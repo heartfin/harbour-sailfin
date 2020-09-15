@@ -1,0 +1,9 @@
+# Spec files are generated from the yaml files, so they are unneeded
+rpm/*.spec
+
+# Build folders
+build/
+build-*/
+
+# IDE files
+harbour-sailfin.pro.user

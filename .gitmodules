@@ -1,0 +1,3 @@
+[submodule "libs/qtrest"]
+	path = libs/qtrest
+	url = ../qtrest

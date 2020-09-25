@@ -2,6 +2,9 @@ import QtQuick 2.6
 import Sailfish.Silica 1.0
 import QtGraphicalEffects 1.0
 
+/**
+ * A silica-like background for displaying backdrops.
+ */
 Rectangle {
     property alias source: backgroundImage.source
     property alias sourceSize: backgroundImage.sourceSize
@@ -10,7 +13,7 @@ Rectangle {
     color: Theme.colorScheme == Theme.DarkOnLight ? "#fff" : "#000"
     z: -1
     opacity: status == Image.Ready ? 1.0 : 0.0
-    Behavior on opacity { NumberAnimation { duration: 300 } }
+    Behavior on opacity { FadeAnimator {} }
 
     Image {
         id: backgroundImage

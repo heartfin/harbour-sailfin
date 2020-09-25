@@ -1,6 +1,9 @@
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
+/**
+ * Delegate for displaying an item in the library.
+ */
 BackgroundItem {
     id: root
     property alias poster: posterImage.source

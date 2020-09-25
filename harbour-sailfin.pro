@@ -33,7 +33,9 @@ DISTFILES += \
     qml/components/RemoteImage.qml \
     qml/components/UserGridDelegate.qml \
     qml/components/VideoPlayer.qml \
+    qml/components/itemdetails/EpisodeDetails.qml \
     qml/components/itemdetails/FilmDetails.qml \
+    qml/components/itemdetails/SeasonDetails.qml \
     qml/components/itemdetails/SeriesDetails.qml \
     qml/components/videoplayer/VideoHud.qml \
     qml/cover/CoverPage.qml \

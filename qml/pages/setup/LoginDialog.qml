@@ -4,6 +4,11 @@ import nl.netsoj.chris.Jellyfin 1.0
 
 import "../../components"
 
+/**
+ * Page where the user can login on their server. Is displayed after the AddServerPage successfully connected
+ * to a Jellyfin server. This page also displays a login message and, if applicable, a list of public users.
+ */
+
 Dialog {
 	property string loginMessage
 	property Page firstPage

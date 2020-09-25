@@ -4,6 +4,12 @@ import Sailfish.Silica 1.0
 
 import "../components"
 
+/**
+ * This page contains legal information about snippets and 3rd party libraries.
+ *
+ * Displaying them is done by loading ../3rdparty.xml, which contains a list of all
+ * the included snippets/libraries and their licenses.
+ */
 Page {
     allowedOrientations: Orientation.All
 
@@ -32,7 +38,7 @@ Page {
             }
 
             PlainLabel {
-                text: qsTr("The Sailfin application contains some code from other projects. Without them, Sailfin would " +
+                text: qsTr("Sailfin contains code taken from other projects. Without them, Sailfin would " +
                            "not be possible!")
             }
 

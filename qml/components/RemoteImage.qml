@@ -1,6 +1,9 @@
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
+/**
+ * An image for "remote" images (loaded over e.g. http), with a spinner and a fallback image
+ */
 Image {
 	property string fallbackImage
 	property bool usingFallbackImage

@@ -5,31 +5,15 @@ import nl.netsoj.chris.Jellyfin 1.0
 
 import "../components"
 
-// Test
+/**
+ * Main page, which simply shows some content of every library, as well as next items.
+ */
 Page {
-    id: page
+    property bool _modelsLoaded: false
 
-    // The effective value will be restricted by ApplicationWindow.allowedOrientations
+    id: page
     allowedOrientations: Orientation.All
 
-    property bool _modelsLoaded: false
-    
-    Connections {
-		target: ApiClient
-		onAuthenticatedChanged: {
-            if (authenticated && !_modelsLoaded) loadModels();
-		}
-		
-		
-	}
-	
-	Component.onCompleted: {
-        if (ApiClient.authenticated && _modelsLoaded) {
-			loadModels();
-		}
-	}
-
-    // To enable PullDownMenu, place our content in a SilicaFlickable
     SilicaFlickable {
         anchors.fill: parent
 
@@ -47,7 +31,6 @@ Page {
 
         // Tell SilicaFlickable the height of its content.
         contentHeight: column.height
-
 
         // Place our content in a Column.  The PageHeader is always placed at the top
         // of the page, followed by our content.
@@ -120,7 +103,19 @@ Page {
             }
         }
     }
-    
+
+    Connections {
+        target: ApiClient
+        onAuthenticatedChanged: {
+            if (authenticated && !_modelsLoaded) loadModels();
+        }
+    }
+
+    Component.onCompleted: {
+        if (ApiClient.authenticated && _modelsLoaded) {
+            loadModels();
+        }
+    }
     function loadModels() {
         _modelsLoaded = true;
         mediaLibraryModel.reload()

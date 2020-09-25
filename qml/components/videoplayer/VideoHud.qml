@@ -2,6 +2,10 @@ import QtQuick 2.6
 import QtMultimedia 5.6
 import Sailfish.Silica 1.0
 
+/**
+ * The video "hud" or controls. This is the overlay displayed over a video player, which contains controls
+ * and playback information.
+ */
 Item {
     id: videoHud
     property MediaPlayer player

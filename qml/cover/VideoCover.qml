@@ -9,6 +9,7 @@ CoverBackground {
         anchors.fill: parent
         color: "black"
 
+        // Wanted to display the currently running move on here, but it's hard :/
         /*VideoOutput {
             id: coverOutput
             anchors.fill: parent

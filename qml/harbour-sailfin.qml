@@ -11,10 +11,12 @@ ApplicationWindow {
 	id: appWindow
 	property bool isInSetup: false
     property bool _hasInitialized: false
+    // The global mediaPlayer instance
     readonly property MediaPlayer mediaPlayer: _mediaPlayer
+    // Data of the currently selected item. For use on the cover.
     property var itemData
-    //property alias backdrop: backdrop
 	
+    //FIXME: proper error handling
 	Connections {
 		target: ApiClient
 		onNetworkError: errorNotification.show("Network error: " + error)
@@ -27,21 +29,11 @@ ApplicationWindow {
         autoPlay: true
     }
 
-    /*GlassyBackground {
-        id: backdrop
-        anchors.fill: parent
-        opacity: status == Image.Ready ? 1.0 : 0.0
-        Behavior on opacity { NumberAnimation { duration: 300 } }
-
-        function clear() {
-            source = ""
-        }
-    }*/
-	
 	initialPage: Component {
 		MainPage {
 			Connections {
 				target: ApiClient
+                // Replace the MainPage if no server was set up.
 				onSetupRequired: {
 					if (!isInSetup) {
 						isInSetup = true;

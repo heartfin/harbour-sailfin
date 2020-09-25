@@ -6,7 +6,11 @@ import nl.netsoj.chris.Jellyfin 1.0
 
 import "videoplayer"
 
-Item {
+/**
+ * A videoPlayer for Jellyfin videos
+ */
+
+SilicaItem {
     id: playerRoot
     property string itemId
     property string title
@@ -14,6 +18,17 @@ Item {
     readonly property bool landscape: videoOutput.contentRect.width > videoOutput.contentRect.height
     property MediaPlayer player
     readonly property bool hudVisible: !hud.hidden
+
+    // Force a Light on Dark theme since I doubt that there are persons who are willing to watch a Video
+    // on a white background.
+    palette.colorScheme: Theme.LightOnDark
+
+    // Blackground to prevent the ambience from leaking through
+    Rectangle {
+        anchors.fill: parent
+        color: "black"
+    }
+
 
     MediaSource {
         id: mediaSource

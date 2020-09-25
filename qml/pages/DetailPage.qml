@@ -4,8 +4,14 @@ import Sailfish.Silica 1.0
 import nl.netsoj.chris.Jellyfin 1.0
 
 import "../components"
-import "../compontents/details"
+import "../components/itemdetails"
 
+/**
+ * This page displays details about a film, show, season, episode, and so on.
+ *
+ * It contains the common functionality for all items. Additional components are
+ * loaded in for every specific type of items, from ../components/itemdetails.
+ */
 Page {
     id: pageRoot
     property string itemId: ""

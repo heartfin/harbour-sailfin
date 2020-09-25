@@ -2,6 +2,8 @@ import QtQuick 2.6
 import QtMultimedia 5.6
 import Sailfish.Silica 1.0
 
+import "../../Utils.js" as Utils
+
 /**
  * The video "hud" or controls. This is the overlay displayed over a video player, which contains controls
  * and playback information.
@@ -92,7 +94,7 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: Theme.horizontalPageMargin
                 anchors.verticalCenter: progressSlider.verticalCenter
-                text: timeToText(player.position)
+                text: Utils.timeToText(player.position)
             }
 
             Slider {
@@ -112,21 +114,12 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.horizontalPageMargin
                 anchors.verticalCenter: progress.verticalCenter
-                text: timeToText(player.duration)
+                text: Utils.timeToText(player.duration)
             }
         }
     }
 
-    function timeToText(time) {
-        if (time < 0) return "??:??:??"
-        var hours = Math.floor(time / (60 * 60 * 1000))
-        var left = time % (60 * 60 * 1000)
-        var minutes = Math.floor(left / (60 * 1000))
-        left = time % (60 * 1000)
-        var seconds = Math.floor(left / 1000)
 
-        return hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "")+ seconds
-    }
 
     Connections {
         target: player

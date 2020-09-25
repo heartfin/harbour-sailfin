@@ -81,37 +81,24 @@ Page {
                 height: Theme.paddingLarge
             }
 
-            PlainLabel {
-                id: overviewText
-                text: itemData.Overview
-                visible: text.length > 0
-                font.pixelSize: Theme.fontSizeSmall
+            Loader {
+                active: itemData != undefined
+                asynchronous: true
+                width: parent.width
+                source: {
+                    switch (itemData.Type){
+                    case "Movie":
+                        return Qt.resolvedUrl("../components/itemdetails/FilmDetails.qml")
+                    default:
+                        return Qt.resolvedUrl("../components/itemdetails/UnsupportedDetails.qml")
+                    }
+                }
+                onLoaded: {
+                    item.itemData = Qt.binding(function() { return pageRoot.itemData; })
+                }
             }
 
-            Item {
-                visible: overviewText.visible
-                width: 1
-                height: Theme.paddingLarge
-            }
 
-            Row {
-                anchors {
-                    //left: parent.left
-                    right: parent.right
-                    leftMargin: Theme.horizontalPageMargin
-                    rightMargin: Theme.horizontalPageMargin
-                }
-                spacing: Theme.paddingMedium
-                IconButton {
-                    id: favouriteButton
-                    icon.source: "image://theme/icon-m-favorite"
-                }
-                IconButton {
-                    id: playButton
-                    icon.source: "image://theme/icon-l-play"
-                    onPressed: pageStack.push(Qt.resolvedUrl("VideoPage.qml"), {"itemId": itemId, "itemData": itemData})
-                }
-            }
         }
     }
 

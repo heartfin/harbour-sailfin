@@ -3,8 +3,7 @@
 namespace Jellyfin {
 
 MediaSource::MediaSource(QObject *parent)
-    : QObject(parent),
-    m_mediaPlayer(new QMediaPlayer(this)){
+    : QObject(parent) {
 
 }
 
@@ -15,8 +14,8 @@ void MediaSource::fetchStreamUrl() {
     params.addQueryItem("IsPlayback", "true");
     params.addQueryItem("AutoOpenLiveStream", this->m_autoOpen ? "true" : "false");
     params.addQueryItem("MediaSourceId", this->m_itemId);
-    params.addQueryItem("SubtitleStreamIndex", "-1");
-    params.addQueryItem("AudioStreamIndex", "0");
+    params.addQueryItem("SubtitleStreamIndex", QString::number(m_subtitleIndex));
+    params.addQueryItem("AudioStreamIndex", QString::number(m_audioIndex));
 
     QJsonObject root;
     root["DeviceProfile"] = m_apiClient->playbackDeviceProfile();
@@ -36,11 +35,6 @@ void MediaSource::fetchStreamUrl() {
 
             emit this->streamUrlChanged(this->m_streamUrl);
             qDebug() << "Found stream url: " << this->m_streamUrl;
-            /*QNetworkRequest req;
-            req.setUrl(this->m_streamUrl);
-            m_apiClient->addTokenHeader(req);
-            m_mediaPlayer->setMedia(QMediaContent(req));
-            if (m_autoPlay) m_mediaPlayer->play();*/
         }
 
         rep->deleteLater();
@@ -52,10 +46,7 @@ void MediaSource::setItemId(const QString &newItemId) {
         qWarning() << "apiClient is not set on this MediaSource instance! Aborting.";
         return;
     }
-    if (m_mediaPlayer == nullptr) {
-        qWarning() << "mediaPlayer is not set on this MediaSource instance! Aborting.";
-        return;
-    }
+
     this->m_itemId = newItemId;
     // Deinitialize the streamUrl
     setStreamUrl("");
@@ -70,15 +61,15 @@ void MediaSource::setStreamUrl(const QString &streamUrl) {
 }
 
 void MediaSource::play() {
-    this->m_mediaPlayer->play();
+    //todo: playback reporting
 }
 
 void MediaSource::pause() {
-    this->m_mediaPlayer->pause();
+    //todo: playback reporting
 }
 
 void MediaSource::stop() {
-    this->m_mediaPlayer->stop();
+    //todo: playback reporting
 }
 
 }

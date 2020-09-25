@@ -22,19 +22,19 @@ public:
     Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
     Q_PROPERTY(QString streamUrl READ streamUrl NOTIFY streamUrlChanged)
     Q_PROPERTY(bool autoOpen MEMBER m_autoOpen NOTIFY autoOpenChanged)
-    Q_PROPERTY(QMediaPlayer *mediaPlayer READ mediaPlayer)
-    Q_PROPERTY(bool autoPlay MEMBER m_autoPlay)
+    Q_PROPERTY(int audioIndex MEMBER m_audioIndex NOTIFY audioIndexChanged)
+    Q_PROPERTY(int subtitleIndex MEMBER m_subtitleIndex NOTIFY subtitleIndexChanged)
 
     QString itemId() const { return m_itemId; }
     void setItemId(const QString &newItemId);
 
     QString streamUrl() const { return m_streamUrl; }
-
-    QMediaPlayer *mediaPlayer() { return m_mediaPlayer; }
 signals:
     void itemIdChanged(const QString &newItemId);
     void streamUrlChanged(const QString &newStreamUrl);
     void autoOpenChanged(bool autoOpen);
+    void audioIndexChanged(int audioIndex);
+    void subtitleIndexChanged(int subtitleIndex);
 
 public slots:
     void play();
@@ -43,15 +43,16 @@ public slots:
 
 private:
     ApiClient *m_apiClient = nullptr;
-    QMediaPlayer *m_mediaPlayer = nullptr;
     QString m_itemId;
     QString m_streamUrl;
     QString m_playSessionId;
+    int m_audioIndex = 0;
+    int m_subtitleIndex = -1;
+
     /**
      * @brief Whether to automatically open the livestream of the item;
      */
     bool m_autoOpen = false;
-    bool m_autoPlay = false;
 
     void fetchStreamUrl();
     void setStreamUrl(const QString &streamUrl);

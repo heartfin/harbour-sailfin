@@ -26,10 +26,11 @@ Rectangle {
     }
 
     FastBlur {
+        cached: true
         anchors.fill: backgroundImage
         source: backgroundImage
         opacity: dimmedOpacity
-        radius: 100
+        radius: 50
     }
 
     Image {

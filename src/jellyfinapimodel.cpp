@@ -111,5 +111,6 @@ void registerModels(const char *URI) {
     qmlRegisterType<PublicUserModel>(URI, 1, 0, "PublicUserModel");
     qmlRegisterType<UserViewModel>(URI, 1, 0, "UserViewModel");
     qmlRegisterType<UserItemModel>(URI, 1, 0, "UserItemModel");
+    qmlRegisterType<UserItemLatestModel>(URI, 1, 0, "UserItemLatestModel");
 }
 }

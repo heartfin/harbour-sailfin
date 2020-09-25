@@ -18,6 +18,8 @@ SilicaItem {
     readonly property bool landscape: videoOutput.contentRect.width > videoOutput.contentRect.height
     property MediaPlayer player
     readonly property bool hudVisible: !hud.hidden
+    property alias audioTrack: mediaSource.audioIndex
+    property alias subtitleTrack: mediaSource.subtitleIndex
 
     // Force a Light on Dark theme since I doubt that there are persons who are willing to watch a Video
     // on a white background.

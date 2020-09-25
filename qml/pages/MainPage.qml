@@ -84,7 +84,7 @@ Page {
                             }
                         }
                         HorizontalScrollDecorator {}
-                        UserItemModel {
+                        UserItemLatestModel {
                             id: userItemModel
                             apiClient: ApiClient
                             parentId: model.id

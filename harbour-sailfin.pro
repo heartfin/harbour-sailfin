@@ -26,6 +26,7 @@ SOURCES += \
     src/serverdiscoverymodel.cpp
 
 DISTFILES += \
+    qml/Utils.js \
     qml/components/GlassyBackground.qml \
     qml/components/LibraryItemDelegate.qml \
     qml/components/MoreSection.qml \
@@ -35,8 +36,11 @@ DISTFILES += \
     qml/components/VideoPlayer.qml \
     qml/components/itemdetails/EpisodeDetails.qml \
     qml/components/itemdetails/FilmDetails.qml \
+    qml/components/itemdetails/PlayToolbar.qml \
     qml/components/itemdetails/SeasonDetails.qml \
     qml/components/itemdetails/SeriesDetails.qml \
+    qml/components/itemdetails/UnsupportedDetails.qml \
+    qml/components/itemdetails/VideoTrackSelector.qml \
     qml/components/videoplayer/VideoHud.qml \
     qml/cover/CoverPage.qml \
     qml/cover/PosterCover.qml \

@@ -51,17 +51,24 @@
     </message>
 </context>
 <context>
+    <name>FilmDetails</name>
+    <message>
+        <source>Released: %1 — Run time: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LegalPage</name>
     <message>
         <source>Legal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The Sailfin application contains some code from other projects. Without them, Sailfin would not be possible!</source>
+        <source>This program contains small snippets of code taken from &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt;, which is licensed under the %3 license:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This program contains small snippets of code taken from &lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt;, which is licensed under the %3 license:</source>
+        <source>Sailfin contains code taken from other projects. Without them, Sailfin would not be possible!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -119,9 +126,36 @@
     </message>
 </context>
 <context>
+    <name>UnsupportedDetails</name>
+    <message>
+        <source>Item type unsupported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This is still an alpha version :)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UserGridDelegate</name>
     <message>
         <source>Other account</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>VideoTrackSelector</name>
+    <message>
+        <source>Audio track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subtitle track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <extracomment>Value in ComboBox to disable subtitles</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>

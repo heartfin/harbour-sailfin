@@ -191,6 +191,12 @@ public:
     explicit UserItemModel (QObject *parent = nullptr)
         : ApiModel ("/Users/:user/Items", "Items", parent) {}
 };
+class UserItemLatestModel : public ApiModel {
+public:
+    explicit UserItemLatestModel (QObject *parent = nullptr)
+        : ApiModel ("/Users/:user/Items/Latest", "", parent) {}
+};
+
 
 void registerModels(const char *URI);
 

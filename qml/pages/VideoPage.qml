@@ -13,6 +13,9 @@ Page {
     id: videoPage
     property string itemId
     property var itemData
+    property int audioTrack
+    property int subtitleTrack
+
     allowedOrientations: Orientation.All
     showNavigationIndicator: videoPlayer.hudVisible
 
@@ -22,6 +25,8 @@ Page {
         itemId: videoPage.itemId
         player: appWindow.mediaPlayer
         title: itemData.Name
+        audioTrack: videoPage.audioTrack
+        subtitleTrack: videoPage.subtitleTrack
 
         onLandscapeChanged: {
             console.log("Is landscape: " + landscape)
@@ -31,8 +36,13 @@ Page {
     }
 
     onStatusChanged: {
-        if (status == PageStatus.Inactive) {
+        switch(status) {
+        case PageStatus.Inactive:
             videoPlayer.stop()
+            break;
+        case PageStatus.Active:
+            appWindow.itemData = videoPage.itemData
+            break;
         }
     }
 }

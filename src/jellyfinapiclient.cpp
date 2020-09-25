@@ -3,11 +3,14 @@
 #define STR2(x) #x
 #define STR(x) STR2(x)
 
-JellyfinApiClient::JellyfinApiClient(QObject *parent)
+namespace Jellyfin {
+ApiClient::ApiClient(QObject *parent)
     : QObject(parent) {
     m_deviceName = QHostInfo::localHostName();
-    m_deviceId = QUuid::createUuid().toString();
+    m_deviceId = QUuid::createUuid().toString(); // TODO: make this not random?
     m_credManager = CredentialsManager::getInstance(this);
+
+    generateDeviceProfile();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,8 +18,17 @@ JellyfinApiClient::JellyfinApiClient(QObject *parent)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void JellyfinApiClient::addBaseRequestHeaders(QNetworkRequest &request, const QString &path, const QUrlQuery &params) {
-    QString authentication =   "MediaBrowser ";
+void ApiClient::addBaseRequestHeaders(QNetworkRequest &request, const QString &path, const QUrlQuery &params) {
+    addTokenHeader(request);
+    request.setRawHeader("Accept", "application/json;"); // profile=\"CamelCase\"");
+    request.setHeader(QNetworkRequest::UserAgentHeader, QString("Sailfin/%1").arg(STR(SAILFIN_VERSION)));
+    QString url = this->m_baseUrl + path;
+    if (!params.isEmpty()) url += "?" + params.toString();
+    request.setUrl(url);
+}
+
+void ApiClient::addTokenHeader(QNetworkRequest &request) {
+     QString authentication =   "MediaBrowser ";
     authentication        +=   "Client=\"Sailfin\"";
     authentication        += ", Device=\"" + m_deviceName + "\"";
     authentication        += ", DeviceId=\"" + m_deviceId + "\"";
@@ -25,22 +37,20 @@ void JellyfinApiClient::addBaseRequestHeaders(QNetworkRequest &request, const QS
         authentication    += ", token=\"" + m_token + "\"";
     }
     request.setRawHeader("X-Emby-Authorization", authentication.toUtf8());
-    request.setRawHeader("Accept", "application/json");
-    request.setHeader(QNetworkRequest::UserAgentHeader, QString("Sailfin/%1").arg(STR(SAILFIN_VERSION)));
-    request.setUrl(this->m_baseUrl + path + "?" + params.toString());
-    qDebug() << "REQUEST TO: " << request.url();
 }
 
-QNetworkReply *JellyfinApiClient::get(const QString &path, const QUrlQuery &params) {
+QNetworkReply *ApiClient::get(const QString &path, const QUrlQuery &params) {
     QNetworkRequest req;
     addBaseRequestHeaders(req, path, params);
+    qDebug() << "GET  " << req.url();
     return m_naManager.get(req);
 }
-QNetworkReply *JellyfinApiClient::post(const QString &path, const QJsonDocument &data) {
+QNetworkReply *ApiClient::post(const QString &path, const QJsonDocument &data, const QUrlQuery &params) {
 
     QNetworkRequest req;
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    addBaseRequestHeaders(req, path);
+    addBaseRequestHeaders(req, path, params);
+    qDebug() << "POST " << req.url();
     if (data.isEmpty())
         return m_naManager.post(req, QByteArray());
     else {
@@ -52,7 +62,7 @@ QNetworkReply *JellyfinApiClient::post(const QString &path, const QJsonDocument 
 // Nice to have methods                                                                           //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void JellyfinApiClient::initialize(){
+void ApiClient::restoreSavedSession(){
     QObject *ctx1 = new QObject(this);
     connect(m_credManager, &CredentialsManager::serversListed, ctx1, [this, ctx1](const QStringList &servers) {
         qDebug() << "Servers listed: " << servers;
@@ -82,6 +92,7 @@ void JellyfinApiClient::initialize(){
                 this->m_token = token;
                 this->setUserId(user);
                 this->setAuthenticated(true);
+                this->postCapabilities();
                 disconnect(ctx3);
             }, Qt::UniqueConnection);
             m_credManager->get(server, user);
@@ -95,7 +106,7 @@ void JellyfinApiClient::initialize(){
     m_credManager->listServers();
 }
 
-void JellyfinApiClient::setupConnection() {
+void ApiClient::setupConnection() {
     // First detect redirects:
     // Note that this is done without calling JellyfinApiClient::get since that automatically includes the base_url,
     // which is something we want to avoid here.
@@ -132,7 +143,7 @@ void JellyfinApiClient::setupConnection() {
     });
 }
 
-void JellyfinApiClient::getBrandingConfiguration() {
+void ApiClient::getBrandingConfiguration() {
     QNetworkReply *rep = get("/Branding/Configuration");
     connect(rep, &QNetworkReply::finished, this, [rep, this]() {
         qDebug() << "RESPONSE: " << statusCode(rep);
@@ -161,7 +172,7 @@ void JellyfinApiClient::getBrandingConfiguration() {
     });
 }
 
-void JellyfinApiClient::authenticate(QString username, QString password, bool storeCredentials) {
+void ApiClient::authenticate(QString username, QString password, bool storeCredentials) {
     QJsonObject requestData;
 
     requestData["Username"] = username;
@@ -173,9 +184,13 @@ void JellyfinApiClient::authenticate(QString username, QString password, bool st
         if (status >= 200 && status < 300) {
             QJsonObject authInfo = QJsonDocument::fromJson(rep->readAll()).object();
             this->m_token = authInfo["AccessToken"].toString();
-            this->setAuthenticated(true);
 
+            // Fool this class's addRequestheaders to add the token, without
+            // notifying QML that we're authenticated, to prevent other requests going first.
+            this->m_authenticated = true;
             this->setUserId(authInfo["User"].toObject()["Id"].toString());
+            this->postCapabilities();
+            this->setAuthenticated(true);
 
             if (storeCredentials) {
                 m_credManager->store(this->m_baseUrl, this->m_userId, this->m_token);
@@ -184,10 +199,10 @@ void JellyfinApiClient::authenticate(QString username, QString password, bool st
         rep->deleteLater();
     });
     connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
-            this, &JellyfinApiClient::defaultNetworkErrorHandler);
+            this, &ApiClient::defaultNetworkErrorHandler);
 }
 
-void JellyfinApiClient::fetchItem(const QString &id) {
+void ApiClient::fetchItem(const QString &id) {
     QNetworkReply *rep = get("/Users/" + m_userId + "/Items/" + id);
     connect(rep, &QNetworkReply::finished, this, [rep, id, this]() {
         int status = statusCode(rep);
@@ -199,7 +214,36 @@ void JellyfinApiClient::fetchItem(const QString &id) {
     });
 }
 
-void JellyfinApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {
+void ApiClient::postCapabilities() {
+    QJsonObject capabilities;
+    capabilities["SupportsPersistentIdentifier"] = false; // Technically untrue, but not implemented yet.
+    capabilities["SupportsMediaControl"] = false;
+    capabilities["SupportsSync"] = false;
+    capabilities["SupportsContentUploading"] = false;
+    capabilities["AppStoreUrl"] = "https://chris.netsoj.nl/projects/harbour-sailfin";
+    capabilities["IconUrl"] = "https://chris.netsoj.nl/static/img/logo.png";
+    capabilities["DeviceProfile"] = m_deviceProfile;
+    QNetworkReply *rep = post("/Sessions/Capabilities/Full", QJsonDocument(capabilities));
+    connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
+            this, &ApiClient::defaultNetworkErrorHandler);
+}
+
+void ApiClient::generateDeviceProfile() {
+    QJsonObject root = DeviceProfile::generateProfile();
+    m_playbackDeviceProfile = QJsonObject(root);
+    root["Name"] = m_deviceName;
+    root["Id"] = m_deviceId;
+    root["FriendlyName"] = QSysInfo::prettyProductName();
+    QJsonArray playableMediaTypes;
+    playableMediaTypes.append("Audio");
+    playableMediaTypes.append("Video");
+    playableMediaTypes.append("Photo");
+    root["PlayableMediaTypes"] = playableMediaTypes;
+
+    m_deviceProfile = root;
+}
+
+void ApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {
     QObject *signalSender = sender();
     QNetworkReply *rep = dynamic_cast<QNetworkReply *>(signalSender);
     if (rep != nullptr && statusCode(rep) == 401) {
@@ -208,6 +252,7 @@ void JellyfinApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError e
         emit this->networkError(error);
     }
     rep->deleteLater();
+}
 }
 
 #undef STR

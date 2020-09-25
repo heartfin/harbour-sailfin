@@ -5,6 +5,7 @@ import nl.netsoj.chris.Jellyfin 1.0
 
 import "../components"
 
+// Test
 Page {
     id: page
 
@@ -90,11 +91,13 @@ Page {
                         delegate: LibraryItemDelegate {
                             property string id: model.id
                             title: model.name
-                            poster: ApiClient.baseUrl + "/Items/" + model.id + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
+                            poster: model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
+                                                                 + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
+                                                               : ""
                             landscape: true
 
                             onClicked: {
-                                pageStack.push(Qt.resolvedUrl("DetailBasePage.qml"), {"itemId": model.id})
+                                pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
                             }
                         }
                         HorizontalScrollDecorator {}

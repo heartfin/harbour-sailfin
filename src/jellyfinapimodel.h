@@ -100,7 +100,7 @@ public:
      * Subfield should be set to "data" in this example.
      */
     explicit ApiModel(QString path, QString subfield, QObject *parent = nullptr);
-    Q_PROPERTY(JellyfinApiClient *apiClient MEMBER m_apiClient)
+    Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient)
     Q_PROPERTY(ModelStatus status READ status NOTIFY statusChanged)
     Q_PROPERTY(int limit MEMBER m_limit NOTIFY limitChanged)
     Q_PROPERTY(QString parentId MEMBER m_parentId NOTIFY parentIdChanged)
@@ -141,7 +141,7 @@ public slots:
      */
     void reload();
 protected:
-    JellyfinApiClient *m_apiClient = nullptr;
+    ApiClient *m_apiClient = nullptr;
     ModelStatus m_status = Uninitialised;
 
     QString m_path;

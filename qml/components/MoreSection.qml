@@ -71,6 +71,6 @@ Item {
             right: parent.right
         }
         width: parent.width
-        height: children[0].height
+        height: children.length > 0 ? children[0].height : 0
     }
 }

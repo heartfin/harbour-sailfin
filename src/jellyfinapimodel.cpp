@@ -82,7 +82,7 @@ void ApiModel::generateFields() {
         QByteArray keyArr = keyName.toUtf8();
         if (!m_roles.values().contains(keyArr)) {
             m_roles.insert(i++, keyArr);
-            qDebug() << m_path << " adding " << keyName << " as " << ( i - 1);
+            //qDebug() << m_path << " adding " << keyName << " as " << ( i - 1);
         }
     }
     this->endResetModel();

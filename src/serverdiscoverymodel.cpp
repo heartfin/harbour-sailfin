@@ -1,5 +1,6 @@
 #include "serverdiscoverymodel.h"
 
+namespace Jellyfin {
 ServerDiscoveryModel::ServerDiscoveryModel(QObject *parent)
     : QAbstractListModel (parent) {
     connect(&m_socket, &QUdpSocket::readyRead, this, &ServerDiscoveryModel::on_datagramsAvailable);
@@ -71,3 +72,4 @@ void ServerDiscoveryModel::on_datagramsAvailable() {
     m_discoveredServers.insert(m_discoveredServers.end(), discoveredServers.begin(), discoveredServers.end());
     endInsertRows();
 };
+}

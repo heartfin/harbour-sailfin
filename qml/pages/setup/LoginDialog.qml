@@ -2,7 +2,7 @@ import QtQuick 2.6
 import Sailfish.Silica 1.0
 import nl.netsoj.chris.Jellyfin 1.0
 
-import "../components"
+import "../../components"
 
 Dialog {
 	property string loginMessage
@@ -27,7 +27,7 @@ Dialog {
 			onAuthenticatedChanged: {
 				if (ApiClient.authenticated) {
 					console.log("authenticated!")
-					pageStack.replaceAbove(pageStack.previousPage(firstPage), Qt.resolvedUrl("MainPage.qml"))
+                    pageStack.replaceAbove(pageStack.previousPage(firstPage), Qt.resolvedUrl("../MainPage.qml"))
 				}
 			}
 			onAuthenticationError: {

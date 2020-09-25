@@ -12,6 +12,7 @@
 #include <QHostAddress>
 #include <QUdpSocket>
 
+namespace Jellyfin {
 struct ServerDiscovery {
     QString name;
     QString address;
@@ -59,5 +60,5 @@ private:
     QUdpSocket m_socket;
     std::vector<ServerDiscovery> m_discoveredServers;
 };
-
+}
 #endif //SERVER_DISCOVERY_MODEL_H

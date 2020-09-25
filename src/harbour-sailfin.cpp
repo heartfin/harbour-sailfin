@@ -11,17 +11,20 @@
 
 #include "jellyfinapiclient.h"
 #include "jellyfinapimodel.h"
+#include "jellyfinmediasource.h"
 #include "serverdiscoverymodel.h"
 
 
 void registerQml() {
     const char* QML_NAMESPACE = "nl.netsoj.chris.Jellyfin";
-    qmlRegisterSingletonType<JellyfinApiClient>(QML_NAMESPACE, 1, 0, "ApiClient", [](QQmlEngine *eng, QJSEngine *js) {
+    // Singletons are perhaps bad, but they are convenient :)
+    qmlRegisterSingletonType<Jellyfin::ApiClient>(QML_NAMESPACE, 1, 0, "ApiClient", [](QQmlEngine *eng, QJSEngine *js) {
         Q_UNUSED(eng)
         Q_UNUSED(js)
-        return dynamic_cast<QObject*>(new JellyfinApiClient());
+        return dynamic_cast<QObject*>(new Jellyfin::ApiClient());
     });
-    qmlRegisterType<ServerDiscoveryModel>(QML_NAMESPACE, 1, 0, "ServerDiscoveryModel");
+    qmlRegisterType<Jellyfin::ServerDiscoveryModel>(QML_NAMESPACE, 1, 0, "ServerDiscoveryModel");
+    qmlRegisterType<Jellyfin::MediaSource>(QML_NAMESPACE, 1, 0, "MediaSource");
 
     // API models
     Jellyfin::registerModels(QML_NAMESPACE);

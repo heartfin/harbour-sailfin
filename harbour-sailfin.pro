@@ -12,6 +12,7 @@
 # The name of your application
 TARGET = harbour-sailfin
 
+QT += multimedia
 
 CONFIG += sailfishapp c++11
 
@@ -20,6 +21,8 @@ SOURCES += \
     src/harbour-sailfin.cpp \
     src/jellyfinapiclient.cpp \
     src/jellyfinapimodel.cpp \
+    src/jellyfindeviceprofile.cpp \
+    src/jellyfinmediasource.cpp \
     src/serverdiscoverymodel.cpp
 
 DISTFILES += \
@@ -29,14 +32,22 @@ DISTFILES += \
     qml/components/PlainLabel.qml \
     qml/components/RemoteImage.qml \
     qml/components/UserGridDelegate.qml \
+    qml/components/VideoPlayer.qml \
+    qml/components/itemdetails/FilmDetails.qml \
+    qml/components/itemdetails/SeriesDetails.qml \
+    qml/components/videoplayer/VideoHud.qml \
     qml/cover/CoverPage.qml \
-    qml/pages/AddServerConnectingPage.qml \
-    qml/pages/DetailBasePage.qml \
+    qml/cover/PosterCover.qml \
+    qml/cover/VideoCover.qml \
+    qml/pages/DetailPage.qml \
     qml/pages/LegalPage.qml \
-    qml/pages/LoginDialog.qml \
     qml/pages/MainPage.qml \
     qml/pages/SecondPages.qml \
-    qml/harbour-sailfin.qml
+    qml/harbour-sailfin.qml \
+    qml/pages/VideoPage.qml \
+    qml/pages/setup/AddServerConnectingPage.qml \
+    qml/pages/setup/LoginDialog.qml \
+    qml/pages/setup/a
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 
@@ -54,4 +65,6 @@ CONFIG += sailfishapp_i18n
     src/credentialmanager.h \
     src/jellyfinapiclient.h \
     src/jellyfinapimodel.h \
+    src/jellyfindeviceprofile.h \
+    src/jellyfinmediasource.h \
     src/serverdiscoverymodel.h

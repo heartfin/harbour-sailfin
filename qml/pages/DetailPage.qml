@@ -4,6 +4,7 @@ import Sailfish.Silica 1.0
 import nl.netsoj.chris.Jellyfin 1.0
 
 import "../components"
+import "../compontents/details"
 
 Page {
     id: pageRoot
@@ -102,6 +103,7 @@ Page {
                 IconButton {
                     id: playButton
                     icon.source: "image://theme/icon-l-play"
+                    onPressed: pageStack.push(Qt.resolvedUrl("VideoPage.qml"), {"itemId": itemId, "itemData": itemData})
                 }
             }
         }
@@ -122,6 +124,7 @@ Page {
     onStatusChanged: {
         if (status == PageStatus.Deactivating) {
             backdrop.clear()
+            appWindow.itemData = ({})
         }
     }
 
@@ -129,9 +132,10 @@ Page {
         target: ApiClient
         onItemFetched: {
             if (itemId === pageRoot.itemId) {
-                console.log(JSON.stringify(result))
+                //console.log(JSON.stringify(result))
                 pageRoot.itemData = result
                 pageRoot._loading = false
+                appWindow.itemData = result
             }
         }
     }

@@ -17,13 +17,13 @@ Image {
             GradientStop { position: 0.0; color: Theme.highlightColor; }
             GradientStop { position: 1.0; color: Theme.highlightDimmerColor; }
         }
-        visible: parent.status == Image.Error
+        visible: parent.status == Image.Error || parent.status == Image.Null
     }
 	
 	Image {
 		id: fallbackImageItem
 		anchors.centerIn: parent
-		visible: parent.status == Image.Error
+        visible: parent.status == Image.Error || parent.status == Image.Null
 		source: fallbackImage ? fallbackImage : "image://theme/icon-m-question"
 	}
 }

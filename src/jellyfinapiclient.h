@@ -161,6 +161,7 @@ protected:
 
 private:
     QNetworkAccessManager m_naManager;
+    const char *m_version = SAILFIN_VERSION;
     /*
      * State information
      */

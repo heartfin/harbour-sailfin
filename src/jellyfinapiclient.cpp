@@ -1,8 +1,5 @@
 #include "jellyfinapiclient.h"
 
-#define STR2(x) #x
-#define STR(x) STR2(x)
-
 namespace Jellyfin {
 ApiClient::ApiClient(QObject *parent)
     : QObject(parent) {
@@ -21,18 +18,18 @@ ApiClient::ApiClient(QObject *parent)
 void ApiClient::addBaseRequestHeaders(QNetworkRequest &request, const QString &path, const QUrlQuery &params) {
     addTokenHeader(request);
     request.setRawHeader("Accept", "application/json;"); // profile=\"CamelCase\"");
-    request.setHeader(QNetworkRequest::UserAgentHeader, QString("Sailfin/%1").arg(STR(SAILFIN_VERSION)));
+    request.setHeader(QNetworkRequest::UserAgentHeader, QString("Sailfin/%1").arg(m_version));
     QString url = this->m_baseUrl + path;
     if (!params.isEmpty()) url += "?" + params.toString();
     request.setUrl(url);
 }
 
 void ApiClient::addTokenHeader(QNetworkRequest &request) {
-     QString authentication =   "MediaBrowser ";
+    QString authentication =   "MediaBrowser ";
     authentication        +=   "Client=\"Sailfin\"";
     authentication        += ", Device=\"" + m_deviceName + "\"";
     authentication        += ", DeviceId=\"" + m_deviceId + "\"";
-    authentication        += ", Version=\"" + QString(STR(SAILFIN_VERSION)) + "\"";
+    authentication        += ", Version=\"" + QString(m_version) + "\"";
     if (m_authenticated) {
         authentication    += ", token=\"" + m_token + "\"";
     }
@@ -254,6 +251,3 @@ void ApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {
     rep->deleteLater();
 }
 }
-
-#undef STR
-#undef STR2

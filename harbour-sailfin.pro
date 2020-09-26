@@ -16,6 +16,9 @@ QT += multimedia
 
 CONFIG += sailfishapp c++11
 
+# Help, something keeps eating my quotes and backslashes
+DEFINES += "SAILFIN_VERSION=\"\\\"0.1.0\\\"\""
+
 SOURCES += \
     src/credentialmanager.cpp \
     src/harbour-sailfin.cpp \

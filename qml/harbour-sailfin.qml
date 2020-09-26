@@ -8,7 +8,7 @@ import "components"
 import "pages"
 
 ApplicationWindow {
-	id: appWindow
+    id: appWindow
     property bool _hasInitialized: false
     // The global mediaPlayer instance
     readonly property MediaPlayer mediaPlayer: _mediaPlayer
@@ -22,12 +22,12 @@ ApplicationWindow {
     }
     // Data of the currently selected item. For use on the cover.
     property var itemData
-	
+
     //FIXME: proper error handling
-	Connections {
-		target: ApiClient
-		onNetworkError: errorNotification.show("Network error: " + error)
-		onConnectionFailed: errorNotification.show("Connect error: " + error)
+    Connections {
+        target: ApiClient
+        onNetworkError: errorNotification.show("Network error: " + error)
+        onConnectionFailed: errorNotification.show("Connect error: " + error)
         //onConnectionSuccess: errorNotification.show("Success: " + loginMessage)
         onSetupRequired: {
             var isInSetup = pageStack.find(function (page) { return typeof page._isSetupPage !== "undefined" }) !== null
@@ -36,28 +36,28 @@ ApplicationWindow {
                 pageStack.replace(Qt.resolvedUrl("pages/setup/AddServerPage.qml"), {"backNavigation": false});
             }
         }
-	}
+    }
 
     MediaPlayer {
         id: _mediaPlayer
         autoPlay: true
     }
 
-	initialPage: Component {
-		MainPage {
-			Connections {
-				target: ApiClient
+    initialPage: Component {
+        MainPage {
+            Connections {
+                target: ApiClient
                 // Replace the MainPage if no server was set up.
 
-			}
-			onStatusChanged: {
+            }
+            onStatusChanged: {
                 if (status == PageStatus.Active && !_hasInitialized) {
                     _hasInitialized = true;
                     ApiClient.restoreSavedSession();
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
     cover: {
         if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(mediaPlayer.status) >= 0) {
             if (itemData) {
@@ -69,16 +69,16 @@ ApplicationWindow {
             return Qt.resolvedUrl("cover/VideoCover.qml")
         }
     }
-	allowedOrientations: Orientation.All
-	
-	Notification {
-		id: errorNotification
-		previewSummary: "foo"
-		isTransient: true
-		
-		function show(data) {
-			previewSummary = data;
-			publish();
-		}
-	}
+    allowedOrientations: Orientation.All
+
+    Notification {
+        id: errorNotification
+        previewSummary: "foo"
+        isTransient: true
+
+        function show(data) {
+            previewSummary = data;
+            publish();
+        }
+    }
 }

@@ -1,6 +1,8 @@
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
+import ".."
+
 /**
  * Delegate for displaying an item in the library.
  */
@@ -9,11 +11,12 @@ BackgroundItem {
     property alias poster: posterImage.source
     property alias title: titleText.text
     property bool landscape: false
-    width: Screen.width / 3
-    height: landscape ? width / 4 * 3 : width / 2 * 3
+    width: Constants.libraryDelegateWidth
+    height: landscape ? Constants.libraryDelegateHeight : Constants.libraryDelegatePosterHeight
 
     RemoteImage {
         id: posterImage
+        clip: true
         anchors {
             left: parent.left
             top: parent.top
@@ -23,11 +26,11 @@ BackgroundItem {
         fillMode: Image.PreserveAspectCrop
     }
 
-    Rectangle {
+    /*Rectangle {
         anchors.fill: posterImage
         color: Theme.rgba(Theme.highlightBackgroundColor, Theme.highlightBackgroundOpacity)
         visible: root.highlighted
-    }
+    }*/
 
     Rectangle {
         anchors {

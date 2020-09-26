@@ -70,12 +70,6 @@ public:
     };
     Q_ENUM(ModelStatus)
 
-    enum MediaType {
-        MediaUnspecified,
-        Series
-    };
-    Q_DECLARE_FLAGS(MediaTypes, MediaType)
-    Q_FLAG(MediaTypes)
     /**
      * @brief Creates a new basemodel
      * @param path The path (relative to the baseUrl of JellyfinApiClient) to make the call to.
@@ -99,13 +93,21 @@ public:
      * @endcode
      * Subfield should be set to "data" in this example.
      */
-    explicit ApiModel(QString path, QString subfield, QObject *parent = nullptr);
+    explicit ApiModel(QString path, QString subfield, bool passUserId = false, QObject *parent = nullptr);
     Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient)
     Q_PROPERTY(ModelStatus status READ status NOTIFY statusChanged)
+
+    // Query properties
     Q_PROPERTY(int limit MEMBER m_limit NOTIFY limitChanged)
     Q_PROPERTY(QString parentId MEMBER m_parentId NOTIFY parentIdChanged)
-    Q_PROPERTY(QList<SortOrder::SortBy> sortBy MEMBER m_sortBy NOTIFY sortByChanged)
-    //Q_PROPERTY(MediaTypes includeTypes MEMBER m_includeTypes NOTIFY includeTypesChanged)
+    Q_PROPERTY(QList<QString> sortBy MEMBER m_sortBy NOTIFY sortByChanged)
+    Q_PROPERTY(QList<QString> fields MEMBER m_fields NOTIFY fieldsChanged)
+    Q_PROPERTY(QString seasonId MEMBER m_seasonId NOTIFY seasonIdChanged)
+    Q_PROPERTY(QList<QString> imageTypes MEMBER m_imageTypes NOTIFY imageTypesChanged)
+    Q_PROPERTY(bool recursive MEMBER m_recursive)
+
+    // Path properties
+    Q_PROPERTY(QString show MEMBER m_show NOTIFY showChanged)
 
     int rowCount(const QModelIndex &index) const override {
         if (!index.isValid()) return m_array.size();
@@ -132,8 +134,11 @@ signals:
     void statusChanged(ModelStatus newStatus);
     void limitChanged(int newLimit);
     void parentIdChanged(QString newParentId);
-    void sortByChanged(SortOrder::SortBy newSortOrder);
-    void includeTypesChanged(MediaTypes newTypes);
+    void sortByChanged(QList<QString> newSortOrder);
+    void showChanged(QString newShow);
+    void seasonIdChanged(QString newSeasonId);
+    void fieldsChanged(QList<QString> newFields);
+    void imageTypesChanged(QList<QString> newImageTypes);
 
 public slots:
     /**
@@ -148,11 +153,18 @@ protected:
     QString m_subfield;
     QJsonArray m_array;
 
+    // Path properties
+    QString m_show;
+
     // Query properties
     int m_limit = -1;
+    bool m_addUserId = false;
     QString m_parentId;
-    QList<SortOrder::SortBy> m_sortBy = {};
-    MediaTypes m_includeTypes = MediaUnspecified;
+    QString m_seasonId;
+    QList<QString> m_fields;
+    QList<QString> m_imageTypes;
+    QList<QString> m_sortBy = {};
+    bool m_recursive;
 
     QHash<int, QByteArray> m_roles;
     //QHash<QByteArray, int> m_reverseRoles;
@@ -168,7 +180,6 @@ private:
      */
     void generateFields();
     QString sortByToString(SortOrder::SortBy sortBy);
-    QString mediaTypeToString(MediaType mediaType);
 };
 
 /**
@@ -177,30 +188,40 @@ private:
 class PublicUserModel : public ApiModel {
 public:
     explicit PublicUserModel (QObject *parent = nullptr)
-        : ApiModel ("/users/public", "", parent) { }
+        : ApiModel ("/users/public", "", false, parent) { }
 };
 
 class UserViewModel : public ApiModel {
 public:
     explicit UserViewModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/:user/Views", "Items", parent) {}
+        : ApiModel ("/Users/{{user}}/Views", "Items", false, parent) {}
 };
 
 class UserItemModel : public ApiModel {
 public:
     explicit UserItemModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/:user/Items", "Items", parent) {}
+        : ApiModel ("/Users/{{user}}/Items", "Items", false, parent) {}
 };
 class UserItemLatestModel : public ApiModel {
 public:
     explicit UserItemLatestModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/:user/Items/Latest", "", parent) {}
+        : ApiModel ("/Users/{{user}}/Items/Latest", "", false, parent) {}
+};
+
+class ShowSeasonsModel : public ApiModel {
+public:
+    explicit ShowSeasonsModel (QObject *parent = nullptr)
+        : ApiModel ("/Shows/{{show}}/Seasons", "Items", true, parent) {}
+};
+
+class ShowEpisodesModel : public ApiModel {
+public:
+    explicit ShowEpisodesModel (QObject *parent = nullptr)
+        : ApiModel ("/Shows/{{show}}/Episodes", "Items", true, parent) {}
 };
 
 
 void registerModels(const char *URI);
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(ApiModel::MediaTypes)
 
 }
 #endif //JELLYFIN_API_MODEL

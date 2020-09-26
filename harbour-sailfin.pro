@@ -26,6 +26,7 @@ SOURCES += \
     src/serverdiscoverymodel.cpp
 
 DISTFILES += \
+    qml/Constants.qml \
     qml/Utils.js \
     qml/components/GlassyBackground.qml \
     qml/components/LibraryItemDelegate.qml \
@@ -48,12 +49,12 @@ DISTFILES += \
     qml/pages/DetailPage.qml \
     qml/pages/LegalPage.qml \
     qml/pages/MainPage.qml \
-    qml/pages/SecondPages.qml \
+    qml/pages/AboutPage.qml \
     qml/harbour-sailfin.qml \
     qml/pages/VideoPage.qml \
     qml/pages/setup/AddServerConnectingPage.qml \
     qml/pages/setup/LoginDialog.qml \
-    qml/pages/setup/a
+    qml/qmldir
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 

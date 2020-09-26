@@ -17,3 +17,20 @@ function timeToText(time) {
 function ticksToText(ticks) {
     return timeToText(ticks / 10000);
 }
+
+function itemImageUrl(baseUrl, item, type, options) {
+    if (!item.ImageTags[type]) { return "" }
+    return itemModelImageUrl(baseUrl, item.Id, item.ImageTags[type], type, options)
+   }
+
+function itemModelImageUrl(baseUrl, itemId, tag, type, options) {
+    if (tag == undefined) return ""
+    var extraQuery = "";
+    for (var prop in options) {
+        if (options.hasOwnProperty(prop)) {
+            extraQuery += "&" + prop + "=" + options[prop];
+        }
+    }
+    return baseUrl + "/Items/" + itemId + "/Images/" + type + "?tag=" + tag + extraQuery
+
+}

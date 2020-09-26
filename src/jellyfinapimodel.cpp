@@ -1,10 +1,11 @@
 #include "jellyfinapimodel.h"
 
 namespace Jellyfin {
-ApiModel::ApiModel(QString path, QString subfield, QObject *parent)
+ApiModel::ApiModel(QString path, QString subfield, bool addUserId, QObject *parent)
     : QAbstractListModel (parent),
       m_path(path),
-      m_subfield(subfield) {
+      m_subfield(subfield),
+      m_addUserId(addUserId){
 }
 
 void ApiModel::reload() {
@@ -13,9 +14,11 @@ void ApiModel::reload() {
         qWarning() << "Please set the apiClient property before (re)loading";
         return;
     }
-    if (m_path.contains(":user")) {
-        qDebug() << "Path contains :user, replacing with" << m_apiClient->userId();
-        m_path = m_path.replace(":user", m_apiClient->userId());
+    if (m_path.contains("{{user}}")) {
+        m_path = m_path.replace("{{user}}", m_apiClient->userId());
+    }
+    if (m_path.contains("{{show}}") && !m_show.isEmpty()) {
+        m_path = m_path.replace("{{show}}", m_show);
     }
     QUrlQuery query;
     if (m_limit >= 0) {
@@ -24,8 +27,23 @@ void ApiModel::reload() {
     if (!m_parentId.isEmpty()) {
         query.addQueryItem("ParentId", m_parentId);
     }
-    if (m_sortBy.empty()) {
-        query.addQueryItem("SortBy", enumListToString(m_sortBy));
+    if (!m_sortBy.empty()) {
+        query.addQueryItem("SortBy", m_sortBy.join(","));
+    }
+    if (!m_imageTypes.empty()) {
+        query.addQueryItem("ImageTypes", m_imageTypes.join(","));
+    }
+    if (!m_fields.empty()) {
+        query.addQueryItem("Fields", m_fields.join(","));
+    }
+    if (!m_seasonId.isEmpty()) {
+        query.addQueryItem("seasonId", m_seasonId);
+    }
+    if (m_addUserId) {
+        query.addQueryItem("userId", m_apiClient->userId());
+    }
+    if (m_recursive) {
+        query.addQueryItem("Recursive", "true");
     }
     QNetworkReply *rep = m_apiClient->get(m_path, query);
     connect(rep, &QNetworkReply::finished, this, [this, rep]() {
@@ -112,5 +130,7 @@ void registerModels(const char *URI) {
     qmlRegisterType<UserViewModel>(URI, 1, 0, "UserViewModel");
     qmlRegisterType<UserItemModel>(URI, 1, 0, "UserItemModel");
     qmlRegisterType<UserItemLatestModel>(URI, 1, 0, "UserItemLatestModel");
+    qmlRegisterType<ShowSeasonsModel>(URI, 1, 0, "ShowSeasonsModel");
+    qmlRegisterType<ShowEpisodesModel>(URI, 1, 0, "ShowEpisodesModel");
 }
 }

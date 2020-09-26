@@ -10,17 +10,34 @@ Item {
     property alias text: label.text
     property alias textAlignment: label.horizontalAlignment
     property bool busy: false
+    property bool clickable: true
     property int depth: 0
-    readonly property color _color: enabled ? highlighted ? Theme.highlightColor : Theme.primaryColor : Theme.secondaryColor
+    readonly property color _color: {
+        if (!clickable) {
+            Theme.primaryColor
+        } else if (enabled) {
+                if (highlighted) {
+                    Theme.highlightColor
+                } else {
+                    Theme.primaryColor
+                }
+        } else {
+            Theme.secondaryColor
+        }
+    }
     default property alias content: container.data
+
+    signal headerClicked()
 
     implicitHeight: backgroundItem.height + container.height
     width: parent.width
 
     BackgroundItem {
         id: backgroundItem
+        enabled: parent.enabled && parent.clickable
         width: parent.width
         height: Theme.itemSizeMedium
+        onClicked: root.headerClicked()
 
         Rectangle {
             anchors.fill: parent
@@ -51,7 +68,7 @@ Item {
                 verticalCenter: parent.verticalCenter
                 rightMargin: Theme.horizontalPageMargin
             }
-            visible: root.enabled && !root.busy
+            visible: root.enabled  && root.clickable && !root.busy
             source: "image://theme/icon-m-right?" + _color
         }
 

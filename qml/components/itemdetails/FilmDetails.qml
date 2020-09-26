@@ -21,10 +21,6 @@ Column {
     }
 
     PlainLabel {
-        text: "sub: %1 dub: %2".arg(trackSelector.subtitleTrack).arg(trackSelector.audioTrack)
-    }
-
-    PlainLabel {
         id: tinyDetails
         text: qsTr("Released: %1 — Run time: %2").arg(itemData.ProductionYear).arg(Utils.ticksToText(itemData.RunTimeTicks))
     }
@@ -35,7 +31,4 @@ Column {
         font.pixelSize: Theme.fontSizeSmall
         color: Theme.secondaryHighlightColor
     }
-
-
-
 }

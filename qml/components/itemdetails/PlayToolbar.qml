@@ -20,4 +20,5 @@ Row {
         icon.source: "image://theme/icon-l-play"
         onPressed: playPressed()
     }
+
 }

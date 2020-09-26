@@ -4,7 +4,7 @@ import Sailfish.Silica 1.0
 /**
  * An image for "remote" images (loaded over e.g. http), with a spinner and a fallback image
  */
-Image {
+HighlightImage {
 	property string fallbackImage
 	property bool usingFallbackImage
 	
@@ -23,7 +23,7 @@ Image {
         visible: parent.status == Image.Error || parent.status == Image.Null
     }
 	
-	Image {
+    HighlightImage {
 		id: fallbackImageItem
 		anchors.centerIn: parent
         visible: parent.status == Image.Error || parent.status == Image.Null

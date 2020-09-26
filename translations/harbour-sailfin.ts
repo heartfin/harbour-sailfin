@@ -2,6 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>AboutPage</name>
+    <message>
+        <source>About Sailfin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open externally</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LGPL 2.1 License</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AddServerConnectingPage</name>
     <message>
         <source>Connecting to %1</source>
@@ -46,7 +61,14 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>My Cover</source>
+        <source>Sailfin</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>EpisodeDetails</name>
+    <message>
+        <source>Released: %1 — Run time: %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -106,33 +128,42 @@
 <context>
     <name>MainPage</name>
     <message>
-        <source>Settings</source>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About</source>
+        <source>Resume watching</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Next up</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>SecondPage</name>
+    <name>SeasonDetails</name>
     <message>
-        <source>Nested Page</source>
+        <source>No overview available</source>
+        <extracomment>No overview/summary text of an episode available</extracomment>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>SeriesDetails</name>
     <message>
-        <source>Item</source>
+        <source>Seasons</source>
+        <extracomment>Seasons of a (TV) show</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>UnsupportedDetails</name>
     <message>
-        <source>Item type unsupported</source>
+        <source>This is still an alpha version :)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This is still an alpha version :)</source>
+        <source>Item type (%1) unsupported</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

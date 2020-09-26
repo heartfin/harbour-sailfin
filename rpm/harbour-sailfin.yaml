@@ -6,7 +6,7 @@ Release: 1
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
 Group: Qt/Qt
 URL: https://chris.netsoj.nl/projects/harbour-sailfin
-License: LICENSE
+License: LGPL-2.0-or-later
 # This must be generated before uploading a package to a remote build service.
 # Usually this line does not need to be modified.
 Sources:

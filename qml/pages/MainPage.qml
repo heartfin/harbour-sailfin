@@ -4,6 +4,8 @@ import Sailfish.Silica 1.0
 import nl.netsoj.chris.Jellyfin 1.0
 
 import "../components"
+import "../"
+import "../Utils.js" as Utils
 
 /**
  * Main page, which simply shows some content of every library, as well as next items.
@@ -21,11 +23,7 @@ Page {
         PullDownMenu {
             MenuItem {
                 text: qsTr("About")
-                onClicked: pageStack.push(Qt.resolvedUrl("LegalPage.qml"))
-            }
-            MenuItem {
-                text: qsTr("Settings")
-                onClicked: pageStack.push(Qt.resolvedUrl("SecondPage.qml"))
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
         }
 
@@ -45,11 +43,12 @@ Page {
             }
 
 			MoreSection {
-				text: "Kijken hervatten"
-                enabled: false
+                text: qsTr("Resume watching")
+                clickable: false
 			}
 			MoreSection {
-				text: "Volgende"
+                text: qsTr("Next up")
+                clickable: false
 			}
 
             UserViewModel {
@@ -61,29 +60,46 @@ Page {
                 MoreSection {
                     text: model.name
                     busy: userItemModel.status != ApiModel.Ready
+                    property string collectionType: model.collectionType
+
+                    onHeaderClicked: pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
 
                     SilicaListView {
                         clip: true
-                        height: count > 0 ? Screen.width / 4 : 0
+                        height: {
+                            if (count > 0) {
+                                console.log(collectionType)
+                                if (["tvshows", "movies"].indexOf(collectionType) == -1) {
+                                    Constants.libraryDelegateHeight
+                                } else {
+                                    Constants.libraryDelegatePosterHeight
+                                }
+                            } else {
+                                0
+                            }
+                        }
                         Behavior on height {
                             NumberAnimation { duration: 300 }
                         }
                         width: parent.width
                         model: userItemModel
                         orientation: ListView.Horizontal
+                        leftMargin: Theme.horizontalPageMargin
+                        rightMargin: Theme.horizontalPageMargin
+                        spacing: Theme.paddingLarge
                         delegate: LibraryItemDelegate {
                             property string id: model.id
                             title: model.name
-                            poster: model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
+                            poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
+                                /*model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
                                                                  + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
-                                                               : ""
-                            landscape: true
+                                                               : ""*/
+                            landscape: ["Series", "Movie"].indexOf(model.type) == -1
 
                             onClicked: {
                                 pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
                             }
                         }
-                        HorizontalScrollDecorator {}
                         UserItemLatestModel {
                             id: userItemModel
                             apiClient: ApiClient
@@ -101,6 +117,12 @@ Page {
                     }
                 }
             }
+        }
+    }
+
+    onStatusChanged: {
+        if (status == PageStatus.Active) {
+            appWindow.itemData = null
         }
     }
 

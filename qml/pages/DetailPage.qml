@@ -30,7 +30,7 @@ Page {
         if (_backdropImages && _backdropImages.length > 0) {
             var rand = Math.floor(Math.random() * (_backdropImages.length - 0.001))
             console.log("Random: ", rand)
-            backdrop.source = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand]
+            backdrop.source = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
         } else if (_parentBackdropImages && _parentBackdropImages.length > 0) {
             console.log(parentId)
             backdrop.source = ApiClient.baseUrl + "/Items/" + itemData.ParentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
@@ -89,6 +89,12 @@ Page {
                     switch (itemData.Type){
                     case "Movie":
                         return Qt.resolvedUrl("../components/itemdetails/FilmDetails.qml")
+                    case "Series":
+                        return Qt.resolvedUrl("../components/itemdetails/SeriesDetails.qml")
+                    case "Season":
+                        return Qt.resolvedUrl("../components/itemdetails/SeasonDetails.qml")
+                    case "Episode":
+                        return Qt.resolvedUrl("../components/itemdetails/EpisodeDetails.qml")
                     default:
                         return Qt.resolvedUrl("../components/itemdetails/UnsupportedDetails.qml")
                     }
@@ -117,7 +123,10 @@ Page {
     onStatusChanged: {
         if (status == PageStatus.Deactivating) {
             backdrop.clear()
-            appWindow.itemData = ({})
+            //appWindow.itemData = ({})
+        }
+        if (status == PageStatus.Active && itemData) {
+            appWindow.itemData = itemData
         }
     }
 
@@ -128,6 +137,7 @@ Page {
                 //console.log(JSON.stringify(result))
                 pageRoot.itemData = result
                 pageRoot._loading = false
+                if (status == PageStatus.Active)
                 appWindow.itemData = result
             }
         }

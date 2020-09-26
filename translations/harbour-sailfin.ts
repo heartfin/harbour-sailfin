@@ -109,26 +109,31 @@
     </message>
     <message>
         <source>Login</source>
+        <extracomment>Dialog action</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Credentials</source>
+        <extracomment>Section header for entering username and password</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Username</source>
+        <extracomment>Label placeholder for username field</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>password</source>
+        <extracomment>Label placeholder for password field</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Login message</source>
+        <extracomment>Message shown on login, configured by the server owner. Some form of a MOTD</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invalid username or password</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -205,6 +210,10 @@
     </message>
     <message>
         <source>Log out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Logging out</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -35,7 +35,7 @@ Dialog {
 			onAuthenticatedChanged: {
 				if (ApiClient.authenticated) {
 					console.log("authenticated!")
-                    pageStack.replaceAbove(pageStack.previousPage(firstPage), Qt.resolvedUrl("../MainPage.qml"))
+                    pageStack.replaceAbove(null, Qt.resolvedUrl("../MainPage.qml"))
 				}
 			}
 			onAuthenticationError: {

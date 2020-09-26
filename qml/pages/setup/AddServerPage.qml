@@ -14,6 +14,7 @@ Dialog {
 	readonly property string address: serverSelect.currentItem._address
 	readonly property bool addressCorrect: serverSelect.currentIndex > 0 || manualAddress.acceptableInput
 	readonly property string serverName: serverSelect.currentItem._name
+    readonly property bool _isSetupPage: true
 	
 	
 	acceptDestination: AddServerConnectingPage {

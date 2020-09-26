@@ -9,7 +9,6 @@ import "pages"
 
 ApplicationWindow {
 	id: appWindow
-	property bool isInSetup: false
     property bool _hasInitialized: false
     // The global mediaPlayer instance
     readonly property MediaPlayer mediaPlayer: _mediaPlayer
@@ -29,7 +28,14 @@ ApplicationWindow {
 		target: ApiClient
 		onNetworkError: errorNotification.show("Network error: " + error)
 		onConnectionFailed: errorNotification.show("Connect error: " + error)
-		//onConnectionSuccess: errorNotification.show("Success: " + loginMessage)
+        //onConnectionSuccess: errorNotification.show("Success: " + loginMessage)
+        onSetupRequired: {
+            var isInSetup = pageStack.find(function (page) { return typeof page._isSetupPage !== "undefined" }) !== null
+            console.log("Is in setup: " + isInSetup)
+            if (!isInSetup) {
+                pageStack.replace(Qt.resolvedUrl("pages/setup/AddServerPage.qml"), {"backNavigation": false});
+            }
+        }
 	}
 
     MediaPlayer {
@@ -42,12 +48,7 @@ ApplicationWindow {
 			Connections {
 				target: ApiClient
                 // Replace the MainPage if no server was set up.
-				onSetupRequired: {
-					if (!isInSetup) {
-						isInSetup = true;
-                        pageStack.replace(Qt.resolvedUrl("pages/setup/AddServerPage.qml"), {"backNavigation": false});
-					}
-				}
+
 			}
 			onStatusChanged: {
                 if (status == PageStatus.Active && !_hasInitialized) {

@@ -32,5 +32,8 @@ function itemModelImageUrl(baseUrl, itemId, tag, type, options) {
         }
     }
     return baseUrl + "/Items/" + itemId + "/Images/" + type + "?tag=" + tag + extraQuery
+}
 
+function usePortraitCover(itemType) {
+    return ["Series", "Movie"].indexOf(itemType) >= 0
 }

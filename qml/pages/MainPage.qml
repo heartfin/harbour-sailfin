@@ -73,7 +73,6 @@ Page {
                         clip: true
                         height: {
                             if (count > 0) {
-                                console.log(collectionType)
                                 if (["tvshows", "movies"].indexOf(collectionType) == -1) {
                                     Constants.libraryDelegateHeight
                                 } else {
@@ -99,7 +98,7 @@ Page {
                                 /*model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
                                                                  + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
                                                                : ""*/
-                            landscape: ["Series", "Movie"].indexOf(model.type) == -1
+                            landscape: !Utils.usePortraitCover(model.type)
 
                             onClicked: {
                                 pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})

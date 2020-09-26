@@ -34,6 +34,14 @@ void FallbackCredentialsManager::get(const QString &server, const QString &user)
 
 void FallbackCredentialsManager::remove(const QString &server, const QString &user) {
     m_settings.remove(urlToGroupName(server) + "/users/" + user);
+
+    // Check if only the /address key is left. In this case, the server section should be removed.
+    m_settings.beginGroup(urlToGroupName(server));
+    int childGroupsCount = m_settings.childGroups().count();
+    m_settings.endGroup();
+    if (childGroupsCount == 0) {
+        m_settings.remove(urlToGroupName(server));
+    }
 }
 
 void FallbackCredentialsManager::listServers() const {

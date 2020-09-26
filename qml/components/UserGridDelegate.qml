@@ -10,6 +10,7 @@ GridItem {
 		anchors.fill: parent
 		source: root.image ? root.image : "image://theme/icon-m-contact?" + ((root.highlighted || root.down) ? Theme.highlightColor : Theme.primaryColor)
 		fillMode: Image.PreserveAspectCrop
+        clip: true
 	}
 	Rectangle {
 		anchors.fill: parent

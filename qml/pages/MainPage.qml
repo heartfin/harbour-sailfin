@@ -123,13 +123,14 @@ Page {
     onStatusChanged: {
         if (status == PageStatus.Active) {
             appWindow.itemData = null
+            if (!_modelsLoaded && ApiClient.authenticated) loadModels()
         }
     }
 
     Connections {
         target: ApiClient
         onAuthenticatedChanged: {
-            if (authenticated && !_modelsLoaded) loadModels();
+            if (authenticated /*&& !_modelsLoaded*/) loadModels();
         }
     }
 

@@ -10,8 +10,11 @@ import "../../components"
  */
 
 Dialog {
+    id: loginDialog
 	property string loginMessage
 	property Page firstPage
+
+    property string error
 	
 	allowedOrientations: Orientation.All
 	
@@ -36,6 +39,7 @@ Dialog {
 				}
 			}
 			onAuthenticationError: {
+                loginDialog.error = qsTr("Invalid username or password")
 				pageStack.completeAnimation()
 				pageStack.pop()
 			}
@@ -52,6 +56,7 @@ Dialog {
 		id: dialogHeader
 		anchors.left: parent.left
 		anchors.right: parent.right
+        //: Dialog action
 		acceptText: qsTr("Login");
 	}
 	SilicaFlickable {
@@ -85,14 +90,17 @@ Dialog {
 			}
 			
 			SectionHeader {
+                //: Section header for entering username and password
 				text: qsTr("Credentials")
 			}
 			
 			TextField {
 				id: username
 				width: parent.width
+                //: Label placeholder for username field
 				placeholderText: qsTr("Username")
-				label: qsTr("Username")
+                label: placeholderText
+                errorHighlight: error
 				EnterKey.iconSource: "image://theme/icon-m-enter-next"
 				EnterKey.onClicked: password.focus = true
 			}
@@ -101,15 +109,32 @@ Dialog {
 				id: password
 				width: parent.width
 				
+                //: Label placeholder for password field
 				placeholderText: qsTr("Password")
-				label: qsTr("password")
+                label: placeholderText
 				echoMode: TextInput.Password
+                errorHighlight: error
+
 				EnterKey.iconSource: "image://theme/icon-m-enter-accept"
-				EnterKey.onClicked: login()
+                EnterKey.onClicked: accept()
 			}
+
+            Label {
+                anchors {
+                    left: parent.left
+                    leftMargin: Theme.horizontalPageMargin
+                    right: parent.right
+                    rightMargin: Theme.horizontalPageMargin
+                }
+                text: error
+                color: Theme.errorColor
+                visible: error
+            }
 			
 			SectionHeader {
+                //: Message shown on login, configured by the server owner. Some form of a MOTD
 				text: qsTr("Login message")
+                visible: loginMessage
 			}
 			Label {
 				anchors {
@@ -118,15 +143,12 @@ Dialog {
 					leftMargin: Theme.horizontalPageMargin
 					rightMargin: Theme.horizontalPageMargin
 				}
-				text: loginMessage
+                visible: loginMessage
+                text: loginMessage
 				wrapMode: Text.WordWrap
 				color: Theme.highlightColor
 			}
 		}
 	}
-	canAccept: username.text.length > 0
-	
-	/*onAccepted: {
-		pageStack.replace(Qt.resolvedUrl("MainPage.qml"))
-	}*/
+    canAccept: username.text
 }

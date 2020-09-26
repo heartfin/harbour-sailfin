@@ -32,6 +32,7 @@ DISTFILES += \
     qml/Constants.qml \
     qml/Utils.js \
     qml/components/GlassyBackground.qml \
+    qml/components/IconListItem.qml \
     qml/components/LibraryItemDelegate.qml \
     qml/components/MoreSection.qml \
     qml/components/PlainLabel.qml \
@@ -54,6 +55,7 @@ DISTFILES += \
     qml/pages/MainPage.qml \
     qml/pages/AboutPage.qml \
     qml/harbour-sailfin.qml \
+    qml/pages/SettingsPage.qml \
     qml/pages/VideoPage.qml \
     qml/pages/setup/AddServerConnectingPage.qml \
     qml/pages/setup/LoginDialog.qml \

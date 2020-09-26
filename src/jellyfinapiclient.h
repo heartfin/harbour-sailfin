@@ -106,6 +106,7 @@ signals:
     void userIdChanged(QString userId);
 
     void itemFetched(const QString &itemId, const QJsonObject &result);
+    void itemFetchFailed(const QString &itemId, const QNetworkReply::NetworkError error);
 
 public slots:
     /**
@@ -120,6 +121,12 @@ public slots:
      */
     void setupConnection();
     void authenticate(QString username, QString password, bool storeCredentials = false);
+
+    /**
+     * @brief Logs the user out and clears the session.
+     */
+    void deleteSession();
+
     void fetchItem(const QString &id);
 
     /**
@@ -157,6 +164,7 @@ protected:
      * is a big mess and should be safely contained in it's own file.
      */
     void generateDeviceProfile();
+
     QString &token() { return m_token; }
 
 private:
@@ -205,6 +213,18 @@ private:
      */
     static inline int statusCode(QNetworkReply *rep) {
         return rep->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    }
+
+    /**
+     * @brief Sets the error handler of a reply to this classes default error handler
+     * @param rep The reply to set the error handler on.
+     *
+     * Motivation for this helper is because I forget the correct signature each time, with all the
+     * funky casts.
+     */
+    void setDefaultErrorHandler(QNetworkReply *rep) {
+        connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
+                this, &ApiClient::defaultNetworkErrorHandler);
     }
 };
 } // NS Jellyfin

@@ -66,6 +66,13 @@
     </message>
 </context>
 <context>
+    <name>DetailPage</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>EpisodeDetails</name>
     <message>
         <source>Released: %1 — Run time: %2</source>
@@ -128,15 +135,27 @@
 <context>
     <name>MainPage</name>
     <message>
-        <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Resume watching</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Next up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error has occurred. Please try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Retry</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -153,6 +172,39 @@
     <message>
         <source>Seasons</source>
         <extracomment>Seasons of a (TV) show</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SettingsPage</name>
+    <message>
+        <source>Settings</source>
+        <extracomment>Header of Settings page</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <extracomment>Other settings</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About Sailfin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User id</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log out</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

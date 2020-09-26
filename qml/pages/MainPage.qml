@@ -16,15 +16,20 @@ Page {
     id: page
     allowedOrientations: Orientation.All
 
+    ViewPlaceholder {
+
+    }
+
     SilicaFlickable {
         anchors.fill: parent
 
         // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
         PullDownMenu {
             MenuItem {
-                text: qsTr("About")
-                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+                text: qsTr("Settings")
+                onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
             }
+            busy: mediaLibraryModel.status == ApiModel.Loading
         }
 
         // Tell SilicaFlickable the height of its content.
@@ -60,7 +65,7 @@ Page {
                 MoreSection {
                     text: model.name
                     busy: userItemModel.status != ApiModel.Ready
-                    property string collectionType: model.collectionType
+                    property string collectionType: model.collectionType || ""
 
                     onHeaderClicked: pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
 
@@ -117,30 +122,49 @@ Page {
                     }
                 }
             }
+            Column {
+                width: parent.width
+                visible: mediaLibraryModel.status == ApiModel.Error
+                PageHeader {
+                    title: qsTr("Network error")
+                    //clickable: false
+                }
+
+                PlainLabel {
+                    text: qsTr("An error has occurred. Please try again.")
+                }
+                Item { width: 1; height: Theme.paddingLarge }
+                Button {
+                    text: qsTr("Retry")
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    onClicked: loadModels(true)
+                }
+                Item { width: 1; height: Theme.paddingLarge }
+            }
         }
     }
 
     onStatusChanged: {
         if (status == PageStatus.Active) {
             appWindow.itemData = null
-            if (!_modelsLoaded && ApiClient.authenticated) loadModels()
+            loadModels(false)
         }
     }
 
     Connections {
         target: ApiClient
-        onAuthenticatedChanged: {
-            if (authenticated /*&& !_modelsLoaded*/) loadModels();
-        }
+        onAuthenticatedChanged: loadModels(false)
     }
 
-    Component.onCompleted: {
-        if (ApiClient.authenticated && _modelsLoaded) {
-            loadModels();
+
+    /**
+     * Loads models if not laoded. Set force to true to reload models
+     * even if loaded.
+     */
+    function loadModels(force) {
+        if (force || (ApiClient.authenticated && !_modelsLoaded)) {
+            _modelsLoaded = true;
+            mediaLibraryModel.reload()
         }
-    }
-    function loadModels() {
-        _modelsLoaded = true;
-        mediaLibraryModel.reload()
 	}
 }

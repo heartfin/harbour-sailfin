@@ -33,7 +33,7 @@ void FallbackCredentialsManager::get(const QString &server, const QString &user)
 }
 
 void FallbackCredentialsManager::remove(const QString &server, const QString &user) {
-    m_settings.remove(urlToGroupName(server) + "/" + user);
+    m_settings.remove(urlToGroupName(server) + "/users/" + user);
 }
 
 void FallbackCredentialsManager::listServers() const {

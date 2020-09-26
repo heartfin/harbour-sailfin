@@ -132,12 +132,7 @@ void ApiClient::setupConnection() {
         }
         rep->deleteLater();
     });
-    connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
-            this, [rep, this](QNetworkReply::NetworkError error) {
-        qDebug() << "Error from URL: " << rep->url();
-        emit this->networkError(error);
-        rep->deleteLater();
-    });
+    setDefaultErrorHandler(rep);
 }
 
 void ApiClient::getBrandingConfiguration() {
@@ -162,11 +157,7 @@ void ApiClient::getBrandingConfiguration() {
         }
         rep->deleteLater();
     });
-    connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
-            this, [rep, this](QNetworkReply::NetworkError error) {
-        emit this->networkError(error);
-        rep->deleteLater();
-    });
+    setDefaultErrorHandler(rep);
 }
 
 void ApiClient::authenticate(QString username, QString password, bool storeCredentials) {
@@ -195,8 +186,17 @@ void ApiClient::authenticate(QString username, QString password, bool storeCrede
         }
         rep->deleteLater();
     });
-    connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
-            this, &ApiClient::defaultNetworkErrorHandler);
+    setDefaultErrorHandler(rep);
+}
+
+void ApiClient::deleteSession() {
+    QNetworkReply *rep = post("/Sessions/Logout");
+    connect(rep, &QNetworkReply::finished, this, [rep, this] {
+        m_credManager->remove(m_baseUrl, m_userId);
+        this->setAuthenticated(false);
+        emit this->setupRequired();
+        rep->deleteLater();
+    });
 }
 
 void ApiClient::fetchItem(const QString &id) {
@@ -207,6 +207,11 @@ void ApiClient::fetchItem(const QString &id) {
             QJsonObject data = QJsonDocument::fromJson(rep->readAll()).object();
             emit this->itemFetched(id, data);
         }
+        rep->deleteLater();
+    });
+    connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
+            this, [id, rep, this](QNetworkReply::NetworkError error) {
+        emit this->itemFetchFailed(id, error);
         rep->deleteLater();
     });
 }
@@ -221,8 +226,7 @@ void ApiClient::postCapabilities() {
     capabilities["IconUrl"] = "https://chris.netsoj.nl/static/img/logo.png";
     capabilities["DeviceProfile"] = m_deviceProfile;
     QNetworkReply *rep = post("/Sessions/Capabilities/Full", QJsonDocument(capabilities));
-    connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
-            this, &ApiClient::defaultNetworkErrorHandler);
+    setDefaultErrorHandler(rep);
 }
 
 void ApiClient::generateDeviceProfile() {
@@ -244,6 +248,7 @@ void ApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {
     QObject *signalSender = sender();
     QNetworkReply *rep = dynamic_cast<QNetworkReply *>(signalSender);
     if (rep != nullptr && statusCode(rep) == 401) {
+        this->setAuthenticated(false);
         emit this->authenticationError(ApiError::INVALID_PASSWORD);
     } else {
         emit this->networkError(error);

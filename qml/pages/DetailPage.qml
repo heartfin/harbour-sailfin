@@ -21,7 +21,7 @@ Page {
     readonly property string _logo: itemData.ImageTags.Logo
     readonly property var _backdropImages: itemData.BackdropImageTags
     readonly property var _parentBackdropImages: itemData.ParentBackdropImageTags
-    readonly property string parentId: itemData.ParentId
+    readonly property string parentId: itemData.ParentId || ""
 
     on_BackdropImagesChanged: updateBackdrop()
     on_ParentBackdropImagesChanged: updateBackdrop()
@@ -30,10 +30,13 @@ Page {
         if (_backdropImages && _backdropImages.length > 0) {
             var rand = Math.floor(Math.random() * (_backdropImages.length - 0.001))
             console.log("Random: ", rand)
-            backdrop.source = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
+            //backdrop.source = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
+            appWindow.backgroundSource = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
         } else if (_parentBackdropImages && _parentBackdropImages.length > 0) {
             console.log(parentId)
-            backdrop.source = ApiClient.baseUrl + "/Items/" + itemData.ParentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
+            //backdrop.source = ApiClient.baseUrl + "/Items/" + itemData.ParentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
+            appWindow.backgroundSource = ApiClient.baseUrl + "/Items/" + itemData.ParentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
+            Theme.backgroundGlowColor
         }
     }
 
@@ -53,7 +56,7 @@ Page {
             width: parent.width
 
             PageHeader {
-                title: itemData.Name
+                title: itemData.Name || qsTr("Loading")
                 visible: !_hasLogo
             }
 
@@ -67,7 +70,7 @@ Page {
                     anchors {
                         horizontalCenter: parent.horizontalCenter
                     }
-                    source: _hasLogo ? ApiClient.baseUrl + "/Items/" + itemId + "/Images/Logo?tag=" + _logo : undefined
+                    source: _hasLogo ? ApiClient.baseUrl + "/Items/" + itemId + "/Images/Logo?tag=" + _logo : ""
                 }
                 Item {
                     width: 1
@@ -95,6 +98,8 @@ Page {
                         return Qt.resolvedUrl("../components/itemdetails/SeasonDetails.qml")
                     case "Episode":
                         return Qt.resolvedUrl("../components/itemdetails/EpisodeDetails.qml")
+                    case undefined:
+                        return ""
                     default:
                         return Qt.resolvedUrl("../components/itemdetails/UnsupportedDetails.qml")
                     }
@@ -114,7 +119,7 @@ Page {
 
     onItemIdChanged: {
         itemData = {}
-        if (itemId.length > 0) {
+        if (itemId.length && PageStatus.Active) {
             pageRoot._loading = true
             ApiClient.fetchItem(itemId)
         }
@@ -125,8 +130,11 @@ Page {
             backdrop.clear()
             //appWindow.itemData = ({})
         }
-        if (status == PageStatus.Active && itemData) {
-            appWindow.itemData = itemData
+        if (status == PageStatus.Active) {
+            if (itemId) {
+                ApiClient.fetchItem(itemId)
+            }
+
         }
     }
 

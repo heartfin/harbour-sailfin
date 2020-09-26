@@ -7,6 +7,7 @@ import Sailfish.Silica 1.0
 HighlightImage {
 	property string fallbackImage
 	property bool usingFallbackImage
+    asynchronous: true
 	
 	BusyIndicator {
 		anchors.centerIn: parent

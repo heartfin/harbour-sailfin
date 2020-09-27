@@ -21,7 +21,9 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import QtMultimedia 5.6
 import nl.netsoj.chris.Jellyfin 1.0
+
 import Nemo.Notifications 1.0
+import Nemo.KeepAlive 1.2
 
 import "components"
 import "pages"
@@ -50,11 +52,6 @@ ApplicationWindow {
                 pageStack.replace(Qt.resolvedUrl("pages/setup/AddServerPage.qml"), {"backNavigation": false});
             }
         }
-    }
-
-    MediaPlayer {
-        id: _mediaPlayer
-        autoPlay: true
     }
 
     initialPage: Component {
@@ -95,4 +92,19 @@ ApplicationWindow {
             publish();
         }
     }
+
+    MediaPlayer {
+        id: _mediaPlayer
+        autoPlay: true
+    }
+
+    // Keep the sytem alive while playing media
+    KeepAlive {
+        enabled: _mediaPlayer.playbackState == MediaPlayer.PlayingState
+    }
+
+    DisplayBlanking {
+        preventBlanking: _mediaPlayer.playbackState == MediaPlayer.PlayingState && _mediaPlayer.hasVideo
+    }
+
 }

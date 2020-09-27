@@ -7,6 +7,13 @@
 #include <QSettings>
 #include <QString>
 
+/**
+ * @brief The CredentialsManager class stores credentials for users.
+ *
+ * You can get an instance using ::instance(), which may depend on the platform being
+ * used. Since the implementation may be asynchronous, the methods won't return anything,
+ * they emit a corresponding signal instead.
+ */
 class CredentialsManager : public QObject {
     Q_OBJECT
 public:
@@ -61,9 +68,11 @@ public:
     /**
      * @brief Retrieves an implementation which can store this token.
      * @param The parent to set the implementations QObject parent to
+     *
+     * This method is always guaranteed to return an instance.
      * @return An implementation of this interface (may vary acrros platform).
      */
-    static CredentialsManager *getInstance(QObject *parent = nullptr);
+    static CredentialsManager *newInstance(QObject *parent = nullptr);
 
     /**
      * @return if the implementation of this interface stores the token in a secure place.

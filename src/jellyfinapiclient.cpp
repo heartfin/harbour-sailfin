@@ -5,7 +5,7 @@ ApiClient::ApiClient(QObject *parent)
     : QObject(parent) {
     m_deviceName = QHostInfo::localHostName();
     m_deviceId = QUuid::createUuid().toString(); // TODO: make this not random?
-    m_credManager = CredentialsManager::getInstance(this);
+    m_credManager = CredentialsManager::newInstance(this);
 
     generateDeviceProfile();
 }

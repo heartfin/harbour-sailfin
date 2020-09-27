@@ -47,14 +47,14 @@ Page {
                 apiClient: ApiClient
             }
 
-			MoreSection {
+            MoreSection {
                 text: qsTr("Resume watching")
                 clickable: false
-			}
-			MoreSection {
+            }
+            MoreSection {
                 text: qsTr("Next up")
                 clickable: false
-			}
+            }
 
             UserViewModel {
                 id: mediaLibraryModel
@@ -95,7 +95,7 @@ Page {
                             property string id: model.id
                             title: model.name
                             poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
-                                /*model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
+                            /*model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
                                                                  + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
                                                                : ""*/
                             landscape: !Utils.usePortraitCover(model.type)
@@ -113,6 +113,7 @@ Page {
                         Connections {
                             target: mediaLibraryModel
                             onStatusChanged: {
+                                console.log("MediaLibraryModel status " + status)
                                 if (status == ApiModel.Ready) {
                                     userItemModel.reload()
                                 }
@@ -165,5 +166,5 @@ Page {
             _modelsLoaded = true;
             mediaLibraryModel.reload()
         }
-	}
+    }
 }

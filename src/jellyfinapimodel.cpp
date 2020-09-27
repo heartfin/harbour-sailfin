@@ -1,15 +1,27 @@
 #include "jellyfinapimodel.h"
 
 namespace Jellyfin {
-ApiModel::ApiModel(QString path, QString subfield, bool addUserId, QObject *parent)
+ApiModel::ApiModel(QString path, bool hasRecordResponse, bool addUserId, QObject *parent)
     : QAbstractListModel (parent),
       m_path(path),
-      m_subfield(subfield),
+      m_hasRecordResponse(hasRecordResponse),
       m_addUserId(addUserId){
 }
 
 void ApiModel::reload() {
-    this->setStatus(Loading);
+    load(RELOAD);
+}
+
+void ApiModel::load(LoadType type) {
+    qDebug() << (type == RELOAD ? "RELOAD" : "LOAD_MORE");
+    switch(type) {
+    case RELOAD:
+        this->setStatus(Loading);
+        break;
+    case LOAD_MORE:
+        this->setStatus(LoadingMore);
+        break;
+    }
     if (m_apiClient == nullptr) {
         qWarning() << "Please set the apiClient property before (re)loading";
         return;
@@ -23,6 +35,11 @@ void ApiModel::reload() {
     QUrlQuery query;
     if (m_limit >= 0) {
         query.addQueryItem("Limit", QString::number(m_limit));
+    } else {
+        query.addQueryItem("Limit", QString::number(DEFAULT_LIMIT));
+    }
+    if (m_startIndex > 0) {
+        query.addQueryItem("StartIndex", QString::number(m_startIndex));
     }
     if (!m_parentId.isEmpty()) {
         query.addQueryItem("ParentId", m_parentId);
@@ -45,10 +62,11 @@ void ApiModel::reload() {
     if (m_recursive) {
         query.addQueryItem("Recursive", "true");
     }
+    addQueryParameters(query);
     QNetworkReply *rep = m_apiClient->get(m_path, query);
-    connect(rep, &QNetworkReply::finished, this, [this, rep]() {
+    connect(rep, &QNetworkReply::finished, this, [this, type, rep]() {
         QJsonDocument doc = QJsonDocument::fromJson(rep->readAll());
-        if (m_subfield.trimmed().isEmpty()) {
+        if (!m_hasRecordResponse) {
             if (!doc.isArray()) {
                 qWarning() << "Object is not an array!";
                 this->setStatus(Error);
@@ -62,19 +80,45 @@ void ApiModel::reload() {
                 return;
             }
             QJsonObject obj = doc.object();
-            if (!obj.contains(m_subfield)) {
-                qWarning() << "Object doesn't contain required subfield!";
+            if (!obj.contains("Items")) {
+                qWarning() << "Object doesn't contain items!";
                 this->setStatus(Error);
                 return;
             }
-            if (!obj[m_subfield].isArray()) {
-                qWarning() << "Object's subfield is not an array!";
+            if (m_limit < 0) {
+                //                                                              Javascript is beautiful
+                if (obj.contains("TotalRecordCount") && obj["TotalRecordCount"].isDouble()) {
+                    m_totalRecordCount = obj["TotalRecordCount"].toInt();
+                    m_startIndex += DEFAULT_LIMIT;
+                } else {
+                    qWarning() << "Record-response does not have a total record count";
+                    this->setStatus(Error);
+                    return;
+                }
+            }
+            if (!obj["Items"].isArray()) {
+                qWarning() << "Items is not an array!";
                 this->setStatus(Error);
                 return;
             }
-            this->m_array = obj[m_subfield].toArray();
+            QJsonArray items = obj["Items"].toArray();
+            switch(type) {
+                case RELOAD:
+                    this->m_array = items;
+                    break;
+                case LOAD_MORE:
+                    this->beginInsertRows(QModelIndex(), m_array.size(), m_array.size() + items.size() - 1);
+                    // QJsonArray apparently doesn't allow concatenating lists like QList or std::vector
+                    foreach (const QJsonValue &val, items) {
+                        m_array.append(val);
+                    }
+                    this->endInsertRows();
+                    break;
+            }
         }
-        generateFields();
+        if (type == RELOAD) {
+            generateFields();
+        }
         this->setStatus(Ready);
         rep->deleteLater();
     });
@@ -122,6 +166,32 @@ QVariant ApiModel::data(const QModelIndex &index, int role) const {
     }
     return QVariant();
 }
+
+bool ApiModel::canFetchMore(const QModelIndex &parent) const {
+    if (parent.isValid()) return false;
+    switch(m_status) {
+        case Uninitialised:
+        case Loading:
+            return false;
+        default:
+            break;
+    }
+
+    if (m_limit < 0) {
+        return m_startIndex <= m_totalRecordCount;
+    } else {
+        return false;
+    }
+
+}
+
+void ApiModel::fetchMore(const QModelIndex &parent) {
+    if (parent.isValid()) return;
+    load(LOAD_MORE);
+}
+
+void ApiModel::addQueryParameters(QUrlQuery &query) { Q_UNUSED(query)}
+
 
 void registerModels(const char *URI) {
     qmlRegisterUncreatableType<ApiModel>(URI, 1, 0, "ApiModel", "Is enum and base class");

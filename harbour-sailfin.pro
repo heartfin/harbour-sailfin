@@ -39,6 +39,7 @@ DISTFILES += \
     qml/components/RemoteImage.qml \
     qml/components/UserGridDelegate.qml \
     qml/components/VideoPlayer.qml \
+    qml/components/itemdetails/CollectionFolder.qml \
     qml/components/itemdetails/EpisodeDetails.qml \
     qml/components/itemdetails/FilmDetails.qml \
     qml/components/itemdetails/PlayToolbar.qml \

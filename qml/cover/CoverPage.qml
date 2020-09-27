@@ -61,7 +61,6 @@ CoverBackground {
                 width: height
                 source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": row1.height})
                 fillMode: Image.PreserveAspectCrop
-                Component.onCompleted: console.log(JSON.stringify(model.imageTags))
             }
         }
 
@@ -105,7 +104,6 @@ CoverBackground {
                 width: height
                 source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": row1.height})
                 fillMode: Image.PreserveAspectCrop
-                Component.onCompleted: console.log(JSON.stringify(model.imageTags))
             }
         }
 

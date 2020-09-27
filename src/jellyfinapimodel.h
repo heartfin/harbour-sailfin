@@ -66,7 +66,8 @@ public:
         Uninitialised,
         Loading,
         Ready,
-        Error
+        Error,
+        LoadingMore
     };
     Q_ENUM(ModelStatus)
 
@@ -81,19 +82,24 @@ public:
      * @code{.json}
      * [{...}, {...}, {...}]
      * @endcode
-     * subfield should be left empty
+     *
+     * or
+     * @code{.json}
+     * {...}
+     * @endcode
+     * responseHasRecords should be false
      *
      * If the response looks something like this:
      * @code{.json}
      * {
-     *   "offset": 0,
-     *   "count": 20,
-     *   "data": [{...}, {...}, {...}, ..., {...}]
+     *   "Offset": 0,
+     *   "Count": 20,
+     *   "Items": [{...}, {...}, {...}, ..., {...}]
      * }
      * @endcode
-     * Subfield should be set to "data" in this example.
+     * responseHasRecords should be true
      */
-    explicit ApiModel(QString path, QString subfield, bool passUserId = false, QObject *parent = nullptr);
+    explicit ApiModel(QString path, bool responseHasRecords, bool passUserId = false, QObject *parent = nullptr);
     Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient)
     Q_PROPERTY(ModelStatus status READ status NOTIFY statusChanged)
 
@@ -109,16 +115,19 @@ public:
     // Path properties
     Q_PROPERTY(QString show MEMBER m_show NOTIFY showChanged)
 
+    // Standard QAbstractItemModel overrides
     int rowCount(const QModelIndex &index) const override {
         if (!index.isValid()) return m_array.size();
         return 0;
     }
     QHash<int, QByteArray> roleNames() const override { return m_roles; }
-
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    bool canFetchMore(const QModelIndex &parent) const override;
+    void fetchMore(const QModelIndex &parent) override;
 
     ModelStatus status() const { return m_status; }
 
+    // Helper methods
     template<typename QEnum>
     QString enumToString (const QEnum anEnum) { return QVariant::fromValue(anEnum).toString(); }
 
@@ -130,6 +139,7 @@ public:
         }
         return result;
     }
+
 signals:
     void statusChanged(ModelStatus newStatus);
     void limitChanged(int newLimit);
@@ -146,18 +156,39 @@ public slots:
      */
     void reload();
 protected:
+
+    enum LoadType {
+        RELOAD,
+        LOAD_MORE
+    };
+
+    void load(LoadType loadType);
+    /**
+     * @brief Adds parameters to the query
+     * @param query The query to add parameters to
+     *
+     * This method is intended to be overrided by subclasses. It gets called
+     * before a request is made to the server and can be used to enable
+     * query types specific for a certain model to be available.
+     */
+    virtual void addQueryParameters(QUrlQuery &query);
     ApiClient *m_apiClient = nullptr;
     ModelStatus m_status = Uninitialised;
 
     QString m_path;
-    QString m_subfield;
     QJsonArray m_array;
+    bool m_hasRecordResponse;
 
     // Path properties
     QString m_show;
 
-    // Query properties
+    // Query/record controlling properties
     int m_limit = -1;
+    int m_startIndex = 0;
+    int m_totalRecordCount = 0;
+    const int DEFAULT_LIMIT = 100;
+
+    // Query properties
     bool m_addUserId = false;
     QString m_parentId;
     QString m_seasonId;
@@ -167,7 +198,6 @@ protected:
     bool m_recursive;
 
     QHash<int, QByteArray> m_roles;
-    //QHash<QByteArray, int> m_reverseRoles;
 
     void setStatus(ModelStatus newStatus) {
         this->m_status = newStatus;
@@ -200,24 +230,24 @@ public:
 class UserItemModel : public ApiModel {
 public:
     explicit UserItemModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/{{user}}/Items", "Items", false, parent) {}
+        : ApiModel ("/Users/{{user}}/Items", true, false, parent) {}
 };
 class UserItemLatestModel : public ApiModel {
 public:
     explicit UserItemLatestModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/{{user}}/Items/Latest", "", false, parent) {}
+        : ApiModel ("/Users/{{user}}/Items/Latest", false, false, parent) {}
 };
 
 class ShowSeasonsModel : public ApiModel {
 public:
     explicit ShowSeasonsModel (QObject *parent = nullptr)
-        : ApiModel ("/Shows/{{show}}/Seasons", "Items", true, parent) {}
+        : ApiModel ("/Shows/{{show}}/Seasons", true, true, parent) {}
 };
 
 class ShowEpisodesModel : public ApiModel {
 public:
     explicit ShowEpisodesModel (QObject *parent = nullptr)
-        : ApiModel ("/Shows/{{show}}/Episodes", "Items", true, parent) {}
+        : ApiModel ("/Shows/{{show}}/Episodes", true, true, parent) {}
 };
 
 

@@ -1,6 +1,6 @@
 #include "credentialmanager.h"
 
-CredentialsManager * CredentialsManager::getInstance(QObject *parent) {
+CredentialsManager * CredentialsManager::newInstance(QObject *parent) {
     return new FallbackCredentialsManager(parent);
 }
 

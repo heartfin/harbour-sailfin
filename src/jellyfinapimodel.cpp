@@ -121,7 +121,6 @@ void ApiModel::load(LoadType type) {
 void ApiModel::generateFields() {
     if (m_array.size() == 0) return;
     this->beginResetModel();
-    m_roles.clear();
     int i = Qt::UserRole + 1;
     if (!m_array[0].isObject()) {
         qWarning() << "Iterator is not an object?";

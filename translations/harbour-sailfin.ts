@@ -15,6 +15,10 @@
         <source>LGPL 2.1 License</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;p&gt;&lt;b&gt;Sailfin version %1&lt;/b&gt;&lt;br/&gt;Copyright © Chris Josten 2020&lt;/p&gt;&lt;p&gt;Sailfin is Free Software licensed under the &lt;a href=&apos;lgpl&apos;&gt;LGPL-v2.1&lt;/a&gt; or later, at your choice. Parts of the code of Sailfin are from other libraries. &lt;a href=&apos;3rdparty&apos;&gt;View their licenses here&lt;/a&gt;.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddServerConnectingPage</name>
@@ -107,7 +111,11 @@
 <context>
     <name>EpisodeDetails</name>
     <message>
-        <source>Released: %1 — Run time: %2</source>
+        <source>Episode %1–%2 Season %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Episode %1 Season %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

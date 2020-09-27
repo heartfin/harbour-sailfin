@@ -17,7 +17,12 @@ QT += multimedia
 CONFIG += sailfishapp c++11
 
 # Help, something keeps eating my quotes and backslashes
-DEFINES += "SAILFIN_VERSION=\"\\\"0.1.0\\\"\""
+
+!defined(SAILFIN_VERSION, var) {
+    SAILFIN_VERSION = "(UNKNOWN VERSION)"
+}
+
+DEFINES += "SAILFIN_VERSION=\"\\\"$$SAILFIN_VERSION\\\"\""
 
 SOURCES += \
     src/credentialmanager.cpp \
@@ -77,7 +82,7 @@ CONFIG += sailfishapp_i18n
 # modify the localized app name in the the .desktop file.
 # TRANSLATIONS += \
 
- HEADERS += \
+HEADERS += \
     src/credentialmanager.h \
     src/jellyfinapiclient.h \
     src/jellyfinapimodel.h \

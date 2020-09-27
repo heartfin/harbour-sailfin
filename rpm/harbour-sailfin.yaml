@@ -1,6 +1,6 @@
 Name: harbour-sailfin
 Summary: Sailfin
-Version: 0.1
+Version: &version 0.1.0
 Release: 1
 # The contents of the Group field should be one of the groups listed here:
 # https://github.com/mer-tools/spectacle/blob/master/data/GROUPS
@@ -37,6 +37,9 @@ Files:
   - '%{_datadir}/%{name}'
   - '%{_datadir}/applications/%{name}.desktop'
   - '%{_datadir}/icons/hicolor/*/apps/%{name}.png'
+
+QMakeOptions:
+  - SAILFIN_VERSION='%{version}-%{release}'
 
 # For more information about yaml and what's supported in Sailfish OS
 # build system, please see https://wiki.merproject.org/wiki/Spectacle

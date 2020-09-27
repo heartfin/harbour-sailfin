@@ -73,6 +73,7 @@ public:
     Q_PROPERTY(QString baseUrl MEMBER m_baseUrl READ baseUrl NOTIFY baseUrlChanged)
     Q_PROPERTY(bool authenticated READ authenticated WRITE setAuthenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString userId READ userId NOTIFY userIdChanged)
+    Q_PROPERTY(QString version READ version)
 
     /*QNetworkReply *handleRequest(QString path, QStringList sort, Pagination *pagination,
                                  QVariantMap filters, QStringList fields, QStringList expand, QString id);*/
@@ -101,6 +102,7 @@ public:
     QString &userId() { return m_userId; }
     QJsonObject &deviceProfile() { return m_deviceProfile; }
     QJsonObject &playbackDeviceProfile() { return m_playbackDeviceProfile; }
+    QString version() const { return QString(m_version); }
 signals:
     /*
      * Emitted when the server requires authentication. Please authenticate your user via authenticate.

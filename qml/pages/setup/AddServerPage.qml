@@ -77,7 +77,7 @@ Dialog {
 			
 			EnterKey.enabled: addressCorrect
 			EnterKey.iconSource: "image://theme/icon-m-enter-accept"
-			EnterKey.onClicked: dialogRoot.tryConnect()
+            EnterKey.onClicked: accept()
 		}
 	}
 	

@@ -17,7 +17,7 @@ SilicaItem {
     property int progress
     readonly property bool landscape: videoOutput.contentRect.width > videoOutput.contentRect.height
     property MediaPlayer player
-    readonly property bool hudVisible: !hud.hidden
+    readonly property bool hudVisible: !hud.hidden || player.error !== MediaPlayer.NoError
     property alias audioTrack: mediaSource.audioIndex
     property alias subtitleTrack: mediaSource.subtitleIndex
 
@@ -72,6 +72,11 @@ SilicaItem {
             wrapMode: "WordWrap"
             visible: false
         }
+    }
+
+    VideoError {
+        anchors.fill: videoOutput
+        player: playerRoot.player
     }
 
     function stop() {

@@ -268,6 +268,34 @@
     </message>
 </context>
 <context>
+    <name>VideoError</name>
+    <message>
+        <source>Resource allocation error</source>
+        <extracomment>Video playback error: out of resources</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video format unsupported</source>
+        <extracomment>Video playback error: unsupported format/codec</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network error</source>
+        <extracomment>Video playback error: network error</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access denied</source>
+        <extracomment>Video playback error: access denied</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Media service missing</source>
+        <extracomment>Video playback error: the media cannot be played because the media service could not be instantiated.</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>VideoTrackSelector</name>
     <message>
         <source>Audio track</source>

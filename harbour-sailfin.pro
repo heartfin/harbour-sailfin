@@ -48,6 +48,7 @@ DISTFILES += \
     qml/components/itemdetails/SeriesDetails.qml \
     qml/components/itemdetails/UnsupportedDetails.qml \
     qml/components/itemdetails/VideoTrackSelector.qml \
+    qml/components/videoplayer/VideoError.qml \
     qml/components/videoplayer/VideoHud.qml \
     qml/cover/CoverPage.qml \
     qml/cover/PosterCover.qml \

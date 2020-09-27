@@ -294,6 +294,11 @@
         <extracomment>Video playback error: the media cannot be played because the media service could not be instantiated.</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Retry</source>
+        <extracomment>Button to retry loading a video after a failure</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VideoTrackSelector</name>

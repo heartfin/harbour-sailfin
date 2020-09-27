@@ -27,7 +27,6 @@ Column {
                 anchors {
                     top: parent.top
                     left: parent.left
-                    leftMargin: Theme.horizontalPageMargin
                     bottom: parent.bottom
                 }
                 width: Constants.libraryDelegateWidth
@@ -35,6 +34,31 @@ Column {
                 source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
                 fillMode: Image.PreserveAspectCrop
                 clip: true
+
+                // Makes the progress bar stand out more
+                Shim {
+                    anchors {
+                        left: parent.left
+                        bottom: parent.bottom
+                        right: parent.right
+                    }
+                    height: parent.height / 3
+                    shimColor: Theme.overlayBackgroundColor
+                    shimOpacity: Theme.opacityOverlay
+                    //width: model.userData.PlayedPercentage * parent.width / 100
+                    visible: episodeProgress.width > 0 // It doesn't look nice when it's visible on every image
+                }
+
+                Rectangle {
+                    id: episodeProgress
+                    anchors {
+                        left: parent.left
+                        bottom: parent.bottom
+                    }
+                    height: Theme.paddingMedium
+                    width: model.userData.PlayedPercentage * parent.width / 100
+                    color: Theme.highlightColor
+                }
             }
 
             Label {

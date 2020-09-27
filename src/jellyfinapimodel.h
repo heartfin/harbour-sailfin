@@ -195,7 +195,7 @@ protected:
     QList<QString> m_fields;
     QList<QString> m_imageTypes;
     QList<QString> m_sortBy = {};
-    bool m_recursive;
+    bool m_recursive = false;
 
     QHash<int, QByteArray> m_roles;
 
@@ -218,13 +218,13 @@ private:
 class PublicUserModel : public ApiModel {
 public:
     explicit PublicUserModel (QObject *parent = nullptr)
-        : ApiModel ("/users/public", "", false, parent) { }
+        : ApiModel ("/users/public", false, false, parent) { }
 };
 
 class UserViewModel : public ApiModel {
 public:
     explicit UserViewModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/{{user}}/Views", "Items", false, parent) {}
+        : ApiModel ("/Users/{{user}}/Views", true, false, parent) {}
 };
 
 class UserItemModel : public ApiModel {
@@ -232,6 +232,13 @@ public:
     explicit UserItemModel (QObject *parent = nullptr)
         : ApiModel ("/Users/{{user}}/Items", true, false, parent) {}
 };
+
+class UserItemResumeModel : public ApiModel {
+public:
+    explicit UserItemResumeModel (QObject *parent = nullptr)
+        : ApiModel ("/Users/{{user}}/Items/Resume", true, false, parent) {}
+};
+
 class UserItemLatestModel : public ApiModel {
 public:
     explicit UserItemLatestModel (QObject *parent = nullptr)

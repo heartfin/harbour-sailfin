@@ -16,10 +16,6 @@ Page {
     id: page
     allowedOrientations: Orientation.All
 
-    ViewPlaceholder {
-
-    }
-
     SilicaFlickable {
         anchors.fill: parent
 
@@ -50,6 +46,20 @@ Page {
             MoreSection {
                 text: qsTr("Resume watching")
                 clickable: false
+                busy: userResumeModel.status == ApiModel.Loading
+                Loader {
+                    width: parent.width
+                    sourceComponent: carrouselView
+                    property alias itemModel: userResumeModel
+                    property string collectionType: "series"
+
+                    UserItemResumeModel {
+                        id: userResumeModel
+                        apiClient: ApiClient
+                        limit: 12
+                        recursive: true
+                    }
+                }
             }
             MoreSection {
                 text: qsTr("Next up")
@@ -65,45 +75,14 @@ Page {
                 MoreSection {
                     text: model.name
                     busy: userItemModel.status != ApiModel.Ready
-                    property string collectionType: model.collectionType || ""
 
-                    onHeaderClicked: pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
-
-                    SilicaListView {
-                        clip: true
-                        height: {
-                            if (count > 0) {
-                                if (["tvshows", "movies"].indexOf(collectionType) == -1) {
-                                    Constants.libraryDelegateHeight
-                                } else {
-                                    Constants.libraryDelegatePosterHeight
-                                }
-                            } else {
-                                0
-                            }
-                        }
-                        Behavior on height {
-                            NumberAnimation { duration: 300 }
-                        }
+                    onHeaderClicked: pageStack.push(Qt.resolvedUrl("CollectionPage.qml"), {"itemId": model.id})
+                    Loader {
                         width: parent.width
-                        model: userItemModel
-                        orientation: ListView.Horizontal
-                        leftMargin: Theme.horizontalPageMargin
-                        rightMargin: Theme.horizontalPageMargin
-                        spacing: Theme.paddingLarge
-                        delegate: LibraryItemDelegate {
-                            property string id: model.id
-                            title: model.name
-                            poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
-                            /*model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
-                                                                 + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
-                                                               : ""*/
-                            landscape: !Utils.usePortraitCover(model.type)
+                        sourceComponent: carrouselView
+                        property alias itemModel: userItemModel
+                        property string collectionType: model.collectionType || ""
 
-                            onClicked: {
-                                pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
-                            }
-                        }
                         UserItemLatestModel {
                             id: userItemModel
                             apiClient: ApiClient
@@ -165,6 +144,49 @@ Page {
         if (force || (ApiClient.authenticated && !_modelsLoaded)) {
             _modelsLoaded = true;
             mediaLibraryModel.reload()
+            userResumeModel.reload()
+        }
+    }
+
+    Component {
+        id: carrouselView
+        SilicaListView {
+            id: list
+            clip: true
+            height: {
+                if (count > 0) {
+                    if (["tvshows", "movies"].indexOf(collectionType) == -1) {
+                        Constants.libraryDelegateHeight
+                    } else {
+                        Constants.libraryDelegatePosterHeight
+                    }
+                } else {
+                    0
+                }
+            }
+            Behavior on height {
+                NumberAnimation { duration: 300 }
+            }
+            model: itemModel
+            width: parent.width
+            orientation: ListView.Horizontal
+            leftMargin: Theme.horizontalPageMargin
+            rightMargin: Theme.horizontalPageMargin
+            spacing: Theme.paddingLarge
+            delegate: LibraryItemDelegate {
+                property string id: model.id
+                title: model.name
+                poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
+                /*model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
+                                                     + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
+                                                   : ""*/
+                landscape: !Utils.usePortraitCover(model.type)
+                progress: model.userData.PlayedPercentage / 100
+
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
+                }
+            }
         }
     }
 }

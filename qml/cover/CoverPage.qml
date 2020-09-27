@@ -22,6 +22,7 @@ CoverBackground {
         imageTypes: ["Primary"]
         sortBy: ["IsFavoriteOrLiked", "Random"]
         recursive: true
+        parentId: appWindow.collectionId
         Component.onCompleted: reload()
     }
 
@@ -32,6 +33,7 @@ CoverBackground {
         imageTypes: ["Primary"]
         sortBy: ["IsFavoriteOrLiked", "Random"]
         recursive: true
+        parentId: appWindow.collectionId
         Component.onCompleted: reload()
     }
 
@@ -59,7 +61,8 @@ CoverBackground {
                 clip: true
                 height: row1.height
                 width: height
-                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": row1.height})
+                source: model.id ? Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": row1.height})
+                                 : ""
                 fillMode: Image.PreserveAspectCrop
             }
         }
@@ -117,6 +120,16 @@ CoverBackground {
             }
             if (moveCount == 0) movingRight = true;
             if (moveCount == rowCount - 3) movingRight = false;
+        }
+    }
+
+    Connections {
+        target: appWindow
+        onCollectionIdChanged: {
+            randomItems1.parentId = collectionId
+            randomItems2.parentId = collectionId
+            randomItems1.reload()
+            randomItems2.reload()
         }
     }
 

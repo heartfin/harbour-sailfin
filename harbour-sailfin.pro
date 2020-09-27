@@ -37,6 +37,7 @@ DISTFILES += \
     qml/components/MoreSection.qml \
     qml/components/PlainLabel.qml \
     qml/components/RemoteImage.qml \
+    qml/components/Shim.qml \
     qml/components/UserGridDelegate.qml \
     qml/components/VideoPlayer.qml \
     qml/components/itemdetails/CollectionFolder.qml \
@@ -51,6 +52,7 @@ DISTFILES += \
     qml/cover/CoverPage.qml \
     qml/cover/PosterCover.qml \
     qml/cover/VideoCover.qml \
+    qml/pages/CollectionPage.qml \
     qml/pages/DetailPage.qml \
     qml/pages/LegalPage.qml \
     qml/pages/MainPage.qml \

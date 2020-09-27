@@ -59,6 +59,38 @@
     </message>
 </context>
 <context>
+    <name>CollectionPage</name>
+    <message>
+        <source>Loading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sort by</source>
+        <extracomment>Menu item for selecting the sort order of a collection</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add some items to this collection!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play count</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date added</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>Sailfin</source>

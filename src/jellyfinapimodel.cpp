@@ -9,19 +9,13 @@ ApiModel::ApiModel(QString path, bool hasRecordResponse, bool addUserId, QObject
 }
 
 void ApiModel::reload() {
+    this->setStatus(Loading);
+    m_startIndex = 0;
     load(RELOAD);
 }
 
 void ApiModel::load(LoadType type) {
     qDebug() << (type == RELOAD ? "RELOAD" : "LOAD_MORE");
-    switch(type) {
-    case RELOAD:
-        this->setStatus(Loading);
-        break;
-    case LOAD_MORE:
-        this->setStatus(LoadingMore);
-        break;
-    }
     if (m_apiClient == nullptr) {
         qWarning() << "Please set the apiClient property before (re)loading";
         return;
@@ -187,6 +181,7 @@ bool ApiModel::canFetchMore(const QModelIndex &parent) const {
 
 void ApiModel::fetchMore(const QModelIndex &parent) {
     if (parent.isValid()) return;
+    this->setStatus(LoadingMore);
     load(LOAD_MORE);
 }
 
@@ -200,6 +195,7 @@ void registerModels(const char *URI) {
     qmlRegisterType<UserViewModel>(URI, 1, 0, "UserViewModel");
     qmlRegisterType<UserItemModel>(URI, 1, 0, "UserItemModel");
     qmlRegisterType<UserItemLatestModel>(URI, 1, 0, "UserItemLatestModel");
+    qmlRegisterType<UserItemResumeModel>(URI, 1, 0, "UserItemResumeModel");
     qmlRegisterType<ShowSeasonsModel>(URI, 1, 0, "ShowSeasonsModel");
     qmlRegisterType<ShowEpisodesModel>(URI, 1, 0, "ShowEpisodesModel");
 }

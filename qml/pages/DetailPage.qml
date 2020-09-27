@@ -30,13 +30,10 @@ Page {
         if (_backdropImages && _backdropImages.length > 0) {
             var rand = Math.floor(Math.random() * (_backdropImages.length - 0.001))
             console.log("Random: ", rand)
-            //backdrop.source = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
-            appWindow.backgroundSource = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
+            backdrop.source = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
         } else if (_parentBackdropImages && _parentBackdropImages.length > 0) {
             console.log(parentId)
-            //backdrop.source = ApiClient.baseUrl + "/Items/" + itemData.ParentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
-            appWindow.backgroundSource = ApiClient.baseUrl + "/Items/" + itemData.ParentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
-            Theme.backgroundGlowColor
+            backdrop.source = ApiClient.baseUrl + "/Items/" + itemData.ParentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
         }
     }
 

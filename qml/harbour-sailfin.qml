@@ -12,16 +12,11 @@ ApplicationWindow {
     property bool _hasInitialized: false
     // The global mediaPlayer instance
     readonly property MediaPlayer mediaPlayer: _mediaPlayer
-    property url backgroundSource
-    onBackgroundSourceChanged: {
-        if (backgroundSource) {
-            appWindow._overlayBackgroundSource.backgroundItem.source = backgroundSource
-        } else {
-            appWindow._overlayBackgroundSource.backgroundItem.source = Theme.backgroundImage
-        }
-    }
+
     // Data of the currently selected item. For use on the cover.
     property var itemData
+    // Id of the collection currently browsing. For use on the cover.
+    property string collectionId
 
     //FIXME: proper error handling
     Connections {

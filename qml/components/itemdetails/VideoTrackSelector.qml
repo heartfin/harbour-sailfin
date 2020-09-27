@@ -35,6 +35,7 @@ Column {
     ComboBox {
         id: audioSelector
         label: qsTr("Audio track")
+        enabled: audioModel.count > 1
         menu: ContextMenu {
             Repeater {
                 model: audioModel
@@ -49,6 +50,7 @@ Column {
     ComboBox {
         id: subitleSelector
         label: qsTr("Subtitle track")
+        enabled: subtitleModel.count > 0
         menu: ContextMenu {
             MenuItem {
                 readonly property int _index: -1

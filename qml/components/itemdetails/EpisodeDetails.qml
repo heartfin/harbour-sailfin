@@ -42,7 +42,15 @@ Column {
 
     PlainLabel {
         id: tinyDetails
-        text: qsTr("Released: %1 — Run time: %2").arg(itemData.ProductionYear).arg(Utils.ticksToText(itemData.RunTimeTicks))
+        text: {
+            if (typeof itemData.IndexNumberEnd !== "undefined") {
+                qsTr("Episode %1–%2 Season %3").arg(itemData.IndexNumber)
+                                               .arg(itemData.IndexNumberEnd)
+                                               .arg(itemData.ParentIndexNumber)
+            } else {
+                qsTr("Episode %1 Season %2").arg(itemData.IndexNumber).arg(itemData.ParentIndexNumber)
+            }
+        }
     }
 
     PlainLabel {

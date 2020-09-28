@@ -97,8 +97,8 @@ Dialog {
 					model: userModel
 					delegate: UserGridDelegate {
 						name: model.name
-						image: model.primaryImageTag ? "%1/Users/%2/Images/Primary?tag=%3".arg(ApiClient.baseUrl).arg(model.id).arg(model.primaryImageTag) : null
-						highlighted: model.name == username.text
+                        image: model.primaryImageTag ? "%1/Users/%2/Images/Primary?tag=%3".arg(ApiClient.baseUrl).arg(model.id).arg(model.primaryImageTag) : ""
+                        highlighted: model.name === username.text
 						onClicked: {
 							username.text = model.name
 							password.focus = true

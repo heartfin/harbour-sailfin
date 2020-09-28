@@ -126,30 +126,24 @@ void ApiClient::setupConnection() {
     // First detect redirects:
     // Note that this is done without calling JellyfinApiClient::get since that automatically includes the base_url,
     // which is something we want to avoid here.
-    QNetworkReply *rep = m_naManager.get(QNetworkRequest(m_baseUrl));
+    QNetworkRequest req = QNetworkRequest(m_baseUrl);
+    req.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    QNetworkReply *rep = m_naManager.get(req);
     connect(rep, &QNetworkReply::finished, this, [rep, this](){
         int status = statusCode(rep);
         qDebug() << status;
 
-        // Check if redirect
-        if (status >= 300 && status < 400) {
-            QString location = QString::fromUtf8(rep->rawHeader("location"));
-            qInfo() << "Redirect from " << this->m_baseUrl << " to " << location;
-            QUrl base = QUrl(m_baseUrl);
-            QString newUrl = base.resolved(QUrl(location)).toString();
-            // If the url wants to redirect us to their web interface, we have to chop the last part of.
-            if (newUrl.endsWith("/web/index.html")) {
-                newUrl.chop(QString("/web/index.html").size());
-                this->setBaseUrl(newUrl);
-                getBrandingConfiguration();
-            } else {
-                this->setBaseUrl(newUrl);
-                setupConnection();
-            }
-        } else {
-            getBrandingConfiguration();
+        QString newUrl = rep->url().toString();
+        // If the server wants to redirect us to their web interface, we have to chop the last part of the url off.
+        if (newUrl.endsWith("/web/index.html")) {
+            newUrl.chop(QString("/web/index.html").size());
+            this->setBaseUrl(newUrl);
         }
+        this->getBrandingConfiguration();
         rep->deleteLater();
+    });
+    connect(rep, &QNetworkReply::redirected, this, [req] (const QUrl &url) {
+        qDebug() << "Redirect from " << req.url() << " to " << url;
     });
     setDefaultErrorHandler(rep);
 }

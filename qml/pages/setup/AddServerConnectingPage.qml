@@ -45,17 +45,17 @@ Page {
 	
 	Connections {
 		target: ApiClient
-		onConnectionSuccess: {
-			console.log("Login success: " + loginMessage);
-			pageStack.replace(Qt.resolvedUrl("LoginDialog.qml"), {"loginMessage": loginMessage, "firstPage": firstPage});
-		}
-		onConnectionFailed: function(error) {
-			console.log("Connection failed : " + error)
-			pageStack.pop();
-		}
-		onNetworkError: {
-			console.log("ConnectingPage: popping page!")
-			pageStack.pop();
-		}
-	}
+        onConnectionSuccess: {
+            console.log("Login success: " + loginMessage);
+            pageStack.replace(Qt.resolvedUrl("LoginDialog.qml"), {"loginMessage": loginMessage, "firstPage": firstPage});
+        }
+        onConnectionFailed: function(error) {
+            console.log("Connection failed : " + error)
+            pageStack.pop();
+        }
+        onNetworkError: {
+            console.log("ConnectingPage: popping page!")
+            pageStack.pop();
+        }
+    }
 }

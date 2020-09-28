@@ -56,58 +56,58 @@ Dialog {
 		
 		ComboBox {
 			id: serverSelect
-			label: qsTr("Server")
-			description: qsTr("Sailfin will try to search for Jellyfin servers on your local network automatically")
-			
-			menu: ContextMenu {
-				MenuItem {
-					// Special values are cool, aren't they?
-					readonly property string _address: manualAddress.text
-					readonly property string _name: manualAddress.text
-					text: qsTr("enter address manually") 
-				}
-				Repeater {
-					model: serverModel
-					delegate: MenuItem {
-						readonly property string _address: address
-						readonly property string _name: name
-						text: qsTr("%1 - %2").arg(name).arg(address)
-					}
-				}
-			}
-		}
-		
-		TextField {
-			id: manualAddress
-			width: parent.width
-			clip: true
-			
-			label: qsTr("Server address")
-			placeholderText: qsTr("e.g. https://demo.jellyfin.org")
-			
-			enabled: serverSelect.currentIndex == 0
-			visible: enabled
-			
-			inputMethodHints: Qt.ImhUrlCharactersOnly
-			validator: RegExpValidator {
-				regExp: /^https?:\/\/[a-zA-Z0-9-._~:/?#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]+$/m
-			}
-			
-			EnterKey.enabled: addressCorrect
-			EnterKey.iconSource: "image://theme/icon-m-enter-accept"
+            label: qsTr("Server")
+            description: qsTr("Sailfin will try to search for Jellyfin servers on your local network automatically")
+
+            menu: ContextMenu {
+                MenuItem {
+                    // Special values are cool, aren't they?
+                    readonly property string _address: manualAddress.text
+                    readonly property string _name: manualAddress.text
+                    text: qsTr("enter address manually")
+                }
+                Repeater {
+                    model: serverModel
+                    delegate: MenuItem {
+                        readonly property string _address: address
+                        readonly property string _name: name
+                        text: qsTr("%1 - %2").arg(name).arg(address)
+                    }
+                }
+            }
+        }
+
+        TextField {
+            id: manualAddress
+            width: parent.width
+            clip: true
+
+            label: qsTr("Server address")
+            placeholderText: qsTr("e.g. https://demo.jellyfin.org")
+
+            enabled: serverSelect.currentIndex == 0
+            visible: enabled
+
+            inputMethodHints: Qt.ImhUrlCharactersOnly
+            validator: RegExpValidator {
+                regExp: /^https?:\/\/[a-zA-Z0-9-._~:/?#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]+$/m
+            }
+
+            EnterKey.enabled: addressCorrect
+            EnterKey.iconSource: "image://theme/icon-m-enter-accept"
             EnterKey.onClicked: accept()
-		}
-	}
-	
-	onOpened: serverModel.refresh()
-	canAccept: addressCorrect
-	
-	function tryConnect() {
-		console.log("Hi there!")
-		ApiClient.baseUrl = address;
-		//ApiClient.setupConnection()
-		//fakeTimer.start()
-	}
-	
-	onDone: tryConnect()
+        }
+    }
+
+    onOpened: serverModel.refresh()
+    canAccept: addressCorrect
+
+    function tryConnect() {
+        console.log("Hi there!")
+        ApiClient.baseUrl = address;
+        //ApiClient.setupConnection()
+        //fakeTimer.start()
+    }
+
+    onDone: tryConnect()
 }

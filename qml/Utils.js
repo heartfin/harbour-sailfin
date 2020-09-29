@@ -40,7 +40,7 @@ function ticksToText(ticks) {
 function itemImageUrl(baseUrl, item, type, options) {
     if (!item.ImageTags[type]) { return "" }
     return itemModelImageUrl(baseUrl, item.Id, item.ImageTags[type], type, options)
-   }
+}
 
 function itemModelImageUrl(baseUrl, itemId, tag, type, options) {
     if (tag == undefined) return ""
@@ -55,4 +55,24 @@ function itemModelImageUrl(baseUrl, itemId, tag, type, options) {
 
 function usePortraitCover(itemType) {
     return ["Series", "Movie", "tvshows", "movies"].indexOf(itemType) >= 0
+}
+
+/**
+ * Returns the page url for a certain item type.
+ */
+function getPageUrl(itemType) {
+    switch (itemType.toLowerCase()) {
+    case "series":
+        return Qt.resolvedUrl("pages/itemdetails/SeriesPage.qml")
+    case "movie":
+        return Qt.resolvedUrl("pages/itemdetails/FilmPage.qml")
+    case "collection":
+        return Qt.resolvedUrl("pages/itemdetails/ColectionPage.qml")
+    case "season":
+        return Qt.resolvedUrl("pages/itemdetails/SeasonPage.qml")
+    case "episode":
+        return Qt.resolvedUrl("pages/itemdetails/EpisodePage.qml")
+    default:
+        return Qt.resolvedUrl("pages/itemdetails/UnsupportedPage.qml")
+    }
 }

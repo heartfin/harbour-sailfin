@@ -102,14 +102,7 @@
     </message>
 </context>
 <context>
-    <name>DetailPage</name>
-    <message>
-        <source>Loading</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>EpisodeDetails</name>
+    <name>EpisodePage</name>
     <message>
         <source>Episode %1–%2 Season %3</source>
         <translation type="unfinished"></translation>
@@ -120,7 +113,7 @@
     </message>
 </context>
 <context>
-    <name>FilmDetails</name>
+    <name>FilmPage</name>
     <message>
         <source>Released: %1 — Run time: %2</source>
         <translation type="unfinished"></translation>
@@ -205,7 +198,7 @@
     </message>
 </context>
 <context>
-    <name>SeasonDetails</name>
+    <name>SeasonPage</name>
     <message>
         <source>No overview available</source>
         <extracomment>No overview/summary text of an episode available</extracomment>
@@ -213,7 +206,7 @@
     </message>
 </context>
 <context>
-    <name>SeriesDetails</name>
+    <name>SeriesPage</name>
     <message>
         <source>Seasons</source>
         <extracomment>Seasons of a (TV) show</extracomment>
@@ -258,13 +251,13 @@
     </message>
 </context>
 <context>
-    <name>UnsupportedDetails</name>
+    <name>UnsupportedPage</name>
     <message>
-        <source>This is still an alpha version :)</source>
+        <source>Item type (%1) unsupported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Item type (%1) unsupported</source>
+        <source>This is still an alpha version :)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

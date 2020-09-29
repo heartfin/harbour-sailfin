@@ -20,10 +20,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
-ViewPlaceholder {
-    property var itemData
+BaseDetailPage {
+    SilicaFlickable {
+        anchors.fill: parent
+        PageHeader {
+            title: itemData.Name
+        }
+        ViewPlaceholder {
 
-    enabled: true
-    text: qsTr("Item type (%1) unsupported").arg(itemData.Type)
-    hintText: qsTr("This is still an alpha version :)")
+            enabled: true
+            text: qsTr("Item type (%1) unsupported").arg(itemData.Type)
+            hintText: qsTr("This is still an alpha version :)")
+        }
+    }
 }

@@ -21,21 +21,18 @@ import Sailfish.Silica 1.0
 
 import nl.netsoj.chris.Jellyfin 1.0
 
-import ".."
-import "../components"
-import "../Utils.js" as Utils
+import "../.."
+import "../../components"
 
-Page {
+BaseDetailPage {
     id: pageRoot
-    property var itemId
-    property var itemData
-    property bool _loading: true
 
     UserItemModel {
         id: collectionModel
         apiClient: ApiClient
         parentId: itemData.Id || ""
         sortBy: ["SortName"]
+        onParentIdChanged: reload()
     }
 
     SilicaGridView {
@@ -99,7 +96,7 @@ Page {
                     pageStack.push(Qt.resolvedUrl("CollectionPage.qml"), {"itemId": model.id})
                     break;
                 default:
-                    pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
+                    pageStack.push(Utils.getPageUrl(model.type), {"itemId": model.id})
                 }
             }
         }
@@ -111,48 +108,6 @@ Page {
         }
 
         VerticalScrollDecorator {}
-    }
-
-    PageBusyIndicator {
-        running: pageRoot._loading
-    }
-
-    onItemIdChanged: {
-        itemData = {}
-        if (itemId.length && PageStatus.Active) {
-            pageRoot._loading = true
-            ApiClient.fetchItem(itemId)
-        }
-    }
-
-    onStatusChanged: {
-        if (status == PageStatus.Deactivating) {
-            backdrop.clear()
-        }
-        if (status == PageStatus.Active) {
-            if (itemId && !itemData) {
-                ApiClient.fetchItem(itemId)
-                appWindow.collectionId = itemId
-            }
-
-        }
-    }
-
-    Connections {
-        target: ApiClient
-        onItemFetched: {
-            if (itemId === pageRoot.itemId) {
-                pageRoot.itemData = result
-                pageRoot._loading = false
-                console.log(JSON.stringify(result))
-                collectionModel.parentId = result.Id
-                collectionModel.reload()
-                if (status == PageStatus.Active) {
-                    appWindow.itemData = null
-                    appWindow.collectionId = itemId
-                }
-            }
-        }
     }
 
     Component {

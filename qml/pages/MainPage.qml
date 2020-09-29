@@ -94,7 +94,7 @@ Page {
                     text: model.name
                     busy: userItemModel.status != ApiModel.Ready
 
-                    onHeaderClicked: pageStack.push(Qt.resolvedUrl("CollectionPage.qml"), {"itemId": model.id})
+                    onHeaderClicked: pageStack.push(Qt.resolvedUrl("itemdetails/CollectionPage.qml"), {"itemId": model.id})
                     Loader {
                         width: parent.width
                         sourceComponent: carrouselView
@@ -202,7 +202,7 @@ Page {
                 progress: model.userData.PlayedPercentage / 100
 
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
+                    pageStack.push(Utils.getPageUrl(model.type), {"itemId": model.id})
                 }
             }
         }

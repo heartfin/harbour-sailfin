@@ -21,8 +21,7 @@ import Sailfish.Silica 1.0
 
 import nl.netsoj.chris.Jellyfin 1.0
 
-import "../components"
-import "../components/itemdetails"
+import "../../components"
 
 /**
  * This page displays details about a film, show, season, episode, and so on.
@@ -35,11 +34,11 @@ Page {
     property string itemId: ""
     property var itemData: ({})
     property bool _loading: true
-    readonly property bool _hasLogo: itemData.ImageTags.Logo !== undefined
-    readonly property string _logo: itemData.ImageTags.Logo
+    readonly property bool hasLogo: (typeof itemData.ImageTags !== "undefined") && (typeof itemData.ImageTags["Logo"] !== "undefined")
     readonly property var _backdropImages: itemData.BackdropImageTags
     readonly property var _parentBackdropImages: itemData.ParentBackdropImageTags
     readonly property string parentId: itemData.ParentId || ""
+    property alias backdrop: backdrop
 
     on_BackdropImagesChanged: updateBackdrop()
     on_ParentBackdropImagesChanged: updateBackdrop()
@@ -60,72 +59,6 @@ Page {
     GlassyBackground {
         id: backdrop
         anchors.fill: parent
-    }
-
-    SilicaFlickable {
-        anchors.fill: parent
-        contentHeight: content.height
-
-        Column {
-            id: content
-            width: parent.width
-
-            PageHeader {
-                title: itemData.Name || qsTr("Loading")
-                visible: !_hasLogo
-            }
-
-            Column {
-                width: parent.width
-                Item {
-                    width: 1
-                    height: Theme.paddingLarge
-                }
-                RemoteImage {
-                    anchors {
-                        horizontalCenter: parent.horizontalCenter
-                    }
-                    source: _hasLogo ? ApiClient.baseUrl + "/Items/" + itemId + "/Images/Logo?tag=" + _logo : ""
-                }
-                Item {
-                    width: 1
-                    height: Theme.paddingLarge
-                }
-                visible: _hasLogo
-            }
-
-            Item {
-                width: 1
-                height: Theme.paddingLarge
-            }
-
-            Loader {
-                active: itemData != undefined
-                asynchronous: true
-                width: parent.width
-                source: {
-                    switch (itemData.Type){
-                    case "Movie":
-                        return Qt.resolvedUrl("../components/itemdetails/FilmDetails.qml")
-                    case "Series":
-                        return Qt.resolvedUrl("../components/itemdetails/SeriesDetails.qml")
-                    case "Season":
-                        return Qt.resolvedUrl("../components/itemdetails/SeasonDetails.qml")
-                    case "Episode":
-                        return Qt.resolvedUrl("../components/itemdetails/EpisodeDetails.qml")
-                    case undefined:
-                        return ""
-                    default:
-                        return Qt.resolvedUrl("../components/itemdetails/UnsupportedDetails.qml")
-                    }
-                }
-                onLoaded: {
-                    item.itemData = Qt.binding(function() { return pageRoot.itemData; })
-                }
-            }
-
-
-        }
     }
 
     PageBusyIndicator {
@@ -160,8 +93,13 @@ Page {
                 //console.log(JSON.stringify(result))
                 pageRoot.itemData = result
                 pageRoot._loading = false
-                if (status == PageStatus.Active)
-                appWindow.itemData = result
+                if (status == PageStatus.Active) {
+                    if (itemData.Type === "CollectionFolder") {
+                        appWindow.collectionId = itemData.Id
+                    } else {
+                        appWindow.itemData = result
+                    }
+                }
             }
         }
     }

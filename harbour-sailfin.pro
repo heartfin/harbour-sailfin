@@ -41,31 +41,32 @@ DISTFILES += \
     qml/components/LibraryItemDelegate.qml \
     qml/components/MoreSection.qml \
     qml/components/PlainLabel.qml \
+    qml/components/PlayToolbar.qml \
     qml/components/RemoteImage.qml \
     qml/components/Shim.qml \
     qml/components/UserGridDelegate.qml \
     qml/components/VideoPlayer.qml \
-    qml/components/itemdetails/CollectionFolder.qml \
-    qml/components/itemdetails/EpisodeDetails.qml \
-    qml/components/itemdetails/FilmDetails.qml \
-    qml/components/itemdetails/PlayToolbar.qml \
+    qml/components/VideoTrackSelector.qml \
     qml/components/itemdetails/SeasonDetails.qml \
-    qml/components/itemdetails/SeriesDetails.qml \
-    qml/components/itemdetails/UnsupportedDetails.qml \
-    qml/components/itemdetails/VideoTrackSelector.qml \
     qml/components/videoplayer/VideoError.qml \
     qml/components/videoplayer/VideoHud.qml \
     qml/cover/CoverPage.qml \
     qml/cover/PosterCover.qml \
     qml/cover/VideoCover.qml \
-    qml/pages/CollectionPage.qml \
-    qml/pages/DetailPage.qml \
     qml/pages/LegalPage.qml \
     qml/pages/MainPage.qml \
     qml/pages/AboutPage.qml \
     qml/harbour-sailfin.qml \
     qml/pages/SettingsPage.qml \
     qml/pages/VideoPage.qml \
+    qml/pages/itemdetails/BaseDetailPage.qml \
+    qml/pages/itemdetails/CollectionPage.qml \
+    qml/pages/itemdetails/EpisodePage.qml \
+    qml/pages/itemdetails/FilmPage.qml \
+    qml/pages/itemdetails/MusicAlbumPage.qml \
+    qml/pages/itemdetails/SeasonPage.qml \
+    qml/pages/itemdetails/SeriesPage.qml \
+    qml/pages/itemdetails/UnsupportedPage.qml \
     qml/pages/setup/AddServerConnectingPage.qml \
     qml/pages/setup/LoginDialog.qml \
     qml/qmldir

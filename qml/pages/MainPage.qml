@@ -202,7 +202,7 @@ Page {
                 progress: model.userData.PlayedPercentage / 100
 
                 onClicked: {
-                    pageStack.push(Utils.getPageUrl(model.type), {"itemId": model.id})
+                    pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
                 }
             }
         }

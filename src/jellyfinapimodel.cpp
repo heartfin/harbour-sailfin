@@ -60,6 +60,9 @@ void ApiModel::load(LoadType type) {
     if (!m_sortBy.empty()) {
         query.addQueryItem("SortBy", m_sortBy.join(","));
     }
+    if (m_sortOrder != Unspecified) {
+        query.addQueryItem("SortOrder", m_sortOrder == Ascending ? "Ascending" : "Descending");
+    }
     if (!m_imageTypes.empty()) {
         query.addQueryItem("ImageTypes", m_imageTypes.join(","));
     }
@@ -208,7 +211,7 @@ void ApiModel::addQueryParameters(QUrlQuery &query) { Q_UNUSED(query)}
 
 void registerModels(const char *URI) {
     qmlRegisterUncreatableType<ApiModel>(URI, 1, 0, "ApiModel", "Is enum and base class");
-    qmlRegisterUncreatableType<SortOrder>(URI, 1, 0, "SortOrder", "Is enum");
+    qmlRegisterUncreatableType<SortOptions>(URI, 1, 0, "SortOptions", "Is enum");
     qmlRegisterType<PublicUserModel>(URI, 1, 0, "PublicUserModel");
     qmlRegisterType<UserViewModel>(URI, 1, 0, "UserViewModel");
     qmlRegisterType<UserItemModel>(URI, 1, 0, "UserItemModel");

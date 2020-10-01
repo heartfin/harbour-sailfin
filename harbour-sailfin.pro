@@ -67,6 +67,7 @@ DISTFILES += \
     qml/pages/itemdetails/SeasonPage.qml \
     qml/pages/itemdetails/SeriesPage.qml \
     qml/pages/itemdetails/UnsupportedPage.qml \
+    qml/pages/itemdetails/VideoPage.qml \
     qml/pages/setup/AddServerConnectingPage.qml \
     qml/pages/setup/LoginDialog.qml \
     qml/qmldir

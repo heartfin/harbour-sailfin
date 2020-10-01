@@ -80,7 +80,7 @@ BaseDetailPage {
                 delegate: LibraryItemDelegate {
                     poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
                     title: model.name
-                    onClicked: pageStack.push(Utils.getPageUrl(model.type), {"itemId": model.id})
+                    onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
                 }
             }
 

@@ -27,5 +27,8 @@ QtObject {
     readonly property real libraryDelegateHeight: Screen.width / 3
 
     readonly property real libraryDelegatePosterHeight: Screen.width / 2
+
     readonly property real libraryProgressHeight: Theme.paddingMedium
+
+    readonly property real horizontalVideoAspectRatio: 1.66666 //itemData.PrimaryImageAspectRatio
 }

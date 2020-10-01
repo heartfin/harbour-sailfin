@@ -93,6 +93,16 @@
         <source>Date added</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Ascending</source>
+        <extracomment>Sort order</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Descending</source>
+        <extracomment>Sort order</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CoverPage</name>
@@ -104,11 +114,15 @@
 <context>
     <name>EpisodePage</name>
     <message>
-        <source>Episode %1–%2 Season %3</source>
+        <source>Episode %1–%2 | %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Episode %1 Season %2</source>
+        <source>Episode %1 | %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -116,6 +130,10 @@
     <name>FilmPage</name>
     <message>
         <source>Released: %1 — Run time: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -298,6 +316,13 @@
     <message>
         <source>Retry</source>
         <extracomment>Button to retry loading a video after a failure</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>VideoPage</name>
+    <message>
+        <source>Run time: %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -62,17 +62,13 @@ BaseDetailPage {
                 fillMode: Image.PreserveAspectCrop
                 clip: true
             }
-            Rectangle {
+            Shim {
                 anchors {
                     left: parent.left
                     bottom: parent.bottom
                     right: parent.right
                 }
                 height: itemName.height + Theme.paddingSmall * 2
-                gradient: Gradient {
-                    GradientStop { position: 0.0; color: "transparent" }
-                    GradientStop { position: 1.0; color: Theme.highlightDimmerColor }
-                }
                 visible: itemImage.status !== Image.Null
             }
             Label {
@@ -96,7 +92,7 @@ BaseDetailPage {
                     pageStack.push(Qt.resolvedUrl("CollectionPage.qml"), {"itemId": model.id})
                     break;
                 default:
-                    pageStack.push(Utils.getPageUrl(model.type), {"itemId": model.id})
+                    pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
                 }
             }
         }
@@ -109,6 +105,8 @@ BaseDetailPage {
 
         VerticalScrollDecorator {}
     }
+
+    // The page for selecting a sort order
 
     Component {
         id: sortPageComponent
@@ -139,8 +137,23 @@ BaseDetailPage {
                         }
                         text: model.name
                     }
-                    onClicked: {
-                        collectionModel.sortBy = [model.value]
+                    menu: ContextMenu {
+                        MenuItem {
+                            //: Sort order
+                            text: qsTr("Ascending")
+                            onClicked: apply(model.value, ApiModel.Ascending)
+                        }
+                        MenuItem {
+                            //: Sort order
+                            text: qsTr("Descending")
+                            onClicked: apply(model.value, ApiModel.Descending)
+                        }
+                    }
+                    onClicked: openMenu()
+
+                    function apply(field, order) {
+                        collectionModel.sortBy = [field];
+                        collectionModel.sortOrder = order;
                         collectionModel.reload()
                         pageStack.pop()
                     }

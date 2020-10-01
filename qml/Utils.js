@@ -60,19 +60,26 @@ function usePortraitCover(itemType) {
 /**
  * Returns the page url for a certain item type.
  */
-function getPageUrl(itemType) {
+function getPageUrl(mediaType, itemType) {
     switch (itemType.toLowerCase()) {
     case "series":
         return Qt.resolvedUrl("pages/itemdetails/SeriesPage.qml")
     case "movie":
         return Qt.resolvedUrl("pages/itemdetails/FilmPage.qml")
     case "collection":
-        return Qt.resolvedUrl("pages/itemdetails/ColectionPage.qml")
+        return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
     case "season":
         return Qt.resolvedUrl("pages/itemdetails/SeasonPage.qml")
     case "episode":
         return Qt.resolvedUrl("pages/itemdetails/EpisodePage.qml")
     default:
-        return Qt.resolvedUrl("pages/itemdetails/UnsupportedPage.qml")
+        switch (mediaType ? mediaType.toLowerCase() : "folder") {
+        case "folder":
+            return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
+        case "video":
+            return Qt.resolvedUrl("pages/itemdetails/VideoPage.qml")
+        default:
+            return Qt.resolvedUrl("pages/itemdetails/UnsupportedPage.qml")
+        }
     }
 }

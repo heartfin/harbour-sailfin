@@ -31,9 +31,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "jellyfinapiclient.h"
 
 namespace Jellyfin {
-class SortOrder {
-    Q_GADGET
+class SortOptions : public QObject{
+    Q_OBJECT
 public:
+    explicit SortOptions (QObject *parent = nullptr) : QObject(parent) {}
     enum SortBy {
         Album,
         AlbumArtist,
@@ -53,6 +54,7 @@ public:
     };
     Q_ENUM(SortBy)
 };
+
 
 /**
  * @brief Abstract model for displaying a REST JSON collection. Role names will be based on the fields encountered in the
@@ -89,6 +91,13 @@ public:
         LoadingMore
     };
     Q_ENUM(ModelStatus)
+
+    enum SortOrder {
+        Unspecified,
+        Ascending,
+        Descending
+    };
+    Q_ENUM(SortOrder)
 
     /**
      * @brief Creates a new basemodel
@@ -130,6 +139,7 @@ public:
     Q_PROPERTY(QString seasonId MEMBER m_seasonId NOTIFY seasonIdChanged)
     Q_PROPERTY(QList<QString> imageTypes MEMBER m_imageTypes NOTIFY imageTypesChanged)
     Q_PROPERTY(bool recursive MEMBER m_recursive)
+    Q_PROPERTY(SortOrder sortOrder MEMBER m_sortOrder NOTIFY sortOrderChanged)
 
     // Path properties
     Q_PROPERTY(QString show MEMBER m_show NOTIFY showChanged)
@@ -164,6 +174,7 @@ signals:
     void limitChanged(int newLimit);
     void parentIdChanged(QString newParentId);
     void sortByChanged(QList<QString> newSortOrder);
+    void sortOrderChanged(SortOrder newSortOrder);
     void showChanged(QString newShow);
     void seasonIdChanged(QString newSeasonId);
     void fieldsChanged(QList<QString> newFields);
@@ -214,6 +225,7 @@ protected:
     QList<QString> m_fields;
     QList<QString> m_imageTypes;
     QList<QString> m_sortBy = {};
+    SortOrder m_sortOrder = Unspecified;
     bool m_recursive = false;
 
     QHash<int, QByteArray> m_roles;
@@ -228,7 +240,7 @@ private:
      * @brief Generates roleNames based on the first record in m_array.
      */
     void generateFields();
-    QString sortByToString(SortOrder::SortBy sortBy);
+    QString sortByToString(SortOptions::SortBy sortBy);
 };
 
 /**

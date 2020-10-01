@@ -83,3 +83,15 @@ function getPageUrl(mediaType, itemType) {
         }
     }
 }
+
+/**
+ * Generates a "nice" color based on a string by "hashing" it.
+ */
+function colorFromString(string) {
+    var hash = 0;
+    for (var i = 0; i < string.length; i++) {
+        hash += string.charCodeAt(i);
+    }
+    hash = (hash % 16) / 16;
+    return Qt.hsva(hash, 1.0, 1.0, 1.0);
+}

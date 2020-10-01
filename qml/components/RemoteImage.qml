@@ -26,23 +26,24 @@ import Sailfish.Silica 1.0
 HighlightImage {
 	property string fallbackImage
 	property bool usingFallbackImage
+    property color fallbackColor: Theme.highlightColor
     asynchronous: true
 	
-	BusyIndicator {
-		anchors.centerIn: parent
-		running: parent.status == Image.Loading
-	}
-
     Rectangle {
         id: fallbackBackground
         anchors.fill: parent
         gradient: Gradient {
-            GradientStop { position: 0.0; color: Theme.highlightColor; }
-            GradientStop { position: 1.0; color: Theme.highlightDimmerColor; }
+            GradientStop { position: 0.0; color: fallbackColor; }
+            GradientStop { position: 1.0; color: Theme.highlightDimmerFromColor(fallbackColor, Theme.colorScheme); }
         }
-        visible: parent.status == Image.Error || parent.status == Image.Null
+        visible: parent.status == Image.Error || parent.status == Image.Null || parent.status == Image.Loading
     }
-	
+
+    BusyIndicator {
+        anchors.centerIn: parent
+        running: parent.status == Image.Loading
+    }
+
     HighlightImage {
 		id: fallbackImageItem
 		anchors.centerIn: parent

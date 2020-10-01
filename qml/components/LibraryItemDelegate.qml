@@ -44,6 +44,7 @@ BackgroundItem {
             bottom: parent.bottom
         }
         fillMode: Image.PreserveAspectCrop
+        fallbackColor: Utils.colorFromString(title)
     }
 
     /*Rectangle {

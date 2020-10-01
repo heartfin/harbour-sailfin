@@ -59,6 +59,7 @@ BaseDetailPage {
                 id: itemImage
                 anchors.fill: parent
                 source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxWidth": width})
+                fallbackColor: Utils.colorFromString(model.name)
                 fillMode: Image.PreserveAspectCrop
                 clip: true
             }
@@ -68,7 +69,7 @@ BaseDetailPage {
                     bottom: parent.bottom
                     right: parent.right
                 }
-                height: itemName.height + Theme.paddingSmall * 2
+                height: itemName.height + Theme.paddingMedium * 2
                 visible: itemImage.status !== Image.Null
             }
             Label {
@@ -86,15 +87,7 @@ BaseDetailPage {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: Theme.fontSizeSmall
             }
-            onClicked: {
-                switch(model.type) {
-                case "Folder":
-                    pageStack.push(Qt.resolvedUrl("CollectionPage.qml"), {"itemId": model.id})
-                    break;
-                default:
-                    pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
-                }
-            }
+            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
         }
 
         ViewPlaceholder {

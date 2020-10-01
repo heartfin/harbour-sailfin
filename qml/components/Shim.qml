@@ -23,9 +23,10 @@ import Sailfish.Silica 1.0
 Rectangle {
     property real shimOpacity: 1.0
     property color shimColor: Theme.overlayBackgroundColor
+    property bool upsideDown: false
     gradient: Gradient {
-                  GradientStop { position: 0.0; color: Theme.rgba(shimColor, 0.0); }
-                  GradientStop { position: 1.0; color: Theme.rgba(shimColor, shimOpacity); }
+                  GradientStop { position: upsideDown ? 1.0 : 0.0; color: Theme.rgba(shimColor, 0.0); }
+                  GradientStop { position: upsideDown ? 0.0 : 1.0; color: Theme.rgba(shimColor, shimOpacity); }
               }
 
 }

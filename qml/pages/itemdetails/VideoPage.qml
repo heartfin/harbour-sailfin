@@ -30,9 +30,13 @@ import "../.."
  * the FilmPage or EpisodePage.
  */
 BaseDetailPage {
+    property alias subtitle: pageHeader.description
+    default property alias _data: content.data
     SilicaFlickable {
         anchors.fill: parent
-        contentHeight: content.height
+        contentHeight: content.height + Theme.paddingLarge
+
+        VerticalScrollDecorator {}
 
         Column {
             id: content
@@ -40,17 +44,23 @@ BaseDetailPage {
             spacing: Theme.paddingMedium
 
             PageHeader {
+                id: pageHeader
                 title: itemData.Name
                 description: qsTr("Run time: %2").arg(Utils.ticksToText(itemData.RunTimeTicks))
             }
 
             PlayToolbar {
+                id: toolbar
                 width: parent.width
                 imageSource: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
                 imageAspectRatio: Constants.horizontalVideoAspectRatio
-                onPlayPressed: pageStack.push(Qt.resolvedUrl("../../pages/VideoPage.qml"),
-                                              {"itemId": itemId, "itemData": itemData, "audioTrack": trackSelector.audioTrack,
-                                                  "subtitleTrack": trackSelector.subtitleTrack })
+                playProgress: itemData.UserData.PlayedPercentage / 100
+                onPlayPressed: pageStack.push(Qt.resolvedUrl("../VideoPage.qml"),
+                                              {"itemId": itemId, "itemData": itemData,
+                                                  "audioTrack": trackSelector.audioTrack,
+                                                  "subtitleTrack": trackSelector.subtitleTrack,
+                                                  "startTicks": startFromBeginning ? 0.0
+                                                                    : itemData.UserData.PlaybackPositionTicks })
             }
 
             VideoTrackSelector {

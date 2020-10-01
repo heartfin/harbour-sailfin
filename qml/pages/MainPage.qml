@@ -43,6 +43,10 @@ Page {
                 text: qsTr("Settings")
                 onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
             }
+            MenuItem {
+                text: qsTr("Refresh")
+                onClicked: loadModels(true)
+            }
             busy: mediaLibraryModel.status == ApiModel.Loading
         }
 
@@ -198,7 +202,7 @@ Page {
                 /*model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
                                                      + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
                                                    : ""*/
-                landscape: !Utils.usePortraitCover(model.type)
+                landscape: !Utils.usePortraitCover(collectionType)
                 progress: (typeof model.userData !== "undefined") ? model.userData.PlayedPercentage / 100 : 0.0
 
                 onClicked: {

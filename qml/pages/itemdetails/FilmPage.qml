@@ -25,46 +25,17 @@ import nl.netsoj.chris.Jellyfin 1.0
 import "../../components"
 import "../.."
 
-BaseDetailPage {
-    SilicaFlickable {
-        anchors.fill: parent
-        contentHeight: content.height
+VideoPage {
+    subtitle: qsTr("Released: %1 — Run time: %2").arg(itemData.ProductionYear).arg(Utils.ticksToText(itemData.RunTimeTicks))
 
-        Column {
-            id: content
-            width: parent.width
-            spacing: Theme.paddingMedium
+    SectionHeader {
+        text: qsTr("Overview")
+    }
 
-            PageHeader {
-                title: itemData.Name
-                description: qsTr("Released: %1 — Run time: %2").arg(itemData.ProductionYear).arg(Utils.ticksToText(itemData.RunTimeTicks))
-            }
-
-            PlayToolbar {
-                width: parent.width
-                imageSource: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
-                imageAspectRatio: 1.66666 //itemData.PrimaryImageAspectRatio
-                onPlayPressed: pageStack.push(Qt.resolvedUrl("../../pages/VideoPage.qml"),
-                                              {"itemId": itemId, "itemData": itemData, "audioTrack": trackSelector.audioTrack,
-                                                  "subtitleTrack": trackSelector.subtitleTrack })
-            }
-
-            VideoTrackSelector {
-                id: trackSelector
-                width: parent.width
-                tracks: itemData.MediaStreams
-            }
-
-            SectionHeader {
-                text: qsTr("Overview")
-            }
-
-            PlainLabel {
-                id: overviewText
-                text: itemData.Overview
-                font.pixelSize: Theme.fontSizeSmall
-                color: Theme.secondaryHighlightColor
-            }
-        }
+    PlainLabel {
+        id: overviewText
+        text: itemData.Overview
+        font.pixelSize: Theme.fontSizeSmall
+        color: Theme.secondaryHighlightColor
     }
 }

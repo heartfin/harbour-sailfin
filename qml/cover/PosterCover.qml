@@ -23,6 +23,7 @@ import Sailfish.Silica 1.0
 import nl.netsoj.chris.Jellyfin 1.0
 
 import "../components"
+import ".."
 
 CoverBackground {
     property var mData: appWindow.itemData
@@ -32,6 +33,54 @@ CoverBackground {
                                              + "/Images/Primary?maxHeight=" + height + "&tag=" + mData.ImageTags["Primary"]
                                            : ""
         fillMode: Image.PreserveAspectCrop
+    }
+
+    Shim {
+        // Movies usually show their name on the poster,
+        // so showing it here as well is a bit double
+        visible: itemData.Type !== "Movie"
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+        }
+        upsideDown: true
+        height: parent.height / 2
+
+        Rectangle {
+            anchors {
+                top: parent.top
+                left: parent.left
+            }
+            width: itemData.UserData.PlayedPercentage / 100 * parent.width
+            height: Theme.paddingSmall
+            color: Theme.highlightColor
+        }
+
+        Column {
+            id: infoColumn
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
+            }
+            anchors.margins: Theme.paddingMedium
+            Label {
+                id: itemName
+                anchors {
+                    left: parent.left
+                    right: parent.right
+                }
+                color: Theme.primaryColor
+                text: itemData.Name
+                truncationMode: TruncationMode.Fade
+            }
+            Label {
+                visible: typeof itemData.RunTimeTicks !== "undefined"
+                color: Theme.secondaryColor
+                text: Utils.ticksToText(itemData.RunTimeTicks)
+            }
+        }
     }
 
 }

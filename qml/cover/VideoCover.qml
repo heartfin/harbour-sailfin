@@ -50,6 +50,15 @@ CoverBackground {
         fillMode: Image.PreserveAspectCrop
     }
 
+    Shim {
+        anchors {
+            left: parent.left
+            bottom: parent.bottom
+            right: parent.right
+        }
+        height: Theme.iconSizeLarge
+    }
+
     CoverActionList {
         CoverAction {
             id: playPause

@@ -44,6 +44,7 @@ Page {
     on_ParentBackdropImagesChanged: updateBackdrop()
 
     function updateBackdrop() {
+        return;
         if (_backdropImages && _backdropImages.length > 0) {
             var rand = Math.floor(Math.random() * (_backdropImages.length - 0.001))
             console.log("Random: ", rand)

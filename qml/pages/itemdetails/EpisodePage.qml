@@ -24,56 +24,25 @@ import nl.netsoj.chris.Jellyfin 1.0
 import "../../components"
 import "../../"
 
-BaseDetailPage {
-    SilicaFlickable {
-        anchors.fill: parent
-        contentHeight: content.height
-        Column {
-            id: content
-            width: parent.width
-
-            PageHeader {
-                title: itemData.Name
-                description: {
-                    if (typeof itemData.IndexNumberEnd !== "undefined") {
-                        qsTr("Episode %1–%2 | %3").arg(itemData.IndexNumber)
-                        .arg(itemData.IndexNumberEnd)
-                        .arg(itemData.SeasonName)
-                    } else {
-                        qsTr("Episode %1 | %2").arg(itemData.IndexNumber).arg(itemData.SeasonName)
-                    }
-                }
-            }
-
-            PlayToolbar {
-                imageSource: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
-                imageAspectRatio: itemData.PrimaryImageAspectRatio || 1.0
-                playProgress: itemData.UserData.PlayedPercentage / 100
-                onPlayPressed: pageStack.push(Qt.resolvedUrl("../VideoPage.qml"),
-                                              {"itemId": itemId, "itemData": itemData,
-                                                  "audioTrack": trackSelector.audioTrack,
-                                                  "subtitleTrack": trackSelector.subtitleTrack,
-                                                  "startTicks": startFromBeginning ? 0.0
-                                                                    : itemData.UserData.PlaybackPositionTicks })
-                width: parent.width
-            }
-
-            VideoTrackSelector {
-                id: trackSelector
-                width: parent.width
-                tracks: itemData.MediaStreams
-            }
-
-            SectionHeader {
-                text: qsTr("Overview")
-            }
-
-            PlainLabel {
-                id: overviewText
-                text: itemData.Overview || qsTr("No overview available")
-                font.pixelSize: Theme.fontSizeSmall
-                color: Theme.secondaryHighlightColor
-            }
+VideoPage {
+    subtitle: {
+        if (typeof itemData.IndexNumberEnd !== "undefined") {
+            qsTr("Episode %1–%2 | %3").arg(itemData.IndexNumber)
+            .arg(itemData.IndexNumberEnd)
+            .arg(itemData.SeasonName)
+        } else {
+            qsTr("Episode %1 | %2").arg(itemData.IndexNumber).arg(itemData.SeasonName)
         }
+    }
+
+    SectionHeader {
+        text: qsTr("Overview")
+    }
+
+    PlainLabel {
+        id: overviewText
+        text: itemData.Overview || qsTr("No overview available")
+        font.pixelSize: Theme.fontSizeSmall
+        color: Theme.secondaryHighlightColor
     }
 }

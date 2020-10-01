@@ -34,8 +34,11 @@ Column {
             id: playImage
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop
-            color: Theme.overlayBackgroundColor
             clip: true
+        }
+        Rectangle {
+            anchors.fill: parent
+            color: Theme.rgba(Theme.overlayBackgroundColor, Theme.opacityLow)
         }
         Icon {
             id: playButton

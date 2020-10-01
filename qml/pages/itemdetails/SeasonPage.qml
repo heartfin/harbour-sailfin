@@ -26,107 +26,98 @@ import "../../components"
 import ".."
 
 BaseDetailPage {
-    SilicaFlickable {
+    ShowEpisodesModel {
+        id: episodeModel
+        apiClient: ApiClient
+        show: itemData.SeriesId
+        seasonId: itemData.Id
+        fields: ["Overview"]
+    }
+
+    SilicaListView {
         anchors.fill: parent
         contentHeight: content.height
+        header: PageHeader {
+            title: itemData.Name
+            description: itemData.SeriesName
+        }
+        model: episodeModel
+        delegate: BackgroundItem {
+            height: Constants.libraryDelegateHeight
+            RemoteImage {
+                id: episodeImage
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    bottom: parent.bottom
+                }
+                width: Constants.libraryDelegateWidth
+                height: Constants.libraryDelegateHeight
+                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
+                fillMode: Image.PreserveAspectCrop
+                clip: true
 
-        Column {
-            id: content
-            width: parent.width
-
-            PageHeader {
-                title: itemData.Name
-                description: itemData.SeriesName
-            }
-
-            ShowEpisodesModel {
-                id: episodeModel
-                apiClient: ApiClient
-                show: itemData.SeriesId
-                seasonId: itemData.Id
-                fields: ["Overview"]
-            }
-
-            ColumnView {
-                model: episodeModel
-                itemHeight: Constants.libraryDelegateHeight
-                delegate: BackgroundItem {
-                    height: Constants.libraryDelegateHeight
-                    RemoteImage {
-                        id: episodeImage
-                        anchors {
-                            top: parent.top
-                            left: parent.left
-                            bottom: parent.bottom
-                        }
-                        width: Constants.libraryDelegateWidth
-                        height: Constants.libraryDelegateHeight
-                        source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
-                        fillMode: Image.PreserveAspectCrop
-                        clip: true
-
-                        // Makes the progress bar stand out more
-                        Shim {
-                            anchors {
-                                left: parent.left
-                                bottom: parent.bottom
-                                right: parent.right
-                            }
-                            height: parent.height / 3
-                            shimColor: Theme.overlayBackgroundColor
-                            shimOpacity: Theme.opacityOverlay
-                            //width: model.userData.PlayedPercentage * parent.width / 100
-                            visible: episodeProgress.width > 0 // It doesn't look nice when it's visible on every image
-                        }
-
-                        Rectangle {
-                            id: episodeProgress
-                            anchors {
-                                left: parent.left
-                                bottom: parent.bottom
-                            }
-                            height: Theme.paddingMedium
-                            width: model.userData.PlayedPercentage * parent.width / 100
-                            color: Theme.highlightColor
-                        }
+                // Makes the progress bar stand out more
+                Shim {
+                    anchors {
+                        left: parent.left
+                        bottom: parent.bottom
+                        right: parent.right
                     }
+                    height: parent.height / 3
+                    shimColor: Theme.overlayBackgroundColor
+                    shimOpacity: Theme.opacityOverlay
+                    //width: model.userData.PlayedPercentage * parent.width / 100
+                    visible: episodeProgress.width > 0 // It doesn't look nice when it's visible on every image
+                }
 
-                    Label {
-                        id: episodeTitle
-                        anchors {
-                            left: episodeImage.right
-                            leftMargin: Theme.paddingLarge
-                            top: parent.top
-                            right: parent.right
-                            rightMargin: Theme.horizontalPageMargin
-                        }
-                        text: model.name
-                        truncationMode: TruncationMode.Fade
-                        horizontalAlignment: Text.AlignLeft
+                Rectangle {
+                    id: episodeProgress
+                    anchors {
+                        left: parent.left
+                        bottom: parent.bottom
                     }
-
-                    Label {
-                        id: episodeOverview
-                        anchors {
-                            left: episodeImage.right
-                            leftMargin: Theme.paddingLarge
-                            right: parent.right
-                            rightMargin: Theme.horizontalPageMargin
-                            top: episodeTitle.bottom
-                            bottom: parent.bottom
-                        }
-                        color: highlighted ? Theme.secondaryHighlightColor: Theme.secondaryColor
-                        font.pixelSize: Theme.fontSizeExtraSmall
-                        //: No overview/summary text of an episode available
-                        text: model.overview || qsTr("No overview available")
-                        wrapMode: Text.WordWrap
-                        elide: Text.ElideRight
-                    }
-                    onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
+                    height: Theme.paddingMedium
+                    width: model.userData.PlayedPercentage * parent.width / 100
+                    color: Theme.highlightColor
                 }
             }
 
+            Label {
+                id: episodeTitle
+                anchors {
+                    left: episodeImage.right
+                    leftMargin: Theme.paddingLarge
+                    top: parent.top
+                    right: parent.right
+                    rightMargin: Theme.horizontalPageMargin
+                }
+                text: model.name
+                truncationMode: TruncationMode.Fade
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            Label {
+                id: episodeOverview
+                anchors {
+                    left: episodeImage.right
+                    leftMargin: Theme.paddingLarge
+                    right: parent.right
+                    rightMargin: Theme.horizontalPageMargin
+                    top: episodeTitle.bottom
+                    bottom: parent.bottom
+                }
+                color: highlighted ? Theme.secondaryHighlightColor: Theme.secondaryColor
+                font.pixelSize: Theme.fontSizeExtraSmall
+                //: No overview/summary text of an episode available
+                text: model.overview || qsTr("No overview available")
+                wrapMode: Text.WordWrap
+                elide: Text.ElideRight
+            }
+            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
         }
+
+        VerticalScrollDecorator {}
     }
     onItemDataChanged: {
         console.log(JSON.stringify(itemData))

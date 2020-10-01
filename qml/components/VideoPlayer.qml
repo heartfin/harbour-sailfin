@@ -56,7 +56,6 @@ SilicaItem {
         apiClient: ApiClient
         itemId: playerRoot.itemId
         autoOpen: true
-        //autoPlay: true
         onStreamUrlChanged: {
             if (mediaSource.streamUrl != "") {
                 player.source = streamUrl
@@ -105,13 +104,14 @@ SilicaItem {
 
     function stop() {
         player.stop()
-        //player.source = ""
     }
 
     Connections {
+        property bool enabled: true
         id: playerReadyToSeek
         target: player
         onPlaybackStateChanged: {
+            if (!enabled) return;
             if (startTicks > 0 && player.playbackState == MediaPlayer.PlayingState) {
                 console.log("Seeking to " + Utils.ticksToMs(startTicks))
                 player.seek(Utils.ticksToMs(startTicks))

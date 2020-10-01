@@ -65,7 +65,11 @@ Item {
         id: wakeupArea
         enabled: true
         anchors.fill: parent
-        onClicked: hidden ? videoHud.show(true) : videoHud.hide(true)
+        onClicked: {
+            hidden ? videoHud.show(true) : videoHud.hide(true)
+            console.log("Trying")
+        }
+
     }
 
     BusyIndicator {
@@ -156,18 +160,21 @@ Item {
     }
 
     function show(manual) {
+        _manuallyActivated = manual
         if (manual) {
-            _manuallyActivated = true
             inactivityTimer.restart()
         } else {
-            _manuallyActivated = false
+            inactivityTimer.stop()
         }
         opacity = 1
     }
 
     function hide(manual) {
         // Don't hide if the user decided on their own to show the hud
-        if (!manual && _manuallyActivated) return;
+        //if (!manual && _manuallyActivated) return;
+        // Don't give in to the user if they want to hide the hud while it was forced upon them
+        /*if (!_manuallyActivated && manual) return;
+        _manuallyActivated = false;*/
         opacity = 0
     }
 

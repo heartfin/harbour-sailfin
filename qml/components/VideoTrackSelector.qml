@@ -70,6 +70,7 @@ Column {
     onTracksChanged: {
         audioModel.clear()
         subtitleModel.clear()
+        if (typeof tracks === "undefined") return
         for(var i = 0; i < tracks.length; i++) {
             var track = tracks[i];
             switch(track.Type) {

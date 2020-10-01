@@ -41,6 +41,10 @@ Rectangle {
             color: Theme.errorColor
             text: {
                 switch(player.error) {
+                case MediaPlayer.NoError:
+                    //: Just to be complete if the application shows a video playback error when there's no error.
+                    qsTr("No error");
+                    break;
                 case MediaPlayer.ResourceError:
                     //: Video playback error: out of resources
                     qsTr("Resource allocation error")

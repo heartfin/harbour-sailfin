@@ -33,6 +33,14 @@ function timeToText(time) {
     return hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "")+ seconds
 }
 
+function msToTicks(ms) {
+    return ms * 10000;
+}
+
+function ticksToMs(ticks) {
+    return ticks / 10000;
+}
+
 function ticksToText(ticks) {
     return timeToText(ticks / 10000);
 }

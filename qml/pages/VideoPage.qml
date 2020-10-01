@@ -33,6 +33,7 @@ Page {
     property var itemData
     property int audioTrack
     property int subtitleTrack
+    property int startTicks: 0
 
     allowedOrientations: Orientation.All
     showNavigationIndicator: videoPlayer.hudVisible
@@ -45,6 +46,7 @@ Page {
         title: itemData.Name
         audioTrack: videoPage.audioTrack
         subtitleTrack: videoPage.subtitleTrack
+        startTicks: videoPage.startTicks
 
         onLandscapeChanged: {
             console.log("Is landscape: " + landscape)

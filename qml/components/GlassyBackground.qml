@@ -54,7 +54,7 @@ Rectangle {
         anchors.fill: backgroundImage
         source: backgroundImage
         opacity: dimmedOpacity
-        radius: 50
+        radius: 100
     }
 
     Image {

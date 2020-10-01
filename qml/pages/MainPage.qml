@@ -199,7 +199,7 @@ Page {
                                                      + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
                                                    : ""*/
                 landscape: !Utils.usePortraitCover(model.type)
-                progress: model.userData.PlayedPercentage / 100
+                progress: (typeof model.userData !== "undefined") ? model.userData.PlayedPercentage / 100 : 0.0
 
                 onClicked: {
                     pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})

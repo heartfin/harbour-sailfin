@@ -47,10 +47,14 @@ BaseDetailPage {
 
             PlayToolbar {
                 imageSource: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
-                imageAspectRatio: itemData.PrimaryImageAspectRatio
+                imageAspectRatio: itemData.PrimaryImageAspectRatio || 1.0
+                playProgress: itemData.UserData.PlayedPercentage / 100
                 onPlayPressed: pageStack.push(Qt.resolvedUrl("../VideoPage.qml"),
-                                              {"itemId": itemId, "itemData": itemData, "audioTrack": trackSelector.audioTrack,
-                                                  "subtitleTrack": trackSelector.subtitleTrack })
+                                              {"itemId": itemId, "itemData": itemData,
+                                                  "audioTrack": trackSelector.audioTrack,
+                                                  "subtitleTrack": trackSelector.subtitleTrack,
+                                                  "startTicks": startFromBeginning ? 0.0
+                                                                    : itemData.UserData.PlaybackPositionTicks })
                 width: parent.width
             }
 
@@ -66,7 +70,7 @@ BaseDetailPage {
 
             PlainLabel {
                 id: overviewText
-                text: itemData.Overview
+                text: itemData.Overview || qsTr("No overview available")
                 font.pixelSize: Theme.fontSizeSmall
                 color: Theme.secondaryHighlightColor
             }

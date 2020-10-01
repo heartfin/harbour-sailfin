@@ -125,6 +125,10 @@
         <source>Overview</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>No overview available</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FilmPage</name>
@@ -316,6 +320,11 @@
     <message>
         <source>Retry</source>
         <extracomment>Button to retry loading a video after a failure</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No error</source>
+        <extracomment>Just to be complete if the application shows a video playback error when there&apos;s no error.</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>

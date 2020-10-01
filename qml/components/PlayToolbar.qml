@@ -23,7 +23,8 @@ import Sailfish.Silica 1.0
 Column {
     property alias imageSource : playImage.source
     property real imageAspectRatio: 1.0
-    signal playPressed()
+    property real playProgress: 0.0
+    signal playPressed(bool startFromBeginning)
     spacing: Theme.paddingLarge
 
     BackgroundItem {
@@ -42,7 +43,16 @@ Column {
             anchors.centerIn: parent
             highlighted: parent.highlighted
         }
-        onClicked: playPressed()
+        Rectangle {
+            anchors {
+                left: parent.left
+                bottom: parent.bottom
+            }
+            height: Theme.paddingMedium
+            color: Theme.highlightColor
+            width: parent.width * playProgress
+        }
+        onClicked: playPressed(false)
     }
     Row {
         anchors {
@@ -52,6 +62,12 @@ Column {
             rightMargin: Theme.horizontalPageMargin
         }
         spacing: Theme.paddingMedium
+        IconButton {
+            id: playFromBeginning
+            icon.source: "image://theme/icon-m-backup"
+            visible: playProgress > 0
+            onClicked: playPressed(true)
+        }
         IconButton {
             id: favouriteButton
             icon.source: "image://theme/icon-m-favorite"

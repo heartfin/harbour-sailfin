@@ -23,6 +23,7 @@ import Sailfish.Silica 1.0
 import nl.netsoj.chris.Jellyfin 1.0
 
 import "videoplayer"
+import "../"
 
 /**
  * A videoPlayer for Jellyfin videos
@@ -38,6 +39,7 @@ SilicaItem {
     readonly property bool hudVisible: !hud.hidden || player.error !== MediaPlayer.NoError
     property alias audioTrack: mediaSource.audioIndex
     property alias subtitleTrack: mediaSource.subtitleIndex
+    property int startTicks: 0
 
     // Force a Light on Dark theme since I doubt that there are persons who are willing to watch a Video
     // on a white background.
@@ -49,7 +51,6 @@ SilicaItem {
         color: "black"
     }
 
-
     MediaSource {
         id: mediaSource
         apiClient: ApiClient
@@ -59,9 +60,14 @@ SilicaItem {
         onStreamUrlChanged: {
             if (mediaSource.streamUrl != "") {
                 player.source = streamUrl
-                //mediaPlayer.play()
             }
         }
+    }
+
+    Connections {
+        target: player
+        onPlaybackStateChanged: mediaSource.state = player.playbackState
+        onPositionChanged: mediaSource.position = Utils.msToTicks(player.position)
     }
 
 
@@ -99,6 +105,18 @@ SilicaItem {
 
     function stop() {
         player.stop()
-        player.source = ""
+        //player.source = ""
+    }
+
+    Connections {
+        id: playerReadyToSeek
+        target: player
+        onPlaybackStateChanged: {
+            if (startTicks > 0 && player.playbackState == MediaPlayer.PlayingState) {
+                console.log("Seeking to " + Utils.ticksToMs(startTicks))
+                player.seek(Utils.ticksToMs(startTicks))
+                playerReadyToSeek.enabled = false // Only seek the first time this property changes
+            }
+        }
     }
 }

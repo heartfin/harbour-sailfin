@@ -23,13 +23,15 @@ namespace Jellyfin {
 
 MediaSource::MediaSource(QObject *parent)
     : QObject(parent) {
-
+    m_updateTimer.setInterval(10000); // 10 seconds
+    m_updateTimer.setSingleShot(false);
+    connect(&m_updateTimer, &QTimer::timeout, this, &MediaSource::updatePlaybackInfo);
 }
 
 void MediaSource::fetchStreamUrl() {
     QUrlQuery params;
     params.addQueryItem("UserId", m_apiClient->userId());
-    params.addQueryItem("StartTimeTicks", "0");
+    params.addQueryItem("StartTimeTicks", QString::number(m_position));
     params.addQueryItem("IsPlayback", "true");
     params.addQueryItem("AutoOpenLiveStream", this->m_autoOpen ? "true" : "false");
     params.addQueryItem("MediaSourceId", this->m_itemId);
@@ -51,7 +53,7 @@ void MediaSource::fetchStreamUrl() {
             this->m_streamUrl = this->m_apiClient->baseUrl()
                     + mediaSources[0].toObject()["TranscodingUrl"].toString();
 
-
+            this->m_playMethod = Transcode;
             emit this->streamUrlChanged(this->m_streamUrl);
             qDebug() << "Found stream url: " << this->m_streamUrl;
         }
@@ -79,16 +81,83 @@ void MediaSource::setStreamUrl(const QString &streamUrl) {
     emit streamUrlChanged(streamUrl);
 }
 
-void MediaSource::play() {
-    //todo: playback reporting
+void MediaSource::setPosition(qint64 position) {
+    if (position == 0 && m_position != 0) {
+        // Save the old position when stop gets called. The QMediaPlayer will try to set
+        // position to 0 when stopped, but we don't want to report that to Jellyfin. We
+        // want the old position.
+        m_stopPosition = m_position;
+    }
+    m_position = position;
+    emit positionChanged(position);
 }
 
-void MediaSource::pause() {
-    //todo: playback reporting
+void MediaSource::setState(QMediaPlayer::State newState) {
+    if (m_state == newState) return;
+    if (m_state == QMediaPlayer::StoppedState) {
+        // We're transitioning from stopped to either playing or paused.
+        // Set up the recurring timer
+        m_updateTimer.start();
+        postPlaybackInfo(Started);
+    } else if (newState == QMediaPlayer::StoppedState) {
+        // We've stopped playing the media. Post a stop signal.
+        m_updateTimer.stop();
+        postPlaybackInfo(Stopped);
+    } else {
+        postPlaybackInfo(Progress);
+    }
+
+
+    m_state = newState;
+    emit this->stateChanged(newState);
 }
 
-void MediaSource::stop() {
-    //todo: playback reporting
+void MediaSource::updatePlaybackInfo() {
+    postPlaybackInfo(Progress);
+}
+
+void MediaSource::postPlaybackInfo(PlaybackInfoType type) {
+    QJsonObject root;
+
+    root["ItemId"] = m_itemId;
+    root["SessionId"] = m_playSessionId;
+
+    switch(type) {
+    case Started: // FALLTHROUGH
+    case Progress:
+
+        root["IsPaused"] = m_state != QMediaPlayer::PlayingState;
+        root["IsMuted"] = false;
+
+        root["AudioStreamIndex"] = m_audioIndex;
+        root["SubtitleStreamIndex"] = m_subtitleIndex;
+
+        root["PlayMethod"] = QVariant::fromValue(m_playMethod).toString();
+        root["PositionTicks"] = m_position;
+        break;
+    case Stopped:
+        root["PositionTicks"] = m_stopPosition;
+        break;
+    }
+
+    QString path;
+    switch (type) {
+    case Started:
+        path = "/Sessions/Playing";
+        break;
+    case Progress:
+        path = "/Sessions/Playing/Progress";
+        break;
+    case Stopped:
+        path = "/Sessions/Playing/Stopped";
+        break;
+    }
+
+    QNetworkReply *rep = m_apiClient->post(path, QJsonDocument(root));
+    connect(rep, &QNetworkReply::finished, this, [rep](){
+        rep->deleteLater();
+    });
+    m_apiClient->setDefaultErrorHandler(rep);
 }
 
 }

@@ -37,9 +37,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "credentialmanager.h"
 #include "jellyfindeviceprofile.h"
+#include "jellyfinwebsocket.h"
 
 namespace Jellyfin {
 class MediaSource;
+class WebSocket;
 /**
  * @brief An Api client for Jellyfin. Handles requests and authentication.
  *
@@ -67,6 +69,7 @@ class MediaSource;
  */
 class ApiClient : public QObject {
     friend class MediaSource;
+    friend class WebSocket;
     Q_OBJECT
 public:
     explicit ApiClient(QObject *parent = nullptr);
@@ -194,6 +197,7 @@ private:
     /*
      * State information
      */
+    WebSocket *m_webSocket;
     CredentialsManager * m_credManager;
     QString m_token;
     QString m_deviceName;
@@ -212,10 +216,8 @@ private:
      * Setters
      */
 
-    void setAuthenticated(bool authenticated) {
-        this->m_authenticated = authenticated;
-        emit authenticatedChanged(authenticated);
-    }
+    void setAuthenticated(bool authenticated);
+
     void setUserId(QString userId) {
         this->m_userId = userId;
         emit userIdChanged(userId);

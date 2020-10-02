@@ -21,7 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 namespace Jellyfin {
 ApiClient::ApiClient(QObject *parent)
-    : QObject(parent) {
+    : QObject(parent),
+      m_webSocket(new WebSocket(this)) {
     m_deviceName = QHostInfo::localHostName();
     m_deviceId = QUuid::createUuid().toString(); // TODO: make this not random?
     m_credManager = CredentialsManager::newInstance(this);
@@ -267,5 +268,11 @@ void ApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {
         emit this->networkError(error);
     }
     rep->deleteLater();
+}
+
+void ApiClient::setAuthenticated(bool authenticated) {
+    this->m_authenticated = authenticated;
+    if (authenticated) m_webSocket->open();
+    emit authenticatedChanged(authenticated);
 }
 }

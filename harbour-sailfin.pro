@@ -12,7 +12,7 @@
 # The name of your application
 TARGET = harbour-sailfin
 
-QT += multimedia
+QT += multimedia websockets
 
 CONFIG += sailfishapp c++11
 
@@ -31,6 +31,7 @@ SOURCES += \
     src/jellyfinapimodel.cpp \
     src/jellyfindeviceprofile.cpp \
     src/jellyfinmediasource.cpp \
+    src/jellyfinwebsocket.cpp \
     src/serverdiscoverymodel.cpp
 
 DISTFILES += \
@@ -90,4 +91,5 @@ HEADERS += \
     src/jellyfinapimodel.h \
     src/jellyfindeviceprofile.h \
     src/jellyfinmediasource.h \
+    src/jellyfinwebsocket.h \
     src/serverdiscoverymodel.h

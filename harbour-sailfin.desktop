@@ -1,8 +1,11 @@
 [Desktop Entry]
 Type=Application
+Version=1.1
 X-Nemo-Application-Type=silica-qt5
 Icon=harbour-sailfin
 Exec=harbour-sailfin
+
+
 Name=Sailfin
 # translation example:
 # your app name in German locale (de)
@@ -10,3 +13,7 @@ Name=Sailfin
 # Remember to comment out the following line, if you do not want to use
 # a different app name in German locale (de).
 Name[nl] = Sailfin
+GenericName=Jellyfin client
+
+Comment=Stream audio and video from your Jellyfin media server
+Categories=AudioVideo;Player

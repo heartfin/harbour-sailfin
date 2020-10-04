@@ -54,13 +54,13 @@ BaseDetailPage {
                 width: parent.width
                 imageSource: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
                 imageAspectRatio: Constants.horizontalVideoAspectRatio
-                playProgress: itemData.UserData.PlayedPercentage / 100
+                playProgress: itemData.userData.playedPercentage / 100
                 onPlayPressed: pageStack.push(Qt.resolvedUrl("../VideoPage.qml"),
                                               {"itemId": itemId, "itemData": itemData,
                                                   "audioTrack": trackSelector.audioTrack,
                                                   "subtitleTrack": trackSelector.subtitleTrack,
                                                   "startTicks": startFromBeginning ? 0.0
-                                                                    : itemData.UserData.PlaybackPositionTicks })
+                                                                    : itemData.userData.playbackPositionTicks })
             }
 
             VideoTrackSelector {

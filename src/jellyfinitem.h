@@ -36,7 +36,7 @@ public:
      * @brief Sets this objects properties based on obj.
      * @param obj The data to load into this object.
      */
-    void deserialize(const QJsonObject &obj);
+    void deserialize(const QJsonObject &obj, QObject *to = nullptr);
     QJsonObject serialize() const;
 private:
     QVariant jsonToVariant(QMetaProperty prop, const QJsonValue &val, const QJsonObject &root) const;

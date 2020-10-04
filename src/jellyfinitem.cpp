@@ -3,11 +3,45 @@
 namespace Jellyfin {
 JsonSerializable::JsonSerializable(QObject *parent) : QObject(parent) {}
 
-void JsonSerializable::deserialize(const QJsonObject &jObj) {
-    const QMetaObject *obj = this->metaObject();
+void JsonSerializable::deserialize(const QJsonObject &jObj, QObject *to) {
+    if (to == nullptr) to = this;
+    const QMetaObject *obj = to->metaObject();
+    qDebug() << "Inside class: " << QString(obj->className());
+
+    for (auto it = jObj.constBegin(); it != jObj.constEnd(); it++) {
+
+        // Hardcoded exception for the property id, since its special inside QML
+        if (it.key() == "Id") {
+            to->setProperty("jellyfinId", jsonToVariant(
+                                  obj->property(obj->indexOfProperty("jellyfinId")), it.value(), jObj));
+        } else {
+            const char *propName = fromPascalCase(it.key()).normalized(QString::NormalizationForm_D).toLatin1();
+            int propIndex = obj->indexOfProperty(propName);
+            if (propIndex >= 0) {
+                qDebug() << "Setting property " << QString(propName) << "(" << it.key() << ")";
+                // We have this property! Set it.
+                QMetaProperty prop = obj->property(propIndex);
+                prop.write(to, jsonToVariant(prop, it.value(), jObj));
+            } else {
+                qDebug() << "Setting custom property " << QString(propName) << "(" << it.key() << ")";
+                QJsonValue val = it.value();
+                if (val.isObject()) {
+                    // Create a new QObject with its properties.
+                    QObject *newObj = new QObject(to);
+                    deserialize(val.toObject(), newObj);
+                    to->setProperty(propName, QVariant::fromValue(newObj));
+                } else if (val.isArray()) {
+                    to->setProperty(propName, val.toArray().toVariantList());
+                } else {
+                    to->setProperty(propName, val.toVariant());
+                }
+            }
+        }
+    }
+    qDebug() << "Leaving class: " << QString(obj->className());
 
     // Loop over each property,
-    for (int i = 0; i < obj->propertyCount(); i++) {
+    /*for (int i = 0; i < obj->propertyCount(); i++) {
         QMetaProperty prop = obj->property(i);
         // Skip properties which are not stored (usually derrived of other properties)
         if (!prop.isStored()) continue;
@@ -24,7 +58,7 @@ void JsonSerializable::deserialize(const QJsonObject &jObj) {
         } else {
             qDebug() << "Ignored " << prop.name() << " while deserializing";
         }
-    }
+    }*/
 }
 
 QVariant JsonSerializable::jsonToVariant(QMetaProperty prop, const QJsonValue &val, const QJsonObject &root) const {
@@ -112,13 +146,15 @@ QJsonValue JsonSerializable::variantToJson(const QVariant var) const {
 }
 
 QString JsonSerializable::toPascalCase(QString str) {
-    str[0] = str[0].toUpper();
-    return str;
+    QString copy(str);
+    copy[0] = copy[0].toUpper();
+    return copy;
 }
 
 QString JsonSerializable::fromPascalCase(QString str) {
-    str[0] = str[0].toLower();
-    return str;
+    QString copy(str);
+    copy[0] = copy[0].toLower();
+    return copy;
 }
 
 

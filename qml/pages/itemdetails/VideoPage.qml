@@ -45,7 +45,7 @@ BaseDetailPage {
 
             PageHeader {
                 id: pageHeader
-                title: itemData.Name
+                title: itemData.name
                 description: qsTr("Run time: %2").arg(Utils.ticksToText(itemData.RunTimeTicks))
             }
 
@@ -66,7 +66,7 @@ BaseDetailPage {
             VideoTrackSelector {
                 id: trackSelector
                 width: parent.width
-                tracks: itemData.MediaStreams
+                tracks: itemData.mediaStreams
             }
         }
     }

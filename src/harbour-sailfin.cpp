@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "jellyfinapiclient.h"
 #include "jellyfinapimodel.h"
+#include "jellyfinitem.h"
 #include "jellyfinmediasource.h"
 #include "serverdiscoverymodel.h"
 
@@ -47,6 +48,7 @@ void registerQml() {
 
     // API models
     Jellyfin::registerModels(QML_NAMESPACE);
+    Jellyfin::registerSerializableJsonTypes(QML_NAMESPACE);
 }
 
 int main(int argc, char *argv[]) {

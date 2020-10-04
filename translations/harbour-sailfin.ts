@@ -142,6 +142,13 @@
     </message>
 </context>
 <context>
+    <name>Jellyfin::Item</name>
+    <message>
+        <source>Invalid response from the server: root element is not an object.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LegalPage</name>
     <message>
         <source>Legal</source>
@@ -216,6 +223,10 @@
     </message>
     <message>
         <source>Retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

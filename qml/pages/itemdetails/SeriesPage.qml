@@ -35,7 +35,7 @@ BaseDetailPage {
 
             PageHeader {
                 id: header
-                title: itemData.Name
+                title: itemData.name
                 visible: !hasLogo
             }
 
@@ -52,7 +52,7 @@ BaseDetailPage {
 
             PlainLabel {
                 id: overviewText
-                text: itemData.Overview
+                text: itemData.overview
                 font.pixelSize: Theme.fontSizeSmall
                 color: Theme.secondaryHighlightColor
             }
@@ -65,7 +65,7 @@ BaseDetailPage {
             ShowSeasonsModel {
                 id: showSeasonsModel
                 apiClient: ApiClient
-                show: itemData.Id
+                show: itemData.jellyfinId
             }
 
             SilicaListView {
@@ -87,7 +87,7 @@ BaseDetailPage {
         }
     }
     onItemDataChanged: {
-        showSeasonsModel.show = itemData.Id
+        showSeasonsModel.show = itemData.jellyfinId
         showSeasonsModel.reload()
     }
 }

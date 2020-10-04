@@ -23,3 +23,4 @@ git-change-log
 # Use the subjects (first lines) of tag annotations when no entry would be
 # included for a revision otherwise
 #git-change-log --auto-add-annotations
+exit 0

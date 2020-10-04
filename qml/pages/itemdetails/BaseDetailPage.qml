@@ -31,9 +31,11 @@ import "../../components"
  */
 Page {
     id: pageRoot
-    property string itemId: ""
-    property var itemData: ({})
-    property bool _loading: true
+    property alias itemId: jItem.jellyfinId
+    property alias itemData: jItem
+    //property string itemId: ""
+    //property var itemData: ({})
+    property bool _loading: jItem.status === "Loading"
     readonly property bool hasLogo: (typeof itemData.ImageTags !== "undefined") && (typeof itemData.ImageTags["Logo"] !== "undefined")
     readonly property var _backdropImages: itemData.BackdropImageTags
     readonly property var _parentBackdropImages: itemData.ParentBackdropImageTags
@@ -66,11 +68,11 @@ Page {
         running: pageRoot._loading
     }
 
-    onItemIdChanged: {
-        itemData = {}
-        if (itemId.length && PageStatus.Active) {
-            pageRoot._loading = true
-            ApiClient.fetchItem(itemId)
+    JellyfinItem {
+        id: jItem
+        apiClient: ApiClient
+        onStatusChanged: {
+            console.log("Status changed: " + newStatus, JSON.stringify(jItem))
         }
     }
 
@@ -81,7 +83,7 @@ Page {
         }
         if (status == PageStatus.Active) {
             if (itemId) {
-                ApiClient.fetchItem(itemId)
+                //ApiClient.fetchItem(itemId)
             }
 
         }
@@ -92,7 +94,7 @@ Page {
         onItemFetched: {
             if (itemId === pageRoot.itemId) {
                 //console.log(JSON.stringify(result))
-                pageRoot.itemData = result
+                //pageRoot.itemData = result
                 pageRoot._loading = false
                 if (status == PageStatus.Active) {
                     if (itemData.Type === "CollectionFolder") {

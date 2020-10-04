@@ -24,12 +24,12 @@ BaseDetailPage {
     SilicaFlickable {
         anchors.fill: parent
         PageHeader {
-            title: itemData.Name
+            title: itemData.name
         }
         ViewPlaceholder {
 
             enabled: true
-            text: qsTr("Item type (%1) unsupported").arg(itemData.Type)
+            text: qsTr("Item type (%1) unsupported").arg(itemData.type)
             hintText: qsTr("This is still an alpha version :)")
         }
     }

@@ -46,8 +46,8 @@ function ticksToText(ticks) {
 }
 
 function itemImageUrl(baseUrl, item, type, options) {
-    if (!item.ImageTags[type]) { return "" }
-    return itemModelImageUrl(baseUrl, item.Id, item.ImageTags[type], type, options)
+    if (!item.imageTags[type]) { return "" }
+    return itemModelImageUrl(baseUrl, item.jellyfinId, item.imageTags[type], type, options)
 }
 
 function itemModelImageUrl(baseUrl, itemId, tag, type, options) {

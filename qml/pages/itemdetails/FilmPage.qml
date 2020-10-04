@@ -26,7 +26,7 @@ import "../../components"
 import "../.."
 
 VideoPage {
-    subtitle: qsTr("Released: %1 — Run time: %2").arg(itemData.ProductionYear).arg(Utils.ticksToText(itemData.RunTimeTicks))
+    subtitle: qsTr("Released: %1 — Run time: %2").arg(itemData.productionYear).arg(Utils.ticksToText(itemData.runTimeTicks))
 
     SectionHeader {
         text: qsTr("Overview")
@@ -34,7 +34,7 @@ VideoPage {
 
     PlainLabel {
         id: overviewText
-        text: itemData.Overview
+        text: itemData.overview
         font.pixelSize: Theme.fontSizeSmall
         color: Theme.secondaryHighlightColor
     }

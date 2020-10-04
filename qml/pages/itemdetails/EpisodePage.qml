@@ -26,12 +26,12 @@ import "../../"
 
 VideoPage {
     subtitle: {
-        if (typeof itemData.IndexNumberEnd !== "undefined") {
-            qsTr("Episode %1–%2 | %3").arg(itemData.IndexNumber)
-            .arg(itemData.IndexNumberEnd)
-            .arg(itemData.SeasonName)
+        if (typeof itemData.indexNumberEnd !== "undefined") {
+            qsTr("Episode %1–%2 | %3").arg(itemData.indexNumber)
+            .arg(itemData.indexNumberEnd)
+            .arg(itemData.seasonName)
         } else {
-            qsTr("Episode %1 | %2").arg(itemData.IndexNumber).arg(itemData.SeasonName)
+            qsTr("Episode %1 | %2").arg(itemData.indexNumber).arg(itemData.seasonName)
         }
     }
 
@@ -41,7 +41,7 @@ VideoPage {
 
     PlainLabel {
         id: overviewText
-        text: itemData.Overview || qsTr("No overview available")
+        text: itemData.overview || qsTr("No overview available")
         font.pixelSize: Theme.fontSizeSmall
         color: Theme.secondaryHighlightColor
     }

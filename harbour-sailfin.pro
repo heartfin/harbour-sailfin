@@ -14,7 +14,8 @@ TARGET = harbour-sailfin
 
 QT += multimedia websockets
 
-CONFIG += sailfishapp c++11
+CONFIG += sailfishapp # c++17
+QMAKE_CXXFLAGS += -std=c++17
 
 # Help, something keeps eating my quotes and backslashes
 
@@ -30,6 +31,7 @@ SOURCES += \
     src/jellyfinapiclient.cpp \
     src/jellyfinapimodel.cpp \
     src/jellyfindeviceprofile.cpp \
+    src/jellyfinitem.cpp \
     src/jellyfinmediasource.cpp \
     src/jellyfinwebsocket.cpp \
     src/serverdiscoverymodel.cpp
@@ -90,6 +92,7 @@ HEADERS += \
     src/jellyfinapiclient.h \
     src/jellyfinapimodel.h \
     src/jellyfindeviceprofile.h \
+    src/jellyfinitem.h \
     src/jellyfinmediasource.h \
     src/jellyfinwebsocket.h \
     src/serverdiscoverymodel.h

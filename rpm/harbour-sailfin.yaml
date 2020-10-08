@@ -7,13 +7,12 @@ Release: 1
 Group: Qt/Qt
 URL: https://chris.netsoj.nl/projects/harbour-sailfin
 License: LGPL-2.0-or-later
-# This must be generated before uploading a package to a remote build service.
-# Usually this line does not need to be modified.
+# This must be generated before uploading a package to a remote build service.  Usually this line does not need to be modified.
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
   Play video's and music from your Jellyfin media player on your Sailfish device
-Builder: qtc5
+Builder: qmake5
 
 # This section specifies build dependencies that are resolved using pkgconfig.
 # This is the preferred way of specifying build dependencies for your package.
@@ -39,8 +38,13 @@ Files:
   - '%{_datadir}/%{name}'
   - '%{_datadir}/applications/%{name}.desktop'
   - '%{_datadir}/icons/hicolor/*/apps/%{name}.png'
+    
+Macros:
+  - '__provides_exclude_from; ^%{_datadir}/.*$'
+  - '__requires_exclude; ^libjellyfin-qt.*$'
 
 QMakeOptions:
+  - OS_SAILFISHOS=1
   - SAILFIN_VERSION='%{version}-%{release}'
 
 # For more information about yaml and what's supported in Sailfish OS

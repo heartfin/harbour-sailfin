@@ -33,7 +33,7 @@ Page {
     property var itemData
     property int audioTrack
     property int subtitleTrack
-    property int startTicks: 0
+    property real startTicks: 0 // Why is this a real? Because an integer only goes to 3:44 when the ticks are converted to doubles
 
     allowedOrientations: Orientation.All
     showNavigationIndicator: videoPlayer.hudVisible
@@ -43,7 +43,7 @@ Page {
         anchors.fill: parent
         itemId: videoPage.itemId
         player: appWindow.mediaPlayer
-        title: itemData.Name
+        title: itemData.name
         audioTrack: videoPage.audioTrack
         subtitleTrack: videoPage.subtitleTrack
         startTicks: videoPage.startTicks

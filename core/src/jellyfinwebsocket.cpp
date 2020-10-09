@@ -69,6 +69,9 @@ void WebSocket::textMessageReceived(const QString &message) {
     MessageType messageType = static_cast<MessageType>(QMetaEnum::fromType<WebSocket::MessageType>().keyToValue(messageTypeStr.toLatin1(), &ok));
     if (!ok) {
         qWarning() << "Unknown message arrived: " << messageTypeStr;
+        if (messageRoot.contains("Data")) {
+            qDebug() << "with data: " << QJsonDocument(messageRoot["Data"].toObject()).toJson();
+        }
         return;
     }
 
@@ -81,6 +84,21 @@ void WebSocket::textMessageReceived(const QString &message) {
         break;
     case KeepAlive:
         //TODO: do something?
+        break;
+    case UserDataChanged: {
+        QJsonObject data2 = data.toObject();
+        if (data2["UserId"] != m_apiClient->userId()) {
+            qDebug() << "Received UserDataCHanged for other user";
+            break;
+        }
+        QJsonArray userDataList = data2["UserDataList"].toArray();
+        for (QJsonValue val: userDataList) {
+            QSharedPointer<UserData> userData(new UserData, &QObject::deleteLater);
+            userData->deserialize(val.toObject());
+            m_apiClient->onUserDataChanged(userData->itemId(), userData);
+        }
+
+    }
         break;
     }
 

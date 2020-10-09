@@ -1,3 +1,22 @@
+/*
+Sailfin: a Jellyfin client written using Qt
+Copyright (C) 2020 Chris Josten
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
 #include "jellyfinitem.h"
 
 namespace Jellyfin {
@@ -15,7 +34,6 @@ void JsonSerializable::deserialize(const QJsonObject &jObj) {
         if (!prop.isStored()) continue;
         if (!prop.isWritable()) continue;
 
-        qDebug() << toPascalCase(prop.name());
         // Hardcoded exception for the property id, since its special inside QML
         if (QString(prop.name()) == "jellyfinId" && jObj.contains("Id")) {
             QJsonValue val = jObj["Id"];
@@ -30,17 +48,13 @@ void JsonSerializable::deserialize(const QJsonObject &jObj) {
             // the actual QList<SubclassOfQobject *>, so that qml can access the object with its real name.
             QString realName = toPascalCase(prop.name() + 8);
             if (!jObj.contains(realName)) {
-                qDebug() << "Ignoring " << realName << " - " << prop.name();
                 continue;
             }
             QJsonValue val = jObj[realName];
-            qDebug() << realName << " - " << prop.name() << ": " << val;
             QMetaProperty realProp = obj->property(obj->indexOfProperty(prop.name() + 8));
             if (!realProp.write(this, jsonToVariant(prop, val, jObj))) {
                 qDebug() << "Write to " << prop.name() << "failed";
             };
-        } else {
-            qDebug() << "Ignored " << prop.name() << " while deserializing";
         }
     }
 }
@@ -51,19 +65,24 @@ QVariant JsonSerializable::jsonToVariant(QMetaProperty prop, const QJsonValue &v
     case QJsonValue::Undefined:
         return QVariant();
     case QJsonValue::Bool:
-    case QJsonValue::Double:
     case QJsonValue::String:
         return val.toVariant();
+    case QJsonValue::Double:
+        if (prop.type() == QVariant::LongLong) {
+            return static_cast<qint64>(val.toDouble(-1));
+        } if (prop.type() == QVariant::Int) {
+            return val.toInt();
+        } else {
+            return val.toDouble();
+        }
     case QJsonValue::Array:
         {
             QJsonArray arr = val.toArray();
             QVariantList varArr;
             for (auto it = arr.constBegin(); it < arr.constEnd(); it++) {
                 QVariant variant = jsonToVariant(prop, *it, root);
-                qDebug() << variant;
                 varArr.append(variant);
             }
-            qDebug() << prop.name() << ": " << varArr.count();
             return QVariant(varArr);
         }
     case QJsonValue::Object:
@@ -104,7 +123,7 @@ QVariant JsonSerializable::jsonToVariant(QMetaProperty prop, const QJsonValue &v
     return QVariant();
 }
 
-QJsonObject JsonSerializable::serialize() const {
+QJsonObject JsonSerializable::serialize(bool capitalize) const {
     QJsonObject result;
     const QMetaObject *obj = this->metaObject();
     for (int i = 0; i < obj->propertyCount(); i++) {
@@ -112,7 +131,7 @@ QJsonObject JsonSerializable::serialize() const {
         if (QString(prop.name()) == "jellyfinId") {
             result["Id"] = variantToJson(prop.read(this));
         } else {
-            result[toPascalCase(prop.name())] = variantToJson(prop.read(this));
+            result[capitalize ? toPascalCase(prop.name()) : prop.name()] = variantToJson(prop.read(this));
         }
     }
     return result;
@@ -206,9 +225,47 @@ bool MediaStream::operator==(const MediaStream &other) {
             && m_index == other.m_index;
 }
 
+// UserData
+UserData::UserData(QObject *parent) : JsonSerializable (parent) {}
+
+void UserData::updateOnServer() {
+    //TODO: implement
+}
+
+void UserData::onUpdated(QSharedPointer<UserData> other) {
+    // The reason I'm not using setLikes and similar is that they don't work with std::nullopt,
+    // since QML does not like it.
+    // THe other reason is that the setLikes method will send a post request to the server, to update the contents
+    // we don't want that to happen, obviously, since the application could end in an infinite loop.
+    if (this->m_playedPercentage != other->m_playedPercentage) {
+        this->m_playedPercentage = other->m_playedPercentage;
+        emit playedPercentageChanged(playedPercentage());
+    }
+    if (m_playbackPositionTicks!= other->m_playbackPositionTicks) {
+        this->m_playbackPositionTicks = other->m_playbackPositionTicks;
+        emit playbackPositionTicksChanged(this->m_playbackPositionTicks);
+    }
+    if (m_isFavorite != other->m_isFavorite) {
+        this->m_isFavorite = other->m_isFavorite;
+        emit isFavoriteChanged(this->m_isFavorite);
+    }
+    if (this->m_likes != other->m_likes) {
+        this->m_likes = other->m_likes;
+        emit likesChanged(likes());
+    }
+    if (this->m_played != other->m_played) {
+        this->m_played = other->m_played;
+        emit playedChanged(this->m_played);
+    }
+}
+
 // Item
 
-Item::Item(QObject *parent) : RemoteData(parent) {}
+Item::Item(QObject *parent) : RemoteData(parent) {
+    connect(this, &RemoteData::apiClientChanged, this, [this](ApiClient *newApiClient) {
+        connect(newApiClient, &ApiClient::userDataChanged, this, &Item::onUserDataChanged);
+    });
+}
 
 
 void Item::setJellyfinId(QString newId) {
@@ -256,8 +313,14 @@ void Item::reload() {
     });
 }
 
+void Item::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData) {
+    if (itemId != m_id || m_userData == nullptr) return;
+    m_userData->onUpdated(userData);
+}
+
 void registerSerializableJsonTypes(const char* URI) {
     qmlRegisterType<MediaStream>(URI, 1, 0, "MediaStream");
+    qmlRegisterType<UserData>(URI, 1, 0, "UserData");
     qmlRegisterType<Item>(URI, 1, 0, "JellyfinItem");
 }
 }

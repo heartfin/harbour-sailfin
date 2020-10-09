@@ -39,7 +39,7 @@ SilicaItem {
     readonly property bool hudVisible: !hud.hidden || player.error !== MediaPlayer.NoError
     property alias audioTrack: mediaSource.audioIndex
     property alias subtitleTrack: mediaSource.subtitleIndex
-    property int startTicks: 0
+    property real startTicks: 0
 
     // Force a Light on Dark theme since I doubt that there are persons who are willing to watch a Video
     // on a white background.

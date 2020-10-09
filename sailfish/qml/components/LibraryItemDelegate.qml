@@ -86,5 +86,6 @@ BackgroundItem {
         height: Theme.paddingSmall
         color: Theme.highlightColor
         width: root.progress * parent.width
+        Behavior on width { SmoothedAnimation {} }
     }
 }

@@ -79,7 +79,7 @@ BaseDetailPage {
                 leftMargin: Theme.horizontalPageMargin
                 rightMargin: Theme.horizontalPageMargin
                 delegate: LibraryItemDelegate {
-                    poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
+                    poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": height})
                     title: model.name
                     onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
                 }

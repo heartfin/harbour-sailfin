@@ -198,12 +198,12 @@ Page {
             delegate: LibraryItemDelegate {
                 property string id: model.id
                 title: model.name
-                poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
+                poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["primary"], "Primary", {"maxHeight": height})
                 /*model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
                                                      + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
                                                    : ""*/
                 landscape: !Utils.usePortraitCover(collectionType)
-                progress: (typeof model.userData !== "undefined") ? model.userData.PlayedPercentage / 100 : 0.0
+                progress: (typeof model.userData !== "undefined") ? model.userData.playedPercentage / 100 : 0.0
 
                 onClicked: {
                     pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})

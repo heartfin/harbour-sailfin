@@ -32,6 +32,7 @@ import "../.."
 BaseDetailPage {
     property alias subtitle: pageHeader.description
     default property alias _data: content.data
+    property real _playbackProsition: itemData.userData.playbackPositionTicks
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height + Theme.paddingLarge
@@ -54,13 +55,14 @@ BaseDetailPage {
                 width: parent.width
                 imageSource: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
                 imageAspectRatio: Constants.horizontalVideoAspectRatio
-                playProgress: itemData.UserData.PlayedPercentage / 100
+                favourited: itemData.userData.isFavorite
+                playProgress: itemData.userData.playedPercentage / 100
                 onPlayPressed: pageStack.push(Qt.resolvedUrl("../VideoPage.qml"),
                                               {"itemId": itemId, "itemData": itemData,
                                                   "audioTrack": trackSelector.audioTrack,
                                                   "subtitleTrack": trackSelector.subtitleTrack,
                                                   "startTicks": startFromBeginning ? 0.0
-                                                                    : itemData.UserData.PlaybackPositionTicks })
+                                                                    : _playbackProsition })
             }
 
             VideoTrackSelector {

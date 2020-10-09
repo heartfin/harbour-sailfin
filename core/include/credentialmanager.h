@@ -127,4 +127,4 @@ private:
     QSettings m_settings;
 };
 
-#endif
+#endif // CREDENTIAL_MANAGER_H

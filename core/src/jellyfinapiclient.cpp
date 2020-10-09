@@ -275,6 +275,10 @@ void ApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {
     rep->deleteLater();
 }
 
+void ApiClient::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData) {
+    userDataChanged(itemId, userData);
+}
+
 void ApiClient::setAuthenticated(bool authenticated) {
     this->m_authenticated = authenticated;
     if (authenticated) m_webSocket->open();

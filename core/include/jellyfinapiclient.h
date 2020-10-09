@@ -38,6 +38,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "credentialmanager.h"
 #include "jellyfindeviceprofile.h"
+#include "jellyfinitem.h"
 #include "jellyfinwebsocket.h"
 
 namespace Jellyfin {
@@ -144,6 +145,15 @@ signals:
     void itemFetched(const QString &itemId, const QJsonObject &result);
     void itemFetchFailed(const QString &itemId, const QNetworkReply::NetworkError error);
 
+    /**
+     * @brief onUserDataChanged Emitted when the user data of an item is changed on the server.
+     * @param itemId The id of the item being changed
+     * @param userData The new user data
+     *
+     * Note: only Jellyfin::UserData should connect to this signal, they will update themselves!
+     */
+    void userDataChanged(const QString &itemId, QSharedPointer<UserData> userData);
+
 public slots:
     /**
      * @brief Tries to access credentials and connect to a server. If nothing has been configured yet,
@@ -172,6 +182,7 @@ public slots:
 
 protected slots:
     void defaultNetworkErrorHandler(QNetworkReply::NetworkError error);
+    void onUserDataChanged(const QString &itemId, QSharedPointer<UserData> newData);
 
 protected:
     /**

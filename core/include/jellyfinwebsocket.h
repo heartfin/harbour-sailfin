@@ -32,9 +32,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QtWebSockets/QWebSocket>
 
 #include "jellyfinapiclient.h"
+#include "jellyfinitem.h"
 
 namespace Jellyfin {
 class ApiClient;
+class UserData;
+/**
+ * @brief Keeps a connection with the Jellyfin server to receive real time updates.
+ *
+ * This class will parse these messages and send them to ApiClient, which will emit signals for
+ * the interested classes.
+ */
 class WebSocket : public QObject {
     Q_OBJECT
 public:
@@ -47,7 +55,8 @@ public:
     explicit WebSocket(ApiClient *client);
     enum MessageType {
         ForceKeepAlive,
-        KeepAlive
+        KeepAlive,
+        UserDataChanged
     };
     Q_ENUM(MessageType)
 public slots:

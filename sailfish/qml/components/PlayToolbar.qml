@@ -24,6 +24,7 @@ Column {
     property alias imageSource : playImage.source
     property real imageAspectRatio: 1.0
     property real playProgress: 0.0
+    property bool favourited: false
     signal playPressed(bool startFromBeginning)
     spacing: Theme.paddingLarge
 
@@ -73,7 +74,8 @@ Column {
         }
         IconButton {
             id: favouriteButton
-            icon.source: "image://theme/icon-m-favorite"
+            icon.source: favourited ? "image://theme/icon-m-favorite-selected"
+                                    : "image://theme/icon-m-favorite"
         }
 
     }

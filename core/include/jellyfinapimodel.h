@@ -129,7 +129,7 @@ public:
      * responseHasRecords should be true
      */
     explicit ApiModel(QString path, bool responseHasRecords, bool passUserId = false, QObject *parent = nullptr);
-    Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient)
+    Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient NOTIFY apiClientChanged)
     Q_PROPERTY(ModelStatus status READ status NOTIFY statusChanged)
 
     // Query properties
@@ -171,6 +171,7 @@ public:
     }
 
 signals:
+    void apiClientChanged(ApiClient *newApiClient);
     void statusChanged(ModelStatus newStatus);
     void limitChanged(int newLimit);
     void parentIdChanged(QString newParentId);
@@ -242,6 +243,9 @@ private:
      */
     void generateFields();
     QString sortByToString(SortOptions::SortBy sortBy);
+
+    void convertToCamelCase(QJsonValueRef val);
+    QString convertToCamelCaseHelper(const QString &str);
 };
 
 /**
@@ -253,40 +257,53 @@ public:
         : ApiModel ("/users/public", false, false, parent) { }
 };
 
+/**
+ * @brief Base class for each model that works with items.
+ *
+ * Listens for updates in the library and updates the model accordingly.
+ */
+class ItemModel : public ApiModel {
+    Q_OBJECT
+public:
+    explicit ItemModel (QString path, bool responseHasRecords, bool replaceUser, QObject *parent = nullptr);
+public slots:
+    void onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData);
+};
+
 class UserViewModel : public ApiModel {
 public:
     explicit UserViewModel (QObject *parent = nullptr)
         : ApiModel ("/Users/{{user}}/Views", true, false, parent) {}
 };
 
-class UserItemModel : public ApiModel {
+class UserItemModel : public ItemModel {
 public:
     explicit UserItemModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/{{user}}/Items", true, false, parent) {}
+        : ItemModel ("/Users/{{user}}/Items", true, false, parent) {}
 };
 
-class UserItemResumeModel : public ApiModel {
+class UserItemResumeModel : public ItemModel {
 public:
     explicit UserItemResumeModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/{{user}}/Items/Resume", true, false, parent) {}
+        : ItemModel ("/Users/{{user}}/Items/Resume", true, false, parent) {}
 };
 
-class UserItemLatestModel : public ApiModel {
+class UserItemLatestModel : public ItemModel {
 public:
     explicit UserItemLatestModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/{{user}}/Items/Latest", false, false, parent) {}
+        : ItemModel ("/Users/{{user}}/Items/Latest", false, false, parent) {}
 };
 
-class ShowSeasonsModel : public ApiModel {
+class ShowSeasonsModel : public ItemModel {
 public:
     explicit ShowSeasonsModel (QObject *parent = nullptr)
-        : ApiModel ("/Shows/{{show}}/Seasons", true, true, parent) {}
+        : ItemModel ("/Shows/{{show}}/Seasons", true, true, parent) {}
 };
 
-class ShowEpisodesModel : public ApiModel {
+class ShowEpisodesModel : public ItemModel {
 public:
     explicit ShowEpisodesModel (QObject *parent = nullptr)
-        : ApiModel ("/Shows/{{show}}/Episodes", true, true, parent) {}
+        : ItemModel ("/Shows/{{show}}/Episodes", true, true, parent) {}
 };
 
 

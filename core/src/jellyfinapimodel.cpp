@@ -125,6 +125,9 @@ void ApiModel::load(LoadType type) {
                 case LOAD_MORE:
                     this->beginInsertRows(QModelIndex(), m_array.size(), m_array.size() + items.size() - 1);
                     // QJsonArray apparently doesn't allow concatenating lists like QList or std::vector
+                    for (auto it = items.begin(); it != items.end(); it++) {
+                        convertToCamelCase(*it);
+                    }
                     foreach (const QJsonValue &val, items) {
                         m_array.append(val);
                     }
@@ -159,8 +162,10 @@ void ApiModel::generateFields() {
         QByteArray keyArr = keyName.toUtf8();
         if (!m_roles.values().contains(keyArr)) {
             m_roles.insert(i++, keyArr);
-            //qDebug() << m_path << " adding " << keyName << " as " << ( i - 1);
         }
+    }
+    for (auto it = m_array.begin(); it != m_array.end(); it++){
+        convertToCamelCase(*it);
     }
     this->endResetModel();
 }
@@ -174,8 +179,7 @@ QVariant ApiModel::data(const QModelIndex &index, int role) const {
 
     QJsonObject obj = m_array.at(index.row()).toObject();
 
-    QString key = m_roles[role];
-    key[0] = key[0].toUpper();
+    const QString &key = m_roles[role];
     if (obj.contains(key)) {
         return obj[key].toVariant();
     }
@@ -207,6 +211,64 @@ void ApiModel::fetchMore(const QModelIndex &parent) {
 }
 
 void ApiModel::addQueryParameters(QUrlQuery &query) { Q_UNUSED(query)}
+
+void ApiModel::convertToCamelCase(QJsonValueRef val) {
+    switch(val.type()) {
+    case QJsonValue::Object: {
+        QJsonObject obj = val.toObject();
+        for(const QString &key: obj.keys()) {
+            QJsonValueRef ref = obj[key];
+            convertToCamelCase(ref);
+            obj[convertToCamelCaseHelper(key)] = ref;
+            obj.remove(key);
+        }
+        val = obj;
+        break;
+    }
+    case QJsonValue::Array: {
+        QJsonArray arr = val.toArray();
+        for (auto it = arr.begin(); it != arr.end(); it++) {
+            convertToCamelCase(*it);
+        }
+        val = arr;
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+QString ApiModel::convertToCamelCaseHelper(const QString &str) {
+    QString res(str);
+    res[0] = res[0].toLower();
+    return res;
+}
+
+
+// Itemmodel
+
+ItemModel::ItemModel(QString path, bool hasRecordFields, bool replaceUser, QObject *parent)
+    : ApiModel (path, hasRecordFields, replaceUser, parent){
+    connect(this, &ApiModel::apiClientChanged, this, [this](ApiClient *newApiClient) {
+        connect(newApiClient, &ApiClient::userDataChanged, this, &ItemModel::onUserDataChanged);
+    });
+}
+
+void ItemModel::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData) {
+    int i = 0;
+    for (QJsonValueRef val: m_array) {
+        QJsonObject item = val.toObject();
+        if (item.contains("id") && item["id"].toString() == itemId) {
+            if (item.contains("userData")) {
+                QModelIndex cell = this->index(i);
+                item["userData"] = userData->serialize(false);
+                val = item;
+                this->dataChanged(cell, cell);
+            }
+        }
+        i++;
+    }
+}
 
 
 void registerModels(const char *URI) {

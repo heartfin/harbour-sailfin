@@ -53,7 +53,7 @@ BaseDetailPage {
                 }
                 width: Constants.libraryDelegateWidth
                 height: Constants.libraryDelegateHeight
-                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": height})
+                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": height})
                 fillMode: Image.PreserveAspectCrop
                 clip: true
 
@@ -78,7 +78,7 @@ BaseDetailPage {
                         bottom: parent.bottom
                     }
                     height: Theme.paddingMedium
-                    width: model.userData.PlayedPercentage * parent.width / 100
+                    width: model.userData.playedPercentage * parent.width / 100
                     color: Theme.highlightColor
                 }
             }

@@ -248,6 +248,10 @@ void ApiClient::postCapabilities() {
     setDefaultErrorHandler(rep);
 }
 
+QString ApiClient::downloadUrl(const QString &itemId) const {
+    return m_baseUrl + "/Items/" + itemId + "/Download?api_key=" + this->m_token;
+}
+
 void ApiClient::generateDeviceProfile() {
     QJsonObject root = DeviceProfile::generateProfile();
     m_playbackDeviceProfile = QJsonObject(root);

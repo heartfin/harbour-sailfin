@@ -179,6 +179,7 @@ public slots:
      * @brief Shares the capabilities of this device to the server.
      */
     void postCapabilities();
+    QString downloadUrl(const QString &itemId) const;
 
 protected slots:
     void defaultNetworkErrorHandler(QNetworkReply::NetworkError error);

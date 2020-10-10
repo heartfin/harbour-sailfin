@@ -41,14 +41,10 @@ SilicaItem {
     property alias subtitleTrack: mediaSource.subtitleIndex
     property real startTicks: 0
 
-    // Force a Light on Dark theme since I doubt that there are persons who are willing to watch a Video
-    // on a white background.
-    palette.colorScheme: Theme.LightOnDark
-
     // Blackground to prevent the ambience from leaking through
     Rectangle {
         anchors.fill: parent
-        color: "black"
+        color: Theme.overlayBackgroundColor
     }
 
     PlaybackManager {

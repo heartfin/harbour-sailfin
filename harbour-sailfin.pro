@@ -22,4 +22,7 @@ message($$SUBDIRS)
 # modify the localized app name in the the .desktop file.
 # TRANSLATIONS += \
 
+DISTFILES += \
+    sailfish/qml/pages/itemdetails/PhotoPage.qml
+
 

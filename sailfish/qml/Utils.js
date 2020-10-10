@@ -86,6 +86,8 @@ function getPageUrl(mediaType, itemType) {
             return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
         case "video":
             return Qt.resolvedUrl("pages/itemdetails/VideoPage.qml")
+        case "photo":
+            return Qt.resolvedUrl("pages/itemdetails/PhotoPage.qml")
         default:
             return Qt.resolvedUrl("pages/itemdetails/UnsupportedPage.qml")
         }

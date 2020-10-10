@@ -13,6 +13,7 @@ SOURCES += \
     src/jellyfinitem.cpp \
     src/jellyfinplaybackmanager.cpp \
     src/jellyfinwebsocket.cpp \
+    src/jsonhelper.cpp \
     src/serverdiscoverymodel.cpp
 
 HEADERS += \
@@ -24,6 +25,7 @@ HEADERS += \
     include/jellyfinitem.h \
     include/jellyfinplaybackmanager.h \
     include/jellyfinwebsocket.h \
+    include/jsonhelper.h \
     include/serverdiscoverymodel.h
 
 VERSION = $$SAILFIN_VERSION

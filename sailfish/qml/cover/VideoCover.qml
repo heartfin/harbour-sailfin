@@ -25,30 +25,22 @@ import nl.netsoj.chris.Jellyfin 1.0
 
 import "../components"
 
-CoverBackground {
+PosterCover {
     readonly property MediaPlayer player: appWindow.mediaPlayer
     property var mData: appWindow.itemData
 
-    Rectangle {
+    // Wanted to display the currently running move on here, but it's hard :/
+    /*Rectangle {
         anchors.fill: parent
         color: "black"
 
-        // Wanted to display the currently running move on here, but it's hard :/
-        /*VideoOutput {
+        VideoOutput {
             id: coverOutput
             anchors.fill: parent
             source: player
-        }*/
+        }
 
-    }
-    // As a temporary fallback, use the poster image
-    RemoteImage {
-        anchors.fill: parent
-        source: mData.ImageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + mData.Id
-                                             + "/Images/Primary?maxHeight=" + height + "&tag=" + mData.ImageTags["Primary"]
-                                           : ""
-        fillMode: Image.PreserveAspectCrop
-    }
+    }*/
 
     Shim {
         anchors {

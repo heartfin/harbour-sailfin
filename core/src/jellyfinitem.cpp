@@ -87,7 +87,19 @@ QVariant JsonSerializable::jsonToVariant(QMetaProperty prop, const QJsonValue &v
         }
     case QJsonValue::Object:
         QJsonObject innerObj = val.toObject();
-        int typeNo = prop.userType();
+        if (prop.userType() == QMetaType::QJsonObject) {
+            QJsonArray tmp = {innerObj };
+            JsonHelper::convertToCamelCase(QJsonValueRef(&tmp, 0));
+            return QVariant(innerObj);
+        } else {
+            return deserializeQobject(innerObj, prop);
+        }
+    }
+    return QVariant();
+}
+
+QVariant JsonSerializable::deserializeQobject(const QJsonObject &innerObj, const QMetaProperty &prop) {
+    int typeNo = prop.userType();
         const QMetaObject *metaType = QMetaType::metaObjectForType(prop.userType());
         if (metaType == nullptr) {
             // Try to determine if the type is a qlist
@@ -119,8 +131,6 @@ QVariant JsonSerializable::jsonToVariant(QMetaProperty prop, const QJsonValue &v
             qDebug() << "Object is not a serializable one!";
             return QVariant();
         }
-    }
-    return QVariant();
 }
 
 QJsonObject JsonSerializable::serialize(bool capitalize) const {

@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QVariant>
 
 #include "jellyfinapiclient.h"
+#include "jsonhelper.h"
 
 namespace Jellyfin {
 class SortOptions : public QObject{
@@ -243,9 +244,6 @@ private:
      */
     void generateFields();
     QString sortByToString(SortOptions::SortBy sortBy);
-
-    void convertToCamelCase(QJsonValueRef val);
-    QString convertToCamelCaseHelper(const QString &str);
 };
 
 /**

@@ -83,7 +83,7 @@ Page {
             //appWindow.itemData = ({})
         }
         if (status == PageStatus.Active) {
-
+            appWindow.itemData = jItem
         }
     }
 }

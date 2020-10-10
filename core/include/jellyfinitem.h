@@ -40,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <cmath>
 
 #include "jellyfinapiclient.h"
+#include "jsonhelper.h"
 
 namespace Jellyfin {
 class ApiClient;
@@ -63,6 +64,7 @@ public:
 private:
     QVariant jsonToVariant(QMetaProperty prop, const QJsonValue &val, const QJsonObject &root);
     QJsonValue variantToJson(const QVariant var) const;
+    QVariant deserializeQobject(const QJsonObject &obj, const QMetaProperty &prop);
 
     /**
      * @brief Sets the first letter of the string to lower case (to make it camelCase).
@@ -278,6 +280,10 @@ public:
     Q_PROPERTY(QString seasonName MEMBER m_seasonName NOTIFY seasonNameChanged)
     Q_PROPERTY(QList<MediaStream *> __list__mediaStreams MEMBER __list__m_mediaStreams NOTIFY mediaStreamsChanged)
     Q_PROPERTY(QVariantList mediaStreams MEMBER m_mediaStreams NOTIFY mediaStreamsChanged STORED false)
+    // Why is this a QJsonObject? Well, because I couldn't be bothered to implement the deserialisations of
+    // a QHash at the moment.
+    Q_PROPERTY(QJsonObject imageTags MEMBER m_imageTags NOTIFY imageTagsChanged)
+    Q_PROPERTY(QJsonObject imageBlurHashes MEMBER m_imageBlurHashes NOTIFY imageBlurHashesChanged)
 
     QString jellyfinId() const { return m_id; }
     void setJellyfinId(QString newId);
@@ -355,6 +361,8 @@ signals:
     void seriesNameChanged(const QString &newSeriesName);
     void seasonNameChanged(const QString &newSeasonName);
     void mediaStreamsChanged(/*const QList<MediaStream *> &newMediaStreams*/);
+    void imageTagsChanged();
+    void imageBlurHashesChanged();
 
 public slots:
     /**
@@ -402,6 +410,8 @@ protected:
     QString m_seasonName;
     QList<MediaStream *> __list__m_mediaStreams;
     QVariantList m_mediaStreams;
+    QJsonObject m_imageTags;
+    QJsonObject m_imageBlurHashes;
 
     template<typename T>
     QQmlListProperty<T> toReadOnlyQmlListProperty(QList<T *> &list) {

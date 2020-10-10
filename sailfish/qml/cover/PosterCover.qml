@@ -29,16 +29,15 @@ CoverBackground {
     property var mData: appWindow.itemData
     RemoteImage {
         anchors.fill: parent
-        source: mData.ImageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + mData.Id
-                                             + "/Images/Primary?maxHeight=" + height + "&tag=" + mData.ImageTags["Primary"]
-                                           : ""
+        source: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
         fillMode: Image.PreserveAspectCrop
+        onSourceChanged: console.log(source)
     }
 
     Shim {
         // Movies usually show their name on the poster,
         // so showing it here as well is a bit double
-        visible: itemData.Type !== "Movie"
+        visible: itemData.type !== "Movie"
         anchors {
             left: parent.left
             right: parent.right
@@ -52,7 +51,7 @@ CoverBackground {
                 top: parent.top
                 left: parent.left
             }
-            width: itemData.UserData.PlayedPercentage / 100 * parent.width
+            width: itemData.userData.playedPercentage / 100 * parent.width
             height: Theme.paddingSmall
             color: Theme.highlightColor
         }
@@ -72,13 +71,13 @@ CoverBackground {
                     right: parent.right
                 }
                 color: Theme.primaryColor
-                text: itemData.Name
+                text: itemData.name
                 truncationMode: TruncationMode.Fade
             }
             Label {
-                visible: typeof itemData.RunTimeTicks !== "undefined"
+                visible: typeof itemData.runTimeTicks !== "undefined"
                 color: Theme.secondaryColor
-                text: Utils.ticksToText(itemData.RunTimeTicks)
+                text: Utils.ticksToText(itemData.runTimeTicks)
             }
         }
     }

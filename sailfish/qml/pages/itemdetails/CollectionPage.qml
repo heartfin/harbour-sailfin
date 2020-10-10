@@ -43,7 +43,7 @@ BaseDetailPage {
         cellHeight: Utils.usePortraitCover(itemData.CollectionType) ? Constants.libraryDelegatePosterHeight
                                                                     : Constants.libraryDelegateHeight
         header: PageHeader {
-            title: itemData.Name || qsTr("Loading")
+            title: itemData.name || qsTr("Loading")
         }
         PullDownMenu {
             id: downMenu
@@ -58,7 +58,7 @@ BaseDetailPage {
             RemoteImage {
                 id: itemImage
                 anchors.fill: parent
-                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxWidth": width})
+                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxWidth": width})
                 fallbackColor: Utils.colorFromString(model.name)
                 fillMode: Image.PreserveAspectCrop
                 clip: true

@@ -126,7 +126,7 @@ void ApiModel::load(LoadType type) {
                     this->beginInsertRows(QModelIndex(), m_array.size(), m_array.size() + items.size() - 1);
                     // QJsonArray apparently doesn't allow concatenating lists like QList or std::vector
                     for (auto it = items.begin(); it != items.end(); it++) {
-                        convertToCamelCase(*it);
+                        JsonHelper::convertToCamelCase(*it);
                     }
                     foreach (const QJsonValue &val, items) {
                         m_array.append(val);
@@ -165,7 +165,7 @@ void ApiModel::generateFields() {
         }
     }
     for (auto it = m_array.begin(); it != m_array.end(); it++){
-        convertToCamelCase(*it);
+        JsonHelper::convertToCamelCase(*it);
     }
     this->endResetModel();
 }
@@ -212,37 +212,7 @@ void ApiModel::fetchMore(const QModelIndex &parent) {
 
 void ApiModel::addQueryParameters(QUrlQuery &query) { Q_UNUSED(query)}
 
-void ApiModel::convertToCamelCase(QJsonValueRef val) {
-    switch(val.type()) {
-    case QJsonValue::Object: {
-        QJsonObject obj = val.toObject();
-        for(const QString &key: obj.keys()) {
-            QJsonValueRef ref = obj[key];
-            convertToCamelCase(ref);
-            obj[convertToCamelCaseHelper(key)] = ref;
-            obj.remove(key);
-        }
-        val = obj;
-        break;
-    }
-    case QJsonValue::Array: {
-        QJsonArray arr = val.toArray();
-        for (auto it = arr.begin(); it != arr.end(); it++) {
-            convertToCamelCase(*it);
-        }
-        val = arr;
-        break;
-    }
-    default:
-        break;
-    }
-}
 
-QString ApiModel::convertToCamelCaseHelper(const QString &str) {
-    QString res(str);
-    res[0] = res[0].toLower();
-    return res;
-}
 
 
 // Itemmodel

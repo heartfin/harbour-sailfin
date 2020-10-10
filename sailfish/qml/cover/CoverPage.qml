@@ -79,7 +79,7 @@ CoverBackground {
                 clip: true
                 height: row1.height
                 width: height
-                source: model.id ? Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": row1.height})
+                source: model.id ? Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": row1.height})
                                  : ""
                 fillMode: Image.PreserveAspectCrop
             }
@@ -123,7 +123,7 @@ CoverBackground {
                 clip: true
                 height: row2.height
                 width: height
-                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["Primary"], "Primary", {"maxHeight": row1.height})
+                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": row1.height})
                 fillMode: Image.PreserveAspectCrop
             }
         }

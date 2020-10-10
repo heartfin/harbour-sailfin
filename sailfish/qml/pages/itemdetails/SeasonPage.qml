@@ -68,7 +68,7 @@ BaseDetailPage {
                     shimColor: Theme.overlayBackgroundColor
                     shimOpacity: Theme.opacityOverlay
                     //width: model.userData.PlayedPercentage * parent.width / 100
-                    visible: episodeProgress.width > 0 // It doesn't look nice when it's visible on every image
+                    visible: episodeProgress.width > 0 || model.userData.played || model.userData.isFavorite // It doesn't look nice when it's visible on every image
                 }
 
                 Rectangle {
@@ -78,8 +78,27 @@ BaseDetailPage {
                         bottom: parent.bottom
                     }
                     height: Theme.paddingMedium
-                    width: model.userData.playedPercentage * parent.width / 100
+                    width:  model.userData.playedPercentage * parent.width / 100
                     color: Theme.highlightColor
+                }
+                Row {
+                    spacing: Theme.paddingSmall
+                    anchors {
+                        bottom: episodeProgress.width > 0 ? episodeProgress.top : parent.bottom
+                        bottomMargin: Theme.paddingMedium
+                        right: parent.right
+                        rightMargin: Theme.paddingMedium
+                    }
+
+                    Icon {
+                        source: "image://theme/icon-s-checkmark"
+                        visible: model.userData.played
+                    }
+
+                    Icon {
+                        source: "image://theme/icon-s-favorite"
+                        visible: model.userData.isFavorite
+                    }
                 }
             }
 
@@ -129,9 +148,9 @@ BaseDetailPage {
     }
     onStatusChanged: {
         if (status == PageStatus.Active) {
-        console.log(JSON.stringify(itemData))
-        episodeModel.show = itemData.seriesId
-        episodeModel.seasonId = itemData.jellyfinId
+            //console.log(JSON.stringify(itemData))
+            episodeModel.show = itemData.seriesId
+            episodeModel.seasonId = itemData.jellyfinId
         }
     }
 }

@@ -87,6 +87,20 @@ Page {
             MoreSection {
                 text: qsTr("Next up")
                 clickable: false
+                busy: showNextUpModel.status == ApiModel.Loading
+
+                Loader {
+                    width: parent.width
+                    sourceComponent: carrouselView
+                    property alias itemModel: showNextUpModel
+                    property string collectionType: "series"
+
+                    ShowNextUpModel {
+                        id: showNextUpModel
+                        apiClient: ApiClient
+                        limit: 12
+                    }
+                }
             }
 
             UserViewModel {
@@ -174,6 +188,7 @@ Page {
             _modelsLoaded = true;
             mediaLibraryModel.reload()
             userResumeModel.reload()
+            showNextUpModel.reload()
         }
     }
 

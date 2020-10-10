@@ -249,6 +249,7 @@ void registerModels(const char *URI) {
     qmlRegisterType<UserItemModel>(URI, 1, 0, "UserItemModel");
     qmlRegisterType<UserItemLatestModel>(URI, 1, 0, "UserItemLatestModel");
     qmlRegisterType<UserItemResumeModel>(URI, 1, 0, "UserItemResumeModel");
+    qmlRegisterType<ShowNextUpModel>(URI, 1, 0, "ShowNextUpModel");
     qmlRegisterType<ShowSeasonsModel>(URI, 1, 0, "ShowSeasonsModel");
     qmlRegisterType<ShowEpisodesModel>(URI, 1, 0, "ShowEpisodesModel");
 }

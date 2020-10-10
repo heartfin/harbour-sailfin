@@ -292,6 +292,12 @@ public:
         : ItemModel ("/Users/{{user}}/Items/Latest", false, false, parent) {}
 };
 
+class ShowNextUpModel : public ItemModel {
+public:
+    explicit ShowNextUpModel (QObject *parent = nullptr)
+        : ItemModel("/Shows/NextUp", true, true, parent) {}
+};
+
 class ShowSeasonsModel : public ItemModel {
 public:
     explicit ShowSeasonsModel (QObject *parent = nullptr)

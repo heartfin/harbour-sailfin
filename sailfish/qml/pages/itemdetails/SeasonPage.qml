@@ -34,9 +34,16 @@ BaseDetailPage {
         fields: ["Overview"]
     }
 
+    Connections {
+        target: itemData
+        onReady: episodeModel.reload()
+    }
+
     SilicaListView {
         anchors.fill: parent
         contentHeight: content.height
+        visible: itemData.status !== JellyfinItem.Error
+
         header: PageHeader {
             title: itemData.name
             description: itemData.seriesName

@@ -51,12 +51,13 @@ Page {
         }
 
         // Tell SilicaFlickable the height of its content.
-        contentHeight: column.height
+        contentHeight: column.visible ? column.height : errorColumn.height
 
         // Place our content in a Column.  The PageHeader is always placed at the top
         // of the page, followed by our content.
         Column {
             id: column
+            visible: mediaLibraryModel.status != ApiModel.Error
 
             width: page.width
             //spacing: Theme.paddingLarge
@@ -123,25 +124,31 @@ Page {
                     }
                 }
             }
-            Column {
-                width: parent.width
-                visible: mediaLibraryModel.status == ApiModel.Error
-                PageHeader {
-                    title: qsTr("Network error")
-                    //clickable: false
-                }
+        }
 
-                PlainLabel {
-                    text: qsTr("An error has occurred. Please try again.")
-                }
-                Item { width: 1; height: Theme.paddingLarge }
-                Button {
-                    text: qsTr("Retry")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    onClicked: loadModels(true)
-                }
-                Item { width: 1; height: Theme.paddingLarge }
+        Column {
+            id: errorColumn
+            width: parent.width
+            visible: mediaLibraryModel.status == ApiModel.Error
+            PageHeader {
+                title: qsTr("Network error")
             }
+
+            Item {
+                width: 1
+                height: page.height / 3
+            }
+
+            PlainLabel {
+                text: qsTr("An error has occurred. Please try again.")
+            }
+            Item { width: 1; height: Theme.paddingLarge }
+            Button {
+                text: qsTr("Retry")
+                anchors.horizontalCenter: parent.horizontalCenter
+                onClicked: loadModels(true)
+            }
+            Item { width: 1; height: Theme.paddingLarge }
         }
     }
 

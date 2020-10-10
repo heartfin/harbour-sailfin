@@ -126,9 +126,39 @@ signals:
     void apiClientChanged(ApiClient *newApiClient);
     void errorChanged(QNetworkReply::NetworkError newError);
     void errorStringChanged(QString newErrorString);
+    /**
+     * @brief Convenience signal for status == RemoteData.Ready.
+     */
+    void ready();
 public slots:
-    virtual void reload() = 0;
+
+    /**
+     * @brief Overload this method to reimplement the fetching mechanism to
+     * populate the RemoteData with data from the server.
+     *
+     * The default implementation makes a GET request to getDataUrl() and parses the resulting JSON,
+     * which should be enough for most cases. Consider overriding getDataUrl() and
+     * canRelaod() if possible. Manual overrides need to make sure that
+     * they're calling setStatus(Status), setError(QNetworkReply::NetworkError) and
+     * setErrorString() to let the QML side know what this thing is up to.
+     */
+    virtual void reload();
 protected:
+    /**
+     * @brief Subclasses should implement this to determine if they can
+     * load data from the server.
+     *
+     * Usage cases include checking if the
+     * required properties, such as the item id are set.
+     */
+    virtual bool canReload() const = 0;
+
+    /**
+     * @brief Construct the URL to fetch the data from.
+     * @return The URL to load data from.
+     */
+    virtual QString getDataUrl() const = 0;
+
     void setStatus(Status newStatus);
     void setError(QNetworkReply::NetworkError error);
     void setErrorString(const QString &newErrorString);
@@ -137,6 +167,33 @@ private:
     Status m_status = Uninitialised;
     QNetworkReply::NetworkError m_error = QNetworkReply::NoError;
     QString m_errorString;
+};
+
+class User : public RemoteData {
+    Q_OBJECT
+public:
+    Q_INVOKABLE User(QObject *parent = nullptr);
+
+    Q_PROPERTY(QString userId MEMBER m_userId WRITE setUserId NOTIFY userIdChanged)
+    Q_PROPERTY(QString name MEMBER m_name NOTIFY nameChanged)
+    Q_PROPERTY(QString primaryImageTag MEMBER m_primaryImageTag NOTIFY primaryImageTagChanged)
+
+    void setUserId(const QString &newUserId) {
+        this->m_userId = newUserId;
+        emit userIdChanged(newUserId);
+        reload();
+    }
+signals:
+    void userIdChanged(const QString &newUserId);
+    void nameChanged(const QString &newName);
+    void primaryImageTagChanged(const QString &newPrimaryImageTag);
+protected:
+    QString getDataUrl() const override;
+    bool canReload() const override;
+private:
+    QString m_userId;
+    QString m_name;
+    QString m_primaryImageTag;
 };
 
 class MediaStream : public JsonSerializable {
@@ -365,12 +422,12 @@ signals:
     void imageBlurHashesChanged();
 
 public slots:
-    /**
-     * @brief (Re)loads the item from the Jellyfin server.
-     */
-    void reload() override;
     void onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData);
 protected:
+    // Overrides
+    QString getDataUrl() const override;
+    bool canReload() const override;
+
     QString m_id;
     QString m_name;
     QString m_originalTitle;

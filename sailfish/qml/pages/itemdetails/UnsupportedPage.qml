@@ -23,6 +23,7 @@ import Sailfish.Silica 1.0
 BaseDetailPage {
     SilicaFlickable {
         anchors.fill: parent
+        visible: itemData.status !== JellyfinItem.Error
         PageHeader {
             title: itemData.name
         }

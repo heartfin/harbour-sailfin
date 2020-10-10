@@ -198,6 +198,7 @@ RemoteData::RemoteData(QObject *parent) : JsonSerializable (parent) {}
 void RemoteData::setStatus(Status newStatus) {
     m_status = newStatus;
     emit statusChanged(newStatus);
+    if (newStatus == Ready) emit ready();
 }
 
 void RemoteData::setError(QNetworkReply::NetworkError error) {
@@ -214,6 +215,54 @@ void RemoteData::setApiClient(ApiClient *newApiClient) {
     m_apiClient = newApiClient;
     emit apiClientChanged(newApiClient);
     reload();
+}
+
+void RemoteData::reload() {
+    if (!canReload() || m_apiClient == nullptr) {
+        setStatus(Uninitialised);
+        return;
+    } else {
+        setStatus(Loading);
+    }
+    QNetworkReply *rep = m_apiClient->get(getDataUrl());
+    connect(rep, &QNetworkReply::finished, this, [this, rep]() {
+        rep->deleteLater();
+
+        QJsonParseError error;
+        QString data(rep->readAll());
+        data = data.normalized(QString::NormalizationForm_D);
+        QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8(), &error);
+        if (doc.isNull()) {
+            this->setError(QNetworkReply::ProtocolFailure);
+            this->setErrorString(error.errorString());
+            return;
+        }
+        if (!doc.isObject()) {
+            this->setError(QNetworkReply::ProtocolFailure);
+            this->setErrorString(tr("Invalid response from the server: root element is not an object."));
+            return;
+        }
+        this->deserialize(doc.object());
+        this->setStatus(Ready);
+    });
+    connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
+            this, [this, rep](QNetworkReply::NetworkError error) {
+        this->setError(error);
+        this->setErrorString(rep->errorString());
+        this->setStatus(Error);
+        rep->deleteLater();
+    });
+}
+
+// User
+User::User(QObject *parent) : RemoteData (parent) {}
+
+QString User::getDataUrl() const {
+    return QString("/Users/") + m_apiClient->userId();
+}
+
+bool User::canReload() const {
+    return true;
 }
 
 // MediaStream
@@ -277,6 +326,13 @@ Item::Item(QObject *parent) : RemoteData(parent) {
     });
 }
 
+QString Item::getDataUrl() const {
+    return QString("/Users/") + m_apiClient->userId() + "/Items/" + m_id;
+}
+
+bool Item::canReload() const {
+    return !m_id.isNull();
+}
 
 void Item::setJellyfinId(QString newId) {
     m_id = newId.trimmed();
@@ -286,42 +342,7 @@ void Item::setJellyfinId(QString newId) {
     }
 }
 
-void Item::reload() {
-    if (m_id.isEmpty() || m_apiClient == nullptr) {
-        setStatus(Uninitialised);
-        return;
-    } else {
-        setStatus(Loading);
-    }
-    QNetworkReply *rep = m_apiClient->get("/Users/" + m_apiClient->userId() + "/Items/" + m_id);
-    connect(rep, &QNetworkReply::finished, this, [this, rep]() {
-        rep->deleteLater();
 
-        QJsonParseError error;
-        QString data(rep->readAll());
-        data = data.normalized(QString::NormalizationForm_D);
-        QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8(), &error);
-        if (doc.isNull()) {
-            this->setError(QNetworkReply::ProtocolFailure);
-            this->setErrorString(error.errorString());
-            return;
-        }
-        if (!doc.isObject()) {
-            this->setError(QNetworkReply::ProtocolFailure);
-            this->setErrorString(tr("Invalid response from the server: root element is not an object."));
-            return;
-        }
-        this->deserialize(doc.object());
-        this->setStatus(Ready);
-    });
-    connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
-            this, [this, rep](QNetworkReply::NetworkError error) {
-        rep->deleteLater();
-        this->setError(error);
-        this->setErrorString(rep->errorString());
-        this->setStatus(Error);
-    });
-}
 
 void Item::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData) {
     if (itemId != m_id || m_userData == nullptr) return;
@@ -330,6 +351,7 @@ void Item::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> use
 
 void registerSerializableJsonTypes(const char* URI) {
     qmlRegisterType<MediaStream>(URI, 1, 0, "MediaStream");
+    qmlRegisterType<User>(URI, 1, 0, "User");
     qmlRegisterType<UserData>(URI, 1, 0, "UserData");
     qmlRegisterType<Item>(URI, 1, 0, "JellyfinItem");
 }

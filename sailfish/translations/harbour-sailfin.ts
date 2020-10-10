@@ -63,6 +63,17 @@
     </message>
 </context>
 <context>
+    <name>BaseDetailPage</name>
+    <message>
+        <source>Retry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An error has occured</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CollectionPage</name>
     <message>
         <source>Loading</source>
@@ -257,14 +268,6 @@
     </message>
     <message>
         <source>Session</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User id</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

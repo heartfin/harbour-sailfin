@@ -28,6 +28,7 @@ BaseDetailPage {
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height
+        visible: itemData.status !== JellyfinItem.Error
 
         Column {
             id: content
@@ -67,6 +68,10 @@ BaseDetailPage {
                 apiClient: ApiClient
                 show: itemData.jellyfinId
                 onShowChanged: reload()
+            }
+            Connections {
+                target: itemData
+                onReady: showSeasonsModel.reload()
             }
 
             SilicaListView {

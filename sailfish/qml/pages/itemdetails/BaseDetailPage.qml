@@ -68,6 +68,31 @@ Page {
         running: pageRoot._loading
     }
 
+    SilicaFlickable {
+        anchors.fill: parent
+        contentHeight: errorContent.height
+        visible: jItem.status == JellyfinItem.Error
+
+        PullDownMenu {
+            busy: jItem.status == JellyfinItem.Loading
+            MenuItem {
+                text: qsTr("Retry")
+                onClicked: jItem.reload()
+            }
+        }
+
+        Column {
+            id: errorContent
+            width: parent.width
+
+            ViewPlaceholder {
+                enabled: true
+                text: qsTr("An error has occured")
+                hintText: jItem.errorString
+            }
+        }
+    }
+
     JellyfinItem {
         id: jItem
         apiClient: ApiClient

@@ -36,6 +36,7 @@ BaseDetailPage {
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height + Theme.paddingLarge
+        visible: itemData.status !== JellyfinItem.Error
 
         VerticalScrollDecorator {}
 

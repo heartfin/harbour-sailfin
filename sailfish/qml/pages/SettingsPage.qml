@@ -48,24 +48,54 @@ Page {
                 text: qsTr("Session")
             }
 
-            PlainLabel {
-                text: qsTr("Server")
-            }
+            Item {
+                anchors {
+                    left: parent.left
+                    leftMargin: Theme.horizontalPageMargin
+                    right: parent.right
+                    rightMargin: Theme.horizontalPageMargin
+                }
+                height: user.implicitHeight + server.implicitHeight + Theme.paddingMedium
+                User {
+                    id: loggedInUser
+                    apiClient: ApiClient
+                }
+                Image {
+                    id: userIcon
+                    width: height
+                    anchors {
+                        left: parent.left
+                        top: parent.top
+                        bottom: parent.bottom
+                    }
+                    source: ApiClient.baseUrl + "/Users/" + ApiClient.userId + "/Images/Primary?tag=" + loggedInUser.primaryImageTag
+                }
 
-            PlainLabel {
-                text: ApiClient.baseUrl
-                color: Theme.secondaryHighlightColor
-            }
+                Label {
+                    id: user
+                    anchors {
+                        left: userIcon.right
+                        leftMargin: Theme.paddingLarge
+                        bottom: parent.verticalCenter
+                        right: parent.right
+                    }
+                    text: loggedInUser.status == User.Ready ? loggedInUser.name : ApiClient.userId
+                    color: Theme.highlightColor
+                }
 
-            Item { width: 1; height: Theme.paddingMedium; }
+                Label {
+                    id: server
+                    anchors {
+                        left: userIcon.right
+                        leftMargin: Theme.paddingLarge
+                        top: parent.verticalCenter
+                        right: parent.right
+                    }
+                    text: ApiClient.baseUrl
+                    color: Theme.secondaryHighlightColor
+                }
 
-            PlainLabel {
-                text: qsTr("User id")
-            }
 
-            PlainLabel {
-                text: ApiClient.userId
-                color: Theme.secondaryHighlightColor
             }
 
             Item { width: 1; height: Theme.paddingLarge; }

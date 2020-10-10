@@ -42,6 +42,8 @@ BaseDetailPage {
         cellWidth: Constants.libraryDelegateWidth
         cellHeight: Utils.usePortraitCover(itemData.CollectionType) ? Constants.libraryDelegatePosterHeight
                                                                     : Constants.libraryDelegateHeight
+        visible: itemData.status !== JellyfinItem.Error
+
         header: PageHeader {
             title: itemData.name || qsTr("Loading")
         }

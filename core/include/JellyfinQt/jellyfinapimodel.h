@@ -251,8 +251,7 @@ private:
  */
 class PublicUserModel : public ApiModel {
 public:
-    explicit PublicUserModel (QObject *parent = nullptr)
-        : ApiModel ("/users/public", false, false, parent) { }
+    explicit PublicUserModel (QObject *parent = nullptr);
 };
 
 /**
@@ -270,44 +269,37 @@ public slots:
 
 class UserViewModel : public ApiModel {
 public:
-    explicit UserViewModel (QObject *parent = nullptr)
-        : ApiModel ("/Users/{{user}}/Views", true, false, parent) {}
+    explicit UserViewModel (QObject *parent = nullptr);
 };
 
 class UserItemModel : public ItemModel {
 public:
-    explicit UserItemModel (QObject *parent = nullptr)
-        : ItemModel ("/Users/{{user}}/Items", true, false, parent) {}
+    explicit UserItemModel (QObject *parent = nullptr);
 };
 
 class UserItemResumeModel : public ItemModel {
 public:
-    explicit UserItemResumeModel (QObject *parent = nullptr)
-        : ItemModel ("/Users/{{user}}/Items/Resume", true, false, parent) {}
+    explicit UserItemResumeModel (QObject *parent = nullptr);
 };
 
 class UserItemLatestModel : public ItemModel {
 public:
-    explicit UserItemLatestModel (QObject *parent = nullptr)
-        : ItemModel ("/Users/{{user}}/Items/Latest", false, false, parent) {}
+    explicit UserItemLatestModel (QObject *parent = nullptr);
 };
 
 class ShowNextUpModel : public ItemModel {
 public:
-    explicit ShowNextUpModel (QObject *parent = nullptr)
-        : ItemModel("/Shows/NextUp", true, true, parent) {}
+    explicit ShowNextUpModel (QObject *parent = nullptr);
 };
 
 class ShowSeasonsModel : public ItemModel {
 public:
-    explicit ShowSeasonsModel (QObject *parent = nullptr)
-        : ItemModel ("/Shows/{{show}}/Seasons", true, true, parent) {}
+    explicit ShowSeasonsModel (QObject *parent = nullptr);
 };
 
 class ShowEpisodesModel : public ItemModel {
 public:
-    explicit ShowEpisodesModel (QObject *parent = nullptr)
-        : ItemModel ("/Shows/{{show}}/Episodes", true, true, parent) {}
+    explicit ShowEpisodesModel (QObject *parent = nullptr);
 };
 
 

@@ -12,7 +12,7 @@ Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
   Play video's and music from your Jellyfin media player on your Sailfish device
-Builder: qmake5
+Builder: cmake
 
 # This section specifies build dependencies that are resolved using pkgconfig.
 # This is the preferred way of specifying build dependencies for your package.
@@ -43,9 +43,9 @@ Macros:
   - '__provides_exclude_from; ^%{_datadir}/.*$'
   - '__requires_exclude; ^libjellyfin-qt.*$'
 
-QMakeOptions:
-  - OS_SAILFISHOS=1
-  - SAILFIN_VERSION='%{version}-%{release}'
+ConfigOptions:
+  - -DSAILFISHOS=1
+  - -DSAILFIN_VERSION='%{version}-%{release}'
 
 # For more information about yaml and what's supported in Sailfish OS
 # build system, please see https://wiki.merproject.org/wiki/Spectacle

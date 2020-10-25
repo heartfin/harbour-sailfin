@@ -17,7 +17,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "jellyfinapimodel.h"
+#include "JellyfinQt/jellyfinapimodel.h"
 
 namespace Jellyfin {
 ApiModel::ApiModel(QString path, bool hasRecordResponse, bool addUserId, QObject *parent)
@@ -240,6 +240,29 @@ void ItemModel::onUserDataChanged(const QString &itemId, QSharedPointer<UserData
     }
 }
 
+PublicUserModel::PublicUserModel(QObject *parent)
+    : ApiModel ("/users/public", false, false, parent) { }
+
+UserViewModel::UserViewModel(QObject *parent)
+        : ApiModel ("/Users/{{user}}/Views", true, false, parent) {}
+
+UserItemModel::UserItemModel(QObject *parent)
+        : ItemModel ("/Users/{{user}}/Items", true, false, parent) {}
+
+UserItemResumeModel::UserItemResumeModel(QObject *parent)
+        : ItemModel ("/Users/{{user}}/Items/Resume", true, false, parent) {}
+
+UserItemLatestModel::UserItemLatestModel(QObject *parent)
+        : ItemModel ("/Users/{{user}}/Items/Latest", false, false, parent) {}
+
+ShowNextUpModel::ShowNextUpModel(QObject *parent)
+        : ItemModel("/Shows/NextUp", true, true, parent) {}
+
+ShowSeasonsModel::ShowSeasonsModel(QObject *parent)
+        : ItemModel ("/Shows/{{show}}/Seasons", true, true, parent) {}
+
+ShowEpisodesModel::ShowEpisodesModel(QObject *parent)
+        : ItemModel ("/Shows/{{show}}/Episodes", true, true, parent) {}
 
 void registerModels(const char *URI) {
     qmlRegisterUncreatableType<ApiModel>(URI, 1, 0, "ApiModel", "Is enum and base class");

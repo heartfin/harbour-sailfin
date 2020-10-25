@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <sailfishapp.h>
 
-#include <jellyfin.h>
+#include <JellyfinQt/jellyfin.h>
 
 int main(int argc, char *argv[]) {
     // SailfishApp::main() will display "qml/harbour-sailfin.qml", if you need more

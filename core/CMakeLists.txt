@@ -1,4 +1,4 @@
-project(jellyfin-qt)
+project(jellyfin-qt VERSION 0.1.0)
 find_package(Qt5 5.6 COMPONENTS Multimedia Network Qml WebSockets REQUIRED)
 include(GNUInstallDirs)
 

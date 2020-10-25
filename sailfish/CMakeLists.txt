@@ -7,8 +7,52 @@ find_package(SailfishApp 1.0 REQUIRED)
 set(harbour-sailfin_SOURCES
 	src/harbour-sailfin.cpp)
 
+set(sailfin_QML_SOURCES
+	qml/Constants.qml
+	qml/Utils.js
+	qml/components/GlassyBackground.qml
+	qml/components/IconListItem.qml
+	qml/components/LibraryItemDelegate.qml
+	qml/components/MoreSection.qml
+	qml/components/PlainLabel.qml
+	qml/components/PlayToolbar.qml
+	qml/components/RemoteImage.qml
+	qml/components/Shim.qml
+	qml/components/UserGridDelegate.qml
+	qml/components/VideoPlayer.qml
+	qml/components/VideoTrackSelector.qml
+	qml/components/itemdetails/SeasonDetails.qml
+	qml/components/videoplayer/VideoError.qml
+	qml/components/videoplayer/VideoHud.qml
+	qml/cover/CoverPage.qml
+	qml/cover/PosterCover.qml
+	qml/cover/VideoCover.qml
+	qml/pages/LegalPage.qml
+	qml/pages/MainPage.qml
+	qml/pages/AboutPage.qml
+	qml/harbour-sailfin.qml
+	qml/pages/SettingsPage.qml
+	qml/pages/VideoPage.qml
+	qml/pages/itemdetails/BaseDetailPage.qml
+	qml/pages/itemdetails/CollectionPage.qml
+	qml/pages/itemdetails/EpisodePage.qml
+	qml/pages/itemdetails/FilmPage.qml
+	qml/pages/itemdetails/MusicAlbumPage.qml
+	qml/pages/itemdetails/SeasonPage.qml
+	qml/pages/itemdetails/SeriesPage.qml
+	qml/pages/itemdetails/UnsupportedPage.qml
+	qml/pages/itemdetails/VideoPage.qml
+	qml/pages/setup/AddServerConnectingPage.qml
+	qml/pages/setup/LoginDialog.qml
+	qml/qmldir)
+	
 add_executable(harbour-sailfin ${harbour-sailfin_SOURCES})
-target_link_libraries(harbour-sailfin PRIVATE Qt5::Gui Qt5::Qml Qt5::Quick SailfishApp::SailfishApp jellyfin-qt)
+target_link_libraries(harbour-sailfin PRIVATE Qt5::Gui Qt5::Qml Qt5::Quick SailfishApp::SailfishApp 
+	# Note: this may break when the compiler changes. -rdynamic and -pie seem to be needed for the 
+	# invoker/booster to work
+	jellyfin-qt "-Wl,-rpath,${CMAKE_INSTALL_LIBDIR} -rdynamic -pie")
+
+add_custom_target(harbour-sailfin-qml ${sailfin_QML_SOURCES})
 
 install(TARGETS harbour-sailfin
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

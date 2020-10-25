@@ -2,46 +2,30 @@ find_package(Qt5 COMPONENTS Gui Qml Quick)
 set(sailfin_SOURCES
 	src/main.cpp)
 
-set(sailfin_QML_SOURCES
-	qml/Constants.qml
-	qml/Utils.js
-	qml/components/GlassyBackground.qml
-	qml/components/IconListItem.qml
-	qml/components/LibraryItemDelegate.qml
-	qml/components/MoreSection.qml
-	qml/components/PlainLabel.qml
-	qml/components/PlayToolbar.qml
-	qml/components/RemoteImage.qml
-	qml/components/Shim.qml
-	qml/components/UserGridDelegate.qml
-	qml/components/VideoPlayer.qml
-	qml/components/VideoTrackSelector.qml
-	qml/components/itemdetails/SeasonDetails.qml
-	qml/components/videoplayer/VideoError.qml
-	qml/components/videoplayer/VideoHud.qml
-	qml/cover/CoverPage.qml
-	qml/cover/PosterCover.qml
-	qml/cover/VideoCover.qml
-	qml/pages/LegalPage.qml
-	qml/pages/MainPage.qml
-	qml/pages/AboutPage.qml
-	qml/harbour-sailfin.qml
-	qml/pages/SettingsPage.qml
-	qml/pages/VideoPage.qml
-	qml/pages/itemdetails/BaseDetailPage.qml
-	qml/pages/itemdetails/CollectionPage.qml
-	qml/pages/itemdetails/EpisodePage.qml
-	qml/pages/itemdetails/FilmPage.qml
-	qml/pages/itemdetails/MusicAlbumPage.qml
-	qml/pages/itemdetails/SeasonPage.qml
-	qml/pages/itemdetails/SeriesPage.qml
-	qml/pages/itemdetails/UnsupportedPage.qml
-	qml/pages/itemdetails/VideoPage.qml
-	qml/pages/setup/AddServerConnectingPage.qml
-	qml/pages/setup/LoginDialog.qml
-	qml/qmldir)
-
-add_custom_target(harbour-sailfin-qml ${sailfin_QML_SOURCES})
-
 add_executable(sailfin ${sailfin_SOURCES})
 target_link_libraries(sailfin PUBLIC Qt5::Gui Qt5::Qml Qt5::Quick jellyfin-qt)
+
+install(TARGETS harbour-sailfin
+    RUNTIME DESTINATION bin
+)
+
+install(DIRECTORY translations
+    DESTINATION share/harbour-sailfin
+    FILES_MATCHING PATTERN "*.qm"
+)
+
+# Tell Qt Creator where the application executable(s) would be located on the
+# device.
+#
+# It is not necessary to list other deployables than executables (runtime
+# targets) here. The deployment process of Sailfish OS projects is opaque to
+# Qt Creator and the information contained in QtCreatorDeployment.txt is only
+# used to locate the executable associated with the active run configuration
+# on the device in order to run it.
+#
+# Search the Qt Creator Manual to learn about the QtCreatorDeployment.txt file
+# format.
+file(WRITE "${CMAKE_BINARY_DIR}/QtCreatorDeployment.txt"
+	"${CMAKE_INSTALL_PREFIX}
+	${CMAKE_BINARY_DIR}/harbour-sailfin:bin
+")

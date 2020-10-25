@@ -44,6 +44,7 @@ Macros:
   - '__requires_exclude; ^libjellyfin-qt.*$'
 
 ConfigOptions:
+  - -DCMAKE_BUILD_TYPE=Release
   - -DSAILFISHOS=1
   - -DSAILFIN_VERSION='%{version}-%{release}'
 

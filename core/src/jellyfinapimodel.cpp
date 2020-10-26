@@ -66,6 +66,9 @@ void ApiModel::load(LoadType type) {
     if (!m_imageTypes.empty()) {
         query.addQueryItem("ImageTypes", m_imageTypes.join(","));
     }
+    if (!m_includeItemTypes.empty()) {
+        query.addQueryItem("IncludeItemTypes", m_includeItemTypes.join(","));
+    }
     if (!m_fields.empty()) {
         query.addQueryItem("Fields", m_fields.join(","));
     }
@@ -191,6 +194,7 @@ bool ApiModel::canFetchMore(const QModelIndex &parent) const {
     switch(m_status) {
         case Uninitialised:
         case Loading:
+        case LoadingMore:
             return false;
         default:
             break;

@@ -45,6 +45,7 @@ BackgroundItem {
         }
         fillMode: Image.PreserveAspectCrop
         fallbackColor: Utils.colorFromString(title)
+        highlighted: root.highlighted
     }
 
     /*Rectangle {

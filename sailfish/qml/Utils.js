@@ -22,15 +22,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 /**
  * Converts miliseconds to a h:mm:ss format
  */
-function timeToText(time) {
+function timeToText(time, showHours) {
+    var mShowHours = showHours === undefined ? true : showHours
     if (time < 0) return "??:??:??"
     var hours = Math.floor(time / (60 * 60 * 1000))
     var left = time % (60 * 60 * 1000)
     var minutes = Math.floor(left / (60 * 1000))
     left = time % (60 * 1000)
     var seconds = Math.floor(left / 1000)
-
-    return hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "")+ seconds
+    return (hours > 0 ? hours + ":" : "")
+            + (minutes < 10 ? "0" : "")
+            + minutes + ":" + (seconds < 10 ? "0" : "")+ seconds
 }
 
 function msToTicks(ms) {
@@ -41,8 +43,8 @@ function ticksToMs(ticks) {
     return ticks / 10000;
 }
 
-function ticksToText(ticks) {
-    return timeToText(ticks / 10000);
+function ticksToText(ticks, showHours) {
+    return timeToText(ticks / 10000, showHours);
 }
 
 function itemImageUrl(baseUrl, item, type, options) {
@@ -80,6 +82,8 @@ function getPageUrl(mediaType, itemType) {
         return Qt.resolvedUrl("pages/itemdetails/SeasonPage.qml")
     case "episode":
         return Qt.resolvedUrl("pages/itemdetails/EpisodePage.qml")
+    case "musicalbum":
+        return Qt.resolvedUrl("pages/itemdetails/MusicAlbumPage.qml")
     default:
         switch (mediaType ? mediaType.toLowerCase() : "folder") {
         case "folder":

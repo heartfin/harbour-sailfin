@@ -23,11 +23,22 @@ import Sailfish.Silica 1.0
 /**
  * An image for "remote" images (loaded over e.g. http), with a spinner and a fallback image
  */
-HighlightImage {
-	property string fallbackImage
-	property bool usingFallbackImage
+SilicaItem {
+    property string fallbackImage
+    property bool usingFallbackImage
     property color fallbackColor: Theme.highlightColor
-    asynchronous: true
+
+    property alias source: realImage.source
+    property alias sourceSize: realImage.sourceSize
+    property alias fillMode: realImage.fillMode
+    implicitHeight: realImage.implicitHeight
+    implicitWidth: realImage.implicitWidth
+
+    Image {
+        id: realImage
+        anchors.fill: parent
+        asynchronous: true
+    }
 	
     Rectangle {
         id: fallbackBackground
@@ -36,18 +47,25 @@ HighlightImage {
             GradientStop { position: 0.0; color: fallbackColor; }
             GradientStop { position: 1.0; color: Theme.highlightDimmerFromColor(fallbackColor, Theme.colorScheme); }
         }
-        visible: parent.status == Image.Error || parent.status == Image.Null || parent.status == Image.Loading
+        visible: realImage.status === Image.Error || realImage.status === Image.Null || realImage.status === Image.Loading
+    }
+
+    Rectangle {
+        id: highlightOverlay
+        anchors.fill: parent
+        color: Theme.rgba(Theme.highlightColor, Theme.opacityOverlay)
+        visible: parent.highlighted
     }
 
     BusyIndicator {
         anchors.centerIn: parent
-        running: parent.status == Image.Loading
+        running: realImage.status === Image.Loading
     }
 
     HighlightImage {
 		id: fallbackImageItem
 		anchors.centerIn: parent
-        visible: parent.status == Image.Error || parent.status == Image.Null
+        visible: realImage.status === Image.Error || realImage.status === Image.Null
 		source: fallbackImage ? fallbackImage : "image://theme/icon-m-question"
 	}
 }

@@ -254,6 +254,8 @@ void RemoteData::reload() {
     });
 }
 
+NameGuidPair::NameGuidPair(QObject *parent) : JsonSerializable (parent) {}
+
 // User
 User::User(QObject *parent) : RemoteData (parent) {}
 
@@ -351,6 +353,7 @@ void Item::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> use
 
 void registerSerializableJsonTypes(const char* URI) {
     qmlRegisterType<MediaStream>(URI, 1, 0, "MediaStream");
+    qmlRegisterType<NameGuidPair>(URI, 1, 0, "NameGuidPair");
     qmlRegisterType<User>(URI, 1, 0, "User");
     qmlRegisterType<UserData>(URI, 1, 0, "UserData");
     qmlRegisterType<Item>(URI, 1, 0, "JellyfinItem");

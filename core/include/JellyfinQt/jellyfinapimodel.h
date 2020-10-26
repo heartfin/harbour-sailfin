@@ -140,6 +140,7 @@ public:
     Q_PROPERTY(QList<QString> fields MEMBER m_fields NOTIFY fieldsChanged)
     Q_PROPERTY(QString seasonId MEMBER m_seasonId NOTIFY seasonIdChanged)
     Q_PROPERTY(QList<QString> imageTypes MEMBER m_imageTypes NOTIFY imageTypesChanged)
+    Q_PROPERTY(QList<QString> includeItemTypes MEMBER m_includeItemTypes NOTIFY includeItemTypesChanged)
     Q_PROPERTY(bool recursive MEMBER m_recursive)
     Q_PROPERTY(SortOrder sortOrder MEMBER m_sortOrder NOTIFY sortOrderChanged)
 
@@ -182,6 +183,7 @@ signals:
     void seasonIdChanged(QString newSeasonId);
     void fieldsChanged(QList<QString> newFields);
     void imageTypesChanged(QList<QString> newImageTypes);
+    void includeItemTypesChanged(const QList<QString> &newIncludeItemTypes);
 
 public slots:
     /**
@@ -225,9 +227,10 @@ protected:
     bool m_addUserId = false;
     QString m_parentId;
     QString m_seasonId;
-    QList<QString> m_fields;
-    QList<QString> m_imageTypes;
+    QList<QString> m_fields = {};
+    QList<QString> m_imageTypes = {};
     QList<QString> m_sortBy = {};
+    QList<QString> m_includeItemTypes = {};
     SortOrder m_sortOrder = Unspecified;
     bool m_recursive = false;
 

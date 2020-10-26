@@ -20,8 +20,7 @@ set(sailfin_QML_SOURCES
 	qml/components/Shim.qml
 	qml/components/UserGridDelegate.qml
 	qml/components/VideoPlayer.qml
-	qml/components/VideoTrackSelector.qml
-	qml/components/itemdetails/SeasonDetails.qml
+        qml/components/VideoTrackSelector.qml
 	qml/components/videoplayer/VideoError.qml
 	qml/components/videoplayer/VideoHud.qml
 	qml/cover/CoverPage.qml
@@ -46,13 +45,11 @@ set(sailfin_QML_SOURCES
 	qml/pages/setup/LoginDialog.qml
 	qml/qmldir)
 	
-add_executable(harbour-sailfin ${harbour-sailfin_SOURCES})
+add_executable(harbour-sailfin ${harbour-sailfin_SOURCES} ${sailfin_QML_SOURCES})
 target_link_libraries(harbour-sailfin PRIVATE Qt5::Gui Qt5::Qml Qt5::Quick SailfishApp::SailfishApp 
 	# Note: this may break when the compiler changes. -rdynamic and -pie seem to be needed for the 
 	# invoker/booster to work
 	jellyfin-qt "-Wl,-rpath,${CMAKE_INSTALL_LIBDIR} -rdynamic -pie")
-
-add_custom_target(harbour-sailfin-qml ${sailfin_QML_SOURCES})
 
 install(TARGETS harbour-sailfin
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -79,3 +76,19 @@ install(FILES icons/128x128/harbour-sailfin.png
 install(FILES icons/172x172/harbour-sailfin.png
     DESTINATION share/icons/hicolor/172x172/apps
 )
+
+# Tell Qt Creator where the application executable(s) would be located on the
+# device.
+#
+# It is not necessary to list other deployables than executables (runtime
+# targets) here. The deployment process of Sailfish OS projects is opaque to
+# Qt Creator and the information contained in QtCreatorDeployment.txt is only
+# used to locate the executable associated with the active run configuration
+# on the device in order to run it.
+#
+# Search the Qt Creator Manual to learn about the QtCreatorDeployment.txt file
+# format.
+file(WRITE "${CMAKE_BINARY_DIR}/QtCreatorDeployment.txt"
+    "${CMAKE_INSTALL_PREFIX}
+    sailfish/harbour-sailfin:bin
+")

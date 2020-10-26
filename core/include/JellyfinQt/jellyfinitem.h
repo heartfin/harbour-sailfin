@@ -169,6 +169,21 @@ private:
     QString m_errorString;
 };
 
+class NameGuidPair : public JsonSerializable {
+    Q_OBJECT
+public:
+    Q_INVOKABLE NameGuidPair(QObject *parent = nullptr);
+    Q_PROPERTY(QString name MEMBER m_name NOTIFY nameChanged)
+    // Once again the Jellyfin id workaround
+    Q_PROPERTY(QString jellyfinId MEMBER m_id NOTIFY jellyfinIdChanged)
+signals:
+    void nameChanged(const QString &newName);
+    void jellyfinIdChanged(const QString &newJellyfinId);
+private:
+    QString m_name;
+    QString m_id;
+};
+
 class User : public RemoteData {
     Q_OBJECT
 public:
@@ -333,10 +348,16 @@ public:
     Q_PROPERTY(bool isFolder READ isFolder WRITE setIsFolder NOTIFY isFolderChanged)
     Q_PROPERTY(QString type MEMBER m_type NOTIFY typeChanged)
     Q_PROPERTY(UserData *userData MEMBER m_userData NOTIFY userDataChanged)
+    Q_PROPERTY(int recursiveItemCount READ recursiveItemCount WRITE setRecursiveItemCount NOTIFY recursiveItemCountChanged)
+    Q_PROPERTY(int childCount READ childCount WRITE setChildCount NOTIFY childCountChanged)
+    Q_PROPERTY(QString albumArtist MEMBER m_albumArtist NOTIFY albumArtistChanged)
+    Q_PROPERTY(QList<NameGuidPair *> __list__albumArtists MEMBER __list__m_albumArtists NOTIFY albumArtistsChanged)
+    Q_PROPERTY(QVariantList albumArtists MEMBER m_albumArtists NOTIFY albumArtistsChanged STORED false)
     Q_PROPERTY(QString seriesName MEMBER m_seriesName NOTIFY seriesNameChanged)
     Q_PROPERTY(QString seasonName MEMBER m_seasonName NOTIFY seasonNameChanged)
     Q_PROPERTY(QList<MediaStream *> __list__mediaStreams MEMBER __list__m_mediaStreams NOTIFY mediaStreamsChanged)
     Q_PROPERTY(QVariantList mediaStreams MEMBER m_mediaStreams NOTIFY mediaStreamsChanged STORED false)
+    Q_PROPERTY(QStringList artists MEMBER m_artists NOTIFY artistsChanged)
     // Why is this a QJsonObject? Well, because I couldn't be bothered to implement the deserialisations of
     // a QHash at the moment.
     Q_PROPERTY(QJsonObject imageTags MEMBER m_imageTags NOTIFY imageTagsChanged)
@@ -374,6 +395,10 @@ public:
     void setIndexNumberEnd(int newIndexNumberEnd) { m_indexNumberEnd = std::optional<int>(newIndexNumberEnd); emit indexNumberEndChanged(newIndexNumberEnd); }
     bool isFolder() const { return m_isFolder.value_or(false); }
     void setIsFolder(bool newIsFolder) { m_isFolder = newIsFolder; emit isFolderChanged(newIsFolder); }
+    int recursiveItemCount() const { return m_recursiveItemCount.value_or(-1); }
+    void setRecursiveItemCount(int newRecursiveItemCount) { m_recursiveItemCount = newRecursiveItemCount; emit recursiveItemCountChanged(newRecursiveItemCount); }
+    int childCount() const { return m_childCount.value_or(-1); }
+    void setChildCount(int newChildCount) { m_childCount = newChildCount; emit childCountChanged(newChildCount); }
 
     //QQmlListProperty<MediaStream> mediaStreams() { return toReadOnlyQmlListProperty<MediaStream>(m_mediaStreams); }
     //QList<QObject *> mediaStreams() { return *reinterpret_cast<QList<QObject *> *>(&m_mediaStreams); }
@@ -415,9 +440,14 @@ signals:
     void isFolderChanged(bool newIsFolder);
     void typeChanged(const QString &newType);
     void userDataChanged(UserData *newUserData);
+    void recursiveItemCountChanged(int newRecursiveItemCount);
+    void childCountChanged(int newChildCount);
+    void albumArtistChanged(const QString &newAlbumArtist);
+    void albumArtistsChanged(NameGuidPair *newAlbumArtists);
     void seriesNameChanged(const QString &newSeriesName);
     void seasonNameChanged(const QString &newSeasonName);
     void mediaStreamsChanged(/*const QList<MediaStream *> &newMediaStreams*/);
+    void artistsChanged(const QStringList &newArtists);
     void imageTagsChanged();
     void imageBlurHashesChanged();
 
@@ -463,10 +493,16 @@ protected:
     std::optional<bool> m_isFolder = std::nullopt;
     QString m_type;
     UserData *m_userData = nullptr;
+    std::optional<int> m_recursiveItemCount = std::nullopt;
+    std::optional<int> m_childCount = std::nullopt;
+    QString m_albumArtist;
+    QList<NameGuidPair *> __list__m_albumArtists;
+    QVariantList m_albumArtists;
     QString m_seriesName;
     QString m_seasonName;
     QList<MediaStream *> __list__m_mediaStreams;
     QVariantList m_mediaStreams;
+    QStringList m_artists;
     QJsonObject m_imageTags;
     QJsonObject m_imageBlurHashes;
 

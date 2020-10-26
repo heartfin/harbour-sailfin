@@ -6,4 +6,5 @@ build/
 build-*/
 
 # IDE files
-harbour-sailfin.pro.user
+*.user
+CMakeLists.txt.user.*

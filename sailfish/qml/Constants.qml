@@ -23,10 +23,30 @@ import QtQuick 2.6
 import Sailfish.Silica 1.0
 
 QtObject {
-    readonly property real libraryDelegateWidth: Screen.width / 3
-    readonly property real libraryDelegateHeight: Screen.width / 3
+    readonly property real libraryDelegateWidth: {
+        switch(Screen.sizeCategory) {
+        case Screen.Small:
+        case Screen.Medium:
+            return Screen.width / 3
+        case Screen.Large:
+            return Screen.width / 5
+        case Screen.ExtraLarge:
+            return Screen.width / 7
+        }
+    }
+    readonly property real libraryDelegateHeight: {
+        switch(Screen.sizeCategory) {
+        case Screen.Small:
+        case Screen.Medium:
+            return Screen.width / 3
+        case Screen.Large:
+            return Screen.width / 5
+        case Screen.ExtraLarge:
+            return Screen.width / 7
+        }
+    }
 
-    readonly property real libraryDelegatePosterHeight: Screen.width / 2
+    readonly property real libraryDelegatePosterHeight: libraryDelegateHeight * 1.6667
 
     readonly property real libraryProgressHeight: Theme.paddingMedium
 

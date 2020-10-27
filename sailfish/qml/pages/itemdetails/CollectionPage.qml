@@ -40,7 +40,7 @@ BaseDetailPage {
         anchors.fill: parent
         model: collectionModel
         cellWidth: Constants.libraryDelegateWidth
-        cellHeight: Utils.usePortraitCover(itemData.CollectionType) ? Constants.libraryDelegatePosterHeight
+        cellHeight: Utils.usePortraitCover(itemData.collectionType) ? Constants.libraryDelegatePosterHeight
                                                                     : Constants.libraryDelegateHeight
         visible: itemData.status !== JellyfinItem.Error
 

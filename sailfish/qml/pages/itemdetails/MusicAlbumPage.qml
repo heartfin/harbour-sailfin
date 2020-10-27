@@ -1,14 +1,36 @@
+/*
+Sailfin: a Jellyfin client written using Qt
+Copyright (C) 2020 Chris Josten
+
+This library is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import QtQuick.Layouts 1.1
 
 import nl.netsoj.chris.Jellyfin 1.0
 
 import "../../components"
+import "../../components/music"
 import "../.."
 
 BaseDetailPage {
+    id: albumPageRoot
     readonly property int _songIndexWidth: 100
     property string _albumArtistText: itemData.albumArtist
+    width: 800 * Theme.pixelRatio
 
     UserItemModel {
         id: collectionModel
@@ -18,203 +40,51 @@ BaseDetailPage {
         parentId: itemData.jellyfinId
         onParentIdChanged: reload()
     }
-
-    SilicaListView {
-        id: list
+    RowLayout {
         anchors.fill: parent
-        model: collectionModel
-        header: Item {
-            property string stateIfArt: "largeArt"
-            property alias albumArt: albumArt
-            id: listHeader
-            width: parent.width
-            //spacing: Theme.paddingLarge
-            state: albumArt.source != "" ? stateIfArt : "noArt"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if (listHeader.stateIfArt == "largeArt") {
-                        listHeader.stateIfArt = "details"
-                    } else {
-                        listHeader.stateIfArt = "largeArt"
-                    }
-                }
-            }
-            RemoteImage {
-                id: albumArt
-                anchors {
-                    top: parent.top
-                    right: parent.right
-                }
-                source: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
-                sourceSize.width: listHeader.width
-                sourceSize.height: listHeader.width
-                fillMode: Image.PreserveAspectFit
-                opacity: 1
-                clip: true
-            }
-            PageHeader {
-                id: albumHeader
-                width: parent.width - Theme.horizontalPageMargin - height
-                title: itemData.name
-                description: qsTr("%1\n%2 songs | %3 | %4")
-                    .arg(_albumArtistText)
-                    .arg(itemData.childCount)
-                    .arg(Utils.ticksToText(itemData.runTimeTicks))
-                    .arg(itemData.productionYear > 0 ? itemData.productionYear : qsTr("Unknown year"))
-            }
 
-            states: [
-                State {
-                    name: "largeArt"
-                    PropertyChanges {
-                        target: albumArt
-                        width: parent.width
-                        height: width
-                    }
-                    PropertyChanges {
-                        target: listHeader
-                        height: width
-                    }
-                    PropertyChanges {
-                        target: albumHeader
-                        opacity: 0
-                    }
-                    PropertyChanges {
-                        target: list
-                        contentY: -list.width
-                    }
-                    AnchorChanges {
-                        target: albumHeader
-                        anchors.left: undefined
-                        anchors.right: albumArt.left
-                    }
-                },
-                State {
-                    name: "details"
-                    PropertyChanges {
-                        target: albumArt
-                        width: height
-                        height: albumHeader.height
-                    }
-                    PropertyChanges {
-                        target: listHeader
-                        height: albumHeader.height
-                    }
-                    PropertyChanges {
-                        target: albumHeader
-                        opacity: 1
-                    }
-                    PropertyChanges {
-                        target: list
-                        contentY: -albumHeader.height
-                    }
-                    AnchorChanges {
-                        target: albumHeader
-                        anchors.left: undefined
-                        anchors.right: albumArt.left
-                    }
-                },
-                State {
-                    name: "noArt"
-                    extend: "details"
-                    PropertyChanges {
-                        target: albumArt
-                        opacity: 0
-                    }
-                    PropertyChanges {
-                        target: albumHeader
-                        width: parent.width - Theme.horizontalPageMargin * 2
-                    }
-                    AnchorChanges {
-                        target: albumHeader
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                    }
-                }
-            ]
-            transitions: Transition {
-                OpacityAnimator { target: albumHeader}
-                OpacityAnimator { target: albumArt}
-                NumberAnimation {
-                    properties: "width,height,contentY"
-                    //velocity: 1600
-                    duration: 300
-                    easing.type: Easing.OutQuad
-                }
-                AnchorAnimation {}
-            }
+        Item {height: 1; width: Theme.horizontalPageMargin; visible: wideAlbumCover.visible; }
+        Loader {
+            id: wideAlbumCover
+            visible: albumPageRoot.width / Theme.pixelRatio >= 800
+            Layout.minimumWidth: 1000 / Theme.pixelRatio
+            Layout.fillHeight: true
+            source: visible
+                    ? "../../components/music/WideAlbumCover.qml" : ""
+            onLoaded: bindAlbum(item)
         }
-        section {
-            property: "parentIndexNumber"
-            delegate: SectionHeader {
-                text: qsTr("Disc %1").arg(section)
+        Item {height: 1; width: Theme.horizontalPageMargin; visible: wideAlbumCover.visible; }
+        SilicaListView {
+            id: list
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            model: collectionModel
+            header: Loader {
+                width: parent.width
+                height: item ? item.height : 0
+                source: albumPageRoot.width / Theme.pixelRatio < 800
+                        ? "../../components/music/NarrowAlbumCover.qml" : ""
+                onLoaded: bindAlbum(item)
             }
+            section {
+                property: "parentIndexNumber"
+                delegate: SectionHeader {
+                    text: qsTr("Disc %1").arg(section)
+                }
+            }
+            delegate: SongDelegate {
+                name: model.name
+                artists: model.artists
+                duration: model.runTimeTicks
+                indexNumber: model.indexNumber
+            }
+
+            VerticalScrollDecorator {}
         }
-        delegate: ListItem {
-            contentHeight: songName.height + songArtists.height + 2 * Theme.paddingMedium
-            width: parent.width
+    }
 
-            Label {
-                id: songIndex
-                anchors {
-                    top: parent.top
-                    topMargin: Theme.paddingMedium
-                    left: parent.left
-                    leftMargin: Theme.horizontalPageMargin
-                }
-                text: model.indexNumber
-                horizontalAlignment: Text.AlignRight
-                font.pixelSize: Theme.fontSizeExtraLarge
-                width: _songIndexWidth
-            }
-
-            Label {
-                id: songName
-                anchors {
-                    left: songIndex.right
-                    leftMargin: Theme.paddingLarge
-                    top: parent.top
-                    topMargin: Theme.paddingMedium
-                    right: duration.left
-                    rightMargin: Theme.paddingLarge
-                }
-                text: model.name
-                font.pixelSize: Theme.fontSizeMedium
-                truncationMode: TruncationMode.Fade
-            }
-            Label {
-                id: songArtists
-                anchors {
-                    top: songName.bottom
-                    left: songIndex.right
-                    leftMargin: Theme.paddingLarge
-                    right: parent.right
-                    rightMargin: Theme.horizontalPageMargin
-                }
-                text: model.artists.join(", ")
-                font.pixelSize: Theme.fontSizeSmall
-                truncationMode: TruncationMode.Fade
-                color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
-            }
-
-            Label {
-                id: duration
-                anchors {
-                    right: parent.right
-                    rightMargin: Theme.horizontalPageMargin
-                    baseline: songName.baseline
-                }
-                width: contentWidth
-                text: Utils.ticksToText(model.runTimeTicks)
-                font.pixelSize: Theme.fontSizeSmall
-                color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
-            }
-        }
-
-
-
-        VerticalScrollDecorator {}
+    Label {
+        text: "%1; %2".arg(Theme.pixelRatio).arg(stateIfArt)
     }
 
     Connections {
@@ -226,5 +96,15 @@ BaseDetailPage {
                 _albumArtistText += itemData.albumArtists[i]["name"]
             }
         }
+    }
+
+    function bindAlbum(item) {
+        item.albumArt = Qt.binding(function(){ return Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})})
+        item.name = Qt.binding(function(){ return itemData.name})
+        item.releaseYear = Qt.binding(function() { return itemData.productionYear})
+        item.albumArtist = Qt.binding(function() { return _albumArtistText})
+        item.duration = Qt.binding(function() { return itemData.runTimeTicks})
+        item.songCount = Qt.binding(function() { return itemData.childCount})
+        item.listview = Qt.binding(function() { return list})
     }
 }

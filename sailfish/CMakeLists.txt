@@ -10,6 +10,11 @@ set(harbour-sailfin_SOURCES
 set(sailfin_QML_SOURCES
 	qml/Constants.qml
 	qml/Utils.js
+        qml/components/music/NarrowAlbumCover.qml
+        qml/components/music/WideAlbumCover.qml
+        qml/components/music/SongDelegate.qml
+        qml/components/videoplayer/VideoError.qml
+        qml/components/videoplayer/VideoHud.qml
 	qml/components/GlassyBackground.qml
 	qml/components/IconListItem.qml
 	qml/components/LibraryItemDelegate.qml
@@ -21,8 +26,6 @@ set(sailfin_QML_SOURCES
 	qml/components/UserGridDelegate.qml
 	qml/components/VideoPlayer.qml
         qml/components/VideoTrackSelector.qml
-	qml/components/videoplayer/VideoError.qml
-	qml/components/videoplayer/VideoHud.qml
 	qml/cover/CoverPage.qml
 	qml/cover/PosterCover.qml
 	qml/cover/VideoCover.qml

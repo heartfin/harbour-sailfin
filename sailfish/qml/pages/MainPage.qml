@@ -192,6 +192,12 @@ Page {
         }
     }
 
+    Label {
+        text: Screen.sizeCategory
+        x: 100
+        y: 100
+    }
+
     Component {
         id: carrouselView
         SilicaListView {

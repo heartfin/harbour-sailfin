@@ -53,11 +53,15 @@ function itemImageUrl(baseUrl, item, type, options) {
 }
 
 function itemModelImageUrl(baseUrl, itemId, tag, type, options) {
-    if (tag == undefined) return ""
+    if (tag === undefined) return ""
     var extraQuery = "";
     for (var prop in options) {
         if (options.hasOwnProperty(prop)) {
-            extraQuery += "&" + prop + "=" + options[prop];
+            var value = options[prop];
+            if (prop === "maxWidth" || prop === "maxHeight") {
+                value = Math.floor(options[prop]);
+            }
+            extraQuery += "&" + prop + "=" + value;
         }
     }
     return baseUrl + "/Items/" + itemId + "/Images/" + type + "?tag=" + tag + extraQuery

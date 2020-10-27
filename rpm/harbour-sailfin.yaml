@@ -16,6 +16,8 @@ Builder: cmake
 
 # This section specifies build dependencies that are resolved using pkgconfig.
 # This is the preferred way of specifying build dependencies for your package.
+PkgBR:
+  - git
 PkgConfigBR:
   - sailfishapp >= 1.0.2
   - Qt5Core

@@ -1,6 +1,15 @@
 project(harbour-sailfin-sailfish)
 
 # find_library(SAILFISH sailfishapp 1.0 REQUIRED)
+include(ExternalProject)
+# FIXME: don't hardcode /home/deploy/installroot/
+set(DEPLOY_ROOT /home/deploy/installroot/)
+ExternalProject_Add(BlurhashQt
+    # PREFIX ${CMAKE_CURRENT_BINARY_DIR}/lib/blurhash-qt
+    GIT_REPOSITORY https://github.com/HenkKalkwater/BlurhashQt.git
+    GIT_TAG 6a0d05919a798eedeacdbc30507470b774b90f8d
+
+    CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON -DENABLE_EXPORT=OFF -DCMAKE_INSTALL_LIBDIR=${DEPLOY_ROOT}usr/share/harbour-sailfin/plugins)
 find_package(Qt5 COMPONENTS Gui Qml Quick)
 find_package(SailfishApp 1.0 REQUIRED)
 

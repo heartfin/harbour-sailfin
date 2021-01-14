@@ -4,7 +4,7 @@
 # generate changelog from well formatted Git commit messages and tag
 # annotations.
 
-git-change-log
+git-change-log --dense '/[0-9]+.[0-9]+$'
 
 # Here are some basic examples how to change from the default behavior. Run
 # git-change-log --help inside the Sailfish OS SDK chroot or build engine to

@@ -5,7 +5,7 @@ set(sailfin_SOURCES
 add_executable(sailfin ${sailfin_SOURCES})
 target_link_libraries(sailfin PUBLIC Qt5::Gui Qt5::Qml Qt5::Quick jellyfin-qt)
 
-install(TARGETS harbour-sailfin
+install(TARGETS sailfin
     RUNTIME DESTINATION bin
 )
 

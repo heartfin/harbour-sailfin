@@ -44,11 +44,16 @@ Files:
 Macros:
   - '__provides_exclude_from; ^%{_datadir}/.*$'
   - '__requires_exclude; ^libjellyfin-qt.*$'
+  # Turn off facist build policy
+  - '_unpackaged_files_terminate_build; 0 '
 
 ConfigOptions:
   - -DCMAKE_BUILD_TYPE=Release
   - -DSAILFISHOS=1
   - -DSAILFIN_VERSION='%{version}-%{release}'
+  
+# ExtraInstall: |
+  # mv /home/deploy/installroot/home/deploy/installroot/usr/share/harbour-sailfin/plugins /home/deploy/installroot/usr/share/harbour-sailfin/plugins
 
 # For more information about yaml and what's supported in Sailfish OS
 # build system, please see https://wiki.merproject.org/wiki/Spectacle

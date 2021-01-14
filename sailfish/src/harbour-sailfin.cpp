@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QtQuick>
 #endif
 
+#include <QDebug>
 #include <QJSEngine>
 #include <QGuiApplication>
 #include <QQuickView>
@@ -45,6 +46,7 @@ int main(int argc, char *argv[]) {
     QQuickView *view = SailfishApp::createView();
     view->setSource(SailfishApp::pathToMainQml());
     view->show();
+    qDebug() << "QML import paths: " << view->engine()->importPathList();
 
     return app->exec();
 }

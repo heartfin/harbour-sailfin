@@ -61,6 +61,7 @@ BaseDetailPage {
                 id: itemImage
                 anchors.fill: parent
                 source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxWidth": width})
+                blurhash: model.imageBlurHashes.primary[model.imageTags.primary]
                 fallbackColor: Utils.colorFromString(model.name)
                 fillMode: Image.PreserveAspectCrop
                 clip: true

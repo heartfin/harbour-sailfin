@@ -34,6 +34,7 @@ Item {
     property real duration
     property int songCount
     property string name
+    property alias blurhash : albumArt.blurhash
 
 
     property string stateIfArt: "largeArt"

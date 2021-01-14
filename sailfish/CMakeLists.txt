@@ -50,6 +50,7 @@ set(sailfin_QML_SOURCES
 	qml/pages/itemdetails/EpisodePage.qml
 	qml/pages/itemdetails/FilmPage.qml
 	qml/pages/itemdetails/MusicAlbumPage.qml
+        qml/pages/itemdetails/PhotoPage.qml
 	qml/pages/itemdetails/SeasonPage.qml
 	qml/pages/itemdetails/SeriesPage.qml
 	qml/pages/itemdetails/UnsupportedPage.qml

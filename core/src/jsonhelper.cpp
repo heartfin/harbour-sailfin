@@ -30,7 +30,12 @@ void convertToCamelCase(QJsonValueRef val) {
             QJsonValueRef ref = obj[key];
             convertToCamelCase(ref);
             obj[convertToCamelCaseHelper(key)] = ref;
-            obj.remove(key);
+            if (key[0].isLower() || !key[0].isLetter()) {
+                obj[key] = ref;
+            } else {
+                obj[convertToCamelCaseHelper(key)] = ref;
+                obj.remove(key);
+            }
         }
         val = obj;
         break;

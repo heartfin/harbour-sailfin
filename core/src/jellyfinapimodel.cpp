@@ -183,6 +183,7 @@ QVariant ApiModel::data(const QModelIndex &index, int role) const {
     QJsonObject obj = m_array.at(index.row()).toObject();
 
     const QString &key = m_roles[role];
+
     if (obj.contains(key)) {
         return obj[key].toVariant();
     }

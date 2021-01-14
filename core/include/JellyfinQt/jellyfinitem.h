@@ -362,6 +362,8 @@ public:
     // a QHash at the moment.
     Q_PROPERTY(QJsonObject imageTags MEMBER m_imageTags NOTIFY imageTagsChanged)
     Q_PROPERTY(QJsonObject imageBlurHashes MEMBER m_imageBlurHashes NOTIFY imageBlurHashesChanged)
+    Q_PROPERTY(int width MEMBER m_width NOTIFY widthChanged)
+    Q_PROPERTY(int height MEMBER m_height NOTIFY heightChanged)
 
     QString jellyfinId() const { return m_id; }
     void setJellyfinId(QString newId);
@@ -450,6 +452,8 @@ signals:
     void artistsChanged(const QStringList &newArtists);
     void imageTagsChanged();
     void imageBlurHashesChanged();
+    void widthChanged(int newWidth);
+    void heightChanged(int newHeight);
 
 public slots:
     void onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData);
@@ -505,6 +509,8 @@ protected:
     QStringList m_artists;
     QJsonObject m_imageTags;
     QJsonObject m_imageBlurHashes;
+    int m_width;
+    int m_height;
 
     template<typename T>
     QQmlListProperty<T> toReadOnlyQmlListProperty(QList<T *> &list) {

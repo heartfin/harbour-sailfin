@@ -35,6 +35,7 @@ Column {
     property real duration
     property int songCount
     property string name
+    property alias blurhash : albumArt.blurhash
 
     Item { width:1; height: Theme.paddingLarge }
 

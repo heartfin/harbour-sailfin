@@ -3,6 +3,8 @@ import Sailfish.Silica 1.0
 
 import nl.netsoj.chris.Jellyfin 1.0
 
+import "../../components"
+
 BaseDetailPage {
     id: pageRoot
     navigationStyle: PageNavigation.Vertical
@@ -17,19 +19,13 @@ BaseDetailPage {
         titleColor: Theme.primaryColor
     }
 
-    Image {
+    RemoteImage {
         id: image
         source: ApiClient.downloadUrl(itemId)
         fillMode: Image.PreserveAspectFit
         anchors.fill: parent
 
-        opacity: status == Image.Ready ? 1.0 : 0.0
-        Behavior on opacity { FadeAnimator {}}
+        blurhash: itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]
+        aspectRatio: itemData.width / itemData.height
     }
-
-    BusyIndicator {
-            running: image.status == Image.Loading
-            size: BusyIndicatorSize.Large
-            anchors.centerIn: parent
-        }
 }

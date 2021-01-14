@@ -60,7 +60,7 @@ Page {
                     id: loggedInUser
                     apiClient: ApiClient
                 }
-                Image {
+                RemoteImage {
                     id: userIcon
                     width: height
                     anchors {

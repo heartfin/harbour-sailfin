@@ -29,6 +29,7 @@ import "../Utils.js" as Utils
  * Main page, which simply shows some content of every library, as well as next items.
  */
 Page {
+    /// True if the models on this page already have been loaded and don't necessarily need a refresh
     property bool _modelsLoaded: false
 
     id: page
@@ -192,12 +193,6 @@ Page {
         }
     }
 
-    Label {
-        text: Screen.sizeCategory
-        x: 100
-        y: 100
-    }
-
     Component {
         id: carrouselView
         SilicaListView {
@@ -227,9 +222,7 @@ Page {
                 property string id: model.id
                 title: model.name
                 poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["primary"], "Primary", {"maxHeight": height})
-                /*model.imageTags["Primary"] ? ApiClient.baseUrl + "/Items/" + model.id
-                                                     + "/Images/Primary?maxHeight=" + height + "&tag=" + model.imageTags["Primary"]
-                                                   : ""*/
+                blurhash: model.imageBlurHashes["primary"][model.imageTags["primary"]]
                 landscape: !Utils.usePortraitCover(collectionType)
                 progress: (typeof model.userData !== "undefined") ? model.userData.playedPercentage / 100 : 0.0
 

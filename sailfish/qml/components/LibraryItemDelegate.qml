@@ -28,6 +28,7 @@ BackgroundItem {
     id: root
     property alias poster: posterImage.source
     property alias title: titleText.text
+    property alias blurhash: posterImage.blurhash
     property bool landscape: false
     property real progress: 0.0
 

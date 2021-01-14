@@ -106,5 +106,6 @@ BaseDetailPage {
         item.duration = Qt.binding(function() { return itemData.runTimeTicks})
         item.songCount = Qt.binding(function() { return itemData.childCount})
         item.listview = Qt.binding(function() { return list})
+        item.blurhash = Qt.binding(function() { return itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]; })
     }
 }

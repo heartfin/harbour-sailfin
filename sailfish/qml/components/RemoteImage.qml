@@ -57,7 +57,7 @@ SilicaItem {
         asynchronous: true
         fillMode: root.fillMode
         opacity: 1
-        source: alreadyLoaded || [PageStatus.Active, PageStatus.Deactivating].indexOf(__parentPage.status) >= 0 ? root.source : ""
+        source: alreadyLoaded || __parentPage && [PageStatus.Active, PageStatus.Deactivating].indexOf(__parentPage.status) >= 0 ? root.source : ""
         onStatusChanged: {
             if (status == Image.Ready) {
                 alreadyLoaded = true
@@ -81,7 +81,7 @@ SilicaItem {
         fillMode: root.fillMode
         sourceSize.height: 32
         sourceSize.width: 32 * aspectRatio
-        source: "image://blurhash/" + encodeURIComponent(blurhash)
+        source: blurhash.length > 0 ? "image://blurhash/" + encodeURIComponent(blurhash) : ""
         opacity: 0
     }
 
@@ -104,12 +104,6 @@ SilicaItem {
         source: fallbackImage ? fallbackImage : "image://theme/icon-m-question"
 	}
 
-    Text {
-        id: name
-        text: state
-        color: Qt.red
-    }
-    onStateChanged: console.log("New state: " + state + ", blurhash: '" + blurhash + "'")
     states: [
         State {
             name: "fallback"
@@ -150,7 +144,6 @@ SilicaItem {
         while (item != null) {
             if ("__silica_page" in item) {
                 __parentPage = item
-                console.log("Found parent " + item)
                 break;
             }
             item = item.parent

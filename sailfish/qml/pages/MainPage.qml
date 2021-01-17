@@ -125,12 +125,11 @@ Page {
                             id: userItemModel
                             apiClient: ApiClient
                             parentId: model.id
-                            limit: 12
+                            limit: 16
                         }
                         Connections {
                             target: mediaLibraryModel
                             onStatusChanged: {
-                                console.log("MediaLibraryModel status " + status)
                                 if (status == ApiModel.Ready) {
                                     userItemModel.reload()
                                 }

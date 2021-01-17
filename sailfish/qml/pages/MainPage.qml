@@ -22,6 +22,7 @@ import Sailfish.Silica 1.0
 import nl.netsoj.chris.Jellyfin 1.0
 
 import "../components"
+import "../components/search"
 import "../"
 import "../Utils.js" as Utils
 
@@ -36,6 +37,7 @@ Page {
     allowedOrientations: Orientation.All
 
     SilicaFlickable {
+        id: mainView
         anchors.fill: parent
 
         // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
@@ -66,73 +68,92 @@ Page {
                 id: mediaLibraryModel2
                 apiClient: ApiClient
             }
+            Item {
+                id: searchBoxPlaceholder
+                width: parent.width
+                height: searchBox.height
 
-            MoreSection {
-                text: qsTr("Resume watching")
-                clickable: false
-                busy: userResumeModel.status == ApiModel.Loading
-                Loader {
+                SearchField {
+                    id: searchBox
                     width: parent.width
-                    sourceComponent: carrouselView
-                    property alias itemModel: userResumeModel
-                    property string collectionType: "series"
-
-                    UserItemResumeModel {
-                        id: userResumeModel
-                        apiClient: ApiClient
-                        limit: 12
-                        recursive: true
-                    }
-                }
-            }
-            MoreSection {
-                text: qsTr("Next up")
-                clickable: false
-                busy: showNextUpModel.status == ApiModel.Loading
-
-                Loader {
-                    width: parent.width
-                    sourceComponent: carrouselView
-                    property alias itemModel: showNextUpModel
-                    property string collectionType: "series"
-
-                    ShowNextUpModel {
-                        id: showNextUpModel
-                        apiClient: ApiClient
-                        limit: 12
-                    }
+                    placeholderText: qsTr("Search")
                 }
             }
 
-            UserViewModel {
-                id: mediaLibraryModel
-                apiClient: ApiClient
+            Label {
+                text: "%1 results".arg(searchView.count)
             }
-            Repeater {
-                model: mediaLibraryModel
+
+            Column {
+                id: homeView
+                width: parent.width
                 MoreSection {
-                    text: model.name
-                    busy: userItemModel.status != ApiModel.Ready
-
-                    onHeaderClicked: pageStack.push(Qt.resolvedUrl("itemdetails/CollectionPage.qml"), {"itemId": model.id})
+                    text: qsTr("Resume watching")
+                    clickable: false
+                    busy: userResumeModel.status == ApiModel.Loading
                     Loader {
                         width: parent.width
                         sourceComponent: carrouselView
-                        property alias itemModel: userItemModel
-                        property string collectionType: model.collectionType || ""
+                        property alias itemModel: userResumeModel
+                        property string collectionType: "series"
 
-                        UserItemLatestModel {
-                            id: userItemModel
+                        UserItemResumeModel {
+                            id: userResumeModel
                             apiClient: ApiClient
-                            parentId: model.id
+                            limit: 12
+                            recursive: true
+                        }
+                    }
+                }
+                MoreSection {
+                    text: qsTr("Next up")
+                    clickable: false
+                    busy: showNextUpModel.status == ApiModel.Loading
+
+                    Loader {
+                        width: parent.width
+                        sourceComponent: carrouselView
+                        property alias itemModel: showNextUpModel
+                        property string collectionType: "series"
+
+                        ShowNextUpModel {
+                            id: showNextUpModel
+                            apiClient: ApiClient
                             limit: 12
                         }
-                        Connections {
-                            target: mediaLibraryModel
-                            onStatusChanged: {
-                                console.log("MediaLibraryModel status " + status)
-                                if (status == ApiModel.Ready) {
-                                    userItemModel.reload()
+                    }
+                }
+
+                UserViewModel {
+                    id: mediaLibraryModel
+                    apiClient: ApiClient
+                }
+                Repeater {
+                    model: mediaLibraryModel
+                    MoreSection {
+                        text: model.name
+                        busy: userItemModel.status != ApiModel.Ready
+
+                        onHeaderClicked: pageStack.push(Qt.resolvedUrl("itemdetails/CollectionPage.qml"), {"itemId": model.id})
+                        Loader {
+                            width: parent.width
+                            sourceComponent: carrouselView
+                            property alias itemModel: userItemModel
+                            property string collectionType: model.collectionType || ""
+
+                            UserItemLatestModel {
+                                id: userItemModel
+                                apiClient: ApiClient
+                                parentId: model.id
+                                limit: 12
+                            }
+                            Connections {
+                                target: mediaLibraryModel
+                                onStatusChanged: {
+                                    console.log("MediaLibraryModel status " + status)
+                                    if (status == ApiModel.Ready) {
+                                        userItemModel.reload()
+                                    }
                                 }
                             }
                         }
@@ -167,6 +188,42 @@ Page {
         }
     }
 
+    SearchResults {
+        id: searchView
+        anchors.fill: parent
+        header: Item {
+            width: parent.width
+            height: searchBox.height
+        }
+        query: searchBox.text
+        visible: false
+        opacity: 0
+    }
+
+    states: [
+        State {
+            name: "search"
+            when: searchBox.text.length
+            PropertyChanges {
+                target: searchView
+                visible: true
+                opacity: 1
+            }
+            PropertyChanges {
+                target: mainView
+                opacity: 0
+                visible: false
+            }
+            ParentChange {
+                target: searchBox
+                parent: searchView.headerItem
+            }
+            StateChangeScript {
+                script: searchBox.forceActiveFocus()
+            }
+        }
+    ]
+
     onStatusChanged: {
         if (status == PageStatus.Active) {
             appWindow.itemData = null
@@ -181,7 +238,7 @@ Page {
 
 
     /**
-     * Loads models if not laoded. Set force to true to reload models
+     * Loads models if not loaded. Set force to true to reload models
      * even if loaded.
      */
     function loadModels(force) {

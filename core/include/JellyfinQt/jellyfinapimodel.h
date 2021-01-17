@@ -143,6 +143,7 @@ public:
     Q_PROPERTY(QList<QString> includeItemTypes MEMBER m_includeItemTypes NOTIFY includeItemTypesChanged)
     Q_PROPERTY(bool recursive MEMBER m_recursive)
     Q_PROPERTY(SortOrder sortOrder MEMBER m_sortOrder NOTIFY sortOrderChanged)
+    Q_PROPERTY(QString searchTerm MEMBER m_searchTerm WRITE setSearchTerm NOTIFY searchTermChanged)
 
     // Path properties
     Q_PROPERTY(QString show MEMBER m_show NOTIFY showChanged)
@@ -156,6 +157,12 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex &parent) override;
+
+    virtual void setSearchTerm(QString newSearchTerm) {
+        this->m_searchTerm = newSearchTerm;
+        emit searchTermChanged(newSearchTerm);
+        reload();
+    }
 
     ModelStatus status() const { return m_status; }
 
@@ -184,6 +191,7 @@ signals:
     void fieldsChanged(QList<QString> newFields);
     void imageTypesChanged(QList<QString> newImageTypes);
     void includeItemTypesChanged(const QList<QString> &newIncludeItemTypes);
+    void searchTermChanged(QString newSearchTerm);
 
 public slots:
     /**
@@ -193,6 +201,7 @@ public slots:
 protected:
 
     enum LoadType {
+        INITIAL_LOAD,
         RELOAD,
         LOAD_MORE
     };
@@ -207,6 +216,14 @@ protected:
      * query types specific for a certain model to be available.
      */
     virtual void addQueryParameters(QUrlQuery &query);
+
+    /**
+     * @brief setArray gets called when response data that replaces the current data has been received.
+     * The default implementation just resets the model, subclasses may do more advanced operations.
+     * @param newData The new data to store.
+     */
+    virtual void setArray(const QJsonArray &newData);
+
     ApiClient *m_apiClient = nullptr;
     ModelStatus m_status = Uninitialised;
 
@@ -225,6 +242,7 @@ protected:
 
     // Query properties
     bool m_addUserId = false;
+    bool m_recursive = false;
     QString m_parentId;
     QString m_seasonId;
     QList<QString> m_fields = {};
@@ -232,7 +250,7 @@ protected:
     QList<QString> m_sortBy = {};
     QList<QString> m_includeItemTypes = {};
     SortOrder m_sortOrder = Unspecified;
-    bool m_recursive = false;
+    QString m_searchTerm;
 
     QHash<int, QByteArray> m_roles;
 
@@ -245,7 +263,7 @@ private:
     /**
      * @brief Generates roleNames based on the first record in m_array.
      */
-    void generateFields();
+    void generateFields(const QJsonArray &newData);
     QString sortByToString(SortOptions::SortBy sortBy);
 };
 
@@ -268,6 +286,31 @@ public:
     explicit ItemModel (QString path, bool responseHasRecords, bool replaceUser, QObject *parent = nullptr);
 public slots:
     void onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData);
+};
+
+/**
+ * @brief Lists search items and provides a nice animation when search items change their position.
+ */
+class SearchModel : public ItemModel {
+    Q_OBJECT
+public:
+    explicit SearchModel(QObject *parent = nullptr);
+    Q_PROPERTY(int searchTimeout MEMBER m_searchTimeout NOTIFY searchTimeoutChanged)
+signals:
+    void searchTimeoutChanged(int newTimeout);
+protected:
+    void setArray(const QJsonArray &newData) override;
+    void setSearchTerm(QString searchTerm) override;
+    /**
+     * @brief DIFF_SIZE amount of items to keep track of when the position changes.
+     */
+    const static size_t DIFF_SIZE = 10;
+    // Store the ids of the
+    std::array<QString, DIFF_SIZE> m_diffTracker;
+
+    // Time in ms before we can search again
+    int m_searchTimeout = 500;
+    QTimer m_searchTimeoutTimer;
 };
 
 class UserViewModel : public ApiModel {

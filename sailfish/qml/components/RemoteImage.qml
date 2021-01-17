@@ -30,6 +30,7 @@ SilicaItem {
     property string fallbackImage
     property bool usingFallbackImage
     property color fallbackColor: Theme.highlightColor
+    property bool hideFallbackColor: false
 
     property var __parentPage : null
     property bool alreadyLoaded: false
@@ -56,7 +57,7 @@ SilicaItem {
         anchors.fill: parent
         asynchronous: true
         fillMode: root.fillMode
-        opacity: 1
+        opacity: hideFallbackColor ? 0.0 : 1.0
         source: alreadyLoaded || [PageStatus.Active, PageStatus.Deactivating].indexOf(__parentPage.status) >= 0 ? root.source : ""
         onStatusChanged: {
             if (status == Image.Ready) {
@@ -73,6 +74,7 @@ SilicaItem {
             GradientStop { position: 1.0; color: Theme.highlightDimmerFromColor(fallbackColor, Theme.colorScheme); }
         }
         opacity: 0
+        visible: !hideFallbackColor
     }
 
     Image {
@@ -132,7 +134,7 @@ SilicaItem {
             when: realImage.status === Image.Ready
             PropertyChanges {
                 target: realImage
-                //opacity: 1
+                opacity: 1
             }
         }
     ]

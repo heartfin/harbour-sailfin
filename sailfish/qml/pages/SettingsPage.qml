@@ -68,6 +68,7 @@ Page {
                         top: parent.top
                         bottom: parent.bottom
                     }
+                    hideFallbackColor: true
                     source: ApiClient.baseUrl + "/Users/" + ApiClient.userId + "/Images/Primary?tag=" + loggedInUser.primaryImageTag
                 }
 

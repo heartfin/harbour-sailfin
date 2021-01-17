@@ -138,7 +138,7 @@ public slots:
      *
      * The default implementation makes a GET request to getDataUrl() and parses the resulting JSON,
      * which should be enough for most cases. Consider overriding getDataUrl() and
-     * canRelaod() if possible. Manual overrides need to make sure that
+     * canReload() if possible. Manual overrides need to make sure that
      * they're calling setStatus(Status), setError(QNetworkReply::NetworkError) and
      * setErrorString() to let the QML side know what this thing is up to.
      */

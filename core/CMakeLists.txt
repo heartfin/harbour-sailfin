@@ -27,7 +27,7 @@ set(jellyfin-qt_HEADERS
 	include/JellyfinQt/serverdiscoverymodel.h)
 
 add_definitions(-DSAILFIN_VERSION=\"${SAILFIN_VERSION}\")
-add_library(jellyfin-qt ${jellyfin-qt_SOURCES} ${jellyfin-qt_HEADERS})
+add_library(jellyfin-qt STATIC ${jellyfin-qt_SOURCES} ${jellyfin-qt_HEADERS})
 target_include_directories(jellyfin-qt 
 	PUBLIC "include"
 )

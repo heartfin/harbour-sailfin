@@ -23,6 +23,7 @@ set(sailfin_QML_SOURCES
         qml/components/music/NarrowAlbumCover.qml
         qml/components/music/WideAlbumCover.qml
         qml/components/music/SongDelegate.qml
+        qml/components/search/SearchResults.qml
         qml/components/videoplayer/VideoError.qml
         qml/components/videoplayer/VideoHud.qml
 	qml/components/GlassyBackground.qml
@@ -62,7 +63,7 @@ set(sailfin_QML_SOURCES
 add_executable(harbour-sailfin ${harbour-sailfin_SOURCES} ${sailfin_QML_SOURCES})
 target_link_libraries(harbour-sailfin PRIVATE Qt5::Gui Qt5::Qml Qt5::Quick SailfishApp::SailfishApp 
 	# Note: this may break when the compiler changes. -rdynamic and -pie seem to be needed for the 
-	# invoker/booster to work
+        # invoker/booster to work
 	jellyfin-qt "-Wl,-rpath,${CMAKE_INSTALL_LIBDIR} -rdynamic -pie")
 
 install(TARGETS harbour-sailfin

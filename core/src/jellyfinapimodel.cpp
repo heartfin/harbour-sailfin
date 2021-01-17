@@ -30,11 +30,12 @@ ApiModel::ApiModel(QString path, bool hasRecordResponse, bool addUserId, QObject
 void ApiModel::reload() {
     this->setStatus(Loading);
     m_startIndex = 0;
-    load(RELOAD);
+
+    load(m_array.isEmpty() ? INITIAL_LOAD : RELOAD);
 }
 
 void ApiModel::load(LoadType type) {
-    qDebug() << (type == RELOAD ? "RELOAD" : "LOAD_MORE");
+    qDebug() << (type == RELOAD ? "RELOAD" : type == INITIAL_LOAD ? "INITIAL_LOAD" : "LOAD_MORE");
     if (m_apiClient == nullptr) {
         qWarning() << "Please set the apiClient property before (re)loading";
         return;
@@ -81,17 +82,21 @@ void ApiModel::load(LoadType type) {
     if (m_recursive) {
         query.addQueryItem("Recursive", "true");
     }
+    if (!m_searchTerm.isEmpty()) {
+        query.addQueryItem("searchTerm", m_searchTerm);
+    }
     addQueryParameters(query);
     QNetworkReply *rep = m_apiClient->get(m_path, query);
     connect(rep, &QNetworkReply::finished, this, [this, type, rep]() {
         QJsonDocument doc = QJsonDocument::fromJson(rep->readAll());
+        QJsonArray items;
         if (!m_hasRecordResponse) {
             if (!doc.isArray()) {
                 qWarning() << "Object is not an array!";
                 this->setStatus(Error);
                 return;
             }
-            this->m_array = doc.array();
+            items = doc.array();
         } else {
             if (!doc.isObject()) {
                 qWarning() << "Object is not an object!";
@@ -120,10 +125,10 @@ void ApiModel::load(LoadType type) {
                 this->setStatus(Error);
                 return;
             }
-            QJsonArray items = obj["Items"].toArray();
+            items = obj["Items"].toArray();
             switch(type) {
+                case INITIAL_LOAD:
                 case RELOAD:
-                    this->m_array = items;
                     break;
                 case LOAD_MORE:
                     this->beginInsertRows(QModelIndex(), m_array.size(), m_array.size() + items.size() - 1);
@@ -138,27 +143,35 @@ void ApiModel::load(LoadType type) {
                     break;
             }
         }
-        if (type == RELOAD) {
-            generateFields();
+
+        if (type == INITIAL_LOAD) {
+            generateFields(items);
         }
+
+        if (type == INITIAL_LOAD || type == RELOAD) {
+            for (auto it = items.begin(); it != items.end(); it++){
+                JsonHelper::convertToCamelCase(*it);
+            }
+            setArray(items);
+        }
+
         this->setStatus(Ready);
         rep->deleteLater();
     });
 }
 
-void ApiModel::generateFields() {
-    if (m_array.size() == 0) return;
-    this->beginResetModel();
+void ApiModel::generateFields(const QJsonArray &newData) {
+    if (newData.size() == 0) return;
     int i = Qt::UserRole + 1;
-    if (!m_array[0].isObject()) {
+    if (!newData[0].isObject()) {
         qWarning() << "Iterator is not an object?";
         return;
     }
     // Walks over the keys in the first record and adds them to the rolenames.
     // This assumes the back-end has the same keys for every record. I could technically
-    // go over all records to be really sure, but no-one got time for a O(n²) algorithm, so
+    // go over all records to be really sure, but no-one got time for a O(n) algorithm, so
     // this heuristic hopefully suffices.
-    QJsonObject ob = m_array[0].toObject();
+    QJsonObject ob = newData[0].toObject();
     for (auto jt = ob.begin(); jt != ob.end(); jt++) {
         QString keyName = jt.key();
         keyName[0] = keyName[0].toLower();
@@ -167,9 +180,12 @@ void ApiModel::generateFields() {
             m_roles.insert(i++, keyArr);
         }
     }
-    for (auto it = m_array.begin(); it != m_array.end(); it++){
-        JsonHelper::convertToCamelCase(*it);
-    }
+
+}
+
+void ApiModel::setArray(const QJsonArray &newData) {
+    this->beginResetModel();
+    m_array = newData;
     this->endResetModel();
 }
 
@@ -245,6 +261,124 @@ void ItemModel::onUserDataChanged(const QString &itemId, QSharedPointer<UserData
     }
 }
 
+SearchModel::SearchModel(QObject *parent)
+    : ItemModel("/Users/{{user}}/Items", true, false, parent) {
+    m_diffTracker.fill("");
+    m_searchTimeoutTimer.setInterval(m_searchTimeout);
+    connect(this, &SearchModel::searchTimeoutChanged, &m_searchTimeoutTimer, &QTimer::setInterval);
+    m_searchTimeoutTimer.setSingleShot(true);
+    connect(&m_searchTimeoutTimer, &QTimer::timeout, this, &ApiModel::reload);
+}
+
+void SearchModel::setArray(const QJsonArray &newData) {
+    // Calculate the movement of the search results in the first DIFF_SIZE results
+    qDebug() << "Calculating diff";
+    int maxLoop = std::min(static_cast<int>(DIFF_SIZE), newData.size());
+
+    // Loop over the first DIFF_SIZE entries of newData to check where they came from.
+    for (int i = 0; i < maxLoop; i++) {
+
+        // Loop over all the entries of our difference tracker
+        int j;
+        for (j = 0; j < static_cast<int>(m_diffTracker.size()); j++) {
+            // Stop when we're hitting empty entries
+            if (m_diffTracker[static_cast<size_t>(j)].isEmpty()) {
+                j = DIFF_SIZE;
+                break;
+            }
+
+            if (newData[i].toObject()["id"] == m_diffTracker[static_cast<size_t>(j)]) {
+                // The old entry is on the same place as the previous entry
+                if (i == j) break;
+                // Entry[j] has moved to position i
+                this->beginMoveRows(QModelIndex(), j, j, QModelIndex(), i);
+                m_array.insert(i, newData[i]);
+                // If the old position j is greater than the new position i, we need to remove
+                // j + 1, since the index has shifted due the insertion we just made.
+                m_array.removeAt(j > i ? j + 1 : j);
+                qDebug() << j << " -> " << i;
+                this->endMoveRows();
+                break;
+            }
+
+        }
+
+        if (j == static_cast<int>(m_diffTracker.size())) {
+            // New item id could not be found in the old item id list.
+            // Remove the old items and add the new item
+            if (i < m_array.size()) {
+                this->beginRemoveRows(QModelIndex(), i, i);
+                m_array.removeAt(i);
+                this->endRemoveRows();
+                qDebug() << i << " replaced";
+            } else {
+                qDebug() << i << " inserted";
+            }
+            this->beginInsertRows(QModelIndex(), i, i);
+            m_array.insert(i, newData[i]);
+            this->endInsertRows();
+        }
+    }
+
+    // Remove items from the point where we just left until we reach the previous size or the
+    // amount of items we keep the difference on. Should only be executed when the amount
+    // of new results is smaller than the old amount.
+    for (int i = maxLoop; i < static_cast<int>(DIFF_SIZE) && i < m_array.size(); i++) {
+        this->beginRemoveRows(QModelIndex(), i, i);
+        m_array.removeAt(i);
+        this->endRemoveRows();
+    }
+
+    // Store the new positions of the items
+    for (int i = 0; i < maxLoop; i++) {
+        if (!newData[i].isObject() || !newData[i].toObject().contains("id")) continue;
+        m_diffTracker[static_cast<size_t>(i)] = newData[i].toObject()["id"].toString();
+        qDebug() << i << " changed";
+    }
+    for (size_t i = static_cast<size_t>(maxLoop); i < DIFF_SIZE; i++) {
+        m_diffTracker[i].clear();
+        qDebug() << i << " removed";
+    }
+
+    // If the amount of data is smaller than the amount of data of which we track their differences in position,
+    // we're done hear.
+    // if (newData.size() < static_cast<int>(DIFF_SIZE)) return;
+
+    int common = std::max(static_cast<int>(DIFF_SIZE), std::min(newData.size(), m_array.size()));
+    for (int i = static_cast<int>(DIFF_SIZE); i < common; i++) {
+        m_array.replace(i, newData[i]);
+        qDebug() << i << " replaced (tail)";
+    }
+
+    emit dataChanged(index(static_cast<int>(DIFF_SIZE)), index(common - 1));
+
+    // Handle extra or fewer items in the area that we do not diff
+    if (newData.size() > m_array.size()) {
+        this->beginInsertRows(QModelIndex(), common, newData.size() - 1);
+        for (int i = common; i < newData.size(); i++) {
+            m_array.append(newData[i]);
+            qDebug() << i << " appended (tail)";
+        }
+        this->endInsertRows();
+    } else if (newData.size() < m_array.size()) {
+        this->beginRemoveRows(QModelIndex(), common, m_array.size() - 1);
+        for (int i = common; i < m_array.size(); i++) {
+            qDebug() << i << " removed (tail)";
+            m_array.removeAt(i);
+        }
+        this->endRemoveRows();
+    }
+}
+
+void SearchModel::setSearchTerm(QString searchTerm) {
+    if (m_searchTimeoutTimer.isActive()) {
+        m_searchTimeoutTimer.stop();
+    }
+    m_searchTimeoutTimer.start();
+    m_searchTerm = searchTerm;
+    emit searchTermChanged(searchTerm);
+}
+
 PublicUserModel::PublicUserModel(QObject *parent)
     : ApiModel ("/users/public", false, false, parent) { }
 
@@ -280,5 +414,6 @@ void registerModels(const char *URI) {
     qmlRegisterType<ShowNextUpModel>(URI, 1, 0, "ShowNextUpModel");
     qmlRegisterType<ShowSeasonsModel>(URI, 1, 0, "ShowSeasonsModel");
     qmlRegisterType<ShowEpisodesModel>(URI, 1, 0, "ShowEpisodesModel");
+    qmlRegisterType<SearchModel>(URI, 1, 0, "SearchModel");
 }
 }

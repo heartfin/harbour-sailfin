@@ -32,9 +32,10 @@ SilicaItem {
     property color fallbackColor: Theme.highlightColor
 
     property var __parentPage : null
-    property bool alreadyLoaded: false
+    property bool _alreadyLoaded: false
+    readonly property bool _shouldLoad: _alreadyLoaded || __parentPage && [PageStatus.Active, PageStatus.Deactivating].indexOf(__parentPage.status) >= 0
 
-    onSourceChanged: alreadyLoaded = false
+    onSourceChanged: _alreadyLoaded = false
 
     /**
      * BlurHash that is used as placeholder
@@ -47,7 +48,11 @@ SilicaItem {
     property string source: ""
     property alias sourceSize: realImage.sourceSize
     property var fillMode: Image.Stretch
-    property alias status: realImage.status
+    property int status: {
+        if (!source) return Image.Null
+        if (realImage.status == Image.Null && !_shouldLoad) return Image.Loading
+        return realImage.status
+    }
     implicitHeight: realImage.implicitHeight
     implicitWidth: realImage.implicitWidth
 
@@ -57,10 +62,10 @@ SilicaItem {
         asynchronous: true
         fillMode: root.fillMode
         opacity: 1
-        source: alreadyLoaded || __parentPage && [PageStatus.Active, PageStatus.Deactivating].indexOf(__parentPage.status) >= 0 ? root.source : ""
+        source:  _shouldLoad ? root.source : ""
         onStatusChanged: {
             if (status == Image.Ready) {
-                alreadyLoaded = true
+                _alreadyLoaded = true
             }
         }
     }
@@ -141,7 +146,7 @@ SilicaItem {
 
     Component.onCompleted: {
         var item = parent;
-        while (item != null) {
+        while (item !== null) {
             if ("__silica_page" in item) {
                 __parentPage = item
                 break;

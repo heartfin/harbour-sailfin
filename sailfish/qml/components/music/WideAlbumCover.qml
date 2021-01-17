@@ -36,6 +36,7 @@ Column {
     property int songCount
     property string name
     property alias blurhash : albumArt.blurhash
+    property bool twoColumns: true
 
     Item { width:1; height: Theme.paddingLarge }
 

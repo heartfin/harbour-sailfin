@@ -29,42 +29,47 @@ import "../.."
 Item {
     property ListView listview
     property real releaseYear
-    property alias albumArt: albumArt.source
+    property alias albumArt: albumArtImage.source
     property string albumArtist
     property real duration
     property int songCount
     property string name
-    property alias blurhash : albumArt.blurhash
+    property alias blurhash : albumArtImage.blurhash
+    property bool twoColumns
 
-
-    property string stateIfArt: "largeArt"
-    property alias _albumArt: albumArt
+    readonly property real smallSize: albumHeader.height
+    readonly property real bigSize: listHeader.width
     id: listHeader
     width: parent.width
     //spacing: Theme.paddingLarge
-    state: _albumArt.source != "" ? stateIfArt : "noArt"
+
     MouseArea {
-        anchors.fill: parent
+        anchors.fill: albumArtImage
         onClicked: {
-            if (listHeader.stateIfArt == "largeArt") {
-                listHeader.stateIfArt = "details"
+            if (listview.contentY < -bigSize + 10) {
+                listviewShrinkAnimation.start()
             } else {
-                listHeader.stateIfArt = "largeArt"
+                listviewGrowAnimation.start()
             }
         }
     }
-    RemoteImage {
-        id: albumArt
-        anchors {
-            top: parent.top
-            right: parent.right
-        }
-        sourceSize.width: listHeader.width
-        sourceSize.height: listHeader.width
-        fillMode: Image.PreserveAspectFit
-        opacity: 1
-        clip: true
+
+    NumberAnimation {
+        id: listviewShrinkAnimation
+        target: listview
+        property: "contentY"
+        easing.type: Easing.OutCubic
+        to: -smallSize
     }
+
+    NumberAnimation {
+        id: listviewGrowAnimation
+        target: listview
+        property: "contentY"
+        easing.type: Easing.OutCubic
+        to: -bigSize
+    }
+
     PageHeader {
         id: albumHeader
         width: parent.width - Theme.horizontalPageMargin - height
@@ -78,79 +83,140 @@ Item {
             .arg(releaseYear >= 0 ? releaseYear : qsTr("Unknown year"))
     }
 
+    RemoteImage {
+        id: albumArtImage
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+        }
+        sourceSize.width: listHeader.width
+        sourceSize.height: listHeader.width
+        fillMode: Image.PreserveAspectFit
+        opacity: 1
+        clip: true
+    }
+
     states: [
         State {
-            name: "largeArt"
-            PropertyChanges {
-                target: _albumArt
-                width: parent.width
-                height: width
-            }
-            PropertyChanges {
-                target: listHeader
-                height: width
-            }
-            PropertyChanges {
-                target: albumHeader
-                opacity: 0
-            }
+            name: "art"
+            when: albumArtImage.status != Image.Null && !twoColumns
             PropertyChanges {
                 target: listview
-                contentY: -listview.width
-            }
-            AnchorChanges {
-                target: albumHeader
-                anchors.left: undefined
-                anchors.right: _albumArt.left
-            }
-        },
-        State {
-            name: "details"
-            PropertyChanges {
-                target: _albumArt
-                width: height
-                height: albumHeader.height
+                //contentY: -smallSize
+                topMargin: Screen.width - smallSize
+                bottomMargin: listview.contentHeight < listview.height ? listview.height - listview.contentHeight : 0
             }
             PropertyChanges {
-                target: listHeader
-                height: albumHeader.height
-            }
-            PropertyChanges {
-                target: albumHeader
+                target: albumArtImage
                 opacity: 1
+                width: height
+                height: smallSize + -(Math.min(listview.contentY + smallSize, 0) / (listview.topMargin)) * (bigSize - smallSize)
             }
             PropertyChanges {
-                target: listview
-                contentY: -albumHeader.height
+                target: listHeader
+                height: smallSize
+                visible: true
+            }
+            PropertyChanges {
+                target: albumHeader
+                opacity: 1.0 - Math.min(1.0, Math.max(0.0, -Math.min(listview.contentY + smallSize, 0) / (listview.topMargin)))
+                anchors.rightMargin: Theme.paddingMedium + albumArtImage.width
             }
             AnchorChanges {
                 target: albumHeader
+                anchors.top: albumArtImage.top
                 anchors.left: undefined
-                anchors.right: _albumArt.left
+                anchors.right: parent.right
             }
         },
         State {
             name: "noArt"
-            extend: "details"
+            when: albumArtImage.status == Image.Null && !twoColumns
             PropertyChanges {
-                target: _albumArt
+                target: albumArtImage
                 opacity: 0
+            }
+            PropertyChanges {
+                target: listHeader
+                height: smallSize
             }
             PropertyChanges {
                 target: albumHeader
                 width: parent.width - Theme.horizontalPageMargin * 2
+                opacity: 1
             }
             AnchorChanges {
                 target: albumHeader
+                anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
+            }
+
+        },
+        State {
+            name: "hidden"
+            when: twoColumns
+            PropertyChanges {
+                target: listview
+                topMargin: 0
+            }
+
+            PropertyChanges {
+                target: listHeader
+                height: 0
+                visible: false
             }
         }
     ]
     transitions: [
-        Transition {
+        /*Transition {
             from: "noArt"
             // No transitions from "noArt", otherwise the layout animates every load
+        },*/
+        Transition {
+            from: "hidden"
+            SequentialAnimation {
+                PauseAnimation {
+                    duration: 50
+                }
+                ScriptAction {
+                    script: {
+                        if (listview.contentY < 10) {
+                            listviewShrinkAnimation.start()
+                        }
+                    }
+                }
+            }
+        },
+        Transition {
+            to: "noArt"
+            SequentialAnimation {
+                PauseAnimation {
+                    duration: 10
+                }
+                ScriptAction {
+                    script: {
+                        if (listview.contentY < 10) {
+                            listview.contentY = -smallSize
+                        }
+                    }
+                }
+            }
+        },
+        Transition {
+            to: "art"
+            SequentialAnimation {
+                PauseAnimation {
+                    duration: 10
+                }
+                ScriptAction {
+                    script: {
+                        if (listview.contentY < 10) {
+                            listview.contentY = -smallSize
+                        }
+                    }
+                }
+            }
         },
         Transition {
             OpacityAnimator { target: albumHeader}

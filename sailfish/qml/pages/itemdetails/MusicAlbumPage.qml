@@ -32,6 +32,8 @@ BaseDetailPage {
     property string _albumArtistText: itemData.albumArtist
     width: 800 * Theme.pixelRatio
 
+    readonly property bool _twoColumns: albumPageRoot.width / Theme.pixelRatio >= 800
+
     UserItemModel {
         id: collectionModel
         apiClient: ApiClient
@@ -46,7 +48,7 @@ BaseDetailPage {
         Item {height: 1; width: Theme.horizontalPageMargin; visible: wideAlbumCover.visible; }
         Loader {
             id: wideAlbumCover
-            visible: albumPageRoot.width / Theme.pixelRatio >= 800
+            visible: _twoColumns
             Layout.minimumWidth: 1000 / Theme.pixelRatio
             Layout.fillHeight: true
             source: visible
@@ -61,9 +63,7 @@ BaseDetailPage {
             model: collectionModel
             header: Loader {
                 width: parent.width
-                height: item ? item.height : 0
-                source: albumPageRoot.width / Theme.pixelRatio < 800
-                        ? "../../components/music/NarrowAlbumCover.qml" : ""
+                source: "../../components/music/NarrowAlbumCover.qml"
                 onLoaded: bindAlbum(item)
             }
             section {
@@ -81,10 +81,6 @@ BaseDetailPage {
 
             VerticalScrollDecorator {}
         }
-    }
-
-    Label {
-        text: "%1; %2".arg(Theme.pixelRatio).arg(stateIfArt)
     }
 
     Connections {
@@ -107,5 +103,6 @@ BaseDetailPage {
         item.songCount = Qt.binding(function() { return itemData.childCount})
         item.listview = Qt.binding(function() { return list})
         item.blurhash = Qt.binding(function() { return itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]; })
+        item.twoColumns = Qt.binding(function() { return _twoColumns })
     }
 }

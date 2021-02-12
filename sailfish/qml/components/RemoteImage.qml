@@ -23,7 +23,10 @@ import Sailfish.Silica 1.0
 import nl.netsoj.chris.blurhash 1.0
 
 /**
- * An image for "remote" images (loaded over e.g. http), with a spinner and a fallback image
+ * An image for "remote" images (loaded over e.g. http), with a spinner and a fallback image.
+ *
+ * If placed in a page, it will delay the loading of the image until the transition is over,
+ * displaying a simpler blurhash instead, to reduce the stutter during the transition
  */
 SilicaItem {
     id: root

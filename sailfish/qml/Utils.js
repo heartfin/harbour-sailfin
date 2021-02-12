@@ -74,13 +74,14 @@ function usePortraitCover(itemType) {
 /**
  * Returns the page url for a certain item type.
  */
-function getPageUrl(mediaType, itemType) {
+function getPageUrl(mediaType, itemType, isFolder) {
     switch (itemType.toLowerCase()) {
     case "series":
         return Qt.resolvedUrl("pages/itemdetails/SeriesPage.qml")
     case "movie":
         return Qt.resolvedUrl("pages/itemdetails/FilmPage.qml")
     case "collection":
+    case "photoalbum":
         return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
     case "season":
         return Qt.resolvedUrl("pages/itemdetails/SeasonPage.qml")
@@ -88,8 +89,10 @@ function getPageUrl(mediaType, itemType) {
         return Qt.resolvedUrl("pages/itemdetails/EpisodePage.qml")
     case "musicalbum":
         return Qt.resolvedUrl("pages/itemdetails/MusicAlbumPage.qml")
+    case "photo":
+        return Qt.resolvedUrl("pages/itemdetails/PhotoPage.qml")
     default:
-        switch (mediaType ? mediaType.toLowerCase() : "folder") {
+        switch (mediaType ? mediaType.toLowerCase() : isFolder ? "folder" : "") {
         case "folder":
             return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
         case "video":
@@ -97,6 +100,7 @@ function getPageUrl(mediaType, itemType) {
         case "photo":
             return Qt.resolvedUrl("pages/itemdetails/PhotoPage.qml")
         default:
+            if (isFolder) return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
             return Qt.resolvedUrl("pages/itemdetails/UnsupportedPage.qml")
         }
     }

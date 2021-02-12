@@ -78,13 +78,14 @@ BaseDetailPage {
                 model: showSeasonsModel
                 clip: true
                 width: parent.width
-                height: Screen.width / 2
+                height: Constants.libraryDelegatePosterHeight
                 orientation: ListView.Horizontal
                 spacing: Theme.paddingLarge
                 leftMargin: Theme.horizontalPageMargin
                 rightMargin: Theme.horizontalPageMargin
                 delegate: LibraryItemDelegate {
                     poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": height})
+                    blurhash: model.imageBlurHashes["primary"][model.imageTags.primary]
                     title: model.name
                     onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
                 }

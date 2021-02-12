@@ -25,13 +25,14 @@ Column {
     property real imageAspectRatio: 1.0
     property real playProgress: 0.0
     property bool favourited: false
+    property alias imageBlurhash: playImage.blurhash
     signal playPressed(bool startFromBeginning)
     spacing: Theme.paddingLarge
 
     BackgroundItem {
         width: parent.width
         height: width / imageAspectRatio
-        HighlightImage {
+        RemoteImage {
             id: playImage
             anchors.fill: parent
             fillMode: Image.PreserveAspectCrop

@@ -40,7 +40,7 @@ BaseDetailPage {
         anchors.fill: parent
         model: collectionModel
         cellWidth: Constants.libraryDelegateWidth
-        cellHeight: Utils.usePortraitCover(itemData.collectionType) ? Constants.libraryDelegatePosterHeight
+        cellHeight: Utils.usePortraitCover(itemData.type) ? Constants.libraryDelegatePosterHeight
                                                                     : Constants.libraryDelegateHeight
         visible: itemData.status !== JellyfinItem.Error
 
@@ -90,7 +90,7 @@ BaseDetailPage {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: Theme.fontSizeSmall
             }
-            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
+            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type, model.isFolder), {"itemId": model.id})
         }
 
         ViewPlaceholder {

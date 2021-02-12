@@ -226,7 +226,7 @@ Page {
                 progress: (typeof model.userData !== "undefined") ? model.userData.playedPercentage / 100 : 0.0
 
                 onClicked: {
-                    pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
+                    pageStack.push(Utils.getPageUrl(model.mediaType, model.type, model.isFolder), {"itemId": model.id})
                 }
             }
         }

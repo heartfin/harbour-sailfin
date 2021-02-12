@@ -56,6 +56,7 @@ BaseDetailPage {
                 width: parent.width
                 imageSource: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
                 imageAspectRatio: Constants.horizontalVideoAspectRatio
+                imageBlurhash: itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]
                 favourited: itemData.userData.isFavorite
                 playProgress: itemData.userData.playedPercentage / 100
                 onPlayPressed: pageStack.push(Qt.resolvedUrl("../VideoPage.qml"),

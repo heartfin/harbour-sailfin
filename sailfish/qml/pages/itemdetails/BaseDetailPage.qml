@@ -39,22 +39,18 @@ Page {
     //property var itemData: ({})
     property bool _loading: jItem.status === "Loading"
     readonly property bool hasLogo: (typeof itemData.ImageTags !== "undefined") && (typeof itemData.ImageTags["Logo"] !== "undefined")
-    readonly property var _backdropImages: itemData.backdropImageTags
-    readonly property var _parentBackdropImages: itemData.parentBackdropImageTags
     property string _chosenBackdropImage: ""
     readonly property string parentId: itemData.ParentId || ""
 
-    on_BackdropImagesChanged: updateBackdrop()
-    on_ParentBackdropImagesChanged: updateBackdrop()
-
     function updateBackdrop() {
+        var rand = 0;
         if (itemData.backdropImageTags.length > 0) {
-            var rand = Math.floor(Math.random() * (_backdropImages.length - 0.001))
+            rand = Math.floor(Math.random() * (itemData.backdropImageTags.length - 0.001))
             console.log("Random: ", rand)
-            _chosenBackdropImage = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
-            //_chosenBackdropImage = Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Backdrop/" + rand)
+            _chosenBackdropImage = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" +itemData.backdropImageTags[rand] + "&maxHeight" + height
         } else if (itemData.parentBackdropImageTags.length > 0) {
-            _chosenBackdropImage = ApiClient.baseUrl + "/Items/" + itemData.parentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
+            rand = Math.floor(Math.random() * (itemData.parentBackdropImageTags.length - 0.001))
+            _chosenBackdropImage = ApiClient.baseUrl + "/Items/" + itemData.parentBackdropItemId + "/Images/Backdrop/" + rand + "?tag=" + itemData.parentBackdropImageTags[0]
         }
     }
 
@@ -74,11 +70,6 @@ Page {
         id: backdrop
         source: _chosenBackdropImage
         visible: false
-    }
-
-    Text {
-        color: "red"
-        text: _chosenBackdropImage || "No backdrop"
     }
 
     PageBusyIndicator {
@@ -116,6 +107,9 @@ Page {
         onStatusChanged: {
             console.log("Status changed: " + newStatus, JSON.stringify(jItem))
             console.log(jItem.mediaStreams)
+            if (status == JellyfinItem.Ready) {
+                updateBackdrop()
+            }
         }
     }
 

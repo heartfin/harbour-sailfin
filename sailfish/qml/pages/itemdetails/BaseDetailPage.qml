@@ -18,10 +18,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import Sailfish.Silica.Background 1.0
 
 import nl.netsoj.chris.Jellyfin 1.0
 
 import "../../components"
+import "../.."
 
 /**
  * This page displays details about a film, show, season, episode, and so on.
@@ -37,31 +39,46 @@ Page {
     //property var itemData: ({})
     property bool _loading: jItem.status === "Loading"
     readonly property bool hasLogo: (typeof itemData.ImageTags !== "undefined") && (typeof itemData.ImageTags["Logo"] !== "undefined")
-    readonly property var _backdropImages: itemData.BackdropImageTags
-    readonly property var _parentBackdropImages: itemData.ParentBackdropImageTags
+    readonly property var _backdropImages: itemData.backdropImageTags
+    readonly property var _parentBackdropImages: itemData.parentBackdropImageTags
+    property string _chosenBackdropImage: ""
     readonly property string parentId: itemData.ParentId || ""
-    property alias backdrop: backdrop
 
     on_BackdropImagesChanged: updateBackdrop()
     on_ParentBackdropImagesChanged: updateBackdrop()
 
     function updateBackdrop() {
-        return;
-        if (_backdropImages && _backdropImages.length > 0) {
+        if (itemData.backdropImageTags.length > 0) {
             var rand = Math.floor(Math.random() * (_backdropImages.length - 0.001))
             console.log("Random: ", rand)
-            backdrop.source = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
-        } else if (_parentBackdropImages && _parentBackdropImages.length > 0) {
-            console.log(parentId)
-            backdrop.source = ApiClient.baseUrl + "/Items/" + itemData.ParentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
+            _chosenBackdropImage = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" + _backdropImages[rand] + "&maxHeight" + height
+            //_chosenBackdropImage = Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Backdrop/" + rand)
+        } else if (itemData.parentBackdropImageTags.length > 0) {
+            _chosenBackdropImage = ApiClient.baseUrl + "/Items/" + itemData.parentBackdropItemId + "/Images/Backdrop/0?tag=" + _parentBackdropImages[0]
         }
     }
 
 
     allowedOrientations: Orientation.All
-    GlassyBackground {
+    background: _chosenBackdropImage ? backdropBackground : null
+
+    Component {
+        id: backdropBackground
+        ThemeBackground {
+            sourceItem: backdrop
+            backgroundMaterial: Materials.blur
+        }
+    }
+
+    ThemeWallpaper {
         id: backdrop
-        anchors.fill: parent
+        source: _chosenBackdropImage
+        visible: false
+    }
+
+    Text {
+        color: "red"
+        text: _chosenBackdropImage || "No backdrop"
     }
 
     PageBusyIndicator {
@@ -104,7 +121,6 @@ Page {
 
     onStatusChanged: {
         if (status == PageStatus.Deactivating) {
-            backdrop.clear()
             //appWindow.itemData = ({})
         }
         if (status == PageStatus.Active) {

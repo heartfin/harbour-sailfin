@@ -311,6 +311,8 @@ public:
     // the properties and generate a class based on that.
     // Doing that in C++ would be more difficult and I dislike qmake. Does it even support running programs at compile time?
     // But here I am, using ctrl-C++
+
+    // Please keep the order of the properties the same as in the file linked above.
     Q_PROPERTY(QString name MEMBER m_name NOTIFY nameChanged)
     Q_PROPERTY(QString originalTitle MEMBER m_originalTitle NOTIFY originalTitleChanged)
     Q_PROPERTY(QString serverId MEMBER m_serverId NOTIFY serverIdChanged)
@@ -347,6 +349,8 @@ public:
     Q_PROPERTY(int indexNumberEnd READ indexNumberEnd WRITE setIndexNumberEnd NOTIFY indexNumberEndChanged)
     Q_PROPERTY(bool isFolder READ isFolder WRITE setIsFolder NOTIFY isFolderChanged)
     Q_PROPERTY(QString type MEMBER m_type NOTIFY typeChanged)
+    Q_PROPERTY(QString parentBackdropItemId MEMBER m_parentBackdropItemId NOTIFY parentBackdropItemIdChanged)
+    Q_PROPERTY(QStringList parentBackdropImageTags MEMBER m_parentBackdropImageTags NOTIFY parentBackdropImageTagsChanged)
     Q_PROPERTY(UserData *userData MEMBER m_userData NOTIFY userDataChanged)
     Q_PROPERTY(int recursiveItemCount READ recursiveItemCount WRITE setRecursiveItemCount NOTIFY recursiveItemCountChanged)
     Q_PROPERTY(int childCount READ childCount WRITE setChildCount NOTIFY childCountChanged)
@@ -361,6 +365,7 @@ public:
     // Why is this a QJsonObject? Well, because I couldn't be bothered to implement the deserialisations of
     // a QHash at the moment.
     Q_PROPERTY(QJsonObject imageTags MEMBER m_imageTags NOTIFY imageTagsChanged)
+    Q_PROPERTY(QStringList backdropImageTags MEMBER m_backdropImageTags NOTIFY backdropImageTagsChanged)
     Q_PROPERTY(QJsonObject imageBlurHashes MEMBER m_imageBlurHashes NOTIFY imageBlurHashesChanged)
     Q_PROPERTY(int width MEMBER m_width NOTIFY widthChanged)
     Q_PROPERTY(int height MEMBER m_height NOTIFY heightChanged)
@@ -441,6 +446,8 @@ signals:
     void indexNumberEndChanged(int newIndexNumberEnd);
     void isFolderChanged(bool newIsFolder);
     void typeChanged(const QString &newType);
+    void parentBackdropItemIdChanged();
+    void parentBackdropImageTagsChanged();
     void userDataChanged(UserData *newUserData);
     void recursiveItemCountChanged(int newRecursiveItemCount);
     void childCountChanged(int newChildCount);
@@ -451,6 +458,7 @@ signals:
     void mediaStreamsChanged(/*const QList<MediaStream *> &newMediaStreams*/);
     void artistsChanged(const QStringList &newArtists);
     void imageTagsChanged();
+    void backdropImageTagsChanged();
     void imageBlurHashesChanged();
     void widthChanged(int newWidth);
     void heightChanged(int newHeight);
@@ -496,6 +504,8 @@ protected:
     std::optional<int> m_indexNumberEnd = std::nullopt;
     std::optional<bool> m_isFolder = std::nullopt;
     QString m_type;
+    QString m_parentBackdropItemId;
+    QStringList m_parentBackdropImageTags;
     UserData *m_userData = nullptr;
     std::optional<int> m_recursiveItemCount = std::nullopt;
     std::optional<int> m_childCount = std::nullopt;
@@ -508,6 +518,7 @@ protected:
     QVariantList m_mediaStreams;
     QStringList m_artists;
     QJsonObject m_imageTags;
+    QStringList m_backdropImageTags;
     QJsonObject m_imageBlurHashes;
     int m_width;
     int m_height;

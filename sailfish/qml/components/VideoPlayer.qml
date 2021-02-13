@@ -31,15 +31,15 @@ import "../"
 
 SilicaItem {
     id: playerRoot
-    property string itemId
-    property string title
+    property alias item : mediaSource.item
+    property string title: item.name
+    property alias resume: mediaSource.resumePlayback
     property int progress
     readonly property bool landscape: videoOutput.contentRect.width > videoOutput.contentRect.height
     property MediaPlayer player
     readonly property bool hudVisible: !hud.hidden || player.error !== MediaPlayer.NoError
     property alias audioTrack: mediaSource.audioIndex
     property alias subtitleTrack: mediaSource.subtitleIndex
-    property real startTicks: 0
 
     // Blackground to prevent the ambience from leaking through
     Rectangle {
@@ -50,21 +50,9 @@ SilicaItem {
     PlaybackManager {
         id: mediaSource
         apiClient: ApiClient
-        itemId: playerRoot.itemId
+        mediaPlayer: player
         autoOpen: true
-        onStreamUrlChanged: {
-            if (mediaSource.streamUrl != "") {
-                player.source = streamUrl
-            }
-        }
     }
-
-    Connections {
-        target: player
-        onPlaybackStateChanged: mediaSource.state = player.playbackState
-        onPositionChanged: mediaSource.position = Utils.msToTicks(player.position)
-    }
-
 
     VideoOutput {
         id: videoOutput
@@ -81,7 +69,8 @@ SilicaItem {
         Label {
             anchors.fill: parent
             anchors.margins: Theme.horizontalPageMargin
-            text: itemId + "\n" + mediaSource.streamUrl + "\n"
+            text: item.jellyfinId + "\n" + mediaSource.streamUrl + "\n"
+                  + player.position + "\n"
                   + player.status + "\n"
                   + player.bufferProgress + "\n"
                   + player.metaData.videoCodec + "@" + player.metaData.videoFrameRate + "(" + player.metaData.videoBitRate + ")" + "\n"
@@ -89,7 +78,7 @@ SilicaItem {
                   + player.errorString + "\n"
             font.pixelSize: Theme.fontSizeExtraSmall
             wrapMode: "WordWrap"
-            visible: false
+            visible: true
         }
     }
 
@@ -100,19 +89,5 @@ SilicaItem {
 
     function stop() {
         player.stop()
-    }
-
-    Connections {
-        property bool enabled: true
-        id: playerReadyToSeek
-        target: player
-        onPlaybackStateChanged: {
-            if (!enabled) return;
-            if (startTicks > 0 && player.playbackState == MediaPlayer.PlayingState) {
-                console.log("Seeking to " + Utils.ticksToMs(startTicks))
-                player.seek(Utils.ticksToMs(startTicks))
-                playerReadyToSeek.enabled = false // Only seek the first time this property changes
-            }
-        }
     }
 }

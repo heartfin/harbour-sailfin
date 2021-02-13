@@ -62,7 +62,7 @@ Page {
         id: backdropBackground
         ThemeBackground {
             sourceItem: backdrop
-            backgroundMaterial: Materials.blur
+            backgroundMaterial: "blur"
         }
     }
 

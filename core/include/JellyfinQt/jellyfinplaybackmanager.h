@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QObject>
+#include <QtGlobal>
 #include <QVariant>
 
 #include <QUrlQuery>
@@ -31,11 +32,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 
 #include "jellyfinapiclient.h"
+#include "jellyfinitem.h"
 
 namespace Jellyfin {
 
-class PlaybackManager : public QObject {
+// Forward declaration of Jellyfin::Item found in jellyfinitem.h
+class Item;
+// Forward declaration of Jellyfin::ApiClient found in jellyfinapiclient.h
+class ApiClient;
+
+/**
+ * @brief The PlaybackManager class manages the playback of Jellyfin items. It fetches streams based on Jellyfin items, posts
+ * the current playback state to the Jellyfin Server and so on.
+ */
+class PlaybackManager : public QObject, public QQmlParserStatus {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
 public:
     enum PlayMethod {
         Transcode,
@@ -46,58 +58,71 @@ public:
 
     explicit PlaybackManager(QObject *parent = nullptr);
     Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient)
-    Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
+    Q_PROPERTY(Item *item READ item WRITE setItem NOTIFY itemChanged)
     Q_PROPERTY(QString streamUrl READ streamUrl NOTIFY streamUrlChanged)
     Q_PROPERTY(bool autoOpen MEMBER m_autoOpen NOTIFY autoOpenChanged)
     Q_PROPERTY(int audioIndex MEMBER m_audioIndex NOTIFY audioIndexChanged)
     Q_PROPERTY(int subtitleIndex MEMBER m_subtitleIndex NOTIFY subtitleIndexChanged)
-    Q_PROPERTY(qint64 position MEMBER m_position WRITE setPosition NOTIFY positionChanged)
-    Q_PROPERTY(QMediaPlayer::State state READ state WRITE setState NOTIFY stateChanged)
+    Q_PROPERTY(bool resumePlayback MEMBER m_resumePlayback NOTIFY resumePlaybackChanged)
+    Q_PROPERTY(QObject* mediaPlayer READ mediaPlayer WRITE setMediaPlayer NOTIFY mediaPlayerChanged)
 
-    QString itemId() const { return m_itemId; }
-    void setItemId(const QString &newItemId);
+    Item *item() const { return m_item; }
+    void setItem(Item *newItem);
 
-    QMediaPlayer::State state() const { return m_state; }
-    void setState(QMediaPlayer::State newState);
-
-    void setPosition(qint64 position);
+    QObject *mediaPlayer() const {
+        return m_qmlMediaPlayer;
+    }
+    void setMediaPlayer(QObject *qmlMediaPlayer);
 
     QString streamUrl() const { return m_streamUrl; }
 signals:
-    void itemIdChanged(const QString &newItemId);
+    void itemChanged(Item *newItemId);
     void streamUrlChanged(const QString &newStreamUrl);
     void autoOpenChanged(bool autoOpen);
     void audioIndexChanged(int audioIndex);
     void subtitleIndexChanged(int subtitleIndex);
-    void positionChanged(qint64 position);
-    void stateChanged(QMediaPlayer::State state);
+    void mediaPlayerChanged(QObject *newMediaPlayer);
+    void resumePlaybackChanged(bool newResumePlayback);
 
 public slots:
     void updatePlaybackInfo();
+private slots:
+    void mediaPlayerStateChanged(QMediaPlayer::State newState);
+    void mediaPlayerPositionChanged(qint64 position);
+    void mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus newStatus);
 
 private:
     QTimer m_updateTimer;
     ApiClient *m_apiClient = nullptr;
-    QString m_itemId;
+    Item *m_item = nullptr;
     QString m_streamUrl;
     QString m_playSessionId;
     int m_audioIndex = 0;
     int m_subtitleIndex = -1;
-    qint64 m_position = 0;
+    qint64 m_resumePosition = 0;
+    qint64 m_oldPosition = 0;
     qint64 m_stopPosition = 0;
+    QMediaPlayer::State m_oldState = QMediaPlayer::StoppedState;
     PlayMethod m_playMethod;
-    QMediaPlayer::State m_state = QMediaPlayer::StoppedState;
+    QObject *m_qmlMediaPlayer = nullptr;
+    QMediaPlayer * m_mediaPlayer = nullptr;
+    bool m_resumePlayback = true;
+
+    bool m_qmlIsParsingComponent = false;
 
     /**
      * @brief Whether to automatically open the livestream of the item;
      */
     bool m_autoOpen = false;
 
+    /**
+     * @brief Retrieves the URL of the stream to open.
+     */
     void fetchStreamUrl();
     void setStreamUrl(const QString &streamUrl);
 
     // Factor to multiply with when converting from milliseconds to ticks.
-    const int MS_TICK_FACTOR = 10000;
+    const static int MS_TICK_FACTOR = 10000;
 
     enum PlaybackInfoType { Started, Stopped, Progress };
 
@@ -105,6 +130,11 @@ private:
      * @brief Posts the playback information
      */
     void postPlaybackInfo(PlaybackInfoType type);
+
+    void classBegin() override {
+        m_qmlIsParsingComponent = true;
+    }
+    void componentComplete() override;
 };
 
 }

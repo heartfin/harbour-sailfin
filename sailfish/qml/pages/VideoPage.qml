@@ -21,6 +21,8 @@ import Sailfish.Silica 1.0
 
 import "../components"
 
+import nl.netsoj.chris.Jellyfin 1.0
+
 /**
  * Page only containing a video player.
  *
@@ -29,11 +31,10 @@ import "../components"
 
 Page {
     id: videoPage
-    property string itemId
-    property var itemData
+    property JellyfinItem itemData
     property int audioTrack
     property int subtitleTrack
-    property real startTicks: 0 // Why is this a real? Because an integer only goes to 3:44 when the ticks are converted to doubles
+    property bool resume: true
 
     allowedOrientations: Orientation.All
     showNavigationIndicator: videoPlayer.hudVisible
@@ -41,12 +42,12 @@ Page {
     VideoPlayer {
         id: videoPlayer
         anchors.fill: parent
-        itemId: videoPage.itemId
         player: appWindow.mediaPlayer
         title: itemData.name
         audioTrack: videoPage.audioTrack
         subtitleTrack: videoPage.subtitleTrack
-        startTicks: videoPage.startTicks
+        resume: videoPage.resume
+        item: itemData
 
         onLandscapeChanged: {
             console.log("Is landscape: " + landscape)

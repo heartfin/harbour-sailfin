@@ -60,11 +60,10 @@ BaseDetailPage {
                 favourited: itemData.userData.isFavorite
                 playProgress: itemData.userData.playedPercentage / 100
                 onPlayPressed: pageStack.push(Qt.resolvedUrl("../VideoPage.qml"),
-                                              {"itemId": itemId, "itemData": itemData,
+                                              {"itemData": itemData,
                                                   "audioTrack": trackSelector.audioTrack,
                                                   "subtitleTrack": trackSelector.subtitleTrack,
-                                                  "startTicks": startFromBeginning ? 0.0
-                                                                    : _playbackProsition })
+                                                  "resume": resume})
             }
 
             VideoTrackSelector {

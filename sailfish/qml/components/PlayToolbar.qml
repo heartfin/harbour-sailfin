@@ -26,7 +26,7 @@ Column {
     property real playProgress: 0.0
     property bool favourited: false
     property alias imageBlurhash: playImage.blurhash
-    signal playPressed(bool startFromBeginning)
+    signal playPressed(bool resume)
     spacing: Theme.paddingLarge
 
     BackgroundItem {
@@ -57,7 +57,7 @@ Column {
             color: Theme.highlightColor
             width: parent.width * playProgress
         }
-        onClicked: playPressed(false)
+        onClicked: playPressed(true)
     }
     Row {
         anchors {
@@ -71,7 +71,7 @@ Column {
             id: playFromBeginning
             icon.source: "image://theme/icon-m-backup"
             visible: playProgress > 0
-            onClicked: playPressed(true)
+            onClicked: playPressed(false)
         }
         IconButton {
             id: favouriteButton

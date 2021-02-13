@@ -39,11 +39,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "credentialmanager.h"
 #include "jellyfindeviceprofile.h"
 #include "jellyfinitem.h"
+#include "jellyfinplaybackmanager.h"
 #include "jellyfinwebsocket.h"
 
 namespace Jellyfin {
 class MediaSource;
 class WebSocket;
+class PlaybackManager;
 /**
  * @brief An Api client for Jellyfin. Handles requests and authentication.
  *
@@ -71,6 +73,7 @@ class WebSocket;
  */
 class ApiClient : public QObject {
     friend class WebSocket;
+    friend class PlaybackManager;
     Q_OBJECT
 public:
     explicit ApiClient(QObject *parent = nullptr);

@@ -26,10 +26,10 @@ import "../components"
 import ".."
 
 CoverBackground {
-    property var mData: appWindow.itemData
+    property JellyfinItem mData: appWindow.itemData
     RemoteImage {
         anchors.fill: parent
-        source: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
+        source: mData == null ? "" : Utils.itemImageUrl(ApiClient.baseUrl, mData, "Primary", {"maxWidth": parent.width})
         fillMode: Image.PreserveAspectCrop
         onSourceChanged: console.log(source)
     }
@@ -37,7 +37,7 @@ CoverBackground {
     Shim {
         // Movies usually show their name on the poster,
         // so showing it here as well is a bit double
-        visible: itemData.type !== "Movie"
+        visible: mData.type !== "Movie"
         anchors {
             left: parent.left
             right: parent.right
@@ -71,13 +71,13 @@ CoverBackground {
                     right: parent.right
                 }
                 color: Theme.primaryColor
-                text: itemData.name
+                text: mData.name
                 truncationMode: TruncationMode.Fade
             }
             Label {
-                visible: typeof itemData.runTimeTicks !== "undefined"
+                visible: typeof mData.runTimeTicks !== "undefined"
                 color: Theme.secondaryColor
-                text: Utils.ticksToText(itemData.runTimeTicks)
+                text: Utils.ticksToText(mData.runTimeTicks)
             }
         }
     }

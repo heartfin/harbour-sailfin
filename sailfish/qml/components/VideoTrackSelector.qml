@@ -27,11 +27,29 @@ Column {
     readonly property int subtitleTrack: subitleSelector.currentItem._index
 
     ListModel {
+        id: videoModel
+    }
+    ListModel {
         id: audioModel
     }
 
     ListModel {
         id: subtitleModel
+    }
+
+    ComboBox {
+        id: videoSelector
+        label: qsTr("Video track")
+        enabled: videoModel.count > 1
+        menu: ContextMenu {
+            Repeater {
+                model: videoModel
+                MenuItem {
+                    readonly property int _index: model.index
+                    text: model.displayTitle
+                }
+            }
+        }
     }
 
     ComboBox {
@@ -80,6 +98,9 @@ Column {
         for(var i = 0; i < tracks.length; i++) {
             var track = tracks[i];
             switch(track.type) {
+            case MediaStream.Video:
+                videoModel.append(track)
+                break;
             case MediaStream.Audio:
                 audioModel.append(track)
                 break;

@@ -80,7 +80,7 @@ QJsonObject DeviceProfile::generateProfile() {
                              JsonPair("Type", "VideoAudio")
                          });
     codecProfiles.append(QJsonObject {
-                             JsonPair("Coded", "h264"),
+                             JsonPair("Codec", "h264"),
                              JsonPair("Conditions", QJsonArray {
                                  QJsonObject {
                                      JsonPair("Property", "IsAnamorphic"),

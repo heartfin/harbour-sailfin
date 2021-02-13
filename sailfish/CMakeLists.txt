@@ -25,7 +25,6 @@ set(sailfin_QML_SOURCES
         qml/components/music/SongDelegate.qml
         qml/components/videoplayer/VideoError.qml
         qml/components/videoplayer/VideoHud.qml
-	qml/components/GlassyBackground.qml
 	qml/components/IconListItem.qml
 	qml/components/LibraryItemDelegate.qml
 	qml/components/MoreSection.qml
@@ -55,6 +54,7 @@ set(sailfin_QML_SOURCES
 	qml/pages/itemdetails/SeriesPage.qml
 	qml/pages/itemdetails/UnsupportedPage.qml
 	qml/pages/itemdetails/VideoPage.qml
+        qml/pages/settings/DebugPage.qml
 	qml/pages/setup/AddServerConnectingPage.qml
 	qml/pages/setup/LoginDialog.qml
 	qml/qmldir)

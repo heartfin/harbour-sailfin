@@ -265,6 +265,7 @@ void ApiClient::generateDeviceProfile() {
     root["PlayableMediaTypes"] = playableMediaTypes;
 
     m_deviceProfile = root;
+    emit deviceProfileChanged();
 }
 
 void ApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {

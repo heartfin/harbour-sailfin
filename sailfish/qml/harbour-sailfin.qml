@@ -35,7 +35,7 @@ ApplicationWindow {
     readonly property MediaPlayer mediaPlayer: _mediaPlayer
 
     // Data of the currently selected item. For use on the cover.
-    property var itemData
+    property JellyfinItem itemData
     // Id of the collection currently browsing. For use on the cover.
     property string collectionId
 
@@ -105,6 +105,9 @@ ApplicationWindow {
 
     DisplayBlanking {
         preventBlanking: _mediaPlayer.playbackState == MediaPlayer.PlayingState && _mediaPlayer.hasVideo
+    }
+    
+    DockedPanel {
     }
 
 }

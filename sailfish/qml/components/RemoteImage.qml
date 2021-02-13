@@ -36,7 +36,9 @@ SilicaItem {
 
     property var __parentPage : null
     property bool _alreadyLoaded: false
-    readonly property bool _shouldLoad: _alreadyLoaded || __parentPage && [PageStatus.Active, PageStatus.Deactivating].indexOf(__parentPage.status) >= 0
+    readonly property bool _shouldLoad: _alreadyLoaded
+                                        || __parentPage == null // Not an indirect child of a page. Immediatly start loading.
+                                        || __parentPage && [PageStatus.Active, PageStatus.Deactivating].indexOf(__parentPage.status) >= 0
 
     onSourceChanged: _alreadyLoaded = false
 

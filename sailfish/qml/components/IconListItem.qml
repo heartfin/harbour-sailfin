@@ -32,6 +32,7 @@ BackgroundItem {
             bottom: parent.bottom
             bottomMargin: Theme.paddingMedium
         }
+        width: height
     }
 
     Label {

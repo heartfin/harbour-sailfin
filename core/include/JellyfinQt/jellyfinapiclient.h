@@ -77,6 +77,7 @@ public:
     Q_PROPERTY(QString baseUrl MEMBER m_baseUrl READ baseUrl NOTIFY baseUrlChanged)
     Q_PROPERTY(bool authenticated READ authenticated WRITE setAuthenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString userId READ userId NOTIFY userIdChanged)
+    Q_PROPERTY(QJsonObject deviceProfile READ deviceProfile NOTIFY deviceProfileChanged)
     Q_PROPERTY(QString version READ version)
 
     /*QNetworkReply *handleRequest(QString path, QStringList sort, Pagination *pagination,
@@ -144,6 +145,8 @@ signals:
 
     void itemFetched(const QString &itemId, const QJsonObject &result);
     void itemFetchFailed(const QString &itemId, const QNetworkReply::NetworkError error);
+
+    void deviceProfileChanged();
 
     /**
      * @brief onUserDataChanged Emitted when the user data of an item is changed on the server.

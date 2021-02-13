@@ -113,6 +113,12 @@ Page {
             }
 
             IconListItem {
+                text: qsTr("Debug information")
+                iconSource: "image://theme/icon-s-developer"
+                onClicked: pageStack.push(Qt.resolvedUrl("settings/DebugPage.qml"))
+            }
+
+            IconListItem {
                 text: qsTr("About Sailfin")
                 iconSource: "image://theme/icon-m-about"
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))

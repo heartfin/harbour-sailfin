@@ -78,8 +78,7 @@ BaseDetailPage {
                 artists: model.artists
                 duration: model.runTimeTicks
                 indexNumber: model.indexNumber
-                onClicked: window.playbackManager.item = Qt.createQmlObject("import nl.netsoj.chris.Jellyfin 1.0;"
-                    + "JellyfinItem { jellyfinId: \"" + model.id + "\"; apiClient: ApiClient; }", songDelegate, "nonexistent.qml");
+                onClicked: window.playbackManager.playItem(model.id)
             }
 
             VerticalScrollDecorator {}

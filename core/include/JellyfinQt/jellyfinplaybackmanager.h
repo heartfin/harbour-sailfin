@@ -89,6 +89,12 @@ signals:
 
 public slots:
     void updatePlaybackInfo();
+    /**
+     * @brief playItem Plays the item with the given id. This will construct the Jellyfin::Item internally
+     * and delete it later.
+     * @param itemId The id of the item to play.
+     */
+    void playItem(const QString &itemId);
 private slots:
     void mediaPlayerStateChanged(QMediaPlayer::State newState);
     void mediaPlayerPositionChanged(qint64 position);

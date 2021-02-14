@@ -43,6 +43,18 @@ ApplicationWindow {
     // Bad way to implement settings, but it'll do for now.
     property bool showDebugInfo: false
 
+    property bool _hidePlaybackBar: false
+
+    Connections {
+        target: pageStack
+        onCurrentPageChanged: {
+           _hidePlaybackBar = "__videoPlaybackPage" in pageStack.currentPage
+            console.log("Current page changed: " + _hidePlaybackBar)
+        }
+    }
+
+    bottomMargin: playbackBar.visibleSize
+
     //FIXME: proper error handling
     Connections {
         target: ApiClient
@@ -119,7 +131,9 @@ ApplicationWindow {
         preventBlanking: _mediaPlayer.playbackState == MediaPlayer.PlayingState && _mediaPlayer.hasVideo
     }
     
-    DockedPanel {
+    PlaybackBar {
+        id: playbackBar
+        open: !_hidePlaybackBar//_mediaPlayer.playbackState != MediaPlayer.StoppedState
+        manager: _playbackManager
     }
-
 }

@@ -31,6 +31,7 @@ import nl.netsoj.chris.Jellyfin 1.0
 
 Page {
     id: videoPage
+    property bool __videoPlaybackPage: true
     property JellyfinItem itemData
     property int audioTrack
     property int subtitleTrack

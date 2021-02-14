@@ -19,19 +19,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "JellyfinQt/jellyfin.h"
 namespace Jellyfin {
 
-void registerTypes() {
-    const char* QML_NAMESPACE = "nl.netsoj.chris.Jellyfin";
+void registerTypes(const char *uri) {
     // Singletons are perhaps bad, but they are convenient :)
-    qmlRegisterSingletonType<Jellyfin::ApiClient>(QML_NAMESPACE, 1, 0, "ApiClient", [](QQmlEngine *eng, QJSEngine *js) {
+    qmlRegisterSingletonType<Jellyfin::ApiClient>(uri, 1, 0, "ApiClient", [](QQmlEngine *eng, QJSEngine *js) {
         Q_UNUSED(eng)
         Q_UNUSED(js)
         return dynamic_cast<QObject*>(new Jellyfin::ApiClient());
     });
-    qmlRegisterType<Jellyfin::ServerDiscoveryModel>(QML_NAMESPACE, 1, 0, "ServerDiscoveryModel");
-    qmlRegisterType<Jellyfin::PlaybackManager>(QML_NAMESPACE, 1, 0, "PlaybackManager");
+    qmlRegisterType<Jellyfin::ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
+    qmlRegisterType<Jellyfin::PlaybackManager>(uri, 1, 0, "PlaybackManager");
 
     // API models
-    Jellyfin::registerModels(QML_NAMESPACE);
-    Jellyfin::registerSerializableJsonTypes(QML_NAMESPACE);
+    Jellyfin::registerModels(uri);
+    Jellyfin::registerSerializableJsonTypes(uri);
 }
 }

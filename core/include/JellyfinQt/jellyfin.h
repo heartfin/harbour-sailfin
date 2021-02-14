@@ -10,7 +10,7 @@
 #include "JellyfinQt/jellyfinplaybackmanager.h"
 
 namespace Jellyfin {
-void registerTypes();
+void registerTypes(const char *uri = "nl.netsoj.chris.Jellyfin");
 }
 
 #endif // JELLYFIN_H

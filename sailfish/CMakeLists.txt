@@ -29,6 +29,7 @@ set(sailfin_QML_SOURCES
 	qml/components/LibraryItemDelegate.qml
 	qml/components/MoreSection.qml
 	qml/components/PlainLabel.qml
+        qml/components/PlaybackBar.qml
 	qml/components/PlayToolbar.qml
 	qml/components/RemoteImage.qml
 	qml/components/Shim.qml

@@ -302,6 +302,7 @@ class Item : public RemoteData {
     Q_OBJECT
 public:
     Q_INVOKABLE explicit Item(QObject *parent = nullptr);
+    Item(QString itemId, ApiClient *apiClient, QObject *parent = nullptr);
 
     Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
 
@@ -473,7 +474,7 @@ protected:
     QString getDataUrl() const override;
     bool canReload() const override;
 
-    QString m_id;
+    QString m_id = QStringLiteral("");
     QString m_name;
     QString m_originalTitle;
     QString m_serverId;

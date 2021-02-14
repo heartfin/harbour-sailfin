@@ -54,7 +54,7 @@ void JsonSerializable::deserialize(const QJsonObject &jObj) {
             QMetaProperty realProp = obj->property(obj->indexOfProperty(prop.name() + 8));
             if (!realProp.write(this, jsonToVariant(prop, val, jObj))) {
                 qDebug() << "Write to " << prop.name() << "failed";
-            };
+            }
         }
     }
 }
@@ -326,6 +326,14 @@ Item::Item(QObject *parent) : RemoteData(parent) {
     connect(this, &RemoteData::apiClientChanged, this, [this](ApiClient *newApiClient) {
         connect(newApiClient, &ApiClient::userDataChanged, this, &Item::onUserDataChanged);
     });
+}
+
+Item::Item(QString id, ApiClient *apiClient, QObject *parent)
+    : RemoteData(parent), m_id(id) {
+    connect(this, &RemoteData::apiClientChanged, this, [this](ApiClient *newApiClient) {
+        connect(newApiClient, &ApiClient::userDataChanged, this, &Item::onUserDataChanged);
+    });
+    setApiClient(apiClient);
 }
 
 QString Item::getDataUrl() const {

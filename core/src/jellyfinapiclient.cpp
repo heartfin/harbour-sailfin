@@ -25,8 +25,6 @@ ApiClient::ApiClient(QObject *parent)
     : QObject(parent),
       m_webSocket(new WebSocket(this)) {
     m_deviceName = QHostInfo::localHostName();
-    uint uuid1 = qHash(m_deviceName);
-    uint uuid2 = qHash(QSysInfo::productVersion());
     m_deviceId = QUuid::createUuid().toString(); // TODO: make this not random?
     m_credManager = CredentialsManager::newInstance(this);
 

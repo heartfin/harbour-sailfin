@@ -99,7 +99,13 @@ void PlaybackManager::fetchStreamUrl() {
 
 void PlaybackManager::setItem(Item *newItem) {
     if (m_mediaPlayer != nullptr) m_mediaPlayer->stop();
+
+    // If we own the item, delete it.
+    if (m_item != nullptr && m_item->parent() == this) {
+        m_item->deleteLater();
+    }
     this->m_item = newItem;
+    emit itemChanged(newItem);
     // Don't try to start fetching when we're not completely parsed yet.
     if (m_qmlIsParsingComponent) return;
 
@@ -110,6 +116,16 @@ void PlaybackManager::setItem(Item *newItem) {
     // Deinitialize the streamUrl
     setStreamUrl("");
     if (newItem != nullptr) {
+        if (newItem->parent() != this) {
+            // The new item may outlive the lifetime of the element it was created on. In the Sailfish
+            // application for example, the player is given an Jellyfin::Item that sits on a Page on a PageStack.
+            // As soon as the user pops the Page from the PageStack, newItem would be destroyed. Therefore, we
+            // take ownership of the given newItem, as this object will usually exist throughout the lifetime of
+            // the application. A better solution would be to create a copy of the newItem, but no way I'm going
+            // to create an handwritten copy of that.
+            QQmlEngine::setObjectOwnership(newItem, QQmlEngine::ObjectOwnership::CppOwnership);
+            newItem->setParent(this);
+        }
         if (m_item->status() == RemoteData::Ready) {
             fetchStreamUrl();
         } else {
@@ -190,6 +206,11 @@ void PlaybackManager::setMediaPlayer(QObject *qmlMediaPlayer) {
 
 void PlaybackManager::updatePlaybackInfo() {
     postPlaybackInfo(Progress);
+}
+
+void PlaybackManager::playItem(const QString &itemId) {
+    Item *newItem = new Item(itemId, m_apiClient, this);
+    setItem(newItem);
 }
 
 void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {

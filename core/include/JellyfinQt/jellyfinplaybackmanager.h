@@ -65,6 +65,7 @@ public:
     Q_PROPERTY(int subtitleIndex MEMBER m_subtitleIndex NOTIFY subtitleIndexChanged)
     Q_PROPERTY(bool resumePlayback MEMBER m_resumePlayback NOTIFY resumePlaybackChanged)
     Q_PROPERTY(QObject* mediaPlayer READ mediaPlayer WRITE setMediaPlayer NOTIFY mediaPlayerChanged)
+    Q_PROPERTY(PlayMethod playMethod READ playMethod NOTIFY playMethodChanged)
 
     Item *item() const { return m_item; }
     void setItem(Item *newItem);
@@ -75,6 +76,7 @@ public:
     void setMediaPlayer(QObject *qmlMediaPlayer);
 
     QString streamUrl() const { return m_streamUrl; }
+    PlayMethod playMethod() const { return m_playMethod; }
 signals:
     void itemChanged(Item *newItemId);
     void streamUrlChanged(const QString &newStreamUrl);
@@ -83,6 +85,7 @@ signals:
     void subtitleIndexChanged(int subtitleIndex);
     void mediaPlayerChanged(QObject *newMediaPlayer);
     void resumePlaybackChanged(bool newResumePlayback);
+    void playMethodChanged(PlayMethod newPlayMethod);
 
 public slots:
     void updatePlaybackInfo();
@@ -103,7 +106,7 @@ private:
     qint64 m_oldPosition = 0;
     qint64 m_stopPosition = 0;
     QMediaPlayer::State m_oldState = QMediaPlayer::StoppedState;
-    PlayMethod m_playMethod;
+    PlayMethod m_playMethod = Transcode;
     QObject *m_qmlMediaPlayer = nullptr;
     QMediaPlayer * m_mediaPlayer = nullptr;
     bool m_resumePlayback = true;

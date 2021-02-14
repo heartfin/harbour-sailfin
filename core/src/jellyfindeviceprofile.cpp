@@ -46,6 +46,18 @@ QJsonObject DeviceProfile::generateProfile() {
     using JsonPair = QPair<QString, QJsonValue>;
     QJsonObject profile;
 
+    QStringList audioCodes = {
+        "aac",
+        "flac",
+        "mp2",
+        "mp3",
+        "oga"
+        "ogg",
+        "wav",
+        "webma",
+        "wma"
+    };
+
     QStringList videoAudioCodecs;
     QStringList mp4VideoCodecs;
     QStringList hlsVideoCodecs;
@@ -171,6 +183,7 @@ QJsonObject DeviceProfile::generateProfile() {
                             }));
 
     // Direct play profiles
+    // Video
     QJsonArray directPlayProfiles;
     directPlayProfiles.append(QJsonObject {
                                   JsonPair("Container", "mp4,m4v"),
@@ -178,6 +191,39 @@ QJsonObject DeviceProfile::generateProfile() {
                                   JsonPair("VideoCodec", mp4VideoCodecs.join(',')),
                                   JsonPair("AudioCodec", videoAudioCodecs.join(','))
                               });
+    directPlayProfiles.append(QJsonObject {
+                                  JsonPair("Container", "mkv"),
+                                  JsonPair("Type", "Video"),
+                                  JsonPair("VideoCodec", mp4VideoCodecs.join(',')),
+                                  JsonPair("AudioCodec", videoAudioCodecs.join(','))
+                              });
+
+    // Audio
+    for (auto it = audioCodes.begin(); it != audioCodes.end(); it++) {
+        if (*it == "mp2") {
+            directPlayProfiles.append(QJsonObject {
+                                          JsonPair("Container", "mp2,mp3"),
+                                          JsonPair("Type", "Audio"),
+                                          JsonPair("AudioCodec", "mp2")
+                                      });
+        } else if(*it == "mp3") {
+            directPlayProfiles.append(QJsonObject {
+                                          JsonPair("Container", "mp3"),
+                                          JsonPair("Type", "Audio"),
+                                          JsonPair("AudioCodec", "mp3")
+                                      });
+        } else if (*it == "webma") {
+            directPlayProfiles.append(QJsonObject {
+                                          JsonPair("Container", "webma,webm"),
+                                          JsonPair("Type", "Audio"),
+                                      });
+        } else {
+            directPlayProfiles.append(QJsonObject {
+                                          JsonPair("Container", *it),
+                                          JsonPair("Type", "Audio")
+                                      });
+        }
+    }
 
     profile["CodecProfiles"] = codecProfiles;
     profile["ContainerProfiles"] = QJsonArray();

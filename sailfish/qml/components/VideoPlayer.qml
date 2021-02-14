@@ -31,27 +31,20 @@ import "../"
 
 SilicaItem {
     id: playerRoot
-    property alias item : mediaSource.item
+    property JellyfinItem item
     property string title: item.name
-    property alias resume: mediaSource.resumePlayback
+    property bool resume
     property int progress
     readonly property bool landscape: videoOutput.contentRect.width > videoOutput.contentRect.height
     property MediaPlayer player
     readonly property bool hudVisible: !hud.hidden || player.error !== MediaPlayer.NoError
-    property alias audioTrack: mediaSource.audioIndex
-    property alias subtitleTrack: mediaSource.subtitleIndex
+    property int audioTrack: 0
+    property int subtitleTrack: 0
 
     // Blackground to prevent the ambience from leaking through
     Rectangle {
         anchors.fill: parent
         color: Theme.overlayBackgroundColor
-    }
-
-    PlaybackManager {
-        id: mediaSource
-        apiClient: ApiClient
-        mediaPlayer: player
-        autoOpen: true
     }
 
     VideoOutput {
@@ -69,7 +62,8 @@ SilicaItem {
         Label {
             anchors.fill: parent
             anchors.margins: Theme.horizontalPageMargin
-            text: item.jellyfinId + "\n" + mediaSource.streamUrl + "\n"
+            text: item.jellyfinId + "\n" + appWindow.playbackManager.streamUrl + "\n"
+                  + (appWindow.playbackManager.playMethod == PlaybackManager.DirectPlay ? "Direct Play" : "Transcoding") + "\n"
                   + player.position + "\n"
                   + player.status + "\n"
                   + player.bufferProgress + "\n"
@@ -78,13 +72,20 @@ SilicaItem {
                   + player.errorString + "\n"
             font.pixelSize: Theme.fontSizeExtraSmall
             wrapMode: "WordWrap"
-            visible: true
+            visible: appWindow.showDebugInfo
         }
     }
 
     VideoError {
         anchors.fill: videoOutput
         player: playerRoot.player
+    }
+
+    function start() {
+        appWindow.playbackManager.audioIndex = audioTrack
+        appWindow.playbackManager.subtitleIndex = subtitleTrack
+        appWindow.playbackManager.resumePlayback = resume
+        appWindow.playbackManager.item = item
     }
 
     function stop() {

@@ -367,6 +367,7 @@ public:
     Q_PROPERTY(QJsonObject imageTags MEMBER m_imageTags NOTIFY imageTagsChanged)
     Q_PROPERTY(QStringList backdropImageTags MEMBER m_backdropImageTags NOTIFY backdropImageTagsChanged)
     Q_PROPERTY(QJsonObject imageBlurHashes MEMBER m_imageBlurHashes NOTIFY imageBlurHashesChanged)
+    Q_PROPERTY(QString mediaType MEMBER m_mediaType READ mediaType NOTIFY mediaTypeChanged)
     Q_PROPERTY(int width MEMBER m_width NOTIFY widthChanged)
     Q_PROPERTY(int height MEMBER m_height NOTIFY heightChanged)
 
@@ -406,6 +407,7 @@ public:
     void setRecursiveItemCount(int newRecursiveItemCount) { m_recursiveItemCount = newRecursiveItemCount; emit recursiveItemCountChanged(newRecursiveItemCount); }
     int childCount() const { return m_childCount.value_or(-1); }
     void setChildCount(int newChildCount) { m_childCount = newChildCount; emit childCountChanged(newChildCount); }
+    QString mediaType() const { return m_mediaType; }
 
     //QQmlListProperty<MediaStream> mediaStreams() { return toReadOnlyQmlListProperty<MediaStream>(m_mediaStreams); }
     //QList<QObject *> mediaStreams() { return *reinterpret_cast<QList<QObject *> *>(&m_mediaStreams); }
@@ -460,6 +462,7 @@ signals:
     void imageTagsChanged();
     void backdropImageTagsChanged();
     void imageBlurHashesChanged();
+    void mediaTypeChanged(const QString &newMediaType);
     void widthChanged(int newWidth);
     void heightChanged(int newHeight);
 
@@ -520,6 +523,7 @@ protected:
     QJsonObject m_imageTags;
     QStringList m_backdropImageTags;
     QJsonObject m_imageBlurHashes;
+    QString m_mediaType;
     int m_width;
     int m_height;
 

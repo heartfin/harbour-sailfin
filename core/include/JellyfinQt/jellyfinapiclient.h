@@ -82,6 +82,7 @@ public:
     Q_PROPERTY(QString userId READ userId NOTIFY userIdChanged)
     Q_PROPERTY(QJsonObject deviceProfile READ deviceProfile NOTIFY deviceProfileChanged)
     Q_PROPERTY(QString version READ version)
+    Q_PROPERTY(WebSocket *websocket READ websocket NOTIFY websocketChanged)
 
     /*QNetworkReply *handleRequest(QString path, QStringList sort, Pagination *pagination,
                                  QVariantMap filters, QStringList fields, QStringList expand, QString id);*/
@@ -111,6 +112,7 @@ public:
     QJsonObject &deviceProfile() { return m_deviceProfile; }
     QJsonObject &playbackDeviceProfile() { return m_playbackDeviceProfile; }
     QString version() const;
+    WebSocket *websocket() const { return m_webSocket; }
 
     /**
      * @brief Sets the error handler of a reply to this classes default error handler
@@ -146,10 +148,8 @@ signals:
 
     void userIdChanged(QString userId);
 
-    void itemFetched(const QString &itemId, const QJsonObject &result);
-    void itemFetchFailed(const QString &itemId, const QNetworkReply::NetworkError error);
-
     void deviceProfileChanged();
+    void websocketChanged(WebSocket *newWebsocket);
 
     /**
      * @brief onUserDataChanged Emitted when the user data of an item is changed on the server.
@@ -178,8 +178,6 @@ public slots:
      * @brief Logs the user out and clears the session.
      */
     void deleteSession();
-
-    void fetchItem(const QString &id);
 
     /**
      * @brief Shares the capabilities of this device to the server.

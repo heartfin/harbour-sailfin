@@ -28,6 +28,9 @@ WebSocket::WebSocket(ApiClient *client)
         Q_UNUSED(error)
         qDebug() << "Connection error: " <<  m_webSocket.errorString();
     });
+    connect(&m_webSocket, &QWebSocket::stateChanged, this, &WebSocket::onWebsocketStateChanged);
+    connect(&m_keepAliveTimer, &QTimer::timeout, this, &WebSocket::sendKeepAlive);
+    connect(&m_retryTimer, &QTimer::timeout, this, &WebSocket::open);
 }
 
 void WebSocket::open() {
@@ -39,16 +42,22 @@ void WebSocket::open() {
     connectionUrl.setPath("/socket");
     connectionUrl.setQuery(query);
     m_webSocket.open(connectionUrl);
-    qDebug() << "Opening WebSocket connection to " << m_webSocket.requestUrl();
+    m_reconnectAttempt++;
+    qDebug() << "Opening WebSocket connection to " << m_webSocket.requestUrl() << ", connect attempt " << m_reconnectAttempt;
 }
 
 void WebSocket::onConnected() {
     connect(&m_webSocket, &QWebSocket::textMessageReceived, this, &WebSocket::textMessageReceived);
+    m_reconnectAttempt = 0;
 }
 
 void WebSocket::onDisconnected() {
     disconnect(&m_webSocket, &QWebSocket::textMessageReceived, this, &WebSocket::textMessageReceived);
     m_keepAliveTimer.stop();
+    if (m_reconnectAttempt <= 3) {
+        // 500, 2500, 12500
+        m_retryTimer.setInterval(100 * static_cast<int>(std::pow(5., m_reconnectAttempt)));
+    }
 }
 
 void WebSocket::textMessageReceived(const QString &message) {
@@ -112,7 +121,6 @@ void WebSocket::setupKeepAlive(int data) {
     // Data is timeout in seconds, we want to send a keepalive at half the timeout
     m_keepAliveTimer.setInterval(data * 500);
     m_keepAliveTimer.setSingleShot(false);
-    connect(&m_keepAliveTimer, &QTimer::timeout, this, &WebSocket::sendKeepAlive);
     m_keepAliveTimer.start();
     sendKeepAlive();
 }

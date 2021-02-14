@@ -33,11 +33,15 @@ ApplicationWindow {
     property bool _hasInitialized: false
     // The global mediaPlayer instance
     readonly property MediaPlayer mediaPlayer: _mediaPlayer
+    readonly property PlaybackManager playbackManager: _playbackManager
 
     // Data of the currently selected item. For use on the cover.
     property JellyfinItem itemData
     // Id of the collection currently browsing. For use on the cover.
     property string collectionId
+
+    // Bad way to implement settings, but it'll do for now.
+    property bool showDebugInfo: false
 
     //FIXME: proper error handling
     Connections {
@@ -96,6 +100,14 @@ ApplicationWindow {
     MediaPlayer {
         id: _mediaPlayer
         autoPlay: true
+    }
+
+    PlaybackManager {
+        id: _playbackManager
+        apiClient: ApiClient
+        mediaPlayer: _mediaPlayer
+        audioIndex: 0
+        autoOpen: true
     }
 
     // Keep the sytem alive while playing media

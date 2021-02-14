@@ -54,6 +54,7 @@ Page {
             //appWindow.orientation = landscape ? Orientation.Landscape : Orientation.Portrait
             videoPage.allowedOrientations = landscape ? Orientation.LandscapeMask : Orientation.PortraitMask
         }
+
     }
 
     onStatusChanged: {
@@ -62,6 +63,7 @@ Page {
             videoPlayer.stop()
             break;
         case PageStatus.Active:
+            videoPlayer.start()
             appWindow.itemData = videoPage.itemData
             break;
         }

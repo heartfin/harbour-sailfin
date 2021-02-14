@@ -58,7 +58,12 @@ public:
         KeepAlive,
         UserDataChanged
     };
+    Q_PROPERTY(QAbstractSocket::SocketState state READ state NOTIFY stateChanged)
     Q_ENUM(MessageType)
+
+    QAbstractSocket::SocketState state() const {
+        return m_webSocket.state();
+    }
 public slots:
     void open();
 private slots:
@@ -67,14 +72,18 @@ private slots:
     void onDisconnected();
 
     void sendKeepAlive();
+    void onWebsocketStateChanged(QAbstractSocket::SocketState newState) { emit stateChanged(newState); }
 signals:
     void commandReceived(QString arts, QVariantMap args);
+    void stateChanged(QAbstractSocket::SocketState newState);
 
 protected:
     ApiClient *m_apiClient;
     QWebSocket m_webSocket;
 
     QTimer m_keepAliveTimer;
+    QTimer m_retryTimer;
+    int m_reconnectAttempt = 0;
 
 
     void setupKeepAlive(int data);

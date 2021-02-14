@@ -39,6 +39,55 @@ Page {
                 title: qsTr("Debug information")
             }
 
+            TextSwitch {
+                text: qsTr("Show debug information")
+                checked: appWindow.showDebugInfo
+                onCheckedChanged: appWindow.showDebugInfo = checked
+            }
+
+            SectionHeader {
+                text: qsTr("Websocket")
+            }
+
+            DetailItem {
+                label: qsTr("Connection state")
+                value: {
+                    var stateText
+                    switch( ApiClient.websocket.state) {
+                    case 0:
+                        //- Socket state
+                        stateText = qsTr("Unconnected");
+                        break;
+                    case 1:
+                        //- Socket state
+                        stateText = "Looking up host";
+                        break;
+                    case 2:
+                        //- Socket state
+                        stateText = "Connecting";
+                        break;
+                    case 3:
+                        //- Socket state
+                        stateText = "Connected";
+                        break;
+                    case 4:
+                        //- Socket state
+                        stateText = "Bound";
+                        break;
+                    case 5:
+                        //- Socket state
+                        stateText = "Closing";
+                        break;
+                    case 6:
+                        //- Socket state
+                        stateText = "Listening";
+                        break;
+                    }
+                    //- Socket state: "state no (state description)"
+                    qsTr("%1 (%2)").arg(ApiClient.websocket.state).arg(stateText)
+                }
+            }
+
             SectionHeader {
                 text: qsTr("Device profile")
             }

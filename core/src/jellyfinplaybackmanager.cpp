@@ -29,7 +29,10 @@ PlaybackManager::PlaybackManager(QObject *parent)
 }
 
 void PlaybackManager::fetchStreamUrl() {
-    if (m_item == nullptr || m_apiClient == nullptr) return;
+    if (m_item == nullptr || m_apiClient == nullptr) {
+        qDebug() << "Item or apiClient not set";
+        return;
+    }
     m_resumePosition = 0;
     if (m_resumePlayback && !m_item->property("userData").isNull()) {
         UserData* userData = qvariant_cast<UserData *>(m_item->property("userData"));
@@ -57,12 +60,36 @@ void PlaybackManager::fetchStreamUrl() {
 
         if (this->m_autoOpen) {
             QJsonArray mediaSources = root["MediaSources"].toArray();
+            QJsonObject firstMediaSource = mediaSources[0].toObject();
             //FIXME: relies on the fact that the returned transcode url always has a query!
-            QString streamUrl = this->m_apiClient->baseUrl()
-                    + mediaSources[0].toObject()["TranscodingUrl"].toString();
+            if (firstMediaSource.isEmpty()) {
+                qWarning() << "No media source found";
+            } else if (firstMediaSource["SupportsDirectStream"].toBool()) {
+                QUrlQuery query;
+                query.addQueryItem("mediaSourceId", firstMediaSource["Id"].toString());
+                query.addQueryItem("deviceId", m_apiClient->m_deviceId);
+                query.addQueryItem("api_key", m_apiClient->token());
+                query.addQueryItem("Static", "True");
+                QString mediaType = "unknown";
+                if (m_item->mediaType() == "Audio") {
+                    mediaType = "Audio";
+                } else if (m_item->mediaType() == "Video") {
+                    mediaType = "Videos";
+                }
+                QString streamUrl = this->m_apiClient->baseUrl() + "/" + mediaType + "/" + m_item->jellyfinId() + "/stream."
+                        + firstMediaSource["Container"].toString() + "?" + query.toString(QUrl::EncodeReserved);
+                setStreamUrl(streamUrl);
+                this->m_playMethod = DirectPlay;
+            } else if (firstMediaSource["SupportsTranscoding"].toBool() && !firstMediaSource["TranscodingUrl"].isNull()) {
+                QString streamUrl = this->m_apiClient->baseUrl()
+                        + firstMediaSource["TranscodingUrl"].toString();
 
-            this->m_playMethod = Transcode;
-            setStreamUrl(streamUrl);
+                this->m_playMethod = Transcode;
+                setStreamUrl(streamUrl);
+            } else {
+                qDebug() << "No stream url found";
+                return;
+            }
             qDebug() << "Found stream url: " << this->m_streamUrl;
         }
 
@@ -71,6 +98,7 @@ void PlaybackManager::fetchStreamUrl() {
 }
 
 void PlaybackManager::setItem(Item *newItem) {
+    if (m_mediaPlayer != nullptr) m_mediaPlayer->stop();
     this->m_item = newItem;
     // Don't try to start fetching when we're not completely parsed yet.
     if (m_qmlIsParsingComponent) return;
@@ -81,8 +109,14 @@ void PlaybackManager::setItem(Item *newItem) {
     }
     // Deinitialize the streamUrl
     setStreamUrl("");
-    if (newItem != nullptr && !newItem->jellyfinId().isEmpty()) {
-        fetchStreamUrl();
+    if (newItem != nullptr) {
+        if (m_item->status() == RemoteData::Ready) {
+            fetchStreamUrl();
+        } else {
+            connect(m_item, &RemoteData::ready, [this]() -> void {
+                fetchStreamUrl();
+            });
+        }
     }
 }
 
@@ -161,6 +195,10 @@ void PlaybackManager::updatePlaybackInfo() {
 void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
     QJsonObject root;
 
+    if (m_item == nullptr) {
+        qWarning() << "Item is null. Not posting playback info";
+        return;
+    }
     root["ItemId"] = m_item->jellyfinId();
     root["SessionId"] = m_playSessionId;
 
@@ -204,6 +242,7 @@ void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
 
 void PlaybackManager::componentComplete() {
     if (m_apiClient == nullptr) qWarning() << "No ApiClient set for PlaybackManager";
+    m_qmlIsParsingComponent = false;
     if (m_item != nullptr) {
         if (m_item->status() == RemoteData::Ready) {
             fetchStreamUrl();

@@ -25,6 +25,8 @@ ApiClient::ApiClient(QObject *parent)
     : QObject(parent),
       m_webSocket(new WebSocket(this)) {
     m_deviceName = QHostInfo::localHostName();
+    uint uuid1 = qHash(m_deviceName);
+    uint uuid2 = qHash(QSysInfo::productVersion());
     m_deviceId = QUuid::createUuid().toString(); // TODO: make this not random?
     m_credManager = CredentialsManager::newInstance(this);
 
@@ -214,23 +216,6 @@ void ApiClient::deleteSession() {
         m_credManager->remove(m_baseUrl, m_userId);
         this->setAuthenticated(false);
         emit this->setupRequired();
-        rep->deleteLater();
-    });
-}
-
-void ApiClient::fetchItem(const QString &id) {
-    QNetworkReply *rep = get("/Users/" + m_userId + "/Items/" + id);
-    connect(rep, &QNetworkReply::finished, this, [rep, id, this]() {
-        int status = statusCode(rep);
-        if (status >= 200 && status < 300) {
-            QJsonObject data = QJsonDocument::fromJson(rep->readAll()).object();
-            emit this->itemFetched(id, data);
-        }
-        rep->deleteLater();
-    });
-    connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
-            this, [id, rep, this](QNetworkReply::NetworkError error) {
-        emit this->itemFetchFailed(id, error);
         rep->deleteLater();
     });
 }

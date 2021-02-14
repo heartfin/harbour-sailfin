@@ -143,8 +143,8 @@ SilicaItem {
 
     transitions: [
         Transition {
-            from: "*"
-            to: "*"
+            from: "blurhash,fallback"
+            to: "loaded"
             FadeAnimation {}
         }
     ]

@@ -48,7 +48,13 @@ ApplicationWindow {
     Connections {
         target: pageStack
         onCurrentPageChanged: {
-           _hidePlaybackBar = "__videoPlaybackPage" in pageStack.currentPage
+            /*_hidePlaybackBar = "__hidePlaybackBar" in pageStack.currentPage
+            if (_hidePlaybackBar) {
+                playbackBar.state = "hidden"
+            } else {
+                //playbackBar.state = ""
+                //appWindow.bottomMargin = playbackBar.height
+            }*/
             console.log("Current page changed: " + _hidePlaybackBar)
         }
     }
@@ -133,7 +139,8 @@ ApplicationWindow {
     
     PlaybackBar {
         id: playbackBar
-        open: !_hidePlaybackBar//_mediaPlayer.playbackState != MediaPlayer.StoppedState
+        //open: !_hidePlaybackBar//_mediaPlayer.playbackState != MediaPlayer.StoppedState
         manager: _playbackManager
+        //state: "hidden"
     }
 }

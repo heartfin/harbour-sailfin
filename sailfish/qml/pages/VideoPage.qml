@@ -31,7 +31,8 @@ import nl.netsoj.chris.Jellyfin 1.0
 
 Page {
     id: videoPage
-    property bool __videoPlaybackPage: true
+    // PlaybackBar will hide itself when it encounters a page with such a property
+    property bool __hidePlaybackBar: true
     property JellyfinItem itemData
     property int audioTrack
     property int subtitleTrack

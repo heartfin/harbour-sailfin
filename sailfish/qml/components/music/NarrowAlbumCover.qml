@@ -43,6 +43,31 @@ Item {
     width: parent.width
     //spacing: Theme.paddingLarge
 
+    Connections {
+        target: listview
+        onVerticalVelocityChanged: {
+            if (!listview.draggingVertically && Math.abs(listview.verticalVelocity) < Theme.itemSizeMedium
+                    && listview.contentY < -smallSize) {
+                if (listview.verticalVelocity > 0) {
+                    listview.cancelFlick()
+                    listviewShrinkAnimation.start()
+                } else if (listview.verticalVelocity < 0){
+                    listview.cancelFlick()
+                    listviewGrowAnimation.start()
+                }
+            }
+        }
+        onDraggingVerticallyChanged: {
+            if (!listview.draggingVertically && listview.verticalVelocity == 0) {
+                if (-smallSize - listview.contentY > -bigSize - listview.contentY) {
+                    listviewShrinkAnimation.start()
+                } else {
+                    listviewGrowAnimation.start()
+                }
+            }
+        }
+    }
+
     MouseArea {
         anchors.fill: albumArtImage
         onClicked: {

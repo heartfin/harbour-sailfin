@@ -25,8 +25,6 @@ import "../components"
 
 Page {
     id: page
-
-    // The effective value will be restricted by ApplicationWindow.allowedOrientations
     allowedOrientations: Orientation.All
 
     SilicaFlickable {

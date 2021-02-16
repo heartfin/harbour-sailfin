@@ -35,39 +35,47 @@ Page {
     id: page
     allowedOrientations: Orientation.All
 
-    SilicaFlickable {
-        anchors.fill: parent
-
-        // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
+    // This component is reused both in the normal state and error state
+    Component {
+        id: commonPullDownMenu
         PullDownMenu {
             MenuItem {
+                //: Pulley menu item: navigate to application settings page
                 text: qsTr("Settings")
                 onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
             }
             MenuItem {
-                text: qsTr("Refresh")
+                //: Pulley menu item: reload items on page
+                text: qsTr("Reload")
                 onClicked: loadModels(true)
             }
             busy: mediaLibraryModel.status == ApiModel.Loading
         }
+    }
+
+    SilicaFlickable {
+        id: flickable
+        anchors.fill: parent
+
+        // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
+        Loader { sourceComponent: commonPullDownMenu; }
 
         // Tell SilicaFlickable the height of its content.
-        contentHeight: column.visible ? column.height : errorColumn.height
+        contentHeight: column.height + Theme.paddingMedium
 
         // Place our content in a Column.  The PageHeader is always placed at the top
         // of the page, followed by our content.
         Column {
             id: column
-            visible: mediaLibraryModel.status != ApiModel.Error
-
             width: page.width
-            //spacing: Theme.paddingLarge
+
             UserViewModel {
                 id: mediaLibraryModel2
                 apiClient: ApiClient
             }
 
             MoreSection {
+                //- Section header for films and TV shows that an user hasn't completed yet.
                 text: qsTr("Resume watching")
                 clickable: false
                 busy: userResumeModel.status == ApiModel.Loading
@@ -86,6 +94,7 @@ Page {
                 }
             }
             MoreSection {
+                //- Section header for next episodes in a TV show that an user was watching.
                 text: qsTr("Next up")
                 clickable: false
                 busy: showNextUpModel.status == ApiModel.Loading
@@ -139,30 +148,23 @@ Page {
                 }
             }
         }
+    }
+    SilicaFlickable {
+        id: errorFlickable
+        anchors.fill: parent
+        visible: false
+        opacity: 0
+        contentHeight: errorColumn.height
 
-        Column {
-            id: errorColumn
-            width: parent.width
-            visible: mediaLibraryModel.status == ApiModel.Error
-            PageHeader {
-                title: qsTr("Network error")
-            }
+        Loader { sourceComponent: commonPullDownMenu; }
 
-            Item {
-                width: 1
-                height: page.height / 3
-            }
-
-            PlainLabel {
-                text: qsTr("An error has occurred. Please try again.")
-            }
-            Item { width: 1; height: Theme.paddingLarge }
-            Button {
-                text: qsTr("Retry")
-                anchors.horizontalCenter: parent.horizontalCenter
-                onClicked: loadModels(true)
-            }
-            Item { width: 1; height: Theme.paddingLarge }
+        ViewPlaceholder {
+            enabled: true
+            //- ViewPlaceholder text for when a network error has occurred and no contents could be loaded
+            text: qsTr("Network error")
+            //- ViewPlaceholder hint text for when a network error has occurred and no contents could be loaded.
+            //- The user can reload the page by using the pulley, which this text should hint at.
+            hintText: qsTr("Pull down to retry again")
         }
     }
 
@@ -209,7 +211,7 @@ Page {
                 }
             }
             Behavior on height {
-                NumberAnimation { duration: 300 }
+                NumberAnimation { easing.type: Easing.OutQuad; duration: 300 }
             }
             model: itemModel
             width: parent.width
@@ -231,4 +233,49 @@ Page {
             }
         }
     }
+
+    state: "default"
+    states: [
+        State {
+            name: "default"
+            when: mediaLibraryModel2.status !== ApiModel.Error
+        },
+        State {
+            name: "error"
+            when: mediaLibraryModel2.status === ApiModel.Error
+
+            PropertyChanges {
+                target: errorFlickable
+                visible: true
+                opacity: 1
+            }
+
+            PropertyChanges {
+                target: flickable
+                opacity: 0
+                visible: false
+            }
+        }
+    ]
+
+    transitions: [
+        Transition {
+            from: "default"
+            to: "error"
+            SequentialAnimation {
+                PropertyAction { target: errorFlickable; property: "visible"; value: true }
+                FadeAnimation {}
+                PropertyAction { target: flickable; property: "visible"; value: false }
+            }
+        },
+        Transition {
+            from: "error"
+            to: "default"
+            SequentialAnimation {
+                PropertyAction { target: flickable; property: "visible"; value: true }
+                FadeAnimation {}
+                PropertyAction { target: errorFlickable; property: "visible"; value: false }
+            }
+        }
+    ]
 }

@@ -39,7 +39,7 @@ PanelBackground {
     id: playbackBar
     height: Theme.itemSizeLarge
     width: parent.width
-    y: parent.height
+    y: parent.height - height
     property PlaybackManager manager
     property bool open
     property real visibleSize: height
@@ -54,6 +54,7 @@ PanelBackground {
         width: parent.width
         height: parent.height
         onClicked: playbackBar.state = (playbackBar.state == "large" ? "open" : "large")
+
 
         RemoteImage {
             id: albumArt
@@ -217,7 +218,7 @@ PanelBackground {
            name: "large"
             PropertyChanges {
                 target: playbackBar
-                height: Screen.height
+                height: pageStack.currentOrientation & Orientation.LandscapeMask ? Screen.width : Screen.height
             }
             PropertyChanges {
                 target: albumArt
@@ -332,7 +333,8 @@ PanelBackground {
            when: (appWindow.mediaPlayer.playbackState === MediaPlayer.StoppedState || "__hidePlaybackBar" in pageStack.currentPage) && state != "page"
            PropertyChanges {
                target: playbackBarTranslate
-               y: playbackBar.height
+               // + small padding since the ProgressBar otherwise would stick out
+               y: playbackBar.height + Theme.paddingSmall
            }
            PropertyChanges {
                target: playbackBar
@@ -354,10 +356,24 @@ PanelBackground {
         Page {
             property bool __hidePlaybackBar: true
             showNavigationIndicator: true
-            Loader {
-                Component.onCompleted: setSource(Qt.resolvedUrl("PlaybackBar.qml"),
-                                                 {"state": "page", "manager": manager, "y": 0})
+            allowedOrientations: appWindow.allowedOrientations
+            SilicaFlickable {
                 anchors.fill: parent
+                PullDownMenu {
+                    MenuItem {
+                        //: Pulley menu item to view detailed media information of a song
+                        text: qsTr("Info")
+                    }
+                    MenuItem {
+                        //: Pulley menu item: add music to a playlist
+                        text: qsTr("Add to playlist")
+                    }
+                }
+                Loader {
+                    Component.onCompleted: setSource(Qt.resolvedUrl("PlaybackBar.qml"),
+                                                     {"state": "page", "manager": manager, "y": 0})
+                    anchors.fill: parent
+                }
             }
         }
     }

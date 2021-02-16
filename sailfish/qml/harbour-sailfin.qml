@@ -45,36 +45,9 @@ ApplicationWindow {
 
     property bool _hidePlaybackBar: false
 
-    Connections {
-        target: pageStack
-        onCurrentPageChanged: {
-            /*_hidePlaybackBar = "__hidePlaybackBar" in pageStack.currentPage
-            if (_hidePlaybackBar) {
-                playbackBar.state = "hidden"
-            } else {
-                //playbackBar.state = ""
-                //appWindow.bottomMargin = playbackBar.height
-            }*/
-            console.log("Current page changed: " + _hidePlaybackBar)
-        }
-    }
-
     bottomMargin: playbackBar.visibleSize
 
-    //FIXME: proper error handling
-    Connections {
-        target: ApiClient
-        onNetworkError: errorNotification.show("Network error: " + error)
-        onConnectionFailed: errorNotification.show("Connect error: " + error)
-        //onConnectionSuccess: errorNotification.show("Success: " + loginMessage)
-        onSetupRequired: {
-            var isInSetup = pageStack.find(function (page) { return typeof page._isSetupPage !== "undefined" }) !== null
-            console.log("Is in setup: " + isInSetup)
-            if (!isInSetup) {
-                pageStack.replace(Qt.resolvedUrl("pages/setup/AddServerPage.qml"), {"backNavigation": false});
-            }
-        }
-    }
+
 
     initialPage: Component {
         MainPage {
@@ -102,7 +75,6 @@ ApplicationWindow {
             return Qt.resolvedUrl("cover/VideoCover.qml")
         }
     }
-    allowedOrientations: Orientation.All
 
     Notification {
         id: errorNotification
@@ -139,8 +111,24 @@ ApplicationWindow {
     
     PlaybackBar {
         id: playbackBar
-        //open: !_hidePlaybackBar//_mediaPlayer.playbackState != MediaPlayer.StoppedState
         manager: _playbackManager
-        //state: "hidden"
+        state: "hidden"
+        // CTMBWSIU: Code That Might Break When Silica Is Updated
+        Component.onCompleted: playbackBar.parent = __silica_applicationwindow_instance._rotatingItem
+    }
+
+    //FIXME: proper error handling
+    Connections {
+        target: ApiClient
+        onNetworkError: errorNotification.show("Network error: " + error)
+        onConnectionFailed: errorNotification.show("Connect error: " + error)
+        //onConnectionSuccess: errorNotification.show("Success: " + loginMessage)
+        onSetupRequired: {
+            var isInSetup = pageStack.find(function (page) { return typeof page._isSetupPage !== "undefined" }) !== null
+            console.log("Is in setup: " + isInSetup)
+            if (!isInSetup) {
+                pageStack.replace(Qt.resolvedUrl("pages/setup/AddServerPage.qml"), {"backNavigation": false});
+            }
+        }
     }
 }

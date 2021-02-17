@@ -3,7 +3,7 @@ Type=Application
 Version=1.1
 X-Nemo-Application-Type=silica-qt5
 Icon=harbour-sailfin
-Exec=harbour-sailfin
+Exec=harbour-sailfin --attempt-sandbox
 
 
 Name=Sailfin
@@ -17,3 +17,8 @@ GenericName=Jellyfin client
 
 Comment=Stream audio and video from your Jellyfin media server
 Categories=AudioVideo;Player
+
+[X-Sailjail]
+Permissions=Internet;Audio
+OrganizationName=nl.netsoj.chris
+ApplicationName=Sailfin

@@ -27,7 +27,13 @@ CredentialsManager * CredentialsManager::newInstance(QObject *parent) {
 // FallbackCredentialsManager                                                                     //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 FallbackCredentialsManager::FallbackCredentialsManager(QObject *parent)
-    : CredentialsManager (parent) {
+    : CredentialsManager (parent)
+    #if PLATFORM_SAILFISHOS
+    // I'd rather not hardcoded this here, but I don´t know a better, quick solution.
+    // since this file must be placed in this path due to sandboxing.
+    , m_settings("nl.netsoj.chris/Sailfin/sailfin")
+    #endif
+{
     m_settings.beginGroup("Credentials");
 }
 

@@ -48,8 +48,7 @@ Macros:
   - '_unpackaged_files_terminate_build; 0 '
 
 ConfigOptions:
-  - -DCMAKE_BUILD_TYPE=Release
-  - -DSAILFISHOS=1
+  - -DPLATFORM_SAILFISHOS=1
   - -DSAILFIN_VERSION='%{version}-%{release}'
   
 # ExtraInstall: |

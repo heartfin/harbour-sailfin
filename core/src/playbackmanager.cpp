@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2021 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,10 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "JellyfinQt/jellyfinplaybackmanager.h"
+#include "JellyfinQt/playbackmanager.h"
+
+#include "JellyfinQt/DTO/dto.h"
+#include "JellyfinQt/DTO/userdata.h"
 
 namespace Jellyfin {
 
@@ -211,6 +214,14 @@ void PlaybackManager::updatePlaybackInfo() {
 void PlaybackManager::playItem(const QString &itemId) {
     Item *newItem = new Item(itemId, m_apiClient, this);
     setItem(newItem);
+}
+
+void PlaybackManager::next() {
+    Q_UNIMPLEMENTED();
+}
+
+void PlaybackManager::previous() {
+    Q_UNIMPLEMENTED();
 }
 
 void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {

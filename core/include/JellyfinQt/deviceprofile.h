@@ -16,21 +16,37 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include "JellyfinQt/jellyfin.h"
+
+#ifndef JELLYFIN_DEVICE_PROFILE_H
+#define JELLYFIN_DEVICE_PROFILE_H
+
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QList>
+#include <QMap>
+#include <QString>
+#include <QSysInfo>
+
+#include <QtMultimedia/QMediaPlayer>
+
 namespace Jellyfin {
+namespace DeviceProfile {
+    QJsonObject generateProfile();
+    // Transport
+    bool supportsHls();
 
-void registerTypes(const char *uri) {
-    // Singletons are perhaps bad, but they are convenient :)
-    qmlRegisterSingletonType<Jellyfin::ApiClient>(uri, 1, 0, "ApiClient", [](QQmlEngine *eng, QJSEngine *js) {
-        Q_UNUSED(eng)
-        Q_UNUSED(js)
-        return dynamic_cast<QObject*>(new Jellyfin::ApiClient());
-    });
-    qmlRegisterType<Jellyfin::ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
-    qmlRegisterType<Jellyfin::PlaybackManager>(uri, 1, 0, "PlaybackManager");
+    // Bitrate
+    int maxStreamingBitrate();
 
-    // API models
-    Jellyfin::registerModels(uri);
-    Jellyfin::DTO::registerTypes(uri);
+    // Video codecs
+    bool canPlayH264();
+    bool canPlayH265();
+
+    // Audio codecs
+    bool canPlayAc3();
+    bool supportsMp3VideoAudio();
 }
 }
+
+#endif // JELLYFIN_DEVICE_PROFILE_H

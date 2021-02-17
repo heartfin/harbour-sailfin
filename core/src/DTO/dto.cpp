@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2021 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -17,12 +17,15 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "JellyfinQt/jellyfinitem.h"
+#include "JellyfinQt/DTO/dto.h"
+
+#include "JellyfinQt/apiclient.h"
 
 namespace Jellyfin {
+namespace DTO {
+
 const QRegularExpression JsonSerializable::m_listExpression = QRegularExpression("^QList<\\s*([a-zA-Z0-9]*)\\s*\\*?\\s*>$");
-JsonSerializable::JsonSerializable(QObject *parent) : QObject(parent) {
-}
+JsonSerializable::JsonSerializable(QObject *parent) : QObject(parent) { }
 
 void JsonSerializable::deserialize(const QJsonObject &jObj) {
     const QMetaObject *obj = this->metaObject();
@@ -107,7 +110,7 @@ QVariant JsonSerializable::deserializeQobject(const QJsonObject &innerObj, const
             if (match.hasMatch()) {
                 // It is a qList! Now extract the inner type
                 // There should be an easier way, shouldn't there?
-                QString listType = match.captured(1).prepend("Jellyfin::").append("*");
+                QString listType = match.captured(1).prepend("Jellyfin::DTO::").append("*");
                 // UGLY CODE HERE WE COME
                 typeNo = QMetaType::type(listType.toUtf8());
                 if (typeNo == QMetaType::UnknownType) {
@@ -254,116 +257,5 @@ void RemoteData::reload() {
     });
 }
 
-NameGuidPair::NameGuidPair(QObject *parent) : JsonSerializable (parent) {}
-
-// User
-User::User(QObject *parent) : RemoteData (parent) {}
-
-QString User::getDataUrl() const {
-    return QString("/Users/") + m_apiClient->userId();
-}
-
-bool User::canReload() const {
-    return true;
-}
-
-// MediaStream
-MediaStream::MediaStream(QObject *parent) : JsonSerializable (parent) {}
-MediaStream::MediaStream(const MediaStream &other)
-    : JsonSerializable (other.parent()),
-      m_codec(other.m_codec),
-      m_codecTag(other.m_codecTag),
-      m_language(other.m_language),
-      m_displayTitle(other.m_displayTitle),
-      m_type(other.m_type),
-      m_index(other.m_index){
-}
-bool MediaStream::operator==(const MediaStream &other) {
-    // displayTitle is explicitly left out, since it's generated based on other properties
-    // in the Jellyfin source code.
-    return m_codec == other.m_codec && m_codecTag == other.m_codecTag
-            && m_language == other.m_language && m_type == other.m_type
-            && m_index == other.m_index;
-}
-
-// UserData
-UserData::UserData(QObject *parent) : JsonSerializable (parent) {}
-
-void UserData::updateOnServer() {
-    //TODO: implement
-}
-
-void UserData::onUpdated(QSharedPointer<UserData> other) {
-    // The reason I'm not using setLikes and similar is that they don't work with std::nullopt,
-    // since QML does not like it.
-    // THe other reason is that the setLikes method will send a post request to the server, to update the contents
-    // we don't want that to happen, obviously, since the application could end in an infinite loop.
-    if (this->m_playedPercentage != other->m_playedPercentage) {
-        this->m_playedPercentage = other->m_playedPercentage;
-        emit playedPercentageChanged(playedPercentage());
-    }
-    if (m_playbackPositionTicks!= other->m_playbackPositionTicks) {
-        this->m_playbackPositionTicks = other->m_playbackPositionTicks;
-        emit playbackPositionTicksChanged(this->m_playbackPositionTicks);
-    }
-    if (m_isFavorite != other->m_isFavorite) {
-        this->m_isFavorite = other->m_isFavorite;
-        emit isFavoriteChanged(this->m_isFavorite);
-    }
-    if (this->m_likes != other->m_likes) {
-        this->m_likes = other->m_likes;
-        emit likesChanged(likes());
-    }
-    if (this->m_played != other->m_played) {
-        this->m_played = other->m_played;
-        emit playedChanged(this->m_played);
-    }
-}
-
-// Item
-
-Item::Item(QObject *parent) : RemoteData(parent) {
-    connect(this, &RemoteData::apiClientChanged, this, [this](ApiClient *newApiClient) {
-        connect(newApiClient, &ApiClient::userDataChanged, this, &Item::onUserDataChanged);
-    });
-}
-
-Item::Item(QString id, ApiClient *apiClient, QObject *parent)
-    : RemoteData(parent), m_id(id) {
-    connect(this, &RemoteData::apiClientChanged, this, [this](ApiClient *newApiClient) {
-        connect(newApiClient, &ApiClient::userDataChanged, this, &Item::onUserDataChanged);
-    });
-    setApiClient(apiClient);
-}
-
-QString Item::getDataUrl() const {
-    return QString("/Users/") + m_apiClient->userId() + "/Items/" + m_id;
-}
-
-bool Item::canReload() const {
-    return !m_id.isNull();
-}
-
-void Item::setJellyfinId(QString newId) {
-    m_id = newId.trimmed();
-    if (m_id != newId) {
-        emit jellyfinIdChanged(m_id);
-        reload();
-    }
-}
-
-
-
-void Item::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData) {
-    if (itemId != m_id || m_userData == nullptr) return;
-    m_userData->onUpdated(userData);
-}
-
-void registerSerializableJsonTypes(const char* URI) {
-    qmlRegisterType<MediaStream>(URI, 1, 0, "MediaStream");
-    qmlRegisterType<NameGuidPair>(URI, 1, 0, "NameGuidPair");
-    qmlRegisterType<User>(URI, 1, 0, "User");
-    qmlRegisterType<UserData>(URI, 1, 0, "UserData");
-    qmlRegisterType<Item>(URI, 1, 0, "JellyfinItem");
-}
-}
+} // NS DTO
+} // NS Jellyfin

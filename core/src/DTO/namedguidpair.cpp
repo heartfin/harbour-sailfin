@@ -16,21 +16,12 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include "JellyfinQt/jellyfin.h"
+#include "JellyfinQt/DTO/namedguidpair.h"
+
 namespace Jellyfin {
+namespace DTO {
 
-void registerTypes(const char *uri) {
-    // Singletons are perhaps bad, but they are convenient :)
-    qmlRegisterSingletonType<Jellyfin::ApiClient>(uri, 1, 0, "ApiClient", [](QQmlEngine *eng, QJSEngine *js) {
-        Q_UNUSED(eng)
-        Q_UNUSED(js)
-        return dynamic_cast<QObject*>(new Jellyfin::ApiClient());
-    });
-    qmlRegisterType<Jellyfin::ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
-    qmlRegisterType<Jellyfin::PlaybackManager>(uri, 1, 0, "PlaybackManager");
+NameGuidPair::NameGuidPair(QObject *parent) : JsonSerializable (parent) {}
 
-    // API models
-    Jellyfin::registerModels(uri);
-    Jellyfin::DTO::registerTypes(uri);
-}
-}
+} // NS DTO
+} // NS Jellyfin

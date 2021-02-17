@@ -16,21 +16,26 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include "JellyfinQt/jellyfin.h"
+#ifndef JELLYFIN_DTO_TYPES_H
+#define JELLYFIN_DTO_TYPES_H
+
+#include "dto.h"
+#include "item.h"
+#include "mediastream.h"
+#include "namedguidpair.h"
+#include "user.h"
+#include "userdata.h"
+
 namespace Jellyfin {
+namespace DTO {
 
-void registerTypes(const char *uri) {
-    // Singletons are perhaps bad, but they are convenient :)
-    qmlRegisterSingletonType<Jellyfin::ApiClient>(uri, 1, 0, "ApiClient", [](QQmlEngine *eng, QJSEngine *js) {
-        Q_UNUSED(eng)
-        Q_UNUSED(js)
-        return dynamic_cast<QObject*>(new Jellyfin::ApiClient());
-    });
-    qmlRegisterType<Jellyfin::ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
-    qmlRegisterType<Jellyfin::PlaybackManager>(uri, 1, 0, "PlaybackManager");
+/**
+ * @brief registerTypes Registers all DTO types to the QML type system
+ * @param uri The uri to register the items under.
+ */
+void registerTypes(const char *uri);
 
-    // API models
-    Jellyfin::registerModels(uri);
-    Jellyfin::DTO::registerTypes(uri);
-}
-}
+} // NS DTO
+} // NS Jellyfin
+
+#endif // JELLYFIN_DTO_TYPES_H

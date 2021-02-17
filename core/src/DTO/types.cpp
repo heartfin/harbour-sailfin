@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2021 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -17,36 +17,20 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef JELLYFIN_DEVICE_PROFILE_H
-#define JELLYFIN_DEVICE_PROFILE_H
+#include "JellyfinQt/DTO/types.h"
 
-#include <QJsonArray>
-#include <QJsonObject>
-#include <QJsonValue>
-#include <QList>
-#include <QMap>
-#include <QString>
-#include <QSysInfo>
-
-#include <QtMultimedia/QMediaPlayer>
+#include <QtQml>
 
 namespace Jellyfin {
-namespace DeviceProfile {
-    QJsonObject generateProfile();
-    // Transport
-    bool supportsHls();
+namespace DTO {
 
-    // Bitrate
-    int maxStreamingBitrate();
-
-    // Video codecs
-    bool canPlayH264();
-    bool canPlayH265();
-
-    // Audio codecs
-    bool canPlayAc3();
-    bool supportsMp3VideoAudio();
-}
+void registerTypes(const char *uri) {
+    qmlRegisterType<MediaStream>(uri, 1, 0, "MediaStream");
+    qmlRegisterType<NameGuidPair>(uri, 1, 0, "NameGuidPair");
+    qmlRegisterType<User>(uri, 1, 0, "User");
+    qmlRegisterType<UserData>(uri, 1, 0, "UserData");
+    qmlRegisterType<Item>(uri, 1, 0, "JellyfinItem");
 }
 
-#endif // JELLYFIN_DEVICE_PROFILE_H
+} // NS DTO
+} // NS Jellyfin

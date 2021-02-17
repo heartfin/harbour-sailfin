@@ -1,3 +1,4 @@
+ 
 /*
 Sailfin: a Jellyfin client written using Qt
 Copyright (C) 2021 Chris Josten
@@ -16,21 +17,34 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include "JellyfinQt/jellyfin.h"
+
+#ifndef JELLYFIN_DTO_NAMEDGUIDPAIR_H
+#define JELLYFIN_DTO_NAMEDGUIDPAIR_H
+
+#include <QObject>
+#include <QString>
+
+#include "dto.h"
+
 namespace Jellyfin {
+namespace DTO {
 
-void registerTypes(const char *uri) {
-    // Singletons are perhaps bad, but they are convenient :)
-    qmlRegisterSingletonType<Jellyfin::ApiClient>(uri, 1, 0, "ApiClient", [](QQmlEngine *eng, QJSEngine *js) {
-        Q_UNUSED(eng)
-        Q_UNUSED(js)
-        return dynamic_cast<QObject*>(new Jellyfin::ApiClient());
-    });
-    qmlRegisterType<Jellyfin::ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
-    qmlRegisterType<Jellyfin::PlaybackManager>(uri, 1, 0, "PlaybackManager");
+class NameGuidPair : public JsonSerializable {
+    Q_OBJECT
+public:
+    Q_INVOKABLE NameGuidPair(QObject *parent = nullptr);
+    Q_PROPERTY(QString name MEMBER m_name NOTIFY nameChanged)
+    // Once again the Jellyfin id workaround
+    Q_PROPERTY(QString jellyfinId MEMBER m_id NOTIFY jellyfinIdChanged)
+signals:
+    void nameChanged(const QString &newName);
+    void jellyfinIdChanged(const QString &newJellyfinId);
+private:
+    QString m_name;
+    QString m_id;
+};
 
-    // API models
-    Jellyfin::registerModels(uri);
-    Jellyfin::DTO::registerTypes(uri);
-}
-}
+} // NS DTO
+} // NS JELLYFIN
+
+#endif // JELLYFIN_DTO_NAMEDGUIDPAIR_H

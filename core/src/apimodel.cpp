@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2021 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,9 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "JellyfinQt/jellyfinapimodel.h"
+#include "JellyfinQt/apimodel.h"
+
+#include "JellyfinQt/DTO/userdata.h"
 
 namespace Jellyfin {
 ApiModel::ApiModel(QString path, bool hasRecordResponse, bool addUserId, QObject *parent)
@@ -229,7 +231,7 @@ ItemModel::ItemModel(QString path, bool hasRecordFields, bool replaceUser, QObje
     });
 }
 
-void ItemModel::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData) {
+void ItemModel::onUserDataChanged(const QString &itemId, QSharedPointer<DTO::UserData> userData) {
     int i = 0;
     for (QJsonValueRef val: m_array) {
         QJsonObject item = val.toObject();

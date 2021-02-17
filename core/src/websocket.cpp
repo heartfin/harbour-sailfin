@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2021 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,10 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include "JellyfinQt/jellyfinwebsocket.h"
+
+#include "JellyfinQt/websocket.h"
+
+#include "JellyfinQt/DTO/userdata.h"
 
 namespace Jellyfin {
 WebSocket::WebSocket(ApiClient *client)
@@ -102,7 +105,7 @@ void WebSocket::textMessageReceived(const QString &message) {
         }
         QJsonArray userDataList = data2["UserDataList"].toArray();
         for (QJsonValue val: userDataList) {
-            QSharedPointer<UserData> userData(new UserData, &QObject::deleteLater);
+            QSharedPointer<DTO::UserData> userData(new DTO::UserData, &QObject::deleteLater);
             userData->deserialize(val.toObject());
             m_apiClient->onUserDataChanged(userData->itemId(), userData);
         }

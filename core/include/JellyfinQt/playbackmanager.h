@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2021 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -30,16 +30,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <QtMultimedia/QMediaPlayer>
 
+#include "JellyfinQt/DTO/item.h"
 
-#include "jellyfinapiclient.h"
-#include "jellyfinitem.h"
+#include "apiclient.h"
 
 namespace Jellyfin {
 
-// Forward declaration of Jellyfin::Item found in jellyfinitem.h
-class Item;
 // Forward declaration of Jellyfin::ApiClient found in jellyfinapiclient.h
 class ApiClient;
+using namespace DTO;
 
 /**
  * @brief The PlaybackManager class manages the playback of Jellyfin items. It fetches streams based on Jellyfin items, posts
@@ -95,6 +94,16 @@ public slots:
      * @param itemId The id of the item to play.
      */
     void playItem(const QString &itemId);
+
+    /**
+     * @brief previous Play the previous track in the current playlist.
+     */
+    void previous();
+
+    /**
+     * @brief next Play the next track in the current playlist.
+     */
+    void next();
 private slots:
     void mediaPlayerStateChanged(QMediaPlayer::State newState);
     void mediaPlayerPositionChanged(qint64 position);

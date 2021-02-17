@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2021 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -31,12 +31,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <QtWebSockets/QWebSocket>
 
-#include "jellyfinapiclient.h"
-#include "jellyfinitem.h"
+#include "apiclient.h"
 
 namespace Jellyfin {
 class ApiClient;
+
+namespace DTO {
 class UserData;
+}
 /**
  * @brief Keeps a connection with the Jellyfin server to receive real time updates.
  *

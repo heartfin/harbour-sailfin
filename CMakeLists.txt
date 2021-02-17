@@ -6,8 +6,8 @@ set(CMAKE_AUTOMOC ON)
 cmake_policy(SET CMP0048 NEW)
 
 # Options
-option(PLATFORM_SAILFISHOS "Build SailfishOS version of application")
-option(PLATFORM_QTQUICK "Build QtQuick version of application")
+option(PLATFORM_SAILFISHOS "Build SailfishOS version of application" OFF)
+option(PLATFORM_QTQUICK "Build QtQuick version of application" ON)
 
 if(PLATFORM_SAILFISHOS)
 	# Hardcode this less?

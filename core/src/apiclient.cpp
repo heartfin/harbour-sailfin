@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2021 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "JellyfinQt/jellyfinapiclient.h"
+#include "JellyfinQt/apiclient.h"
 
 namespace Jellyfin {
 
@@ -264,7 +264,7 @@ void ApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {
 }
 
 void ApiClient::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData) {
-    userDataChanged(itemId, userData);
+    emit userDataChanged(itemId, userData);
 }
 
 void ApiClient::setAuthenticated(bool authenticated) {

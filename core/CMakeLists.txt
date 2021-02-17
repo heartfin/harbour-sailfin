@@ -3,28 +3,40 @@ find_package(Qt5 5.6 COMPONENTS Multimedia Network Qml WebSockets REQUIRED)
 include(GNUInstallDirs)
 
 set(jellyfin-qt_SOURCES
-	src/credentialmanager.cpp
-	src/jellyfin.cpp
-	src/jellyfinapiclient.cpp
-	src/jellyfinapimodel.cpp
-	src/jellyfindeviceprofile.cpp
-	src/jellyfinitem.cpp
-	src/jellyfinplaybackmanager.cpp
-	src/jellyfinwebsocket.cpp
-	src/jsonhelper.cpp
-	src/serverdiscoverymodel.cpp)
+        src/DTO/dto.cpp
+        src/DTO/item.cpp
+        src/DTO/namedguidpair.cpp
+        src/DTO/mediastream.cpp
+        src/DTO/types.cpp
+        src/DTO/user.cpp
+        src/DTO/userdata.cpp
+        src/apiclient.cpp
+        src/apimodel.cpp
+        src/credentialmanager.cpp
+        src/deviceprofile.cpp
+        src/jellyfin.cpp
+        src/jsonhelper.cpp
+        src/playbackmanager.cpp
+        src/serverdiscoverymodel.cpp
+        src/websocket.cpp)
 
 set(jellyfin-qt_HEADERS
-	include/JellyfinQt/credentialmanager.h 
-	include/JellyfinQt/jellyfin.h 
-	include/JellyfinQt/jellyfinapiclient.h 
-	include/JellyfinQt/jellyfinapimodel.h 
-	include/JellyfinQt/jellyfindeviceprofile.h 
-	include/JellyfinQt/jellyfinitem.h 
-	include/JellyfinQt/jellyfinplaybackmanager.h 
-	include/JellyfinQt/jellyfinwebsocket.h 
-	include/JellyfinQt/jsonhelper.h
-	include/JellyfinQt/serverdiscoverymodel.h)
+        include/JellyfinQt/DTO/dto.h
+        include/JellyfinQt/DTO/item.h
+        include/JellyfinQt/DTO/mediastream.h
+        include/JellyfinQt/DTO/namedguidpair.h
+        include/JellyfinQt/DTO/types.h
+        include/JellyfinQt/DTO/userdata.h
+        include/JellyfinQt/DTO/user.h
+        include/JellyfinQt/apiclient.h
+        include/JellyfinQt/apimodel.h
+        include/JellyfinQt/credentialmanager.h
+        include/JellyfinQt/deviceprofile.h
+        include/JellyfinQt/jellyfin.h
+        include/JellyfinQt/jsonhelper.h
+        include/JellyfinQt/playbackmanager.h
+        include/JellyfinQt/serverdiscoverymodel.h
+        include/JellyfinQt/websocket.h)
 
 add_definitions(-DSAILFIN_VERSION=\"${SAILFIN_VERSION}\")
 if (PLATFORM_SAILFISHOS)

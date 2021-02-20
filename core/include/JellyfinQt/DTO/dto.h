@@ -46,6 +46,7 @@ class JsonSerializable : public QObject {
     Q_OBJECT
 public:
     Q_INVOKABLE JsonSerializable(QObject *parent);
+    virtual ~JsonSerializable();
 
     /**
      * @brief Sets this objects properties based on obj.
@@ -56,7 +57,7 @@ public:
 private:
     QVariant jsonToVariant(QMetaProperty prop, const QJsonValue &val, const QJsonObject &root);
     QJsonValue variantToJson(const QVariant var) const;
-    QVariant deserializeQobject(const QJsonObject &obj, const QMetaProperty &prop);
+    QVariant deserializeQObject(const QJsonObject &obj, const QMetaProperty &prop);
 
     /**
      * @brief Sets the first letter of the string to lower case (to make it camelCase).
@@ -72,6 +73,8 @@ private:
     static QString toPascalCase(QString st);
 
     static const QRegularExpression m_listExpression;
+    static const QRegularExpression m_hashExpression;
+    static int findTypeIdForProperty(QString type);
     /**
      * @brief Qt is doing weird. I'll keep track of the metatypes myself.
      */
@@ -107,17 +110,20 @@ public:
     Q_PROPERTY(Status status READ status NOTIFY statusChanged STORED false)
     Q_PROPERTY(QNetworkReply::NetworkError error READ error NOTIFY errorChanged STORED false)
     Q_PROPERTY(QString errorString READ errorString NOTIFY errorStringChanged STORED false)
+    Q_PROPERTY(QStringList extraFields MEMBER m_extraFields WRITE setExtraFields NOTIFY extraFieldsChanged STORED false)
 
     Status status() const { return m_status; }
     QNetworkReply::NetworkError error() const { return m_error; }
     QString errorString() const { return m_errorString; }
 
     void setApiClient(ApiClient *newApiClient);
+    void setExtraFields(const QStringList &extraFields);
 signals:
     void statusChanged(Status newStatus);
     void apiClientChanged(ApiClient *newApiClient);
     void errorChanged(QNetworkReply::NetworkError newError);
     void errorStringChanged(QString newErrorString);
+    void extraFieldsChanged(const QStringList &newExtraFields);
     /**
      * @brief Convenience signal for status == RemoteData.Ready.
      */
@@ -159,6 +165,7 @@ private:
     Status m_status = Uninitialised;
     QNetworkReply::NetworkError m_error = QNetworkReply::NoError;
     QString m_errorString;
+    QStringList m_extraFields;
 };
 
 } // NS DTO

@@ -88,8 +88,7 @@ Page {
         id: jItem
         apiClient: ApiClient
         onStatusChanged: {
-            console.log("Status changed: " + newStatus, JSON.stringify(jItem))
-            console.log(jItem.mediaStreams)
+            //console.log("Status changed: " + newStatus, JSON.stringify(jItem))
             if (status == JellyfinItem.Ready) {
                 updateBackdrop()
             }

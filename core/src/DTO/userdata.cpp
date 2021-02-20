@@ -27,7 +27,7 @@ void UserData::updateOnServer() {
     //TODO: implement
 }
 
-void UserData::onUpdated(QSharedPointer<UserData> other) {
+void UserData::onUpdated(UserData *other) {
     // The reason I'm not using setLikes and similar is that they don't work with std::nullopt,
     // since QML does not like it.
     // THe other reason is that the setLikes method will send a post request to the server, to update the contents

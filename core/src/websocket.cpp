@@ -105,9 +105,11 @@ void WebSocket::textMessageReceived(const QString &message) {
         }
         QJsonArray userDataList = data2["UserDataList"].toArray();
         for (QJsonValue val: userDataList) {
-            QSharedPointer<DTO::UserData> userData(new DTO::UserData, &QObject::deleteLater);
+            UserData* userData =new DTO::UserData;
             userData->deserialize(val.toObject());
+            userData->setParent(this);
             m_apiClient->onUserDataChanged(userData->itemId(), userData);
+            userData->deleteLater();
         }
 
     }

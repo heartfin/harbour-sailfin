@@ -31,6 +31,7 @@ namespace Jellyfin {
 
 namespace JsonHelper {
     void convertToCamelCase(QJsonValueRef val);
+    void convertToCamelCase(QJsonValue &val);
     QString convertToCamelCaseHelper(const QString &str);
 };
 

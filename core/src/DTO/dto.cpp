@@ -25,7 +25,16 @@ namespace Jellyfin {
 namespace DTO {
 
 const QRegularExpression JsonSerializable::m_listExpression = QRegularExpression("^QList<\\s*([a-zA-Z0-9]*)\\s*\\*?\\s*>$");
+const QRegularExpression JsonSerializable::m_hashExpression = QRegularExpression("^QHash<\\s*([a-zA-Z0-9]*)\\s*\\*?\\s*,\\s*([a-zA-Z0-9]*)\\s*\\*?\\s*>$");
 JsonSerializable::JsonSerializable(QObject *parent) : QObject(parent) { }
+JsonSerializable::~JsonSerializable() {
+    if (parent() == nullptr) {
+        qDebug() << "Deleting" << metaObject()->className() << ", parent: nullptr, ownership: " << QQmlEngine::objectOwnership(this);
+    } else {
+        qDebug() << "Deleting" << metaObject()->className() << ", parent: " << parent()->metaObject()->className()
+                 << ", ownership: " << QQmlEngine::objectOwnership(this);
+    }
+}
 
 void JsonSerializable::deserialize(const QJsonObject &jObj) {
     const QMetaObject *obj = this->metaObject();
@@ -95,45 +104,55 @@ QVariant JsonSerializable::jsonToVariant(QMetaProperty prop, const QJsonValue &v
             JsonHelper::convertToCamelCase(QJsonValueRef(&tmp, 0));
             return QVariant(innerObj);
         } else {
-            return deserializeQobject(innerObj, prop);
+            return deserializeQObject(innerObj, prop);
         }
     }
     return QVariant();
 }
 
-QVariant JsonSerializable::deserializeQobject(const QJsonObject &innerObj, const QMetaProperty &prop) {
+QVariant JsonSerializable::deserializeQObject(const QJsonObject &innerObj, const QMetaProperty &prop) {
     int typeNo = prop.userType();
-        const QMetaObject *metaType = QMetaType::metaObjectForType(prop.userType());
-        if (metaType == nullptr) {
-            // Try to determine if the type is a qlist
-            QRegularExpressionMatch match = m_listExpression.match(prop.typeName());
-            if (match.hasMatch()) {
-                // It is a qList! Now extract the inner type
-                // There should be an easier way, shouldn't there?
-                QString listType = match.captured(1).prepend("Jellyfin::DTO::").append("*");
-                // UGLY CODE HERE WE COME
-                typeNo = QMetaType::type(listType.toUtf8());
-                if (typeNo == QMetaType::UnknownType) {
-                    qDebug() << "Unknown type: " << listType;
-                    return QVariant();
-                }
-                metaType = QMetaType::metaObjectForType(typeNo);
-            } else {
-                qDebug() << "No metaObject for " << prop.typeName() << ", " << prop.type() << ", " << prop.userType();
-                return QVariant();
-            }
-        }
-        QObject *deserializedInnerObj = metaType->newInstance();
-        deserializedInnerObj->setParent(this);
-        if (JsonSerializable *ser = dynamic_cast<JsonSerializable *>(deserializedInnerObj)) {
-            qDebug() << "Deserializing user type " << deserializedInnerObj->metaObject()->className();
-            ser->deserialize(innerObj);
-            return QVariant(typeNo, &ser);
+    const QMetaObject *metaType = QMetaType::metaObjectForType(prop.userType());
+    if (metaType == nullptr) {
+        // Try to determine if the type is a qlist
+        QRegularExpressionMatch listMatch = m_listExpression.match(prop.typeName());
+        QRegularExpressionMatch hashMatch = m_hashExpression.match(prop.typeName());
+        if (listMatch.hasMatch()) {
+            // It is a qList! Now extract the inner type
+            // There should be an easier way, shouldn't there?
+            QString listType = listMatch.captured(1);
+            typeNo = findTypeIdForProperty(listType);
+            metaType = QMetaType::metaObjectForType(typeNo);
         } else {
-            deserializedInnerObj->deleteLater();
-            qDebug() << "Object is not a serializable one!";
+            qDebug() << "No metaObject for " << prop.typeName() << ", " << prop.type() << ", " << prop.userType();
             return QVariant();
         }
+    }
+    QObject *deserializedInnerObj = metaType->newInstance();
+    deserializedInnerObj->setParent(this);
+    if (JsonSerializable *ser = dynamic_cast<JsonSerializable *>(deserializedInnerObj)) {
+        // qDebug() << "Deserializing user type " << deserializedInnerObj->metaObject()->className();
+        ser->deserialize(innerObj);
+        return QVariant(typeNo, &ser);
+    } else {
+        deserializedInnerObj->deleteLater();
+        qDebug() << "Object is not a serializable one!";
+        return QVariant();
+    }
+}
+
+int JsonSerializable::findTypeIdForProperty(QString type) {
+    // UGLY CODE HERE WE COME
+    // We assume the type is either in no namespace (Qt Types) or in the Jellyfin::DTO namespace.
+    int typeNo = QMetaType::type(type.toUtf8());
+    if (typeNo == QMetaType::UnknownType) {
+        typeNo = QMetaType::type(type.prepend("Jellyfin::DTO::").append("*").toUtf8());
+        if (typeNo == QMetaType::UnknownType) {
+            qDebug() << "Unknown type: " << type;
+            return typeNo;
+        }
+    }
+    return typeNo;
 }
 
 QJsonObject JsonSerializable::serialize(bool capitalize) const {
@@ -220,6 +239,13 @@ void RemoteData::setApiClient(ApiClient *newApiClient) {
     reload();
 }
 
+void RemoteData::setExtraFields(const QStringList &extraFields) {
+    if (extraFields != m_extraFields) {
+        emit extraFieldsChanged(extraFields);
+        reload();
+    }
+}
+
 void RemoteData::reload() {
     if (!canReload() || m_apiClient == nullptr) {
         setStatus(Uninitialised);
@@ -227,7 +253,11 @@ void RemoteData::reload() {
     } else {
         setStatus(Loading);
     }
-    QNetworkReply *rep = m_apiClient->get(getDataUrl());
+    QUrlQuery params;
+    if (m_extraFields.length() > 0) {
+        params.addQueryItem("fields", m_extraFields.join(","));
+    }
+    QNetworkReply *rep = m_apiClient->get(getDataUrl() + QStringLiteral("?") + params.toString(QUrl::EncodeReserved));
     connect(rep, &QNetworkReply::finished, this, [this, rep]() {
         rep->deleteLater();
 

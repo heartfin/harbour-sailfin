@@ -31,6 +31,7 @@ Dialog {
     id: loginDialog
     property string loginMessage
     property Page firstPage
+    property User selectedUser: null
 
     property string error
 
@@ -92,16 +93,25 @@ Dialog {
             width: parent.width
 
             Flow {
+                id: userList
                 width: parent.width
                 Repeater {
+                    id: userRepeater
                     model: userModel
                     delegate: UserGridDelegate {
                         name: model.name
-                        image: model.primaryImageTag ? "%1/Users/%2/Images/Primary?tag=%3".arg(ApiClient.baseUrl).arg(model.id).arg(model.primaryImageTag) : ""
+                        image: model.primaryImageTag ? "%1/Users/%2/Images/Primary?tag=%3".arg(ApiClient.baseUrl).arg(model.jellyfinId).arg(model.primaryImageTag) : ""
                         highlighted: model.name === username.text
+                        onHighlightedChanged: {
+                            if (highlighted) {
+                                selectedUser = model.qtObject
+                            }
+                        }
                         onClicked: {
                             username.text = model.name
-                            password.focus = true
+                            if (!password.activeFocus) {
+                                password.focus = true
+                            }
                         }
                     }
                 }
@@ -119,18 +129,23 @@ Dialog {
                 placeholderText: qsTr("Username")
                 label: placeholderText
                 errorHighlight: error
-                EnterKey.iconSource: "image://theme/icon-m-enter-next"
-                EnterKey.onClicked: password.focus = true
+                EnterKey.iconSource: "image://theme/icon-m-enter-" + (password.enabled ? "next" : "accept")
+                EnterKey.onClicked: password.enabled ? password.focus = true : accept()
+                onTextChanged: {
+                    // Wil be executed before the onHighlightChanged of the UserDelegate
+                    // This is done to update the UI after an user is selected and this field has
+                    // been changed, to not let the UI be in an invalid state (e.g. no user selected, password field disabled)
+                    selectedUser = null
+                }
             }
 
-            TextField {
+            PasswordField {
                 id: password
                 width: parent.width
 
                 //: Label placeholder for password field
                 placeholderText: qsTr("Password")
                 label: placeholderText
-                echoMode: TextInput.Password
                 errorHighlight: error
 
                 EnterKey.iconSource: "image://theme/icon-m-enter-accept"
@@ -169,4 +184,41 @@ Dialog {
         }
     }
     canAccept: username.text
+
+    states: [
+        State {
+            name: "noUsers"
+            when: userRepeater.count == 0
+            PropertyChanges {
+                target: userList
+                visible: false
+            }
+        },
+        State {
+            name: "users"
+            when: userRepeater.count != 0 && selectedUser === null
+            PropertyChanges {
+                target: userList
+                visible: true
+            }
+        },
+        State {
+            name: "selectedUserPassword"
+            when: selectedUser !== null && selectedUser.hasPassword
+            extend: "users"
+            PropertyChanges {
+                target: password
+                enabled: true
+            }
+        },
+        State {
+            name: "selectedUserNoPassword"
+            when: selectedUser !== null && !selectedUser.hasPassword
+            extend: "users"
+            PropertyChanges {
+                target: password
+                enabled: false
+            }
+        }
+    ]
 }

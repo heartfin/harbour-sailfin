@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QtQuick>
 #endif
 
+#include <QQmlDebuggingEnabler>
 #include <QCommandLineOption>
 #include <QCommandLineParser>
 #include <QDebug>
@@ -37,6 +38,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 static const char *SANDBOX_PROGRAM = "/usr/bin/sailjail";
 
 int main(int argc, char *argv[]) {
+    QQmlDebuggingEnabler enabler;
+    enabler.startTcpDebugServer(9999);
     // SailfishApp::main() will display "qml/harbour-sailfin.qml", if you need more
     // control over initialization, you can use:
     //

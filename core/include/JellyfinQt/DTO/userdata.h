@@ -67,7 +67,7 @@ signals:
     void playedChanged(bool newPlayed);
 public slots:
     void updateOnServer();
-    void onUpdated(QSharedPointer<UserData> other);
+    void onUpdated(UserData *other);
 private:
     std::optional<double> m_playedPercentage =  std::nullopt;
     qint64 m_playbackPositionTicks = 0;

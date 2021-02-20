@@ -33,6 +33,7 @@ BaseDetailPage {
     property alias subtitle: pageHeader.description
     default property alias _data: content.data
     property real _playbackProsition: itemData.userData.playbackPositionTicks
+    readonly property bool _userdataReady:  itemData.status == JellyfinItem.Ready && itemData.userData != null
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height + Theme.paddingLarge
@@ -57,8 +58,14 @@ BaseDetailPage {
                 imageSource: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
                 imageAspectRatio: Constants.horizontalVideoAspectRatio
                 imageBlurhash: itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]
-                favourited: itemData.userData.isFavorite
-                playProgress: itemData.userData.playedPercentage / 100
+                Binding on favourited {
+                    when: _userdataReady
+                    value: itemData.userData.isFavorite
+                }
+                Binding on playProgress {
+                    when: _userdataReady
+                    value: itemData.userData.playedPercentage / 100
+                }
                 onPlayPressed: pageStack.push(Qt.resolvedUrl("../VideoPage.qml"),
                                               {"itemData": itemData,
                                                   "audioTrack": trackSelector.audioTrack,

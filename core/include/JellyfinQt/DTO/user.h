@@ -33,26 +33,38 @@ class User : public RemoteData {
 public:
     Q_INVOKABLE User(QObject *parent = nullptr);
 
-    Q_PROPERTY(QString userId MEMBER m_userId WRITE setUserId NOTIFY userIdChanged)
+    Q_PROPERTY(QString jellyfinId MEMBER m_jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
     Q_PROPERTY(QString name MEMBER m_name NOTIFY nameChanged)
     Q_PROPERTY(QString primaryImageTag MEMBER m_primaryImageTag NOTIFY primaryImageTagChanged)
+    Q_PROPERTY(bool hasPassword MEMBER m_hasPassword NOTIFY hasPasswordChanged)
+    Q_PROPERTY(bool hasConfiguredPassword MEMBER m_hasConfiguredPassword NOTIFY hasConfiguredPasswordChanged)
+    Q_PROPERTY(bool hasConfiguredEasyPassword MEMBER m_hasConfiguredEasyPassword NOTIFY hasConfiguredEasyPasswordChanged)
 
-    void setUserId(const QString &newUserId) {
-        this->m_userId = newUserId;
-        emit userIdChanged(newUserId);
-        reload();
+    void setJellyfinId(const QString &newJellyfinId) {
+        if (m_jellyfinId != newJellyfinId) {
+            this->m_jellyfinId = newJellyfinId;
+            emit jellyfinIdChanged(newJellyfinId);
+            reload();
+        }
     }
 signals:
-    void userIdChanged(const QString &newUserId);
     void nameChanged(const QString &newName);
+    void jellyfinIdChanged(const QString &newJellyfinId);
     void primaryImageTagChanged(const QString &newPrimaryImageTag);
+    void hasPasswordChanged(bool newHasPasswordChanged);
+    void hasConfiguredPasswordChanged(bool newHasConfiguredPasswordChanged);
+    void hasConfiguredEasyPasswordChanged(bool newHasConfiguredEasyPasswordChanged);
+
 protected:
     QString getDataUrl() const override;
     bool canReload() const override;
 private:
-    QString m_userId;
     QString m_name;
+    QString m_jellyfinId;
     QString m_primaryImageTag;
+    bool m_hasPassword;
+    bool m_hasConfiguredPassword;
+    bool m_hasConfiguredEasyPassword;
 };
 
 } // NS DTO

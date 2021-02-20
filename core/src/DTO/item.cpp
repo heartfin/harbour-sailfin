@@ -43,7 +43,7 @@ QString Item::getDataUrl() const {
 }
 
 bool Item::canReload() const {
-    return !m_id.isNull();
+    return !m_id.isNull() && m_apiClient != nullptr;
 }
 
 void Item::setJellyfinId(QString newId) {
@@ -54,7 +54,7 @@ void Item::setJellyfinId(QString newId) {
     }
 }
 
-void Item::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData) {
+void Item::onUserDataChanged(const QString &itemId, UserData *userData) {
     if (itemId != m_id || m_userData == nullptr) return;
     m_userData->onUpdated(userData);
 }

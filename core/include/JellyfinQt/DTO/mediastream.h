@@ -35,7 +35,6 @@ public:
     Q_INVOKABLE explicit MediaStream(QObject *parent = nullptr);
     MediaStream(const MediaStream &other);
     bool operator==(const MediaStream &other);
-    virtual ~MediaStream() { qDebug() << "MediaStream destroyed"; }
 
     enum MediaStreamType {
         Undefined,

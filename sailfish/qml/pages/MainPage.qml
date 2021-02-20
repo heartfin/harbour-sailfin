@@ -78,7 +78,7 @@ Page {
                 //- Section header for films and TV shows that an user hasn't completed yet.
                 text: qsTr("Resume watching")
                 clickable: false
-                busy: userResumeModel.status == ApiModel.Loading
+                busy: userResumeModel.status === ApiModel.Loading
                 Loader {
                     width: parent.width
                     sourceComponent: carrouselView
@@ -97,7 +97,7 @@ Page {
                 //- Section header for next episodes in a TV show that an user was watching.
                 text: qsTr("Next up")
                 clickable: false
-                busy: showNextUpModel.status == ApiModel.Loading
+                busy: showNextUpModel.status === ApiModel.Loading
 
                 Loader {
                     width: parent.width
@@ -121,9 +121,9 @@ Page {
                 model: mediaLibraryModel
                 MoreSection {
                     text: model.name
-                    busy: userItemModel.status != ApiModel.Ready
+                    busy: userItemModel.status !== ApiModel.Ready
 
-                    onHeaderClicked: pageStack.push(Qt.resolvedUrl("itemdetails/CollectionPage.qml"), {"itemId": model.id})
+                    onHeaderClicked: pageStack.push(Qt.resolvedUrl("itemdetails/CollectionPage.qml"), {"itemId": model.jellyfinId})
                     Loader {
                         width: parent.width
                         sourceComponent: carrouselView
@@ -133,16 +133,12 @@ Page {
                         UserItemLatestModel {
                             id: userItemModel
                             apiClient: ApiClient
-                            parentId: model.id
+                            parentId: jellyfinId
                             limit: 16
                         }
                         Connections {
                             target: mediaLibraryModel
-                            onStatusChanged: {
-                                if (status == ApiModel.Ready) {
-                                    userItemModel.reload()
-                                }
-                            }
+                            onReady: userItemModel.reload()
                         }
                     }
                 }
@@ -154,7 +150,6 @@ Page {
         anchors.fill: parent
         visible: false
         opacity: 0
-        contentHeight: errorColumn.height
 
         Loader { sourceComponent: commonPullDownMenu; }
 
@@ -220,15 +215,18 @@ Page {
             rightMargin: Theme.horizontalPageMargin
             spacing: Theme.paddingLarge
             delegate: LibraryItemDelegate {
-                property string id: model.id
+                property string id: model.jellyfinId
                 title: model.name
-                poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags["primary"], "Primary", {"maxHeight": height})
-                blurhash: model.imageBlurHashes["primary"][model.imageTags["primary"]]
+                poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"maxHeight": height})
+                Binding on blurhash {
+                    when: poster !== ""
+                    value: model.imageBlurHashes["Primary"][model.imageTags["Primary"]]
+                }
                 landscape: !Utils.usePortraitCover(collectionType)
                 progress: (typeof model.userData !== "undefined") ? model.userData.playedPercentage / 100 : 0.0
 
                 onClicked: {
-                    pageStack.push(Utils.getPageUrl(model.mediaType, model.type, model.isFolder), {"itemId": model.id})
+                    pageStack.push(Utils.getPageUrl(model.mediaType, model.type, model.isFolder), {"itemId": model.jellyfinId, "itemData": model.qtObject})
                 }
             }
         }

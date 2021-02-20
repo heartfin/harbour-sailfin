@@ -48,7 +48,7 @@ function ticksToText(ticks, showHours) {
 }
 
 function itemImageUrl(baseUrl, item, type, options) {
-    if (!item.imageTags[type]) { return "" }
+    if (item === null || !item.imageTags[type]) { return "" }
     return itemModelImageUrl(baseUrl, item.jellyfinId, item.imageTags[type], type, options)
 }
 

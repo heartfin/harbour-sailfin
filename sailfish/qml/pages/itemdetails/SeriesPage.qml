@@ -84,10 +84,10 @@ BaseDetailPage {
                 leftMargin: Theme.horizontalPageMargin
                 rightMargin: Theme.horizontalPageMargin
                 delegate: LibraryItemDelegate {
-                    poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": height})
-                    blurhash: model.imageBlurHashes["primary"][model.imageTags.primary]
+                    poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxHeight": height})
+                    blurhash: model.imageBlurHashes["Primary"][model.imageTags.Primary]
                     title: model.name
-                    onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
+                    onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.jellyfinId})
                 }
             }
 

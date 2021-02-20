@@ -29,7 +29,6 @@ import "../.."
 BaseDetailPage {
     id: albumPageRoot
     readonly property int _songIndexWidth: 100
-    property string _albumArtistText: itemData.albumArtist
     width: 800 * Theme.pixelRatio
 
     readonly property bool _twoColumns: albumPageRoot.width / Theme.pixelRatio >= 800
@@ -78,7 +77,7 @@ BaseDetailPage {
                 artists: model.artists
                 duration: model.runTimeTicks
                 indexNumber: model.indexNumber
-                onClicked: window.playbackManager.playItem(model.id)
+                onClicked: window.playbackManager.playItem(model.jellyfinId)
             }
 
             VerticalScrollDecorator {}
@@ -88,11 +87,6 @@ BaseDetailPage {
     Connections {
         target: itemData
         onAlbumArtistsChanged: {
-            console.log(itemData.albumArtists)
-            _albumArtistText = ""
-            for (var i = 0; i < itemData.albumArtists.length; i++) {
-                _albumArtistText += itemData.albumArtists[i]["name"]
-            }
         }
     }
 
@@ -100,7 +94,7 @@ BaseDetailPage {
         item.albumArt = Qt.binding(function(){ return Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})})
         item.name = Qt.binding(function(){ return itemData.name})
         item.releaseYear = Qt.binding(function() { return itemData.productionYear})
-        item.albumArtist = Qt.binding(function() { return _albumArtistText})
+        item.albumArtist = Qt.binding(function() { return itemData.albumArtist})
         item.duration = Qt.binding(function() { return itemData.runTimeTicks})
         item.songCount = Qt.binding(function() { return itemData.childCount})
         item.listview = Qt.binding(function() { return list})

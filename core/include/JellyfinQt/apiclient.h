@@ -162,8 +162,9 @@ signals:
      * @param userData The new user data
      *
      * Note: only Jellyfin::UserData should connect to this signal, they will update themselves!
+     * Note: the userData is only valid during this callback, afterwards it is deleted!
      */
-    void userDataChanged(const QString &itemId, QSharedPointer<UserData> userData);
+    void userDataChanged(const QString &itemId, UserData *userData);
 
 public slots:
     /**
@@ -192,7 +193,7 @@ public slots:
 
 protected slots:
     void defaultNetworkErrorHandler(QNetworkReply::NetworkError error);
-    void onUserDataChanged(const QString &itemId, QSharedPointer<UserData> newData);
+    void onUserDataChanged(const QString &itemId, UserData *newData);
 
 protected:
     /**

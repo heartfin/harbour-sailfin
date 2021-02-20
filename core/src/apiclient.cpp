@@ -45,7 +45,7 @@ void ApiClient::addBaseRequestHeaders(QNetworkRequest &request, const QString &p
     request.setRawHeader("Accept", "application/json;"); // profile=\"CamelCase\"");
     request.setHeader(QNetworkRequest::UserAgentHeader, QString("Sailfin/%1").arg(version()));
     QString url = this->m_baseUrl + path;
-    if (!params.isEmpty()) url += "?" + params.toString();
+    if (!params.isEmpty()) url += "?" + params.toString(QUrl::EncodeReserved);
     request.setUrl(url);
 }
 
@@ -263,7 +263,7 @@ void ApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {
     rep->deleteLater();
 }
 
-void ApiClient::onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData) {
+void ApiClient::onUserDataChanged(const QString &itemId, UserData *userData) {
     emit userDataChanged(itemId, userData);
 }
 

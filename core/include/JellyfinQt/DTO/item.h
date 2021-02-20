@@ -93,11 +93,13 @@ public:
     Q_PROPERTY(int productionYear READ productionYear WRITE setProductionYear NOTIFY productionYearChanged)
     Q_PROPERTY(int indexNumber READ indexNumber WRITE setIndexNumber NOTIFY indexNumberChanged)
     Q_PROPERTY(int indexNumberEnd READ indexNumberEnd WRITE setIndexNumberEnd NOTIFY indexNumberEndChanged)
+    Q_PROPERTY(int parentIndexNumber READ parentIndexNumber WRITE setParentIndexNumber NOTIFY parentIndexNumberChanged)
     Q_PROPERTY(bool isFolder READ isFolder WRITE setIsFolder NOTIFY isFolderChanged)
+    Q_PROPERTY(QString parentID MEMBER m_parentId READ parentId NOTIFY parentIdChanged)
     Q_PROPERTY(QString type MEMBER m_type NOTIFY typeChanged)
     Q_PROPERTY(QString parentBackdropItemId MEMBER m_parentBackdropItemId NOTIFY parentBackdropItemIdChanged)
     Q_PROPERTY(QStringList parentBackdropImageTags MEMBER m_parentBackdropImageTags NOTIFY parentBackdropImageTagsChanged)
-    Q_PROPERTY(UserData *userData MEMBER m_userData NOTIFY userDataChanged)
+    Q_PROPERTY(UserData *userData READ userData WRITE setUserData NOTIFY userDataChanged)
     Q_PROPERTY(int recursiveItemCount READ recursiveItemCount WRITE setRecursiveItemCount NOTIFY recursiveItemCountChanged)
     Q_PROPERTY(int childCount READ childCount WRITE setChildCount NOTIFY childCountChanged)
     Q_PROPERTY(QString albumArtist MEMBER m_albumArtist NOTIFY albumArtistChanged)
@@ -147,8 +149,19 @@ public:
     void setIndexNumber(int newIndexNumber) { m_indexNumber = std::optional<int>(newIndexNumber); emit indexNumberChanged(newIndexNumber); }
     int indexNumberEnd() const { return m_indexNumberEnd.value_or(-1); }
     void setIndexNumberEnd(int newIndexNumberEnd) { m_indexNumberEnd = std::optional<int>(newIndexNumberEnd); emit indexNumberEndChanged(newIndexNumberEnd); }
+    int parentIndexNumber() const { return m_parentIndexNumber.value_or(-1); }
+    void setParentIndexNumber(int newParentIndexNumber) { m_parentIndexNumber= std::optional<int>(newParentIndexNumber); emit parentIndexNumberChanged(newParentIndexNumber); }
     bool isFolder() const { return m_isFolder.value_or(false); }
     void setIsFolder(bool newIsFolder) { m_isFolder = newIsFolder; emit isFolderChanged(newIsFolder); }
+    QString parentId() const { return m_parentId; }
+    UserData *userData() const { return m_userData; }
+    void setUserData(UserData *newUserData) {
+        if (m_userData != nullptr) {
+            m_userData->deleteLater();
+        }
+        m_userData = newUserData;
+        emit userDataChanged(newUserData);
+    }
     int recursiveItemCount() const { return m_recursiveItemCount.value_or(-1); }
     void setRecursiveItemCount(int newRecursiveItemCount) { m_recursiveItemCount = newRecursiveItemCount; emit recursiveItemCountChanged(newRecursiveItemCount); }
     int childCount() const { return m_childCount.value_or(-1); }
@@ -193,6 +206,7 @@ signals:
     void indexNumberChanged(int newIndexNumber);
     void indexNumberEndChanged(int newIndexNumberEnd);
     void isFolderChanged(bool newIsFolder);
+    void parentIdChanged(const QString &newParentId);
     void typeChanged(const QString &newType);
     void parentBackdropItemIdChanged();
     void parentBackdropImageTagsChanged();
@@ -213,7 +227,7 @@ signals:
     void heightChanged(int newHeight);
 
 public slots:
-    void onUserDataChanged(const QString &itemId, QSharedPointer<UserData> userData);
+    void onUserDataChanged(const QString &itemId, UserData *userData);
 protected:
     // Overrides
     QString getDataUrl() const override;
@@ -251,7 +265,9 @@ protected:
     std::optional<int> m_productionYear = std::nullopt;
     std::optional<int> m_indexNumber = std::nullopt;
     std::optional<int> m_indexNumberEnd = std::nullopt;
+    std::optional<int> m_parentIndexNumber = std::nullopt;
     std::optional<bool> m_isFolder = std::nullopt;
+    QString m_parentId;
     QString m_type;
     QString m_parentBackdropItemId;
     QStringList m_parentBackdropImageTags;

@@ -3,6 +3,28 @@
 	name "openapigenerator.d"
 	dependency "dyaml" version="~>0.8.0"
 +/
+
+// The following copyright string also applies to this file.
+string COPYRIGHT = q"EOL
+/*
+ * Sailfin: a Jellyfin client written using Qt
+ * Copyright (C) 2021 Chris Josten and the Sailfin Contributors.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+EOL";
 import std.algorithm;
 import std.array;
 import std.file : mkdirRecurse;
@@ -15,11 +37,32 @@ import std.uni;
 
 import dyaml;
 
-// CODE GENERATION SETTINGS
-CasePolicy OPENAPI_CASING = CasePolicy.PASCAL;
+static this() {
+	COPYRIGHT ~= q"EOS
+/*
+ * WARNING: THIS IS AN AUTOMATICALLY GENERATED FILE! PLEASE DO NOT EDIT THIS, AS YOUR EDITS WILL GET
+ * OVERWRITTEN AT SOME POINT! 
+ *
+ * If there is a bug in this file, please fix the code generator used to generate this file found in
+ * core/openapigenerator.d. 
+ *
+ * This file is generated based on Jellyfin's OpenAPI description, "openapi.json". Please update that
+ * file with a newer file if needed instead of manually updating the files.
+ */
+EOS";
+}
 
-string[] CPP_NAMESPACE = ["Jellyfin", "DTO"];
+// CODE GENERATION SETTINGS
+
+// File name of the CMake file this generated should generate.
+string CMAKE_INCLUDE_FILE = "GeneratedSources.cmake";
+string CMAKE_VAR_PREFIX = "openapi";
+
 string INCLUDE_PREFIX = "JellyfinQt/DTO";
+string SRC_PREFIX = "DTO";
+
+CasePolicy OPENAPI_CASING = CasePolicy.PASCAL;
+string[] CPP_NAMESPACE = ["Jellyfin", "DTO"];
 CasePolicy CPP_FILENAME_CASING = CasePolicy.LOWER;
 CasePolicy CPP_CLASS_CASING = CasePolicy.PASCAL;
 CasePolicy CPP_CLASS_MEMBER_CASING = CasePolicy.CAMEL;
@@ -28,8 +71,10 @@ string CPP_CLASS_MEMBER_PREFIX = "m_";
 CasePolicy CPP_CLASS_METHOD_CASING = CasePolicy.CAMEL;
 bool GENERATE_PROPERTIES = true;
 
-// Implementation
 string outputDirectory = "generated";
+// END CODE GENERATION SETTINGS.
+
+// Implementation
 
 enum CasePolicy {
 	KEEP, // Do not modify
@@ -63,18 +108,49 @@ void realMain(string[] args) {
 	
 	if (args.length >= 3) outputDirectory = args[2];
 	mkdirRecurse(buildPath(outputDirectory, "include", INCLUDE_PREFIX));
-	mkdirRecurse(buildPath(outputDirectory, "src"));
+	mkdirRecurse(buildPath(outputDirectory, "src", SRC_PREFIX));
 	
 	Node root = Loader.fromFile(schemeFile).load();
+	Appender!(string[]) headerFiles, implementationFiles;
 	foreach(ref string key, ref const Node scheme; root["components"]["schemas"]) {
 		generateFileForSchema(key, scheme, root["components"]["schemas"]);
+		
+		string fileBase = key.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
+		headerFiles ~= [buildPath(outputDirectory, "include", INCLUDE_PREFIX, fileBase ~ ".h")];
+		implementationFiles ~= [buildPath(outputDirectory, "src", SRC_PREFIX, fileBase ~ ".cpp")];
 	}
+	writeCMakeFile(headerFiles[], implementationFiles[]);
+}
+
+void writeCMakeFile(string[] headerFiles, string[] implementationFiles) {
+	File output = File(buildPath(outputDirectory, "..", CMAKE_INCLUDE_FILE), "w+");
+	output.writeln("cmake_minimum_required(VERSION 3.0)");
+	// Peek laziness: wrapping a C++ comment inside a CMake block comment because I couldn't be
+	// donkey'd to do otherwise.
+	output.writeln("#[[");
+	output.writeln(COPYRIGHT);
+	output.writeln("]]");
+	
+	output.writef("set(%s_HEADERS", CMAKE_VAR_PREFIX);
+	foreach (headerFile; headerFiles) {
+		output.writeln();
+		output.writef("\t%s", headerFile);
+	}
+	output.writeln();
+	output.writeln();
+	
+	output.writef("set(%s_SOURCES", CMAKE_VAR_PREFIX);
+	foreach (implementationFile; implementationFiles) {
+		output.writeln();
+		output.writef("\t%s", implementationFile);
+	}
+	output.writeln();
 }
 
 void generateFileForSchema(ref string name, ref const Node scheme, Node allSchemas) {
 	string fileBase = name.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
 	File headerFile = File(buildPath(outputDirectory, "include", INCLUDE_PREFIX, fileBase ~ ".h"), "w+");
-	File implementationFile = File(buildPath(outputDirectory, "src", fileBase ~ ".cpp"), "w+");
+	File implementationFile = File(buildPath(outputDirectory, "src", SRC_PREFIX, fileBase ~ ".cpp"), "w+");
 	
 	if ("enum" in scheme) {
 		string[1] imports = ["QObject"];
@@ -329,6 +405,7 @@ void writeEnumImplementation(File output, string name) {
 
 // Common
 void writeHeaderPreamble(File output, string className, string[] imports = []) {
+	output.writeln(COPYRIGHT);
 	string guard = guardName(CPP_NAMESPACE, className);
 	output.writefln("#ifndef %s", guard);
 	output.writefln("#define %s", guard);
@@ -356,6 +433,7 @@ void writeHeaderPostamble(File output, string className) {
 }
 
 void writeImplementationPreamble(File output, string className, string[] imports = []) {
+	output.writeln(COPYRIGHT);
 	output.writefln("#include <%s>", buildPath(INCLUDE_PREFIX, className.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h"));
 	output.writeln();
 	

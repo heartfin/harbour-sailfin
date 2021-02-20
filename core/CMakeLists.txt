@@ -2,6 +2,8 @@ project(jellyfin-qt VERSION 0.1.0)
 find_package(Qt5 5.6 COMPONENTS Multimedia Network Qml WebSockets REQUIRED)
 include(GNUInstallDirs)
 
+include(GeneratedSources.cmake)
+
 set(jellyfin-qt_SOURCES
         src/DTO/dto.cpp
         src/DTO/item.cpp
@@ -20,6 +22,8 @@ set(jellyfin-qt_SOURCES
         src/serverdiscoverymodel.cpp
         src/websocket.cpp)
 
+list(APPEND jellyfin-qt_SOURCES openapi_HEADERS)
+
 set(jellyfin-qt_HEADERS
         include/JellyfinQt/DTO/dto.h
         include/JellyfinQt/DTO/item.h
@@ -37,6 +41,8 @@ set(jellyfin-qt_HEADERS
         include/JellyfinQt/playbackmanager.h
         include/JellyfinQt/serverdiscoverymodel.h
         include/JellyfinQt/websocket.h)
+        
+list(APPEND jellyfin-qt_SOURCES openapi_SOURCES)
 
 add_definitions(-DSAILFIN_VERSION=\"${SAILFIN_VERSION}\")
 if (PLATFORM_SAILFISHOS)

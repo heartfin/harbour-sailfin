@@ -61,6 +61,14 @@ string CMAKE_VAR_PREFIX = "openapi";
 string INCLUDE_PREFIX = "JellyfinQt/DTO";
 string SRC_PREFIX = "DTO";
 
+string[string] compatAliases;
+
+static this() {
+	compatAliases["BaseItemDto"] = "Item";
+	compatAliases["UserDto"] = "User";
+	compatAliases["UserItemDataDto"] = "UserData";
+}
+
 CasePolicy OPENAPI_CASING = CasePolicy.PASCAL;
 string[] CPP_NAMESPACE = ["Jellyfin", "DTO"];
 CasePolicy CPP_FILENAME_CASING = CasePolicy.LOWER;
@@ -112,18 +120,21 @@ void realMain(string[] args) {
 	
 	Node root = Loader.fromFile(schemeFile).load();
 	Appender!(string[]) headerFiles, implementationFiles;
-	foreach(ref string key, ref const Node scheme; root["components"]["schemas"]) {
+	foreach(string key, ref const Node scheme; root["components"]["schemas"]) {
 		generateFileForSchema(key, scheme, root["components"]["schemas"]);
 		
 		string fileBase = key.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
 		headerFiles ~= [buildPath(outputDirectory, "include", INCLUDE_PREFIX, fileBase ~ ".h")];
 		implementationFiles ~= [buildPath(outputDirectory, "src", SRC_PREFIX, fileBase ~ ".cpp")];
 	}
+	foreach(string original, string compatAlias; compatAliases) {
+		writeCompatAliasFile(original, compatAlias);
+	}
 	writeCMakeFile(headerFiles[], implementationFiles[]);
 }
 
 void writeCMakeFile(string[] headerFiles, string[] implementationFiles) {
-	File output = File(buildPath(outputDirectory, "..", CMAKE_INCLUDE_FILE), "w+");
+	File output = File(buildPath(outputDirectory, CMAKE_INCLUDE_FILE), "w+");
 	output.writeln("cmake_minimum_required(VERSION 3.0)");
 	// Peek laziness: wrapping a C++ comment inside a CMake block comment because I couldn't be
 	// donkey'd to do otherwise.
@@ -136,7 +147,7 @@ void writeCMakeFile(string[] headerFiles, string[] implementationFiles) {
 		output.writeln();
 		output.writef("\t%s", headerFile);
 	}
-	output.writeln();
+	output.writeln(")");
 	output.writeln();
 	
 	output.writef("set(%s_SOURCES", CMAKE_VAR_PREFIX);
@@ -144,7 +155,17 @@ void writeCMakeFile(string[] headerFiles, string[] implementationFiles) {
 		output.writeln();
 		output.writef("\t%s", implementationFile);
 	}
-	output.writeln();
+	output.writeln(")");
+}
+
+void writeCompatAliasFile(ref const string original, ref const string compatAlias) {
+	string fileBase = compatAlias.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
+	File headerFile = File(buildPath(outputDirectory, "include", INCLUDE_PREFIX, fileBase ~ ".h"), "w+");
+	File implementationFile = File(buildPath(outputDirectory, "src", SRC_PREFIX, fileBase ~ ".cpp"), "w+");
+	
+	writeHeaderPreamble(headerFile, compatAlias, [], [original]);
+	headerFile.writefln("using %s = %s;", compatAlias, original);
+	writeHeaderPostamble(headerFile, compatAlias);
 }
 
 void generateFileForSchema(ref string name, ref const Node scheme, Node allSchemas) {
@@ -170,7 +191,8 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 	if (scheme["type"].as!string == "object" && "properties" in scheme) {
 		// Determine all imports
 		Appender!(string[]) systemImports, userImports;
-		systemImports ~= ["QObject"];
+		Appender!(string[]) forwardDeclarations;
+		systemImports ~= ["QObject", "QJsonObject"];
 		
 		MetaTypeInfo[] usedTypes = collectTypeInfo(scheme["properties"], allSchemas);
 		bool importedContainers = false;
@@ -188,7 +210,11 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 					systemImports ~= [type.typeName];
 				}
 			} else if (type.needsLocalImport && !userImports[].canFind(type.typeName)) {
-				userImports ~= type.typeName;
+				if (type.needsPointer) {
+					forwardDeclarations ~= type.typeName;
+				} else {
+					userImports ~= type.typeName;
+				}
 			}
 		}
 		foreach (type; usedTypes) {
@@ -198,10 +224,11 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 		// Sort them for nicer reading
 		string[] sortedSystemImports = sort(systemImports[]).array;
 		string[] sortedUserImports = sort(userImports[]).array;
+		string[] sortedForwardDeclarations = sort(forwardDeclarations[]).array;
 		
 		// Write implementation files
-		writeHeaderPreamble(headerFile, name, sortedSystemImports);
-		writeObjectHeader(headerFile, name, usedTypes, sortedUserImports);
+		writeHeaderPreamble(headerFile, name, sortedSystemImports, sortedUserImports);
+		writeObjectHeader(headerFile, name, usedTypes, sortedForwardDeclarations);
 		writeHeaderPostamble(headerFile, name);
 		
 		writeImplementationPreamble(implementationFile, name, sortedUserImports);
@@ -231,7 +258,7 @@ MetaTypeInfo[] collectTypeInfo(Node properties, Node allSchemas) {
 				info.needsPointer = true;
 			} 
 			info.needsLocalImport = true;
-			info.typeName = type;
+			info.typeName = type; 
 			return info;
 		}
 		if (!("type" in node)) {
@@ -287,7 +314,7 @@ MetaTypeInfo[] collectTypeInfo(Node properties, Node allSchemas) {
 			if (containedType.typeName == "QString") {
 				info.typeName = "QStringList";
 			} else {
-				info.typeName = "QList<" ~ containedType.typeName ~ ">";
+				info.typeName = "QList<" ~ containedType.typeNameWithQualifiers ~ ">";
 			}
 			return info;
 		default:
@@ -313,7 +340,10 @@ void writeObjectHeader(File output, string name, MetaTypeInfo[] properties, stri
 	output.writefln("class %s : public QObject {", className);
 	output.writefln("\tQ_OBJECT");
 	output.writefln("public:");
-	output.writefln("\t%s(QObject *parent = nullptr);", className);
+	output.writefln("\texplicit %s(QObject *parent = nullptr);", className);
+	output.writefln("\tstatic %s *fromJSON(QJsonObject source, QObject *parent = nullptr);", className);
+	output.writefln("\tvoid updateFromJSON(QJsonObject source);");
+	output.writefln("\tQJsonObject toJSON();");
 	output.writeln();
 	
 	// Generate Q_PROPERTIES
@@ -367,6 +397,23 @@ void writeObjectImplementation(File output, string name, MetaTypeInfo[] properti
 	output.writefln("%s::%s(QObject *parent) : QObject(parent) {}", className, className);
 	output.writeln();
 	
+	output.writefln("%s *%s::fromJSON(QJsonObject source, QObject *parent) {", className, className);
+	output.writefln("\t%s *instance = new %s(parent);", className, className);
+	output.writefln("\tinstance->updateFromJSON(source);", className);
+	output.writefln("\treturn instance;");
+	output.writefln("}");
+	output.writeln();
+	
+	output.writefln("void %s::updateFromJSON(QJsonObject source) {", className, className);
+	output.writefln("\tQ_UNIMPLEMENTED();");
+	output.writefln("}");
+	
+	output.writefln("QJsonObject %s::toJSON() {", className);
+	output.writefln("\tQ_UNIMPLEMENTED();");
+	output.writefln("\tQJsonObject result;");
+	output.writefln("\treturn result;");
+	output.writefln("}");
+	
 	foreach(property; properties) {
 		output.writefln("%s %s::%s() const { return %s; }", property.typeNameWithQualifiers, 
 			className, property.name, property.memberName);
@@ -374,7 +421,7 @@ void writeObjectImplementation(File output, string name, MetaTypeInfo[] properti
 		output.writefln("void %s::set%s(%s new%s) {", className, property.writeName, 
 			property.typeNameWithQualifiers, property.writeName);
 		output.writefln("\t%s = new%s;", property.memberName, property.writeName);
-		output.writefln("\temit %sChanged(new%s)", property.name, property.writeName);
+		output.writefln("\temit %sChanged(new%s);", property.name, property.writeName);
 		output.writefln("}");
 		output.writeln();
 	}
@@ -383,28 +430,29 @@ void writeObjectImplementation(File output, string name, MetaTypeInfo[] properti
 // Enum
 void writeEnumHeader(File output, string name, string[] values, string doc = "") {
 	string className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
-	output.writefln("class %s {", className);
+	output.writefln("class %sClass {", className);
 	output.writefln("\tQ_GADGET");
 	output.writefln("public:");
-	output.writefln("\tenum %s {", className);
+	output.writefln("\tenum Value {");
 	foreach (value; values) {
 		output.writefln("\t\t%s,", value);
 	}
 	output.writefln("\t};");
-	output.writefln("\tQ_ENUM(%s)", className);
+	output.writefln("\tQ_ENUM(Value)");
 	output.writefln("private:");
-	output.writefln("\texplicit %s();", className);
+	output.writefln("\texplicit %sClass();", className);
 	output.writefln("};");
+	output.writefln("typedef %sClass::Value %s;", className, className);
 }
 
 void writeEnumImplementation(File output, string name) {
 	string className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
 	string importName = name.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
-	output.writefln("%s::%s() {}", name, name);
+	output.writefln("%sClass::%sClass() {}", name, name);
 }
 
 // Common
-void writeHeaderPreamble(File output, string className, string[] imports = []) {
+void writeHeaderPreamble(File output, string className, string[] imports = [], string[] userImports = []) {
 	output.writeln(COPYRIGHT);
 	string guard = guardName(CPP_NAMESPACE, className);
 	output.writefln("#ifndef %s", guard);
@@ -416,6 +464,11 @@ void writeHeaderPreamble(File output, string className, string[] imports = []) {
 	}
 	
 	if (imports.length > 0) output.writeln();
+	
+	foreach(file; userImports) {
+		output.writefln("#include \"%s\"", buildPath(INCLUDE_PREFIX, file.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h"));
+	}
+	if (userImports.length > 0) output.writeln();
 	
 	foreach (namespace; CPP_NAMESPACE) {
 		output.writefln("namespace %s {", namespace);

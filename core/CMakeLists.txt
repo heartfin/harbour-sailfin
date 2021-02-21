@@ -5,13 +5,7 @@ include(GNUInstallDirs)
 include(GeneratedSources.cmake)
 
 set(jellyfin-qt_SOURCES
-        src/DTO/dto.cpp
-        src/DTO/item.cpp
-        src/DTO/namedguidpair.cpp
-        src/DTO/mediastream.cpp
-        src/DTO/types.cpp
-        src/DTO/user.cpp
-        src/DTO/userdata.cpp
+        # src/DTO/dto.cpp
         src/apiclient.cpp
         src/apimodel.cpp
         src/credentialmanager.cpp
@@ -19,19 +13,14 @@ set(jellyfin-qt_SOURCES
         src/jellyfin.cpp
         src/jsonhelper.cpp
         src/playbackmanager.cpp
+        src/remotedata.cpp
         src/serverdiscoverymodel.cpp
         src/websocket.cpp)
 
-list(APPEND jellyfin-qt_SOURCES openapi_HEADERS)
+list(APPEND jellyfin-qt_SOURCES ${openapi_SOURCES})
 
 set(jellyfin-qt_HEADERS
-        include/JellyfinQt/DTO/dto.h
-        include/JellyfinQt/DTO/item.h
-        include/JellyfinQt/DTO/mediastream.h
-        include/JellyfinQt/DTO/namedguidpair.h
-        include/JellyfinQt/DTO/types.h
-        include/JellyfinQt/DTO/userdata.h
-        include/JellyfinQt/DTO/user.h
+        # include/JellyfinQt/DTO/dto.h
         include/JellyfinQt/apiclient.h
         include/JellyfinQt/apimodel.h
         include/JellyfinQt/credentialmanager.h
@@ -39,18 +28,22 @@ set(jellyfin-qt_HEADERS
         include/JellyfinQt/jellyfin.h
         include/JellyfinQt/jsonhelper.h
         include/JellyfinQt/playbackmanager.h
+        include/JellyfinQt/remotedata.h
         include/JellyfinQt/serverdiscoverymodel.h
         include/JellyfinQt/websocket.h)
         
-list(APPEND jellyfin-qt_SOURCES openapi_SOURCES)
+list(APPEND jellyfin-qt_SOURCES ${openapi_HEADERS})
 
 add_definitions(-DSAILFIN_VERSION=\"${SAILFIN_VERSION}\")
 if (PLATFORM_SAILFISHOS)
     add_definitions(-DPLATFORM_SAILFISHOS=1)
 endif()
 add_library(jellyfin-qt ${jellyfin-qt_SOURCES} ${jellyfin-qt_HEADERS})
+if(${CMAKE_VERSION} VERSION_GREATER "3.16.0") 
+	target_precompile_headers(jellyfin-qt PRIVATE ${jellyfin-qt_HEADERS})
+endif()
 target_include_directories(jellyfin-qt 
-	PUBLIC "include"
+        PUBLIC "include" "generated/include"
 )
 target_link_libraries(jellyfin-qt PUBLIC Qt5::Core Qt5::Multimedia Qt5::Network Qt5::Qml Qt5::WebSockets)
 set_target_properties(jellyfin-qt PROPERTIES CXX_VISIBILITY_PRESET default)

@@ -20,12 +20,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "JellyfinQt/apimodel.h"
 
 #include "JellyfinQt/DTO/item.h"
-#include "JellyfinQt/DTO/userdata.h"
-#include "JellyfinQt/DTO/user.h"
+#include "JellyfinQt/DTO/useritemdatadto.h"
+#include "JellyfinQt/DTO/userdto.h"
 
 namespace Jellyfin {
 
 // BaseApiModel
+namespace DTO {
+    using UserData = DTO::UserItemDataDto;
+    using User = DTO::UserDto;
+}
+using User = DTO::UserDto;
 
 BaseApiModel::BaseApiModel(QString path, bool hasRecordResponse, bool addUserId, QObject *parent)
     : QAbstractListModel(parent),
@@ -180,8 +185,7 @@ ApiModel<QJsonValue>::ApiModel(QString path, bool hasRecordResponse, bool addUse
 
 template <class T>
 T *ApiModel<T>::deserializeResult(QJsonValueRef source) {
-    T *result = new T(static_cast<BaseApiModel *>(this));
-    result->deserialize(source.toObject());
+    T *result = T::fromJSON(source.toObject(), this);
     return result;
 }
 
@@ -379,7 +383,7 @@ void ItemModel::onUserDataChanged(const QString &itemId, DTO::UserData *userData
     for (Item *val: m_array) {
         if (val->userData() != nullptr && val->jellyfinId() == itemId) {
             QModelIndex cell = this->index(i);
-            val->userData()->onUpdated(userData);
+            // val->userData()->onUpdated(userData);
             this->dataChanged(cell, cell);
         }
         i++;

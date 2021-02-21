@@ -33,13 +33,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "apiclient.h"
 #include "jsonhelper.h"
 
+#include "DTO/item.h"
+#include "DTO/user.h"
+#include "DTO/userdata.h"
+
 namespace Jellyfin {
 
-namespace DTO {
-    class Item;
-    class JsonSerializable;
-    class User;
-}
 class SortOptions : public QObject {
     Q_OBJECT
 public:
@@ -217,7 +216,7 @@ protected:
  * The model will have roleNames for "name" and "id".
  *
  */
-template <typename T>
+template <class T>
 class ApiModel : public BaseApiModel {
 public:
     /**

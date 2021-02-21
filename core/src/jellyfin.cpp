@@ -31,6 +31,7 @@ void registerTypes(const char *uri) {
 
     // API models
     Jellyfin::registerModels(uri);
-    Jellyfin::DTO::registerTypes(uri);
+    //Jellyfin::DTO::registerTypes(uri);
+    Jellyfin::registerRemoteTypes(uri);
 }
 }

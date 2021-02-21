@@ -46,7 +46,8 @@ class WebSocket;
 class PlaybackManager;
 
 namespace DTO {
-    class UserData; // Keep it as an opaque pointer
+    class UserItemDataDto; // Keep it as an opaque pointer
+    using UserData = UserItemDataDto;
 }
 
 using namespace DTO;

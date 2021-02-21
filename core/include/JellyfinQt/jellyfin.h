@@ -21,21 +21,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <QtQml>
 
-#include "DTO/dto.h"
+// #include "DTO/dto.h"
 #include "DTO/item.h"
 #include "DTO/mediastream.h"
-#include "DTO/namedguidpair.h"
-#include "DTO/types.h"
-#include "DTO/user.h"
-#include "DTO/userdata.h"
+#include "DTO/nameguidpair.h"
+#include "DTO/userdto.h"
+#include "DTO/useritemdatadto.h"
 
 #include "apiclient.h"
 #include "apimodel.h"
 #include "serverdiscoverymodel.h"
 #include "playbackmanager.h"
+#include "remotedata.h"
 
 namespace Jellyfin {
+
 void registerTypes(const char *uri = "nl.netsoj.chris.Jellyfin");
+
 }
 
 #endif // JELLYFIN_H

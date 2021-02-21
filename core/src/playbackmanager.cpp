@@ -21,19 +21,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "JellyfinQt/apimodel.h"
 
-#include "JellyfinQt/DTO/dto.h"
-#include "JellyfinQt/DTO/userdata.h"
+// #include "JellyfinQt/DTO/dto.h"
+#include <JellyfinQt/DTO/useritemdatadto.h>
+#include <JellyfinQt/remotedata.h>
 
 namespace Jellyfin {
 class ItemModel;
 
+namespace DTO {
+    using UserData = UserItemDataDto;
+}
+
 PlaybackManager::PlaybackManager(QObject *parent)
-    : QObject(parent), m_mediaPlayer1(new QMediaPlayer(this)), m_mediaPlayer2(new QMediaPlayer(this)) {
+    : QObject(parent), m_mediaPlayer1(new QMediaPlayer(this)), m_mediaPlayer2(new QMediaPlayer(this)),
+    m_item(new RemoteItem(this)){
     // Set up connections.
     swapMediaPlayer();
     m_updateTimer.setInterval(10000); // 10 seconds
     m_updateTimer.setSingleShot(false);
     connect(&m_updateTimer, &QTimer::timeout, this, &PlaybackManager::updatePlaybackInfo);
+}
+
+void PlaybackManager::setApiClient(ApiClient *apiClient) {
+    m_item->setApiClient(apiClient);
 }
 
 void PlaybackManager::fetchStreamUrl(const Item *item, bool autoOpen, const FetchCallback &callback) {
@@ -42,7 +52,7 @@ void PlaybackManager::fetchStreamUrl(const Item *item, bool autoOpen, const Fetc
     }
     m_resumePosition = 0;
     if (m_resumePlayback && !item->property("userData").isNull()) {
-        UserData* userData = qvariant_cast<UserData *>(m_item->property("userData"));
+        UserData* userData = m_item->data()->userData();
         if (userData != nullptr) {
             m_resumePosition = userData->playbackPositionTicks();
         }
@@ -78,9 +88,9 @@ void PlaybackManager::fetchStreamUrl(const Item *item, bool autoOpen, const Fetc
                 query.addQueryItem("api_key", m_apiClient->token());
                 query.addQueryItem("Static", "True");
                 QString mediaType = "unknown";
-                if (m_item->mediaType() == "Audio") {
+                if (m_item->data()->mediaType() == "Audio") {
                     mediaType = "Audio";
-                } else if (m_item->mediaType() == "Video") {
+                } else if (m_item->data()->mediaType() == "Video") {
                     mediaType = "Videos";
                 }
                 QString streamUrl = this->m_apiClient->baseUrl() + "/" + mediaType + "/" + m_item->jellyfinId() + "/stream."
@@ -103,7 +113,7 @@ void PlaybackManager::fetchStreamUrl(const Item *item, bool autoOpen, const Fetc
 
 void PlaybackManager::fetchAndSetStreamUrl(const Item *item) {
     fetchStreamUrl(item, m_autoOpen, [this, item](QUrl &&url, PlayMethod playbackMethod) {
-        if (m_item == item) {
+        if (m_item->data() == item) {
             setStreamUrl(url.toString());
             m_playMethod = playbackMethod;
             emit playMethodChanged(m_playMethod);
@@ -117,11 +127,7 @@ void PlaybackManager::fetchAndSetStreamUrl(const Item *item) {
 void PlaybackManager::setItem(Item *newItem) {
     if (m_mediaPlayer != nullptr) m_mediaPlayer->stop();
 
-    // If we own the item, delete it.
-    if (m_item != nullptr && m_item->parent() == this) {
-        m_item->deleteLater();
-    }
-    this->m_item = newItem;
+    this->m_item->setData(newItem);
     emit itemChanged(newItem);
 
     if (m_apiClient == nullptr) {
@@ -131,21 +137,11 @@ void PlaybackManager::setItem(Item *newItem) {
     // Deinitialize the streamUrl
     setStreamUrl("");
     if (newItem != nullptr) {
-        if (newItem->parent() != this) {
-            // The new item may outlive the lifetime of the element it was created on. In the Sailfish
-            // application for example, the player is given an Jellyfin::Item that sits on a Page on a PageStack.
-            // As soon as the user pops the Page from the PageStack, newItem would be destroyed. Therefore, we
-            // take ownership of the given newItem, as this object will usually exist throughout the lifetime of
-            // the application. A better solution would be to create a copy of the newItem, but no way I'm going
-            // to create an handwritten copy of that.
-            QQmlEngine::setObjectOwnership(newItem, QQmlEngine::ObjectOwnership::CppOwnership);
-            newItem->setParent(this);
-        }
-        if (m_item->status() == RemoteData::Ready) {
-            fetchAndSetStreamUrl(m_item);
+        if (m_item->status() == RemoteDataBase::Ready) {
+            fetchAndSetStreamUrl(m_item->data());
         } else {
-            connect(m_item, &RemoteData::ready, [this]() -> void {
-                fetchAndSetStreamUrl(m_item);
+            connect(m_item, &RemoteDataBase::ready, [this]() -> void {
+                fetchAndSetStreamUrl(m_item->data());
             });
         }
     }
@@ -218,16 +214,16 @@ void PlaybackManager::updatePlaybackInfo() {
 }
 
 void PlaybackManager::playItem(const QString &itemId) {
-    Item *newItem = new Item(itemId, m_apiClient, this);
-    QString parentId = newItem->parentId();
-    setItem(newItem);
+    RemoteItem *newItem = new RemoteItem(itemId, m_apiClient, this);
     ItemModel *queue = new UserItemModel(this);
     setQueue(queue);
-    connect(newItem, &Item::ready, this, [this, queue, parentId](){
+    connect(newItem, &RemoteItem::ready, this, [this, queue, newItem](){
+        QString parentId = newItem->data()->parentId();
         queue->setParentId(parentId);
         queue->setLimit(10000);
         queue->setApiClient(m_apiClient);
         queue->reload();
+        setItem(newItem->data());
     });
     connect(queue, &BaseApiModel::ready, this, [this, queue, newItem]() {
         for (int i = 0; i < queue->size(); i++) {
@@ -357,11 +353,11 @@ void PlaybackManager::componentComplete() {
     if (m_apiClient == nullptr) qWarning() << "No ApiClient set for PlaybackManager";
     m_qmlIsParsingComponent = false;
     if (m_item != nullptr) {
-        if (m_item->status() == RemoteData::Ready) {
-            fetchAndSetStreamUrl(m_item);
+        if (m_item->status() == RemoteItem::Ready) {
+            fetchAndSetStreamUrl(m_item->data());
         } else {
-            connect(m_item, &RemoteData::ready, [this]() -> void {
-                fetchAndSetStreamUrl(m_item);
+            connect(m_item, &RemoteItem::ready, [this]() -> void {
+                fetchAndSetStreamUrl(m_item->data());
             });
         }
     }

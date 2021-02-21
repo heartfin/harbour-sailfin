@@ -37,7 +37,8 @@ namespace Jellyfin {
 class ApiClient;
 
 namespace DTO {
-class UserData;
+    class UserItemDataDto;
+    using UserData = UserItemDataDto;
 }
 /**
  * @brief Keeps a connection with the Jellyfin server to receive real time updates.

@@ -34,7 +34,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <functional>
 
-#include "JellyfinQt/DTO/item.h"
+#include <JellyfinQt/DTO/baseitemdto.h>
+#include "remotedata.h"
 
 #include "apiclient.h"
 
@@ -44,7 +45,8 @@ namespace Jellyfin {
 // Forward declaration of Jellyfin::ApiClient found in jellyfinapiclient.h
 class ApiClient;
 class ItemModel;
-using namespace DTO;
+class RemoteItem;
+
 
 /**
  * @brief The PlaybackManager class manages the playback of Jellyfin items. It fetches streams based on Jellyfin items, posts
@@ -67,7 +69,7 @@ public:
 
     explicit PlaybackManager(QObject *parent = nullptr);
 
-    Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient)
+    Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient WRITE setApiClient)
     Q_PROPERTY(QString streamUrl READ streamUrl NOTIFY streamUrlChanged)
     Q_PROPERTY(bool autoOpen MEMBER m_autoOpen NOTIFY autoOpenChanged)
     Q_PROPERTY(int audioIndex MEMBER m_audioIndex NOTIFY audioIndexChanged)
@@ -90,7 +92,8 @@ public:
     Q_PROPERTY(QMediaPlayer::State playbackState READ playbackState NOTIFY playbackStateChanged)
     Q_PROPERTY(qint64 position READ position NOTIFY positionChanged)
 
-    Item *item() const { return m_item; }
+    BaseItemDto *item() const { return m_item->data(); }
+    void setApiClient(ApiClient *apiClient);
 
     QString streamUrl() const { return m_streamUrl; }
     PlayMethod playMethod() const { return m_playMethod; }
@@ -107,7 +110,7 @@ public:
     QMediaPlayer::Error error () const { return m_mediaPlayer->error(); }
     QString errorString() const { return m_mediaPlayer->errorString(); }
 signals:
-    void itemChanged(Item *newItemId);
+    void itemChanged(BaseItemDto *newItemId);
     void streamUrlChanged(const QString &newStreamUrl);
     void autoOpenChanged(bool autoOpen);
     void audioIndexChanged(int audioIndex);
@@ -163,7 +166,7 @@ private slots:
 private:
     QTimer m_updateTimer;
     ApiClient *m_apiClient = nullptr;
-    Item *m_item = nullptr;
+    RemoteItem *m_item;
     QString m_streamUrl;
     QString m_playSessionId;
     int m_audioIndex = 0;
@@ -183,7 +186,7 @@ private:
     int m_queueIndex = 0;
     bool m_resumePlayback = true;
 
-    void setItem(Item *newItem);
+    void setItem(BaseItemDto *newItem);
     void swapMediaPlayer();
 
     bool m_qmlIsParsingComponent = false;
@@ -196,12 +199,12 @@ private:
     /**
      * @brief Retrieves the URL of the stream to open.
      */
-    void fetchStreamUrl(const Item *item, bool autoOpen, const FetchCallback &callback);
-    void fetchAndSetStreamUrl(const Item *item);
+    void fetchStreamUrl(const BaseItemDto *item, bool autoOpen, const FetchCallback &callback);
+    void fetchAndSetStreamUrl(const BaseItemDto *item);
     void setStreamUrl(const QString &streamUrl);
     void setPlaybackState(QMediaPlayer::State newState);
 
-    Item *nextItem();
+    BaseItemDto *nextItem();
     void setQueue(ItemModel *itemModel);
 
     // Factor to multiply with when converting from milliseconds to ticks.

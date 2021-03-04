@@ -1,14 +1,33 @@
 import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtGraphicalEffects 1.12
 import QtQuick.Window 2.12
 
-import "components"
+import nl.netsoj.chris.Jellyfin 1.0
 
-Window {
+import "components"
+import "../SailfinStyle"
+
+ApplicationWindow {
     width: 600
     height: 600
     visible: true
 
-    Background {
+    background: Background {
         anchors.fill: parent
+    }
+
+    StackView {
+        id: pageStack
+        anchors.fill: parent
+    }
+
+    Connections {
+        target: ApiClient
+        onSetupRequired: pageStack.push(Qt.resolvedUrl("pages/setup/ServerSelectPage.qml"));
+    }
+
+    Component.onCompleted: {
+        ApiClient.restoreSavedSession()
     }
 }

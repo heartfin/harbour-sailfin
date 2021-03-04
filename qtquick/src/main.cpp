@@ -1,3 +1,8 @@
+#define QT_DEBUG
+#define QT_QML_DEBUG
+#include <QtQuick>
+//#endif
+
 #include <QDebug>
 #include <QQmlApplicationEngine>
 #include <QGuiApplication>

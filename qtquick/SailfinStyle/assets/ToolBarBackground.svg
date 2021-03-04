@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="500" height="75" version="1.1" viewBox="0 0 500 75" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <radialGradient id="radialGradient2446" cx="250" cy="-203.06" r="250" gradientTransform="matrix(-1.16 1.5346e-8 0 -.14 540 -3.4277)" gradientUnits="userSpaceOnUse">
+   <stop stop-opacity=".74902" offset="0"/>
+   <stop stop-opacity="0" offset="1"/>
+  </radialGradient>
+ </defs>
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g>
+  <path d="m500-5h-500v30c125 25 375 25 500 0z" fill="#fff"/>
+  <path d="m500 75h-500l1.5984e-6 -50c125 25 375 25 500 0z" fill="url(#radialGradient2446)"/>
+ </g>
+</svg>

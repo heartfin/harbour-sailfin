@@ -159,6 +159,9 @@ protected:
         }
     }
     ApiClient *m_apiClient = nullptr;
+protected:
+    // Returns true if this class is instantiated within QML and is still being parsed.
+    bool isQmlParsing() const { return m_isParsing; }
 private:
     Status m_status = Uninitialised;
     QNetworkReply::NetworkError m_error = QNetworkReply::NoError;

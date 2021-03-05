@@ -58,15 +58,22 @@ EOS";
 string CMAKE_INCLUDE_FILE = "GeneratedSources.cmake";
 string CMAKE_VAR_PREFIX = "openapi";
 
-string INCLUDE_PREFIX = "JellyfinQt/DTO";
-string SRC_PREFIX = "DTO";
+
+string INCLUDE_PREFIX = "JellyfinQt";
+string SRC_PREFIX = "";
+
+string MODEL_FOLDER = "model";
+string SUPPORT_FOLDER = "support";
 
 string[string] compatAliases;
+string[string] memberAliases;
 
 static this() {
 	compatAliases["BaseItemDto"] = "Item";
 	compatAliases["UserDto"] = "User";
 	compatAliases["UserItemDataDto"] = "UserData";
+	
+	memberAliases["id"] = "jellyfinId";
 }
 
 CasePolicy OPENAPI_CASING = CasePolicy.PASCAL;
@@ -115,8 +122,8 @@ void realMain(string[] args) {
 	string schemeFile = args[1];
 	
 	if (args.length >= 3) outputDirectory = args[2];
-	mkdirRecurse(buildPath(outputDirectory, "include", INCLUDE_PREFIX));
-	mkdirRecurse(buildPath(outputDirectory, "src", SRC_PREFIX));
+	mkdirRecurse(buildPath(outputDirectory, "include", INCLUDE_PREFIX, MODEL_FOLDER));
+	mkdirRecurse(buildPath(outputDirectory, "src", SRC_PREFIX, MODEL_FOLDER));
 	
 	Node root = Loader.fromFile(schemeFile).load();
 	Appender!(string[]) headerFiles, implementationFiles;
@@ -124,8 +131,8 @@ void realMain(string[] args) {
 		generateFileForSchema(key, scheme, root["components"]["schemas"]);
 		
 		string fileBase = key.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
-		headerFiles ~= [buildPath(outputDirectory, "include", INCLUDE_PREFIX, fileBase ~ ".h")];
-		implementationFiles ~= [buildPath(outputDirectory, "src", SRC_PREFIX, fileBase ~ ".cpp")];
+		headerFiles ~= [buildPath(outputDirectory, "include", INCLUDE_PREFIX, MODEL_FOLDER, fileBase ~ ".h")];
+		implementationFiles ~= [buildPath(outputDirectory, "src", SRC_PREFIX, MODEL_FOLDER, fileBase ~ ".cpp")];
 	}
 	foreach(string original, string compatAlias; compatAliases) {
 		writeCompatAliasFile(original, compatAlias);
@@ -160,8 +167,8 @@ void writeCMakeFile(string[] headerFiles, string[] implementationFiles) {
 
 void writeCompatAliasFile(ref const string original, ref const string compatAlias) {
 	string fileBase = compatAlias.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
-	File headerFile = File(buildPath(outputDirectory, "include", INCLUDE_PREFIX, fileBase ~ ".h"), "w+");
-	File implementationFile = File(buildPath(outputDirectory, "src", SRC_PREFIX, fileBase ~ ".cpp"), "w+");
+	File headerFile = File(buildPath(outputDirectory, "include", INCLUDE_PREFIX, MODEL_FOLDER, fileBase ~ ".h"), "w+");
+	File implementationFile = File(buildPath(outputDirectory, "src", SRC_PREFIX, MODEL_FOLDER, fileBase ~ ".cpp"), "w+");
 	
 	writeHeaderPreamble(headerFile, compatAlias, [], [original]);
 	headerFile.writefln("using %s = %s;", compatAlias, original);
@@ -170,11 +177,11 @@ void writeCompatAliasFile(ref const string original, ref const string compatAlia
 
 void generateFileForSchema(ref string name, ref const Node scheme, Node allSchemas) {
 	string fileBase = name.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
-	File headerFile = File(buildPath(outputDirectory, "include", INCLUDE_PREFIX, fileBase ~ ".h"), "w+");
-	File implementationFile = File(buildPath(outputDirectory, "src", SRC_PREFIX, fileBase ~ ".cpp"), "w+");
+	File headerFile = File(buildPath(outputDirectory, "include", INCLUDE_PREFIX, MODEL_FOLDER, fileBase ~ ".h"), "w+");
+	File implementationFile = File(buildPath(outputDirectory, "src", SRC_PREFIX, MODEL_FOLDER, fileBase ~ ".cpp"), "w+");
 	
 	if ("enum" in scheme) {
-		string[1] imports = ["QObject"];
+		string[3] imports = ["QJsonValue", "QObject", "QString"];
 		writeHeaderPreamble(headerFile, name, imports);
 		
 		Appender!(string[]) values;
@@ -193,6 +200,7 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 		Appender!(string[]) systemImports, userImports;
 		Appender!(string[]) forwardDeclarations;
 		systemImports ~= ["QObject", "QJsonObject"];
+		userImports ~= [buildPath(SUPPORT_FOLDER, "jsonconv.h")];
 		
 		MetaTypeInfo[] usedTypes = collectTypeInfo(scheme["properties"], allSchemas);
 		bool importedContainers = false;
@@ -213,7 +221,7 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 				if (type.needsPointer) {
 					forwardDeclarations ~= type.typeName;
 				} else {
-					userImports ~= type.typeName;
+					userImports ~= buildPath(MODEL_FOLDER, type.typeName.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h");
 				}
 			}
 		}
@@ -231,7 +239,7 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 		writeObjectHeader(headerFile, name, usedTypes, sortedForwardDeclarations);
 		writeHeaderPostamble(headerFile, name);
 		
-		writeImplementationPreamble(implementationFile, name, sortedUserImports);
+		writeImplementationPreamble(implementationFile, name);
 		writeObjectImplementation(implementationFile, name, usedTypes);
 		writeImplementationPostamble(implementationFile, name);
 	}
@@ -243,13 +251,14 @@ MetaTypeInfo[] collectTypeInfo(Node properties, Node allSchemas) {
 	// We need to recurse (sometimes)
 	MetaTypeInfo getType(string name, Node node) {
 		MetaTypeInfo info = new MetaTypeInfo();
+		info.originalName = name;
 		info.name = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_MEMBER_CASING);
 		if ("description" in node) {
 			info.description = node["description"].as!string;
 		}
 		
 		// Special case for QML
-		if (info.name.toLower() == "id") info.name = "jellyfinId";
+		info.name = memberAliases.get(info.name.toLower(), info.name);
 		
 		if ("$ref" in node) {
 			string type = node["$ref"].as!string()["#/components/schemas/".length..$];
@@ -342,7 +351,7 @@ void writeObjectHeader(File output, string name, MetaTypeInfo[] properties, stri
 	output.writefln("public:");
 	output.writefln("\texplicit %s(QObject *parent = nullptr);", className);
 	output.writefln("\tstatic %s *fromJSON(QJsonObject source, QObject *parent = nullptr);", className);
-	output.writefln("\tvoid updateFromJSON(QJsonObject source);");
+	output.writefln("\tvoid updateFromJSON(QJsonObject source, bool emitSignals = true);");
 	output.writefln("\tQJsonObject toJSON();");
 	output.writeln();
 	
@@ -399,18 +408,31 @@ void writeObjectImplementation(File output, string name, MetaTypeInfo[] properti
 	
 	output.writefln("%s *%s::fromJSON(QJsonObject source, QObject *parent) {", className, className);
 	output.writefln("\t%s *instance = new %s(parent);", className, className);
-	output.writefln("\tinstance->updateFromJSON(source);", className);
+	output.writefln("\tinstance->updateFromJSON(source, false);", className);
 	output.writefln("\treturn instance;");
 	output.writefln("}");
 	output.writeln();
 	
-	output.writefln("void %s::updateFromJSON(QJsonObject source) {", className, className);
+	output.writefln("void %s::updateFromJSON(QJsonObject source, bool emitSignals) {", className, className);
 	output.writefln("\tQ_UNIMPLEMENTED();");
+	foreach (property; properties) {
+		output.writefln("\t%s = fromJsonValue<%s>(source[\"%s\");", property.memberName,  property.typeNameWithQualifiers, 
+			property.originalName);
+	}
+	output.writeln();
+	output.writefln("\tif (emitSignals) {");
+	foreach (property; properties) {
+		output.writefln("\t\temit %sChanged(%s);", property.name,  property.memberName);
+	}
+	output.writefln("\t}");
 	output.writefln("}");
 	
 	output.writefln("QJsonObject %s::toJSON() {", className);
-	output.writefln("\tQ_UNIMPLEMENTED();");
 	output.writefln("\tQJsonObject result;");
+	foreach (property; properties) {
+		output.writefln("\tresult[\"%s\"] = toJsonValue<%s>(%s);", property.originalName, property.typeNameWithQualifiers, 
+			property.memberName);
+	}
 	output.writefln("\treturn result;");
 	output.writefln("}");
 	
@@ -434,6 +456,7 @@ void writeEnumHeader(File output, string name, string[] values, string doc = "")
 	output.writefln("\tQ_GADGET");
 	output.writefln("public:");
 	output.writefln("\tenum Value {");
+	output.writefln("\t\tEnumNotSet,");
 	foreach (value; values) {
 		output.writefln("\t\t%s,", value);
 	}
@@ -443,6 +466,26 @@ void writeEnumHeader(File output, string name, string[] values, string doc = "")
 	output.writefln("\texplicit %sClass();", className);
 	output.writefln("};");
 	output.writefln("typedef %sClass::Value %s;", className, className);
+	output.writeln();
+	output.writefln("template <>");
+	output.writefln("%s fromJsonValue<%s>(QJsonValue source) {", className, className);
+	output.writefln("\tif (!source.isString()) return %sClass::EnumNotSet;", className);
+	output.writeln();
+	output.writefln("\tQString str = source.toString();");
+	if (values.length > 0) {
+		output.writefln("\tif (str == QStringLiteral(\"%s\")) {", values[0]);
+		output.writefln("\t\treturn %sClass::%s;", className, values[0]);
+		output.write("\t}");
+		foreach(value; drop(values, 1)) {
+			output.writefln(" else if (str == QStringLiteral(\"%s\")) {", value);
+			output.writefln("\t\treturn %sClass::%s;", className, value);
+			output.write("\t}");
+		}
+		output.writeln();
+	}
+	output.writeln();
+	output.writefln("\treturn %sClass::EnumNotSet;", className);
+	output.writefln("}");
 }
 
 void writeEnumImplementation(File output, string name) {
@@ -466,7 +509,7 @@ void writeHeaderPreamble(File output, string className, string[] imports = [], s
 	if (imports.length > 0) output.writeln();
 	
 	foreach(file; userImports) {
-		output.writefln("#include \"%s\"", buildPath(INCLUDE_PREFIX, file.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h"));
+		output.writefln("#include \"%s\"", buildPath(INCLUDE_PREFIX, file));
 	}
 	if (userImports.length > 0) output.writeln();
 	
@@ -487,11 +530,11 @@ void writeHeaderPostamble(File output, string className) {
 
 void writeImplementationPreamble(File output, string className, string[] imports = []) {
 	output.writeln(COPYRIGHT);
-	output.writefln("#include <%s>", buildPath(INCLUDE_PREFIX, className.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h"));
+	output.writefln("#include <%s>", buildPath(INCLUDE_PREFIX, MODEL_FOLDER, className.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h"));
 	output.writeln();
 	
 	foreach(file; imports) {
-		output.writefln("#include <%s>", buildPath(INCLUDE_PREFIX, file.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h"));
+		output.writefln("#include <%s>", buildPath(INCLUDE_PREFIX, file));
 	}
 	if (imports.length > 0) output.writeln();
 	
@@ -569,6 +612,7 @@ string applyCasePolicy(string source, CasePolicy input, CasePolicy output) {
 
 class MetaTypeInfo {
 public:
+	string originalName = "";
 	string name = "";
 	string typeName = "";
 	string description = "";

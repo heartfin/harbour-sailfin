@@ -4,6 +4,7 @@ rpm/*.spec
 # Build folders
 build/
 build-*/
+.dub/
 
 # IDE files
 *.user

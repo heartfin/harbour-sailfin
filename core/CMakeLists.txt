@@ -6,6 +6,7 @@ include(GeneratedSources.cmake)
 
 set(jellyfin-qt_SOURCES
         # src/DTO/dto.cpp
+        src/support/loader.cpp
         src/apiclient.cpp
         src/apimodel.cpp
         src/credentialmanager.cpp
@@ -21,6 +22,7 @@ list(APPEND jellyfin-qt_SOURCES ${openapi_SOURCES})
 
 set(jellyfin-qt_HEADERS
         # include/JellyfinQt/DTO/dto.h
+        include/JellyfinQt/support/loader.h
         include/JellyfinQt/apiclient.h
         include/JellyfinQt/apimodel.h
         include/JellyfinQt/credentialmanager.h

@@ -6,9 +6,13 @@
         <file>qtquickcontrols2.conf</file>
         <file>SailfinStyle/assets/ToolBarBackground.svg</file>
         <file>SailfinStyle/qmldir</file>
-        <file>SailfinStyle/SailfinStyle.qml</file>
         <file>SailfinStyle/ToolBar.qml</file>
         <file>qml/pages/setup/ServerSelectPage.qml</file>
         <file>SailfinStyle/Page.qml</file>
+        <file>SailfinStyle.qml</file>
+        <file>qmldir</file>
+        <file>qml/components/+sailfinstyle/Background.qml</file>
+        <file>qml/components/BusyDialog.qml</file>
+        <file>qml/pages/setup/LoginPage.qml</file>
     </qresource>
 </RCC>

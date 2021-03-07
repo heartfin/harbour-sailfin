@@ -3,9 +3,12 @@ import QtQuick.Controls 2.12
 
 import nl.netsoj.chris.Jellyfin 1.0
 
-import "../../../SailfinStyle"
+import "../../components"
+import "../../.."
 
 Page {
+    property string selectedServerName
+    property StackView stackView: StackView.view
     header: ToolBar {
         Label {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -13,12 +16,66 @@ Page {
             text: qsTr("Select a server")
         }
     }
-    BusyIndicator {
-        anchors.centerIn: parent
+
+    ListView {
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            top: parent.top
+            bottom: parent.bottom
+        }
+        width: Math.min(80 * SailfinStyle.unit, parent.width - 2 * SailfinStyle.largePadding)
+        model: discoveryModel
+
+        header: Column {
+            width: parent.width
+            Label {
+                text: "Enter an IP address"
+                width: parent.width
+            }
+            TextField {
+                width: parent.width
+            }
+        }
+        delegate: RadioDelegate {
+            text: name
+            width: parent.width
+            onClicked: {
+                selectedServerName = name
+                ApiClient.baseUrl = address
+                ApiClient.setupConnection()
+                busyDialog.open()
+                //StackView.view.push()
+            }
+        }
+        footer: BusyIndicator {
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
     }
 
     ServerDiscoveryModel {
         id: discoveryModel
+    }
+
+    StackView.onActivated: {
+        console.log("Hello")
+        discoveryModel.refresh()
+    }
+
+    BusyDialog {
+        id: busyDialog
+        anchors.centerIn: Overlay.overlay
+        title: qsTr("Connecting to %1").arg(selectedServerName)
+    }
+
+    Connections {
+        target: ApiClient
+        onConnectionSuccess: {
+            busyDialog.close()
+            stackView.push(Qt.resolvedUrl("LoginPage.qml"), {"loginMessage": loginMessage})
+        }
+        onConnectionFailed: {
+            busyDialog.close()
+        }
     }
 
 }

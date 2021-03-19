@@ -2,6 +2,8 @@
 /+ dub.sdl:
 	name "openapigenerator.d"
 	dependency "dyaml" version="~>0.8.0"
+    dependency "handlebars" version="~>0.2.2"
+    stringImportPaths "codegen"
 +/
 
 // The following copyright string also applies to this file.
@@ -36,6 +38,7 @@ import std.stdio;
 import std.uni;
 
 import dyaml;
+import handlebars.tpl;
 
 static this() {
 	COPYRIGHT ~= q"EOS
@@ -341,156 +344,46 @@ MetaTypeInfo[] collectTypeInfo(Node properties, Node allSchemas) {
 }
 
 void writeObjectHeader(File output, string name, MetaTypeInfo[] properties, string[] userImports) {
-	string className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
-	foreach (userClass; userImports) {
-		if (userClass != className) output.writefln("class %s;", userClass);
+	class Controller {
+		string className;
+		MetaTypeInfo[] properties;
+		string[] userImports;
 	}
-	if (userImports.length > 0) output.writeln();
-	output.writefln("class %s : public QObject {", className);
-	output.writefln("\tQ_OBJECT");
-	output.writefln("public:");
-	output.writefln("\texplicit %s(QObject *parent = nullptr);", className);
-	output.writefln("\tstatic %s *fromJSON(QJsonObject source, QObject *parent = nullptr);", className);
-	output.writefln("\tvoid updateFromJSON(QJsonObject source, bool emitSignals = true);");
-	output.writefln("\tQJsonObject toJSON();");
-	output.writeln();
+	Controller controller = new Controller();
+	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
+	controller.properties = properties;
+	controller.userImports = userImports;
 	
-	// Generate Q_PROPERTIES
-	foreach (property; properties) {
-		// Avoid clashes with QML
-		if (property.description.length > 0) {
-			output.writefln("\t/**");
-			output.writefln("\t * @brief %s", property.description);
-			output.writefln("\t */");
-		}
-		output.writefln("\tQ_PROPERTY(%s %s READ %s WRITE set%s NOTIFY %sChanged)", 
-			property.typeNameWithQualifiers, property.name, property.name, property.writeName, property.name);
-	}
+	output.writeln(render!(import("object_header.hbs"), Controller)(controller));
 	
-	output.writeln();
-	// Write getters
-	foreach (property; properties) {
-		// Avoid clashes with QML
-		output.writefln("\t%s %s() const;", 
-			property.typeNameWithQualifiers, property.name);
-		output.writefln("\tvoid set%s(%s new%s);",
-			property.writeName, property.typeNameWithQualifiers, property.writeName);
-		output.writefln("\t");
-	}
 	
-	// Signals
-	output.writefln("signals:");
-	foreach (property; properties) {
-		output.writefln("\tvoid %sChanged(%s new%s);",
-			property.name, property.typeNameWithQualifiers, property.writeName);
-	}
-	output.writefln("protected:");
-	
-	// Write member variables
-	foreach (property; properties) {
-		if (property.defaultInitializer.length > 0) {
-			output.writefln("\t%s %s = %s;",
-				property.typeNameWithQualifiers, property.memberName, property.defaultInitializer);
-		} else {
-			output.writefln("\t%s %s;",
-				property.typeNameWithQualifiers, property.memberName);
-		}
-	}
-	
-	output.writefln("};");
 }
 
 void writeObjectImplementation(File output, string name, MetaTypeInfo[] properties) {
-	string className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
-	
-	output.writefln("%s::%s(QObject *parent) : QObject(parent) {}", className, className);
-	output.writeln();
-	
-	output.writefln("%s *%s::fromJSON(QJsonObject source, QObject *parent) {", className, className);
-	output.writefln("\t%s *instance = new %s(parent);", className, className);
-	output.writefln("\tinstance->updateFromJSON(source, false);", className);
-	output.writefln("\treturn instance;");
-	output.writefln("}");
-	output.writeln();
-	
-	output.writefln("void %s::updateFromJSON(QJsonObject source, bool emitSignals) {", className, className);
-	output.writefln("\tQ_UNIMPLEMENTED();");
-	foreach (property; properties) {
-		output.writefln("\t%s = fromJsonValue<%s>(source[\"%s\");", property.memberName,  property.typeNameWithQualifiers, 
-			property.originalName);
+	class Controller {
+		string className;
+		MetaTypeInfo[] properties;
 	}
-	output.writeln();
-	output.writefln("\tif (emitSignals) {");
-	foreach (property; properties) {
-		output.writefln("\t\temit %sChanged(%s);", property.name,  property.memberName);
-	}
-	output.writefln("\t}");
-	output.writefln("}");
-	
-	output.writefln("QJsonObject %s::toJSON() {", className);
-	output.writefln("\tQJsonObject result;");
-	foreach (property; properties) {
-		output.writefln("\tresult[\"%s\"] = toJsonValue<%s>(%s);", property.originalName, property.typeNameWithQualifiers, 
-			property.memberName);
-	}
-	output.writefln("\treturn result;");
-	output.writefln("}");
-	
-	foreach(property; properties) {
-		output.writefln("%s %s::%s() const { return %s; }", property.typeNameWithQualifiers, 
-			className, property.name, property.memberName);
-			
-		output.writefln("void %s::set%s(%s new%s) {", className, property.writeName, 
-			property.typeNameWithQualifiers, property.writeName);
-		output.writefln("\t%s = new%s;", property.memberName, property.writeName);
-		output.writefln("\temit %sChanged(new%s);", property.name, property.writeName);
-		output.writefln("}");
-		output.writeln();
-	}
+	Controller controller = new Controller();
+	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
+	controller.properties = properties;
+	output.writeln(render!(import("object_implementation.hbs"), Controller)(controller));
 }
 
 // Enum
 void writeEnumHeader(File output, string name, string[] values, string doc = "") {
-	string className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
-	output.writefln("class %sClass {", className);
-	output.writefln("\tQ_GADGET");
-	output.writefln("public:");
-	output.writefln("\tenum Value {");
-	output.writefln("\t\tEnumNotSet,");
-	foreach (value; values) {
-		output.writefln("\t\t%s,", value);
+	class Controller {
+		string className;
+		string[] values;
 	}
-	output.writefln("\t};");
-	output.writefln("\tQ_ENUM(Value)");
-	output.writefln("private:");
-	output.writefln("\texplicit %sClass();", className);
-	output.writefln("};");
-	output.writefln("typedef %sClass::Value %s;", className, className);
-	output.writeln();
-	output.writefln("template <>");
-	output.writefln("%s fromJsonValue<%s>(QJsonValue source) {", className, className);
-	output.writefln("\tif (!source.isString()) return %sClass::EnumNotSet;", className);
-	output.writeln();
-	output.writefln("\tQString str = source.toString();");
-	if (values.length > 0) {
-		output.writefln("\tif (str == QStringLiteral(\"%s\")) {", values[0]);
-		output.writefln("\t\treturn %sClass::%s;", className, values[0]);
-		output.write("\t}");
-		foreach(value; drop(values, 1)) {
-			output.writefln(" else if (str == QStringLiteral(\"%s\")) {", value);
-			output.writefln("\t\treturn %sClass::%s;", className, value);
-			output.write("\t}");
-		}
-		output.writeln();
-	}
-	output.writeln();
-	output.writefln("\treturn %sClass::EnumNotSet;", className);
-	output.writefln("}");
+	Controller controller = new Controller();
+	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
+	controller.values = values;
+	output.writeln(render!(import("enum_header.hbs"), Controller)(controller));
 }
 
 void writeEnumImplementation(File output, string name) {
 	string className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
-	string importName = name.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
 	output.writefln("%sClass::%sClass() {}", name, name);
 }
 

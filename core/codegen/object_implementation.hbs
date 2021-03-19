@@ -1,0 +1,49 @@
+{{className}}::{{className}}(QObject *parent) : QObject(parent) {}
+
+
+{{className}} *{{className}}::fromJSON(QJsonObject source, QObject *parent) {
+	{{className}} *instance = new {{className}}(parent);
+	instance->updateFromJSON(source, false);
+	return instance;
+}
+
+
+void {{className}}::updateFromJSON(QJsonObject source, bool emitSignals) {
+
+	{{#each properties as |property|}}
+	{{property.memberName}} = fromJsonValue<{{property.typeNameWithQualifiers}}>(source["{{property.originalName}}"]);
+
+	{{/each}}
+	
+	if (emitSignals) {
+
+	{{#each properties as |property|}}
+		emit {{property.name}}Changed({{property.memberName}});
+
+	{{/each}}
+	}
+}
+	
+QJsonObject {{className}}::toJSON() {
+	QJsonObject result;
+
+	{{#each properties as |property|}}
+	result["{{property.originalName}}"] = toJsonValue<{{property.typeNameWithQualifiers}}>({{property.memberName}});
+
+	{{/each}}
+
+	return result;
+}"
+
+
+{{#each properties as |property|}}
+{{property.typeNameWithQualifiers}} {{className}}::{{property.name}}() const { return {{property.memberName}}; }
+
+void {{className}}::set{{property.writeName}}({{property.typeNameWithQualifiers}} new{{property.writeName}}) {
+	
+	{{property.memberName}} = new{{property.writeName}};
+	emit {{property.name}}Changed(new{{property.writeName}});
+}
+
+
+{{/each}}

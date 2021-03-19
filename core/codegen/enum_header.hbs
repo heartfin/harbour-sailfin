@@ -1,0 +1,34 @@
+class {{className}}Class {
+	Q_GADGET
+public:
+	enum Value {
+		EnumNotSet,
+
+		{{#each values as |value|}}
+		{{value}},
+
+		{{/each}}
+	};
+	Q_ENUM(Value)
+private:
+	explicit {{className}}Class();
+};
+
+typedef {{className}} Class::Value {{className}};
+
+template <>
+
+{{className}} fromJsonValue<{{className}}>(QJsonValue source) {
+	if (!source.isString()) return {{className}}Class::EnumNotSet;
+
+	QString str = source.toString();
+
+	{{#each values as |value|}}
+	if (str == QStringLiteral("{{value}}")) {
+		return {{className}}Class::{{value}};
+	}
+
+	{{/each}}
+	
+	return {{className}}Class::EnumNotSet;
+}

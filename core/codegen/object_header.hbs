@@ -1,0 +1,57 @@
+{{#each userImports as |userClass|}}
+{{#if userClass != className}}
+class {{className}};
+
+{{/if}}
+{{/each}}
+
+class {{className}} : public QObject {
+	Q_OBJECT
+public:
+	explicit {{className}}(QObject *parent = nullptr);
+	static {{className}} *fromJSON(QJsonObject source, QObject *parent = nullptr);
+	void updateFromJSON(QJsonObject source, bool emitSignals = true);
+	QJsonObject toJSON();
+	
+	// Properties
+
+{{#each properties as |p|}}
+{{#if p.description.length > 0}}
+	/**
+	 * @brief {{p.description}}
+
+	 */
+{{/if}}
+
+	Q_PROPERTY({{p.typeNameWithQualifiers}} {{p.name}} READ {{p.name}} WRITE set{{p.writeName}} NOTIFY {{p.name}}Changed)
+
+{{/each}}
+
+	// Getters
+
+	{{#each properties as |p|}}
+	{{p.typeNameWithQualifiers}} {{p.name}}() const;
+	void set{{p.writeName}}({{p.typeNameWithQualifiers}} new{{p.writeName}});
+
+
+	{{/each}}
+	
+	// Signals
+signals:
+
+	{{#each properties as |p|}}
+	void {{p.name}}Changed({{p.typeNameWithQualifiers}} new{{p.writeName}});
+
+	{{/each}}
+
+protected:
+
+{{#each properties as |p|}}
+{{#if p.defaultInitializer.length > 0}}
+	{{p.typeNameWithQualifiers}} {{p.memberName}} = {{p.defaultInitializer}};
+{{else}}
+	{{p.typeNameWithQualifiers}} {{p.memberName}};
+{{/if}}
+
+{{/each}}
+};

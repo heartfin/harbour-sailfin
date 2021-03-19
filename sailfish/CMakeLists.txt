@@ -30,7 +30,8 @@ set(sailfin_QML_SOURCES
 	qml/components/MoreSection.qml
 	qml/components/PlainLabel.qml
         qml/components/PlaybackBar.qml
-	qml/components/PlayToolbar.qml
+        qml/components/PlayQueue.qml
+        qml/components/PlayToolbar.qml
 	qml/components/RemoteImage.qml
 	qml/components/Shim.qml
 	qml/components/UserGridDelegate.qml
@@ -65,6 +66,8 @@ target_link_libraries(harbour-sailfin PRIVATE Qt5::Gui Qt5::Qml Qt5::Quick Sailf
 	# Note: this may break when the compiler changes. -rdynamic and -pie seem to be needed for the 
 	# invoker/booster to work
 	jellyfin-qt "-Wl,-rpath,${CMAKE_INSTALL_LIBDIR} -rdynamic -pie")
+target_compile_definitions(harbour-sailfin
+      PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
 install(TARGETS harbour-sailfin
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -107,5 +110,5 @@ install(FILES icons/172x172/harbour-sailfin.png
 # format.
 file(WRITE "${CMAKE_BINARY_DIR}/QtCreatorDeployment.txt"
     "${CMAKE_INSTALL_PREFIX}
-    sailfish/harbour-sailfin:bin
+     ${CMAKE_BINARY_DIR}/sailfish/harbour-sailfin:bin
 ")

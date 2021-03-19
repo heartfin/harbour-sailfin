@@ -4,23 +4,24 @@ set (CMAKE_CXX_STANDARD 17)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_AUTOMOC ON)
 cmake_policy(SET CMP0048 NEW)
+set(CMAKE_CXX_STANDARD 17)
 
 # Options
-option(SAILFISHOS "Build SailfishOS version of application")
-option(PLATFORM_QTQUICK "Build QtQuick version of application")
+option(PLATFORM_SAILFISHOS "Build SailfishOS version of application" OFF)
+option(PLATFORM_QTQUICK "Build QtQuick version of application" ON)
 
 if (NOT SAILFIN_VERSION)
     set(SAILFIN_VERSION "1.0.0")
 endif()
 
-if(SAILFISHOS)
+if(PLATFORM_SAILFISHOS)
 	# Hardcode this less?
 	set(CMAKE_INSTALL_LIBDIR "${CMAKE_INSTALL_PREFIX}/share/harbour-sailfin/lib")
 endif()
 
 add_subdirectory(core)
-if(SAILFISHOS)
+if(PLATFORM_SAILFISHOS)
 	add_subdirectory(sailfish)
-else()
+elseif(PLATFORM_QTQUICK)
 	add_subdirectory(qtquick)
 endif()

@@ -36,10 +36,10 @@ SilicaItem {
     property bool resume
     property int progress
     readonly property bool landscape: videoOutput.contentRect.width > videoOutput.contentRect.height
-    property MediaPlayer player
-    readonly property bool hudVisible: !hud.hidden || player.error !== MediaPlayer.NoError
+    readonly property bool hudVisible: !hud.hidden || manager.error !== MediaPlayer.NoError
     property int audioTrack: 0
     property int subtitleTrack: 0
+    property PlaybackManager manager;
 
     // Blackground to prevent the ambience from leaking through
     Rectangle {
@@ -49,27 +49,27 @@ SilicaItem {
 
     VideoOutput {
         id: videoOutput
-        source: player
+        source: manager
         anchors.fill: parent
     }
 
     VideoHud {
         id: hud
         anchors.fill: parent
-        player: playerRoot.player
+        manager: playerRoot.manager
         title: videoPlayer.title
 
         Label {
             anchors.fill: parent
             anchors.margins: Theme.horizontalPageMargin
             text: item.jellyfinId + "\n" + appWindow.playbackManager.streamUrl + "\n"
-                  + (appWindow.playbackManager.playMethod == PlaybackManager.DirectPlay ? "Direct Play" : "Transcoding") + "\n"
-                  + player.position + "\n"
-                  + player.status + "\n"
-                  + player.bufferProgress + "\n"
-                  + player.metaData.videoCodec + "@" + player.metaData.videoFrameRate + "(" + player.metaData.videoBitRate + ")" + "\n"
-                  + player.metaData.audioCodec + "(" + player.metaData.audioBitRate + ")" + "\n"
-                  + player.errorString + "\n"
+                  + (manager.playMethod === PlaybackManager.DirectPlay ? "Direct Play" : "Transcoding") + "\n"
+                  + manager.position + "\n"
+                  + manager.mediaStatus + "\n"
+                  // + player.bufferProgress + "\n"
+                  // + player.metaData.videoCodec + "@" + player.metaData.videoFrameRate + "(" + player.metaData.videoBitRate + ")" + "\n"
+                  // + player.metaData.audioCodec + "(" + player.metaData.audioBitRate + ")" + "\n"
+                  // + player.errorString + "\n"
             font.pixelSize: Theme.fontSizeExtraSmall
             wrapMode: "WordWrap"
             visible: appWindow.showDebugInfo
@@ -78,17 +78,17 @@ SilicaItem {
 
     VideoError {
         anchors.fill: videoOutput
-        player: playerRoot.player
+        player: manager
     }
 
     function start() {
-        appWindow.playbackManager.audioIndex = audioTrack
-        appWindow.playbackManager.subtitleIndex = subtitleTrack
-        appWindow.playbackManager.resumePlayback = resume
-        appWindow.playbackManager.item = item
+        manager.audioIndex = audioTrack
+        manager.subtitleIndex = subtitleTrack
+        manager.resumePlayback = resume
+        manager.playItem(item.jellyfinId)
     }
 
     function stop() {
-        player.stop()
+        manager.stop();
     }
 }

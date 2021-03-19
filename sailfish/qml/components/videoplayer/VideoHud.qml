@@ -20,6 +20,8 @@ import QtQuick 2.6
 import QtMultimedia 5.6
 import Sailfish.Silica 1.0
 
+import nl.netsoj.chris.Jellyfin 1.0
+
 import "../../Utils.js" as Utils
 
 /**
@@ -28,7 +30,7 @@ import "../../Utils.js" as Utils
  */
 Item {
     id: videoHud
-    property MediaPlayer player
+    property PlaybackManager manager
     property string title
     property bool _manuallyActivated: false
     readonly property bool hidden: opacity == 0.0
@@ -76,19 +78,19 @@ Item {
         id: busyIndicator
         anchors.centerIn: parent
         size: BusyIndicatorSize.Medium
-        running: [MediaPlayer.Loading, MediaPlayer.Stalled].indexOf(player.status) >= 0
+        running: [MediaPlayer.Loading, MediaPlayer.Stalled].indexOf(manager.mediaStatus) >= 0
     }
 
     IconButton {
         id: playPause
         enabled: !hidden
         anchors.centerIn: parent
-        icon.source: player.playbackState == MediaPlayer.PausedState ? "image://theme/icon-l-play" : "image://theme/icon-l-pause"
+        icon.source: manager.playbackState === MediaPlayer.PausedState ? "image://theme/icon-l-play" : "image://theme/icon-l-pause"
         onClicked: {
-            if (player.playbackState == MediaPlayer.PlayingState) {
-                player.pause()
+            if (manager.playbackState === MediaPlayer.PlayingState) {
+                manager.pause()
             } else {
-                player.play()
+                manager.play()
             }
         }
         visible: !busyIndicator.running
@@ -99,7 +101,7 @@ Item {
         anchors.bottom: parent.bottom
         width: parent.width
         height: progress.height
-        visible: [MediaPlayer.Unavailable, MediaPlayer.Loading, MediaPlayer.NoMedia].indexOf(player.status) == -1
+        visible: [MediaPlayer.Unavailable, MediaPlayer.Loading, MediaPlayer.NoMedia].indexOf(manager.mediaStatus) == -1
 
         gradient: Gradient {
             GradientStop { position: 0.0; color: Theme.rgba(palette.overlayBackgroundColor, 0.15); }
@@ -116,19 +118,19 @@ Item {
                 anchors.left: parent.left
                 anchors.leftMargin: Theme.horizontalPageMargin
                 anchors.verticalCenter: progressSlider.verticalCenter
-                text: Utils.timeToText(player.position)
+                text: Utils.timeToText(manager.position)
             }
 
             Slider {
                 id: progressSlider
-                enabled: player.seekable
-                value: player.position
-                maximumValue: player.duration
+                enabled: manager.seekable
+                value: manager.position
+                maximumValue: manager.duration
                 stepSize: 1000
                 anchors.left: playedTime.right
                 anchors.right: totalTime.left
                 anchors.verticalCenter: parent.verticalCenter
-                onDownChanged: if (!down) { player.seek(value) }
+                onDownChanged: if (!down) { manager.seek(value) }
             }
 
             Label {
@@ -136,7 +138,7 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: Theme.horizontalPageMargin
                 anchors.verticalCenter: progress.verticalCenter
-                text: Utils.timeToText(player.duration)
+                text: Utils.timeToText(manager.duration)
             }
         }
     }
@@ -144,10 +146,10 @@ Item {
 
 
     Connections {
-        target: player
-        onStatusChanged: {
-            console.log("New mediaPlayer status: " + player.status)
-            switch(player.status) {
+        target: manager
+        onMediaStatusChanged: {
+            console.log("New mediaPlayer status: " + manager.mediaStatus)
+            switch(manager.mediaStatus) {
             case MediaPlayer.Loaded:
             case MediaPlayer.Buffering:
                 show(false)

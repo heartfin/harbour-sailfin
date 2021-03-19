@@ -18,7 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 import QtQuick 2.6
 import Sailfish.Silica 1.0
-import Sailfish.Silica.Background 1.0
 
 import nl.netsoj.chris.Jellyfin 1.0
 
@@ -54,23 +53,7 @@ Page {
         }
     }
 
-
     allowedOrientations: Orientation.All
-    background: _chosenBackdropImage ? backdropBackground : null
-
-    Component {
-        id: backdropBackground
-        ThemeBackground {
-            sourceItem: backdrop
-            backgroundMaterial: "blur"
-        }
-    }
-
-    ThemeWallpaper {
-        id: backdrop
-        source: _chosenBackdropImage
-        visible: false
-    }
 
     PageBusyIndicator {
         running: pageRoot._loading
@@ -105,8 +88,7 @@ Page {
         id: jItem
         apiClient: ApiClient
         onStatusChanged: {
-            console.log("Status changed: " + newStatus, JSON.stringify(jItem))
-            console.log(jItem.mediaStreams)
+            //console.log("Status changed: " + newStatus, JSON.stringify(jItem))
             if (status == JellyfinItem.Ready) {
                 updateBackdrop()
             }

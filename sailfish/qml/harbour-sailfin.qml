@@ -32,7 +32,7 @@ ApplicationWindow {
     id: appWindow
     property bool _hasInitialized: false
     // The global mediaPlayer instance
-    readonly property MediaPlayer mediaPlayer: _mediaPlayer
+    //readonly property MediaPlayer mediaPlayer: _mediaPlayer
     readonly property PlaybackManager playbackManager: _playbackManager
 
     // Data of the currently selected item. For use on the cover.
@@ -41,7 +41,7 @@ ApplicationWindow {
     property string collectionId
 
     // Bad way to implement settings, but it'll do for now.
-    property bool showDebugInfo: false
+    property bool showDebugInfo: true
 
     property bool _hidePlaybackBar: false
 
@@ -65,13 +65,13 @@ ApplicationWindow {
         }
     }
     cover: {
-        if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(mediaPlayer.status) >= 0) {
+        if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(playbackManager.status) >= 0) {
             if (itemData) {
                 return Qt.resolvedUrl("cover/PosterCover.qml")
             } else {
                 return Qt.resolvedUrl("cover/CoverPage.qml")
             }
-        } else if (mediaPlayer.hasVideo){
+        } else if (playbackManager.hasVideo){
             return Qt.resolvedUrl("cover/VideoCover.qml")
         }
     }
@@ -87,26 +87,25 @@ ApplicationWindow {
         }
     }
 
-    MediaPlayer {
+    /*MediaPlayer {
         id: _mediaPlayer
         autoPlay: true
-    }
+    }*/
 
     PlaybackManager {
         id: _playbackManager
         apiClient: ApiClient
-        mediaPlayer: _mediaPlayer
         audioIndex: 0
         autoOpen: true
     }
 
     // Keep the sytem alive while playing media
     KeepAlive {
-        enabled: _mediaPlayer.playbackState == MediaPlayer.PlayingState
+        enabled: playbackManager.playbackState === MediaPlayer.PlayingState
     }
 
     DisplayBlanking {
-        preventBlanking: _mediaPlayer.playbackState == MediaPlayer.PlayingState && _mediaPlayer.hasVideo
+        preventBlanking: playbackManager.playbackState === MediaPlayer.PlayingState && playbackManager.hasVideo
     }
     
     PlaybackBar {

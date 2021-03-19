@@ -44,7 +44,7 @@ Page {
     VideoPlayer {
         id: videoPlayer
         anchors.fill: parent
-        player: appWindow.mediaPlayer
+        manager: appWindow.playbackManager
         title: itemData.name
         audioTrack: videoPage.audioTrack
         subtitleTrack: videoPage.subtitleTrack
@@ -61,7 +61,7 @@ Page {
 
     onStatusChanged: {
         switch(status) {
-        case PageStatus.Inactive:
+        case PageStatus.Deactivating:
             videoPlayer.stop()
             break;
         case PageStatus.Active:

@@ -43,6 +43,8 @@ PanelBackground {
     property PlaybackManager manager
     property bool open
     property real visibleSize: height
+    property bool isFullPage: false
+    property bool showQueue: false
 
     property bool _pageWasShowingNavigationIndicator
 
@@ -53,7 +55,7 @@ PanelBackground {
         id: backgroundItem
         width: parent.width
         height: parent.height
-        onClicked: playbackBar.state = (playbackBar.state == "large" ? "open" : "large")
+        onClicked: playbackBar.state = "large"
 
 
         RemoteImage {
@@ -64,7 +66,10 @@ PanelBackground {
                 top: parent.top
             }
             width: height
-            blurhash: manager.item.imageBlurHashes["Primary"][manager.item.imageTags["Primary"]]
+            Binding on blurhash {
+                when: manager.item !== null && "Primary" in manager.item.imageBlurHashes
+                value: manager.item.imageBlurHashes["Primary"][manager.item.imageTags["Primary"]]
+            }
             source: largeAlbumArt.source
             fillMode: Image.PreserveAspectCrop
 
@@ -75,6 +80,20 @@ PanelBackground {
                 anchors.fill: parent
                 opacity: 0
                 Behavior on opacity { FadeAnimation {} }
+            }
+        }
+        Loader {
+            id: queueLoader
+            source: Qt.resolvedUrl("PlayQueue.qml")
+            anchors.fill: albumArt
+            active: false
+            visible: false
+            Binding {
+                when: queueLoader.item !== null
+                target: queueLoader.item
+                property: "model"
+                value: manager.queue
+                //currentIndex: manager.queueIndex
             }
         }
 
@@ -106,6 +125,7 @@ PanelBackground {
                     case "Audio":
                         return manager.item.artists.join(", ")
                     }
+                    return qsTr("Not audio")
                 }
                 width: Math.min(contentWidth, parent.width)
                 font.pixelSize: Theme.fontSizeSmall
@@ -146,11 +166,11 @@ PanelBackground {
                 rightMargin: Theme.paddingMedium
                 verticalCenter: parent.verticalCenter
             }
-            icon.source: appWindow.mediaPlayer.playbackState === MediaPlayer.PlayingState
+            icon.source: manager.playbackState === MediaPlayer.PlayingState
                          ? "image://theme/icon-m-pause" : "image://theme/icon-m-play"
-            onClicked: appWindow.mediaPlayer.playbackState === MediaPlayer.PlayingState
-                ? appWindow.mediaPlayer.pause()
-                : appWindow.mediaPlayer.play()
+            onClicked: manager.playbackState === MediaPlayer.PlayingState
+                ? manager.pause()
+                : manager.play()
         }
         IconButton {
             id: nextButton
@@ -171,8 +191,10 @@ PanelBackground {
                 verticalCenter: playButton.verticalCenter
             }
             icon.source: "image://theme/icon-m-menu"
+            icon.highlighted: showQueue
             enabled: false
             opacity: 0
+            onClicked: showQueue = !showQueue
         }
 
         ProgressBar {
@@ -182,9 +204,9 @@ PanelBackground {
             leftMargin: Theme.itemSizeLarge
             rightMargin: 0
             minimumValue: 0
-            value: appWindow.mediaPlayer.position
-            maximumValue: appWindow.mediaPlayer.duration
-            indeterminate: [MediaPlayer.Loading, MediaPlayer.Buffering].indexOf(appWindow.mediaPlayer.status) >= 0
+            value: manager.position
+            maximumValue: manager.duration
+            indeterminate: [MediaPlayer.Loading, MediaPlayer.Buffering].indexOf(manager.mediaStatus) >= 0
         }
 
         Slider {
@@ -192,17 +214,17 @@ PanelBackground {
             animateValue: false
             anchors.verticalCenter: progressBar.top
             minimumValue: 0
-            value: appWindow.mediaPlayer.position
-            maximumValue: appWindow.mediaPlayer.duration
+            value: manager.position
+            maximumValue: manager.duration
             width: parent.width
             stepSize: 1000
             valueText: Utils.timeToText(value)
             enabled: false
             visible: false
             onDownChanged: { if (!down) {
-                    appWindow.mediaPlayer.seek(value);
+                    manager.seek(value);
                     // For some reason, the binding breaks when dragging the slider.
-                    value = Qt.binding(function() { return appWindow.mediaPlayer.position})
+                    value = Qt.binding(function() { return manager.position})
                 }
             }
         }
@@ -212,7 +234,7 @@ PanelBackground {
    states: [
        State {
            name: ""
-           when: appWindow.mediaPlayer.playbackState !== MediaPlayer.StoppedState && state != "page" && !("__hidePlaybackBar" in pageStack.currentPage)
+           when: manager.playbackState !== MediaPlayer.StoppedState && !isFullPage && !("__hidePlaybackBar" in pageStack.currentPage)
        },
        State {
            name: "large"
@@ -328,27 +350,46 @@ PanelBackground {
             }
 
         },
-       State {
-           name: "hidden"
-           when: (appWindow.mediaPlayer.playbackState === MediaPlayer.StoppedState || "__hidePlaybackBar" in pageStack.currentPage) && state != "page"
-           PropertyChanges {
-               target: playbackBarTranslate
-               // + small padding since the ProgressBar otherwise would stick out
-               y: playbackBar.height + Theme.paddingSmall
-           }
-           PropertyChanges {
-               target: playbackBar
-               visibleSize: 0
-           }
-           PropertyChanges {
-               target: albumArt
-               source: ""
-           }
-       },
-       State {
-           name: "page"
-           extend: "large"
-       }
+        State {
+            name: "hidden"
+            when: (manager.playbackState === MediaPlayer.StoppedState || "__hidePlaybackBar" in pageStack.currentPage) && !isFullPage
+            PropertyChanges {
+                target: playbackBarTranslate
+                // + small padding since the ProgressBar otherwise would stick out
+                y: playbackBar.height + Theme.paddingSmall
+            }
+            PropertyChanges {
+                target: playbackBar
+                visibleSize: 0
+            }
+            PropertyChanges {
+                target: albumArt
+                source: ""
+            }
+        },
+        State {
+            name: "page"
+            when: isFullPage && !showQueue
+            extend: "large"
+            PropertyChanges {
+                target: queueLoader
+                active: true
+            }
+        },
+        State {
+            name: "pageQueue"
+            when: isFullPage && showQueue
+            extend: "page"
+            PropertyChanges {
+                target: queueLoader
+                visible: true
+            }
+            PropertyChanges {
+                target: largeAlbumArt
+                opacity: 0
+                visible: false
+            }
+        }
     ]
 
     Component {
@@ -371,7 +412,7 @@ PanelBackground {
                 }
                 Loader {
                     Component.onCompleted: setSource(Qt.resolvedUrl("PlaybackBar.qml"),
-                                                     {"state": "page", "manager": manager, "y": 0})
+                                                     {"isFullPage": true, "manager": manager, "y": 0})
                     anchors.fill: parent
                 }
             }
@@ -421,23 +462,19 @@ PanelBackground {
         },
         Transition {
             from: "hidden"
-            SequentialAnimation {
-                ParallelAnimation {
-                    NumberAnimation {
-                        targets: [playbackBarTranslate, playbackBar]
-                        properties: "y,visibileSize"
-                        duration: 250
-                        easing.type: Easing.OutQuad
-                    }
+            NumberAnimation {
+                targets: [playbackBarTranslate, playbackBar]
+                properties: "y,visibileSize"
+                duration: 250
+                easing.type: Easing.OutQuad
+            }
 
-                    NumberAnimation {
-                        target: appWindow
-                        property: "bottomMargin"
-                        duration: 250
-                        to: Theme.itemSizeLarge
-                        easing.type: Easing.OutQuad
-                    }
-                }
+            NumberAnimation {
+                target: appWindow
+                property: "bottomMargin"
+                duration: 250
+                to: Theme.itemSizeLarge
+                easing.type: Easing.OutQuad
             }
         },
         Transition {

@@ -40,7 +40,7 @@ BaseDetailPage {
         anchors.fill: parent
         model: collectionModel
         cellWidth: Constants.libraryDelegateWidth
-        cellHeight: Utils.usePortraitCover(itemData.type) ? Constants.libraryDelegatePosterHeight
+        cellHeight: Utils.usePortraitCover(itemData.collectionType) ? Constants.libraryDelegatePosterHeight
                                                                     : Constants.libraryDelegateHeight
         visible: itemData.status !== JellyfinItem.Error
 
@@ -54,14 +54,14 @@ BaseDetailPage {
                 text: qsTr("Sort by")
                 onClicked: pageStack.push(sortPageComponent)
             }
-            busy: collectionModel.status == ApiModel.Loading
+            busy: collectionModel.status === ApiModel.Loading
         }
         delegate: GridItem {
             RemoteImage {
                 id: itemImage
                 anchors.fill: parent
-                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxWidth": width})
-                blurhash: model.imageBlurHashes.primary[model.imageTags.primary]
+                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxWidth": width})
+                blurhash: model.imageBlurHashes.Primary[model.imageTags.Primary]
                 fallbackColor: Utils.colorFromString(model.name)
                 fillMode: Image.PreserveAspectCrop
                 clip: true
@@ -90,7 +90,7 @@ BaseDetailPage {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: Theme.fontSizeSmall
             }
-            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type, model.isFolder), {"itemId": model.id})
+            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type, model.isFolder), {"itemId": model.jellyfinId})
         }
 
         ViewPlaceholder {

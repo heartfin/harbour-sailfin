@@ -60,7 +60,8 @@ BaseDetailPage {
                 }
                 width: Constants.libraryDelegateWidth
                 height: Constants.libraryDelegateHeight
-                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": height})
+                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxHeight": height})
+                blurhash: model.imageBlurHashes.Primary[model.imageTags.Primary]
                 fillMode: Image.PreserveAspectCrop
                 clip: true
 
@@ -140,7 +141,7 @@ BaseDetailPage {
                 wrapMode: Text.WordWrap
                 elide: Text.ElideRight
             }
-            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.id})
+            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.jellyfinId})
         }
 
         VerticalScrollDecorator {}

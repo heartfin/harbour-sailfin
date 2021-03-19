@@ -1,6 +1,5 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
-import QtGraphicalEffects 1.12
 import QtQuick.Window 2.12
 
 import nl.netsoj.chris.Jellyfin 1.0
@@ -31,11 +30,13 @@ ApplicationWindow {
             }
             _oldDepth = depth
         }
+        initialItem: Qt.resolvedUrl("pages/MainPage.qml")
+        Keys.onEscapePressed: pop()
     }
 
     Connections {
         target: ApiClient
-        onSetupRequired: pageStack.push(Qt.resolvedUrl("pages/setup/ServerSelectPage.qml"));
+        onSetupRequired: pageStack.replace(Qt.resolvedUrl("pages/setup/ServerSelectPage.qml"));
     }
 
     Component.onCompleted: {

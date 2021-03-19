@@ -85,7 +85,7 @@ QJsonObject DeviceProfile::generateProfile() {
                                  QJsonObject {
                                      JsonPair("Property", "IsSecondaryAudio"),
                                      JsonPair("Condition", "Equals"),
-                                     JsonPair("Value", false),
+                                     JsonPair("Value", "false"),
                                      JsonPair("IsRequired", false)
                                  }
                              }),
@@ -97,7 +97,7 @@ QJsonObject DeviceProfile::generateProfile() {
                                  QJsonObject {
                                      JsonPair("Property", "IsAnamorphic"),
                                      JsonPair("Condition", "NotEquals"),
-                                     JsonPair("Value", true),
+                                     JsonPair("Value", "true"),
                                      JsonPair("IsRequired", false)
                                  },
                                  QJsonObject {
@@ -109,13 +109,13 @@ QJsonObject DeviceProfile::generateProfile() {
                                  QJsonObject {
                                      JsonPair("Property", "VideoLevel"),
                                      JsonPair("Condition", "LessThanEqual"),
-                                     JsonPair("Value", 51),
+                                     JsonPair("Value", "51"),
                                      JsonPair("IsRequired", false)
                                  },
                                  QJsonObject {
                                      JsonPair("Property", "IsInterlaced"),
                                      JsonPair("Condition", "NotEquals"),
-                                     JsonPair("Value", true),
+                                     JsonPair("Value", "true"),
                                      JsonPair("IsRequired", false)
                                  }
                              }),
@@ -130,8 +130,8 @@ QJsonObject DeviceProfile::generateProfile() {
     transcoding1["BreakOnNonKeyFrames"] =true;
     transcoding1["Container"] = "ts";
     transcoding1["Context"] = "Streaming";
-    transcoding1["MaxAudioChannels"] = 2;
-    transcoding1["MinSegments"] = 1;
+    transcoding1["MaxAudioChannels"] = "2";
+    transcoding1["MinSegments"] = "1";
     transcoding1["Protocol"] = "hls";
     transcoding1["Type"] = "Audio";
     transcodingProfiles.append(transcoding1);
@@ -142,7 +142,7 @@ QJsonObject DeviceProfile::generateProfile() {
                                     JsonPair("BreakOnNonKeyFrames", true),
                                     JsonPair("Container", "ts"),
                                     JsonPair("Context", "Streaming"),
-                                    JsonPair("MaxAudioChannels", 2),
+                                    JsonPair("MaxAudioChannels", "2"),
                                     JsonPair("MinSegments", 1),
                                     JsonPair("Protocol", "hls"),
                                     JsonPair("Type", "Video"),
@@ -168,8 +168,8 @@ QJsonObject DeviceProfile::generateProfile() {
                                        JsonPair("VideoCodec", hlsVideoCodecs.join(",")),
                                        JsonPair("Context", "Streaming"),
                                        JsonPair("Protocol", "hls"),
-                                       JsonPair("MaxAudioChannels", 2),
-                                       JsonPair("MinSegments", 1),
+                                       JsonPair("MaxAudioChannels", "2"),
+                                       JsonPair("MinSegments", "1"),
                                        JsonPair("BreakOnNonKeyFrames", true)
                                    });
     }

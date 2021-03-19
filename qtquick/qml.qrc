@@ -14,5 +14,7 @@
         <file>qml/components/+sailfinstyle/Background.qml</file>
         <file>qml/components/BusyDialog.qml</file>
         <file>qml/pages/setup/LoginPage.qml</file>
+        <file>qml/pages/MainPage.qml</file>
+        <file>qml/pages/DetailPage.qml</file>
     </qresource>
 </RCC>

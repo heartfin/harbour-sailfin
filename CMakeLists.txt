@@ -9,6 +9,10 @@ cmake_policy(SET CMP0048 NEW)
 option(SAILFISHOS "Build SailfishOS version of application")
 option(PLATFORM_QTQUICK "Build QtQuick version of application")
 
+if (NOT SAILFIN_VERSION)
+    set(SAILFIN_VERSION "1.0.0")
+endif()
+
 if(SAILFISHOS)
 	# Hardcode this less?
 	set(CMAKE_INSTALL_LIBDIR "${CMAKE_INSTALL_PREFIX}/share/harbour-sailfin/lib")

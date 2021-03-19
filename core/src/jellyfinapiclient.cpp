@@ -184,7 +184,7 @@ void ApiClient::authenticate(QString username, QString password, bool storeCrede
 
     requestData["Username"] = username;
     requestData["Pw"] = password;
-    QNetworkReply *rep = post("/Users/Authenticatebyname", QJsonDocument(requestData));
+    QNetworkReply *rep = post("/Users/authenticatebyname", QJsonDocument(requestData));
     connect(rep, &QNetworkReply::finished, this, [rep, username, storeCredentials, this]() {
         int status = rep->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         qDebug() << "Got reply with status code " << status;
@@ -201,6 +201,12 @@ void ApiClient::authenticate(QString username, QString password, bool storeCrede
 
             if (storeCredentials) {
                 m_credManager->store(this->m_baseUrl, this->m_userId, this->m_token);
+            }
+        } else if(status >= 400 && status < 500) {
+            if (status == 401) {
+                emit authenticationError(ApiError::INVALID_PASSWORD);
+            } else {
+                emit authenticationError(ApiError::UNEXPECTED_STATUS);
             }
         }
         rep->deleteLater();

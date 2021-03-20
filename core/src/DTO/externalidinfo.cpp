@@ -29,49 +29,54 @@
 
 #include <JellyfinQt/DTO/externalidinfo.h>
 
-#include <JellyfinQt/DTO/externalidmediatype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ExternalIdInfo::ExternalIdInfo(QObject *parent) : QObject(parent) {}
+ExternalIdInfo::ExternalIdInfo(QObject *parent) {}
 
-ExternalIdInfo *ExternalIdInfo::fromJSON(QJsonObject source, QObject *parent) {
-	ExternalIdInfo *instance = new ExternalIdInfo(parent);
-	instance->updateFromJSON(source);
+ExternalIdInfo ExternalIdInfo::fromJson(QJsonObject source) {ExternalIdInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ExternalIdInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ExternalIdInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_key = fromJsonValue<QString>(source["Key"]);
+	m_type = fromJsonValue<ExternalIdMediaType>(source["Type"]);
+	m_urlFormatString = fromJsonValue<QString>(source["UrlFormatString"]);
+
 }
-QJsonObject ExternalIdInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ExternalIdInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Key"] = toJsonValue<QString>(m_key);
+	result["Type"] = toJsonValue<ExternalIdMediaType>(m_type);
+	result["UrlFormatString"] = toJsonValue<QString>(m_urlFormatString);
+
 	return result;
 }
+
 QString ExternalIdInfo::name() const { return m_name; }
+
 void ExternalIdInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString ExternalIdInfo::key() const { return m_key; }
+
 void ExternalIdInfo::setKey(QString newKey) {
 	m_key = newKey;
-	emit keyChanged(newKey);
 }
-
 ExternalIdMediaType ExternalIdInfo::type() const { return m_type; }
+
 void ExternalIdInfo::setType(ExternalIdMediaType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 QString ExternalIdInfo::urlFormatString() const { return m_urlFormatString; }
+
 void ExternalIdInfo::setUrlFormatString(QString newUrlFormatString) {
 	m_urlFormatString = newUrlFormatString;
-	emit urlFormatStringChanged(newUrlFormatString);
 }
 
 

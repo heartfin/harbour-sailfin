@@ -32,9 +32,9 @@ static const int HTTP_TIMEOUT = 30000; // 30 seconds;
  */
 template <typename R, typename P>
 class Loader {
-    using ApiClient = Jellyfin::ApiClient;
 public:
-    explicit Loader(ApiClient *apiClient) : m_apiClient(apiClient) {}
+    explicit Loader(Jellyfin::ApiClient *apiClient)
+        : m_apiClient(apiClient) {}
     /**
      * @brief load Loads the given resource.
      * @param parameters Parameters to determine which resource should be loaded.
@@ -50,14 +50,20 @@ public:
      */
     virtual bool isAvailable() const;
 protected:
-    ApiClient *m_apiClient;
+    Jellyfin::ApiClient *m_apiClient;
 };
 
+/**
+ * Implementation of Loader that loads Items over HTTP
+ */
 template <typename R, typename P>
 class HttpLoader : public Loader<R, P> {
 public:
-    R load(const P &parameters) const override {
-        QNetworkReply *reply = m_apiClient->get(url(parameters), query(parameters));
+    explicit HttpLoader(Jellyfin::ApiClient *apiClient)
+        : Loader<R, P> (apiClient) {}
+
+    virtual R load(const P &parameters) const override {
+        QNetworkReply *reply = this->m_apiClient->get(url(parameters), query(parameters));
         QByteArray array;
         while (!reply->atEnd()) {
             if (!reply->waitForReadyRead(HTTP_TIMEOUT)) {

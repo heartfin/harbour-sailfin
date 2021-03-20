@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-ForgotPasswordDto::ForgotPasswordDto(QObject *parent) : QObject(parent) {}
+ForgotPasswordDto::ForgotPasswordDto(QObject *parent) {}
 
-ForgotPasswordDto *ForgotPasswordDto::fromJSON(QJsonObject source, QObject *parent) {
-	ForgotPasswordDto *instance = new ForgotPasswordDto(parent);
-	instance->updateFromJSON(source);
+ForgotPasswordDto ForgotPasswordDto::fromJson(QJsonObject source) {ForgotPasswordDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ForgotPasswordDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ForgotPasswordDto::setFromJson(QJsonObject source) {
+	m_enteredUsername = fromJsonValue<QString>(source["EnteredUsername"]);
+
 }
-QJsonObject ForgotPasswordDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ForgotPasswordDto::toJson() {
 	QJsonObject result;
+	result["EnteredUsername"] = toJsonValue<QString>(m_enteredUsername);
+
 	return result;
 }
+
 QString ForgotPasswordDto::enteredUsername() const { return m_enteredUsername; }
+
 void ForgotPasswordDto::setEnteredUsername(QString newEnteredUsername) {
 	m_enteredUsername = newEnteredUsername;
-	emit enteredUsernameChanged(newEnteredUsername);
 }
 
 

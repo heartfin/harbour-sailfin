@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_TRANSPORTSTREAMTIMESTAMP_H
 #define JELLYFIN_DTO_TRANSPORTSTREAMTIMESTAMP_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class TransportStreamTimestampClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		None,
 		Zero,
 		Valid,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit TransportStreamTimestampClass();
 };
+
 typedef TransportStreamTimestampClass::Value TransportStreamTimestamp;
+
+} // NS DTO
+
+namespace Support {
+
+using TransportStreamTimestamp = Jellyfin::DTO::TransportStreamTimestamp;
+using TransportStreamTimestampClass = Jellyfin::DTO::TransportStreamTimestampClass;
+
+template <>
+TransportStreamTimestamp fromJsonValue<TransportStreamTimestamp>(const QJsonValue &source) {
+	if (!source.isString()) return TransportStreamTimestampClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("None")) {
+		return TransportStreamTimestampClass::None;
+	}
+	if (str == QStringLiteral("Zero")) {
+		return TransportStreamTimestampClass::Zero;
+	}
+	if (str == QStringLiteral("Valid")) {
+		return TransportStreamTimestampClass::Valid;
+	}
+	
+	return TransportStreamTimestampClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

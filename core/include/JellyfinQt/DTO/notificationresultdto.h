@@ -31,45 +31,60 @@
 #define JELLYFIN_DTO_NOTIFICATIONRESULTDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/notificationdto.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class NotificationDto;
 
-class NotificationResultDto : public QObject {
-	Q_OBJECT
+class NotificationResultDto {
 public:
-	explicit NotificationResultDto(QObject *parent = nullptr);
-	static NotificationResultDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit NotificationResultDto();
+	static NotificationResultDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the current page of notifications.
 	 */
-	Q_PROPERTY(QList<NotificationDto *> notifications READ notifications WRITE setNotifications NOTIFY notificationsChanged)
+	QList<QSharedPointer<NotificationDto>> notifications() const;
+	/**
+	* @brief Gets or sets the current page of notifications.
+	*/
+	void setNotifications(QList<QSharedPointer<NotificationDto>> newNotifications);
 	/**
 	 * @brief Gets or sets the total number of notifications.
 	 */
-	Q_PROPERTY(qint32 totalRecordCount READ totalRecordCount WRITE setTotalRecordCount NOTIFY totalRecordCountChanged)
-
-	QList<NotificationDto *> notifications() const;
-	void setNotifications(QList<NotificationDto *> newNotifications);
-	
 	qint32 totalRecordCount() const;
+	/**
+	* @brief Gets or sets the total number of notifications.
+	*/
 	void setTotalRecordCount(qint32 newTotalRecordCount);
-	
-signals:
-	void notificationsChanged(QList<NotificationDto *> newNotifications);
-	void totalRecordCountChanged(qint32 newTotalRecordCount);
+
 protected:
-	QList<NotificationDto *> m_notifications;
+	QList<QSharedPointer<NotificationDto>> m_notifications;
 	qint32 m_totalRecordCount;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using NotificationResultDto = Jellyfin::DTO::NotificationResultDto;
+
+template <>
+NotificationResultDto fromJsonValue<NotificationResultDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NotificationResultDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

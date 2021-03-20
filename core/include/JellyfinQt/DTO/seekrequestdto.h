@@ -31,32 +31,47 @@
 #define JELLYFIN_DTO_SEEKREQUESTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SeekRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit SeekRequestDto(QObject *parent = nullptr);
-	static SeekRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class SeekRequestDto {
+public:
+	explicit SeekRequestDto();
+	static SeekRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the position ticks.
 	 */
-	Q_PROPERTY(qint64 positionTicks READ positionTicks WRITE setPositionTicks NOTIFY positionTicksChanged)
-
 	qint64 positionTicks() const;
+	/**
+	* @brief Gets or sets the position ticks.
+	*/
 	void setPositionTicks(qint64 newPositionTicks);
-	
-signals:
-	void positionTicksChanged(qint64 newPositionTicks);
+
 protected:
 	qint64 m_positionTicks;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SeekRequestDto = Jellyfin::DTO::SeekRequestDto;
+
+template <>
+SeekRequestDto fromJsonValue<SeekRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SeekRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

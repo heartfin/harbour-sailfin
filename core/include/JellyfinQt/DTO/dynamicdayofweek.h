@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_DYNAMICDAYOFWEEK_H
 #define JELLYFIN_DTO_DYNAMICDAYOFWEEK_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class DynamicDayOfWeekClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Sunday,
 		Monday,
 		Tuesday,
@@ -54,7 +59,54 @@ public:
 private:
 	explicit DynamicDayOfWeekClass();
 };
+
 typedef DynamicDayOfWeekClass::Value DynamicDayOfWeek;
+
+} // NS DTO
+
+namespace Support {
+
+using DynamicDayOfWeek = Jellyfin::DTO::DynamicDayOfWeek;
+using DynamicDayOfWeekClass = Jellyfin::DTO::DynamicDayOfWeekClass;
+
+template <>
+DynamicDayOfWeek fromJsonValue<DynamicDayOfWeek>(const QJsonValue &source) {
+	if (!source.isString()) return DynamicDayOfWeekClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Sunday")) {
+		return DynamicDayOfWeekClass::Sunday;
+	}
+	if (str == QStringLiteral("Monday")) {
+		return DynamicDayOfWeekClass::Monday;
+	}
+	if (str == QStringLiteral("Tuesday")) {
+		return DynamicDayOfWeekClass::Tuesday;
+	}
+	if (str == QStringLiteral("Wednesday")) {
+		return DynamicDayOfWeekClass::Wednesday;
+	}
+	if (str == QStringLiteral("Thursday")) {
+		return DynamicDayOfWeekClass::Thursday;
+	}
+	if (str == QStringLiteral("Friday")) {
+		return DynamicDayOfWeekClass::Friday;
+	}
+	if (str == QStringLiteral("Saturday")) {
+		return DynamicDayOfWeekClass::Saturday;
+	}
+	if (str == QStringLiteral("Everyday")) {
+		return DynamicDayOfWeekClass::Everyday;
+	}
+	if (str == QStringLiteral("Weekday")) {
+		return DynamicDayOfWeekClass::Weekday;
+	}
+	if (str == QStringLiteral("Weekend")) {
+		return DynamicDayOfWeekClass::Weekend;
+	}
+	
+	return DynamicDayOfWeekClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

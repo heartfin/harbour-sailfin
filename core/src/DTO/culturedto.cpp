@@ -32,50 +32,58 @@
 namespace Jellyfin {
 namespace DTO {
 
-CultureDto::CultureDto(QObject *parent) : QObject(parent) {}
+CultureDto::CultureDto(QObject *parent) {}
 
-CultureDto *CultureDto::fromJSON(QJsonObject source, QObject *parent) {
-	CultureDto *instance = new CultureDto(parent);
-	instance->updateFromJSON(source);
+CultureDto CultureDto::fromJson(QJsonObject source) {CultureDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void CultureDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void CultureDto::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_displayName = fromJsonValue<QString>(source["DisplayName"]);
+	m_twoLetterISOLanguageName = fromJsonValue<QString>(source["TwoLetterISOLanguageName"]);
+	m_threeLetterISOLanguageName = fromJsonValue<QString>(source["ThreeLetterISOLanguageName"]);
+	m_threeLetterISOLanguageNames = fromJsonValue<QStringList>(source["ThreeLetterISOLanguageNames"]);
+
 }
-QJsonObject CultureDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject CultureDto::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["DisplayName"] = toJsonValue<QString>(m_displayName);
+	result["TwoLetterISOLanguageName"] = toJsonValue<QString>(m_twoLetterISOLanguageName);
+	result["ThreeLetterISOLanguageName"] = toJsonValue<QString>(m_threeLetterISOLanguageName);
+	result["ThreeLetterISOLanguageNames"] = toJsonValue<QStringList>(m_threeLetterISOLanguageNames);
+
 	return result;
 }
+
 QString CultureDto::name() const { return m_name; }
+
 void CultureDto::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString CultureDto::displayName() const { return m_displayName; }
+
 void CultureDto::setDisplayName(QString newDisplayName) {
 	m_displayName = newDisplayName;
-	emit displayNameChanged(newDisplayName);
 }
-
 QString CultureDto::twoLetterISOLanguageName() const { return m_twoLetterISOLanguageName; }
+
 void CultureDto::setTwoLetterISOLanguageName(QString newTwoLetterISOLanguageName) {
 	m_twoLetterISOLanguageName = newTwoLetterISOLanguageName;
-	emit twoLetterISOLanguageNameChanged(newTwoLetterISOLanguageName);
 }
-
 QString CultureDto::threeLetterISOLanguageName() const { return m_threeLetterISOLanguageName; }
+
 void CultureDto::setThreeLetterISOLanguageName(QString newThreeLetterISOLanguageName) {
 	m_threeLetterISOLanguageName = newThreeLetterISOLanguageName;
-	emit threeLetterISOLanguageNameChanged(newThreeLetterISOLanguageName);
 }
-
 QStringList CultureDto::threeLetterISOLanguageNames() const { return m_threeLetterISOLanguageNames; }
+
 void CultureDto::setThreeLetterISOLanguageNames(QStringList newThreeLetterISOLanguageNames) {
 	m_threeLetterISOLanguageNames = newThreeLetterISOLanguageNames;
-	emit threeLetterISOLanguageNamesChanged(newThreeLetterISOLanguageNames);
 }
 
 

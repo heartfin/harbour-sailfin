@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-SetChannelMappingDto::SetChannelMappingDto(QObject *parent) : QObject(parent) {}
+SetChannelMappingDto::SetChannelMappingDto(QObject *parent) {}
 
-SetChannelMappingDto *SetChannelMappingDto::fromJSON(QJsonObject source, QObject *parent) {
-	SetChannelMappingDto *instance = new SetChannelMappingDto(parent);
-	instance->updateFromJSON(source);
+SetChannelMappingDto SetChannelMappingDto::fromJson(QJsonObject source) {SetChannelMappingDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SetChannelMappingDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SetChannelMappingDto::setFromJson(QJsonObject source) {
+	m_providerId = fromJsonValue<QString>(source["ProviderId"]);
+	m_tunerChannelId = fromJsonValue<QString>(source["TunerChannelId"]);
+	m_providerChannelId = fromJsonValue<QString>(source["ProviderChannelId"]);
+
 }
-QJsonObject SetChannelMappingDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SetChannelMappingDto::toJson() {
 	QJsonObject result;
+	result["ProviderId"] = toJsonValue<QString>(m_providerId);
+	result["TunerChannelId"] = toJsonValue<QString>(m_tunerChannelId);
+	result["ProviderChannelId"] = toJsonValue<QString>(m_providerChannelId);
+
 	return result;
 }
+
 QString SetChannelMappingDto::providerId() const { return m_providerId; }
+
 void SetChannelMappingDto::setProviderId(QString newProviderId) {
 	m_providerId = newProviderId;
-	emit providerIdChanged(newProviderId);
 }
-
 QString SetChannelMappingDto::tunerChannelId() const { return m_tunerChannelId; }
+
 void SetChannelMappingDto::setTunerChannelId(QString newTunerChannelId) {
 	m_tunerChannelId = newTunerChannelId;
-	emit tunerChannelIdChanged(newTunerChannelId);
 }
-
 QString SetChannelMappingDto::providerChannelId() const { return m_providerChannelId; }
+
 void SetChannelMappingDto::setProviderChannelId(QString newProviderChannelId) {
 	m_providerChannelId = newProviderChannelId;
-	emit providerChannelIdChanged(newProviderChannelId);
 }
 
 

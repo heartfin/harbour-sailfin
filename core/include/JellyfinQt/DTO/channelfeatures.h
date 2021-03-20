@@ -31,124 +31,126 @@
 #define JELLYFIN_DTO_CHANNELFEATURES_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
 #include "JellyfinQt/DTO/channelitemsortfield.h"
 #include "JellyfinQt/DTO/channelmediacontenttype.h"
 #include "JellyfinQt/DTO/channelmediatype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ChannelFeatures : public QObject {
-	Q_OBJECT
-public:
-	explicit ChannelFeatures(QObject *parent = nullptr);
-	static ChannelFeatures *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ChannelFeatures {
+public:
+	explicit ChannelFeatures();
+	static ChannelFeatures fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the identifier.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the identifier.
+	*/
+	void setJellyfinId(QString newJellyfinId);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance can search.
 	 */
-	Q_PROPERTY(bool canSearch READ canSearch WRITE setCanSearch NOTIFY canSearchChanged)
+	bool canSearch() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance can search.
+	*/
+	void setCanSearch(bool newCanSearch);
 	/**
 	 * @brief Gets or sets the media types.
 	 */
-	Q_PROPERTY(QList<ChannelMediaType> mediaTypes READ mediaTypes WRITE setMediaTypes NOTIFY mediaTypesChanged)
+	QList<ChannelMediaType> mediaTypes() const;
+	/**
+	* @brief Gets or sets the media types.
+	*/
+	void setMediaTypes(QList<ChannelMediaType> newMediaTypes);
 	/**
 	 * @brief Gets or sets the content types.
 	 */
-	Q_PROPERTY(QList<ChannelMediaContentType> contentTypes READ contentTypes WRITE setContentTypes NOTIFY contentTypesChanged)
+	QList<ChannelMediaContentType> contentTypes() const;
+	/**
+	* @brief Gets or sets the content types.
+	*/
+	void setContentTypes(QList<ChannelMediaContentType> newContentTypes);
 	/**
 	 * @brief Represents the maximum number of records the channel allows retrieving at a time.
 	 */
-	Q_PROPERTY(qint32 maxPageSize READ maxPageSize WRITE setMaxPageSize NOTIFY maxPageSizeChanged)
+	qint32 maxPageSize() const;
+	/**
+	* @brief Represents the maximum number of records the channel allows retrieving at a time.
+	*/
+	void setMaxPageSize(qint32 newMaxPageSize);
 	/**
 	 * @brief Gets or sets the automatic refresh levels.
 	 */
-	Q_PROPERTY(qint32 autoRefreshLevels READ autoRefreshLevels WRITE setAutoRefreshLevels NOTIFY autoRefreshLevelsChanged)
+	qint32 autoRefreshLevels() const;
+	/**
+	* @brief Gets or sets the automatic refresh levels.
+	*/
+	void setAutoRefreshLevels(qint32 newAutoRefreshLevels);
 	/**
 	 * @brief Gets or sets the default sort orders.
 	 */
-	Q_PROPERTY(QList<ChannelItemSortField> defaultSortFields READ defaultSortFields WRITE setDefaultSortFields NOTIFY defaultSortFieldsChanged)
+	QList<ChannelItemSortField> defaultSortFields() const;
+	/**
+	* @brief Gets or sets the default sort orders.
+	*/
+	void setDefaultSortFields(QList<ChannelItemSortField> newDefaultSortFields);
 	/**
 	 * @brief Indicates if a sort ascending/descending toggle is supported or not.
 	 */
-	Q_PROPERTY(bool supportsSortOrderToggle READ supportsSortOrderToggle WRITE setSupportsSortOrderToggle NOTIFY supportsSortOrderToggleChanged)
+	bool supportsSortOrderToggle() const;
+	/**
+	* @brief Indicates if a sort ascending/descending toggle is supported or not.
+	*/
+	void setSupportsSortOrderToggle(bool newSupportsSortOrderToggle);
 	/**
 	 * @brief Gets or sets a value indicating whether [supports latest media].
 	 */
-	Q_PROPERTY(bool supportsLatestMedia READ supportsLatestMedia WRITE setSupportsLatestMedia NOTIFY supportsLatestMediaChanged)
+	bool supportsLatestMedia() const;
+	/**
+	* @brief Gets or sets a value indicating whether [supports latest media].
+	*/
+	void setSupportsLatestMedia(bool newSupportsLatestMedia);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance can filter.
 	 */
-	Q_PROPERTY(bool canFilter READ canFilter WRITE setCanFilter NOTIFY canFilterChanged)
+	bool canFilter() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance can filter.
+	*/
+	void setCanFilter(bool newCanFilter);
 	/**
 	 * @brief Gets or sets a value indicating whether [supports content downloading].
 	 */
-	Q_PROPERTY(bool supportsContentDownloading READ supportsContentDownloading WRITE setSupportsContentDownloading NOTIFY supportsContentDownloadingChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	bool canSearch() const;
-	void setCanSearch(bool newCanSearch);
-	
-	QList<ChannelMediaType> mediaTypes() const;
-	void setMediaTypes(QList<ChannelMediaType> newMediaTypes);
-	
-	QList<ChannelMediaContentType> contentTypes() const;
-	void setContentTypes(QList<ChannelMediaContentType> newContentTypes);
-	
-	qint32 maxPageSize() const;
-	void setMaxPageSize(qint32 newMaxPageSize);
-	
-	qint32 autoRefreshLevels() const;
-	void setAutoRefreshLevels(qint32 newAutoRefreshLevels);
-	
-	QList<ChannelItemSortField> defaultSortFields() const;
-	void setDefaultSortFields(QList<ChannelItemSortField> newDefaultSortFields);
-	
-	bool supportsSortOrderToggle() const;
-	void setSupportsSortOrderToggle(bool newSupportsSortOrderToggle);
-	
-	bool supportsLatestMedia() const;
-	void setSupportsLatestMedia(bool newSupportsLatestMedia);
-	
-	bool canFilter() const;
-	void setCanFilter(bool newCanFilter);
-	
 	bool supportsContentDownloading() const;
+	/**
+	* @brief Gets or sets a value indicating whether [supports content downloading].
+	*/
 	void setSupportsContentDownloading(bool newSupportsContentDownloading);
-	
-signals:
-	void nameChanged(QString newName);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void canSearchChanged(bool newCanSearch);
-	void mediaTypesChanged(QList<ChannelMediaType> newMediaTypes);
-	void contentTypesChanged(QList<ChannelMediaContentType> newContentTypes);
-	void maxPageSizeChanged(qint32 newMaxPageSize);
-	void autoRefreshLevelsChanged(qint32 newAutoRefreshLevels);
-	void defaultSortFieldsChanged(QList<ChannelItemSortField> newDefaultSortFields);
-	void supportsSortOrderToggleChanged(bool newSupportsSortOrderToggle);
-	void supportsLatestMediaChanged(bool newSupportsLatestMedia);
-	void canFilterChanged(bool newCanFilter);
-	void supportsContentDownloadingChanged(bool newSupportsContentDownloading);
+
 protected:
 	QString m_name;
 	QString m_jellyfinId;
@@ -163,6 +165,18 @@ protected:
 	bool m_canFilter;
 	bool m_supportsContentDownloading;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelFeatures = Jellyfin::DTO::ChannelFeatures;
+
+template <>
+ChannelFeatures fromJsonValue<ChannelFeatures>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ChannelFeatures::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

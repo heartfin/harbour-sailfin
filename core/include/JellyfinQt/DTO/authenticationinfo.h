@@ -32,112 +32,114 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class AuthenticationInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit AuthenticationInfo(QObject *parent = nullptr);
-	static AuthenticationInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class AuthenticationInfo {
+public:
+	explicit AuthenticationInfo();
+	static AuthenticationInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the identifier.
 	 */
-	Q_PROPERTY(qint64 jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	qint64 jellyfinId() const;
+	/**
+	* @brief Gets or sets the identifier.
+	*/
+	void setJellyfinId(qint64 newJellyfinId);
 	/**
 	 * @brief Gets or sets the access token.
 	 */
-	Q_PROPERTY(QString accessToken READ accessToken WRITE setAccessToken NOTIFY accessTokenChanged)
+	QString accessToken() const;
+	/**
+	* @brief Gets or sets the access token.
+	*/
+	void setAccessToken(QString newAccessToken);
 	/**
 	 * @brief Gets or sets the device identifier.
 	 */
-	Q_PROPERTY(QString deviceId READ deviceId WRITE setDeviceId NOTIFY deviceIdChanged)
+	QString deviceId() const;
+	/**
+	* @brief Gets or sets the device identifier.
+	*/
+	void setDeviceId(QString newDeviceId);
 	/**
 	 * @brief Gets or sets the name of the application.
 	 */
-	Q_PROPERTY(QString appName READ appName WRITE setAppName NOTIFY appNameChanged)
+	QString appName() const;
+	/**
+	* @brief Gets or sets the name of the application.
+	*/
+	void setAppName(QString newAppName);
 	/**
 	 * @brief Gets or sets the application version.
 	 */
-	Q_PROPERTY(QString appVersion READ appVersion WRITE setAppVersion NOTIFY appVersionChanged)
+	QString appVersion() const;
+	/**
+	* @brief Gets or sets the application version.
+	*/
+	void setAppVersion(QString newAppVersion);
 	/**
 	 * @brief Gets or sets the name of the device.
 	 */
-	Q_PROPERTY(QString deviceName READ deviceName WRITE setDeviceName NOTIFY deviceNameChanged)
+	QString deviceName() const;
+	/**
+	* @brief Gets or sets the name of the device.
+	*/
+	void setDeviceName(QString newDeviceName);
 	/**
 	 * @brief Gets or sets the user identifier.
 	 */
-	Q_PROPERTY(QString userId READ userId WRITE setUserId NOTIFY userIdChanged)
+	QUuid userId() const;
+	/**
+	* @brief Gets or sets the user identifier.
+	*/
+	void setUserId(QUuid newUserId);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is active.
 	 */
-	Q_PROPERTY(bool isActive READ isActive WRITE setIsActive NOTIFY isActiveChanged)
+	bool isActive() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is active.
+	*/
+	void setIsActive(bool newIsActive);
 	/**
 	 * @brief Gets or sets the date created.
 	 */
-	Q_PROPERTY(QDateTime dateCreated READ dateCreated WRITE setDateCreated NOTIFY dateCreatedChanged)
+	QDateTime dateCreated() const;
+	/**
+	* @brief Gets or sets the date created.
+	*/
+	void setDateCreated(QDateTime newDateCreated);
 	/**
 	 * @brief Gets or sets the date revoked.
 	 */
-	Q_PROPERTY(QDateTime dateRevoked READ dateRevoked WRITE setDateRevoked NOTIFY dateRevokedChanged)
-	Q_PROPERTY(QDateTime dateLastActivity READ dateLastActivity WRITE setDateLastActivity NOTIFY dateLastActivityChanged)
-	Q_PROPERTY(QString userName READ userName WRITE setUserName NOTIFY userNameChanged)
-
-	qint64 jellyfinId() const;
-	void setJellyfinId(qint64 newJellyfinId);
-	
-	QString accessToken() const;
-	void setAccessToken(QString newAccessToken);
-	
-	QString deviceId() const;
-	void setDeviceId(QString newDeviceId);
-	
-	QString appName() const;
-	void setAppName(QString newAppName);
-	
-	QString appVersion() const;
-	void setAppVersion(QString newAppVersion);
-	
-	QString deviceName() const;
-	void setDeviceName(QString newDeviceName);
-	
-	QString userId() const;
-	void setUserId(QString newUserId);
-	
-	bool isActive() const;
-	void setIsActive(bool newIsActive);
-	
-	QDateTime dateCreated() const;
-	void setDateCreated(QDateTime newDateCreated);
-	
 	QDateTime dateRevoked() const;
+	/**
+	* @brief Gets or sets the date revoked.
+	*/
 	void setDateRevoked(QDateTime newDateRevoked);
-	
+
 	QDateTime dateLastActivity() const;
+
 	void setDateLastActivity(QDateTime newDateLastActivity);
-	
+
 	QString userName() const;
+
 	void setUserName(QString newUserName);
-	
-signals:
-	void jellyfinIdChanged(qint64 newJellyfinId);
-	void accessTokenChanged(QString newAccessToken);
-	void deviceIdChanged(QString newDeviceId);
-	void appNameChanged(QString newAppName);
-	void appVersionChanged(QString newAppVersion);
-	void deviceNameChanged(QString newDeviceName);
-	void userIdChanged(QString newUserId);
-	void isActiveChanged(bool newIsActive);
-	void dateCreatedChanged(QDateTime newDateCreated);
-	void dateRevokedChanged(QDateTime newDateRevoked);
-	void dateLastActivityChanged(QDateTime newDateLastActivity);
-	void userNameChanged(QString newUserName);
+
 protected:
 	qint64 m_jellyfinId;
 	QString m_accessToken;
@@ -145,13 +147,25 @@ protected:
 	QString m_appName;
 	QString m_appVersion;
 	QString m_deviceName;
-	QString m_userId;
+	QUuid m_userId;
 	bool m_isActive;
 	QDateTime m_dateCreated;
 	QDateTime m_dateRevoked;
 	QDateTime m_dateLastActivity;
 	QString m_userName;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using AuthenticationInfo = Jellyfin::DTO::AuthenticationInfo;
+
+template <>
+AuthenticationInfo fromJsonValue<AuthenticationInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AuthenticationInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

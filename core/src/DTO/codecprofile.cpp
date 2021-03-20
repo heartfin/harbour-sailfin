@@ -29,55 +29,61 @@
 
 #include <JellyfinQt/DTO/codecprofile.h>
 
-#include <JellyfinQt/DTO/codectype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-CodecProfile::CodecProfile(QObject *parent) : QObject(parent) {}
+CodecProfile::CodecProfile(QObject *parent) {}
 
-CodecProfile *CodecProfile::fromJSON(QJsonObject source, QObject *parent) {
-	CodecProfile *instance = new CodecProfile(parent);
-	instance->updateFromJSON(source);
+CodecProfile CodecProfile::fromJson(QJsonObject source) {CodecProfile instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void CodecProfile::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void CodecProfile::setFromJson(QJsonObject source) {
+	m_type = fromJsonValue<CodecType>(source["Type"]);
+	m_conditions = fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
+	m_applyConditions = fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["ApplyConditions"]);
+	m_codec = fromJsonValue<QString>(source["Codec"]);
+	m_container = fromJsonValue<QString>(source["Container"]);
+
 }
-QJsonObject CodecProfile::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject CodecProfile::toJson() {
 	QJsonObject result;
+	result["Type"] = toJsonValue<CodecType>(m_type);
+	result["Conditions"] = toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
+	result["ApplyConditions"] = toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_applyConditions);
+	result["Codec"] = toJsonValue<QString>(m_codec);
+	result["Container"] = toJsonValue<QString>(m_container);
+
 	return result;
 }
+
 CodecType CodecProfile::type() const { return m_type; }
+
 void CodecProfile::setType(CodecType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
+QList<QSharedPointer<ProfileCondition>> CodecProfile::conditions() const { return m_conditions; }
 
-QList<ProfileCondition *> CodecProfile::conditions() const { return m_conditions; }
-void CodecProfile::setConditions(QList<ProfileCondition *> newConditions) {
+void CodecProfile::setConditions(QList<QSharedPointer<ProfileCondition>> newConditions) {
 	m_conditions = newConditions;
-	emit conditionsChanged(newConditions);
 }
+QList<QSharedPointer<ProfileCondition>> CodecProfile::applyConditions() const { return m_applyConditions; }
 
-QList<ProfileCondition *> CodecProfile::applyConditions() const { return m_applyConditions; }
-void CodecProfile::setApplyConditions(QList<ProfileCondition *> newApplyConditions) {
+void CodecProfile::setApplyConditions(QList<QSharedPointer<ProfileCondition>> newApplyConditions) {
 	m_applyConditions = newApplyConditions;
-	emit applyConditionsChanged(newApplyConditions);
 }
-
 QString CodecProfile::codec() const { return m_codec; }
+
 void CodecProfile::setCodec(QString newCodec) {
 	m_codec = newCodec;
-	emit codecChanged(newCodec);
 }
-
 QString CodecProfile::container() const { return m_container; }
+
 void CodecProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
-	emit containerChanged(newContainer);
 }
 
 

@@ -31,144 +31,158 @@
 #define JELLYFIN_DTO_OPENLIVESTREAMDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
 
+#include "JellyfinQt/DTO/deviceprofile.h"
 #include "JellyfinQt/DTO/mediaprotocol.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class DeviceProfile;
 
-class OpenLiveStreamDto : public QObject {
-	Q_OBJECT
+class OpenLiveStreamDto {
 public:
-	explicit OpenLiveStreamDto(QObject *parent = nullptr);
-	static OpenLiveStreamDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit OpenLiveStreamDto();
+	static OpenLiveStreamDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the open token.
 	 */
-	Q_PROPERTY(QString openToken READ openToken WRITE setOpenToken NOTIFY openTokenChanged)
+	QString openToken() const;
+	/**
+	* @brief Gets or sets the open token.
+	*/
+	void setOpenToken(QString newOpenToken);
 	/**
 	 * @brief Gets or sets the user id.
 	 */
-	Q_PROPERTY(QString userId READ userId WRITE setUserId NOTIFY userIdChanged)
+	QUuid userId() const;
+	/**
+	* @brief Gets or sets the user id.
+	*/
+	void setUserId(QUuid newUserId);
 	/**
 	 * @brief Gets or sets the play session id.
 	 */
-	Q_PROPERTY(QString playSessionId READ playSessionId WRITE setPlaySessionId NOTIFY playSessionIdChanged)
+	QString playSessionId() const;
+	/**
+	* @brief Gets or sets the play session id.
+	*/
+	void setPlaySessionId(QString newPlaySessionId);
 	/**
 	 * @brief Gets or sets the max streaming bitrate.
 	 */
-	Q_PROPERTY(qint32 maxStreamingBitrate READ maxStreamingBitrate WRITE setMaxStreamingBitrate NOTIFY maxStreamingBitrateChanged)
+	qint32 maxStreamingBitrate() const;
+	/**
+	* @brief Gets or sets the max streaming bitrate.
+	*/
+	void setMaxStreamingBitrate(qint32 newMaxStreamingBitrate);
 	/**
 	 * @brief Gets or sets the start time in ticks.
 	 */
-	Q_PROPERTY(qint64 startTimeTicks READ startTimeTicks WRITE setStartTimeTicks NOTIFY startTimeTicksChanged)
+	qint64 startTimeTicks() const;
+	/**
+	* @brief Gets or sets the start time in ticks.
+	*/
+	void setStartTimeTicks(qint64 newStartTimeTicks);
 	/**
 	 * @brief Gets or sets the audio stream index.
 	 */
-	Q_PROPERTY(qint32 audioStreamIndex READ audioStreamIndex WRITE setAudioStreamIndex NOTIFY audioStreamIndexChanged)
+	qint32 audioStreamIndex() const;
+	/**
+	* @brief Gets or sets the audio stream index.
+	*/
+	void setAudioStreamIndex(qint32 newAudioStreamIndex);
 	/**
 	 * @brief Gets or sets the subtitle stream index.
 	 */
-	Q_PROPERTY(qint32 subtitleStreamIndex READ subtitleStreamIndex WRITE setSubtitleStreamIndex NOTIFY subtitleStreamIndexChanged)
+	qint32 subtitleStreamIndex() const;
+	/**
+	* @brief Gets or sets the subtitle stream index.
+	*/
+	void setSubtitleStreamIndex(qint32 newSubtitleStreamIndex);
 	/**
 	 * @brief Gets or sets the max audio channels.
 	 */
-	Q_PROPERTY(qint32 maxAudioChannels READ maxAudioChannels WRITE setMaxAudioChannels NOTIFY maxAudioChannelsChanged)
+	qint32 maxAudioChannels() const;
+	/**
+	* @brief Gets or sets the max audio channels.
+	*/
+	void setMaxAudioChannels(qint32 newMaxAudioChannels);
 	/**
 	 * @brief Gets or sets the item id.
 	 */
-	Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
+	QUuid itemId() const;
+	/**
+	* @brief Gets or sets the item id.
+	*/
+	void setItemId(QUuid newItemId);
 	/**
 	 * @brief Gets or sets a value indicating whether to enable direct play.
 	 */
-	Q_PROPERTY(bool enableDirectPlay READ enableDirectPlay WRITE setEnableDirectPlay NOTIFY enableDirectPlayChanged)
+	bool enableDirectPlay() const;
+	/**
+	* @brief Gets or sets a value indicating whether to enable direct play.
+	*/
+	void setEnableDirectPlay(bool newEnableDirectPlay);
 	/**
 	 * @brief Gets or sets a value indicating whether to enale direct stream.
 	 */
-	Q_PROPERTY(bool enableDirectStream READ enableDirectStream WRITE setEnableDirectStream NOTIFY enableDirectStreamChanged)
-	Q_PROPERTY(DeviceProfile * deviceProfile READ deviceProfile WRITE setDeviceProfile NOTIFY deviceProfileChanged)
+	bool enableDirectStream() const;
+	/**
+	* @brief Gets or sets a value indicating whether to enale direct stream.
+	*/
+	void setEnableDirectStream(bool newEnableDirectStream);
+
+	QSharedPointer<DeviceProfile> deviceProfile() const;
+
+	void setDeviceProfile(QSharedPointer<DeviceProfile> newDeviceProfile);
 	/**
 	 * @brief Gets or sets the device play protocols.
 	 */
-	Q_PROPERTY(QList<MediaProtocol> directPlayProtocols READ directPlayProtocols WRITE setDirectPlayProtocols NOTIFY directPlayProtocolsChanged)
-
-	QString openToken() const;
-	void setOpenToken(QString newOpenToken);
-	
-	QString userId() const;
-	void setUserId(QString newUserId);
-	
-	QString playSessionId() const;
-	void setPlaySessionId(QString newPlaySessionId);
-	
-	qint32 maxStreamingBitrate() const;
-	void setMaxStreamingBitrate(qint32 newMaxStreamingBitrate);
-	
-	qint64 startTimeTicks() const;
-	void setStartTimeTicks(qint64 newStartTimeTicks);
-	
-	qint32 audioStreamIndex() const;
-	void setAudioStreamIndex(qint32 newAudioStreamIndex);
-	
-	qint32 subtitleStreamIndex() const;
-	void setSubtitleStreamIndex(qint32 newSubtitleStreamIndex);
-	
-	qint32 maxAudioChannels() const;
-	void setMaxAudioChannels(qint32 newMaxAudioChannels);
-	
-	QString itemId() const;
-	void setItemId(QString newItemId);
-	
-	bool enableDirectPlay() const;
-	void setEnableDirectPlay(bool newEnableDirectPlay);
-	
-	bool enableDirectStream() const;
-	void setEnableDirectStream(bool newEnableDirectStream);
-	
-	DeviceProfile * deviceProfile() const;
-	void setDeviceProfile(DeviceProfile * newDeviceProfile);
-	
 	QList<MediaProtocol> directPlayProtocols() const;
+	/**
+	* @brief Gets or sets the device play protocols.
+	*/
 	void setDirectPlayProtocols(QList<MediaProtocol> newDirectPlayProtocols);
-	
-signals:
-	void openTokenChanged(QString newOpenToken);
-	void userIdChanged(QString newUserId);
-	void playSessionIdChanged(QString newPlaySessionId);
-	void maxStreamingBitrateChanged(qint32 newMaxStreamingBitrate);
-	void startTimeTicksChanged(qint64 newStartTimeTicks);
-	void audioStreamIndexChanged(qint32 newAudioStreamIndex);
-	void subtitleStreamIndexChanged(qint32 newSubtitleStreamIndex);
-	void maxAudioChannelsChanged(qint32 newMaxAudioChannels);
-	void itemIdChanged(QString newItemId);
-	void enableDirectPlayChanged(bool newEnableDirectPlay);
-	void enableDirectStreamChanged(bool newEnableDirectStream);
-	void deviceProfileChanged(DeviceProfile * newDeviceProfile);
-	void directPlayProtocolsChanged(QList<MediaProtocol> newDirectPlayProtocols);
+
 protected:
 	QString m_openToken;
-	QString m_userId;
+	QUuid m_userId;
 	QString m_playSessionId;
 	qint32 m_maxStreamingBitrate;
 	qint64 m_startTimeTicks;
 	qint32 m_audioStreamIndex;
 	qint32 m_subtitleStreamIndex;
 	qint32 m_maxAudioChannels;
-	QString m_itemId;
+	QUuid m_itemId;
 	bool m_enableDirectPlay;
 	bool m_enableDirectStream;
-	DeviceProfile * m_deviceProfile = nullptr;
+	QSharedPointer<DeviceProfile> m_deviceProfile = nullptr;
 	QList<MediaProtocol> m_directPlayProtocols;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using OpenLiveStreamDto = Jellyfin::DTO::OpenLiveStreamDto;
+
+template <>
+OpenLiveStreamDto fromJsonValue<OpenLiveStreamDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return OpenLiveStreamDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

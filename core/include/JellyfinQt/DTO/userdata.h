@@ -30,7 +30,7 @@
 #ifndef JELLYFIN_DTO_USERDATA_H
 #define JELLYFIN_DTO_USERDATA_H
 
-#include "JellyfinQt/DTO/useritemdatadto.h"
+#include "JellyfinQt/UserItemDataDto"
 
 namespace Jellyfin {
 namespace DTO {

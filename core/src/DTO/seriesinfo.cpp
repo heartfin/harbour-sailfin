@@ -32,80 +32,93 @@
 namespace Jellyfin {
 namespace DTO {
 
-SeriesInfo::SeriesInfo(QObject *parent) : QObject(parent) {}
+SeriesInfo::SeriesInfo(QObject *parent) {}
 
-SeriesInfo *SeriesInfo::fromJSON(QJsonObject source, QObject *parent) {
-	SeriesInfo *instance = new SeriesInfo(parent);
-	instance->updateFromJSON(source);
+SeriesInfo SeriesInfo::fromJson(QJsonObject source) {SeriesInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SeriesInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SeriesInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_metadataLanguage = fromJsonValue<QString>(source["MetadataLanguage"]);
+	m_metadataCountryCode = fromJsonValue<QString>(source["MetadataCountryCode"]);
+	m_providerIds = fromJsonValue<QJsonObject>(source["ProviderIds"]);
+	m_year = fromJsonValue<qint32>(source["Year"]);
+	m_indexNumber = fromJsonValue<qint32>(source["IndexNumber"]);
+	m_parentIndexNumber = fromJsonValue<qint32>(source["ParentIndexNumber"]);
+	m_premiereDate = fromJsonValue<QDateTime>(source["PremiereDate"]);
+	m_isAutomated = fromJsonValue<bool>(source["IsAutomated"]);
+
 }
-QJsonObject SeriesInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SeriesInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["MetadataLanguage"] = toJsonValue<QString>(m_metadataLanguage);
+	result["MetadataCountryCode"] = toJsonValue<QString>(m_metadataCountryCode);
+	result["ProviderIds"] = toJsonValue<QJsonObject>(m_providerIds);
+	result["Year"] = toJsonValue<qint32>(m_year);
+	result["IndexNumber"] = toJsonValue<qint32>(m_indexNumber);
+	result["ParentIndexNumber"] = toJsonValue<qint32>(m_parentIndexNumber);
+	result["PremiereDate"] = toJsonValue<QDateTime>(m_premiereDate);
+	result["IsAutomated"] = toJsonValue<bool>(m_isAutomated);
+
 	return result;
 }
+
 QString SeriesInfo::name() const { return m_name; }
+
 void SeriesInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString SeriesInfo::path() const { return m_path; }
+
 void SeriesInfo::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
-
 QString SeriesInfo::metadataLanguage() const { return m_metadataLanguage; }
+
 void SeriesInfo::setMetadataLanguage(QString newMetadataLanguage) {
 	m_metadataLanguage = newMetadataLanguage;
-	emit metadataLanguageChanged(newMetadataLanguage);
 }
-
 QString SeriesInfo::metadataCountryCode() const { return m_metadataCountryCode; }
+
 void SeriesInfo::setMetadataCountryCode(QString newMetadataCountryCode) {
 	m_metadataCountryCode = newMetadataCountryCode;
-	emit metadataCountryCodeChanged(newMetadataCountryCode);
 }
-
 QJsonObject SeriesInfo::providerIds() const { return m_providerIds; }
+
 void SeriesInfo::setProviderIds(QJsonObject newProviderIds) {
 	m_providerIds = newProviderIds;
-	emit providerIdsChanged(newProviderIds);
 }
-
 qint32 SeriesInfo::year() const { return m_year; }
+
 void SeriesInfo::setYear(qint32 newYear) {
 	m_year = newYear;
-	emit yearChanged(newYear);
 }
-
 qint32 SeriesInfo::indexNumber() const { return m_indexNumber; }
+
 void SeriesInfo::setIndexNumber(qint32 newIndexNumber) {
 	m_indexNumber = newIndexNumber;
-	emit indexNumberChanged(newIndexNumber);
 }
-
 qint32 SeriesInfo::parentIndexNumber() const { return m_parentIndexNumber; }
+
 void SeriesInfo::setParentIndexNumber(qint32 newParentIndexNumber) {
 	m_parentIndexNumber = newParentIndexNumber;
-	emit parentIndexNumberChanged(newParentIndexNumber);
 }
-
 QDateTime SeriesInfo::premiereDate() const { return m_premiereDate; }
+
 void SeriesInfo::setPremiereDate(QDateTime newPremiereDate) {
 	m_premiereDate = newPremiereDate;
-	emit premiereDateChanged(newPremiereDate);
 }
-
 bool SeriesInfo::isAutomated() const { return m_isAutomated; }
+
 void SeriesInfo::setIsAutomated(bool newIsAutomated) {
 	m_isAutomated = newIsAutomated;
-	emit isAutomatedChanged(newIsAutomated);
 }
 
 

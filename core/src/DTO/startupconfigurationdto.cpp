@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-StartupConfigurationDto::StartupConfigurationDto(QObject *parent) : QObject(parent) {}
+StartupConfigurationDto::StartupConfigurationDto(QObject *parent) {}
 
-StartupConfigurationDto *StartupConfigurationDto::fromJSON(QJsonObject source, QObject *parent) {
-	StartupConfigurationDto *instance = new StartupConfigurationDto(parent);
-	instance->updateFromJSON(source);
+StartupConfigurationDto StartupConfigurationDto::fromJson(QJsonObject source) {StartupConfigurationDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void StartupConfigurationDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void StartupConfigurationDto::setFromJson(QJsonObject source) {
+	m_uICulture = fromJsonValue<QString>(source["UICulture"]);
+	m_metadataCountryCode = fromJsonValue<QString>(source["MetadataCountryCode"]);
+	m_preferredMetadataLanguage = fromJsonValue<QString>(source["PreferredMetadataLanguage"]);
+
 }
-QJsonObject StartupConfigurationDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject StartupConfigurationDto::toJson() {
 	QJsonObject result;
+	result["UICulture"] = toJsonValue<QString>(m_uICulture);
+	result["MetadataCountryCode"] = toJsonValue<QString>(m_metadataCountryCode);
+	result["PreferredMetadataLanguage"] = toJsonValue<QString>(m_preferredMetadataLanguage);
+
 	return result;
 }
+
 QString StartupConfigurationDto::uICulture() const { return m_uICulture; }
+
 void StartupConfigurationDto::setUICulture(QString newUICulture) {
 	m_uICulture = newUICulture;
-	emit uICultureChanged(newUICulture);
 }
-
 QString StartupConfigurationDto::metadataCountryCode() const { return m_metadataCountryCode; }
+
 void StartupConfigurationDto::setMetadataCountryCode(QString newMetadataCountryCode) {
 	m_metadataCountryCode = newMetadataCountryCode;
-	emit metadataCountryCodeChanged(newMetadataCountryCode);
 }
-
 QString StartupConfigurationDto::preferredMetadataLanguage() const { return m_preferredMetadataLanguage; }
+
 void StartupConfigurationDto::setPreferredMetadataLanguage(QString newPreferredMetadataLanguage) {
 	m_preferredMetadataLanguage = newPreferredMetadataLanguage;
-	emit preferredMetadataLanguageChanged(newPreferredMetadataLanguage);
 }
 
 

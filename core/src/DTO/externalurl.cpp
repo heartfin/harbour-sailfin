@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-ExternalUrl::ExternalUrl(QObject *parent) : QObject(parent) {}
+ExternalUrl::ExternalUrl(QObject *parent) {}
 
-ExternalUrl *ExternalUrl::fromJSON(QJsonObject source, QObject *parent) {
-	ExternalUrl *instance = new ExternalUrl(parent);
-	instance->updateFromJSON(source);
+ExternalUrl ExternalUrl::fromJson(QJsonObject source) {ExternalUrl instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ExternalUrl::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ExternalUrl::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_url = fromJsonValue<QString>(source["Url"]);
+
 }
-QJsonObject ExternalUrl::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ExternalUrl::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Url"] = toJsonValue<QString>(m_url);
+
 	return result;
 }
+
 QString ExternalUrl::name() const { return m_name; }
+
 void ExternalUrl::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString ExternalUrl::url() const { return m_url; }
+
 void ExternalUrl::setUrl(QString newUrl) {
 	m_url = newUrl;
-	emit urlChanged(newUrl);
 }
 
 

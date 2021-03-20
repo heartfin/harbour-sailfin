@@ -32,70 +32,73 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class QuickConnectResult : public QObject {
-	Q_OBJECT
-public:
-	explicit QuickConnectResult(QObject *parent = nullptr);
-	static QuickConnectResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class QuickConnectResult {
+public:
+	explicit QuickConnectResult();
+	static QuickConnectResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets a value indicating whether this request is authorized.
 	 */
-	Q_PROPERTY(bool authenticated READ authenticated WRITE setAuthenticated NOTIFY authenticatedChanged)
+	bool authenticated() const;
+	/**
+	* @brief Gets a value indicating whether this request is authorized.
+	*/
+	void setAuthenticated(bool newAuthenticated);
 	/**
 	 * @brief Gets or sets the secret value used to uniquely identify this request. Can be used to retrieve authentication information.
 	 */
-	Q_PROPERTY(QString secret READ secret WRITE setSecret NOTIFY secretChanged)
+	QString secret() const;
+	/**
+	* @brief Gets or sets the secret value used to uniquely identify this request. Can be used to retrieve authentication information.
+	*/
+	void setSecret(QString newSecret);
 	/**
 	 * @brief Gets or sets the user facing code used so the user can quickly differentiate this request from others.
 	 */
-	Q_PROPERTY(QString code READ code WRITE setCode NOTIFY codeChanged)
+	QString code() const;
+	/**
+	* @brief Gets or sets the user facing code used so the user can quickly differentiate this request from others.
+	*/
+	void setCode(QString newCode);
 	/**
 	 * @brief Gets or sets the private access token.
 	 */
-	Q_PROPERTY(QString authentication READ authentication WRITE setAuthentication NOTIFY authenticationChanged)
+	QString authentication() const;
+	/**
+	* @brief Gets or sets the private access token.
+	*/
+	void setAuthentication(QString newAuthentication);
 	/**
 	 * @brief Gets or sets an error message.
 	 */
-	Q_PROPERTY(QString error READ error WRITE setError NOTIFY errorChanged)
+	QString error() const;
+	/**
+	* @brief Gets or sets an error message.
+	*/
+	void setError(QString newError);
 	/**
 	 * @brief Gets or sets the DateTime that this request was created.
 	 */
-	Q_PROPERTY(QDateTime dateAdded READ dateAdded WRITE setDateAdded NOTIFY dateAddedChanged)
-
-	bool authenticated() const;
-	void setAuthenticated(bool newAuthenticated);
-	
-	QString secret() const;
-	void setSecret(QString newSecret);
-	
-	QString code() const;
-	void setCode(QString newCode);
-	
-	QString authentication() const;
-	void setAuthentication(QString newAuthentication);
-	
-	QString error() const;
-	void setError(QString newError);
-	
 	QDateTime dateAdded() const;
+	/**
+	* @brief Gets or sets the DateTime that this request was created.
+	*/
 	void setDateAdded(QDateTime newDateAdded);
-	
-signals:
-	void authenticatedChanged(bool newAuthenticated);
-	void secretChanged(QString newSecret);
-	void codeChanged(QString newCode);
-	void authenticationChanged(QString newAuthentication);
-	void errorChanged(QString newError);
-	void dateAddedChanged(QDateTime newDateAdded);
+
 protected:
 	bool m_authenticated;
 	QString m_secret;
@@ -104,6 +107,18 @@ protected:
 	QString m_error;
 	QDateTime m_dateAdded;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using QuickConnectResult = Jellyfin::DTO::QuickConnectResult;
+
+template <>
+QuickConnectResult fromJsonValue<QuickConnectResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QuickConnectResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

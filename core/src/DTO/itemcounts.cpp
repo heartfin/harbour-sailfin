@@ -32,92 +32,107 @@
 namespace Jellyfin {
 namespace DTO {
 
-ItemCounts::ItemCounts(QObject *parent) : QObject(parent) {}
+ItemCounts::ItemCounts(QObject *parent) {}
 
-ItemCounts *ItemCounts::fromJSON(QJsonObject source, QObject *parent) {
-	ItemCounts *instance = new ItemCounts(parent);
-	instance->updateFromJSON(source);
+ItemCounts ItemCounts::fromJson(QJsonObject source) {ItemCounts instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ItemCounts::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ItemCounts::setFromJson(QJsonObject source) {
+	m_movieCount = fromJsonValue<qint32>(source["MovieCount"]);
+	m_seriesCount = fromJsonValue<qint32>(source["SeriesCount"]);
+	m_episodeCount = fromJsonValue<qint32>(source["EpisodeCount"]);
+	m_artistCount = fromJsonValue<qint32>(source["ArtistCount"]);
+	m_programCount = fromJsonValue<qint32>(source["ProgramCount"]);
+	m_trailerCount = fromJsonValue<qint32>(source["TrailerCount"]);
+	m_songCount = fromJsonValue<qint32>(source["SongCount"]);
+	m_albumCount = fromJsonValue<qint32>(source["AlbumCount"]);
+	m_musicVideoCount = fromJsonValue<qint32>(source["MusicVideoCount"]);
+	m_boxSetCount = fromJsonValue<qint32>(source["BoxSetCount"]);
+	m_bookCount = fromJsonValue<qint32>(source["BookCount"]);
+	m_itemCount = fromJsonValue<qint32>(source["ItemCount"]);
+
 }
-QJsonObject ItemCounts::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ItemCounts::toJson() {
 	QJsonObject result;
+	result["MovieCount"] = toJsonValue<qint32>(m_movieCount);
+	result["SeriesCount"] = toJsonValue<qint32>(m_seriesCount);
+	result["EpisodeCount"] = toJsonValue<qint32>(m_episodeCount);
+	result["ArtistCount"] = toJsonValue<qint32>(m_artistCount);
+	result["ProgramCount"] = toJsonValue<qint32>(m_programCount);
+	result["TrailerCount"] = toJsonValue<qint32>(m_trailerCount);
+	result["SongCount"] = toJsonValue<qint32>(m_songCount);
+	result["AlbumCount"] = toJsonValue<qint32>(m_albumCount);
+	result["MusicVideoCount"] = toJsonValue<qint32>(m_musicVideoCount);
+	result["BoxSetCount"] = toJsonValue<qint32>(m_boxSetCount);
+	result["BookCount"] = toJsonValue<qint32>(m_bookCount);
+	result["ItemCount"] = toJsonValue<qint32>(m_itemCount);
+
 	return result;
 }
+
 qint32 ItemCounts::movieCount() const { return m_movieCount; }
+
 void ItemCounts::setMovieCount(qint32 newMovieCount) {
 	m_movieCount = newMovieCount;
-	emit movieCountChanged(newMovieCount);
 }
-
 qint32 ItemCounts::seriesCount() const { return m_seriesCount; }
+
 void ItemCounts::setSeriesCount(qint32 newSeriesCount) {
 	m_seriesCount = newSeriesCount;
-	emit seriesCountChanged(newSeriesCount);
 }
-
 qint32 ItemCounts::episodeCount() const { return m_episodeCount; }
+
 void ItemCounts::setEpisodeCount(qint32 newEpisodeCount) {
 	m_episodeCount = newEpisodeCount;
-	emit episodeCountChanged(newEpisodeCount);
 }
-
 qint32 ItemCounts::artistCount() const { return m_artistCount; }
+
 void ItemCounts::setArtistCount(qint32 newArtistCount) {
 	m_artistCount = newArtistCount;
-	emit artistCountChanged(newArtistCount);
 }
-
 qint32 ItemCounts::programCount() const { return m_programCount; }
+
 void ItemCounts::setProgramCount(qint32 newProgramCount) {
 	m_programCount = newProgramCount;
-	emit programCountChanged(newProgramCount);
 }
-
 qint32 ItemCounts::trailerCount() const { return m_trailerCount; }
+
 void ItemCounts::setTrailerCount(qint32 newTrailerCount) {
 	m_trailerCount = newTrailerCount;
-	emit trailerCountChanged(newTrailerCount);
 }
-
 qint32 ItemCounts::songCount() const { return m_songCount; }
+
 void ItemCounts::setSongCount(qint32 newSongCount) {
 	m_songCount = newSongCount;
-	emit songCountChanged(newSongCount);
 }
-
 qint32 ItemCounts::albumCount() const { return m_albumCount; }
+
 void ItemCounts::setAlbumCount(qint32 newAlbumCount) {
 	m_albumCount = newAlbumCount;
-	emit albumCountChanged(newAlbumCount);
 }
-
 qint32 ItemCounts::musicVideoCount() const { return m_musicVideoCount; }
+
 void ItemCounts::setMusicVideoCount(qint32 newMusicVideoCount) {
 	m_musicVideoCount = newMusicVideoCount;
-	emit musicVideoCountChanged(newMusicVideoCount);
 }
-
 qint32 ItemCounts::boxSetCount() const { return m_boxSetCount; }
+
 void ItemCounts::setBoxSetCount(qint32 newBoxSetCount) {
 	m_boxSetCount = newBoxSetCount;
-	emit boxSetCountChanged(newBoxSetCount);
 }
-
 qint32 ItemCounts::bookCount() const { return m_bookCount; }
+
 void ItemCounts::setBookCount(qint32 newBookCount) {
 	m_bookCount = newBookCount;
-	emit bookCountChanged(newBookCount);
 }
-
 qint32 ItemCounts::itemCount() const { return m_itemCount; }
+
 void ItemCounts::setItemCount(qint32 newItemCount) {
 	m_itemCount = newItemCount;
-	emit itemCountChanged(newItemCount);
 }
 
 

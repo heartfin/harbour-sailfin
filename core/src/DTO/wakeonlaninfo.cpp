@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-WakeOnLanInfo::WakeOnLanInfo(QObject *parent) : QObject(parent) {}
+WakeOnLanInfo::WakeOnLanInfo(QObject *parent) {}
 
-WakeOnLanInfo *WakeOnLanInfo::fromJSON(QJsonObject source, QObject *parent) {
-	WakeOnLanInfo *instance = new WakeOnLanInfo(parent);
-	instance->updateFromJSON(source);
+WakeOnLanInfo WakeOnLanInfo::fromJson(QJsonObject source) {WakeOnLanInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void WakeOnLanInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void WakeOnLanInfo::setFromJson(QJsonObject source) {
+	m_macAddress = fromJsonValue<QString>(source["MacAddress"]);
+	m_port = fromJsonValue<qint32>(source["Port"]);
+
 }
-QJsonObject WakeOnLanInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject WakeOnLanInfo::toJson() {
 	QJsonObject result;
+	result["MacAddress"] = toJsonValue<QString>(m_macAddress);
+	result["Port"] = toJsonValue<qint32>(m_port);
+
 	return result;
 }
+
 QString WakeOnLanInfo::macAddress() const { return m_macAddress; }
+
 void WakeOnLanInfo::setMacAddress(QString newMacAddress) {
 	m_macAddress = newMacAddress;
-	emit macAddressChanged(newMacAddress);
 }
-
 qint32 WakeOnLanInfo::port() const { return m_port; }
+
 void WakeOnLanInfo::setPort(qint32 newPort) {
 	m_port = newPort;
-	emit portChanged(newPort);
 }
 
 

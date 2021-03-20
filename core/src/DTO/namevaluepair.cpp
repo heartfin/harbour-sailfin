@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-NameValuePair::NameValuePair(QObject *parent) : QObject(parent) {}
+NameValuePair::NameValuePair(QObject *parent) {}
 
-NameValuePair *NameValuePair::fromJSON(QJsonObject source, QObject *parent) {
-	NameValuePair *instance = new NameValuePair(parent);
-	instance->updateFromJSON(source);
+NameValuePair NameValuePair::fromJson(QJsonObject source) {NameValuePair instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void NameValuePair::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void NameValuePair::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_value = fromJsonValue<QString>(source["Value"]);
+
 }
-QJsonObject NameValuePair::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject NameValuePair::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Value"] = toJsonValue<QString>(m_value);
+
 	return result;
 }
+
 QString NameValuePair::name() const { return m_name; }
+
 void NameValuePair::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString NameValuePair::value() const { return m_value; }
+
 void NameValuePair::setValue(QString newValue) {
 	m_value = newValue;
-	emit valueChanged(newValue);
 }
 
 

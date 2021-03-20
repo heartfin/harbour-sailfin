@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_CHANNELMEDIACONTENTTYPE_H
 #define JELLYFIN_DTO_CHANNELMEDIACONTENTTYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ChannelMediaContentTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Clip,
 		Podcast,
 		Trailer,
@@ -52,7 +57,48 @@ public:
 private:
 	explicit ChannelMediaContentTypeClass();
 };
+
 typedef ChannelMediaContentTypeClass::Value ChannelMediaContentType;
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelMediaContentType = Jellyfin::DTO::ChannelMediaContentType;
+using ChannelMediaContentTypeClass = Jellyfin::DTO::ChannelMediaContentTypeClass;
+
+template <>
+ChannelMediaContentType fromJsonValue<ChannelMediaContentType>(const QJsonValue &source) {
+	if (!source.isString()) return ChannelMediaContentTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Clip")) {
+		return ChannelMediaContentTypeClass::Clip;
+	}
+	if (str == QStringLiteral("Podcast")) {
+		return ChannelMediaContentTypeClass::Podcast;
+	}
+	if (str == QStringLiteral("Trailer")) {
+		return ChannelMediaContentTypeClass::Trailer;
+	}
+	if (str == QStringLiteral("Movie")) {
+		return ChannelMediaContentTypeClass::Movie;
+	}
+	if (str == QStringLiteral("Episode")) {
+		return ChannelMediaContentTypeClass::Episode;
+	}
+	if (str == QStringLiteral("Song")) {
+		return ChannelMediaContentTypeClass::Song;
+	}
+	if (str == QStringLiteral("MovieExtra")) {
+		return ChannelMediaContentTypeClass::MovieExtra;
+	}
+	if (str == QStringLiteral("TvExtra")) {
+		return ChannelMediaContentTypeClass::TvExtra;
+	}
+	
+	return ChannelMediaContentTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

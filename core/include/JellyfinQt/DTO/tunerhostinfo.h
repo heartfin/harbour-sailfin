@@ -31,77 +31,69 @@
 #define JELLYFIN_DTO_TUNERHOSTINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class TunerHostInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit TunerHostInfo(QObject *parent = nullptr);
-	static TunerHostInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-	Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-	Q_PROPERTY(QString deviceId READ deviceId WRITE setDeviceId NOTIFY deviceIdChanged)
-	Q_PROPERTY(QString friendlyName READ friendlyName WRITE setFriendlyName NOTIFY friendlyNameChanged)
-	Q_PROPERTY(bool importFavoritesOnly READ importFavoritesOnly WRITE setImportFavoritesOnly NOTIFY importFavoritesOnlyChanged)
-	Q_PROPERTY(bool allowHWTranscoding READ allowHWTranscoding WRITE setAllowHWTranscoding NOTIFY allowHWTranscodingChanged)
-	Q_PROPERTY(bool enableStreamLooping READ enableStreamLooping WRITE setEnableStreamLooping NOTIFY enableStreamLoopingChanged)
-	Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-	Q_PROPERTY(qint32 tunerCount READ tunerCount WRITE setTunerCount NOTIFY tunerCountChanged)
-	Q_PROPERTY(QString userAgent READ userAgent WRITE setUserAgent NOTIFY userAgentChanged)
+class TunerHostInfo {
+public:
+	explicit TunerHostInfo();
+	static TunerHostInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString jellyfinId() const;
+
 	void setJellyfinId(QString newJellyfinId);
-	
+
 	QString url() const;
+
 	void setUrl(QString newUrl);
-	
+
 	QString type() const;
+
 	void setType(QString newType);
-	
+
 	QString deviceId() const;
+
 	void setDeviceId(QString newDeviceId);
-	
+
 	QString friendlyName() const;
+
 	void setFriendlyName(QString newFriendlyName);
-	
+
 	bool importFavoritesOnly() const;
+
 	void setImportFavoritesOnly(bool newImportFavoritesOnly);
-	
+
 	bool allowHWTranscoding() const;
+
 	void setAllowHWTranscoding(bool newAllowHWTranscoding);
-	
+
 	bool enableStreamLooping() const;
+
 	void setEnableStreamLooping(bool newEnableStreamLooping);
-	
+
 	QString source() const;
+
 	void setSource(QString newSource);
-	
+
 	qint32 tunerCount() const;
+
 	void setTunerCount(qint32 newTunerCount);
-	
+
 	QString userAgent() const;
+
 	void setUserAgent(QString newUserAgent);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
-	void urlChanged(QString newUrl);
-	void typeChanged(QString newType);
-	void deviceIdChanged(QString newDeviceId);
-	void friendlyNameChanged(QString newFriendlyName);
-	void importFavoritesOnlyChanged(bool newImportFavoritesOnly);
-	void allowHWTranscodingChanged(bool newAllowHWTranscoding);
-	void enableStreamLoopingChanged(bool newEnableStreamLooping);
-	void sourceChanged(QString newSource);
-	void tunerCountChanged(qint32 newTunerCount);
-	void userAgentChanged(QString newUserAgent);
+
 protected:
 	QString m_jellyfinId;
 	QString m_url;
@@ -115,6 +107,18 @@ protected:
 	qint32 m_tunerCount;
 	QString m_userAgent;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TunerHostInfo = Jellyfin::DTO::TunerHostInfo;
+
+template <>
+TunerHostInfo fromJsonValue<TunerHostInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TunerHostInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-AuthenticationInfoQueryResult::AuthenticationInfoQueryResult(QObject *parent) : QObject(parent) {}
+AuthenticationInfoQueryResult::AuthenticationInfoQueryResult(QObject *parent) {}
 
-AuthenticationInfoQueryResult *AuthenticationInfoQueryResult::fromJSON(QJsonObject source, QObject *parent) {
-	AuthenticationInfoQueryResult *instance = new AuthenticationInfoQueryResult(parent);
-	instance->updateFromJSON(source);
+AuthenticationInfoQueryResult AuthenticationInfoQueryResult::fromJson(QJsonObject source) {AuthenticationInfoQueryResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void AuthenticationInfoQueryResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void AuthenticationInfoQueryResult::setFromJson(QJsonObject source) {
+	m_items = fromJsonValue<QList<QSharedPointer<AuthenticationInfo>>>(source["Items"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+
 }
-QJsonObject AuthenticationInfoQueryResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject AuthenticationInfoQueryResult::toJson() {
 	QJsonObject result;
+	result["Items"] = toJsonValue<QList<QSharedPointer<AuthenticationInfo>>>(m_items);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+
 	return result;
 }
-QList<AuthenticationInfo *> AuthenticationInfoQueryResult::items() const { return m_items; }
-void AuthenticationInfoQueryResult::setItems(QList<AuthenticationInfo *> newItems) {
-	m_items = newItems;
-	emit itemsChanged(newItems);
-}
 
+QList<QSharedPointer<AuthenticationInfo>> AuthenticationInfoQueryResult::items() const { return m_items; }
+
+void AuthenticationInfoQueryResult::setItems(QList<QSharedPointer<AuthenticationInfo>> newItems) {
+	m_items = newItems;
+}
 qint32 AuthenticationInfoQueryResult::totalRecordCount() const { return m_totalRecordCount; }
+
 void AuthenticationInfoQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
-
 qint32 AuthenticationInfoQueryResult::startIndex() const { return m_startIndex; }
+
 void AuthenticationInfoQueryResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
-	emit startIndexChanged(newStartIndex);
 }
 
 

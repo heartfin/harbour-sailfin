@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_HEADERMATCHTYPE_H
 #define JELLYFIN_DTO_HEADERMATCHTYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class HeaderMatchTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Equals,
 		Regex,
 		Substring,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit HeaderMatchTypeClass();
 };
+
 typedef HeaderMatchTypeClass::Value HeaderMatchType;
+
+} // NS DTO
+
+namespace Support {
+
+using HeaderMatchType = Jellyfin::DTO::HeaderMatchType;
+using HeaderMatchTypeClass = Jellyfin::DTO::HeaderMatchTypeClass;
+
+template <>
+HeaderMatchType fromJsonValue<HeaderMatchType>(const QJsonValue &source) {
+	if (!source.isString()) return HeaderMatchTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Equals")) {
+		return HeaderMatchTypeClass::Equals;
+	}
+	if (str == QStringLiteral("Regex")) {
+		return HeaderMatchTypeClass::Regex;
+	}
+	if (str == QStringLiteral("Substring")) {
+		return HeaderMatchTypeClass::Substring;
+	}
+	
+	return HeaderMatchTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

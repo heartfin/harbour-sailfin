@@ -31,43 +31,56 @@
 #define JELLYFIN_DTO_QUEUEREQUESTDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
-#include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
 
 #include "JellyfinQt/DTO/groupqueuemode.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class QueueRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit QueueRequestDto(QObject *parent = nullptr);
-	static QueueRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class QueueRequestDto {
+public:
+	explicit QueueRequestDto();
+	static QueueRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the items to enqueue.
 	 */
-	Q_PROPERTY(QStringList itemIds READ itemIds WRITE setItemIds NOTIFY itemIdsChanged)
-	Q_PROPERTY(GroupQueueMode mode READ mode WRITE setMode NOTIFY modeChanged)
+	QList<QUuid> itemIds() const;
+	/**
+	* @brief Gets or sets the items to enqueue.
+	*/
+	void setItemIds(QList<QUuid> newItemIds);
 
-	QStringList itemIds() const;
-	void setItemIds(QStringList newItemIds);
-	
 	GroupQueueMode mode() const;
+
 	void setMode(GroupQueueMode newMode);
-	
-signals:
-	void itemIdsChanged(QStringList newItemIds);
-	void modeChanged(GroupQueueMode newMode);
+
 protected:
-	QStringList m_itemIds;
+	QList<QUuid> m_itemIds;
 	GroupQueueMode m_mode;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using QueueRequestDto = Jellyfin::DTO::QueueRequestDto;
+
+template <>
+QueueRequestDto fromJsonValue<QueueRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QueueRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_PROFILECONDITIONTYPE_H
 #define JELLYFIN_DTO_PROFILECONDITIONTYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ProfileConditionTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Equals,
 		NotEquals,
 		LessThanEqual,
@@ -49,7 +54,39 @@ public:
 private:
 	explicit ProfileConditionTypeClass();
 };
+
 typedef ProfileConditionTypeClass::Value ProfileConditionType;
+
+} // NS DTO
+
+namespace Support {
+
+using ProfileConditionType = Jellyfin::DTO::ProfileConditionType;
+using ProfileConditionTypeClass = Jellyfin::DTO::ProfileConditionTypeClass;
+
+template <>
+ProfileConditionType fromJsonValue<ProfileConditionType>(const QJsonValue &source) {
+	if (!source.isString()) return ProfileConditionTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Equals")) {
+		return ProfileConditionTypeClass::Equals;
+	}
+	if (str == QStringLiteral("NotEquals")) {
+		return ProfileConditionTypeClass::NotEquals;
+	}
+	if (str == QStringLiteral("LessThanEqual")) {
+		return ProfileConditionTypeClass::LessThanEqual;
+	}
+	if (str == QStringLiteral("GreaterThanEqual")) {
+		return ProfileConditionTypeClass::GreaterThanEqual;
+	}
+	if (str == QStringLiteral("EqualsAny")) {
+		return ProfileConditionTypeClass::EqualsAny;
+	}
+	
+	return ProfileConditionTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

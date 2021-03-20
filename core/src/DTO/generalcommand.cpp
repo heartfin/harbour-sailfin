@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/generalcommand.h>
 
-#include <JellyfinQt/DTO/generalcommandtype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-GeneralCommand::GeneralCommand(QObject *parent) : QObject(parent) {}
+GeneralCommand::GeneralCommand(QObject *parent) {}
 
-GeneralCommand *GeneralCommand::fromJSON(QJsonObject source, QObject *parent) {
-	GeneralCommand *instance = new GeneralCommand(parent);
-	instance->updateFromJSON(source);
+GeneralCommand GeneralCommand::fromJson(QJsonObject source) {GeneralCommand instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void GeneralCommand::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void GeneralCommand::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<GeneralCommandType>(source["Name"]);
+	m_controllingUserId = fromJsonValue<QUuid>(source["ControllingUserId"]);
+	m_arguments = fromJsonValue<QJsonObject>(source["Arguments"]);
+
 }
-QJsonObject GeneralCommand::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject GeneralCommand::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<GeneralCommandType>(m_name);
+	result["ControllingUserId"] = toJsonValue<QUuid>(m_controllingUserId);
+	result["Arguments"] = toJsonValue<QJsonObject>(m_arguments);
+
 	return result;
 }
+
 GeneralCommandType GeneralCommand::name() const { return m_name; }
+
 void GeneralCommand::setName(GeneralCommandType newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
+QUuid GeneralCommand::controllingUserId() const { return m_controllingUserId; }
 
-QString GeneralCommand::controllingUserId() const { return m_controllingUserId; }
-void GeneralCommand::setControllingUserId(QString newControllingUserId) {
+void GeneralCommand::setControllingUserId(QUuid newControllingUserId) {
 	m_controllingUserId = newControllingUserId;
-	emit controllingUserIdChanged(newControllingUserId);
 }
-
 QJsonObject GeneralCommand::arguments() const { return m_arguments; }
+
 void GeneralCommand::setArguments(QJsonObject newArguments) {
 	m_arguments = newArguments;
-	emit argumentsChanged(newArguments);
 }
 
 

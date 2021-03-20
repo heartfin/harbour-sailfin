@@ -31,131 +31,131 @@
 #define JELLYFIN_DTO_DISPLAYPREFERENCESDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/scrolldirection.h"
 #include "JellyfinQt/DTO/sortorder.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class DisplayPreferencesDto : public QObject {
-	Q_OBJECT
-public:
-	explicit DisplayPreferencesDto(QObject *parent = nullptr);
-	static DisplayPreferencesDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class DisplayPreferencesDto {
+public:
+	explicit DisplayPreferencesDto();
+	static DisplayPreferencesDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the user id.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the user id.
+	*/
+	void setJellyfinId(QString newJellyfinId);
 	/**
 	 * @brief Gets or sets the type of the view.
 	 */
-	Q_PROPERTY(QString viewType READ viewType WRITE setViewType NOTIFY viewTypeChanged)
+	QString viewType() const;
+	/**
+	* @brief Gets or sets the type of the view.
+	*/
+	void setViewType(QString newViewType);
 	/**
 	 * @brief Gets or sets the sort by.
 	 */
-	Q_PROPERTY(QString sortBy READ sortBy WRITE setSortBy NOTIFY sortByChanged)
+	QString sortBy() const;
+	/**
+	* @brief Gets or sets the sort by.
+	*/
+	void setSortBy(QString newSortBy);
 	/**
 	 * @brief Gets or sets the index by.
 	 */
-	Q_PROPERTY(QString indexBy READ indexBy WRITE setIndexBy NOTIFY indexByChanged)
+	QString indexBy() const;
+	/**
+	* @brief Gets or sets the index by.
+	*/
+	void setIndexBy(QString newIndexBy);
 	/**
 	 * @brief Gets or sets a value indicating whether [remember indexing].
 	 */
-	Q_PROPERTY(bool rememberIndexing READ rememberIndexing WRITE setRememberIndexing NOTIFY rememberIndexingChanged)
+	bool rememberIndexing() const;
+	/**
+	* @brief Gets or sets a value indicating whether [remember indexing].
+	*/
+	void setRememberIndexing(bool newRememberIndexing);
 	/**
 	 * @brief Gets or sets the height of the primary image.
 	 */
-	Q_PROPERTY(qint32 primaryImageHeight READ primaryImageHeight WRITE setPrimaryImageHeight NOTIFY primaryImageHeightChanged)
+	qint32 primaryImageHeight() const;
+	/**
+	* @brief Gets or sets the height of the primary image.
+	*/
+	void setPrimaryImageHeight(qint32 newPrimaryImageHeight);
 	/**
 	 * @brief Gets or sets the width of the primary image.
 	 */
-	Q_PROPERTY(qint32 primaryImageWidth READ primaryImageWidth WRITE setPrimaryImageWidth NOTIFY primaryImageWidthChanged)
+	qint32 primaryImageWidth() const;
+	/**
+	* @brief Gets or sets the width of the primary image.
+	*/
+	void setPrimaryImageWidth(qint32 newPrimaryImageWidth);
 	/**
 	 * @brief Gets or sets the custom prefs.
 	 */
-	Q_PROPERTY(QJsonObject customPrefs READ customPrefs WRITE setCustomPrefs NOTIFY customPrefsChanged)
-	Q_PROPERTY(ScrollDirection scrollDirection READ scrollDirection WRITE setScrollDirection NOTIFY scrollDirectionChanged)
+	QJsonObject customPrefs() const;
+	/**
+	* @brief Gets or sets the custom prefs.
+	*/
+	void setCustomPrefs(QJsonObject newCustomPrefs);
+
+	ScrollDirection scrollDirection() const;
+
+	void setScrollDirection(ScrollDirection newScrollDirection);
 	/**
 	 * @brief Gets or sets a value indicating whether to show backdrops on this item.
 	 */
-	Q_PROPERTY(bool showBackdrop READ showBackdrop WRITE setShowBackdrop NOTIFY showBackdropChanged)
+	bool showBackdrop() const;
+	/**
+	* @brief Gets or sets a value indicating whether to show backdrops on this item.
+	*/
+	void setShowBackdrop(bool newShowBackdrop);
 	/**
 	 * @brief Gets or sets a value indicating whether [remember sorting].
 	 */
-	Q_PROPERTY(bool rememberSorting READ rememberSorting WRITE setRememberSorting NOTIFY rememberSortingChanged)
-	Q_PROPERTY(SortOrder sortOrder READ sortOrder WRITE setSortOrder NOTIFY sortOrderChanged)
+	bool rememberSorting() const;
+	/**
+	* @brief Gets or sets a value indicating whether [remember sorting].
+	*/
+	void setRememberSorting(bool newRememberSorting);
+
+	SortOrder sortOrder() const;
+
+	void setSortOrder(SortOrder newSortOrder);
 	/**
 	 * @brief Gets or sets a value indicating whether [show sidebar].
 	 */
-	Q_PROPERTY(bool showSidebar READ showSidebar WRITE setShowSidebar NOTIFY showSidebarChanged)
+	bool showSidebar() const;
+	/**
+	* @brief Gets or sets a value indicating whether [show sidebar].
+	*/
+	void setShowSidebar(bool newShowSidebar);
 	/**
 	 * @brief Gets or sets the client.
 	 */
-	Q_PROPERTY(QString client READ client WRITE setClient NOTIFY clientChanged)
-
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	QString viewType() const;
-	void setViewType(QString newViewType);
-	
-	QString sortBy() const;
-	void setSortBy(QString newSortBy);
-	
-	QString indexBy() const;
-	void setIndexBy(QString newIndexBy);
-	
-	bool rememberIndexing() const;
-	void setRememberIndexing(bool newRememberIndexing);
-	
-	qint32 primaryImageHeight() const;
-	void setPrimaryImageHeight(qint32 newPrimaryImageHeight);
-	
-	qint32 primaryImageWidth() const;
-	void setPrimaryImageWidth(qint32 newPrimaryImageWidth);
-	
-	QJsonObject customPrefs() const;
-	void setCustomPrefs(QJsonObject newCustomPrefs);
-	
-	ScrollDirection scrollDirection() const;
-	void setScrollDirection(ScrollDirection newScrollDirection);
-	
-	bool showBackdrop() const;
-	void setShowBackdrop(bool newShowBackdrop);
-	
-	bool rememberSorting() const;
-	void setRememberSorting(bool newRememberSorting);
-	
-	SortOrder sortOrder() const;
-	void setSortOrder(SortOrder newSortOrder);
-	
-	bool showSidebar() const;
-	void setShowSidebar(bool newShowSidebar);
-	
 	QString client() const;
+	/**
+	* @brief Gets or sets the client.
+	*/
 	void setClient(QString newClient);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
-	void viewTypeChanged(QString newViewType);
-	void sortByChanged(QString newSortBy);
-	void indexByChanged(QString newIndexBy);
-	void rememberIndexingChanged(bool newRememberIndexing);
-	void primaryImageHeightChanged(qint32 newPrimaryImageHeight);
-	void primaryImageWidthChanged(qint32 newPrimaryImageWidth);
-	void customPrefsChanged(QJsonObject newCustomPrefs);
-	void scrollDirectionChanged(ScrollDirection newScrollDirection);
-	void showBackdropChanged(bool newShowBackdrop);
-	void rememberSortingChanged(bool newRememberSorting);
-	void sortOrderChanged(SortOrder newSortOrder);
-	void showSidebarChanged(bool newShowSidebar);
-	void clientChanged(QString newClient);
+
 protected:
 	QString m_jellyfinId;
 	QString m_viewType;
@@ -172,6 +172,18 @@ protected:
 	bool m_showSidebar;
 	QString m_client;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DisplayPreferencesDto = Jellyfin::DTO::DisplayPreferencesDto;
+
+template <>
+DisplayPreferencesDto fromJsonValue<DisplayPreferencesDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DisplayPreferencesDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

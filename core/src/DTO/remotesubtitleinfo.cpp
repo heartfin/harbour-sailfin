@@ -32,86 +32,100 @@
 namespace Jellyfin {
 namespace DTO {
 
-RemoteSubtitleInfo::RemoteSubtitleInfo(QObject *parent) : QObject(parent) {}
+RemoteSubtitleInfo::RemoteSubtitleInfo(QObject *parent) {}
 
-RemoteSubtitleInfo *RemoteSubtitleInfo::fromJSON(QJsonObject source, QObject *parent) {
-	RemoteSubtitleInfo *instance = new RemoteSubtitleInfo(parent);
-	instance->updateFromJSON(source);
+RemoteSubtitleInfo RemoteSubtitleInfo::fromJson(QJsonObject source) {RemoteSubtitleInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void RemoteSubtitleInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void RemoteSubtitleInfo::setFromJson(QJsonObject source) {
+	m_threeLetterISOLanguageName = fromJsonValue<QString>(source["ThreeLetterISOLanguageName"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_providerName = fromJsonValue<QString>(source["ProviderName"]);
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_format = fromJsonValue<QString>(source["Format"]);
+	m_author = fromJsonValue<QString>(source["Author"]);
+	m_comment = fromJsonValue<QString>(source["Comment"]);
+	m_dateCreated = fromJsonValue<QDateTime>(source["DateCreated"]);
+	m_communityRating = fromJsonValue<float>(source["CommunityRating"]);
+	m_downloadCount = fromJsonValue<qint32>(source["DownloadCount"]);
+	m_isHashMatch = fromJsonValue<bool>(source["IsHashMatch"]);
+
 }
-QJsonObject RemoteSubtitleInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject RemoteSubtitleInfo::toJson() {
 	QJsonObject result;
+	result["ThreeLetterISOLanguageName"] = toJsonValue<QString>(m_threeLetterISOLanguageName);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["ProviderName"] = toJsonValue<QString>(m_providerName);
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Format"] = toJsonValue<QString>(m_format);
+	result["Author"] = toJsonValue<QString>(m_author);
+	result["Comment"] = toJsonValue<QString>(m_comment);
+	result["DateCreated"] = toJsonValue<QDateTime>(m_dateCreated);
+	result["CommunityRating"] = toJsonValue<float>(m_communityRating);
+	result["DownloadCount"] = toJsonValue<qint32>(m_downloadCount);
+	result["IsHashMatch"] = toJsonValue<bool>(m_isHashMatch);
+
 	return result;
 }
+
 QString RemoteSubtitleInfo::threeLetterISOLanguageName() const { return m_threeLetterISOLanguageName; }
+
 void RemoteSubtitleInfo::setThreeLetterISOLanguageName(QString newThreeLetterISOLanguageName) {
 	m_threeLetterISOLanguageName = newThreeLetterISOLanguageName;
-	emit threeLetterISOLanguageNameChanged(newThreeLetterISOLanguageName);
 }
-
 QString RemoteSubtitleInfo::jellyfinId() const { return m_jellyfinId; }
+
 void RemoteSubtitleInfo::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 QString RemoteSubtitleInfo::providerName() const { return m_providerName; }
+
 void RemoteSubtitleInfo::setProviderName(QString newProviderName) {
 	m_providerName = newProviderName;
-	emit providerNameChanged(newProviderName);
 }
-
 QString RemoteSubtitleInfo::name() const { return m_name; }
+
 void RemoteSubtitleInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString RemoteSubtitleInfo::format() const { return m_format; }
+
 void RemoteSubtitleInfo::setFormat(QString newFormat) {
 	m_format = newFormat;
-	emit formatChanged(newFormat);
 }
-
 QString RemoteSubtitleInfo::author() const { return m_author; }
+
 void RemoteSubtitleInfo::setAuthor(QString newAuthor) {
 	m_author = newAuthor;
-	emit authorChanged(newAuthor);
 }
-
 QString RemoteSubtitleInfo::comment() const { return m_comment; }
+
 void RemoteSubtitleInfo::setComment(QString newComment) {
 	m_comment = newComment;
-	emit commentChanged(newComment);
 }
-
 QDateTime RemoteSubtitleInfo::dateCreated() const { return m_dateCreated; }
+
 void RemoteSubtitleInfo::setDateCreated(QDateTime newDateCreated) {
 	m_dateCreated = newDateCreated;
-	emit dateCreatedChanged(newDateCreated);
 }
-
 float RemoteSubtitleInfo::communityRating() const { return m_communityRating; }
+
 void RemoteSubtitleInfo::setCommunityRating(float newCommunityRating) {
 	m_communityRating = newCommunityRating;
-	emit communityRatingChanged(newCommunityRating);
 }
-
 qint32 RemoteSubtitleInfo::downloadCount() const { return m_downloadCount; }
+
 void RemoteSubtitleInfo::setDownloadCount(qint32 newDownloadCount) {
 	m_downloadCount = newDownloadCount;
-	emit downloadCountChanged(newDownloadCount);
 }
-
 bool RemoteSubtitleInfo::isHashMatch() const { return m_isHashMatch; }
+
 void RemoteSubtitleInfo::setIsHashMatch(bool newIsHashMatch) {
 	m_isHashMatch = newIsHashMatch;
-	emit isHashMatchChanged(newIsHashMatch);
 }
 
 

@@ -32,85 +32,86 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/taskcompletionstatus.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class TaskResult : public QObject {
-	Q_OBJECT
-public:
-	explicit TaskResult(QObject *parent = nullptr);
-	static TaskResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class TaskResult {
+public:
+	explicit TaskResult();
+	static TaskResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the start time UTC.
 	 */
-	Q_PROPERTY(QDateTime startTimeUtc READ startTimeUtc WRITE setStartTimeUtc NOTIFY startTimeUtcChanged)
+	QDateTime startTimeUtc() const;
+	/**
+	* @brief Gets or sets the start time UTC.
+	*/
+	void setStartTimeUtc(QDateTime newStartTimeUtc);
 	/**
 	 * @brief Gets or sets the end time UTC.
 	 */
-	Q_PROPERTY(QDateTime endTimeUtc READ endTimeUtc WRITE setEndTimeUtc NOTIFY endTimeUtcChanged)
-	Q_PROPERTY(TaskCompletionStatus status READ status WRITE setStatus NOTIFY statusChanged)
+	QDateTime endTimeUtc() const;
+	/**
+	* @brief Gets or sets the end time UTC.
+	*/
+	void setEndTimeUtc(QDateTime newEndTimeUtc);
+
+	TaskCompletionStatus status() const;
+
+	void setStatus(TaskCompletionStatus newStatus);
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the key.
 	 */
-	Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
+	QString key() const;
+	/**
+	* @brief Gets or sets the key.
+	*/
+	void setKey(QString newKey);
 	/**
 	 * @brief Gets or sets the id.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the id.
+	*/
+	void setJellyfinId(QString newJellyfinId);
 	/**
 	 * @brief Gets or sets the error message.
 	 */
-	Q_PROPERTY(QString errorMessage READ errorMessage WRITE setErrorMessage NOTIFY errorMessageChanged)
+	QString errorMessage() const;
+	/**
+	* @brief Gets or sets the error message.
+	*/
+	void setErrorMessage(QString newErrorMessage);
 	/**
 	 * @brief Gets or sets the long error message.
 	 */
-	Q_PROPERTY(QString longErrorMessage READ longErrorMessage WRITE setLongErrorMessage NOTIFY longErrorMessageChanged)
-
-	QDateTime startTimeUtc() const;
-	void setStartTimeUtc(QDateTime newStartTimeUtc);
-	
-	QDateTime endTimeUtc() const;
-	void setEndTimeUtc(QDateTime newEndTimeUtc);
-	
-	TaskCompletionStatus status() const;
-	void setStatus(TaskCompletionStatus newStatus);
-	
-	QString name() const;
-	void setName(QString newName);
-	
-	QString key() const;
-	void setKey(QString newKey);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	QString errorMessage() const;
-	void setErrorMessage(QString newErrorMessage);
-	
 	QString longErrorMessage() const;
+	/**
+	* @brief Gets or sets the long error message.
+	*/
 	void setLongErrorMessage(QString newLongErrorMessage);
-	
-signals:
-	void startTimeUtcChanged(QDateTime newStartTimeUtc);
-	void endTimeUtcChanged(QDateTime newEndTimeUtc);
-	void statusChanged(TaskCompletionStatus newStatus);
-	void nameChanged(QString newName);
-	void keyChanged(QString newKey);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void errorMessageChanged(QString newErrorMessage);
-	void longErrorMessageChanged(QString newLongErrorMessage);
+
 protected:
 	QDateTime m_startTimeUtc;
 	QDateTime m_endTimeUtc;
@@ -121,6 +122,18 @@ protected:
 	QString m_errorMessage;
 	QString m_longErrorMessage;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TaskResult = Jellyfin::DTO::TaskResult;
+
+template <>
+TaskResult fromJsonValue<TaskResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TaskResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

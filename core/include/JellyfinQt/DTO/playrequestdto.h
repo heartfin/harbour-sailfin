@@ -31,53 +31,68 @@
 #define JELLYFIN_DTO_PLAYREQUESTDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
-#include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PlayRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit PlayRequestDto(QObject *parent = nullptr);
-	static PlayRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class PlayRequestDto {
+public:
+	explicit PlayRequestDto();
+	static PlayRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the playing queue.
 	 */
-	Q_PROPERTY(QStringList playingQueue READ playingQueue WRITE setPlayingQueue NOTIFY playingQueueChanged)
+	QList<QUuid> playingQueue() const;
+	/**
+	* @brief Gets or sets the playing queue.
+	*/
+	void setPlayingQueue(QList<QUuid> newPlayingQueue);
 	/**
 	 * @brief Gets or sets the position of the playing item in the queue.
 	 */
-	Q_PROPERTY(qint32 playingItemPosition READ playingItemPosition WRITE setPlayingItemPosition NOTIFY playingItemPositionChanged)
+	qint32 playingItemPosition() const;
+	/**
+	* @brief Gets or sets the position of the playing item in the queue.
+	*/
+	void setPlayingItemPosition(qint32 newPlayingItemPosition);
 	/**
 	 * @brief Gets or sets the start position ticks.
 	 */
-	Q_PROPERTY(qint64 startPositionTicks READ startPositionTicks WRITE setStartPositionTicks NOTIFY startPositionTicksChanged)
-
-	QStringList playingQueue() const;
-	void setPlayingQueue(QStringList newPlayingQueue);
-	
-	qint32 playingItemPosition() const;
-	void setPlayingItemPosition(qint32 newPlayingItemPosition);
-	
 	qint64 startPositionTicks() const;
+	/**
+	* @brief Gets or sets the start position ticks.
+	*/
 	void setStartPositionTicks(qint64 newStartPositionTicks);
-	
-signals:
-	void playingQueueChanged(QStringList newPlayingQueue);
-	void playingItemPositionChanged(qint32 newPlayingItemPosition);
-	void startPositionTicksChanged(qint64 newStartPositionTicks);
+
 protected:
-	QStringList m_playingQueue;
+	QList<QUuid> m_playingQueue;
 	qint32 m_playingItemPosition;
 	qint64 m_startPositionTicks;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlayRequestDto = Jellyfin::DTO::PlayRequestDto;
+
+template <>
+PlayRequestDto fromJsonValue<PlayRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlayRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

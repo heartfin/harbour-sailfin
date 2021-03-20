@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-ChannelMappingOptionsDto::ChannelMappingOptionsDto(QObject *parent) : QObject(parent) {}
+ChannelMappingOptionsDto::ChannelMappingOptionsDto(QObject *parent) {}
 
-ChannelMappingOptionsDto *ChannelMappingOptionsDto::fromJSON(QJsonObject source, QObject *parent) {
-	ChannelMappingOptionsDto *instance = new ChannelMappingOptionsDto(parent);
-	instance->updateFromJSON(source);
+ChannelMappingOptionsDto ChannelMappingOptionsDto::fromJson(QJsonObject source) {ChannelMappingOptionsDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ChannelMappingOptionsDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ChannelMappingOptionsDto::setFromJson(QJsonObject source) {
+	m_tunerChannels = fromJsonValue<QList<QSharedPointer<TunerChannelMapping>>>(source["TunerChannels"]);
+	m_providerChannels = fromJsonValue<QList<QSharedPointer<NameIdPair>>>(source["ProviderChannels"]);
+	m_mappings = fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["Mappings"]);
+	m_providerName = fromJsonValue<QString>(source["ProviderName"]);
+
 }
-QJsonObject ChannelMappingOptionsDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ChannelMappingOptionsDto::toJson() {
 	QJsonObject result;
+	result["TunerChannels"] = toJsonValue<QList<QSharedPointer<TunerChannelMapping>>>(m_tunerChannels);
+	result["ProviderChannels"] = toJsonValue<QList<QSharedPointer<NameIdPair>>>(m_providerChannels);
+	result["Mappings"] = toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_mappings);
+	result["ProviderName"] = toJsonValue<QString>(m_providerName);
+
 	return result;
 }
-QList<TunerChannelMapping *> ChannelMappingOptionsDto::tunerChannels() const { return m_tunerChannels; }
-void ChannelMappingOptionsDto::setTunerChannels(QList<TunerChannelMapping *> newTunerChannels) {
+
+QList<QSharedPointer<TunerChannelMapping>> ChannelMappingOptionsDto::tunerChannels() const { return m_tunerChannels; }
+
+void ChannelMappingOptionsDto::setTunerChannels(QList<QSharedPointer<TunerChannelMapping>> newTunerChannels) {
 	m_tunerChannels = newTunerChannels;
-	emit tunerChannelsChanged(newTunerChannels);
 }
+QList<QSharedPointer<NameIdPair>> ChannelMappingOptionsDto::providerChannels() const { return m_providerChannels; }
 
-QList<NameIdPair *> ChannelMappingOptionsDto::providerChannels() const { return m_providerChannels; }
-void ChannelMappingOptionsDto::setProviderChannels(QList<NameIdPair *> newProviderChannels) {
+void ChannelMappingOptionsDto::setProviderChannels(QList<QSharedPointer<NameIdPair>> newProviderChannels) {
 	m_providerChannels = newProviderChannels;
-	emit providerChannelsChanged(newProviderChannels);
 }
+QList<QSharedPointer<NameValuePair>> ChannelMappingOptionsDto::mappings() const { return m_mappings; }
 
-QList<NameValuePair *> ChannelMappingOptionsDto::mappings() const { return m_mappings; }
-void ChannelMappingOptionsDto::setMappings(QList<NameValuePair *> newMappings) {
+void ChannelMappingOptionsDto::setMappings(QList<QSharedPointer<NameValuePair>> newMappings) {
 	m_mappings = newMappings;
-	emit mappingsChanged(newMappings);
 }
-
 QString ChannelMappingOptionsDto::providerName() const { return m_providerName; }
+
 void ChannelMappingOptionsDto::setProviderName(QString newProviderName) {
 	m_providerName = newProviderName;
-	emit providerNameChanged(newProviderName);
 }
 
 

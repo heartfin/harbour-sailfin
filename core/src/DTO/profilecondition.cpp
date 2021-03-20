@@ -29,50 +29,54 @@
 
 #include <JellyfinQt/DTO/profilecondition.h>
 
-#include <JellyfinQt/DTO/profileconditiontype.h>
-#include <JellyfinQt/DTO/profileconditionvalue.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ProfileCondition::ProfileCondition(QObject *parent) : QObject(parent) {}
+ProfileCondition::ProfileCondition(QObject *parent) {}
 
-ProfileCondition *ProfileCondition::fromJSON(QJsonObject source, QObject *parent) {
-	ProfileCondition *instance = new ProfileCondition(parent);
-	instance->updateFromJSON(source);
+ProfileCondition ProfileCondition::fromJson(QJsonObject source) {ProfileCondition instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ProfileCondition::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ProfileCondition::setFromJson(QJsonObject source) {
+	m_condition = fromJsonValue<ProfileConditionType>(source["Condition"]);
+	m_property = fromJsonValue<ProfileConditionValue>(source["Property"]);
+	m_value = fromJsonValue<QString>(source["Value"]);
+	m_isRequired = fromJsonValue<bool>(source["IsRequired"]);
+
 }
-QJsonObject ProfileCondition::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ProfileCondition::toJson() {
 	QJsonObject result;
+	result["Condition"] = toJsonValue<ProfileConditionType>(m_condition);
+	result["Property"] = toJsonValue<ProfileConditionValue>(m_property);
+	result["Value"] = toJsonValue<QString>(m_value);
+	result["IsRequired"] = toJsonValue<bool>(m_isRequired);
+
 	return result;
 }
+
 ProfileConditionType ProfileCondition::condition() const { return m_condition; }
+
 void ProfileCondition::setCondition(ProfileConditionType newCondition) {
 	m_condition = newCondition;
-	emit conditionChanged(newCondition);
 }
-
 ProfileConditionValue ProfileCondition::property() const { return m_property; }
+
 void ProfileCondition::setProperty(ProfileConditionValue newProperty) {
 	m_property = newProperty;
-	emit propertyChanged(newProperty);
 }
-
 QString ProfileCondition::value() const { return m_value; }
+
 void ProfileCondition::setValue(QString newValue) {
 	m_value = newValue;
-	emit valueChanged(newValue);
 }
-
 bool ProfileCondition::isRequired() const { return m_isRequired; }
+
 void ProfileCondition::setIsRequired(bool newIsRequired) {
 	m_isRequired = newIsRequired;
-	emit isRequiredChanged(newIsRequired);
 }
 
 

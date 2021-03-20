@@ -32,85 +32,86 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/notificationlevel.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class NotificationDto : public QObject {
-	Q_OBJECT
-public:
-	explicit NotificationDto(QObject *parent = nullptr);
-	static NotificationDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class NotificationDto {
+public:
+	explicit NotificationDto();
+	static NotificationDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the notification ID. Defaults to an empty string.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the notification ID. Defaults to an empty string.
+	*/
+	void setJellyfinId(QString newJellyfinId);
 	/**
 	 * @brief Gets or sets the notification's user ID. Defaults to an empty string.
 	 */
-	Q_PROPERTY(QString userId READ userId WRITE setUserId NOTIFY userIdChanged)
+	QString userId() const;
+	/**
+	* @brief Gets or sets the notification's user ID. Defaults to an empty string.
+	*/
+	void setUserId(QString newUserId);
 	/**
 	 * @brief Gets or sets the notification date.
 	 */
-	Q_PROPERTY(QDateTime date READ date WRITE setDate NOTIFY dateChanged)
+	QDateTime date() const;
+	/**
+	* @brief Gets or sets the notification date.
+	*/
+	void setDate(QDateTime newDate);
 	/**
 	 * @brief Gets or sets a value indicating whether the notification has been read. Defaults to false.
 	 */
-	Q_PROPERTY(bool isRead READ isRead WRITE setIsRead NOTIFY isReadChanged)
+	bool isRead() const;
+	/**
+	* @brief Gets or sets a value indicating whether the notification has been read. Defaults to false.
+	*/
+	void setIsRead(bool newIsRead);
 	/**
 	 * @brief Gets or sets the notification's name. Defaults to an empty string.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the notification's name. Defaults to an empty string.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the notification's description. Defaults to an empty string.
 	 */
-	Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+	QString description() const;
+	/**
+	* @brief Gets or sets the notification's description. Defaults to an empty string.
+	*/
+	void setDescription(QString newDescription);
 	/**
 	 * @brief Gets or sets the notification's URL. Defaults to an empty string.
 	 */
-	Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
-	Q_PROPERTY(NotificationLevel level READ level WRITE setLevel NOTIFY levelChanged)
-
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	QString userId() const;
-	void setUserId(QString newUserId);
-	
-	QDateTime date() const;
-	void setDate(QDateTime newDate);
-	
-	bool isRead() const;
-	void setIsRead(bool newIsRead);
-	
-	QString name() const;
-	void setName(QString newName);
-	
-	QString description() const;
-	void setDescription(QString newDescription);
-	
 	QString url() const;
+	/**
+	* @brief Gets or sets the notification's URL. Defaults to an empty string.
+	*/
 	void setUrl(QString newUrl);
-	
+
 	NotificationLevel level() const;
+
 	void setLevel(NotificationLevel newLevel);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
-	void userIdChanged(QString newUserId);
-	void dateChanged(QDateTime newDate);
-	void isReadChanged(bool newIsRead);
-	void nameChanged(QString newName);
-	void descriptionChanged(QString newDescription);
-	void urlChanged(QString newUrl);
-	void levelChanged(NotificationLevel newLevel);
+
 protected:
 	QString m_jellyfinId;
 	QString m_userId;
@@ -121,6 +122,18 @@ protected:
 	QString m_url;
 	NotificationLevel m_level;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using NotificationDto = Jellyfin::DTO::NotificationDto;
+
+template <>
+NotificationDto fromJsonValue<NotificationDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NotificationDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

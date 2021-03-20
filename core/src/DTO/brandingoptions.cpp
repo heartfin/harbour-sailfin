@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-BrandingOptions::BrandingOptions(QObject *parent) : QObject(parent) {}
+BrandingOptions::BrandingOptions(QObject *parent) {}
 
-BrandingOptions *BrandingOptions::fromJSON(QJsonObject source, QObject *parent) {
-	BrandingOptions *instance = new BrandingOptions(parent);
-	instance->updateFromJSON(source);
+BrandingOptions BrandingOptions::fromJson(QJsonObject source) {BrandingOptions instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void BrandingOptions::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void BrandingOptions::setFromJson(QJsonObject source) {
+	m_loginDisclaimer = fromJsonValue<QString>(source["LoginDisclaimer"]);
+	m_customCss = fromJsonValue<QString>(source["CustomCss"]);
+
 }
-QJsonObject BrandingOptions::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject BrandingOptions::toJson() {
 	QJsonObject result;
+	result["LoginDisclaimer"] = toJsonValue<QString>(m_loginDisclaimer);
+	result["CustomCss"] = toJsonValue<QString>(m_customCss);
+
 	return result;
 }
+
 QString BrandingOptions::loginDisclaimer() const { return m_loginDisclaimer; }
+
 void BrandingOptions::setLoginDisclaimer(QString newLoginDisclaimer) {
 	m_loginDisclaimer = newLoginDisclaimer;
-	emit loginDisclaimerChanged(newLoginDisclaimer);
 }
-
 QString BrandingOptions::customCss() const { return m_customCss; }
+
 void BrandingOptions::setCustomCss(QString newCustomCss) {
 	m_customCss = newCustomCss;
-	emit customCssChanged(newCustomCss);
 }
 
 

@@ -65,7 +65,7 @@ string CMAKE_VAR_PREFIX = "openapi";
 string INCLUDE_PREFIX = "JellyfinQt";
 string SRC_PREFIX = "";
 
-string MODEL_FOLDER = "model";
+string MODEL_FOLDER = "DTO";
 string SUPPORT_FOLDER = "support";
 
 string[string] compatAliases;
@@ -80,7 +80,10 @@ static this() {
 }
 
 CasePolicy OPENAPI_CASING = CasePolicy.PASCAL;
-string[] CPP_NAMESPACE = ["Jellyfin", "DTO"];
+static immutable string[1] CPP_NAMESPACE = ["Jellyfin"];
+static immutable string[2] CPP_NAMESPACE_DTO = ["Jellyfin", "DTO"];
+static immutable string[2] CPP_NAMESPACE_SUPPORT = ["Jellyfin", "Support"];
+
 CasePolicy CPP_FILENAME_CASING = CasePolicy.LOWER;
 CasePolicy CPP_CLASS_CASING = CasePolicy.PASCAL;
 CasePolicy CPP_CLASS_MEMBER_CASING = CasePolicy.CAMEL;
@@ -173,9 +176,9 @@ void writeCompatAliasFile(ref const string original, ref const string compatAlia
 	File headerFile = File(buildPath(outputDirectory, "include", INCLUDE_PREFIX, MODEL_FOLDER, fileBase ~ ".h"), "w+");
 	File implementationFile = File(buildPath(outputDirectory, "src", SRC_PREFIX, MODEL_FOLDER, fileBase ~ ".cpp"), "w+");
 	
-	writeHeaderPreamble(headerFile, compatAlias, [], [original]);
+	writeHeaderPreamble(headerFile, CPP_NAMESPACE_DTO, compatAlias, [], [original]);
 	headerFile.writefln("using %s = %s;", compatAlias, original);
-	writeHeaderPostamble(headerFile, compatAlias);
+	writeHeaderPostamble(headerFile, CPP_NAMESPACE_DTO, compatAlias);
 }
 
 void generateFileForSchema(ref string name, ref const Node scheme, Node allSchemas) {
@@ -185,29 +188,34 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 	
 	if ("enum" in scheme) {
 		string[3] imports = ["QJsonValue", "QObject", "QString"];
-		writeHeaderPreamble(headerFile, name, imports);
+		string[1] userImports = [buildPath(SUPPORT_FOLDER, "jsonconv.h")];
+		writeHeaderPreamble(headerFile, CPP_NAMESPACE_DTO, name, imports, userImports);
 		
 		Appender!(string[]) values;
 		foreach (string value; scheme["enum"]) {
 			values ~= value;
 		}
 		writeEnumHeader(headerFile, name, values[]);
-		writeHeaderPostamble(headerFile, name);
+		writeHeaderPostamble(headerFile, CPP_NAMESPACE_DTO, name);
 		
-		writeImplementationPreamble(implementationFile, name);
+		writeImplementationPreamble(implementationFile, CPP_NAMESPACE_DTO, name);
 		writeEnumImplementation(implementationFile, name);
-		writeImplementationPostamble(implementationFile, name);
+		writeImplementationPostamble(implementationFile, CPP_NAMESPACE_DTO, name);
 	}
 	if (scheme["type"].as!string == "object" && "properties" in scheme) {
 		// Determine all imports
 		Appender!(string[]) systemImports, userImports;
 		Appender!(string[]) forwardDeclarations;
-		systemImports ~= ["QObject", "QJsonObject"];
+		systemImports ~= ["optional", "QJsonObject", "QJsonValue"];
 		userImports ~= [buildPath(SUPPORT_FOLDER, "jsonconv.h")];
 		
 		MetaTypeInfo[] usedTypes = collectTypeInfo(scheme["properties"], allSchemas);
 		bool importedContainers = false;
 		void collectImports(MetaTypeInfo type) {
+			if (type.needsPointer && !systemImports[].canFind("QSharedPointer")) {
+				systemImports ~= ["QSharedPointer"];
+			}
+			
 			if (type.needsSystemImport && !systemImports[].canFind(type.typeName)) {
 				if (type.isContainer) {
 					if (!importedContainers) {
@@ -220,11 +228,10 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 				} else {
 					systemImports ~= [type.typeName];
 				}
-			} else if (type.needsLocalImport && !userImports[].canFind(type.typeName)) {
-				if (type.needsPointer) {
-					forwardDeclarations ~= type.typeName;
-				} else {
-					userImports ~= buildPath(MODEL_FOLDER, type.typeName.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h");
+			} else {
+				string userImport = buildPath(MODEL_FOLDER, type.typeName.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h");
+				if (type.needsLocalImport && !userImports[].canFind(userImport) && type.typeName != name) {
+					userImports ~= userImport;
 				}
 			}
 		}
@@ -238,13 +245,13 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 		string[] sortedForwardDeclarations = sort(forwardDeclarations[]).array;
 		
 		// Write implementation files
-		writeHeaderPreamble(headerFile, name, sortedSystemImports, sortedUserImports);
+		writeHeaderPreamble(headerFile, CPP_NAMESPACE_DTO, name, sortedSystemImports, sortedUserImports);
 		writeObjectHeader(headerFile, name, usedTypes, sortedForwardDeclarations);
-		writeHeaderPostamble(headerFile, name);
+		writeHeaderPostamble(headerFile, CPP_NAMESPACE_DTO, name);
 		
-		writeImplementationPreamble(implementationFile, name);
+		writeImplementationPreamble(implementationFile, CPP_NAMESPACE_DTO, name);
 		writeObjectImplementation(implementationFile, name, usedTypes);
-		writeImplementationPostamble(implementationFile, name);
+		writeImplementationPostamble(implementationFile, CPP_NAMESPACE_DTO, name);
 	}
 }
 
@@ -268,14 +275,21 @@ MetaTypeInfo[] collectTypeInfo(Node properties, Node allSchemas) {
 			if (type in allSchemas&& "type" in allSchemas[type] 
 					&& allSchemas[type]["type"].as!string == "object") {
 				info.needsPointer = true;
-			} 
+				info.isTypeNullable = true;
+				info.typeNullableCheck = ".isNull()";
+				info.typeNullableSetter = ".clear()";
+			}
+
 			info.needsLocalImport = true;
 			info.typeName = type; 
 			return info;
 		}
 		if (!("type" in node)) {
 			info.typeName = "QVariant";
+			info.isTypeNullable = true;
 			info.needsSystemImport = true;
+			info.typeNullableCheck = ".isNull()";
+			info.typeNullableSetter = ".clear()";
 			return info;
 		}
 		switch(node["type"].as!string) {
@@ -288,13 +302,26 @@ MetaTypeInfo[] collectTypeInfo(Node properties, Node allSchemas) {
 				case "date-time":
 					info.typeName= "QDateTime";
 					info.needsSystemImport = true;
+					info.isTypeNullable = true;
+					info.typeNullableCheck = ".isNull()";
+					info.typeNullableSetter = "= QDateTime()";
+					return info;
+				case "uuid":
+					info.typeName = "QUuid";
+					info.needsSystemImport = true;
+					info.isTypeNullable = true;
+					info.typeNullableCheck = ".isNull()";
+					info.typeNullableSetter = "= QGuid()";
 					return info;
 				default:
 					break;
 				}
 			}
+			info.isTypeNullable = true;
 			info.typeName= "QString";
 			info.needsSystemImport = true;
+			info.typeNullableCheck = ".isNull()";
+			info.typeNullableSetter = ".clear()";
 			return info;
 		case "integer":
 			if ("format" in node) {
@@ -323,6 +350,9 @@ MetaTypeInfo[] collectTypeInfo(Node properties, Node allSchemas) {
 			info.needsSystemImport = true;
 			info.isContainer = true;
 			info.containerType = containedType;
+			info.isTypeNullable = true;
+			info.typeNullableCheck = ".size() == 0";
+			info.typeNullableSetter = ".clear()";
 			if (containedType.typeName == "QString") {
 				info.typeName = "QStringList";
 			} else {
@@ -348,6 +378,7 @@ void writeObjectHeader(File output, string name, MetaTypeInfo[] properties, stri
 		string className;
 		MetaTypeInfo[] properties;
 		string[] userImports;
+		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
 	}
 	Controller controller = new Controller();
 	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
@@ -363,6 +394,7 @@ void writeObjectImplementation(File output, string name, MetaTypeInfo[] properti
 	class Controller {
 		string className;
 		MetaTypeInfo[] properties;
+		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
 	}
 	Controller controller = new Controller();
 	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
@@ -375,6 +407,7 @@ void writeEnumHeader(File output, string name, string[] values, string doc = "")
 	class Controller {
 		string className;
 		string[] values;
+		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
 	}
 	Controller controller = new Controller();
 	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
@@ -388,9 +421,9 @@ void writeEnumImplementation(File output, string name) {
 }
 
 // Common
-void writeHeaderPreamble(File output, string className, string[] imports = [], string[] userImports = []) {
+void writeHeaderPreamble(File output, immutable string[] fileNamespace, string className, string[] imports = [], string[] userImports = []) {
 	output.writeln(COPYRIGHT);
-	string guard = guardName(CPP_NAMESPACE, className);
+	string guard = guardName(fileNamespace, className);
 	output.writefln("#ifndef %s", guard);
 	output.writefln("#define %s", guard);
 	output.writeln();
@@ -406,22 +439,22 @@ void writeHeaderPreamble(File output, string className, string[] imports = [], s
 	}
 	if (userImports.length > 0) output.writeln();
 	
-	foreach (namespace; CPP_NAMESPACE) {
+	foreach (namespace; fileNamespace) {
 		output.writefln("namespace %s {", namespace);
 	}
 	output.writeln();
 }
 
-void writeHeaderPostamble(File output, string className) {
+void writeHeaderPostamble(File output, immutable string[] fileNamespace, string className) {
 	output.writeln();
-	foreach(namespace; CPP_NAMESPACE) {
+	foreach(namespace; fileNamespace) {
 		output.writefln("} // NS %s", namespace);
 	}
 	output.writeln();
-	output.writefln("#endif // %s", guardName(CPP_NAMESPACE, className));
+	output.writefln("#endif // %s", guardName(fileNamespace, className));
 }
 
-void writeImplementationPreamble(File output, string className, string[] imports = []) {
+void writeImplementationPreamble(File output, immutable string[] fileNamespace, string className, string[] imports = []) {
 	output.writeln(COPYRIGHT);
 	output.writefln("#include <%s>", buildPath(INCLUDE_PREFIX, MODEL_FOLDER, className.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h"));
 	output.writeln();
@@ -431,15 +464,15 @@ void writeImplementationPreamble(File output, string className, string[] imports
 	}
 	if (imports.length > 0) output.writeln();
 	
-	foreach (namespace; CPP_NAMESPACE) {
+	foreach (namespace; fileNamespace) {
 		output.writefln("namespace %s {", namespace);
 	}
 	output.writeln();
 }
 
-void writeImplementationPostamble(File output, string className) {
+void writeImplementationPostamble(File output, immutable string[] fileNamespace, string className) {
 	output.writeln();
-	foreach(namespace; CPP_NAMESPACE) {
+	foreach(namespace; fileNamespace) {
 		output.writefln("} // NS %s", namespace);
 	}
 }
@@ -508,11 +541,20 @@ public:
 	string originalName = "";
 	string name = "";
 	string typeName = "";
+	/// Description of this property.
 	string description = "";
+	/// If this property is nullable according to the OpenAPI spec.
+	bool isNullable = false;
 	bool needsPointer = false;
+	/// If the type needs a system import (Such as Qt types)
 	bool needsSystemImport = false;
+	/// If the type needs a local import (such as types elsewhere in this project).
 	bool needsLocalImport = false;
+	/// If the type is a container type
 	bool isContainer = false;
+	/// If this type has a non-ambigious null state.
+	bool isTypeNullable = false;
+	/// If `isContainer` is true, the type of the container.
 	MetaTypeInfo containerType = null;
 	
 	string writeName() {
@@ -525,20 +567,59 @@ public:
 	
 	string typeNameWithQualifiers() {
 		if (needsPointer) {
-			return typeName~ " *";
+			return "QSharedPointer<" ~ typeName~ ">";
 		} else {
 			return typeName;
 		}
 	}
 	
+	bool needsOptional() {
+		return isNullable && !isTypeNullable;
+	}
+	
+	string typeNullableCheck;
+	string nullableCheck() {
+		if (typeNullableCheck.length > 0) {
+			return memberName ~ "." ~ typeNullableCheck;
+		}
+		if (needsOptional) {
+			return "!" ~ memberName ~ ".has_value()";
+		}
+		return "Q_ASSERT(false)";
+	}
+	
+	string typeNullableSetter = "";
+	string nullableSetter() {
+		if (needsOptional) {
+			return memberName ~ "= std::nullopt";
+		}
+		if (typeNullableSetter.startsWith("=")) {
+			return memberName ~ typeNullableSetter;
+		} else {
+			return typeNullableSetter;
+		}
+	}
+	
 	string defaultInitializer() {
 		if (needsPointer) return "nullptr";
+		if (needsOptional) return "std::nullopt";
 		return "";
 	}
 }
 
-string guardName(string[] namespace, string className) {
+string guardName(immutable string[] namespace, string className) {
 	return namespace.map!toUpper().join("_") ~ "_"
 		~ className.applyCasePolicy(OPENAPI_CASING, CasePolicy.UPPER)
 		~ "_H";
+}
+
+string namespaceString(string[] name)() {
+	string result;
+	static foreach(idx, part; name) {
+		static if (idx != 0) {
+			result ~= "::";
+		}
+		result ~= part;
+	}
+	return result;
 }

@@ -29,37 +29,40 @@
 
 #include <JellyfinQt/DTO/queuerequestdto.h>
 
-#include <JellyfinQt/DTO/groupqueuemode.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-QueueRequestDto::QueueRequestDto(QObject *parent) : QObject(parent) {}
+QueueRequestDto::QueueRequestDto(QObject *parent) {}
 
-QueueRequestDto *QueueRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	QueueRequestDto *instance = new QueueRequestDto(parent);
-	instance->updateFromJSON(source);
+QueueRequestDto QueueRequestDto::fromJson(QJsonObject source) {QueueRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void QueueRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void QueueRequestDto::setFromJson(QJsonObject source) {
+	m_itemIds = fromJsonValue<QList<QUuid>>(source["ItemIds"]);
+	m_mode = fromJsonValue<GroupQueueMode>(source["Mode"]);
+
 }
-QJsonObject QueueRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject QueueRequestDto::toJson() {
 	QJsonObject result;
+	result["ItemIds"] = toJsonValue<QList<QUuid>>(m_itemIds);
+	result["Mode"] = toJsonValue<GroupQueueMode>(m_mode);
+
 	return result;
 }
-QStringList QueueRequestDto::itemIds() const { return m_itemIds; }
-void QueueRequestDto::setItemIds(QStringList newItemIds) {
-	m_itemIds = newItemIds;
-	emit itemIdsChanged(newItemIds);
-}
 
+QList<QUuid> QueueRequestDto::itemIds() const { return m_itemIds; }
+
+void QueueRequestDto::setItemIds(QList<QUuid> newItemIds) {
+	m_itemIds = newItemIds;
+}
 GroupQueueMode QueueRequestDto::mode() const { return m_mode; }
+
 void QueueRequestDto::setMode(GroupQueueMode newMode) {
 	m_mode = newMode;
-	emit modeChanged(newMode);
 }
 
 

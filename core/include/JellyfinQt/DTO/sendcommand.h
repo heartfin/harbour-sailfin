@@ -32,77 +32,90 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QUuid>
+#include <optional>
 
 #include "JellyfinQt/DTO/sendcommandtype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SendCommand : public QObject {
-	Q_OBJECT
-public:
-	explicit SendCommand(QObject *parent = nullptr);
-	static SendCommand *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class SendCommand {
+public:
+	explicit SendCommand();
+	static SendCommand fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets the group identifier.
 	 */
-	Q_PROPERTY(QString groupId READ groupId WRITE setGroupId NOTIFY groupIdChanged)
+	QUuid groupId() const;
+	/**
+	* @brief Gets the group identifier.
+	*/
+	void setGroupId(QUuid newGroupId);
 	/**
 	 * @brief Gets the playlist identifier of the playing item.
 	 */
-	Q_PROPERTY(QString playlistItemId READ playlistItemId WRITE setPlaylistItemId NOTIFY playlistItemIdChanged)
+	QUuid playlistItemId() const;
+	/**
+	* @brief Gets the playlist identifier of the playing item.
+	*/
+	void setPlaylistItemId(QUuid newPlaylistItemId);
 	/**
 	 * @brief Gets or sets the UTC time when to execute the command.
 	 */
-	Q_PROPERTY(QDateTime when READ when WRITE setWhen NOTIFY whenChanged)
+	QDateTime when() const;
+	/**
+	* @brief Gets or sets the UTC time when to execute the command.
+	*/
+	void setWhen(QDateTime newWhen);
 	/**
 	 * @brief Gets the position ticks.
 	 */
-	Q_PROPERTY(qint64 positionTicks READ positionTicks WRITE setPositionTicks NOTIFY positionTicksChanged)
-	Q_PROPERTY(SendCommandType command READ command WRITE setCommand NOTIFY commandChanged)
+	qint64 positionTicks() const;
+	/**
+	* @brief Gets the position ticks.
+	*/
+	void setPositionTicks(qint64 newPositionTicks);
+
+	SendCommandType command() const;
+
+	void setCommand(SendCommandType newCommand);
 	/**
 	 * @brief Gets the UTC time when this command has been emitted.
 	 */
-	Q_PROPERTY(QDateTime emittedAt READ emittedAt WRITE setEmittedAt NOTIFY emittedAtChanged)
-
-	QString groupId() const;
-	void setGroupId(QString newGroupId);
-	
-	QString playlistItemId() const;
-	void setPlaylistItemId(QString newPlaylistItemId);
-	
-	QDateTime when() const;
-	void setWhen(QDateTime newWhen);
-	
-	qint64 positionTicks() const;
-	void setPositionTicks(qint64 newPositionTicks);
-	
-	SendCommandType command() const;
-	void setCommand(SendCommandType newCommand);
-	
 	QDateTime emittedAt() const;
+	/**
+	* @brief Gets the UTC time when this command has been emitted.
+	*/
 	void setEmittedAt(QDateTime newEmittedAt);
-	
-signals:
-	void groupIdChanged(QString newGroupId);
-	void playlistItemIdChanged(QString newPlaylistItemId);
-	void whenChanged(QDateTime newWhen);
-	void positionTicksChanged(qint64 newPositionTicks);
-	void commandChanged(SendCommandType newCommand);
-	void emittedAtChanged(QDateTime newEmittedAt);
+
 protected:
-	QString m_groupId;
-	QString m_playlistItemId;
+	QUuid m_groupId;
+	QUuid m_playlistItemId;
 	QDateTime m_when;
 	qint64 m_positionTicks;
 	SendCommandType m_command;
 	QDateTime m_emittedAt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SendCommand = Jellyfin::DTO::SendCommand;
+
+template <>
+SendCommand fromJsonValue<SendCommand>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SendCommand::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

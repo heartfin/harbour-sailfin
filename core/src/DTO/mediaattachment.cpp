@@ -32,62 +32,72 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaAttachment::MediaAttachment(QObject *parent) : QObject(parent) {}
+MediaAttachment::MediaAttachment(QObject *parent) {}
 
-MediaAttachment *MediaAttachment::fromJSON(QJsonObject source, QObject *parent) {
-	MediaAttachment *instance = new MediaAttachment(parent);
-	instance->updateFromJSON(source);
+MediaAttachment MediaAttachment::fromJson(QJsonObject source) {MediaAttachment instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MediaAttachment::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MediaAttachment::setFromJson(QJsonObject source) {
+	m_codec = fromJsonValue<QString>(source["Codec"]);
+	m_codecTag = fromJsonValue<QString>(source["CodecTag"]);
+	m_comment = fromJsonValue<QString>(source["Comment"]);
+	m_index = fromJsonValue<qint32>(source["Index"]);
+	m_fileName = fromJsonValue<QString>(source["FileName"]);
+	m_mimeType = fromJsonValue<QString>(source["MimeType"]);
+	m_deliveryUrl = fromJsonValue<QString>(source["DeliveryUrl"]);
+
 }
-QJsonObject MediaAttachment::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MediaAttachment::toJson() {
 	QJsonObject result;
+	result["Codec"] = toJsonValue<QString>(m_codec);
+	result["CodecTag"] = toJsonValue<QString>(m_codecTag);
+	result["Comment"] = toJsonValue<QString>(m_comment);
+	result["Index"] = toJsonValue<qint32>(m_index);
+	result["FileName"] = toJsonValue<QString>(m_fileName);
+	result["MimeType"] = toJsonValue<QString>(m_mimeType);
+	result["DeliveryUrl"] = toJsonValue<QString>(m_deliveryUrl);
+
 	return result;
 }
+
 QString MediaAttachment::codec() const { return m_codec; }
+
 void MediaAttachment::setCodec(QString newCodec) {
 	m_codec = newCodec;
-	emit codecChanged(newCodec);
 }
-
 QString MediaAttachment::codecTag() const { return m_codecTag; }
+
 void MediaAttachment::setCodecTag(QString newCodecTag) {
 	m_codecTag = newCodecTag;
-	emit codecTagChanged(newCodecTag);
 }
-
 QString MediaAttachment::comment() const { return m_comment; }
+
 void MediaAttachment::setComment(QString newComment) {
 	m_comment = newComment;
-	emit commentChanged(newComment);
 }
-
 qint32 MediaAttachment::index() const { return m_index; }
+
 void MediaAttachment::setIndex(qint32 newIndex) {
 	m_index = newIndex;
-	emit indexChanged(newIndex);
 }
-
 QString MediaAttachment::fileName() const { return m_fileName; }
+
 void MediaAttachment::setFileName(QString newFileName) {
 	m_fileName = newFileName;
-	emit fileNameChanged(newFileName);
 }
-
 QString MediaAttachment::mimeType() const { return m_mimeType; }
+
 void MediaAttachment::setMimeType(QString newMimeType) {
 	m_mimeType = newMimeType;
-	emit mimeTypeChanged(newMimeType);
 }
-
 QString MediaAttachment::deliveryUrl() const { return m_deliveryUrl; }
+
 void MediaAttachment::setDeliveryUrl(QString newDeliveryUrl) {
 	m_deliveryUrl = newDeliveryUrl;
-	emit deliveryUrlChanged(newDeliveryUrl);
 }
 
 

@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_IMAGEORIENTATION_H
 #define JELLYFIN_DTO_IMAGEORIENTATION_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ImageOrientationClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		TopLeft,
 		TopRight,
 		BottomRight,
@@ -52,7 +57,48 @@ public:
 private:
 	explicit ImageOrientationClass();
 };
+
 typedef ImageOrientationClass::Value ImageOrientation;
+
+} // NS DTO
+
+namespace Support {
+
+using ImageOrientation = Jellyfin::DTO::ImageOrientation;
+using ImageOrientationClass = Jellyfin::DTO::ImageOrientationClass;
+
+template <>
+ImageOrientation fromJsonValue<ImageOrientation>(const QJsonValue &source) {
+	if (!source.isString()) return ImageOrientationClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("TopLeft")) {
+		return ImageOrientationClass::TopLeft;
+	}
+	if (str == QStringLiteral("TopRight")) {
+		return ImageOrientationClass::TopRight;
+	}
+	if (str == QStringLiteral("BottomRight")) {
+		return ImageOrientationClass::BottomRight;
+	}
+	if (str == QStringLiteral("BottomLeft")) {
+		return ImageOrientationClass::BottomLeft;
+	}
+	if (str == QStringLiteral("LeftTop")) {
+		return ImageOrientationClass::LeftTop;
+	}
+	if (str == QStringLiteral("RightTop")) {
+		return ImageOrientationClass::RightTop;
+	}
+	if (str == QStringLiteral("RightBottom")) {
+		return ImageOrientationClass::RightBottom;
+	}
+	if (str == QStringLiteral("LeftBottom")) {
+		return ImageOrientationClass::LeftBottom;
+	}
+	
+	return ImageOrientationClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

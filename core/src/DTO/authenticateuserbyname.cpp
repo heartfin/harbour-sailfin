@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-AuthenticateUserByName::AuthenticateUserByName(QObject *parent) : QObject(parent) {}
+AuthenticateUserByName::AuthenticateUserByName(QObject *parent) {}
 
-AuthenticateUserByName *AuthenticateUserByName::fromJSON(QJsonObject source, QObject *parent) {
-	AuthenticateUserByName *instance = new AuthenticateUserByName(parent);
-	instance->updateFromJSON(source);
+AuthenticateUserByName AuthenticateUserByName::fromJson(QJsonObject source) {AuthenticateUserByName instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void AuthenticateUserByName::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void AuthenticateUserByName::setFromJson(QJsonObject source) {
+	m_username = fromJsonValue<QString>(source["Username"]);
+	m_pw = fromJsonValue<QString>(source["Pw"]);
+	m_password = fromJsonValue<QString>(source["Password"]);
+
 }
-QJsonObject AuthenticateUserByName::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject AuthenticateUserByName::toJson() {
 	QJsonObject result;
+	result["Username"] = toJsonValue<QString>(m_username);
+	result["Pw"] = toJsonValue<QString>(m_pw);
+	result["Password"] = toJsonValue<QString>(m_password);
+
 	return result;
 }
+
 QString AuthenticateUserByName::username() const { return m_username; }
+
 void AuthenticateUserByName::setUsername(QString newUsername) {
 	m_username = newUsername;
-	emit usernameChanged(newUsername);
 }
-
 QString AuthenticateUserByName::pw() const { return m_pw; }
+
 void AuthenticateUserByName::setPw(QString newPw) {
 	m_pw = newPw;
-	emit pwChanged(newPw);
 }
-
 QString AuthenticateUserByName::password() const { return m_password; }
+
 void AuthenticateUserByName::setPassword(QString newPassword) {
 	m_password = newPassword;
-	emit passwordChanged(newPassword);
 }
 
 

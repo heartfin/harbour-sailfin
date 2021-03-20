@@ -32,60 +32,75 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LogFile : public QObject {
-	Q_OBJECT
-public:
-	explicit LogFile(QObject *parent = nullptr);
-	static LogFile *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class LogFile {
+public:
+	explicit LogFile();
+	static LogFile fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the date created.
 	 */
-	Q_PROPERTY(QDateTime dateCreated READ dateCreated WRITE setDateCreated NOTIFY dateCreatedChanged)
+	QDateTime dateCreated() const;
+	/**
+	* @brief Gets or sets the date created.
+	*/
+	void setDateCreated(QDateTime newDateCreated);
 	/**
 	 * @brief Gets or sets the date modified.
 	 */
-	Q_PROPERTY(QDateTime dateModified READ dateModified WRITE setDateModified NOTIFY dateModifiedChanged)
+	QDateTime dateModified() const;
+	/**
+	* @brief Gets or sets the date modified.
+	*/
+	void setDateModified(QDateTime newDateModified);
 	/**
 	 * @brief Gets or sets the size.
 	 */
-	Q_PROPERTY(qint64 size READ size WRITE setSize NOTIFY sizeChanged)
+	qint64 size() const;
+	/**
+	* @brief Gets or sets the size.
+	*/
+	void setSize(qint64 newSize);
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-
-	QDateTime dateCreated() const;
-	void setDateCreated(QDateTime newDateCreated);
-	
-	QDateTime dateModified() const;
-	void setDateModified(QDateTime newDateModified);
-	
-	qint64 size() const;
-	void setSize(qint64 newSize);
-	
 	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
 	void setName(QString newName);
-	
-signals:
-	void dateCreatedChanged(QDateTime newDateCreated);
-	void dateModifiedChanged(QDateTime newDateModified);
-	void sizeChanged(qint64 newSize);
-	void nameChanged(QString newName);
+
 protected:
 	QDateTime m_dateCreated;
 	QDateTime m_dateModified;
 	qint64 m_size;
 	QString m_name;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LogFile = Jellyfin::DTO::LogFile;
+
+template <>
+LogFile fromJsonValue<LogFile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LogFile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,50 +32,58 @@
 namespace Jellyfin {
 namespace DTO {
 
-ChapterInfo::ChapterInfo(QObject *parent) : QObject(parent) {}
+ChapterInfo::ChapterInfo(QObject *parent) {}
 
-ChapterInfo *ChapterInfo::fromJSON(QJsonObject source, QObject *parent) {
-	ChapterInfo *instance = new ChapterInfo(parent);
-	instance->updateFromJSON(source);
+ChapterInfo ChapterInfo::fromJson(QJsonObject source) {ChapterInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ChapterInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ChapterInfo::setFromJson(QJsonObject source) {
+	m_startPositionTicks = fromJsonValue<qint64>(source["StartPositionTicks"]);
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_imagePath = fromJsonValue<QString>(source["ImagePath"]);
+	m_imageDateModified = fromJsonValue<QDateTime>(source["ImageDateModified"]);
+	m_imageTag = fromJsonValue<QString>(source["ImageTag"]);
+
 }
-QJsonObject ChapterInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ChapterInfo::toJson() {
 	QJsonObject result;
+	result["StartPositionTicks"] = toJsonValue<qint64>(m_startPositionTicks);
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["ImagePath"] = toJsonValue<QString>(m_imagePath);
+	result["ImageDateModified"] = toJsonValue<QDateTime>(m_imageDateModified);
+	result["ImageTag"] = toJsonValue<QString>(m_imageTag);
+
 	return result;
 }
+
 qint64 ChapterInfo::startPositionTicks() const { return m_startPositionTicks; }
+
 void ChapterInfo::setStartPositionTicks(qint64 newStartPositionTicks) {
 	m_startPositionTicks = newStartPositionTicks;
-	emit startPositionTicksChanged(newStartPositionTicks);
 }
-
 QString ChapterInfo::name() const { return m_name; }
+
 void ChapterInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString ChapterInfo::imagePath() const { return m_imagePath; }
+
 void ChapterInfo::setImagePath(QString newImagePath) {
 	m_imagePath = newImagePath;
-	emit imagePathChanged(newImagePath);
 }
-
 QDateTime ChapterInfo::imageDateModified() const { return m_imageDateModified; }
+
 void ChapterInfo::setImageDateModified(QDateTime newImageDateModified) {
 	m_imageDateModified = newImageDateModified;
-	emit imageDateModifiedChanged(newImageDateModified);
 }
-
 QString ChapterInfo::imageTag() const { return m_imageTag; }
+
 void ChapterInfo::setImageTag(QString newImageTag) {
 	m_imageTag = newImageTag;
-	emit imageTagChanged(newImageTag);
 }
 
 

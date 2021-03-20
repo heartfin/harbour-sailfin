@@ -31,91 +31,103 @@
 #define JELLYFIN_DTO_VIRTUALFOLDERINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/libraryoptions.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LibraryOptions;
 
-class VirtualFolderInfo : public QObject {
-	Q_OBJECT
+class VirtualFolderInfo {
 public:
-	explicit VirtualFolderInfo(QObject *parent = nullptr);
-	static VirtualFolderInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit VirtualFolderInfo();
+	static VirtualFolderInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the locations.
 	 */
-	Q_PROPERTY(QStringList locations READ locations WRITE setLocations NOTIFY locationsChanged)
+	QStringList locations() const;
+	/**
+	* @brief Gets or sets the locations.
+	*/
+	void setLocations(QStringList newLocations);
 	/**
 	 * @brief Gets or sets the type of the collection.
 	 */
-	Q_PROPERTY(QString collectionType READ collectionType WRITE setCollectionType NOTIFY collectionTypeChanged)
-	Q_PROPERTY(LibraryOptions * libraryOptions READ libraryOptions WRITE setLibraryOptions NOTIFY libraryOptionsChanged)
+	QString collectionType() const;
+	/**
+	* @brief Gets or sets the type of the collection.
+	*/
+	void setCollectionType(QString newCollectionType);
+
+	QSharedPointer<LibraryOptions> libraryOptions() const;
+
+	void setLibraryOptions(QSharedPointer<LibraryOptions> newLibraryOptions);
 	/**
 	 * @brief Gets or sets the item identifier.
 	 */
-	Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
+	QString itemId() const;
+	/**
+	* @brief Gets or sets the item identifier.
+	*/
+	void setItemId(QString newItemId);
 	/**
 	 * @brief Gets or sets the primary image item identifier.
 	 */
-	Q_PROPERTY(QString primaryImageItemId READ primaryImageItemId WRITE setPrimaryImageItemId NOTIFY primaryImageItemIdChanged)
-	Q_PROPERTY(double refreshProgress READ refreshProgress WRITE setRefreshProgress NOTIFY refreshProgressChanged)
-	Q_PROPERTY(QString refreshStatus READ refreshStatus WRITE setRefreshStatus NOTIFY refreshStatusChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QStringList locations() const;
-	void setLocations(QStringList newLocations);
-	
-	QString collectionType() const;
-	void setCollectionType(QString newCollectionType);
-	
-	LibraryOptions * libraryOptions() const;
-	void setLibraryOptions(LibraryOptions * newLibraryOptions);
-	
-	QString itemId() const;
-	void setItemId(QString newItemId);
-	
 	QString primaryImageItemId() const;
+	/**
+	* @brief Gets or sets the primary image item identifier.
+	*/
 	void setPrimaryImageItemId(QString newPrimaryImageItemId);
-	
+
 	double refreshProgress() const;
+
 	void setRefreshProgress(double newRefreshProgress);
-	
+
 	QString refreshStatus() const;
+
 	void setRefreshStatus(QString newRefreshStatus);
-	
-signals:
-	void nameChanged(QString newName);
-	void locationsChanged(QStringList newLocations);
-	void collectionTypeChanged(QString newCollectionType);
-	void libraryOptionsChanged(LibraryOptions * newLibraryOptions);
-	void itemIdChanged(QString newItemId);
-	void primaryImageItemIdChanged(QString newPrimaryImageItemId);
-	void refreshProgressChanged(double newRefreshProgress);
-	void refreshStatusChanged(QString newRefreshStatus);
+
 protected:
 	QString m_name;
 	QStringList m_locations;
 	QString m_collectionType;
-	LibraryOptions * m_libraryOptions = nullptr;
+	QSharedPointer<LibraryOptions> m_libraryOptions = nullptr;
 	QString m_itemId;
 	QString m_primaryImageItemId;
 	double m_refreshProgress;
 	QString m_refreshStatus;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using VirtualFolderInfo = Jellyfin::DTO::VirtualFolderInfo;
+
+template <>
+VirtualFolderInfo fromJsonValue<VirtualFolderInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return VirtualFolderInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

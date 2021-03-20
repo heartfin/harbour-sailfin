@@ -31,48 +31,59 @@
 #define JELLYFIN_DTO_TUNERCHANNELMAPPING_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class TunerChannelMapping : public QObject {
-	Q_OBJECT
-public:
-	explicit TunerChannelMapping(QObject *parent = nullptr);
-	static TunerChannelMapping *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-	Q_PROPERTY(QString providerChannelName READ providerChannelName WRITE setProviderChannelName NOTIFY providerChannelNameChanged)
-	Q_PROPERTY(QString providerChannelId READ providerChannelId WRITE setProviderChannelId NOTIFY providerChannelIdChanged)
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+class TunerChannelMapping {
+public:
+	explicit TunerChannelMapping();
+	static TunerChannelMapping fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString name() const;
+
 	void setName(QString newName);
-	
+
 	QString providerChannelName() const;
+
 	void setProviderChannelName(QString newProviderChannelName);
-	
+
 	QString providerChannelId() const;
+
 	void setProviderChannelId(QString newProviderChannelId);
-	
+
 	QString jellyfinId() const;
+
 	void setJellyfinId(QString newJellyfinId);
-	
-signals:
-	void nameChanged(QString newName);
-	void providerChannelNameChanged(QString newProviderChannelName);
-	void providerChannelIdChanged(QString newProviderChannelId);
-	void jellyfinIdChanged(QString newJellyfinId);
+
 protected:
 	QString m_name;
 	QString m_providerChannelName;
 	QString m_providerChannelId;
 	QString m_jellyfinId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TunerChannelMapping = Jellyfin::DTO::TunerChannelMapping;
+
+template <>
+TunerChannelMapping fromJsonValue<TunerChannelMapping>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TunerChannelMapping::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,49 +31,46 @@
 #define JELLYFIN_DTO_SUBTITLEPROFILE_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/subtitledeliverymethod.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SubtitleProfile : public QObject {
-	Q_OBJECT
-public:
-	explicit SubtitleProfile(QObject *parent = nullptr);
-	static SubtitleProfile *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString format READ format WRITE setFormat NOTIFY formatChanged)
-	Q_PROPERTY(SubtitleDeliveryMethod method READ method WRITE setMethod NOTIFY methodChanged)
-	Q_PROPERTY(QString didlMode READ didlMode WRITE setDidlMode NOTIFY didlModeChanged)
-	Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
-	Q_PROPERTY(QString container READ container WRITE setContainer NOTIFY containerChanged)
+class SubtitleProfile {
+public:
+	explicit SubtitleProfile();
+	static SubtitleProfile fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString format() const;
+
 	void setFormat(QString newFormat);
-	
+
 	SubtitleDeliveryMethod method() const;
+
 	void setMethod(SubtitleDeliveryMethod newMethod);
-	
+
 	QString didlMode() const;
+
 	void setDidlMode(QString newDidlMode);
-	
+
 	QString language() const;
+
 	void setLanguage(QString newLanguage);
-	
+
 	QString container() const;
+
 	void setContainer(QString newContainer);
-	
-signals:
-	void formatChanged(QString newFormat);
-	void methodChanged(SubtitleDeliveryMethod newMethod);
-	void didlModeChanged(QString newDidlMode);
-	void languageChanged(QString newLanguage);
-	void containerChanged(QString newContainer);
+
 protected:
 	QString m_format;
 	SubtitleDeliveryMethod m_method;
@@ -81,6 +78,18 @@ protected:
 	QString m_language;
 	QString m_container;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SubtitleProfile = Jellyfin::DTO::SubtitleProfile;
+
+template <>
+SubtitleProfile fromJsonValue<SubtitleProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SubtitleProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

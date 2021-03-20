@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaPathInfo::MediaPathInfo(QObject *parent) : QObject(parent) {}
+MediaPathInfo::MediaPathInfo(QObject *parent) {}
 
-MediaPathInfo *MediaPathInfo::fromJSON(QJsonObject source, QObject *parent) {
-	MediaPathInfo *instance = new MediaPathInfo(parent);
-	instance->updateFromJSON(source);
+MediaPathInfo MediaPathInfo::fromJson(QJsonObject source) {MediaPathInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MediaPathInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MediaPathInfo::setFromJson(QJsonObject source) {
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_networkPath = fromJsonValue<QString>(source["NetworkPath"]);
+
 }
-QJsonObject MediaPathInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MediaPathInfo::toJson() {
 	QJsonObject result;
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["NetworkPath"] = toJsonValue<QString>(m_networkPath);
+
 	return result;
 }
+
 QString MediaPathInfo::path() const { return m_path; }
+
 void MediaPathInfo::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
-
 QString MediaPathInfo::networkPath() const { return m_networkPath; }
+
 void MediaPathInfo::setNetworkPath(QString newNetworkPath) {
 	m_networkPath = newNetworkPath;
-	emit networkPathChanged(newNetworkPath);
 }
 
 

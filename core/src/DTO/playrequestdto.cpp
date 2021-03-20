@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-PlayRequestDto::PlayRequestDto(QObject *parent) : QObject(parent) {}
+PlayRequestDto::PlayRequestDto(QObject *parent) {}
 
-PlayRequestDto *PlayRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	PlayRequestDto *instance = new PlayRequestDto(parent);
-	instance->updateFromJSON(source);
+PlayRequestDto PlayRequestDto::fromJson(QJsonObject source) {PlayRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PlayRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PlayRequestDto::setFromJson(QJsonObject source) {
+	m_playingQueue = fromJsonValue<QList<QUuid>>(source["PlayingQueue"]);
+	m_playingItemPosition = fromJsonValue<qint32>(source["PlayingItemPosition"]);
+	m_startPositionTicks = fromJsonValue<qint64>(source["StartPositionTicks"]);
+
 }
-QJsonObject PlayRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PlayRequestDto::toJson() {
 	QJsonObject result;
+	result["PlayingQueue"] = toJsonValue<QList<QUuid>>(m_playingQueue);
+	result["PlayingItemPosition"] = toJsonValue<qint32>(m_playingItemPosition);
+	result["StartPositionTicks"] = toJsonValue<qint64>(m_startPositionTicks);
+
 	return result;
 }
-QStringList PlayRequestDto::playingQueue() const { return m_playingQueue; }
-void PlayRequestDto::setPlayingQueue(QStringList newPlayingQueue) {
-	m_playingQueue = newPlayingQueue;
-	emit playingQueueChanged(newPlayingQueue);
-}
 
+QList<QUuid> PlayRequestDto::playingQueue() const { return m_playingQueue; }
+
+void PlayRequestDto::setPlayingQueue(QList<QUuid> newPlayingQueue) {
+	m_playingQueue = newPlayingQueue;
+}
 qint32 PlayRequestDto::playingItemPosition() const { return m_playingItemPosition; }
+
 void PlayRequestDto::setPlayingItemPosition(qint32 newPlayingItemPosition) {
 	m_playingItemPosition = newPlayingItemPosition;
-	emit playingItemPositionChanged(newPlayingItemPosition);
 }
-
 qint64 PlayRequestDto::startPositionTicks() const { return m_startPositionTicks; }
+
 void PlayRequestDto::setStartPositionTicks(qint64 newStartPositionTicks) {
 	m_startPositionTicks = newStartPositionTicks;
-	emit startPositionTicksChanged(newStartPositionTicks);
 }
 
 

@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-QueryFilters::QueryFilters(QObject *parent) : QObject(parent) {}
+QueryFilters::QueryFilters(QObject *parent) {}
 
-QueryFilters *QueryFilters::fromJSON(QJsonObject source, QObject *parent) {
-	QueryFilters *instance = new QueryFilters(parent);
-	instance->updateFromJSON(source);
+QueryFilters QueryFilters::fromJson(QJsonObject source) {QueryFilters instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void QueryFilters::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void QueryFilters::setFromJson(QJsonObject source) {
+	m_genres = fromJsonValue<QList<QSharedPointer<NameGuidPair>>>(source["Genres"]);
+	m_tags = fromJsonValue<QStringList>(source["Tags"]);
+
 }
-QJsonObject QueryFilters::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject QueryFilters::toJson() {
 	QJsonObject result;
+	result["Genres"] = toJsonValue<QList<QSharedPointer<NameGuidPair>>>(m_genres);
+	result["Tags"] = toJsonValue<QStringList>(m_tags);
+
 	return result;
 }
-QList<NameGuidPair *> QueryFilters::genres() const { return m_genres; }
-void QueryFilters::setGenres(QList<NameGuidPair *> newGenres) {
-	m_genres = newGenres;
-	emit genresChanged(newGenres);
-}
 
+QList<QSharedPointer<NameGuidPair>> QueryFilters::genres() const { return m_genres; }
+
+void QueryFilters::setGenres(QList<QSharedPointer<NameGuidPair>> newGenres) {
+	m_genres = newGenres;
+}
 QStringList QueryFilters::tags() const { return m_tags; }
+
 void QueryFilters::setTags(QStringList newTags) {
 	m_tags = newTags;
-	emit tagsChanged(newTags);
 }
 
 

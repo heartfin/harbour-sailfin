@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaUpdateInfoDto::MediaUpdateInfoDto(QObject *parent) : QObject(parent) {}
+MediaUpdateInfoDto::MediaUpdateInfoDto(QObject *parent) {}
 
-MediaUpdateInfoDto *MediaUpdateInfoDto::fromJSON(QJsonObject source, QObject *parent) {
-	MediaUpdateInfoDto *instance = new MediaUpdateInfoDto(parent);
-	instance->updateFromJSON(source);
+MediaUpdateInfoDto MediaUpdateInfoDto::fromJson(QJsonObject source) {MediaUpdateInfoDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MediaUpdateInfoDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MediaUpdateInfoDto::setFromJson(QJsonObject source) {
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_updateType = fromJsonValue<QString>(source["UpdateType"]);
+
 }
-QJsonObject MediaUpdateInfoDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MediaUpdateInfoDto::toJson() {
 	QJsonObject result;
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["UpdateType"] = toJsonValue<QString>(m_updateType);
+
 	return result;
 }
+
 QString MediaUpdateInfoDto::path() const { return m_path; }
+
 void MediaUpdateInfoDto::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
-
 QString MediaUpdateInfoDto::updateType() const { return m_updateType; }
+
 void MediaUpdateInfoDto::setUpdateType(QString newUpdateType) {
 	m_updateType = newUpdateType;
-	emit updateTypeChanged(newUpdateType);
 }
 
 

@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-TimerEventInfo::TimerEventInfo(QObject *parent) : QObject(parent) {}
+TimerEventInfo::TimerEventInfo(QObject *parent) {}
 
-TimerEventInfo *TimerEventInfo::fromJSON(QJsonObject source, QObject *parent) {
-	TimerEventInfo *instance = new TimerEventInfo(parent);
-	instance->updateFromJSON(source);
+TimerEventInfo TimerEventInfo::fromJson(QJsonObject source) {TimerEventInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TimerEventInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TimerEventInfo::setFromJson(QJsonObject source) {
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_programId = fromJsonValue<QUuid>(source["ProgramId"]);
+
 }
-QJsonObject TimerEventInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TimerEventInfo::toJson() {
 	QJsonObject result;
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["ProgramId"] = toJsonValue<QUuid>(m_programId);
+
 	return result;
 }
+
 QString TimerEventInfo::jellyfinId() const { return m_jellyfinId; }
+
 void TimerEventInfo::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
+QUuid TimerEventInfo::programId() const { return m_programId; }
 
-QString TimerEventInfo::programId() const { return m_programId; }
-void TimerEventInfo::setProgramId(QString newProgramId) {
+void TimerEventInfo::setProgramId(QUuid newProgramId) {
 	m_programId = newProgramId;
-	emit programIdChanged(newProgramId);
 }
 
 

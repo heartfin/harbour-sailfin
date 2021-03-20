@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-PluginSecurityInfo::PluginSecurityInfo(QObject *parent) : QObject(parent) {}
+PluginSecurityInfo::PluginSecurityInfo(QObject *parent) {}
 
-PluginSecurityInfo *PluginSecurityInfo::fromJSON(QJsonObject source, QObject *parent) {
-	PluginSecurityInfo *instance = new PluginSecurityInfo(parent);
-	instance->updateFromJSON(source);
+PluginSecurityInfo PluginSecurityInfo::fromJson(QJsonObject source) {PluginSecurityInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PluginSecurityInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PluginSecurityInfo::setFromJson(QJsonObject source) {
+	m_supporterKey = fromJsonValue<QString>(source["SupporterKey"]);
+	m_isMbSupporter = fromJsonValue<bool>(source["IsMbSupporter"]);
+
 }
-QJsonObject PluginSecurityInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PluginSecurityInfo::toJson() {
 	QJsonObject result;
+	result["SupporterKey"] = toJsonValue<QString>(m_supporterKey);
+	result["IsMbSupporter"] = toJsonValue<bool>(m_isMbSupporter);
+
 	return result;
 }
+
 QString PluginSecurityInfo::supporterKey() const { return m_supporterKey; }
+
 void PluginSecurityInfo::setSupporterKey(QString newSupporterKey) {
 	m_supporterKey = newSupporterKey;
-	emit supporterKeyChanged(newSupporterKey);
 }
-
 bool PluginSecurityInfo::isMbSupporter() const { return m_isMbSupporter; }
+
 void PluginSecurityInfo::setIsMbSupporter(bool newIsMbSupporter) {
 	m_isMbSupporter = newIsMbSupporter;
-	emit isMbSupporterChanged(newIsMbSupporter);
 }
 
 

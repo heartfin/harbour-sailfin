@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_QUICKCONNECTSTATE_H
 #define JELLYFIN_DTO_QUICKCONNECTSTATE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class QuickConnectStateClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Unavailable,
 		Available,
 		Active,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit QuickConnectStateClass();
 };
+
 typedef QuickConnectStateClass::Value QuickConnectState;
+
+} // NS DTO
+
+namespace Support {
+
+using QuickConnectState = Jellyfin::DTO::QuickConnectState;
+using QuickConnectStateClass = Jellyfin::DTO::QuickConnectStateClass;
+
+template <>
+QuickConnectState fromJsonValue<QuickConnectState>(const QJsonValue &source) {
+	if (!source.isString()) return QuickConnectStateClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Unavailable")) {
+		return QuickConnectStateClass::Unavailable;
+	}
+	if (str == QStringLiteral("Available")) {
+		return QuickConnectStateClass::Available;
+	}
+	if (str == QStringLiteral("Active")) {
+		return QuickConnectStateClass::Active;
+	}
+	
+	return QuickConnectStateClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

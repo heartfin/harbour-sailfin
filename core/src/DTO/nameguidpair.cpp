@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-NameGuidPair::NameGuidPair(QObject *parent) : QObject(parent) {}
+NameGuidPair::NameGuidPair(QObject *parent) {}
 
-NameGuidPair *NameGuidPair::fromJSON(QJsonObject source, QObject *parent) {
-	NameGuidPair *instance = new NameGuidPair(parent);
-	instance->updateFromJSON(source);
+NameGuidPair NameGuidPair::fromJson(QJsonObject source) {NameGuidPair instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void NameGuidPair::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void NameGuidPair::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
+
 }
-QJsonObject NameGuidPair::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject NameGuidPair::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
+
 	return result;
 }
+
 QString NameGuidPair::name() const { return m_name; }
+
 void NameGuidPair::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
+QUuid NameGuidPair::jellyfinId() const { return m_jellyfinId; }
 
-QString NameGuidPair::jellyfinId() const { return m_jellyfinId; }
-void NameGuidPair::setJellyfinId(QString newJellyfinId) {
+void NameGuidPair::setJellyfinId(QUuid newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
 
 

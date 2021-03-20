@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-StartupRemoteAccessDto::StartupRemoteAccessDto(QObject *parent) : QObject(parent) {}
+StartupRemoteAccessDto::StartupRemoteAccessDto(QObject *parent) {}
 
-StartupRemoteAccessDto *StartupRemoteAccessDto::fromJSON(QJsonObject source, QObject *parent) {
-	StartupRemoteAccessDto *instance = new StartupRemoteAccessDto(parent);
-	instance->updateFromJSON(source);
+StartupRemoteAccessDto StartupRemoteAccessDto::fromJson(QJsonObject source) {StartupRemoteAccessDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void StartupRemoteAccessDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void StartupRemoteAccessDto::setFromJson(QJsonObject source) {
+	m_enableRemoteAccess = fromJsonValue<bool>(source["EnableRemoteAccess"]);
+	m_enableAutomaticPortMapping = fromJsonValue<bool>(source["EnableAutomaticPortMapping"]);
+
 }
-QJsonObject StartupRemoteAccessDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject StartupRemoteAccessDto::toJson() {
 	QJsonObject result;
+	result["EnableRemoteAccess"] = toJsonValue<bool>(m_enableRemoteAccess);
+	result["EnableAutomaticPortMapping"] = toJsonValue<bool>(m_enableAutomaticPortMapping);
+
 	return result;
 }
+
 bool StartupRemoteAccessDto::enableRemoteAccess() const { return m_enableRemoteAccess; }
+
 void StartupRemoteAccessDto::setEnableRemoteAccess(bool newEnableRemoteAccess) {
 	m_enableRemoteAccess = newEnableRemoteAccess;
-	emit enableRemoteAccessChanged(newEnableRemoteAccess);
 }
-
 bool StartupRemoteAccessDto::enableAutomaticPortMapping() const { return m_enableAutomaticPortMapping; }
+
 void StartupRemoteAccessDto::setEnableAutomaticPortMapping(bool newEnableAutomaticPortMapping) {
 	m_enableAutomaticPortMapping = newEnableAutomaticPortMapping;
-	emit enableAutomaticPortMappingChanged(newEnableAutomaticPortMapping);
 }
 
 

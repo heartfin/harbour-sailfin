@@ -31,96 +31,98 @@
 #define JELLYFIN_DTO_VERSIONINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/DTO/version.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class Version;
 
-class VersionInfo : public QObject {
-	Q_OBJECT
+class VersionInfo {
 public:
-	explicit VersionInfo(QObject *parent = nullptr);
-	static VersionInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit VersionInfo();
+	static VersionInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the version.
 	 */
-	Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
-	Q_PROPERTY(Version * versionNumber READ versionNumber WRITE setVersionNumber NOTIFY versionNumberChanged)
+	QString version() const;
+	/**
+	* @brief Gets or sets the version.
+	*/
+	void setVersion(QString newVersion);
+
+	QSharedPointer<Version> versionNumber() const;
+
+	void setVersionNumber(QSharedPointer<Version> newVersionNumber);
 	/**
 	 * @brief Gets or sets the changelog for this version.
 	 */
-	Q_PROPERTY(QString changelog READ changelog WRITE setChangelog NOTIFY changelogChanged)
+	QString changelog() const;
+	/**
+	* @brief Gets or sets the changelog for this version.
+	*/
+	void setChangelog(QString newChangelog);
 	/**
 	 * @brief Gets or sets the ABI that this version was built against.
 	 */
-	Q_PROPERTY(QString targetAbi READ targetAbi WRITE setTargetAbi NOTIFY targetAbiChanged)
+	QString targetAbi() const;
+	/**
+	* @brief Gets or sets the ABI that this version was built against.
+	*/
+	void setTargetAbi(QString newTargetAbi);
 	/**
 	 * @brief Gets or sets the source URL.
 	 */
-	Q_PROPERTY(QString sourceUrl READ sourceUrl WRITE setSourceUrl NOTIFY sourceUrlChanged)
+	QString sourceUrl() const;
+	/**
+	* @brief Gets or sets the source URL.
+	*/
+	void setSourceUrl(QString newSourceUrl);
 	/**
 	 * @brief Gets or sets a checksum for the binary.
 	 */
-	Q_PROPERTY(QString checksum READ checksum WRITE setChecksum NOTIFY checksumChanged)
+	QString checksum() const;
+	/**
+	* @brief Gets or sets a checksum for the binary.
+	*/
+	void setChecksum(QString newChecksum);
 	/**
 	 * @brief Gets or sets a timestamp of when the binary was built.
 	 */
-	Q_PROPERTY(QString timestamp READ timestamp WRITE setTimestamp NOTIFY timestampChanged)
+	QString timestamp() const;
+	/**
+	* @brief Gets or sets a timestamp of when the binary was built.
+	*/
+	void setTimestamp(QString newTimestamp);
 	/**
 	 * @brief Gets or sets the repository name.
 	 */
-	Q_PROPERTY(QString repositoryName READ repositoryName WRITE setRepositoryName NOTIFY repositoryNameChanged)
+	QString repositoryName() const;
+	/**
+	* @brief Gets or sets the repository name.
+	*/
+	void setRepositoryName(QString newRepositoryName);
 	/**
 	 * @brief Gets or sets the repository url.
 	 */
-	Q_PROPERTY(QString repositoryUrl READ repositoryUrl WRITE setRepositoryUrl NOTIFY repositoryUrlChanged)
-
-	QString version() const;
-	void setVersion(QString newVersion);
-	
-	Version * versionNumber() const;
-	void setVersionNumber(Version * newVersionNumber);
-	
-	QString changelog() const;
-	void setChangelog(QString newChangelog);
-	
-	QString targetAbi() const;
-	void setTargetAbi(QString newTargetAbi);
-	
-	QString sourceUrl() const;
-	void setSourceUrl(QString newSourceUrl);
-	
-	QString checksum() const;
-	void setChecksum(QString newChecksum);
-	
-	QString timestamp() const;
-	void setTimestamp(QString newTimestamp);
-	
-	QString repositoryName() const;
-	void setRepositoryName(QString newRepositoryName);
-	
 	QString repositoryUrl() const;
+	/**
+	* @brief Gets or sets the repository url.
+	*/
 	void setRepositoryUrl(QString newRepositoryUrl);
-	
-signals:
-	void versionChanged(QString newVersion);
-	void versionNumberChanged(Version * newVersionNumber);
-	void changelogChanged(QString newChangelog);
-	void targetAbiChanged(QString newTargetAbi);
-	void sourceUrlChanged(QString newSourceUrl);
-	void checksumChanged(QString newChecksum);
-	void timestampChanged(QString newTimestamp);
-	void repositoryNameChanged(QString newRepositoryName);
-	void repositoryUrlChanged(QString newRepositoryUrl);
+
 protected:
 	QString m_version;
-	Version * m_versionNumber = nullptr;
+	QSharedPointer<Version> m_versionNumber = nullptr;
 	QString m_changelog;
 	QString m_targetAbi;
 	QString m_sourceUrl;
@@ -129,6 +131,18 @@ protected:
 	QString m_repositoryName;
 	QString m_repositoryUrl;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using VersionInfo = Jellyfin::DTO::VersionInfo;
+
+template <>
+VersionInfo fromJsonValue<VersionInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return VersionInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,60 +31,75 @@
 #define JELLYFIN_DTO_UPDATEUSERPASSWORD_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class UpdateUserPassword : public QObject {
-	Q_OBJECT
-public:
-	explicit UpdateUserPassword(QObject *parent = nullptr);
-	static UpdateUserPassword *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class UpdateUserPassword {
+public:
+	explicit UpdateUserPassword();
+	static UpdateUserPassword fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the current sha1-hashed password.
 	 */
-	Q_PROPERTY(QString currentPassword READ currentPassword WRITE setCurrentPassword NOTIFY currentPasswordChanged)
+	QString currentPassword() const;
+	/**
+	* @brief Gets or sets the current sha1-hashed password.
+	*/
+	void setCurrentPassword(QString newCurrentPassword);
 	/**
 	 * @brief Gets or sets the current plain text password.
 	 */
-	Q_PROPERTY(QString currentPw READ currentPw WRITE setCurrentPw NOTIFY currentPwChanged)
+	QString currentPw() const;
+	/**
+	* @brief Gets or sets the current plain text password.
+	*/
+	void setCurrentPw(QString newCurrentPw);
 	/**
 	 * @brief Gets or sets the new plain text password.
 	 */
-	Q_PROPERTY(QString newPw READ newPw WRITE setNewPw NOTIFY newPwChanged)
+	QString newPw() const;
+	/**
+	* @brief Gets or sets the new plain text password.
+	*/
+	void setNewPw(QString newNewPw);
 	/**
 	 * @brief Gets or sets a value indicating whether to reset the password.
 	 */
-	Q_PROPERTY(bool resetPassword READ resetPassword WRITE setResetPassword NOTIFY resetPasswordChanged)
-
-	QString currentPassword() const;
-	void setCurrentPassword(QString newCurrentPassword);
-	
-	QString currentPw() const;
-	void setCurrentPw(QString newCurrentPw);
-	
-	QString newPw() const;
-	void setNewPw(QString newNewPw);
-	
 	bool resetPassword() const;
+	/**
+	* @brief Gets or sets a value indicating whether to reset the password.
+	*/
 	void setResetPassword(bool newResetPassword);
-	
-signals:
-	void currentPasswordChanged(QString newCurrentPassword);
-	void currentPwChanged(QString newCurrentPw);
-	void newPwChanged(QString newNewPw);
-	void resetPasswordChanged(bool newResetPassword);
+
 protected:
 	QString m_currentPassword;
 	QString m_currentPw;
 	QString m_newPw;
 	bool m_resetPassword;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UpdateUserPassword = Jellyfin::DTO::UpdateUserPassword;
+
+template <>
+UpdateUserPassword fromJsonValue<UpdateUserPassword>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UpdateUserPassword::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

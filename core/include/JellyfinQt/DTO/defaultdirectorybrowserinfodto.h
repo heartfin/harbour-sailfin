@@ -31,33 +31,48 @@
 #define JELLYFIN_DTO_DEFAULTDIRECTORYBROWSERINFODTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class DefaultDirectoryBrowserInfoDto : public QObject {
-	Q_OBJECT
-public:
-	explicit DefaultDirectoryBrowserInfoDto(QObject *parent = nullptr);
-	static DefaultDirectoryBrowserInfoDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class DefaultDirectoryBrowserInfoDto {
+public:
+	explicit DefaultDirectoryBrowserInfoDto();
+	static DefaultDirectoryBrowserInfoDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the path.
 	 */
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
-
 	QString path() const;
+	/**
+	* @brief Gets or sets the path.
+	*/
 	void setPath(QString newPath);
-	
-signals:
-	void pathChanged(QString newPath);
+
 protected:
 	QString m_path;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DefaultDirectoryBrowserInfoDto = Jellyfin::DTO::DefaultDirectoryBrowserInfoDto;
+
+template <>
+DefaultDirectoryBrowserInfoDto fromJsonValue<DefaultDirectoryBrowserInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DefaultDirectoryBrowserInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

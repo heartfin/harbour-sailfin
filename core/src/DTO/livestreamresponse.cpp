@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-LiveStreamResponse::LiveStreamResponse(QObject *parent) : QObject(parent) {}
+LiveStreamResponse::LiveStreamResponse(QObject *parent) {}
 
-LiveStreamResponse *LiveStreamResponse::fromJSON(QJsonObject source, QObject *parent) {
-	LiveStreamResponse *instance = new LiveStreamResponse(parent);
-	instance->updateFromJSON(source);
+LiveStreamResponse LiveStreamResponse::fromJson(QJsonObject source) {LiveStreamResponse instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void LiveStreamResponse::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void LiveStreamResponse::setFromJson(QJsonObject source) {
+	m_mediaSource = fromJsonValue<QSharedPointer<MediaSourceInfo>>(source["MediaSource"]);
+
 }
-QJsonObject LiveStreamResponse::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject LiveStreamResponse::toJson() {
 	QJsonObject result;
+	result["MediaSource"] = toJsonValue<QSharedPointer<MediaSourceInfo>>(m_mediaSource);
+
 	return result;
 }
-MediaSourceInfo * LiveStreamResponse::mediaSource() const { return m_mediaSource; }
-void LiveStreamResponse::setMediaSource(MediaSourceInfo * newMediaSource) {
+
+QSharedPointer<MediaSourceInfo> LiveStreamResponse::mediaSource() const { return m_mediaSource; }
+
+void LiveStreamResponse::setMediaSource(QSharedPointer<MediaSourceInfo> newMediaSource) {
 	m_mediaSource = newMediaSource;
-	emit mediaSourceChanged(newMediaSource);
 }
 
 

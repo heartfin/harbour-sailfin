@@ -31,59 +31,55 @@
 #define JELLYFIN_DTO_METADATAOPTIONS_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MetadataOptions : public QObject {
-	Q_OBJECT
-public:
-	explicit MetadataOptions(QObject *parent = nullptr);
-	static MetadataOptions *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString itemType READ itemType WRITE setItemType NOTIFY itemTypeChanged)
-	Q_PROPERTY(QStringList disabledMetadataSavers READ disabledMetadataSavers WRITE setDisabledMetadataSavers NOTIFY disabledMetadataSaversChanged)
-	Q_PROPERTY(QStringList localMetadataReaderOrder READ localMetadataReaderOrder WRITE setLocalMetadataReaderOrder NOTIFY localMetadataReaderOrderChanged)
-	Q_PROPERTY(QStringList disabledMetadataFetchers READ disabledMetadataFetchers WRITE setDisabledMetadataFetchers NOTIFY disabledMetadataFetchersChanged)
-	Q_PROPERTY(QStringList metadataFetcherOrder READ metadataFetcherOrder WRITE setMetadataFetcherOrder NOTIFY metadataFetcherOrderChanged)
-	Q_PROPERTY(QStringList disabledImageFetchers READ disabledImageFetchers WRITE setDisabledImageFetchers NOTIFY disabledImageFetchersChanged)
-	Q_PROPERTY(QStringList imageFetcherOrder READ imageFetcherOrder WRITE setImageFetcherOrder NOTIFY imageFetcherOrderChanged)
+class MetadataOptions {
+public:
+	explicit MetadataOptions();
+	static MetadataOptions fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString itemType() const;
+
 	void setItemType(QString newItemType);
-	
+
 	QStringList disabledMetadataSavers() const;
+
 	void setDisabledMetadataSavers(QStringList newDisabledMetadataSavers);
-	
+
 	QStringList localMetadataReaderOrder() const;
+
 	void setLocalMetadataReaderOrder(QStringList newLocalMetadataReaderOrder);
-	
+
 	QStringList disabledMetadataFetchers() const;
+
 	void setDisabledMetadataFetchers(QStringList newDisabledMetadataFetchers);
-	
+
 	QStringList metadataFetcherOrder() const;
+
 	void setMetadataFetcherOrder(QStringList newMetadataFetcherOrder);
-	
+
 	QStringList disabledImageFetchers() const;
+
 	void setDisabledImageFetchers(QStringList newDisabledImageFetchers);
-	
+
 	QStringList imageFetcherOrder() const;
+
 	void setImageFetcherOrder(QStringList newImageFetcherOrder);
-	
-signals:
-	void itemTypeChanged(QString newItemType);
-	void disabledMetadataSaversChanged(QStringList newDisabledMetadataSavers);
-	void localMetadataReaderOrderChanged(QStringList newLocalMetadataReaderOrder);
-	void disabledMetadataFetchersChanged(QStringList newDisabledMetadataFetchers);
-	void metadataFetcherOrderChanged(QStringList newMetadataFetcherOrder);
-	void disabledImageFetchersChanged(QStringList newDisabledImageFetchers);
-	void imageFetcherOrderChanged(QStringList newImageFetcherOrder);
+
 protected:
 	QString m_itemType;
 	QStringList m_disabledMetadataSavers;
@@ -93,6 +89,18 @@ protected:
 	QStringList m_disabledImageFetchers;
 	QStringList m_imageFetcherOrder;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MetadataOptions = Jellyfin::DTO::MetadataOptions;
+
+template <>
+MetadataOptions fromJsonValue<MetadataOptions>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MetadataOptions::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

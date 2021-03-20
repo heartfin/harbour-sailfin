@@ -31,64 +31,73 @@
 #define JELLYFIN_DTO_TYPEOPTIONS_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/imageoption.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ImageOption;
 
-class TypeOptions : public QObject {
-	Q_OBJECT
+class TypeOptions {
 public:
-	explicit TypeOptions(QObject *parent = nullptr);
-	static TypeOptions *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-	Q_PROPERTY(QStringList metadataFetchers READ metadataFetchers WRITE setMetadataFetchers NOTIFY metadataFetchersChanged)
-	Q_PROPERTY(QStringList metadataFetcherOrder READ metadataFetcherOrder WRITE setMetadataFetcherOrder NOTIFY metadataFetcherOrderChanged)
-	Q_PROPERTY(QStringList imageFetchers READ imageFetchers WRITE setImageFetchers NOTIFY imageFetchersChanged)
-	Q_PROPERTY(QStringList imageFetcherOrder READ imageFetcherOrder WRITE setImageFetcherOrder NOTIFY imageFetcherOrderChanged)
-	Q_PROPERTY(QList<ImageOption *> imageOptions READ imageOptions WRITE setImageOptions NOTIFY imageOptionsChanged)
+	explicit TypeOptions();
+	static TypeOptions fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString type() const;
+
 	void setType(QString newType);
-	
+
 	QStringList metadataFetchers() const;
+
 	void setMetadataFetchers(QStringList newMetadataFetchers);
-	
+
 	QStringList metadataFetcherOrder() const;
+
 	void setMetadataFetcherOrder(QStringList newMetadataFetcherOrder);
-	
+
 	QStringList imageFetchers() const;
+
 	void setImageFetchers(QStringList newImageFetchers);
-	
+
 	QStringList imageFetcherOrder() const;
+
 	void setImageFetcherOrder(QStringList newImageFetcherOrder);
-	
-	QList<ImageOption *> imageOptions() const;
-	void setImageOptions(QList<ImageOption *> newImageOptions);
-	
-signals:
-	void typeChanged(QString newType);
-	void metadataFetchersChanged(QStringList newMetadataFetchers);
-	void metadataFetcherOrderChanged(QStringList newMetadataFetcherOrder);
-	void imageFetchersChanged(QStringList newImageFetchers);
-	void imageFetcherOrderChanged(QStringList newImageFetcherOrder);
-	void imageOptionsChanged(QList<ImageOption *> newImageOptions);
+
+	QList<QSharedPointer<ImageOption>> imageOptions() const;
+
+	void setImageOptions(QList<QSharedPointer<ImageOption>> newImageOptions);
+
 protected:
 	QString m_type;
 	QStringList m_metadataFetchers;
 	QStringList m_metadataFetcherOrder;
 	QStringList m_imageFetchers;
 	QStringList m_imageFetcherOrder;
-	QList<ImageOption *> m_imageOptions;
+	QList<QSharedPointer<ImageOption>> m_imageOptions;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TypeOptions = Jellyfin::DTO::TypeOptions;
+
+template <>
+TypeOptions fromJsonValue<TypeOptions>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TypeOptions::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

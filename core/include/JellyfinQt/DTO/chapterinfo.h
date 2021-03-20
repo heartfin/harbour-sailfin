@@ -32,56 +32,57 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ChapterInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit ChapterInfo(QObject *parent = nullptr);
-	static ChapterInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ChapterInfo {
+public:
+	explicit ChapterInfo();
+	static ChapterInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the start position ticks.
 	 */
-	Q_PROPERTY(qint64 startPositionTicks READ startPositionTicks WRITE setStartPositionTicks NOTIFY startPositionTicksChanged)
+	qint64 startPositionTicks() const;
+	/**
+	* @brief Gets or sets the start position ticks.
+	*/
+	void setStartPositionTicks(qint64 newStartPositionTicks);
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the image path.
 	 */
-	Q_PROPERTY(QString imagePath READ imagePath WRITE setImagePath NOTIFY imagePathChanged)
-	Q_PROPERTY(QDateTime imageDateModified READ imageDateModified WRITE setImageDateModified NOTIFY imageDateModifiedChanged)
-	Q_PROPERTY(QString imageTag READ imageTag WRITE setImageTag NOTIFY imageTagChanged)
-
-	qint64 startPositionTicks() const;
-	void setStartPositionTicks(qint64 newStartPositionTicks);
-	
-	QString name() const;
-	void setName(QString newName);
-	
 	QString imagePath() const;
+	/**
+	* @brief Gets or sets the image path.
+	*/
 	void setImagePath(QString newImagePath);
-	
+
 	QDateTime imageDateModified() const;
+
 	void setImageDateModified(QDateTime newImageDateModified);
-	
+
 	QString imageTag() const;
+
 	void setImageTag(QString newImageTag);
-	
-signals:
-	void startPositionTicksChanged(qint64 newStartPositionTicks);
-	void nameChanged(QString newName);
-	void imagePathChanged(QString newImagePath);
-	void imageDateModifiedChanged(QDateTime newImageDateModified);
-	void imageTagChanged(QString newImageTag);
+
 protected:
 	qint64 m_startPositionTicks;
 	QString m_name;
@@ -89,6 +90,18 @@ protected:
 	QDateTime m_imageDateModified;
 	QString m_imageTag;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ChapterInfo = Jellyfin::DTO::ChapterInfo;
+
+template <>
+ChapterInfo fromJsonValue<ChapterInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ChapterInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

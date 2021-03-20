@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_SUBTITLEPLAYBACKMODE_H
 #define JELLYFIN_DTO_SUBTITLEPLAYBACKMODE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class SubtitlePlaybackModeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Default,
 		Always,
 		OnlyForced,
@@ -49,7 +54,39 @@ public:
 private:
 	explicit SubtitlePlaybackModeClass();
 };
+
 typedef SubtitlePlaybackModeClass::Value SubtitlePlaybackMode;
+
+} // NS DTO
+
+namespace Support {
+
+using SubtitlePlaybackMode = Jellyfin::DTO::SubtitlePlaybackMode;
+using SubtitlePlaybackModeClass = Jellyfin::DTO::SubtitlePlaybackModeClass;
+
+template <>
+SubtitlePlaybackMode fromJsonValue<SubtitlePlaybackMode>(const QJsonValue &source) {
+	if (!source.isString()) return SubtitlePlaybackModeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Default")) {
+		return SubtitlePlaybackModeClass::Default;
+	}
+	if (str == QStringLiteral("Always")) {
+		return SubtitlePlaybackModeClass::Always;
+	}
+	if (str == QStringLiteral("OnlyForced")) {
+		return SubtitlePlaybackModeClass::OnlyForced;
+	}
+	if (str == QStringLiteral("None")) {
+		return SubtitlePlaybackModeClass::None;
+	}
+	if (str == QStringLiteral("Smart")) {
+		return SubtitlePlaybackModeClass::Smart;
+	}
+	
+	return SubtitlePlaybackModeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

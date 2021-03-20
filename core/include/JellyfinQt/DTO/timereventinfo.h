@@ -31,36 +31,50 @@
 #define JELLYFIN_DTO_TIMEREVENTINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class TimerEventInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit TimerEventInfo(QObject *parent = nullptr);
-	static TimerEventInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-	Q_PROPERTY(QString programId READ programId WRITE setProgramId NOTIFY programIdChanged)
+class TimerEventInfo {
+public:
+	explicit TimerEventInfo();
+	static TimerEventInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString jellyfinId() const;
+
 	void setJellyfinId(QString newJellyfinId);
-	
-	QString programId() const;
-	void setProgramId(QString newProgramId);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
-	void programIdChanged(QString newProgramId);
+
+	QUuid programId() const;
+
+	void setProgramId(QUuid newProgramId);
+
 protected:
 	QString m_jellyfinId;
-	QString m_programId;
+	QUuid m_programId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TimerEventInfo = Jellyfin::DTO::TimerEventInfo;
+
+template <>
+TimerEventInfo fromJsonValue<TimerEventInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TimerEventInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

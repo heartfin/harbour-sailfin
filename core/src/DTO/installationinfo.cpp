@@ -32,56 +32,65 @@
 namespace Jellyfin {
 namespace DTO {
 
-InstallationInfo::InstallationInfo(QObject *parent) : QObject(parent) {}
+InstallationInfo::InstallationInfo(QObject *parent) {}
 
-InstallationInfo *InstallationInfo::fromJSON(QJsonObject source, QObject *parent) {
-	InstallationInfo *instance = new InstallationInfo(parent);
-	instance->updateFromJSON(source);
+InstallationInfo InstallationInfo::fromJson(QJsonObject source) {InstallationInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void InstallationInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void InstallationInfo::setFromJson(QJsonObject source) {
+	m_guid = fromJsonValue<QUuid>(source["Guid"]);
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_version = fromJsonValue<QSharedPointer<Version>>(source["Version"]);
+	m_changelog = fromJsonValue<QString>(source["Changelog"]);
+	m_sourceUrl = fromJsonValue<QString>(source["SourceUrl"]);
+	m_checksum = fromJsonValue<QString>(source["Checksum"]);
+
 }
-QJsonObject InstallationInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject InstallationInfo::toJson() {
 	QJsonObject result;
+	result["Guid"] = toJsonValue<QUuid>(m_guid);
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Version"] = toJsonValue<QSharedPointer<Version>>(m_version);
+	result["Changelog"] = toJsonValue<QString>(m_changelog);
+	result["SourceUrl"] = toJsonValue<QString>(m_sourceUrl);
+	result["Checksum"] = toJsonValue<QString>(m_checksum);
+
 	return result;
 }
-QString InstallationInfo::guid() const { return m_guid; }
-void InstallationInfo::setGuid(QString newGuid) {
-	m_guid = newGuid;
-	emit guidChanged(newGuid);
-}
 
+QUuid InstallationInfo::guid() const { return m_guid; }
+
+void InstallationInfo::setGuid(QUuid newGuid) {
+	m_guid = newGuid;
+}
 QString InstallationInfo::name() const { return m_name; }
+
 void InstallationInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
+QSharedPointer<Version> InstallationInfo::version() const { return m_version; }
 
-Version * InstallationInfo::version() const { return m_version; }
-void InstallationInfo::setVersion(Version * newVersion) {
+void InstallationInfo::setVersion(QSharedPointer<Version> newVersion) {
 	m_version = newVersion;
-	emit versionChanged(newVersion);
 }
-
 QString InstallationInfo::changelog() const { return m_changelog; }
+
 void InstallationInfo::setChangelog(QString newChangelog) {
 	m_changelog = newChangelog;
-	emit changelogChanged(newChangelog);
 }
-
 QString InstallationInfo::sourceUrl() const { return m_sourceUrl; }
+
 void InstallationInfo::setSourceUrl(QString newSourceUrl) {
 	m_sourceUrl = newSourceUrl;
-	emit sourceUrlChanged(newSourceUrl);
 }
-
 QString InstallationInfo::checksum() const { return m_checksum; }
+
 void InstallationInfo::setChecksum(QString newChecksum) {
 	m_checksum = newChecksum;
-	emit checksumChanged(newChecksum);
 }
 
 

@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-MusicVideoInfoRemoteSearchQuery::MusicVideoInfoRemoteSearchQuery(QObject *parent) : QObject(parent) {}
+MusicVideoInfoRemoteSearchQuery::MusicVideoInfoRemoteSearchQuery(QObject *parent) {}
 
-MusicVideoInfoRemoteSearchQuery *MusicVideoInfoRemoteSearchQuery::fromJSON(QJsonObject source, QObject *parent) {
-	MusicVideoInfoRemoteSearchQuery *instance = new MusicVideoInfoRemoteSearchQuery(parent);
-	instance->updateFromJSON(source);
+MusicVideoInfoRemoteSearchQuery MusicVideoInfoRemoteSearchQuery::fromJson(QJsonObject source) {MusicVideoInfoRemoteSearchQuery instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MusicVideoInfoRemoteSearchQuery::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MusicVideoInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
+	m_searchInfo = fromJsonValue<QSharedPointer<MusicVideoInfo>>(source["SearchInfo"]);
+	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+
 }
-QJsonObject MusicVideoInfoRemoteSearchQuery::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MusicVideoInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
+	result["SearchInfo"] = toJsonValue<QSharedPointer<MusicVideoInfo>>(m_searchInfo);
+	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+
 	return result;
 }
-MusicVideoInfo * MusicVideoInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
-void MusicVideoInfoRemoteSearchQuery::setSearchInfo(MusicVideoInfo * newSearchInfo) {
+
+QSharedPointer<MusicVideoInfo> MusicVideoInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
+
+void MusicVideoInfoRemoteSearchQuery::setSearchInfo(QSharedPointer<MusicVideoInfo> newSearchInfo) {
 	m_searchInfo = newSearchInfo;
-	emit searchInfoChanged(newSearchInfo);
 }
+QUuid MusicVideoInfoRemoteSearchQuery::itemId() const { return m_itemId; }
 
-QString MusicVideoInfoRemoteSearchQuery::itemId() const { return m_itemId; }
-void MusicVideoInfoRemoteSearchQuery::setItemId(QString newItemId) {
+void MusicVideoInfoRemoteSearchQuery::setItemId(QUuid newItemId) {
 	m_itemId = newItemId;
-	emit itemIdChanged(newItemId);
 }
-
 QString MusicVideoInfoRemoteSearchQuery::searchProviderName() const { return m_searchProviderName; }
+
 void MusicVideoInfoRemoteSearchQuery::setSearchProviderName(QString newSearchProviderName) {
 	m_searchProviderName = newSearchProviderName;
-	emit searchProviderNameChanged(newSearchProviderName);
 }
-
 bool MusicVideoInfoRemoteSearchQuery::includeDisabledProviders() const { return m_includeDisabledProviders; }
+
 void MusicVideoInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncludeDisabledProviders) {
 	m_includeDisabledProviders = newIncludeDisabledProviders;
-	emit includeDisabledProvidersChanged(newIncludeDisabledProviders);
 }
 
 

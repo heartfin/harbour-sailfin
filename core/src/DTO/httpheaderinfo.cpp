@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/httpheaderinfo.h>
 
-#include <JellyfinQt/DTO/headermatchtype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-HttpHeaderInfo::HttpHeaderInfo(QObject *parent) : QObject(parent) {}
+HttpHeaderInfo::HttpHeaderInfo(QObject *parent) {}
 
-HttpHeaderInfo *HttpHeaderInfo::fromJSON(QJsonObject source, QObject *parent) {
-	HttpHeaderInfo *instance = new HttpHeaderInfo(parent);
-	instance->updateFromJSON(source);
+HttpHeaderInfo HttpHeaderInfo::fromJson(QJsonObject source) {HttpHeaderInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void HttpHeaderInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void HttpHeaderInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_value = fromJsonValue<QString>(source["Value"]);
+	m_match = fromJsonValue<HeaderMatchType>(source["Match"]);
+
 }
-QJsonObject HttpHeaderInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject HttpHeaderInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Value"] = toJsonValue<QString>(m_value);
+	result["Match"] = toJsonValue<HeaderMatchType>(m_match);
+
 	return result;
 }
+
 QString HttpHeaderInfo::name() const { return m_name; }
+
 void HttpHeaderInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString HttpHeaderInfo::value() const { return m_value; }
+
 void HttpHeaderInfo::setValue(QString newValue) {
 	m_value = newValue;
-	emit valueChanged(newValue);
 }
-
 HeaderMatchType HttpHeaderInfo::match() const { return m_match; }
+
 void HttpHeaderInfo::setMatch(HeaderMatchType newMatch) {
 	m_match = newMatch;
-	emit matchChanged(newMatch);
 }
 
 

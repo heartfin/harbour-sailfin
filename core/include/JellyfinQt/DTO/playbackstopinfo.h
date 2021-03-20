@@ -31,106 +31,106 @@
 #define JELLYFIN_DTO_PLAYBACKSTOPINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/baseitemdto.h"
+#include "JellyfinQt/DTO/queueitem.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class BaseItemDto;
-class QueueItem;
 
-class PlaybackStopInfo : public QObject {
-	Q_OBJECT
+class PlaybackStopInfo {
 public:
-	explicit PlaybackStopInfo(QObject *parent = nullptr);
-	static PlaybackStopInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
+	explicit PlaybackStopInfo();
+	static PlaybackStopInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
-	Q_PROPERTY(BaseItemDto * item READ item WRITE setItem NOTIFY itemChanged)
+	QSharedPointer<BaseItemDto> item() const;
+
+	void setItem(QSharedPointer<BaseItemDto> newItem);
 	/**
 	 * @brief Gets or sets the item identifier.
 	 */
-	Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
+	QUuid itemId() const;
+	/**
+	* @brief Gets or sets the item identifier.
+	*/
+	void setItemId(QUuid newItemId);
 	/**
 	 * @brief Gets or sets the session id.
 	 */
-	Q_PROPERTY(QString sessionId READ sessionId WRITE setSessionId NOTIFY sessionIdChanged)
+	QString sessionId() const;
+	/**
+	* @brief Gets or sets the session id.
+	*/
+	void setSessionId(QString newSessionId);
 	/**
 	 * @brief Gets or sets the media version identifier.
 	 */
-	Q_PROPERTY(QString mediaSourceId READ mediaSourceId WRITE setMediaSourceId NOTIFY mediaSourceIdChanged)
+	QString mediaSourceId() const;
+	/**
+	* @brief Gets or sets the media version identifier.
+	*/
+	void setMediaSourceId(QString newMediaSourceId);
 	/**
 	 * @brief Gets or sets the position ticks.
 	 */
-	Q_PROPERTY(qint64 positionTicks READ positionTicks WRITE setPositionTicks NOTIFY positionTicksChanged)
+	qint64 positionTicks() const;
+	/**
+	* @brief Gets or sets the position ticks.
+	*/
+	void setPositionTicks(qint64 newPositionTicks);
 	/**
 	 * @brief Gets or sets the live stream identifier.
 	 */
-	Q_PROPERTY(QString liveStreamId READ liveStreamId WRITE setLiveStreamId NOTIFY liveStreamIdChanged)
+	QString liveStreamId() const;
+	/**
+	* @brief Gets or sets the live stream identifier.
+	*/
+	void setLiveStreamId(QString newLiveStreamId);
 	/**
 	 * @brief Gets or sets the play session identifier.
 	 */
-	Q_PROPERTY(QString playSessionId READ playSessionId WRITE setPlaySessionId NOTIFY playSessionIdChanged)
+	QString playSessionId() const;
+	/**
+	* @brief Gets or sets the play session identifier.
+	*/
+	void setPlaySessionId(QString newPlaySessionId);
 	/**
 	 * @brief Gets or sets a value indicating whether this MediaBrowser.Model.Session.PlaybackStopInfo is failed.
 	 */
-	Q_PROPERTY(bool failed READ failed WRITE setFailed NOTIFY failedChanged)
-	Q_PROPERTY(QString nextMediaType READ nextMediaType WRITE setNextMediaType NOTIFY nextMediaTypeChanged)
-	Q_PROPERTY(QString playlistItemId READ playlistItemId WRITE setPlaylistItemId NOTIFY playlistItemIdChanged)
-	Q_PROPERTY(QList<QueueItem *> nowPlayingQueue READ nowPlayingQueue WRITE setNowPlayingQueue NOTIFY nowPlayingQueueChanged)
-
-	BaseItemDto * item() const;
-	void setItem(BaseItemDto * newItem);
-	
-	QString itemId() const;
-	void setItemId(QString newItemId);
-	
-	QString sessionId() const;
-	void setSessionId(QString newSessionId);
-	
-	QString mediaSourceId() const;
-	void setMediaSourceId(QString newMediaSourceId);
-	
-	qint64 positionTicks() const;
-	void setPositionTicks(qint64 newPositionTicks);
-	
-	QString liveStreamId() const;
-	void setLiveStreamId(QString newLiveStreamId);
-	
-	QString playSessionId() const;
-	void setPlaySessionId(QString newPlaySessionId);
-	
 	bool failed() const;
+	/**
+	* @brief Gets or sets a value indicating whether this MediaBrowser.Model.Session.PlaybackStopInfo is failed.
+	*/
 	void setFailed(bool newFailed);
-	
+
 	QString nextMediaType() const;
+
 	void setNextMediaType(QString newNextMediaType);
-	
+
 	QString playlistItemId() const;
+
 	void setPlaylistItemId(QString newPlaylistItemId);
-	
-	QList<QueueItem *> nowPlayingQueue() const;
-	void setNowPlayingQueue(QList<QueueItem *> newNowPlayingQueue);
-	
-signals:
-	void itemChanged(BaseItemDto * newItem);
-	void itemIdChanged(QString newItemId);
-	void sessionIdChanged(QString newSessionId);
-	void mediaSourceIdChanged(QString newMediaSourceId);
-	void positionTicksChanged(qint64 newPositionTicks);
-	void liveStreamIdChanged(QString newLiveStreamId);
-	void playSessionIdChanged(QString newPlaySessionId);
-	void failedChanged(bool newFailed);
-	void nextMediaTypeChanged(QString newNextMediaType);
-	void playlistItemIdChanged(QString newPlaylistItemId);
-	void nowPlayingQueueChanged(QList<QueueItem *> newNowPlayingQueue);
+
+	QList<QSharedPointer<QueueItem>> nowPlayingQueue() const;
+
+	void setNowPlayingQueue(QList<QSharedPointer<QueueItem>> newNowPlayingQueue);
+
 protected:
-	BaseItemDto * m_item = nullptr;
-	QString m_itemId;
+	QSharedPointer<BaseItemDto> m_item = nullptr;
+	QUuid m_itemId;
 	QString m_sessionId;
 	QString m_mediaSourceId;
 	qint64 m_positionTicks;
@@ -139,8 +139,20 @@ protected:
 	bool m_failed;
 	QString m_nextMediaType;
 	QString m_playlistItemId;
-	QList<QueueItem *> m_nowPlayingQueue;
+	QList<QSharedPointer<QueueItem>> m_nowPlayingQueue;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlaybackStopInfo = Jellyfin::DTO::PlaybackStopInfo;
+
+template <>
+PlaybackStopInfo fromJsonValue<PlaybackStopInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlaybackStopInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

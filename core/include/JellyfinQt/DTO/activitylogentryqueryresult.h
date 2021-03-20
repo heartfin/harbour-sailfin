@@ -31,54 +31,69 @@
 #define JELLYFIN_DTO_ACTIVITYLOGENTRYQUERYRESULT_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/activitylogentry.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ActivityLogEntry;
 
-class ActivityLogEntryQueryResult : public QObject {
-	Q_OBJECT
+class ActivityLogEntryQueryResult {
 public:
-	explicit ActivityLogEntryQueryResult(QObject *parent = nullptr);
-	static ActivityLogEntryQueryResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit ActivityLogEntryQueryResult();
+	static ActivityLogEntryQueryResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the items.
 	 */
-	Q_PROPERTY(QList<ActivityLogEntry *> items READ items WRITE setItems NOTIFY itemsChanged)
+	QList<QSharedPointer<ActivityLogEntry>> items() const;
+	/**
+	* @brief Gets or sets the items.
+	*/
+	void setItems(QList<QSharedPointer<ActivityLogEntry>> newItems);
 	/**
 	 * @brief The total number of records available.
 	 */
-	Q_PROPERTY(qint32 totalRecordCount READ totalRecordCount WRITE setTotalRecordCount NOTIFY totalRecordCountChanged)
+	qint32 totalRecordCount() const;
+	/**
+	* @brief The total number of records available.
+	*/
+	void setTotalRecordCount(qint32 newTotalRecordCount);
 	/**
 	 * @brief The index of the first record in Items.
 	 */
-	Q_PROPERTY(qint32 startIndex READ startIndex WRITE setStartIndex NOTIFY startIndexChanged)
-
-	QList<ActivityLogEntry *> items() const;
-	void setItems(QList<ActivityLogEntry *> newItems);
-	
-	qint32 totalRecordCount() const;
-	void setTotalRecordCount(qint32 newTotalRecordCount);
-	
 	qint32 startIndex() const;
+	/**
+	* @brief The index of the first record in Items.
+	*/
 	void setStartIndex(qint32 newStartIndex);
-	
-signals:
-	void itemsChanged(QList<ActivityLogEntry *> newItems);
-	void totalRecordCountChanged(qint32 newTotalRecordCount);
-	void startIndexChanged(qint32 newStartIndex);
+
 protected:
-	QList<ActivityLogEntry *> m_items;
+	QList<QSharedPointer<ActivityLogEntry>> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ActivityLogEntryQueryResult = Jellyfin::DTO::ActivityLogEntryQueryResult;
+
+template <>
+ActivityLogEntryQueryResult fromJsonValue<ActivityLogEntryQueryResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ActivityLogEntryQueryResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

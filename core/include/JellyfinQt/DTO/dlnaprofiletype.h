@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_DLNAPROFILETYPE_H
 #define JELLYFIN_DTO_DLNAPROFILETYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class DlnaProfileTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Audio,
 		Video,
 		Photo,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit DlnaProfileTypeClass();
 };
+
 typedef DlnaProfileTypeClass::Value DlnaProfileType;
+
+} // NS DTO
+
+namespace Support {
+
+using DlnaProfileType = Jellyfin::DTO::DlnaProfileType;
+using DlnaProfileTypeClass = Jellyfin::DTO::DlnaProfileTypeClass;
+
+template <>
+DlnaProfileType fromJsonValue<DlnaProfileType>(const QJsonValue &source) {
+	if (!source.isString()) return DlnaProfileTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Audio")) {
+		return DlnaProfileTypeClass::Audio;
+	}
+	if (str == QStringLiteral("Video")) {
+		return DlnaProfileTypeClass::Video;
+	}
+	if (str == QStringLiteral("Photo")) {
+		return DlnaProfileTypeClass::Photo;
+	}
+	
+	return DlnaProfileTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-LiveTvInfo::LiveTvInfo(QObject *parent) : QObject(parent) {}
+LiveTvInfo::LiveTvInfo(QObject *parent) {}
 
-LiveTvInfo *LiveTvInfo::fromJSON(QJsonObject source, QObject *parent) {
-	LiveTvInfo *instance = new LiveTvInfo(parent);
-	instance->updateFromJSON(source);
+LiveTvInfo LiveTvInfo::fromJson(QJsonObject source) {LiveTvInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void LiveTvInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void LiveTvInfo::setFromJson(QJsonObject source) {
+	m_services = fromJsonValue<QList<QSharedPointer<LiveTvServiceInfo>>>(source["Services"]);
+	m_isEnabled = fromJsonValue<bool>(source["IsEnabled"]);
+	m_enabledUsers = fromJsonValue<QStringList>(source["EnabledUsers"]);
+
 }
-QJsonObject LiveTvInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject LiveTvInfo::toJson() {
 	QJsonObject result;
+	result["Services"] = toJsonValue<QList<QSharedPointer<LiveTvServiceInfo>>>(m_services);
+	result["IsEnabled"] = toJsonValue<bool>(m_isEnabled);
+	result["EnabledUsers"] = toJsonValue<QStringList>(m_enabledUsers);
+
 	return result;
 }
-QList<LiveTvServiceInfo *> LiveTvInfo::services() const { return m_services; }
-void LiveTvInfo::setServices(QList<LiveTvServiceInfo *> newServices) {
-	m_services = newServices;
-	emit servicesChanged(newServices);
-}
 
+QList<QSharedPointer<LiveTvServiceInfo>> LiveTvInfo::services() const { return m_services; }
+
+void LiveTvInfo::setServices(QList<QSharedPointer<LiveTvServiceInfo>> newServices) {
+	m_services = newServices;
+}
 bool LiveTvInfo::isEnabled() const { return m_isEnabled; }
+
 void LiveTvInfo::setIsEnabled(bool newIsEnabled) {
 	m_isEnabled = newIsEnabled;
-	emit isEnabledChanged(newIsEnabled);
 }
-
 QStringList LiveTvInfo::enabledUsers() const { return m_enabledUsers; }
+
 void LiveTvInfo::setEnabledUsers(QStringList newEnabledUsers) {
 	m_enabledUsers = newEnabledUsers;
-	emit enabledUsersChanged(newEnabledUsers);
 }
 
 

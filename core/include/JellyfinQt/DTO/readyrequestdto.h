@@ -32,60 +32,75 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ReadyRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit ReadyRequestDto(QObject *parent = nullptr);
-	static ReadyRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ReadyRequestDto {
+public:
+	explicit ReadyRequestDto();
+	static ReadyRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets when the request has been made by the client.
 	 */
-	Q_PROPERTY(QDateTime when READ when WRITE setWhen NOTIFY whenChanged)
+	QDateTime when() const;
+	/**
+	* @brief Gets or sets when the request has been made by the client.
+	*/
+	void setWhen(QDateTime newWhen);
 	/**
 	 * @brief Gets or sets the position ticks.
 	 */
-	Q_PROPERTY(qint64 positionTicks READ positionTicks WRITE setPositionTicks NOTIFY positionTicksChanged)
+	qint64 positionTicks() const;
+	/**
+	* @brief Gets or sets the position ticks.
+	*/
+	void setPositionTicks(qint64 newPositionTicks);
 	/**
 	 * @brief Gets or sets a value indicating whether the client playback is unpaused.
 	 */
-	Q_PROPERTY(bool isPlaying READ isPlaying WRITE setIsPlaying NOTIFY isPlayingChanged)
+	bool isPlaying() const;
+	/**
+	* @brief Gets or sets a value indicating whether the client playback is unpaused.
+	*/
+	void setIsPlaying(bool newIsPlaying);
 	/**
 	 * @brief Gets or sets the playlist item identifier of the playing item.
 	 */
-	Q_PROPERTY(QString playlistItemId READ playlistItemId WRITE setPlaylistItemId NOTIFY playlistItemIdChanged)
+	QUuid playlistItemId() const;
+	/**
+	* @brief Gets or sets the playlist item identifier of the playing item.
+	*/
+	void setPlaylistItemId(QUuid newPlaylistItemId);
 
-	QDateTime when() const;
-	void setWhen(QDateTime newWhen);
-	
-	qint64 positionTicks() const;
-	void setPositionTicks(qint64 newPositionTicks);
-	
-	bool isPlaying() const;
-	void setIsPlaying(bool newIsPlaying);
-	
-	QString playlistItemId() const;
-	void setPlaylistItemId(QString newPlaylistItemId);
-	
-signals:
-	void whenChanged(QDateTime newWhen);
-	void positionTicksChanged(qint64 newPositionTicks);
-	void isPlayingChanged(bool newIsPlaying);
-	void playlistItemIdChanged(QString newPlaylistItemId);
 protected:
 	QDateTime m_when;
 	qint64 m_positionTicks;
 	bool m_isPlaying;
-	QString m_playlistItemId;
+	QUuid m_playlistItemId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ReadyRequestDto = Jellyfin::DTO::ReadyRequestDto;
+
+template <>
+ReadyRequestDto fromJsonValue<ReadyRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ReadyRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

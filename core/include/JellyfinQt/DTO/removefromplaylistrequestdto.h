@@ -31,35 +31,50 @@
 #define JELLYFIN_DTO_REMOVEFROMPLAYLISTREQUESTDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
-#include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class RemoveFromPlaylistRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit RemoveFromPlaylistRequestDto(QObject *parent = nullptr);
-	static RemoveFromPlaylistRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class RemoveFromPlaylistRequestDto {
+public:
+	explicit RemoveFromPlaylistRequestDto();
+	static RemoveFromPlaylistRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the playlist identifiers ot the items.
 	 */
-	Q_PROPERTY(QStringList playlistItemIds READ playlistItemIds WRITE setPlaylistItemIds NOTIFY playlistItemIdsChanged)
+	QList<QUuid> playlistItemIds() const;
+	/**
+	* @brief Gets or sets the playlist identifiers ot the items.
+	*/
+	void setPlaylistItemIds(QList<QUuid> newPlaylistItemIds);
 
-	QStringList playlistItemIds() const;
-	void setPlaylistItemIds(QStringList newPlaylistItemIds);
-	
-signals:
-	void playlistItemIdsChanged(QStringList newPlaylistItemIds);
 protected:
-	QStringList m_playlistItemIds;
+	QList<QUuid> m_playlistItemIds;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using RemoveFromPlaylistRequestDto = Jellyfin::DTO::RemoveFromPlaylistRequestDto;
+
+template <>
+RemoveFromPlaylistRequestDto fromJsonValue<RemoveFromPlaylistRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RemoveFromPlaylistRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

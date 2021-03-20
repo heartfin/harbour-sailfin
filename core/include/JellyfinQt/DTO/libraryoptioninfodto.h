@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_LIBRARYOPTIONINFODTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LibraryOptionInfoDto : public QObject {
-	Q_OBJECT
-public:
-	explicit LibraryOptionInfoDto(QObject *parent = nullptr);
-	static LibraryOptionInfoDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class LibraryOptionInfoDto {
+public:
+	explicit LibraryOptionInfoDto();
+	static LibraryOptionInfoDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets a value indicating whether default enabled.
 	 */
-	Q_PROPERTY(bool defaultEnabled READ defaultEnabled WRITE setDefaultEnabled NOTIFY defaultEnabledChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
 	bool defaultEnabled() const;
+	/**
+	* @brief Gets or sets a value indicating whether default enabled.
+	*/
 	void setDefaultEnabled(bool newDefaultEnabled);
-	
-signals:
-	void nameChanged(QString newName);
-	void defaultEnabledChanged(bool newDefaultEnabled);
+
 protected:
 	QString m_name;
 	bool m_defaultEnabled;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LibraryOptionInfoDto = Jellyfin::DTO::LibraryOptionInfoDto;
+
+template <>
+LibraryOptionInfoDto fromJsonValue<LibraryOptionInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LibraryOptionInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_PARENTALRATING_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ParentalRating : public QObject {
-	Q_OBJECT
-public:
-	explicit ParentalRating(QObject *parent = nullptr);
-	static ParentalRating *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ParentalRating {
+public:
+	explicit ParentalRating();
+	static ParentalRating fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the value.
 	 */
-	Q_PROPERTY(qint32 value READ value WRITE setValue NOTIFY valueChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
 	qint32 value() const;
+	/**
+	* @brief Gets or sets the value.
+	*/
 	void setValue(qint32 newValue);
-	
-signals:
-	void nameChanged(QString newName);
-	void valueChanged(qint32 newValue);
+
 protected:
 	QString m_name;
 	qint32 m_value;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ParentalRating = Jellyfin::DTO::ParentalRating;
+
+template <>
+ParentalRating fromJsonValue<ParentalRating>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ParentalRating::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,68 +31,81 @@
 #define JELLYFIN_DTO_ACCESSSCHEDULE_H
 
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QUuid>
+#include <optional>
 
 #include "JellyfinQt/DTO/dynamicdayofweek.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class AccessSchedule : public QObject {
-	Q_OBJECT
-public:
-	explicit AccessSchedule(QObject *parent = nullptr);
-	static AccessSchedule *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class AccessSchedule {
+public:
+	explicit AccessSchedule();
+	static AccessSchedule fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the id of this instance.
 	 */
-	Q_PROPERTY(qint32 jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	qint32 jellyfinId() const;
+	/**
+	* @brief Gets or sets the id of this instance.
+	*/
+	void setJellyfinId(qint32 newJellyfinId);
 	/**
 	 * @brief Gets or sets the id of the associated user.
 	 */
-	Q_PROPERTY(QString userId READ userId WRITE setUserId NOTIFY userIdChanged)
-	Q_PROPERTY(DynamicDayOfWeek dayOfWeek READ dayOfWeek WRITE setDayOfWeek NOTIFY dayOfWeekChanged)
+	QUuid userId() const;
+	/**
+	* @brief Gets or sets the id of the associated user.
+	*/
+	void setUserId(QUuid newUserId);
+
+	DynamicDayOfWeek dayOfWeek() const;
+
+	void setDayOfWeek(DynamicDayOfWeek newDayOfWeek);
 	/**
 	 * @brief Gets or sets the start hour.
 	 */
-	Q_PROPERTY(double startHour READ startHour WRITE setStartHour NOTIFY startHourChanged)
+	double startHour() const;
+	/**
+	* @brief Gets or sets the start hour.
+	*/
+	void setStartHour(double newStartHour);
 	/**
 	 * @brief Gets or sets the end hour.
 	 */
-	Q_PROPERTY(double endHour READ endHour WRITE setEndHour NOTIFY endHourChanged)
-
-	qint32 jellyfinId() const;
-	void setJellyfinId(qint32 newJellyfinId);
-	
-	QString userId() const;
-	void setUserId(QString newUserId);
-	
-	DynamicDayOfWeek dayOfWeek() const;
-	void setDayOfWeek(DynamicDayOfWeek newDayOfWeek);
-	
-	double startHour() const;
-	void setStartHour(double newStartHour);
-	
 	double endHour() const;
+	/**
+	* @brief Gets or sets the end hour.
+	*/
 	void setEndHour(double newEndHour);
-	
-signals:
-	void jellyfinIdChanged(qint32 newJellyfinId);
-	void userIdChanged(QString newUserId);
-	void dayOfWeekChanged(DynamicDayOfWeek newDayOfWeek);
-	void startHourChanged(double newStartHour);
-	void endHourChanged(double newEndHour);
+
 protected:
 	qint32 m_jellyfinId;
-	QString m_userId;
+	QUuid m_userId;
 	DynamicDayOfWeek m_dayOfWeek;
 	double m_startHour;
 	double m_endHour;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using AccessSchedule = Jellyfin::DTO::AccessSchedule;
+
+template <>
+AccessSchedule fromJsonValue<AccessSchedule>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AccessSchedule::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

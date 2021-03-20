@@ -31,62 +31,65 @@
 #define JELLYFIN_DTO_IMAGEBYNAMEINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ImageByNameInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit ImageByNameInfo(QObject *parent = nullptr);
-	static ImageByNameInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ImageByNameInfo {
+public:
+	explicit ImageByNameInfo();
+	static ImageByNameInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the theme.
 	 */
-	Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged)
+	QString theme() const;
+	/**
+	* @brief Gets or sets the theme.
+	*/
+	void setTheme(QString newTheme);
 	/**
 	 * @brief Gets or sets the context.
 	 */
-	Q_PROPERTY(QString context READ context WRITE setContext NOTIFY contextChanged)
+	QString context() const;
+	/**
+	* @brief Gets or sets the context.
+	*/
+	void setContext(QString newContext);
 	/**
 	 * @brief Gets or sets the length of the file.
 	 */
-	Q_PROPERTY(qint64 fileLength READ fileLength WRITE setFileLength NOTIFY fileLengthChanged)
+	qint64 fileLength() const;
+	/**
+	* @brief Gets or sets the length of the file.
+	*/
+	void setFileLength(qint64 newFileLength);
 	/**
 	 * @brief Gets or sets the format.
 	 */
-	Q_PROPERTY(QString format READ format WRITE setFormat NOTIFY formatChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString theme() const;
-	void setTheme(QString newTheme);
-	
-	QString context() const;
-	void setContext(QString newContext);
-	
-	qint64 fileLength() const;
-	void setFileLength(qint64 newFileLength);
-	
 	QString format() const;
+	/**
+	* @brief Gets or sets the format.
+	*/
 	void setFormat(QString newFormat);
-	
-signals:
-	void nameChanged(QString newName);
-	void themeChanged(QString newTheme);
-	void contextChanged(QString newContext);
-	void fileLengthChanged(qint64 newFileLength);
-	void formatChanged(QString newFormat);
+
 protected:
 	QString m_name;
 	QString m_theme;
@@ -94,6 +97,18 @@ protected:
 	qint64 m_fileLength;
 	QString m_format;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ImageByNameInfo = Jellyfin::DTO::ImageByNameInfo;
+
+template <>
+ImageByNameInfo fromJsonValue<ImageByNameInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ImageByNameInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

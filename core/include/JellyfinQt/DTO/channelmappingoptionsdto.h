@@ -31,66 +31,81 @@
 #define JELLYFIN_DTO_CHANNELMAPPINGOPTIONSDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/nameidpair.h"
+#include "JellyfinQt/DTO/namevaluepair.h"
+#include "JellyfinQt/DTO/tunerchannelmapping.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class NameIdPair;
-class NameValuePair;
-class TunerChannelMapping;
 
-class ChannelMappingOptionsDto : public QObject {
-	Q_OBJECT
+class ChannelMappingOptionsDto {
 public:
-	explicit ChannelMappingOptionsDto(QObject *parent = nullptr);
-	static ChannelMappingOptionsDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit ChannelMappingOptionsDto();
+	static ChannelMappingOptionsDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets list of tuner channels.
 	 */
-	Q_PROPERTY(QList<TunerChannelMapping *> tunerChannels READ tunerChannels WRITE setTunerChannels NOTIFY tunerChannelsChanged)
+	QList<QSharedPointer<TunerChannelMapping>> tunerChannels() const;
+	/**
+	* @brief Gets or sets list of tuner channels.
+	*/
+	void setTunerChannels(QList<QSharedPointer<TunerChannelMapping>> newTunerChannels);
 	/**
 	 * @brief Gets or sets list of provider channels.
 	 */
-	Q_PROPERTY(QList<NameIdPair *> providerChannels READ providerChannels WRITE setProviderChannels NOTIFY providerChannelsChanged)
+	QList<QSharedPointer<NameIdPair>> providerChannels() const;
+	/**
+	* @brief Gets or sets list of provider channels.
+	*/
+	void setProviderChannels(QList<QSharedPointer<NameIdPair>> newProviderChannels);
 	/**
 	 * @brief Gets or sets list of mappings.
 	 */
-	Q_PROPERTY(QList<NameValuePair *> mappings READ mappings WRITE setMappings NOTIFY mappingsChanged)
+	QList<QSharedPointer<NameValuePair>> mappings() const;
+	/**
+	* @brief Gets or sets list of mappings.
+	*/
+	void setMappings(QList<QSharedPointer<NameValuePair>> newMappings);
 	/**
 	 * @brief Gets or sets provider name.
 	 */
-	Q_PROPERTY(QString providerName READ providerName WRITE setProviderName NOTIFY providerNameChanged)
-
-	QList<TunerChannelMapping *> tunerChannels() const;
-	void setTunerChannels(QList<TunerChannelMapping *> newTunerChannels);
-	
-	QList<NameIdPair *> providerChannels() const;
-	void setProviderChannels(QList<NameIdPair *> newProviderChannels);
-	
-	QList<NameValuePair *> mappings() const;
-	void setMappings(QList<NameValuePair *> newMappings);
-	
 	QString providerName() const;
+	/**
+	* @brief Gets or sets provider name.
+	*/
 	void setProviderName(QString newProviderName);
-	
-signals:
-	void tunerChannelsChanged(QList<TunerChannelMapping *> newTunerChannels);
-	void providerChannelsChanged(QList<NameIdPair *> newProviderChannels);
-	void mappingsChanged(QList<NameValuePair *> newMappings);
-	void providerNameChanged(QString newProviderName);
+
 protected:
-	QList<TunerChannelMapping *> m_tunerChannels;
-	QList<NameIdPair *> m_providerChannels;
-	QList<NameValuePair *> m_mappings;
+	QList<QSharedPointer<TunerChannelMapping>> m_tunerChannels;
+	QList<QSharedPointer<NameIdPair>> m_providerChannels;
+	QList<QSharedPointer<NameValuePair>> m_mappings;
 	QString m_providerName;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelMappingOptionsDto = Jellyfin::DTO::ChannelMappingOptionsDto;
+
+template <>
+ChannelMappingOptionsDto fromJsonValue<ChannelMappingOptionsDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ChannelMappingOptionsDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

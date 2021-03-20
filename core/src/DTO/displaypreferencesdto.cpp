@@ -29,110 +29,124 @@
 
 #include <JellyfinQt/DTO/displaypreferencesdto.h>
 
-#include <JellyfinQt/DTO/scrolldirection.h>
-#include <JellyfinQt/DTO/sortorder.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-DisplayPreferencesDto::DisplayPreferencesDto(QObject *parent) : QObject(parent) {}
+DisplayPreferencesDto::DisplayPreferencesDto(QObject *parent) {}
 
-DisplayPreferencesDto *DisplayPreferencesDto::fromJSON(QJsonObject source, QObject *parent) {
-	DisplayPreferencesDto *instance = new DisplayPreferencesDto(parent);
-	instance->updateFromJSON(source);
+DisplayPreferencesDto DisplayPreferencesDto::fromJson(QJsonObject source) {DisplayPreferencesDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void DisplayPreferencesDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void DisplayPreferencesDto::setFromJson(QJsonObject source) {
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_viewType = fromJsonValue<QString>(source["ViewType"]);
+	m_sortBy = fromJsonValue<QString>(source["SortBy"]);
+	m_indexBy = fromJsonValue<QString>(source["IndexBy"]);
+	m_rememberIndexing = fromJsonValue<bool>(source["RememberIndexing"]);
+	m_primaryImageHeight = fromJsonValue<qint32>(source["PrimaryImageHeight"]);
+	m_primaryImageWidth = fromJsonValue<qint32>(source["PrimaryImageWidth"]);
+	m_customPrefs = fromJsonValue<QJsonObject>(source["CustomPrefs"]);
+	m_scrollDirection = fromJsonValue<ScrollDirection>(source["ScrollDirection"]);
+	m_showBackdrop = fromJsonValue<bool>(source["ShowBackdrop"]);
+	m_rememberSorting = fromJsonValue<bool>(source["RememberSorting"]);
+	m_sortOrder = fromJsonValue<SortOrder>(source["SortOrder"]);
+	m_showSidebar = fromJsonValue<bool>(source["ShowSidebar"]);
+	m_client = fromJsonValue<QString>(source["Client"]);
+
 }
-QJsonObject DisplayPreferencesDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject DisplayPreferencesDto::toJson() {
 	QJsonObject result;
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["ViewType"] = toJsonValue<QString>(m_viewType);
+	result["SortBy"] = toJsonValue<QString>(m_sortBy);
+	result["IndexBy"] = toJsonValue<QString>(m_indexBy);
+	result["RememberIndexing"] = toJsonValue<bool>(m_rememberIndexing);
+	result["PrimaryImageHeight"] = toJsonValue<qint32>(m_primaryImageHeight);
+	result["PrimaryImageWidth"] = toJsonValue<qint32>(m_primaryImageWidth);
+	result["CustomPrefs"] = toJsonValue<QJsonObject>(m_customPrefs);
+	result["ScrollDirection"] = toJsonValue<ScrollDirection>(m_scrollDirection);
+	result["ShowBackdrop"] = toJsonValue<bool>(m_showBackdrop);
+	result["RememberSorting"] = toJsonValue<bool>(m_rememberSorting);
+	result["SortOrder"] = toJsonValue<SortOrder>(m_sortOrder);
+	result["ShowSidebar"] = toJsonValue<bool>(m_showSidebar);
+	result["Client"] = toJsonValue<QString>(m_client);
+
 	return result;
 }
+
 QString DisplayPreferencesDto::jellyfinId() const { return m_jellyfinId; }
+
 void DisplayPreferencesDto::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 QString DisplayPreferencesDto::viewType() const { return m_viewType; }
+
 void DisplayPreferencesDto::setViewType(QString newViewType) {
 	m_viewType = newViewType;
-	emit viewTypeChanged(newViewType);
 }
-
 QString DisplayPreferencesDto::sortBy() const { return m_sortBy; }
+
 void DisplayPreferencesDto::setSortBy(QString newSortBy) {
 	m_sortBy = newSortBy;
-	emit sortByChanged(newSortBy);
 }
-
 QString DisplayPreferencesDto::indexBy() const { return m_indexBy; }
+
 void DisplayPreferencesDto::setIndexBy(QString newIndexBy) {
 	m_indexBy = newIndexBy;
-	emit indexByChanged(newIndexBy);
 }
-
 bool DisplayPreferencesDto::rememberIndexing() const { return m_rememberIndexing; }
+
 void DisplayPreferencesDto::setRememberIndexing(bool newRememberIndexing) {
 	m_rememberIndexing = newRememberIndexing;
-	emit rememberIndexingChanged(newRememberIndexing);
 }
-
 qint32 DisplayPreferencesDto::primaryImageHeight() const { return m_primaryImageHeight; }
+
 void DisplayPreferencesDto::setPrimaryImageHeight(qint32 newPrimaryImageHeight) {
 	m_primaryImageHeight = newPrimaryImageHeight;
-	emit primaryImageHeightChanged(newPrimaryImageHeight);
 }
-
 qint32 DisplayPreferencesDto::primaryImageWidth() const { return m_primaryImageWidth; }
+
 void DisplayPreferencesDto::setPrimaryImageWidth(qint32 newPrimaryImageWidth) {
 	m_primaryImageWidth = newPrimaryImageWidth;
-	emit primaryImageWidthChanged(newPrimaryImageWidth);
 }
-
 QJsonObject DisplayPreferencesDto::customPrefs() const { return m_customPrefs; }
+
 void DisplayPreferencesDto::setCustomPrefs(QJsonObject newCustomPrefs) {
 	m_customPrefs = newCustomPrefs;
-	emit customPrefsChanged(newCustomPrefs);
 }
-
 ScrollDirection DisplayPreferencesDto::scrollDirection() const { return m_scrollDirection; }
+
 void DisplayPreferencesDto::setScrollDirection(ScrollDirection newScrollDirection) {
 	m_scrollDirection = newScrollDirection;
-	emit scrollDirectionChanged(newScrollDirection);
 }
-
 bool DisplayPreferencesDto::showBackdrop() const { return m_showBackdrop; }
+
 void DisplayPreferencesDto::setShowBackdrop(bool newShowBackdrop) {
 	m_showBackdrop = newShowBackdrop;
-	emit showBackdropChanged(newShowBackdrop);
 }
-
 bool DisplayPreferencesDto::rememberSorting() const { return m_rememberSorting; }
+
 void DisplayPreferencesDto::setRememberSorting(bool newRememberSorting) {
 	m_rememberSorting = newRememberSorting;
-	emit rememberSortingChanged(newRememberSorting);
 }
-
 SortOrder DisplayPreferencesDto::sortOrder() const { return m_sortOrder; }
+
 void DisplayPreferencesDto::setSortOrder(SortOrder newSortOrder) {
 	m_sortOrder = newSortOrder;
-	emit sortOrderChanged(newSortOrder);
 }
-
 bool DisplayPreferencesDto::showSidebar() const { return m_showSidebar; }
+
 void DisplayPreferencesDto::setShowSidebar(bool newShowSidebar) {
 	m_showSidebar = newShowSidebar;
-	emit showSidebarChanged(newShowSidebar);
 }
-
 QString DisplayPreferencesDto::client() const { return m_client; }
+
 void DisplayPreferencesDto::setClient(QString newClient) {
 	m_client = newClient;
-	emit clientChanged(newClient);
 }
 
 

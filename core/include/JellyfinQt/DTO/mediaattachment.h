@@ -31,78 +31,81 @@
 #define JELLYFIN_DTO_MEDIAATTACHMENT_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaAttachment : public QObject {
-	Q_OBJECT
-public:
-	explicit MediaAttachment(QObject *parent = nullptr);
-	static MediaAttachment *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class MediaAttachment {
+public:
+	explicit MediaAttachment();
+	static MediaAttachment fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the codec.
 	 */
-	Q_PROPERTY(QString codec READ codec WRITE setCodec NOTIFY codecChanged)
+	QString codec() const;
+	/**
+	* @brief Gets or sets the codec.
+	*/
+	void setCodec(QString newCodec);
 	/**
 	 * @brief Gets or sets the codec tag.
 	 */
-	Q_PROPERTY(QString codecTag READ codecTag WRITE setCodecTag NOTIFY codecTagChanged)
+	QString codecTag() const;
+	/**
+	* @brief Gets or sets the codec tag.
+	*/
+	void setCodecTag(QString newCodecTag);
 	/**
 	 * @brief Gets or sets the comment.
 	 */
-	Q_PROPERTY(QString comment READ comment WRITE setComment NOTIFY commentChanged)
+	QString comment() const;
+	/**
+	* @brief Gets or sets the comment.
+	*/
+	void setComment(QString newComment);
 	/**
 	 * @brief Gets or sets the index.
 	 */
-	Q_PROPERTY(qint32 index READ index WRITE setIndex NOTIFY indexChanged)
+	qint32 index() const;
+	/**
+	* @brief Gets or sets the index.
+	*/
+	void setIndex(qint32 newIndex);
 	/**
 	 * @brief Gets or sets the filename.
 	 */
-	Q_PROPERTY(QString fileName READ fileName WRITE setFileName NOTIFY fileNameChanged)
+	QString fileName() const;
+	/**
+	* @brief Gets or sets the filename.
+	*/
+	void setFileName(QString newFileName);
 	/**
 	 * @brief Gets or sets the MIME type.
 	 */
-	Q_PROPERTY(QString mimeType READ mimeType WRITE setMimeType NOTIFY mimeTypeChanged)
+	QString mimeType() const;
+	/**
+	* @brief Gets or sets the MIME type.
+	*/
+	void setMimeType(QString newMimeType);
 	/**
 	 * @brief Gets or sets the delivery URL.
 	 */
-	Q_PROPERTY(QString deliveryUrl READ deliveryUrl WRITE setDeliveryUrl NOTIFY deliveryUrlChanged)
-
-	QString codec() const;
-	void setCodec(QString newCodec);
-	
-	QString codecTag() const;
-	void setCodecTag(QString newCodecTag);
-	
-	QString comment() const;
-	void setComment(QString newComment);
-	
-	qint32 index() const;
-	void setIndex(qint32 newIndex);
-	
-	QString fileName() const;
-	void setFileName(QString newFileName);
-	
-	QString mimeType() const;
-	void setMimeType(QString newMimeType);
-	
 	QString deliveryUrl() const;
+	/**
+	* @brief Gets or sets the delivery URL.
+	*/
 	void setDeliveryUrl(QString newDeliveryUrl);
-	
-signals:
-	void codecChanged(QString newCodec);
-	void codecTagChanged(QString newCodecTag);
-	void commentChanged(QString newComment);
-	void indexChanged(qint32 newIndex);
-	void fileNameChanged(QString newFileName);
-	void mimeTypeChanged(QString newMimeType);
-	void deliveryUrlChanged(QString newDeliveryUrl);
+
 protected:
 	QString m_codec;
 	QString m_codecTag;
@@ -112,6 +115,18 @@ protected:
 	QString m_mimeType;
 	QString m_deliveryUrl;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaAttachment = Jellyfin::DTO::MediaAttachment;
+
+template <>
+MediaAttachment fromJsonValue<MediaAttachment>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaAttachment::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

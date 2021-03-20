@@ -31,42 +31,58 @@
 #define JELLYFIN_DTO_SESSIONUSERINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SessionUserInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit SessionUserInfo(QObject *parent = nullptr);
-	static SessionUserInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class SessionUserInfo {
+public:
+	explicit SessionUserInfo();
+	static SessionUserInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the user identifier.
 	 */
-	Q_PROPERTY(QString userId READ userId WRITE setUserId NOTIFY userIdChanged)
+	QUuid userId() const;
+	/**
+	* @brief Gets or sets the user identifier.
+	*/
+	void setUserId(QUuid newUserId);
 	/**
 	 * @brief Gets or sets the name of the user.
 	 */
-	Q_PROPERTY(QString userName READ userName WRITE setUserName NOTIFY userNameChanged)
-
-	QString userId() const;
-	void setUserId(QString newUserId);
-	
 	QString userName() const;
+	/**
+	* @brief Gets or sets the name of the user.
+	*/
 	void setUserName(QString newUserName);
-	
-signals:
-	void userIdChanged(QString newUserId);
-	void userNameChanged(QString newUserName);
+
 protected:
-	QString m_userId;
+	QUuid m_userId;
 	QString m_userName;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SessionUserInfo = Jellyfin::DTO::SessionUserInfo;
+
+template <>
+SessionUserInfo fromJsonValue<SessionUserInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SessionUserInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

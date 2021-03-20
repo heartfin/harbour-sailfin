@@ -31,33 +31,48 @@
 #define JELLYFIN_DTO_JOINGROUPREQUESTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class JoinGroupRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit JoinGroupRequestDto(QObject *parent = nullptr);
-	static JoinGroupRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class JoinGroupRequestDto {
+public:
+	explicit JoinGroupRequestDto();
+	static JoinGroupRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the group identifier.
 	 */
-	Q_PROPERTY(QString groupId READ groupId WRITE setGroupId NOTIFY groupIdChanged)
+	QUuid groupId() const;
+	/**
+	* @brief Gets or sets the group identifier.
+	*/
+	void setGroupId(QUuid newGroupId);
 
-	QString groupId() const;
-	void setGroupId(QString newGroupId);
-	
-signals:
-	void groupIdChanged(QString newGroupId);
 protected:
-	QString m_groupId;
+	QUuid m_groupId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using JoinGroupRequestDto = Jellyfin::DTO::JoinGroupRequestDto;
+
+template <>
+JoinGroupRequestDto fromJsonValue<JoinGroupRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return JoinGroupRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

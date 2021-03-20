@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-EndPointInfo::EndPointInfo(QObject *parent) : QObject(parent) {}
+EndPointInfo::EndPointInfo(QObject *parent) {}
 
-EndPointInfo *EndPointInfo::fromJSON(QJsonObject source, QObject *parent) {
-	EndPointInfo *instance = new EndPointInfo(parent);
-	instance->updateFromJSON(source);
+EndPointInfo EndPointInfo::fromJson(QJsonObject source) {EndPointInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void EndPointInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void EndPointInfo::setFromJson(QJsonObject source) {
+	m_isLocal = fromJsonValue<bool>(source["IsLocal"]);
+	m_isInNetwork = fromJsonValue<bool>(source["IsInNetwork"]);
+
 }
-QJsonObject EndPointInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject EndPointInfo::toJson() {
 	QJsonObject result;
+	result["IsLocal"] = toJsonValue<bool>(m_isLocal);
+	result["IsInNetwork"] = toJsonValue<bool>(m_isInNetwork);
+
 	return result;
 }
+
 bool EndPointInfo::isLocal() const { return m_isLocal; }
+
 void EndPointInfo::setIsLocal(bool newIsLocal) {
 	m_isLocal = newIsLocal;
-	emit isLocalChanged(newIsLocal);
 }
-
 bool EndPointInfo::isInNetwork() const { return m_isInNetwork; }
+
 void EndPointInfo::setIsInNetwork(bool newIsInNetwork) {
 	m_isInNetwork = newIsInNetwork;
-	emit isInNetworkChanged(newIsInNetwork);
 }
 
 

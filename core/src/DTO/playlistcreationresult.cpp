@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-PlaylistCreationResult::PlaylistCreationResult(QObject *parent) : QObject(parent) {}
+PlaylistCreationResult::PlaylistCreationResult(QObject *parent) {}
 
-PlaylistCreationResult *PlaylistCreationResult::fromJSON(QJsonObject source, QObject *parent) {
-	PlaylistCreationResult *instance = new PlaylistCreationResult(parent);
-	instance->updateFromJSON(source);
+PlaylistCreationResult PlaylistCreationResult::fromJson(QJsonObject source) {PlaylistCreationResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PlaylistCreationResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PlaylistCreationResult::setFromJson(QJsonObject source) {
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+
 }
-QJsonObject PlaylistCreationResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PlaylistCreationResult::toJson() {
 	QJsonObject result;
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+
 	return result;
 }
+
 QString PlaylistCreationResult::jellyfinId() const { return m_jellyfinId; }
+
 void PlaylistCreationResult::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
 
 

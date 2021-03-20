@@ -31,45 +31,55 @@
 #define JELLYFIN_DTO_ALLTHEMEMEDIARESULT_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
+#include <optional>
+
+#include "JellyfinQt/DTO/thememediaresult.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ThemeMediaResult;
-class ThemeMediaResult;
-class ThemeMediaResult;
 
-class AllThemeMediaResult : public QObject {
-	Q_OBJECT
+class AllThemeMediaResult {
 public:
-	explicit AllThemeMediaResult(QObject *parent = nullptr);
-	static AllThemeMediaResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
+	explicit AllThemeMediaResult();
+	static AllThemeMediaResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
-	Q_PROPERTY(ThemeMediaResult * themeVideosResult READ themeVideosResult WRITE setThemeVideosResult NOTIFY themeVideosResultChanged)
-	Q_PROPERTY(ThemeMediaResult * themeSongsResult READ themeSongsResult WRITE setThemeSongsResult NOTIFY themeSongsResultChanged)
-	Q_PROPERTY(ThemeMediaResult * soundtrackSongsResult READ soundtrackSongsResult WRITE setSoundtrackSongsResult NOTIFY soundtrackSongsResultChanged)
+	QSharedPointer<ThemeMediaResult> themeVideosResult() const;
 
-	ThemeMediaResult * themeVideosResult() const;
-	void setThemeVideosResult(ThemeMediaResult * newThemeVideosResult);
-	
-	ThemeMediaResult * themeSongsResult() const;
-	void setThemeSongsResult(ThemeMediaResult * newThemeSongsResult);
-	
-	ThemeMediaResult * soundtrackSongsResult() const;
-	void setSoundtrackSongsResult(ThemeMediaResult * newSoundtrackSongsResult);
-	
-signals:
-	void themeVideosResultChanged(ThemeMediaResult * newThemeVideosResult);
-	void themeSongsResultChanged(ThemeMediaResult * newThemeSongsResult);
-	void soundtrackSongsResultChanged(ThemeMediaResult * newSoundtrackSongsResult);
+	void setThemeVideosResult(QSharedPointer<ThemeMediaResult> newThemeVideosResult);
+
+	QSharedPointer<ThemeMediaResult> themeSongsResult() const;
+
+	void setThemeSongsResult(QSharedPointer<ThemeMediaResult> newThemeSongsResult);
+
+	QSharedPointer<ThemeMediaResult> soundtrackSongsResult() const;
+
+	void setSoundtrackSongsResult(QSharedPointer<ThemeMediaResult> newSoundtrackSongsResult);
+
 protected:
-	ThemeMediaResult * m_themeVideosResult = nullptr;
-	ThemeMediaResult * m_themeSongsResult = nullptr;
-	ThemeMediaResult * m_soundtrackSongsResult = nullptr;
+	QSharedPointer<ThemeMediaResult> m_themeVideosResult = nullptr;
+	QSharedPointer<ThemeMediaResult> m_themeSongsResult = nullptr;
+	QSharedPointer<ThemeMediaResult> m_soundtrackSongsResult = nullptr;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using AllThemeMediaResult = Jellyfin::DTO::AllThemeMediaResult;
+
+template <>
+AllThemeMediaResult fromJsonValue<AllThemeMediaResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AllThemeMediaResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

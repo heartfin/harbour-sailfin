@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-AllThemeMediaResult::AllThemeMediaResult(QObject *parent) : QObject(parent) {}
+AllThemeMediaResult::AllThemeMediaResult(QObject *parent) {}
 
-AllThemeMediaResult *AllThemeMediaResult::fromJSON(QJsonObject source, QObject *parent) {
-	AllThemeMediaResult *instance = new AllThemeMediaResult(parent);
-	instance->updateFromJSON(source);
+AllThemeMediaResult AllThemeMediaResult::fromJson(QJsonObject source) {AllThemeMediaResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void AllThemeMediaResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void AllThemeMediaResult::setFromJson(QJsonObject source) {
+	m_themeVideosResult = fromJsonValue<QSharedPointer<ThemeMediaResult>>(source["ThemeVideosResult"]);
+	m_themeSongsResult = fromJsonValue<QSharedPointer<ThemeMediaResult>>(source["ThemeSongsResult"]);
+	m_soundtrackSongsResult = fromJsonValue<QSharedPointer<ThemeMediaResult>>(source["SoundtrackSongsResult"]);
+
 }
-QJsonObject AllThemeMediaResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject AllThemeMediaResult::toJson() {
 	QJsonObject result;
+	result["ThemeVideosResult"] = toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeVideosResult);
+	result["ThemeSongsResult"] = toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeSongsResult);
+	result["SoundtrackSongsResult"] = toJsonValue<QSharedPointer<ThemeMediaResult>>(m_soundtrackSongsResult);
+
 	return result;
 }
-ThemeMediaResult * AllThemeMediaResult::themeVideosResult() const { return m_themeVideosResult; }
-void AllThemeMediaResult::setThemeVideosResult(ThemeMediaResult * newThemeVideosResult) {
+
+QSharedPointer<ThemeMediaResult> AllThemeMediaResult::themeVideosResult() const { return m_themeVideosResult; }
+
+void AllThemeMediaResult::setThemeVideosResult(QSharedPointer<ThemeMediaResult> newThemeVideosResult) {
 	m_themeVideosResult = newThemeVideosResult;
-	emit themeVideosResultChanged(newThemeVideosResult);
 }
+QSharedPointer<ThemeMediaResult> AllThemeMediaResult::themeSongsResult() const { return m_themeSongsResult; }
 
-ThemeMediaResult * AllThemeMediaResult::themeSongsResult() const { return m_themeSongsResult; }
-void AllThemeMediaResult::setThemeSongsResult(ThemeMediaResult * newThemeSongsResult) {
+void AllThemeMediaResult::setThemeSongsResult(QSharedPointer<ThemeMediaResult> newThemeSongsResult) {
 	m_themeSongsResult = newThemeSongsResult;
-	emit themeSongsResultChanged(newThemeSongsResult);
 }
+QSharedPointer<ThemeMediaResult> AllThemeMediaResult::soundtrackSongsResult() const { return m_soundtrackSongsResult; }
 
-ThemeMediaResult * AllThemeMediaResult::soundtrackSongsResult() const { return m_soundtrackSongsResult; }
-void AllThemeMediaResult::setSoundtrackSongsResult(ThemeMediaResult * newSoundtrackSongsResult) {
+void AllThemeMediaResult::setSoundtrackSongsResult(QSharedPointer<ThemeMediaResult> newSoundtrackSongsResult) {
 	m_soundtrackSongsResult = newSoundtrackSongsResult;
-	emit soundtrackSongsResultChanged(newSoundtrackSongsResult);
 }
 
 

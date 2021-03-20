@@ -32,86 +32,100 @@
 namespace Jellyfin {
 namespace DTO {
 
-TunerHostInfo::TunerHostInfo(QObject *parent) : QObject(parent) {}
+TunerHostInfo::TunerHostInfo(QObject *parent) {}
 
-TunerHostInfo *TunerHostInfo::fromJSON(QJsonObject source, QObject *parent) {
-	TunerHostInfo *instance = new TunerHostInfo(parent);
-	instance->updateFromJSON(source);
+TunerHostInfo TunerHostInfo::fromJson(QJsonObject source) {TunerHostInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TunerHostInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TunerHostInfo::setFromJson(QJsonObject source) {
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_url = fromJsonValue<QString>(source["Url"]);
+	m_type = fromJsonValue<QString>(source["Type"]);
+	m_deviceId = fromJsonValue<QString>(source["DeviceId"]);
+	m_friendlyName = fromJsonValue<QString>(source["FriendlyName"]);
+	m_importFavoritesOnly = fromJsonValue<bool>(source["ImportFavoritesOnly"]);
+	m_allowHWTranscoding = fromJsonValue<bool>(source["AllowHWTranscoding"]);
+	m_enableStreamLooping = fromJsonValue<bool>(source["EnableStreamLooping"]);
+	m_source = fromJsonValue<QString>(source["Source"]);
+	m_tunerCount = fromJsonValue<qint32>(source["TunerCount"]);
+	m_userAgent = fromJsonValue<QString>(source["UserAgent"]);
+
 }
-QJsonObject TunerHostInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TunerHostInfo::toJson() {
 	QJsonObject result;
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["Url"] = toJsonValue<QString>(m_url);
+	result["Type"] = toJsonValue<QString>(m_type);
+	result["DeviceId"] = toJsonValue<QString>(m_deviceId);
+	result["FriendlyName"] = toJsonValue<QString>(m_friendlyName);
+	result["ImportFavoritesOnly"] = toJsonValue<bool>(m_importFavoritesOnly);
+	result["AllowHWTranscoding"] = toJsonValue<bool>(m_allowHWTranscoding);
+	result["EnableStreamLooping"] = toJsonValue<bool>(m_enableStreamLooping);
+	result["Source"] = toJsonValue<QString>(m_source);
+	result["TunerCount"] = toJsonValue<qint32>(m_tunerCount);
+	result["UserAgent"] = toJsonValue<QString>(m_userAgent);
+
 	return result;
 }
+
 QString TunerHostInfo::jellyfinId() const { return m_jellyfinId; }
+
 void TunerHostInfo::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 QString TunerHostInfo::url() const { return m_url; }
+
 void TunerHostInfo::setUrl(QString newUrl) {
 	m_url = newUrl;
-	emit urlChanged(newUrl);
 }
-
 QString TunerHostInfo::type() const { return m_type; }
+
 void TunerHostInfo::setType(QString newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 QString TunerHostInfo::deviceId() const { return m_deviceId; }
+
 void TunerHostInfo::setDeviceId(QString newDeviceId) {
 	m_deviceId = newDeviceId;
-	emit deviceIdChanged(newDeviceId);
 }
-
 QString TunerHostInfo::friendlyName() const { return m_friendlyName; }
+
 void TunerHostInfo::setFriendlyName(QString newFriendlyName) {
 	m_friendlyName = newFriendlyName;
-	emit friendlyNameChanged(newFriendlyName);
 }
-
 bool TunerHostInfo::importFavoritesOnly() const { return m_importFavoritesOnly; }
+
 void TunerHostInfo::setImportFavoritesOnly(bool newImportFavoritesOnly) {
 	m_importFavoritesOnly = newImportFavoritesOnly;
-	emit importFavoritesOnlyChanged(newImportFavoritesOnly);
 }
-
 bool TunerHostInfo::allowHWTranscoding() const { return m_allowHWTranscoding; }
+
 void TunerHostInfo::setAllowHWTranscoding(bool newAllowHWTranscoding) {
 	m_allowHWTranscoding = newAllowHWTranscoding;
-	emit allowHWTranscodingChanged(newAllowHWTranscoding);
 }
-
 bool TunerHostInfo::enableStreamLooping() const { return m_enableStreamLooping; }
+
 void TunerHostInfo::setEnableStreamLooping(bool newEnableStreamLooping) {
 	m_enableStreamLooping = newEnableStreamLooping;
-	emit enableStreamLoopingChanged(newEnableStreamLooping);
 }
-
 QString TunerHostInfo::source() const { return m_source; }
+
 void TunerHostInfo::setSource(QString newSource) {
 	m_source = newSource;
-	emit sourceChanged(newSource);
 }
-
 qint32 TunerHostInfo::tunerCount() const { return m_tunerCount; }
+
 void TunerHostInfo::setTunerCount(qint32 newTunerCount) {
 	m_tunerCount = newTunerCount;
-	emit tunerCountChanged(newTunerCount);
 }
-
 QString TunerHostInfo::userAgent() const { return m_userAgent; }
+
 void TunerHostInfo::setUserAgent(QString newUserAgent) {
 	m_userAgent = newUserAgent;
-	emit userAgentChanged(newUserAgent);
 }
 
 

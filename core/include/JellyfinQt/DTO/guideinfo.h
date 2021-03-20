@@ -32,41 +32,56 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class GuideInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit GuideInfo(QObject *parent = nullptr);
-	static GuideInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class GuideInfo {
+public:
+	explicit GuideInfo();
+	static GuideInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the start date.
 	 */
-	Q_PROPERTY(QDateTime startDate READ startDate WRITE setStartDate NOTIFY startDateChanged)
+	QDateTime startDate() const;
+	/**
+	* @brief Gets or sets the start date.
+	*/
+	void setStartDate(QDateTime newStartDate);
 	/**
 	 * @brief Gets or sets the end date.
 	 */
-	Q_PROPERTY(QDateTime endDate READ endDate WRITE setEndDate NOTIFY endDateChanged)
-
-	QDateTime startDate() const;
-	void setStartDate(QDateTime newStartDate);
-	
 	QDateTime endDate() const;
+	/**
+	* @brief Gets or sets the end date.
+	*/
 	void setEndDate(QDateTime newEndDate);
-	
-signals:
-	void startDateChanged(QDateTime newStartDate);
-	void endDateChanged(QDateTime newEndDate);
+
 protected:
 	QDateTime m_startDate;
 	QDateTime m_endDate;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using GuideInfo = Jellyfin::DTO::GuideInfo;
+
+template <>
+GuideInfo fromJsonValue<GuideInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return GuideInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

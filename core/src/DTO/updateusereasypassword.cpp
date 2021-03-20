@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-UpdateUserEasyPassword::UpdateUserEasyPassword(QObject *parent) : QObject(parent) {}
+UpdateUserEasyPassword::UpdateUserEasyPassword(QObject *parent) {}
 
-UpdateUserEasyPassword *UpdateUserEasyPassword::fromJSON(QJsonObject source, QObject *parent) {
-	UpdateUserEasyPassword *instance = new UpdateUserEasyPassword(parent);
-	instance->updateFromJSON(source);
+UpdateUserEasyPassword UpdateUserEasyPassword::fromJson(QJsonObject source) {UpdateUserEasyPassword instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void UpdateUserEasyPassword::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void UpdateUserEasyPassword::setFromJson(QJsonObject source) {
+	m_newPassword = fromJsonValue<QString>(source["NewPassword"]);
+	m_newPw = fromJsonValue<QString>(source["NewPw"]);
+	m_resetPassword = fromJsonValue<bool>(source["ResetPassword"]);
+
 }
-QJsonObject UpdateUserEasyPassword::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject UpdateUserEasyPassword::toJson() {
 	QJsonObject result;
+	result["NewPassword"] = toJsonValue<QString>(m_newPassword);
+	result["NewPw"] = toJsonValue<QString>(m_newPw);
+	result["ResetPassword"] = toJsonValue<bool>(m_resetPassword);
+
 	return result;
 }
+
 QString UpdateUserEasyPassword::newPassword() const { return m_newPassword; }
+
 void UpdateUserEasyPassword::setNewPassword(QString newNewPassword) {
 	m_newPassword = newNewPassword;
-	emit newPasswordChanged(newNewPassword);
 }
-
 QString UpdateUserEasyPassword::newPw() const { return m_newPw; }
+
 void UpdateUserEasyPassword::setNewPw(QString newNewPw) {
 	m_newPw = newNewPw;
-	emit newPwChanged(newNewPw);
 }
-
 bool UpdateUserEasyPassword::resetPassword() const { return m_resetPassword; }
+
 void UpdateUserEasyPassword::setResetPassword(bool newResetPassword) {
 	m_resetPassword = newResetPassword;
-	emit resetPasswordChanged(newResetPassword);
 }
 
 

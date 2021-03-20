@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_GROUPQUEUEMODE_H
 #define JELLYFIN_DTO_GROUPQUEUEMODE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class GroupQueueModeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Queue,
 		QueueNext,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit GroupQueueModeClass();
 };
+
 typedef GroupQueueModeClass::Value GroupQueueMode;
+
+} // NS DTO
+
+namespace Support {
+
+using GroupQueueMode = Jellyfin::DTO::GroupQueueMode;
+using GroupQueueModeClass = Jellyfin::DTO::GroupQueueModeClass;
+
+template <>
+GroupQueueMode fromJsonValue<GroupQueueMode>(const QJsonValue &source) {
+	if (!source.isString()) return GroupQueueModeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Queue")) {
+		return GroupQueueModeClass::Queue;
+	}
+	if (str == QStringLiteral("QueueNext")) {
+		return GroupQueueModeClass::QueueNext;
+	}
+	
+	return GroupQueueModeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

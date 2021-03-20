@@ -31,110 +31,100 @@
 #define JELLYFIN_DTO_USERCONFIGURATION_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
 #include "JellyfinQt/DTO/subtitleplaybackmode.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class UserConfiguration : public QObject {
-	Q_OBJECT
-public:
-	explicit UserConfiguration(QObject *parent = nullptr);
-	static UserConfiguration *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class UserConfiguration {
+public:
+	explicit UserConfiguration();
+	static UserConfiguration fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the audio language preference.
 	 */
-	Q_PROPERTY(QString audioLanguagePreference READ audioLanguagePreference WRITE setAudioLanguagePreference NOTIFY audioLanguagePreferenceChanged)
+	QString audioLanguagePreference() const;
+	/**
+	* @brief Gets or sets the audio language preference.
+	*/
+	void setAudioLanguagePreference(QString newAudioLanguagePreference);
 	/**
 	 * @brief Gets or sets a value indicating whether [play default audio track].
 	 */
-	Q_PROPERTY(bool playDefaultAudioTrack READ playDefaultAudioTrack WRITE setPlayDefaultAudioTrack NOTIFY playDefaultAudioTrackChanged)
+	bool playDefaultAudioTrack() const;
+	/**
+	* @brief Gets or sets a value indicating whether [play default audio track].
+	*/
+	void setPlayDefaultAudioTrack(bool newPlayDefaultAudioTrack);
 	/**
 	 * @brief Gets or sets the subtitle language preference.
 	 */
-	Q_PROPERTY(QString subtitleLanguagePreference READ subtitleLanguagePreference WRITE setSubtitleLanguagePreference NOTIFY subtitleLanguagePreferenceChanged)
-	Q_PROPERTY(bool displayMissingEpisodes READ displayMissingEpisodes WRITE setDisplayMissingEpisodes NOTIFY displayMissingEpisodesChanged)
-	Q_PROPERTY(QStringList groupedFolders READ groupedFolders WRITE setGroupedFolders NOTIFY groupedFoldersChanged)
-	Q_PROPERTY(SubtitlePlaybackMode subtitleMode READ subtitleMode WRITE setSubtitleMode NOTIFY subtitleModeChanged)
-	Q_PROPERTY(bool displayCollectionsView READ displayCollectionsView WRITE setDisplayCollectionsView NOTIFY displayCollectionsViewChanged)
-	Q_PROPERTY(bool enableLocalPassword READ enableLocalPassword WRITE setEnableLocalPassword NOTIFY enableLocalPasswordChanged)
-	Q_PROPERTY(QStringList orderedViews READ orderedViews WRITE setOrderedViews NOTIFY orderedViewsChanged)
-	Q_PROPERTY(QStringList latestItemsExcludes READ latestItemsExcludes WRITE setLatestItemsExcludes NOTIFY latestItemsExcludesChanged)
-	Q_PROPERTY(QStringList myMediaExcludes READ myMediaExcludes WRITE setMyMediaExcludes NOTIFY myMediaExcludesChanged)
-	Q_PROPERTY(bool hidePlayedInLatest READ hidePlayedInLatest WRITE setHidePlayedInLatest NOTIFY hidePlayedInLatestChanged)
-	Q_PROPERTY(bool rememberAudioSelections READ rememberAudioSelections WRITE setRememberAudioSelections NOTIFY rememberAudioSelectionsChanged)
-	Q_PROPERTY(bool rememberSubtitleSelections READ rememberSubtitleSelections WRITE setRememberSubtitleSelections NOTIFY rememberSubtitleSelectionsChanged)
-	Q_PROPERTY(bool enableNextEpisodeAutoPlay READ enableNextEpisodeAutoPlay WRITE setEnableNextEpisodeAutoPlay NOTIFY enableNextEpisodeAutoPlayChanged)
-
-	QString audioLanguagePreference() const;
-	void setAudioLanguagePreference(QString newAudioLanguagePreference);
-	
-	bool playDefaultAudioTrack() const;
-	void setPlayDefaultAudioTrack(bool newPlayDefaultAudioTrack);
-	
 	QString subtitleLanguagePreference() const;
+	/**
+	* @brief Gets or sets the subtitle language preference.
+	*/
 	void setSubtitleLanguagePreference(QString newSubtitleLanguagePreference);
-	
+
 	bool displayMissingEpisodes() const;
+
 	void setDisplayMissingEpisodes(bool newDisplayMissingEpisodes);
-	
+
 	QStringList groupedFolders() const;
+
 	void setGroupedFolders(QStringList newGroupedFolders);
-	
+
 	SubtitlePlaybackMode subtitleMode() const;
+
 	void setSubtitleMode(SubtitlePlaybackMode newSubtitleMode);
-	
+
 	bool displayCollectionsView() const;
+
 	void setDisplayCollectionsView(bool newDisplayCollectionsView);
-	
+
 	bool enableLocalPassword() const;
+
 	void setEnableLocalPassword(bool newEnableLocalPassword);
-	
+
 	QStringList orderedViews() const;
+
 	void setOrderedViews(QStringList newOrderedViews);
-	
+
 	QStringList latestItemsExcludes() const;
+
 	void setLatestItemsExcludes(QStringList newLatestItemsExcludes);
-	
+
 	QStringList myMediaExcludes() const;
+
 	void setMyMediaExcludes(QStringList newMyMediaExcludes);
-	
+
 	bool hidePlayedInLatest() const;
+
 	void setHidePlayedInLatest(bool newHidePlayedInLatest);
-	
+
 	bool rememberAudioSelections() const;
+
 	void setRememberAudioSelections(bool newRememberAudioSelections);
-	
+
 	bool rememberSubtitleSelections() const;
+
 	void setRememberSubtitleSelections(bool newRememberSubtitleSelections);
-	
+
 	bool enableNextEpisodeAutoPlay() const;
+
 	void setEnableNextEpisodeAutoPlay(bool newEnableNextEpisodeAutoPlay);
-	
-signals:
-	void audioLanguagePreferenceChanged(QString newAudioLanguagePreference);
-	void playDefaultAudioTrackChanged(bool newPlayDefaultAudioTrack);
-	void subtitleLanguagePreferenceChanged(QString newSubtitleLanguagePreference);
-	void displayMissingEpisodesChanged(bool newDisplayMissingEpisodes);
-	void groupedFoldersChanged(QStringList newGroupedFolders);
-	void subtitleModeChanged(SubtitlePlaybackMode newSubtitleMode);
-	void displayCollectionsViewChanged(bool newDisplayCollectionsView);
-	void enableLocalPasswordChanged(bool newEnableLocalPassword);
-	void orderedViewsChanged(QStringList newOrderedViews);
-	void latestItemsExcludesChanged(QStringList newLatestItemsExcludes);
-	void myMediaExcludesChanged(QStringList newMyMediaExcludes);
-	void hidePlayedInLatestChanged(bool newHidePlayedInLatest);
-	void rememberAudioSelectionsChanged(bool newRememberAudioSelections);
-	void rememberSubtitleSelectionsChanged(bool newRememberSubtitleSelections);
-	void enableNextEpisodeAutoPlayChanged(bool newEnableNextEpisodeAutoPlay);
+
 protected:
 	QString m_audioLanguagePreference;
 	bool m_playDefaultAudioTrack;
@@ -152,6 +142,18 @@ protected:
 	bool m_rememberSubtitleSelections;
 	bool m_enableNextEpisodeAutoPlay;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UserConfiguration = Jellyfin::DTO::UserConfiguration;
+
+template <>
+UserConfiguration fromJsonValue<UserConfiguration>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UserConfiguration::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

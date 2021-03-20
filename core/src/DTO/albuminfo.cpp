@@ -32,98 +32,114 @@
 namespace Jellyfin {
 namespace DTO {
 
-AlbumInfo::AlbumInfo(QObject *parent) : QObject(parent) {}
+AlbumInfo::AlbumInfo(QObject *parent) {}
 
-AlbumInfo *AlbumInfo::fromJSON(QJsonObject source, QObject *parent) {
-	AlbumInfo *instance = new AlbumInfo(parent);
-	instance->updateFromJSON(source);
+AlbumInfo AlbumInfo::fromJson(QJsonObject source) {AlbumInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void AlbumInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void AlbumInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_metadataLanguage = fromJsonValue<QString>(source["MetadataLanguage"]);
+	m_metadataCountryCode = fromJsonValue<QString>(source["MetadataCountryCode"]);
+	m_providerIds = fromJsonValue<QJsonObject>(source["ProviderIds"]);
+	m_year = fromJsonValue<qint32>(source["Year"]);
+	m_indexNumber = fromJsonValue<qint32>(source["IndexNumber"]);
+	m_parentIndexNumber = fromJsonValue<qint32>(source["ParentIndexNumber"]);
+	m_premiereDate = fromJsonValue<QDateTime>(source["PremiereDate"]);
+	m_isAutomated = fromJsonValue<bool>(source["IsAutomated"]);
+	m_albumArtists = fromJsonValue<QStringList>(source["AlbumArtists"]);
+	m_artistProviderIds = fromJsonValue<QJsonObject>(source["ArtistProviderIds"]);
+	m_songInfos = fromJsonValue<QList<QSharedPointer<SongInfo>>>(source["SongInfos"]);
+
 }
-QJsonObject AlbumInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject AlbumInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["MetadataLanguage"] = toJsonValue<QString>(m_metadataLanguage);
+	result["MetadataCountryCode"] = toJsonValue<QString>(m_metadataCountryCode);
+	result["ProviderIds"] = toJsonValue<QJsonObject>(m_providerIds);
+	result["Year"] = toJsonValue<qint32>(m_year);
+	result["IndexNumber"] = toJsonValue<qint32>(m_indexNumber);
+	result["ParentIndexNumber"] = toJsonValue<qint32>(m_parentIndexNumber);
+	result["PremiereDate"] = toJsonValue<QDateTime>(m_premiereDate);
+	result["IsAutomated"] = toJsonValue<bool>(m_isAutomated);
+	result["AlbumArtists"] = toJsonValue<QStringList>(m_albumArtists);
+	result["ArtistProviderIds"] = toJsonValue<QJsonObject>(m_artistProviderIds);
+	result["SongInfos"] = toJsonValue<QList<QSharedPointer<SongInfo>>>(m_songInfos);
+
 	return result;
 }
+
 QString AlbumInfo::name() const { return m_name; }
+
 void AlbumInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString AlbumInfo::path() const { return m_path; }
+
 void AlbumInfo::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
-
 QString AlbumInfo::metadataLanguage() const { return m_metadataLanguage; }
+
 void AlbumInfo::setMetadataLanguage(QString newMetadataLanguage) {
 	m_metadataLanguage = newMetadataLanguage;
-	emit metadataLanguageChanged(newMetadataLanguage);
 }
-
 QString AlbumInfo::metadataCountryCode() const { return m_metadataCountryCode; }
+
 void AlbumInfo::setMetadataCountryCode(QString newMetadataCountryCode) {
 	m_metadataCountryCode = newMetadataCountryCode;
-	emit metadataCountryCodeChanged(newMetadataCountryCode);
 }
-
 QJsonObject AlbumInfo::providerIds() const { return m_providerIds; }
+
 void AlbumInfo::setProviderIds(QJsonObject newProviderIds) {
 	m_providerIds = newProviderIds;
-	emit providerIdsChanged(newProviderIds);
 }
-
 qint32 AlbumInfo::year() const { return m_year; }
+
 void AlbumInfo::setYear(qint32 newYear) {
 	m_year = newYear;
-	emit yearChanged(newYear);
 }
-
 qint32 AlbumInfo::indexNumber() const { return m_indexNumber; }
+
 void AlbumInfo::setIndexNumber(qint32 newIndexNumber) {
 	m_indexNumber = newIndexNumber;
-	emit indexNumberChanged(newIndexNumber);
 }
-
 qint32 AlbumInfo::parentIndexNumber() const { return m_parentIndexNumber; }
+
 void AlbumInfo::setParentIndexNumber(qint32 newParentIndexNumber) {
 	m_parentIndexNumber = newParentIndexNumber;
-	emit parentIndexNumberChanged(newParentIndexNumber);
 }
-
 QDateTime AlbumInfo::premiereDate() const { return m_premiereDate; }
+
 void AlbumInfo::setPremiereDate(QDateTime newPremiereDate) {
 	m_premiereDate = newPremiereDate;
-	emit premiereDateChanged(newPremiereDate);
 }
-
 bool AlbumInfo::isAutomated() const { return m_isAutomated; }
+
 void AlbumInfo::setIsAutomated(bool newIsAutomated) {
 	m_isAutomated = newIsAutomated;
-	emit isAutomatedChanged(newIsAutomated);
 }
-
 QStringList AlbumInfo::albumArtists() const { return m_albumArtists; }
+
 void AlbumInfo::setAlbumArtists(QStringList newAlbumArtists) {
 	m_albumArtists = newAlbumArtists;
-	emit albumArtistsChanged(newAlbumArtists);
 }
-
 QJsonObject AlbumInfo::artistProviderIds() const { return m_artistProviderIds; }
+
 void AlbumInfo::setArtistProviderIds(QJsonObject newArtistProviderIds) {
 	m_artistProviderIds = newArtistProviderIds;
-	emit artistProviderIdsChanged(newArtistProviderIds);
 }
+QList<QSharedPointer<SongInfo>> AlbumInfo::songInfos() const { return m_songInfos; }
 
-QList<SongInfo *> AlbumInfo::songInfos() const { return m_songInfos; }
-void AlbumInfo::setSongInfos(QList<SongInfo *> newSongInfos) {
+void AlbumInfo::setSongInfos(QList<QSharedPointer<SongInfo>> newSongInfos) {
 	m_songInfos = newSongInfos;
-	emit songInfosChanged(newSongInfos);
 }
 
 

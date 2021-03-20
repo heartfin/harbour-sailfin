@@ -32,80 +32,93 @@
 namespace Jellyfin {
 namespace DTO {
 
-PersonLookupInfo::PersonLookupInfo(QObject *parent) : QObject(parent) {}
+PersonLookupInfo::PersonLookupInfo(QObject *parent) {}
 
-PersonLookupInfo *PersonLookupInfo::fromJSON(QJsonObject source, QObject *parent) {
-	PersonLookupInfo *instance = new PersonLookupInfo(parent);
-	instance->updateFromJSON(source);
+PersonLookupInfo PersonLookupInfo::fromJson(QJsonObject source) {PersonLookupInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PersonLookupInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PersonLookupInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_metadataLanguage = fromJsonValue<QString>(source["MetadataLanguage"]);
+	m_metadataCountryCode = fromJsonValue<QString>(source["MetadataCountryCode"]);
+	m_providerIds = fromJsonValue<QJsonObject>(source["ProviderIds"]);
+	m_year = fromJsonValue<qint32>(source["Year"]);
+	m_indexNumber = fromJsonValue<qint32>(source["IndexNumber"]);
+	m_parentIndexNumber = fromJsonValue<qint32>(source["ParentIndexNumber"]);
+	m_premiereDate = fromJsonValue<QDateTime>(source["PremiereDate"]);
+	m_isAutomated = fromJsonValue<bool>(source["IsAutomated"]);
+
 }
-QJsonObject PersonLookupInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PersonLookupInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["MetadataLanguage"] = toJsonValue<QString>(m_metadataLanguage);
+	result["MetadataCountryCode"] = toJsonValue<QString>(m_metadataCountryCode);
+	result["ProviderIds"] = toJsonValue<QJsonObject>(m_providerIds);
+	result["Year"] = toJsonValue<qint32>(m_year);
+	result["IndexNumber"] = toJsonValue<qint32>(m_indexNumber);
+	result["ParentIndexNumber"] = toJsonValue<qint32>(m_parentIndexNumber);
+	result["PremiereDate"] = toJsonValue<QDateTime>(m_premiereDate);
+	result["IsAutomated"] = toJsonValue<bool>(m_isAutomated);
+
 	return result;
 }
+
 QString PersonLookupInfo::name() const { return m_name; }
+
 void PersonLookupInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString PersonLookupInfo::path() const { return m_path; }
+
 void PersonLookupInfo::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
-
 QString PersonLookupInfo::metadataLanguage() const { return m_metadataLanguage; }
+
 void PersonLookupInfo::setMetadataLanguage(QString newMetadataLanguage) {
 	m_metadataLanguage = newMetadataLanguage;
-	emit metadataLanguageChanged(newMetadataLanguage);
 }
-
 QString PersonLookupInfo::metadataCountryCode() const { return m_metadataCountryCode; }
+
 void PersonLookupInfo::setMetadataCountryCode(QString newMetadataCountryCode) {
 	m_metadataCountryCode = newMetadataCountryCode;
-	emit metadataCountryCodeChanged(newMetadataCountryCode);
 }
-
 QJsonObject PersonLookupInfo::providerIds() const { return m_providerIds; }
+
 void PersonLookupInfo::setProviderIds(QJsonObject newProviderIds) {
 	m_providerIds = newProviderIds;
-	emit providerIdsChanged(newProviderIds);
 }
-
 qint32 PersonLookupInfo::year() const { return m_year; }
+
 void PersonLookupInfo::setYear(qint32 newYear) {
 	m_year = newYear;
-	emit yearChanged(newYear);
 }
-
 qint32 PersonLookupInfo::indexNumber() const { return m_indexNumber; }
+
 void PersonLookupInfo::setIndexNumber(qint32 newIndexNumber) {
 	m_indexNumber = newIndexNumber;
-	emit indexNumberChanged(newIndexNumber);
 }
-
 qint32 PersonLookupInfo::parentIndexNumber() const { return m_parentIndexNumber; }
+
 void PersonLookupInfo::setParentIndexNumber(qint32 newParentIndexNumber) {
 	m_parentIndexNumber = newParentIndexNumber;
-	emit parentIndexNumberChanged(newParentIndexNumber);
 }
-
 QDateTime PersonLookupInfo::premiereDate() const { return m_premiereDate; }
+
 void PersonLookupInfo::setPremiereDate(QDateTime newPremiereDate) {
 	m_premiereDate = newPremiereDate;
-	emit premiereDateChanged(newPremiereDate);
 }
-
 bool PersonLookupInfo::isAutomated() const { return m_isAutomated; }
+
 void PersonLookupInfo::setIsAutomated(bool newIsAutomated) {
 	m_isAutomated = newIsAutomated;
-	emit isAutomatedChanged(newIsAutomated);
 }
 
 

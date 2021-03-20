@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/objectgroupupdate.h>
 
-#include <JellyfinQt/DTO/groupupdatetype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ObjectGroupUpdate::ObjectGroupUpdate(QObject *parent) : QObject(parent) {}
+ObjectGroupUpdate::ObjectGroupUpdate(QObject *parent) {}
 
-ObjectGroupUpdate *ObjectGroupUpdate::fromJSON(QJsonObject source, QObject *parent) {
-	ObjectGroupUpdate *instance = new ObjectGroupUpdate(parent);
-	instance->updateFromJSON(source);
+ObjectGroupUpdate ObjectGroupUpdate::fromJson(QJsonObject source) {ObjectGroupUpdate instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ObjectGroupUpdate::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ObjectGroupUpdate::setFromJson(QJsonObject source) {
+	m_groupId = fromJsonValue<QUuid>(source["GroupId"]);
+	m_type = fromJsonValue<GroupUpdateType>(source["Type"]);
+	m_data = fromJsonValue<QVariant>(source["Data"]);
+
 }
-QJsonObject ObjectGroupUpdate::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ObjectGroupUpdate::toJson() {
 	QJsonObject result;
+	result["GroupId"] = toJsonValue<QUuid>(m_groupId);
+	result["Type"] = toJsonValue<GroupUpdateType>(m_type);
+	result["Data"] = toJsonValue<QVariant>(m_data);
+
 	return result;
 }
-QString ObjectGroupUpdate::groupId() const { return m_groupId; }
-void ObjectGroupUpdate::setGroupId(QString newGroupId) {
-	m_groupId = newGroupId;
-	emit groupIdChanged(newGroupId);
-}
 
+QUuid ObjectGroupUpdate::groupId() const { return m_groupId; }
+
+void ObjectGroupUpdate::setGroupId(QUuid newGroupId) {
+	m_groupId = newGroupId;
+}
 GroupUpdateType ObjectGroupUpdate::type() const { return m_type; }
+
 void ObjectGroupUpdate::setType(GroupUpdateType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 QVariant ObjectGroupUpdate::data() const { return m_data; }
+
 void ObjectGroupUpdate::setData(QVariant newData) {
 	m_data = newData;
-	emit dataChanged(newData);
 }
 
 

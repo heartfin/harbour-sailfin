@@ -31,85 +31,86 @@
 #define JELLYFIN_DTO_IMAGEINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/imagetype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ImageInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit ImageInfo(QObject *parent = nullptr);
-	static ImageInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(ImageType imageType READ imageType WRITE setImageType NOTIFY imageTypeChanged)
+class ImageInfo {
+public:
+	explicit ImageInfo();
+	static ImageInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
+
+	ImageType imageType() const;
+
+	void setImageType(ImageType newImageType);
 	/**
 	 * @brief Gets or sets the index of the image.
 	 */
-	Q_PROPERTY(qint32 imageIndex READ imageIndex WRITE setImageIndex NOTIFY imageIndexChanged)
+	qint32 imageIndex() const;
+	/**
+	* @brief Gets or sets the index of the image.
+	*/
+	void setImageIndex(qint32 newImageIndex);
 	/**
 	 * @brief Gets or sets the image tag.
 	 */
-	Q_PROPERTY(QString imageTag READ imageTag WRITE setImageTag NOTIFY imageTagChanged)
+	QString imageTag() const;
+	/**
+	* @brief Gets or sets the image tag.
+	*/
+	void setImageTag(QString newImageTag);
 	/**
 	 * @brief Gets or sets the path.
 	 */
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+	QString path() const;
+	/**
+	* @brief Gets or sets the path.
+	*/
+	void setPath(QString newPath);
 	/**
 	 * @brief Gets or sets the blurhash.
 	 */
-	Q_PROPERTY(QString blurHash READ blurHash WRITE setBlurHash NOTIFY blurHashChanged)
+	QString blurHash() const;
+	/**
+	* @brief Gets or sets the blurhash.
+	*/
+	void setBlurHash(QString newBlurHash);
 	/**
 	 * @brief Gets or sets the height.
 	 */
-	Q_PROPERTY(qint32 height READ height WRITE setHeight NOTIFY heightChanged)
+	qint32 height() const;
+	/**
+	* @brief Gets or sets the height.
+	*/
+	void setHeight(qint32 newHeight);
 	/**
 	 * @brief Gets or sets the width.
 	 */
-	Q_PROPERTY(qint32 width READ width WRITE setWidth NOTIFY widthChanged)
+	qint32 width() const;
+	/**
+	* @brief Gets or sets the width.
+	*/
+	void setWidth(qint32 newWidth);
 	/**
 	 * @brief Gets or sets the size.
 	 */
-	Q_PROPERTY(qint64 size READ size WRITE setSize NOTIFY sizeChanged)
-
-	ImageType imageType() const;
-	void setImageType(ImageType newImageType);
-	
-	qint32 imageIndex() const;
-	void setImageIndex(qint32 newImageIndex);
-	
-	QString imageTag() const;
-	void setImageTag(QString newImageTag);
-	
-	QString path() const;
-	void setPath(QString newPath);
-	
-	QString blurHash() const;
-	void setBlurHash(QString newBlurHash);
-	
-	qint32 height() const;
-	void setHeight(qint32 newHeight);
-	
-	qint32 width() const;
-	void setWidth(qint32 newWidth);
-	
 	qint64 size() const;
+	/**
+	* @brief Gets or sets the size.
+	*/
 	void setSize(qint64 newSize);
-	
-signals:
-	void imageTypeChanged(ImageType newImageType);
-	void imageIndexChanged(qint32 newImageIndex);
-	void imageTagChanged(QString newImageTag);
-	void pathChanged(QString newPath);
-	void blurHashChanged(QString newBlurHash);
-	void heightChanged(qint32 newHeight);
-	void widthChanged(qint32 newWidth);
-	void sizeChanged(qint64 newSize);
+
 protected:
 	ImageType m_imageType;
 	qint32 m_imageIndex;
@@ -120,6 +121,18 @@ protected:
 	qint32 m_width;
 	qint64 m_size;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ImageInfo = Jellyfin::DTO::ImageInfo;
+
+template <>
+ImageInfo fromJsonValue<ImageInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ImageInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

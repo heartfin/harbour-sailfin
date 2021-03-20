@@ -29,115 +29,131 @@
 
 #include <JellyfinQt/DTO/userconfiguration.h>
 
-#include <JellyfinQt/DTO/subtitleplaybackmode.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-UserConfiguration::UserConfiguration(QObject *parent) : QObject(parent) {}
+UserConfiguration::UserConfiguration(QObject *parent) {}
 
-UserConfiguration *UserConfiguration::fromJSON(QJsonObject source, QObject *parent) {
-	UserConfiguration *instance = new UserConfiguration(parent);
-	instance->updateFromJSON(source);
+UserConfiguration UserConfiguration::fromJson(QJsonObject source) {UserConfiguration instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void UserConfiguration::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void UserConfiguration::setFromJson(QJsonObject source) {
+	m_audioLanguagePreference = fromJsonValue<QString>(source["AudioLanguagePreference"]);
+	m_playDefaultAudioTrack = fromJsonValue<bool>(source["PlayDefaultAudioTrack"]);
+	m_subtitleLanguagePreference = fromJsonValue<QString>(source["SubtitleLanguagePreference"]);
+	m_displayMissingEpisodes = fromJsonValue<bool>(source["DisplayMissingEpisodes"]);
+	m_groupedFolders = fromJsonValue<QStringList>(source["GroupedFolders"]);
+	m_subtitleMode = fromJsonValue<SubtitlePlaybackMode>(source["SubtitleMode"]);
+	m_displayCollectionsView = fromJsonValue<bool>(source["DisplayCollectionsView"]);
+	m_enableLocalPassword = fromJsonValue<bool>(source["EnableLocalPassword"]);
+	m_orderedViews = fromJsonValue<QStringList>(source["OrderedViews"]);
+	m_latestItemsExcludes = fromJsonValue<QStringList>(source["LatestItemsExcludes"]);
+	m_myMediaExcludes = fromJsonValue<QStringList>(source["MyMediaExcludes"]);
+	m_hidePlayedInLatest = fromJsonValue<bool>(source["HidePlayedInLatest"]);
+	m_rememberAudioSelections = fromJsonValue<bool>(source["RememberAudioSelections"]);
+	m_rememberSubtitleSelections = fromJsonValue<bool>(source["RememberSubtitleSelections"]);
+	m_enableNextEpisodeAutoPlay = fromJsonValue<bool>(source["EnableNextEpisodeAutoPlay"]);
+
 }
-QJsonObject UserConfiguration::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject UserConfiguration::toJson() {
 	QJsonObject result;
+	result["AudioLanguagePreference"] = toJsonValue<QString>(m_audioLanguagePreference);
+	result["PlayDefaultAudioTrack"] = toJsonValue<bool>(m_playDefaultAudioTrack);
+	result["SubtitleLanguagePreference"] = toJsonValue<QString>(m_subtitleLanguagePreference);
+	result["DisplayMissingEpisodes"] = toJsonValue<bool>(m_displayMissingEpisodes);
+	result["GroupedFolders"] = toJsonValue<QStringList>(m_groupedFolders);
+	result["SubtitleMode"] = toJsonValue<SubtitlePlaybackMode>(m_subtitleMode);
+	result["DisplayCollectionsView"] = toJsonValue<bool>(m_displayCollectionsView);
+	result["EnableLocalPassword"] = toJsonValue<bool>(m_enableLocalPassword);
+	result["OrderedViews"] = toJsonValue<QStringList>(m_orderedViews);
+	result["LatestItemsExcludes"] = toJsonValue<QStringList>(m_latestItemsExcludes);
+	result["MyMediaExcludes"] = toJsonValue<QStringList>(m_myMediaExcludes);
+	result["HidePlayedInLatest"] = toJsonValue<bool>(m_hidePlayedInLatest);
+	result["RememberAudioSelections"] = toJsonValue<bool>(m_rememberAudioSelections);
+	result["RememberSubtitleSelections"] = toJsonValue<bool>(m_rememberSubtitleSelections);
+	result["EnableNextEpisodeAutoPlay"] = toJsonValue<bool>(m_enableNextEpisodeAutoPlay);
+
 	return result;
 }
+
 QString UserConfiguration::audioLanguagePreference() const { return m_audioLanguagePreference; }
+
 void UserConfiguration::setAudioLanguagePreference(QString newAudioLanguagePreference) {
 	m_audioLanguagePreference = newAudioLanguagePreference;
-	emit audioLanguagePreferenceChanged(newAudioLanguagePreference);
 }
-
 bool UserConfiguration::playDefaultAudioTrack() const { return m_playDefaultAudioTrack; }
+
 void UserConfiguration::setPlayDefaultAudioTrack(bool newPlayDefaultAudioTrack) {
 	m_playDefaultAudioTrack = newPlayDefaultAudioTrack;
-	emit playDefaultAudioTrackChanged(newPlayDefaultAudioTrack);
 }
-
 QString UserConfiguration::subtitleLanguagePreference() const { return m_subtitleLanguagePreference; }
+
 void UserConfiguration::setSubtitleLanguagePreference(QString newSubtitleLanguagePreference) {
 	m_subtitleLanguagePreference = newSubtitleLanguagePreference;
-	emit subtitleLanguagePreferenceChanged(newSubtitleLanguagePreference);
 }
-
 bool UserConfiguration::displayMissingEpisodes() const { return m_displayMissingEpisodes; }
+
 void UserConfiguration::setDisplayMissingEpisodes(bool newDisplayMissingEpisodes) {
 	m_displayMissingEpisodes = newDisplayMissingEpisodes;
-	emit displayMissingEpisodesChanged(newDisplayMissingEpisodes);
 }
-
 QStringList UserConfiguration::groupedFolders() const { return m_groupedFolders; }
+
 void UserConfiguration::setGroupedFolders(QStringList newGroupedFolders) {
 	m_groupedFolders = newGroupedFolders;
-	emit groupedFoldersChanged(newGroupedFolders);
 }
-
 SubtitlePlaybackMode UserConfiguration::subtitleMode() const { return m_subtitleMode; }
+
 void UserConfiguration::setSubtitleMode(SubtitlePlaybackMode newSubtitleMode) {
 	m_subtitleMode = newSubtitleMode;
-	emit subtitleModeChanged(newSubtitleMode);
 }
-
 bool UserConfiguration::displayCollectionsView() const { return m_displayCollectionsView; }
+
 void UserConfiguration::setDisplayCollectionsView(bool newDisplayCollectionsView) {
 	m_displayCollectionsView = newDisplayCollectionsView;
-	emit displayCollectionsViewChanged(newDisplayCollectionsView);
 }
-
 bool UserConfiguration::enableLocalPassword() const { return m_enableLocalPassword; }
+
 void UserConfiguration::setEnableLocalPassword(bool newEnableLocalPassword) {
 	m_enableLocalPassword = newEnableLocalPassword;
-	emit enableLocalPasswordChanged(newEnableLocalPassword);
 }
-
 QStringList UserConfiguration::orderedViews() const { return m_orderedViews; }
+
 void UserConfiguration::setOrderedViews(QStringList newOrderedViews) {
 	m_orderedViews = newOrderedViews;
-	emit orderedViewsChanged(newOrderedViews);
 }
-
 QStringList UserConfiguration::latestItemsExcludes() const { return m_latestItemsExcludes; }
+
 void UserConfiguration::setLatestItemsExcludes(QStringList newLatestItemsExcludes) {
 	m_latestItemsExcludes = newLatestItemsExcludes;
-	emit latestItemsExcludesChanged(newLatestItemsExcludes);
 }
-
 QStringList UserConfiguration::myMediaExcludes() const { return m_myMediaExcludes; }
+
 void UserConfiguration::setMyMediaExcludes(QStringList newMyMediaExcludes) {
 	m_myMediaExcludes = newMyMediaExcludes;
-	emit myMediaExcludesChanged(newMyMediaExcludes);
 }
-
 bool UserConfiguration::hidePlayedInLatest() const { return m_hidePlayedInLatest; }
+
 void UserConfiguration::setHidePlayedInLatest(bool newHidePlayedInLatest) {
 	m_hidePlayedInLatest = newHidePlayedInLatest;
-	emit hidePlayedInLatestChanged(newHidePlayedInLatest);
 }
-
 bool UserConfiguration::rememberAudioSelections() const { return m_rememberAudioSelections; }
+
 void UserConfiguration::setRememberAudioSelections(bool newRememberAudioSelections) {
 	m_rememberAudioSelections = newRememberAudioSelections;
-	emit rememberAudioSelectionsChanged(newRememberAudioSelections);
 }
-
 bool UserConfiguration::rememberSubtitleSelections() const { return m_rememberSubtitleSelections; }
+
 void UserConfiguration::setRememberSubtitleSelections(bool newRememberSubtitleSelections) {
 	m_rememberSubtitleSelections = newRememberSubtitleSelections;
-	emit rememberSubtitleSelectionsChanged(newRememberSubtitleSelections);
 }
-
 bool UserConfiguration::enableNextEpisodeAutoPlay() const { return m_enableNextEpisodeAutoPlay; }
+
 void UserConfiguration::setEnableNextEpisodeAutoPlay(bool newEnableNextEpisodeAutoPlay) {
 	m_enableNextEpisodeAutoPlay = newEnableNextEpisodeAutoPlay;
-	emit enableNextEpisodeAutoPlayChanged(newEnableNextEpisodeAutoPlay);
 }
 
 

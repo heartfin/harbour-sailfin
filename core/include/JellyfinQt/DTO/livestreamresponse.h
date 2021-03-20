@@ -31,31 +31,45 @@
 #define JELLYFIN_DTO_LIVESTREAMRESPONSE_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
+#include <optional>
+
+#include "JellyfinQt/DTO/mediasourceinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaSourceInfo;
 
-class LiveStreamResponse : public QObject {
-	Q_OBJECT
+class LiveStreamResponse {
 public:
-	explicit LiveStreamResponse(QObject *parent = nullptr);
-	static LiveStreamResponse *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(MediaSourceInfo * mediaSource READ mediaSource WRITE setMediaSource NOTIFY mediaSourceChanged)
-
-	MediaSourceInfo * mediaSource() const;
-	void setMediaSource(MediaSourceInfo * newMediaSource);
+	explicit LiveStreamResponse();
+	static LiveStreamResponse fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
 	
-signals:
-	void mediaSourceChanged(MediaSourceInfo * newMediaSource);
+	// Properties
+
+	QSharedPointer<MediaSourceInfo> mediaSource() const;
+
+	void setMediaSource(QSharedPointer<MediaSourceInfo> newMediaSource);
+
 protected:
-	MediaSourceInfo * m_mediaSource = nullptr;
+	QSharedPointer<MediaSourceInfo> m_mediaSource = nullptr;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LiveStreamResponse = Jellyfin::DTO::LiveStreamResponse;
+
+template <>
+LiveStreamResponse fromJsonValue<LiveStreamResponse>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LiveStreamResponse::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

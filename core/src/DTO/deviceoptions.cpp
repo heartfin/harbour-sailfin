@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceOptions::DeviceOptions(QObject *parent) : QObject(parent) {}
+DeviceOptions::DeviceOptions(QObject *parent) {}
 
-DeviceOptions *DeviceOptions::fromJSON(QJsonObject source, QObject *parent) {
-	DeviceOptions *instance = new DeviceOptions(parent);
-	instance->updateFromJSON(source);
+DeviceOptions DeviceOptions::fromJson(QJsonObject source) {DeviceOptions instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void DeviceOptions::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void DeviceOptions::setFromJson(QJsonObject source) {
+	m_customName = fromJsonValue<QString>(source["CustomName"]);
+
 }
-QJsonObject DeviceOptions::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject DeviceOptions::toJson() {
 	QJsonObject result;
+	result["CustomName"] = toJsonValue<QString>(m_customName);
+
 	return result;
 }
+
 QString DeviceOptions::customName() const { return m_customName; }
+
 void DeviceOptions::setCustomName(QString newCustomName) {
 	m_customName = newCustomName;
-	emit customNameChanged(newCustomName);
 }
 
 

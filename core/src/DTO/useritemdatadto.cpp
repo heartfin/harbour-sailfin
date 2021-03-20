@@ -32,86 +32,100 @@
 namespace Jellyfin {
 namespace DTO {
 
-UserItemDataDto::UserItemDataDto(QObject *parent) : QObject(parent) {}
+UserItemDataDto::UserItemDataDto(QObject *parent) {}
 
-UserItemDataDto *UserItemDataDto::fromJSON(QJsonObject source, QObject *parent) {
-	UserItemDataDto *instance = new UserItemDataDto(parent);
-	instance->updateFromJSON(source);
+UserItemDataDto UserItemDataDto::fromJson(QJsonObject source) {UserItemDataDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void UserItemDataDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void UserItemDataDto::setFromJson(QJsonObject source) {
+	m_rating = fromJsonValue<double>(source["Rating"]);
+	m_playedPercentage = fromJsonValue<double>(source["PlayedPercentage"]);
+	m_unplayedItemCount = fromJsonValue<qint32>(source["UnplayedItemCount"]);
+	m_playbackPositionTicks = fromJsonValue<qint64>(source["PlaybackPositionTicks"]);
+	m_playCount = fromJsonValue<qint32>(source["PlayCount"]);
+	m_isFavorite = fromJsonValue<bool>(source["IsFavorite"]);
+	m_likes = fromJsonValue<bool>(source["Likes"]);
+	m_lastPlayedDate = fromJsonValue<QDateTime>(source["LastPlayedDate"]);
+	m_played = fromJsonValue<bool>(source["Played"]);
+	m_key = fromJsonValue<QString>(source["Key"]);
+	m_itemId = fromJsonValue<QString>(source["ItemId"]);
+
 }
-QJsonObject UserItemDataDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject UserItemDataDto::toJson() {
 	QJsonObject result;
+	result["Rating"] = toJsonValue<double>(m_rating);
+	result["PlayedPercentage"] = toJsonValue<double>(m_playedPercentage);
+	result["UnplayedItemCount"] = toJsonValue<qint32>(m_unplayedItemCount);
+	result["PlaybackPositionTicks"] = toJsonValue<qint64>(m_playbackPositionTicks);
+	result["PlayCount"] = toJsonValue<qint32>(m_playCount);
+	result["IsFavorite"] = toJsonValue<bool>(m_isFavorite);
+	result["Likes"] = toJsonValue<bool>(m_likes);
+	result["LastPlayedDate"] = toJsonValue<QDateTime>(m_lastPlayedDate);
+	result["Played"] = toJsonValue<bool>(m_played);
+	result["Key"] = toJsonValue<QString>(m_key);
+	result["ItemId"] = toJsonValue<QString>(m_itemId);
+
 	return result;
 }
+
 double UserItemDataDto::rating() const { return m_rating; }
+
 void UserItemDataDto::setRating(double newRating) {
 	m_rating = newRating;
-	emit ratingChanged(newRating);
 }
-
 double UserItemDataDto::playedPercentage() const { return m_playedPercentage; }
+
 void UserItemDataDto::setPlayedPercentage(double newPlayedPercentage) {
 	m_playedPercentage = newPlayedPercentage;
-	emit playedPercentageChanged(newPlayedPercentage);
 }
-
 qint32 UserItemDataDto::unplayedItemCount() const { return m_unplayedItemCount; }
+
 void UserItemDataDto::setUnplayedItemCount(qint32 newUnplayedItemCount) {
 	m_unplayedItemCount = newUnplayedItemCount;
-	emit unplayedItemCountChanged(newUnplayedItemCount);
 }
-
 qint64 UserItemDataDto::playbackPositionTicks() const { return m_playbackPositionTicks; }
+
 void UserItemDataDto::setPlaybackPositionTicks(qint64 newPlaybackPositionTicks) {
 	m_playbackPositionTicks = newPlaybackPositionTicks;
-	emit playbackPositionTicksChanged(newPlaybackPositionTicks);
 }
-
 qint32 UserItemDataDto::playCount() const { return m_playCount; }
+
 void UserItemDataDto::setPlayCount(qint32 newPlayCount) {
 	m_playCount = newPlayCount;
-	emit playCountChanged(newPlayCount);
 }
-
 bool UserItemDataDto::isFavorite() const { return m_isFavorite; }
+
 void UserItemDataDto::setIsFavorite(bool newIsFavorite) {
 	m_isFavorite = newIsFavorite;
-	emit isFavoriteChanged(newIsFavorite);
 }
-
 bool UserItemDataDto::likes() const { return m_likes; }
+
 void UserItemDataDto::setLikes(bool newLikes) {
 	m_likes = newLikes;
-	emit likesChanged(newLikes);
 }
-
 QDateTime UserItemDataDto::lastPlayedDate() const { return m_lastPlayedDate; }
+
 void UserItemDataDto::setLastPlayedDate(QDateTime newLastPlayedDate) {
 	m_lastPlayedDate = newLastPlayedDate;
-	emit lastPlayedDateChanged(newLastPlayedDate);
 }
-
 bool UserItemDataDto::played() const { return m_played; }
+
 void UserItemDataDto::setPlayed(bool newPlayed) {
 	m_played = newPlayed;
-	emit playedChanged(newPlayed);
 }
-
 QString UserItemDataDto::key() const { return m_key; }
+
 void UserItemDataDto::setKey(QString newKey) {
 	m_key = newKey;
-	emit keyChanged(newKey);
 }
-
 QString UserItemDataDto::itemId() const { return m_itemId; }
+
 void UserItemDataDto::setItemId(QString newItemId) {
 	m_itemId = newItemId;
-	emit itemIdChanged(newItemId);
 }
 
 

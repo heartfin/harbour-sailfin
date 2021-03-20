@@ -32,41 +32,56 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class UtcTimeResponse : public QObject {
-	Q_OBJECT
-public:
-	explicit UtcTimeResponse(QObject *parent = nullptr);
-	static UtcTimeResponse *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class UtcTimeResponse {
+public:
+	explicit UtcTimeResponse();
+	static UtcTimeResponse fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets the UTC time when request has been received.
 	 */
-	Q_PROPERTY(QDateTime requestReceptionTime READ requestReceptionTime WRITE setRequestReceptionTime NOTIFY requestReceptionTimeChanged)
+	QDateTime requestReceptionTime() const;
+	/**
+	* @brief Gets the UTC time when request has been received.
+	*/
+	void setRequestReceptionTime(QDateTime newRequestReceptionTime);
 	/**
 	 * @brief Gets the UTC time when response has been sent.
 	 */
-	Q_PROPERTY(QDateTime responseTransmissionTime READ responseTransmissionTime WRITE setResponseTransmissionTime NOTIFY responseTransmissionTimeChanged)
-
-	QDateTime requestReceptionTime() const;
-	void setRequestReceptionTime(QDateTime newRequestReceptionTime);
-	
 	QDateTime responseTransmissionTime() const;
+	/**
+	* @brief Gets the UTC time when response has been sent.
+	*/
 	void setResponseTransmissionTime(QDateTime newResponseTransmissionTime);
-	
-signals:
-	void requestReceptionTimeChanged(QDateTime newRequestReceptionTime);
-	void responseTransmissionTimeChanged(QDateTime newResponseTransmissionTime);
+
 protected:
 	QDateTime m_requestReceptionTime;
 	QDateTime m_responseTransmissionTime;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UtcTimeResponse = Jellyfin::DTO::UtcTimeResponse;
+
+template <>
+UtcTimeResponse fromJsonValue<UtcTimeResponse>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UtcTimeResponse::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

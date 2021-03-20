@@ -31,31 +31,44 @@
 #define JELLYFIN_DTO_SETSHUFFLEMODEREQUESTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
 
 #include "JellyfinQt/DTO/groupshufflemode.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SetShuffleModeRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit SetShuffleModeRequestDto(QObject *parent = nullptr);
-	static SetShuffleModeRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(GroupShuffleMode mode READ mode WRITE setMode NOTIFY modeChanged)
+class SetShuffleModeRequestDto {
+public:
+	explicit SetShuffleModeRequestDto();
+	static SetShuffleModeRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	GroupShuffleMode mode() const;
+
 	void setMode(GroupShuffleMode newMode);
-	
-signals:
-	void modeChanged(GroupShuffleMode newMode);
+
 protected:
 	GroupShuffleMode m_mode;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SetShuffleModeRequestDto = Jellyfin::DTO::SetShuffleModeRequestDto;
+
+template <>
+SetShuffleModeRequestDto fromJsonValue<SetShuffleModeRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SetShuffleModeRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

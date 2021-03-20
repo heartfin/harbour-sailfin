@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_RECOMMENDATIONTYPE_H
 #define JELLYFIN_DTO_RECOMMENDATIONTYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class RecommendationTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		SimilarToRecentlyPlayed,
 		SimilarToLikedItem,
 		HasDirectorFromRecentlyPlayed,
@@ -50,7 +55,42 @@ public:
 private:
 	explicit RecommendationTypeClass();
 };
+
 typedef RecommendationTypeClass::Value RecommendationType;
+
+} // NS DTO
+
+namespace Support {
+
+using RecommendationType = Jellyfin::DTO::RecommendationType;
+using RecommendationTypeClass = Jellyfin::DTO::RecommendationTypeClass;
+
+template <>
+RecommendationType fromJsonValue<RecommendationType>(const QJsonValue &source) {
+	if (!source.isString()) return RecommendationTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("SimilarToRecentlyPlayed")) {
+		return RecommendationTypeClass::SimilarToRecentlyPlayed;
+	}
+	if (str == QStringLiteral("SimilarToLikedItem")) {
+		return RecommendationTypeClass::SimilarToLikedItem;
+	}
+	if (str == QStringLiteral("HasDirectorFromRecentlyPlayed")) {
+		return RecommendationTypeClass::HasDirectorFromRecentlyPlayed;
+	}
+	if (str == QStringLiteral("HasActorFromRecentlyPlayed")) {
+		return RecommendationTypeClass::HasActorFromRecentlyPlayed;
+	}
+	if (str == QStringLiteral("HasLikedDirector")) {
+		return RecommendationTypeClass::HasLikedDirector;
+	}
+	if (str == QStringLiteral("HasLikedActor")) {
+		return RecommendationTypeClass::HasLikedActor;
+	}
+	
+	return RecommendationTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

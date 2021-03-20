@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-SpecialViewOptionDto::SpecialViewOptionDto(QObject *parent) : QObject(parent) {}
+SpecialViewOptionDto::SpecialViewOptionDto(QObject *parent) {}
 
-SpecialViewOptionDto *SpecialViewOptionDto::fromJSON(QJsonObject source, QObject *parent) {
-	SpecialViewOptionDto *instance = new SpecialViewOptionDto(parent);
-	instance->updateFromJSON(source);
+SpecialViewOptionDto SpecialViewOptionDto::fromJson(QJsonObject source) {SpecialViewOptionDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SpecialViewOptionDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SpecialViewOptionDto::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+
 }
-QJsonObject SpecialViewOptionDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SpecialViewOptionDto::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+
 	return result;
 }
+
 QString SpecialViewOptionDto::name() const { return m_name; }
+
 void SpecialViewOptionDto::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString SpecialViewOptionDto::jellyfinId() const { return m_jellyfinId; }
+
 void SpecialViewOptionDto::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
 
 

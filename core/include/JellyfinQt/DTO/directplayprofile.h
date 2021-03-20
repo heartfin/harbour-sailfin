@@ -31,50 +31,60 @@
 #define JELLYFIN_DTO_DIRECTPLAYPROFILE_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/dlnaprofiletype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class DirectPlayProfile : public QObject {
-	Q_OBJECT
-public:
-	explicit DirectPlayProfile(QObject *parent = nullptr);
-	static DirectPlayProfile *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString container READ container WRITE setContainer NOTIFY containerChanged)
-	Q_PROPERTY(QString audioCodec READ audioCodec WRITE setAudioCodec NOTIFY audioCodecChanged)
-	Q_PROPERTY(QString videoCodec READ videoCodec WRITE setVideoCodec NOTIFY videoCodecChanged)
-	Q_PROPERTY(DlnaProfileType type READ type WRITE setType NOTIFY typeChanged)
+class DirectPlayProfile {
+public:
+	explicit DirectPlayProfile();
+	static DirectPlayProfile fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString container() const;
+
 	void setContainer(QString newContainer);
-	
+
 	QString audioCodec() const;
+
 	void setAudioCodec(QString newAudioCodec);
-	
+
 	QString videoCodec() const;
+
 	void setVideoCodec(QString newVideoCodec);
-	
+
 	DlnaProfileType type() const;
+
 	void setType(DlnaProfileType newType);
-	
-signals:
-	void containerChanged(QString newContainer);
-	void audioCodecChanged(QString newAudioCodec);
-	void videoCodecChanged(QString newVideoCodec);
-	void typeChanged(DlnaProfileType newType);
+
 protected:
 	QString m_container;
 	QString m_audioCodec;
 	QString m_videoCodec;
 	DlnaProfileType m_type;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DirectPlayProfile = Jellyfin::DTO::DirectPlayProfile;
+
+template <>
+DirectPlayProfile fromJsonValue<DirectPlayProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DirectPlayProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

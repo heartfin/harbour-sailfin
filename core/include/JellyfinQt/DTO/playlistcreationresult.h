@@ -31,30 +31,44 @@
 #define JELLYFIN_DTO_PLAYLISTCREATIONRESULT_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PlaylistCreationResult : public QObject {
-	Q_OBJECT
-public:
-	explicit PlaylistCreationResult(QObject *parent = nullptr);
-	static PlaylistCreationResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+class PlaylistCreationResult {
+public:
+	explicit PlaylistCreationResult();
+	static PlaylistCreationResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString jellyfinId() const;
+
 	void setJellyfinId(QString newJellyfinId);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
+
 protected:
 	QString m_jellyfinId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlaylistCreationResult = Jellyfin::DTO::PlaylistCreationResult;
+
+template <>
+PlaylistCreationResult fromJsonValue<PlaylistCreationResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlaylistCreationResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-DefaultDirectoryBrowserInfoDto::DefaultDirectoryBrowserInfoDto(QObject *parent) : QObject(parent) {}
+DefaultDirectoryBrowserInfoDto::DefaultDirectoryBrowserInfoDto(QObject *parent) {}
 
-DefaultDirectoryBrowserInfoDto *DefaultDirectoryBrowserInfoDto::fromJSON(QJsonObject source, QObject *parent) {
-	DefaultDirectoryBrowserInfoDto *instance = new DefaultDirectoryBrowserInfoDto(parent);
-	instance->updateFromJSON(source);
+DefaultDirectoryBrowserInfoDto DefaultDirectoryBrowserInfoDto::fromJson(QJsonObject source) {DefaultDirectoryBrowserInfoDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void DefaultDirectoryBrowserInfoDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void DefaultDirectoryBrowserInfoDto::setFromJson(QJsonObject source) {
+	m_path = fromJsonValue<QString>(source["Path"]);
+
 }
-QJsonObject DefaultDirectoryBrowserInfoDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject DefaultDirectoryBrowserInfoDto::toJson() {
 	QJsonObject result;
+	result["Path"] = toJsonValue<QString>(m_path);
+
 	return result;
 }
+
 QString DefaultDirectoryBrowserInfoDto::path() const { return m_path; }
+
 void DefaultDirectoryBrowserInfoDto::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
 
 

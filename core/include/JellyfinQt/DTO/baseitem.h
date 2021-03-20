@@ -32,97 +32,103 @@
 
 #include <QDateTime>
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/mediaurl.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaUrl;
 
-class BaseItem : public QObject {
-	Q_OBJECT
+class BaseItem {
 public:
-	explicit BaseItem(QObject *parent = nullptr);
-	static BaseItem *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
+	explicit BaseItem();
+	static BaseItem fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
-	Q_PROPERTY(qint64 size READ size WRITE setSize NOTIFY sizeChanged)
-	Q_PROPERTY(QString container READ container WRITE setContainer NOTIFY containerChanged)
-	Q_PROPERTY(QDateTime dateLastSaved READ dateLastSaved WRITE setDateLastSaved NOTIFY dateLastSavedChanged)
+	qint64 size() const;
+
+	void setSize(qint64 newSize);
+
+	QString container() const;
+
+	void setContainer(QString newContainer);
+
+	QDateTime dateLastSaved() const;
+
+	void setDateLastSaved(QDateTime newDateLastSaved);
 	/**
 	 * @brief Gets or sets the remote trailers.
 	 */
-	Q_PROPERTY(QList<MediaUrl *> remoteTrailers READ remoteTrailers WRITE setRemoteTrailers NOTIFY remoteTrailersChanged)
-	Q_PROPERTY(bool isHD READ isHD WRITE setIsHD NOTIFY isHDChanged)
-	Q_PROPERTY(bool isShortcut READ isShortcut WRITE setIsShortcut NOTIFY isShortcutChanged)
-	Q_PROPERTY(QString shortcutPath READ shortcutPath WRITE setShortcutPath NOTIFY shortcutPathChanged)
-	Q_PROPERTY(qint32 width READ width WRITE setWidth NOTIFY widthChanged)
-	Q_PROPERTY(qint32 height READ height WRITE setHeight NOTIFY heightChanged)
-	Q_PROPERTY(QStringList extraIds READ extraIds WRITE setExtraIds NOTIFY extraIdsChanged)
-	Q_PROPERTY(bool supportsExternalTransfer READ supportsExternalTransfer WRITE setSupportsExternalTransfer NOTIFY supportsExternalTransferChanged)
+	QList<QSharedPointer<MediaUrl>> remoteTrailers() const;
+	/**
+	* @brief Gets or sets the remote trailers.
+	*/
+	void setRemoteTrailers(QList<QSharedPointer<MediaUrl>> newRemoteTrailers);
 
-	qint64 size() const;
-	void setSize(qint64 newSize);
-	
-	QString container() const;
-	void setContainer(QString newContainer);
-	
-	QDateTime dateLastSaved() const;
-	void setDateLastSaved(QDateTime newDateLastSaved);
-	
-	QList<MediaUrl *> remoteTrailers() const;
-	void setRemoteTrailers(QList<MediaUrl *> newRemoteTrailers);
-	
 	bool isHD() const;
+
 	void setIsHD(bool newIsHD);
-	
+
 	bool isShortcut() const;
+
 	void setIsShortcut(bool newIsShortcut);
-	
+
 	QString shortcutPath() const;
+
 	void setShortcutPath(QString newShortcutPath);
-	
+
 	qint32 width() const;
+
 	void setWidth(qint32 newWidth);
-	
+
 	qint32 height() const;
+
 	void setHeight(qint32 newHeight);
-	
-	QStringList extraIds() const;
-	void setExtraIds(QStringList newExtraIds);
-	
+
+	QList<QUuid> extraIds() const;
+
+	void setExtraIds(QList<QUuid> newExtraIds);
+
 	bool supportsExternalTransfer() const;
+
 	void setSupportsExternalTransfer(bool newSupportsExternalTransfer);
-	
-signals:
-	void sizeChanged(qint64 newSize);
-	void containerChanged(QString newContainer);
-	void dateLastSavedChanged(QDateTime newDateLastSaved);
-	void remoteTrailersChanged(QList<MediaUrl *> newRemoteTrailers);
-	void isHDChanged(bool newIsHD);
-	void isShortcutChanged(bool newIsShortcut);
-	void shortcutPathChanged(QString newShortcutPath);
-	void widthChanged(qint32 newWidth);
-	void heightChanged(qint32 newHeight);
-	void extraIdsChanged(QStringList newExtraIds);
-	void supportsExternalTransferChanged(bool newSupportsExternalTransfer);
+
 protected:
 	qint64 m_size;
 	QString m_container;
 	QDateTime m_dateLastSaved;
-	QList<MediaUrl *> m_remoteTrailers;
+	QList<QSharedPointer<MediaUrl>> m_remoteTrailers;
 	bool m_isHD;
 	bool m_isShortcut;
 	QString m_shortcutPath;
 	qint32 m_width;
 	qint32 m_height;
-	QStringList m_extraIds;
+	QList<QUuid> m_extraIds;
 	bool m_supportsExternalTransfer;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using BaseItem = Jellyfin::DTO::BaseItem;
+
+template <>
+BaseItem fromJsonValue<BaseItem>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return BaseItem::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,44 +31,55 @@
 #define JELLYFIN_DTO_HTTPHEADERINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/headermatchtype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class HttpHeaderInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit HttpHeaderInfo(QObject *parent = nullptr);
-	static HttpHeaderInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-	Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
-	Q_PROPERTY(HeaderMatchType match READ match WRITE setMatch NOTIFY matchChanged)
+class HttpHeaderInfo {
+public:
+	explicit HttpHeaderInfo();
+	static HttpHeaderInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString name() const;
+
 	void setName(QString newName);
-	
+
 	QString value() const;
+
 	void setValue(QString newValue);
-	
+
 	HeaderMatchType match() const;
+
 	void setMatch(HeaderMatchType newMatch);
-	
-signals:
-	void nameChanged(QString newName);
-	void valueChanged(QString newValue);
-	void matchChanged(HeaderMatchType newMatch);
+
 protected:
 	QString m_name;
 	QString m_value;
 	HeaderMatchType m_match;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using HttpHeaderInfo = Jellyfin::DTO::HttpHeaderInfo;
+
+template <>
+HttpHeaderInfo fromJsonValue<HttpHeaderInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return HttpHeaderInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

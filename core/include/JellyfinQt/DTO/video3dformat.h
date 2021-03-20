@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_VIDEO3DFORMAT_H
 #define JELLYFIN_DTO_VIDEO3DFORMAT_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class Video3DFormatClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		HalfSideBySide,
 		FullSideBySide,
 		FullTopAndBottom,
@@ -49,7 +54,39 @@ public:
 private:
 	explicit Video3DFormatClass();
 };
+
 typedef Video3DFormatClass::Value Video3DFormat;
+
+} // NS DTO
+
+namespace Support {
+
+using Video3DFormat = Jellyfin::DTO::Video3DFormat;
+using Video3DFormatClass = Jellyfin::DTO::Video3DFormatClass;
+
+template <>
+Video3DFormat fromJsonValue<Video3DFormat>(const QJsonValue &source) {
+	if (!source.isString()) return Video3DFormatClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("HalfSideBySide")) {
+		return Video3DFormatClass::HalfSideBySide;
+	}
+	if (str == QStringLiteral("FullSideBySide")) {
+		return Video3DFormatClass::FullSideBySide;
+	}
+	if (str == QStringLiteral("FullTopAndBottom")) {
+		return Video3DFormatClass::FullTopAndBottom;
+	}
+	if (str == QStringLiteral("HalfTopAndBottom")) {
+		return Video3DFormatClass::HalfTopAndBottom;
+	}
+	if (str == QStringLiteral("MVC")) {
+		return Video3DFormatClass::MVC;
+	}
+	
+	return Video3DFormatClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

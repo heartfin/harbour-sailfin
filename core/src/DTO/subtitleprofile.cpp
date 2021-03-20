@@ -29,55 +29,61 @@
 
 #include <JellyfinQt/DTO/subtitleprofile.h>
 
-#include <JellyfinQt/DTO/subtitledeliverymethod.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-SubtitleProfile::SubtitleProfile(QObject *parent) : QObject(parent) {}
+SubtitleProfile::SubtitleProfile(QObject *parent) {}
 
-SubtitleProfile *SubtitleProfile::fromJSON(QJsonObject source, QObject *parent) {
-	SubtitleProfile *instance = new SubtitleProfile(parent);
-	instance->updateFromJSON(source);
+SubtitleProfile SubtitleProfile::fromJson(QJsonObject source) {SubtitleProfile instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SubtitleProfile::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SubtitleProfile::setFromJson(QJsonObject source) {
+	m_format = fromJsonValue<QString>(source["Format"]);
+	m_method = fromJsonValue<SubtitleDeliveryMethod>(source["Method"]);
+	m_didlMode = fromJsonValue<QString>(source["DidlMode"]);
+	m_language = fromJsonValue<QString>(source["Language"]);
+	m_container = fromJsonValue<QString>(source["Container"]);
+
 }
-QJsonObject SubtitleProfile::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SubtitleProfile::toJson() {
 	QJsonObject result;
+	result["Format"] = toJsonValue<QString>(m_format);
+	result["Method"] = toJsonValue<SubtitleDeliveryMethod>(m_method);
+	result["DidlMode"] = toJsonValue<QString>(m_didlMode);
+	result["Language"] = toJsonValue<QString>(m_language);
+	result["Container"] = toJsonValue<QString>(m_container);
+
 	return result;
 }
+
 QString SubtitleProfile::format() const { return m_format; }
+
 void SubtitleProfile::setFormat(QString newFormat) {
 	m_format = newFormat;
-	emit formatChanged(newFormat);
 }
-
 SubtitleDeliveryMethod SubtitleProfile::method() const { return m_method; }
+
 void SubtitleProfile::setMethod(SubtitleDeliveryMethod newMethod) {
 	m_method = newMethod;
-	emit methodChanged(newMethod);
 }
-
 QString SubtitleProfile::didlMode() const { return m_didlMode; }
+
 void SubtitleProfile::setDidlMode(QString newDidlMode) {
 	m_didlMode = newDidlMode;
-	emit didlModeChanged(newDidlMode);
 }
-
 QString SubtitleProfile::language() const { return m_language; }
+
 void SubtitleProfile::setLanguage(QString newLanguage) {
 	m_language = newLanguage;
-	emit languageChanged(newLanguage);
 }
-
 QString SubtitleProfile::container() const { return m_container; }
+
 void SubtitleProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
-	emit containerChanged(newContainer);
 }
 
 

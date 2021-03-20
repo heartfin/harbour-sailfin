@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/deviceprofileinfo.h>
 
-#include <JellyfinQt/DTO/deviceprofiletype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-DeviceProfileInfo::DeviceProfileInfo(QObject *parent) : QObject(parent) {}
+DeviceProfileInfo::DeviceProfileInfo(QObject *parent) {}
 
-DeviceProfileInfo *DeviceProfileInfo::fromJSON(QJsonObject source, QObject *parent) {
-	DeviceProfileInfo *instance = new DeviceProfileInfo(parent);
-	instance->updateFromJSON(source);
+DeviceProfileInfo DeviceProfileInfo::fromJson(QJsonObject source) {DeviceProfileInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void DeviceProfileInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void DeviceProfileInfo::setFromJson(QJsonObject source) {
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_type = fromJsonValue<DeviceProfileType>(source["Type"]);
+
 }
-QJsonObject DeviceProfileInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject DeviceProfileInfo::toJson() {
 	QJsonObject result;
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Type"] = toJsonValue<DeviceProfileType>(m_type);
+
 	return result;
 }
+
 QString DeviceProfileInfo::jellyfinId() const { return m_jellyfinId; }
+
 void DeviceProfileInfo::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 QString DeviceProfileInfo::name() const { return m_name; }
+
 void DeviceProfileInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 DeviceProfileType DeviceProfileInfo::type() const { return m_type; }
+
 void DeviceProfileInfo::setType(DeviceProfileType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
 
 

@@ -31,51 +31,48 @@
 #define JELLYFIN_DTO_VERSION_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class Version : public QObject {
-	Q_OBJECT
-public:
-	explicit Version(QObject *parent = nullptr);
-	static Version *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(qint32 major READ major WRITE setMajor NOTIFY majorChanged)
-	Q_PROPERTY(qint32 minor READ minor WRITE setMinor NOTIFY minorChanged)
-	Q_PROPERTY(qint32 build READ build WRITE setBuild NOTIFY buildChanged)
-	Q_PROPERTY(qint32 revision READ revision WRITE setRevision NOTIFY revisionChanged)
-	Q_PROPERTY(qint32 majorRevision READ majorRevision WRITE setMajorRevision NOTIFY majorRevisionChanged)
-	Q_PROPERTY(qint32 minorRevision READ minorRevision WRITE setMinorRevision NOTIFY minorRevisionChanged)
+class Version {
+public:
+	explicit Version();
+	static Version fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	qint32 major() const;
+
 	void setMajor(qint32 newMajor);
-	
+
 	qint32 minor() const;
+
 	void setMinor(qint32 newMinor);
-	
+
 	qint32 build() const;
+
 	void setBuild(qint32 newBuild);
-	
+
 	qint32 revision() const;
+
 	void setRevision(qint32 newRevision);
-	
+
 	qint32 majorRevision() const;
+
 	void setMajorRevision(qint32 newMajorRevision);
-	
+
 	qint32 minorRevision() const;
+
 	void setMinorRevision(qint32 newMinorRevision);
-	
-signals:
-	void majorChanged(qint32 newMajor);
-	void minorChanged(qint32 newMinor);
-	void buildChanged(qint32 newBuild);
-	void revisionChanged(qint32 newRevision);
-	void majorRevisionChanged(qint32 newMajorRevision);
-	void minorRevisionChanged(qint32 newMinorRevision);
+
 protected:
 	qint32 m_major;
 	qint32 m_minor;
@@ -84,6 +81,18 @@ protected:
 	qint32 m_majorRevision;
 	qint32 m_minorRevision;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using Version = Jellyfin::DTO::Version;
+
+template <>
+Version fromJsonValue<Version>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return Version::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

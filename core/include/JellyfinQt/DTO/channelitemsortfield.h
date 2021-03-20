@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_CHANNELITEMSORTFIELD_H
 #define JELLYFIN_DTO_CHANNELITEMSORTFIELD_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ChannelItemSortFieldClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Name,
 		CommunityRating,
 		PremiereDate,
@@ -51,7 +56,45 @@ public:
 private:
 	explicit ChannelItemSortFieldClass();
 };
+
 typedef ChannelItemSortFieldClass::Value ChannelItemSortField;
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelItemSortField = Jellyfin::DTO::ChannelItemSortField;
+using ChannelItemSortFieldClass = Jellyfin::DTO::ChannelItemSortFieldClass;
+
+template <>
+ChannelItemSortField fromJsonValue<ChannelItemSortField>(const QJsonValue &source) {
+	if (!source.isString()) return ChannelItemSortFieldClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Name")) {
+		return ChannelItemSortFieldClass::Name;
+	}
+	if (str == QStringLiteral("CommunityRating")) {
+		return ChannelItemSortFieldClass::CommunityRating;
+	}
+	if (str == QStringLiteral("PremiereDate")) {
+		return ChannelItemSortFieldClass::PremiereDate;
+	}
+	if (str == QStringLiteral("DateCreated")) {
+		return ChannelItemSortFieldClass::DateCreated;
+	}
+	if (str == QStringLiteral("Runtime")) {
+		return ChannelItemSortFieldClass::Runtime;
+	}
+	if (str == QStringLiteral("PlayCount")) {
+		return ChannelItemSortFieldClass::PlayCount;
+	}
+	if (str == QStringLiteral("CommunityPlayCount")) {
+		return ChannelItemSortFieldClass::CommunityPlayCount;
+	}
+	
+	return ChannelItemSortFieldClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

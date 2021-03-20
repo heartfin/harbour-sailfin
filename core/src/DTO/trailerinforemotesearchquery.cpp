@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-TrailerInfoRemoteSearchQuery::TrailerInfoRemoteSearchQuery(QObject *parent) : QObject(parent) {}
+TrailerInfoRemoteSearchQuery::TrailerInfoRemoteSearchQuery(QObject *parent) {}
 
-TrailerInfoRemoteSearchQuery *TrailerInfoRemoteSearchQuery::fromJSON(QJsonObject source, QObject *parent) {
-	TrailerInfoRemoteSearchQuery *instance = new TrailerInfoRemoteSearchQuery(parent);
-	instance->updateFromJSON(source);
+TrailerInfoRemoteSearchQuery TrailerInfoRemoteSearchQuery::fromJson(QJsonObject source) {TrailerInfoRemoteSearchQuery instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TrailerInfoRemoteSearchQuery::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TrailerInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
+	m_searchInfo = fromJsonValue<QSharedPointer<TrailerInfo>>(source["SearchInfo"]);
+	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+
 }
-QJsonObject TrailerInfoRemoteSearchQuery::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TrailerInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
+	result["SearchInfo"] = toJsonValue<QSharedPointer<TrailerInfo>>(m_searchInfo);
+	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+
 	return result;
 }
-TrailerInfo * TrailerInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
-void TrailerInfoRemoteSearchQuery::setSearchInfo(TrailerInfo * newSearchInfo) {
+
+QSharedPointer<TrailerInfo> TrailerInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
+
+void TrailerInfoRemoteSearchQuery::setSearchInfo(QSharedPointer<TrailerInfo> newSearchInfo) {
 	m_searchInfo = newSearchInfo;
-	emit searchInfoChanged(newSearchInfo);
 }
+QUuid TrailerInfoRemoteSearchQuery::itemId() const { return m_itemId; }
 
-QString TrailerInfoRemoteSearchQuery::itemId() const { return m_itemId; }
-void TrailerInfoRemoteSearchQuery::setItemId(QString newItemId) {
+void TrailerInfoRemoteSearchQuery::setItemId(QUuid newItemId) {
 	m_itemId = newItemId;
-	emit itemIdChanged(newItemId);
 }
-
 QString TrailerInfoRemoteSearchQuery::searchProviderName() const { return m_searchProviderName; }
+
 void TrailerInfoRemoteSearchQuery::setSearchProviderName(QString newSearchProviderName) {
 	m_searchProviderName = newSearchProviderName;
-	emit searchProviderNameChanged(newSearchProviderName);
 }
-
 bool TrailerInfoRemoteSearchQuery::includeDisabledProviders() const { return m_includeDisabledProviders; }
+
 void TrailerInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncludeDisabledProviders) {
 	m_includeDisabledProviders = newIncludeDisabledProviders;
-	emit includeDisabledProvidersChanged(newIncludeDisabledProviders);
 }
 
 

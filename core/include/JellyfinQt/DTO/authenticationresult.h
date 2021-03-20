@@ -31,51 +31,62 @@
 #define JELLYFIN_DTO_AUTHENTICATIONRESULT_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/DTO/sessioninfo.h"
+#include "JellyfinQt/DTO/userdto.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SessionInfo;
-class UserDto;
 
-class AuthenticationResult : public QObject {
-	Q_OBJECT
+class AuthenticationResult {
 public:
-	explicit AuthenticationResult(QObject *parent = nullptr);
-	static AuthenticationResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(UserDto * user READ user WRITE setUser NOTIFY userChanged)
-	Q_PROPERTY(SessionInfo * sessionInfo READ sessionInfo WRITE setSessionInfo NOTIFY sessionInfoChanged)
-	Q_PROPERTY(QString accessToken READ accessToken WRITE setAccessToken NOTIFY accessTokenChanged)
-	Q_PROPERTY(QString serverId READ serverId WRITE setServerId NOTIFY serverIdChanged)
-
-	UserDto * user() const;
-	void setUser(UserDto * newUser);
+	explicit AuthenticationResult();
+	static AuthenticationResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
 	
-	SessionInfo * sessionInfo() const;
-	void setSessionInfo(SessionInfo * newSessionInfo);
-	
+	// Properties
+
+	QSharedPointer<UserDto> user() const;
+
+	void setUser(QSharedPointer<UserDto> newUser);
+
+	QSharedPointer<SessionInfo> sessionInfo() const;
+
+	void setSessionInfo(QSharedPointer<SessionInfo> newSessionInfo);
+
 	QString accessToken() const;
+
 	void setAccessToken(QString newAccessToken);
-	
+
 	QString serverId() const;
+
 	void setServerId(QString newServerId);
-	
-signals:
-	void userChanged(UserDto * newUser);
-	void sessionInfoChanged(SessionInfo * newSessionInfo);
-	void accessTokenChanged(QString newAccessToken);
-	void serverIdChanged(QString newServerId);
+
 protected:
-	UserDto * m_user = nullptr;
-	SessionInfo * m_sessionInfo = nullptr;
+	QSharedPointer<UserDto> m_user = nullptr;
+	QSharedPointer<SessionInfo> m_sessionInfo = nullptr;
 	QString m_accessToken;
 	QString m_serverId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using AuthenticationResult = Jellyfin::DTO::AuthenticationResult;
+
+template <>
+AuthenticationResult fromJsonValue<AuthenticationResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AuthenticationResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

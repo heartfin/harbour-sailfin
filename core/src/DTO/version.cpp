@@ -32,56 +32,65 @@
 namespace Jellyfin {
 namespace DTO {
 
-Version::Version(QObject *parent) : QObject(parent) {}
+Version::Version(QObject *parent) {}
 
-Version *Version::fromJSON(QJsonObject source, QObject *parent) {
-	Version *instance = new Version(parent);
-	instance->updateFromJSON(source);
+Version Version::fromJson(QJsonObject source) {Version instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void Version::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void Version::setFromJson(QJsonObject source) {
+	m_major = fromJsonValue<qint32>(source["Major"]);
+	m_minor = fromJsonValue<qint32>(source["Minor"]);
+	m_build = fromJsonValue<qint32>(source["Build"]);
+	m_revision = fromJsonValue<qint32>(source["Revision"]);
+	m_majorRevision = fromJsonValue<qint32>(source["MajorRevision"]);
+	m_minorRevision = fromJsonValue<qint32>(source["MinorRevision"]);
+
 }
-QJsonObject Version::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject Version::toJson() {
 	QJsonObject result;
+	result["Major"] = toJsonValue<qint32>(m_major);
+	result["Minor"] = toJsonValue<qint32>(m_minor);
+	result["Build"] = toJsonValue<qint32>(m_build);
+	result["Revision"] = toJsonValue<qint32>(m_revision);
+	result["MajorRevision"] = toJsonValue<qint32>(m_majorRevision);
+	result["MinorRevision"] = toJsonValue<qint32>(m_minorRevision);
+
 	return result;
 }
+
 qint32 Version::major() const { return m_major; }
+
 void Version::setMajor(qint32 newMajor) {
 	m_major = newMajor;
-	emit majorChanged(newMajor);
 }
-
 qint32 Version::minor() const { return m_minor; }
+
 void Version::setMinor(qint32 newMinor) {
 	m_minor = newMinor;
-	emit minorChanged(newMinor);
 }
-
 qint32 Version::build() const { return m_build; }
+
 void Version::setBuild(qint32 newBuild) {
 	m_build = newBuild;
-	emit buildChanged(newBuild);
 }
-
 qint32 Version::revision() const { return m_revision; }
+
 void Version::setRevision(qint32 newRevision) {
 	m_revision = newRevision;
-	emit revisionChanged(newRevision);
 }
-
 qint32 Version::majorRevision() const { return m_majorRevision; }
+
 void Version::setMajorRevision(qint32 newMajorRevision) {
 	m_majorRevision = newMajorRevision;
-	emit majorRevisionChanged(newMajorRevision);
 }
-
 qint32 Version::minorRevision() const { return m_minorRevision; }
+
 void Version::setMinorRevision(qint32 newMinorRevision) {
 	m_minorRevision = newMinorRevision;
-	emit minorRevisionChanged(newMinorRevision);
 }
 
 

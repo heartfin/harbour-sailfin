@@ -31,85 +31,95 @@
 #define JELLYFIN_DTO_PLAYREQUEST_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
 
 #include "JellyfinQt/DTO/playcommand.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PlayRequest : public QObject {
-	Q_OBJECT
-public:
-	explicit PlayRequest(QObject *parent = nullptr);
-	static PlayRequest *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class PlayRequest {
+public:
+	explicit PlayRequest();
+	static PlayRequest fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the item ids.
 	 */
-	Q_PROPERTY(QStringList itemIds READ itemIds WRITE setItemIds NOTIFY itemIdsChanged)
+	QList<QUuid> itemIds() const;
+	/**
+	* @brief Gets or sets the item ids.
+	*/
+	void setItemIds(QList<QUuid> newItemIds);
 	/**
 	 * @brief Gets or sets the start position ticks that the first item should be played at.
 	 */
-	Q_PROPERTY(qint64 startPositionTicks READ startPositionTicks WRITE setStartPositionTicks NOTIFY startPositionTicksChanged)
-	Q_PROPERTY(PlayCommand playCommand READ playCommand WRITE setPlayCommand NOTIFY playCommandChanged)
+	qint64 startPositionTicks() const;
+	/**
+	* @brief Gets or sets the start position ticks that the first item should be played at.
+	*/
+	void setStartPositionTicks(qint64 newStartPositionTicks);
+
+	PlayCommand playCommand() const;
+
+	void setPlayCommand(PlayCommand newPlayCommand);
 	/**
 	 * @brief Gets or sets the controlling user identifier.
 	 */
-	Q_PROPERTY(QString controllingUserId READ controllingUserId WRITE setControllingUserId NOTIFY controllingUserIdChanged)
-	Q_PROPERTY(qint32 subtitleStreamIndex READ subtitleStreamIndex WRITE setSubtitleStreamIndex NOTIFY subtitleStreamIndexChanged)
-	Q_PROPERTY(qint32 audioStreamIndex READ audioStreamIndex WRITE setAudioStreamIndex NOTIFY audioStreamIndexChanged)
-	Q_PROPERTY(QString mediaSourceId READ mediaSourceId WRITE setMediaSourceId NOTIFY mediaSourceIdChanged)
-	Q_PROPERTY(qint32 startIndex READ startIndex WRITE setStartIndex NOTIFY startIndexChanged)
+	QUuid controllingUserId() const;
+	/**
+	* @brief Gets or sets the controlling user identifier.
+	*/
+	void setControllingUserId(QUuid newControllingUserId);
 
-	QStringList itemIds() const;
-	void setItemIds(QStringList newItemIds);
-	
-	qint64 startPositionTicks() const;
-	void setStartPositionTicks(qint64 newStartPositionTicks);
-	
-	PlayCommand playCommand() const;
-	void setPlayCommand(PlayCommand newPlayCommand);
-	
-	QString controllingUserId() const;
-	void setControllingUserId(QString newControllingUserId);
-	
 	qint32 subtitleStreamIndex() const;
+
 	void setSubtitleStreamIndex(qint32 newSubtitleStreamIndex);
-	
+
 	qint32 audioStreamIndex() const;
+
 	void setAudioStreamIndex(qint32 newAudioStreamIndex);
-	
+
 	QString mediaSourceId() const;
+
 	void setMediaSourceId(QString newMediaSourceId);
-	
+
 	qint32 startIndex() const;
+
 	void setStartIndex(qint32 newStartIndex);
-	
-signals:
-	void itemIdsChanged(QStringList newItemIds);
-	void startPositionTicksChanged(qint64 newStartPositionTicks);
-	void playCommandChanged(PlayCommand newPlayCommand);
-	void controllingUserIdChanged(QString newControllingUserId);
-	void subtitleStreamIndexChanged(qint32 newSubtitleStreamIndex);
-	void audioStreamIndexChanged(qint32 newAudioStreamIndex);
-	void mediaSourceIdChanged(QString newMediaSourceId);
-	void startIndexChanged(qint32 newStartIndex);
+
 protected:
-	QStringList m_itemIds;
+	QList<QUuid> m_itemIds;
 	qint64 m_startPositionTicks;
 	PlayCommand m_playCommand;
-	QString m_controllingUserId;
+	QUuid m_controllingUserId;
 	qint32 m_subtitleStreamIndex;
 	qint32 m_audioStreamIndex;
 	QString m_mediaSourceId;
 	qint32 m_startIndex;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlayRequest = Jellyfin::DTO::PlayRequest;
+
+template <>
+PlayRequest fromJsonValue<PlayRequest>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlayRequest::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

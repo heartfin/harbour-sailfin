@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_PATHSUBSTITUTION_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PathSubstitution : public QObject {
-	Q_OBJECT
-public:
-	explicit PathSubstitution(QObject *parent = nullptr);
-	static PathSubstitution *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class PathSubstitution {
+public:
+	explicit PathSubstitution();
+	static PathSubstitution fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the value to substitute.
 	 */
-	Q_PROPERTY(QString from READ from WRITE setFrom NOTIFY fromChanged)
+	QString from() const;
+	/**
+	* @brief Gets or sets the value to substitute.
+	*/
+	void setFrom(QString newFrom);
 	/**
 	 * @brief Gets or sets the value to substitution with.
 	 */
-	Q_PROPERTY(QString to READ to WRITE setTo NOTIFY toChanged)
-
-	QString from() const;
-	void setFrom(QString newFrom);
-	
 	QString to() const;
+	/**
+	* @brief Gets or sets the value to substitution with.
+	*/
 	void setTo(QString newTo);
-	
-signals:
-	void fromChanged(QString newFrom);
-	void toChanged(QString newTo);
+
 protected:
 	QString m_from;
 	QString m_to;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PathSubstitution = Jellyfin::DTO::PathSubstitution;
+
+template <>
+PathSubstitution fromJsonValue<PathSubstitution>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PathSubstitution::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

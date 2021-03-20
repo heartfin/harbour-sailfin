@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-BaseItemDtoQueryResult::BaseItemDtoQueryResult(QObject *parent) : QObject(parent) {}
+BaseItemDtoQueryResult::BaseItemDtoQueryResult(QObject *parent) {}
 
-BaseItemDtoQueryResult *BaseItemDtoQueryResult::fromJSON(QJsonObject source, QObject *parent) {
-	BaseItemDtoQueryResult *instance = new BaseItemDtoQueryResult(parent);
-	instance->updateFromJSON(source);
+BaseItemDtoQueryResult BaseItemDtoQueryResult::fromJson(QJsonObject source) {BaseItemDtoQueryResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void BaseItemDtoQueryResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void BaseItemDtoQueryResult::setFromJson(QJsonObject source) {
+	m_items = fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+
 }
-QJsonObject BaseItemDtoQueryResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject BaseItemDtoQueryResult::toJson() {
 	QJsonObject result;
+	result["Items"] = toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+
 	return result;
 }
-QList<BaseItemDto *> BaseItemDtoQueryResult::items() const { return m_items; }
-void BaseItemDtoQueryResult::setItems(QList<BaseItemDto *> newItems) {
-	m_items = newItems;
-	emit itemsChanged(newItems);
-}
 
+QList<QSharedPointer<BaseItemDto>> BaseItemDtoQueryResult::items() const { return m_items; }
+
+void BaseItemDtoQueryResult::setItems(QList<QSharedPointer<BaseItemDto>> newItems) {
+	m_items = newItems;
+}
 qint32 BaseItemDtoQueryResult::totalRecordCount() const { return m_totalRecordCount; }
+
 void BaseItemDtoQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
-
 qint32 BaseItemDtoQueryResult::startIndex() const { return m_startIndex; }
+
 void BaseItemDtoQueryResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
-	emit startIndexChanged(newStartIndex);
 }
 
 

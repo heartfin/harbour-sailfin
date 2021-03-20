@@ -32,62 +32,72 @@
 namespace Jellyfin {
 namespace DTO {
 
-PublicSystemInfo::PublicSystemInfo(QObject *parent) : QObject(parent) {}
+PublicSystemInfo::PublicSystemInfo(QObject *parent) {}
 
-PublicSystemInfo *PublicSystemInfo::fromJSON(QJsonObject source, QObject *parent) {
-	PublicSystemInfo *instance = new PublicSystemInfo(parent);
-	instance->updateFromJSON(source);
+PublicSystemInfo PublicSystemInfo::fromJson(QJsonObject source) {PublicSystemInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PublicSystemInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PublicSystemInfo::setFromJson(QJsonObject source) {
+	m_localAddress = fromJsonValue<QString>(source["LocalAddress"]);
+	m_serverName = fromJsonValue<QString>(source["ServerName"]);
+	m_version = fromJsonValue<QString>(source["Version"]);
+	m_productName = fromJsonValue<QString>(source["ProductName"]);
+	m_operatingSystem = fromJsonValue<QString>(source["OperatingSystem"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_startupWizardCompleted = fromJsonValue<bool>(source["StartupWizardCompleted"]);
+
 }
-QJsonObject PublicSystemInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PublicSystemInfo::toJson() {
 	QJsonObject result;
+	result["LocalAddress"] = toJsonValue<QString>(m_localAddress);
+	result["ServerName"] = toJsonValue<QString>(m_serverName);
+	result["Version"] = toJsonValue<QString>(m_version);
+	result["ProductName"] = toJsonValue<QString>(m_productName);
+	result["OperatingSystem"] = toJsonValue<QString>(m_operatingSystem);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["StartupWizardCompleted"] = toJsonValue<bool>(m_startupWizardCompleted);
+
 	return result;
 }
+
 QString PublicSystemInfo::localAddress() const { return m_localAddress; }
+
 void PublicSystemInfo::setLocalAddress(QString newLocalAddress) {
 	m_localAddress = newLocalAddress;
-	emit localAddressChanged(newLocalAddress);
 }
-
 QString PublicSystemInfo::serverName() const { return m_serverName; }
+
 void PublicSystemInfo::setServerName(QString newServerName) {
 	m_serverName = newServerName;
-	emit serverNameChanged(newServerName);
 }
-
 QString PublicSystemInfo::version() const { return m_version; }
+
 void PublicSystemInfo::setVersion(QString newVersion) {
 	m_version = newVersion;
-	emit versionChanged(newVersion);
 }
-
 QString PublicSystemInfo::productName() const { return m_productName; }
+
 void PublicSystemInfo::setProductName(QString newProductName) {
 	m_productName = newProductName;
-	emit productNameChanged(newProductName);
 }
-
 QString PublicSystemInfo::operatingSystem() const { return m_operatingSystem; }
+
 void PublicSystemInfo::setOperatingSystem(QString newOperatingSystem) {
 	m_operatingSystem = newOperatingSystem;
-	emit operatingSystemChanged(newOperatingSystem);
 }
-
 QString PublicSystemInfo::jellyfinId() const { return m_jellyfinId; }
+
 void PublicSystemInfo::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 bool PublicSystemInfo::startupWizardCompleted() const { return m_startupWizardCompleted; }
+
 void PublicSystemInfo::setStartupWizardCompleted(bool newStartupWizardCompleted) {
 	m_startupWizardCompleted = newStartupWizardCompleted;
-	emit startupWizardCompletedChanged(newStartupWizardCompleted);
 }
 
 

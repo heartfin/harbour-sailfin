@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaPathDto::MediaPathDto(QObject *parent) : QObject(parent) {}
+MediaPathDto::MediaPathDto(QObject *parent) {}
 
-MediaPathDto *MediaPathDto::fromJSON(QJsonObject source, QObject *parent) {
-	MediaPathDto *instance = new MediaPathDto(parent);
-	instance->updateFromJSON(source);
+MediaPathDto MediaPathDto::fromJson(QJsonObject source) {MediaPathDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MediaPathDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MediaPathDto::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_pathInfo = fromJsonValue<QSharedPointer<MediaPathInfo>>(source["PathInfo"]);
+
 }
-QJsonObject MediaPathDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MediaPathDto::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["PathInfo"] = toJsonValue<QSharedPointer<MediaPathInfo>>(m_pathInfo);
+
 	return result;
 }
+
 QString MediaPathDto::name() const { return m_name; }
+
 void MediaPathDto::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString MediaPathDto::path() const { return m_path; }
+
 void MediaPathDto::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
+QSharedPointer<MediaPathInfo> MediaPathDto::pathInfo() const { return m_pathInfo; }
 
-MediaPathInfo * MediaPathDto::pathInfo() const { return m_pathInfo; }
-void MediaPathDto::setPathInfo(MediaPathInfo * newPathInfo) {
+void MediaPathDto::setPathInfo(QSharedPointer<MediaPathInfo> newPathInfo) {
 	m_pathInfo = newPathInfo;
-	emit pathInfoChanged(newPathInfo);
 }
 
 

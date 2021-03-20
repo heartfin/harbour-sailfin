@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-BoxSetInfoRemoteSearchQuery::BoxSetInfoRemoteSearchQuery(QObject *parent) : QObject(parent) {}
+BoxSetInfoRemoteSearchQuery::BoxSetInfoRemoteSearchQuery(QObject *parent) {}
 
-BoxSetInfoRemoteSearchQuery *BoxSetInfoRemoteSearchQuery::fromJSON(QJsonObject source, QObject *parent) {
-	BoxSetInfoRemoteSearchQuery *instance = new BoxSetInfoRemoteSearchQuery(parent);
-	instance->updateFromJSON(source);
+BoxSetInfoRemoteSearchQuery BoxSetInfoRemoteSearchQuery::fromJson(QJsonObject source) {BoxSetInfoRemoteSearchQuery instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void BoxSetInfoRemoteSearchQuery::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void BoxSetInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
+	m_searchInfo = fromJsonValue<QSharedPointer<BoxSetInfo>>(source["SearchInfo"]);
+	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+
 }
-QJsonObject BoxSetInfoRemoteSearchQuery::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject BoxSetInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
+	result["SearchInfo"] = toJsonValue<QSharedPointer<BoxSetInfo>>(m_searchInfo);
+	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+
 	return result;
 }
-BoxSetInfo * BoxSetInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
-void BoxSetInfoRemoteSearchQuery::setSearchInfo(BoxSetInfo * newSearchInfo) {
+
+QSharedPointer<BoxSetInfo> BoxSetInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
+
+void BoxSetInfoRemoteSearchQuery::setSearchInfo(QSharedPointer<BoxSetInfo> newSearchInfo) {
 	m_searchInfo = newSearchInfo;
-	emit searchInfoChanged(newSearchInfo);
 }
+QUuid BoxSetInfoRemoteSearchQuery::itemId() const { return m_itemId; }
 
-QString BoxSetInfoRemoteSearchQuery::itemId() const { return m_itemId; }
-void BoxSetInfoRemoteSearchQuery::setItemId(QString newItemId) {
+void BoxSetInfoRemoteSearchQuery::setItemId(QUuid newItemId) {
 	m_itemId = newItemId;
-	emit itemIdChanged(newItemId);
 }
-
 QString BoxSetInfoRemoteSearchQuery::searchProviderName() const { return m_searchProviderName; }
+
 void BoxSetInfoRemoteSearchQuery::setSearchProviderName(QString newSearchProviderName) {
 	m_searchProviderName = newSearchProviderName;
-	emit searchProviderNameChanged(newSearchProviderName);
 }
-
 bool BoxSetInfoRemoteSearchQuery::includeDisabledProviders() const { return m_includeDisabledProviders; }
+
 void BoxSetInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncludeDisabledProviders) {
 	m_includeDisabledProviders = newIncludeDisabledProviders;
-	emit includeDisabledProvidersChanged(newIncludeDisabledProviders);
 }
 
 

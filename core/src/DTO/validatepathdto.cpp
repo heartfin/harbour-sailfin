@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-ValidatePathDto::ValidatePathDto(QObject *parent) : QObject(parent) {}
+ValidatePathDto::ValidatePathDto(QObject *parent) {}
 
-ValidatePathDto *ValidatePathDto::fromJSON(QJsonObject source, QObject *parent) {
-	ValidatePathDto *instance = new ValidatePathDto(parent);
-	instance->updateFromJSON(source);
+ValidatePathDto ValidatePathDto::fromJson(QJsonObject source) {ValidatePathDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ValidatePathDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ValidatePathDto::setFromJson(QJsonObject source) {
+	m_validateWritable = fromJsonValue<bool>(source["ValidateWritable"]);
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_isFile = fromJsonValue<bool>(source["IsFile"]);
+
 }
-QJsonObject ValidatePathDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ValidatePathDto::toJson() {
 	QJsonObject result;
+	result["ValidateWritable"] = toJsonValue<bool>(m_validateWritable);
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["IsFile"] = toJsonValue<bool>(m_isFile);
+
 	return result;
 }
+
 bool ValidatePathDto::validateWritable() const { return m_validateWritable; }
+
 void ValidatePathDto::setValidateWritable(bool newValidateWritable) {
 	m_validateWritable = newValidateWritable;
-	emit validateWritableChanged(newValidateWritable);
 }
-
 QString ValidatePathDto::path() const { return m_path; }
+
 void ValidatePathDto::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
-
 bool ValidatePathDto::isFile() const { return m_isFile; }
+
 void ValidatePathDto::setIsFile(bool newIsFile) {
 	m_isFile = newIsFile;
-	emit isFileChanged(newIsFile);
 }
 
 

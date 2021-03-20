@@ -31,60 +31,75 @@
 #define JELLYFIN_DTO_COUNTRYINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class CountryInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit CountryInfo(QObject *parent = nullptr);
-	static CountryInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class CountryInfo {
+public:
+	explicit CountryInfo();
+	static CountryInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the display name.
 	 */
-	Q_PROPERTY(QString displayName READ displayName WRITE setDisplayName NOTIFY displayNameChanged)
+	QString displayName() const;
+	/**
+	* @brief Gets or sets the display name.
+	*/
+	void setDisplayName(QString newDisplayName);
 	/**
 	 * @brief Gets or sets the name of the two letter ISO region.
 	 */
-	Q_PROPERTY(QString twoLetterISORegionName READ twoLetterISORegionName WRITE setTwoLetterISORegionName NOTIFY twoLetterISORegionNameChanged)
+	QString twoLetterISORegionName() const;
+	/**
+	* @brief Gets or sets the name of the two letter ISO region.
+	*/
+	void setTwoLetterISORegionName(QString newTwoLetterISORegionName);
 	/**
 	 * @brief Gets or sets the name of the three letter ISO region.
 	 */
-	Q_PROPERTY(QString threeLetterISORegionName READ threeLetterISORegionName WRITE setThreeLetterISORegionName NOTIFY threeLetterISORegionNameChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString displayName() const;
-	void setDisplayName(QString newDisplayName);
-	
-	QString twoLetterISORegionName() const;
-	void setTwoLetterISORegionName(QString newTwoLetterISORegionName);
-	
 	QString threeLetterISORegionName() const;
+	/**
+	* @brief Gets or sets the name of the three letter ISO region.
+	*/
 	void setThreeLetterISORegionName(QString newThreeLetterISORegionName);
-	
-signals:
-	void nameChanged(QString newName);
-	void displayNameChanged(QString newDisplayName);
-	void twoLetterISORegionNameChanged(QString newTwoLetterISORegionName);
-	void threeLetterISORegionNameChanged(QString newThreeLetterISORegionName);
+
 protected:
 	QString m_name;
 	QString m_displayName;
 	QString m_twoLetterISORegionName;
 	QString m_threeLetterISORegionName;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using CountryInfo = Jellyfin::DTO::CountryInfo;
+
+template <>
+CountryInfo fromJsonValue<CountryInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return CountryInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

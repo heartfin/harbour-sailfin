@@ -31,91 +31,95 @@
 #define JELLYFIN_DTO_PACKAGEINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/versioninfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class VersionInfo;
 
-class PackageInfo : public QObject {
-	Q_OBJECT
+class PackageInfo {
 public:
-	explicit PackageInfo(QObject *parent = nullptr);
-	static PackageInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit PackageInfo();
+	static PackageInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets a long description of the plugin containing features or helpful explanations.
 	 */
-	Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+	QString description() const;
+	/**
+	* @brief Gets or sets a long description of the plugin containing features or helpful explanations.
+	*/
+	void setDescription(QString newDescription);
 	/**
 	 * @brief Gets or sets a short overview of what the plugin does.
 	 */
-	Q_PROPERTY(QString overview READ overview WRITE setOverview NOTIFY overviewChanged)
+	QString overview() const;
+	/**
+	* @brief Gets or sets a short overview of what the plugin does.
+	*/
+	void setOverview(QString newOverview);
 	/**
 	 * @brief Gets or sets the owner.
 	 */
-	Q_PROPERTY(QString owner READ owner WRITE setOwner NOTIFY ownerChanged)
+	QString owner() const;
+	/**
+	* @brief Gets or sets the owner.
+	*/
+	void setOwner(QString newOwner);
 	/**
 	 * @brief Gets or sets the category.
 	 */
-	Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
+	QString category() const;
+	/**
+	* @brief Gets or sets the category.
+	*/
+	void setCategory(QString newCategory);
 	/**
 	 * @brief Gets or sets the guid of the assembly associated with this plugin.
 This is used to identify the proper item for automatic updates.
 	 */
-	Q_PROPERTY(QString guid READ guid WRITE setGuid NOTIFY guidChanged)
+	QString guid() const;
+	/**
+	* @brief Gets or sets the guid of the assembly associated with this plugin.
+This is used to identify the proper item for automatic updates.
+	*/
+	void setGuid(QString newGuid);
 	/**
 	 * @brief Gets or sets the versions.
 	 */
-	Q_PROPERTY(QList<VersionInfo *> versions READ versions WRITE setVersions NOTIFY versionsChanged)
+	QList<QSharedPointer<VersionInfo>> versions() const;
+	/**
+	* @brief Gets or sets the versions.
+	*/
+	void setVersions(QList<QSharedPointer<VersionInfo>> newVersions);
 	/**
 	 * @brief Gets or sets the image url for the package.
 	 */
-	Q_PROPERTY(QString imageUrl READ imageUrl WRITE setImageUrl NOTIFY imageUrlChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString description() const;
-	void setDescription(QString newDescription);
-	
-	QString overview() const;
-	void setOverview(QString newOverview);
-	
-	QString owner() const;
-	void setOwner(QString newOwner);
-	
-	QString category() const;
-	void setCategory(QString newCategory);
-	
-	QString guid() const;
-	void setGuid(QString newGuid);
-	
-	QList<VersionInfo *> versions() const;
-	void setVersions(QList<VersionInfo *> newVersions);
-	
 	QString imageUrl() const;
+	/**
+	* @brief Gets or sets the image url for the package.
+	*/
 	void setImageUrl(QString newImageUrl);
-	
-signals:
-	void nameChanged(QString newName);
-	void descriptionChanged(QString newDescription);
-	void overviewChanged(QString newOverview);
-	void ownerChanged(QString newOwner);
-	void categoryChanged(QString newCategory);
-	void guidChanged(QString newGuid);
-	void versionsChanged(QList<VersionInfo *> newVersions);
-	void imageUrlChanged(QString newImageUrl);
+
 protected:
 	QString m_name;
 	QString m_description;
@@ -123,9 +127,21 @@ protected:
 	QString m_owner;
 	QString m_category;
 	QString m_guid;
-	QList<VersionInfo *> m_versions;
+	QList<QSharedPointer<VersionInfo>> m_versions;
 	QString m_imageUrl;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PackageInfo = Jellyfin::DTO::PackageInfo;
+
+template <>
+PackageInfo fromJsonValue<PackageInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PackageInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

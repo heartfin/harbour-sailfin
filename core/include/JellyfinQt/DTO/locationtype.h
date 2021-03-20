@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_LOCATIONTYPE_H
 #define JELLYFIN_DTO_LOCATIONTYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class LocationTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		FileSystem,
 		Remote,
 		Virtual,
@@ -48,7 +53,36 @@ public:
 private:
 	explicit LocationTypeClass();
 };
+
 typedef LocationTypeClass::Value LocationType;
+
+} // NS DTO
+
+namespace Support {
+
+using LocationType = Jellyfin::DTO::LocationType;
+using LocationTypeClass = Jellyfin::DTO::LocationTypeClass;
+
+template <>
+LocationType fromJsonValue<LocationType>(const QJsonValue &source) {
+	if (!source.isString()) return LocationTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("FileSystem")) {
+		return LocationTypeClass::FileSystem;
+	}
+	if (str == QStringLiteral("Remote")) {
+		return LocationTypeClass::Remote;
+	}
+	if (str == QStringLiteral("Virtual")) {
+		return LocationTypeClass::Virtual;
+	}
+	if (str == QStringLiteral("Offline")) {
+		return LocationTypeClass::Offline;
+	}
+	
+	return LocationTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

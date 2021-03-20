@@ -31,74 +31,75 @@
 #define JELLYFIN_DTO_LIBRARYUPDATEINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LibraryUpdateInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit LibraryUpdateInfo(QObject *parent = nullptr);
-	static LibraryUpdateInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class LibraryUpdateInfo {
+public:
+	explicit LibraryUpdateInfo();
+	static LibraryUpdateInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the folders added to.
 	 */
-	Q_PROPERTY(QStringList foldersAddedTo READ foldersAddedTo WRITE setFoldersAddedTo NOTIFY foldersAddedToChanged)
+	QStringList foldersAddedTo() const;
+	/**
+	* @brief Gets or sets the folders added to.
+	*/
+	void setFoldersAddedTo(QStringList newFoldersAddedTo);
 	/**
 	 * @brief Gets or sets the folders removed from.
 	 */
-	Q_PROPERTY(QStringList foldersRemovedFrom READ foldersRemovedFrom WRITE setFoldersRemovedFrom NOTIFY foldersRemovedFromChanged)
+	QStringList foldersRemovedFrom() const;
+	/**
+	* @brief Gets or sets the folders removed from.
+	*/
+	void setFoldersRemovedFrom(QStringList newFoldersRemovedFrom);
 	/**
 	 * @brief Gets or sets the items added.
 	 */
-	Q_PROPERTY(QStringList itemsAdded READ itemsAdded WRITE setItemsAdded NOTIFY itemsAddedChanged)
+	QStringList itemsAdded() const;
+	/**
+	* @brief Gets or sets the items added.
+	*/
+	void setItemsAdded(QStringList newItemsAdded);
 	/**
 	 * @brief Gets or sets the items removed.
 	 */
-	Q_PROPERTY(QStringList itemsRemoved READ itemsRemoved WRITE setItemsRemoved NOTIFY itemsRemovedChanged)
+	QStringList itemsRemoved() const;
+	/**
+	* @brief Gets or sets the items removed.
+	*/
+	void setItemsRemoved(QStringList newItemsRemoved);
 	/**
 	 * @brief Gets or sets the items updated.
 	 */
-	Q_PROPERTY(QStringList itemsUpdated READ itemsUpdated WRITE setItemsUpdated NOTIFY itemsUpdatedChanged)
-	Q_PROPERTY(QStringList collectionFolders READ collectionFolders WRITE setCollectionFolders NOTIFY collectionFoldersChanged)
-	Q_PROPERTY(bool isEmpty READ isEmpty WRITE setIsEmpty NOTIFY isEmptyChanged)
-
-	QStringList foldersAddedTo() const;
-	void setFoldersAddedTo(QStringList newFoldersAddedTo);
-	
-	QStringList foldersRemovedFrom() const;
-	void setFoldersRemovedFrom(QStringList newFoldersRemovedFrom);
-	
-	QStringList itemsAdded() const;
-	void setItemsAdded(QStringList newItemsAdded);
-	
-	QStringList itemsRemoved() const;
-	void setItemsRemoved(QStringList newItemsRemoved);
-	
 	QStringList itemsUpdated() const;
+	/**
+	* @brief Gets or sets the items updated.
+	*/
 	void setItemsUpdated(QStringList newItemsUpdated);
-	
+
 	QStringList collectionFolders() const;
+
 	void setCollectionFolders(QStringList newCollectionFolders);
-	
+
 	bool isEmpty() const;
+
 	void setIsEmpty(bool newIsEmpty);
-	
-signals:
-	void foldersAddedToChanged(QStringList newFoldersAddedTo);
-	void foldersRemovedFromChanged(QStringList newFoldersRemovedFrom);
-	void itemsAddedChanged(QStringList newItemsAdded);
-	void itemsRemovedChanged(QStringList newItemsRemoved);
-	void itemsUpdatedChanged(QStringList newItemsUpdated);
-	void collectionFoldersChanged(QStringList newCollectionFolders);
-	void isEmptyChanged(bool newIsEmpty);
+
 protected:
 	QStringList m_foldersAddedTo;
 	QStringList m_foldersRemovedFrom;
@@ -108,6 +109,18 @@ protected:
 	QStringList m_collectionFolders;
 	bool m_isEmpty;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LibraryUpdateInfo = Jellyfin::DTO::LibraryUpdateInfo;
+
+template <>
+LibraryUpdateInfo fromJsonValue<LibraryUpdateInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LibraryUpdateInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

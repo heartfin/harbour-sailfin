@@ -31,60 +31,75 @@
 #define JELLYFIN_DTO_UPLOADSUBTITLEDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class UploadSubtitleDto : public QObject {
-	Q_OBJECT
-public:
-	explicit UploadSubtitleDto(QObject *parent = nullptr);
-	static UploadSubtitleDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class UploadSubtitleDto {
+public:
+	explicit UploadSubtitleDto();
+	static UploadSubtitleDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the subtitle language.
 	 */
-	Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
+	QString language() const;
+	/**
+	* @brief Gets or sets the subtitle language.
+	*/
+	void setLanguage(QString newLanguage);
 	/**
 	 * @brief Gets or sets the subtitle format.
 	 */
-	Q_PROPERTY(QString format READ format WRITE setFormat NOTIFY formatChanged)
+	QString format() const;
+	/**
+	* @brief Gets or sets the subtitle format.
+	*/
+	void setFormat(QString newFormat);
 	/**
 	 * @brief Gets or sets a value indicating whether the subtitle is forced.
 	 */
-	Q_PROPERTY(bool isForced READ isForced WRITE setIsForced NOTIFY isForcedChanged)
+	bool isForced() const;
+	/**
+	* @brief Gets or sets a value indicating whether the subtitle is forced.
+	*/
+	void setIsForced(bool newIsForced);
 	/**
 	 * @brief Gets or sets the subtitle data.
 	 */
-	Q_PROPERTY(QString data READ data WRITE setData NOTIFY dataChanged)
-
-	QString language() const;
-	void setLanguage(QString newLanguage);
-	
-	QString format() const;
-	void setFormat(QString newFormat);
-	
-	bool isForced() const;
-	void setIsForced(bool newIsForced);
-	
 	QString data() const;
+	/**
+	* @brief Gets or sets the subtitle data.
+	*/
 	void setData(QString newData);
-	
-signals:
-	void languageChanged(QString newLanguage);
-	void formatChanged(QString newFormat);
-	void isForcedChanged(bool newIsForced);
-	void dataChanged(QString newData);
+
 protected:
 	QString m_language;
 	QString m_format;
 	bool m_isForced;
 	QString m_data;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UploadSubtitleDto = Jellyfin::DTO::UploadSubtitleDto;
+
+template <>
+UploadSubtitleDto fromJsonValue<UploadSubtitleDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UploadSubtitleDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

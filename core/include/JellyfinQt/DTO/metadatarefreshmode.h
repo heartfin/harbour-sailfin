@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_METADATAREFRESHMODE_H
 #define JELLYFIN_DTO_METADATAREFRESHMODE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class MetadataRefreshModeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		None,
 		ValidationOnly,
 		Default,
@@ -48,7 +53,36 @@ public:
 private:
 	explicit MetadataRefreshModeClass();
 };
+
 typedef MetadataRefreshModeClass::Value MetadataRefreshMode;
+
+} // NS DTO
+
+namespace Support {
+
+using MetadataRefreshMode = Jellyfin::DTO::MetadataRefreshMode;
+using MetadataRefreshModeClass = Jellyfin::DTO::MetadataRefreshModeClass;
+
+template <>
+MetadataRefreshMode fromJsonValue<MetadataRefreshMode>(const QJsonValue &source) {
+	if (!source.isString()) return MetadataRefreshModeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("None")) {
+		return MetadataRefreshModeClass::None;
+	}
+	if (str == QStringLiteral("ValidationOnly")) {
+		return MetadataRefreshModeClass::ValidationOnly;
+	}
+	if (str == QStringLiteral("Default")) {
+		return MetadataRefreshModeClass::Default;
+	}
+	if (str == QStringLiteral("FullRefresh")) {
+		return MetadataRefreshModeClass::FullRefresh;
+	}
+	
+	return MetadataRefreshModeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

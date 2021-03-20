@@ -14,11 +14,18 @@ private:
 	explicit {{className}}Class();
 };
 
-typedef {{className}} Class::Value {{className}};
+typedef {{className}}Class::Value {{className}};
+
+} // NS DTO
+
+namespace Support {
+
+using {{className}} = Jellyfin::DTO::{{className}};
+using {{className}}Class = Jellyfin::DTO::{{className}}Class;
 
 template <>
 
-{{className}} fromJsonValue<{{className}}>(QJsonValue source) {
+{{className}} fromJsonValue<{{className}}>(const QJsonValue &source) {
 	if (!source.isString()) return {{className}}Class::EnumNotSet;
 
 	QString str = source.toString();

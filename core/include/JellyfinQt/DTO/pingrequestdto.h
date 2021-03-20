@@ -31,32 +31,47 @@
 #define JELLYFIN_DTO_PINGREQUESTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PingRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit PingRequestDto(QObject *parent = nullptr);
-	static PingRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class PingRequestDto {
+public:
+	explicit PingRequestDto();
+	static PingRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the ping time.
 	 */
-	Q_PROPERTY(qint64 ping READ ping WRITE setPing NOTIFY pingChanged)
-
 	qint64 ping() const;
+	/**
+	* @brief Gets or sets the ping time.
+	*/
 	void setPing(qint64 newPing);
-	
-signals:
-	void pingChanged(qint64 newPing);
+
 protected:
 	qint64 m_ping;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PingRequestDto = Jellyfin::DTO::PingRequestDto;
+
+template <>
+PingRequestDto fromJsonValue<PingRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PingRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,43 +31,59 @@
 #define JELLYFIN_DTO_MEDIAUPDATEINFODTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaUpdateInfoDto : public QObject {
-	Q_OBJECT
-public:
-	explicit MediaUpdateInfoDto(QObject *parent = nullptr);
-	static MediaUpdateInfoDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class MediaUpdateInfoDto {
+public:
+	explicit MediaUpdateInfoDto();
+	static MediaUpdateInfoDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets media path.
 	 */
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+	QString path() const;
+	/**
+	* @brief Gets or sets media path.
+	*/
+	void setPath(QString newPath);
 	/**
 	 * @brief Gets or sets media update type.
 Created, Modified, Deleted.
 	 */
-	Q_PROPERTY(QString updateType READ updateType WRITE setUpdateType NOTIFY updateTypeChanged)
-
-	QString path() const;
-	void setPath(QString newPath);
-	
 	QString updateType() const;
+	/**
+	* @brief Gets or sets media update type.
+Created, Modified, Deleted.
+	*/
 	void setUpdateType(QString newUpdateType);
-	
-signals:
-	void pathChanged(QString newPath);
-	void updateTypeChanged(QString newUpdateType);
+
 protected:
 	QString m_path;
 	QString m_updateType;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaUpdateInfoDto = Jellyfin::DTO::MediaUpdateInfoDto;
+
+template <>
+MediaUpdateInfoDto fromJsonValue<MediaUpdateInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaUpdateInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

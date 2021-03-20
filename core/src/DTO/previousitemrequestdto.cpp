@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-PreviousItemRequestDto::PreviousItemRequestDto(QObject *parent) : QObject(parent) {}
+PreviousItemRequestDto::PreviousItemRequestDto(QObject *parent) {}
 
-PreviousItemRequestDto *PreviousItemRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	PreviousItemRequestDto *instance = new PreviousItemRequestDto(parent);
-	instance->updateFromJSON(source);
+PreviousItemRequestDto PreviousItemRequestDto::fromJson(QJsonObject source) {PreviousItemRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PreviousItemRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PreviousItemRequestDto::setFromJson(QJsonObject source) {
+	m_playlistItemId = fromJsonValue<QUuid>(source["PlaylistItemId"]);
+
 }
-QJsonObject PreviousItemRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PreviousItemRequestDto::toJson() {
 	QJsonObject result;
+	result["PlaylistItemId"] = toJsonValue<QUuid>(m_playlistItemId);
+
 	return result;
 }
-QString PreviousItemRequestDto::playlistItemId() const { return m_playlistItemId; }
-void PreviousItemRequestDto::setPlaylistItemId(QString newPlaylistItemId) {
+
+QUuid PreviousItemRequestDto::playlistItemId() const { return m_playlistItemId; }
+
+void PreviousItemRequestDto::setPlaylistItemId(QUuid newPlaylistItemId) {
 	m_playlistItemId = newPlaylistItemId;
-	emit playlistItemIdChanged(newPlaylistItemId);
 }
 
 

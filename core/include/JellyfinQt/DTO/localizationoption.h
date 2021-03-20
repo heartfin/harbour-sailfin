@@ -31,36 +31,49 @@
 #define JELLYFIN_DTO_LOCALIZATIONOPTION_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LocalizationOption : public QObject {
-	Q_OBJECT
-public:
-	explicit LocalizationOption(QObject *parent = nullptr);
-	static LocalizationOption *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-	Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
+class LocalizationOption {
+public:
+	explicit LocalizationOption();
+	static LocalizationOption fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString name() const;
+
 	void setName(QString newName);
-	
+
 	QString value() const;
+
 	void setValue(QString newValue);
-	
-signals:
-	void nameChanged(QString newName);
-	void valueChanged(QString newValue);
+
 protected:
 	QString m_name;
 	QString m_value;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LocalizationOption = Jellyfin::DTO::LocalizationOption;
+
+template <>
+LocalizationOption fromJsonValue<LocalizationOption>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LocalizationOption::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

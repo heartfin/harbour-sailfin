@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-ControlResponse::ControlResponse(QObject *parent) : QObject(parent) {}
+ControlResponse::ControlResponse(QObject *parent) {}
 
-ControlResponse *ControlResponse::fromJSON(QJsonObject source, QObject *parent) {
-	ControlResponse *instance = new ControlResponse(parent);
-	instance->updateFromJSON(source);
+ControlResponse ControlResponse::fromJson(QJsonObject source) {ControlResponse instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ControlResponse::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ControlResponse::setFromJson(QJsonObject source) {
+	m_headers = fromJsonValue<QJsonObject>(source["Headers"]);
+	m_xml = fromJsonValue<QString>(source["Xml"]);
+	m_isSuccessful = fromJsonValue<bool>(source["IsSuccessful"]);
+
 }
-QJsonObject ControlResponse::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ControlResponse::toJson() {
 	QJsonObject result;
+	result["Headers"] = toJsonValue<QJsonObject>(m_headers);
+	result["Xml"] = toJsonValue<QString>(m_xml);
+	result["IsSuccessful"] = toJsonValue<bool>(m_isSuccessful);
+
 	return result;
 }
+
 QJsonObject ControlResponse::headers() const { return m_headers; }
+
 void ControlResponse::setHeaders(QJsonObject newHeaders) {
 	m_headers = newHeaders;
-	emit headersChanged(newHeaders);
 }
-
 QString ControlResponse::xml() const { return m_xml; }
+
 void ControlResponse::setXml(QString newXml) {
 	m_xml = newXml;
-	emit xmlChanged(newXml);
 }
-
 bool ControlResponse::isSuccessful() const { return m_isSuccessful; }
+
 void ControlResponse::setIsSuccessful(bool newIsSuccessful) {
 	m_isSuccessful = newIsSuccessful;
-	emit isSuccessfulChanged(newIsSuccessful);
 }
 
 

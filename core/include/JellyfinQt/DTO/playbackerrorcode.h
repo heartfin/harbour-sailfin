@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_PLAYBACKERRORCODE_H
 #define JELLYFIN_DTO_PLAYBACKERRORCODE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class PlaybackErrorCodeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		NotAllowed,
 		NoCompatibleStream,
 		RateLimitExceeded,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit PlaybackErrorCodeClass();
 };
+
 typedef PlaybackErrorCodeClass::Value PlaybackErrorCode;
+
+} // NS DTO
+
+namespace Support {
+
+using PlaybackErrorCode = Jellyfin::DTO::PlaybackErrorCode;
+using PlaybackErrorCodeClass = Jellyfin::DTO::PlaybackErrorCodeClass;
+
+template <>
+PlaybackErrorCode fromJsonValue<PlaybackErrorCode>(const QJsonValue &source) {
+	if (!source.isString()) return PlaybackErrorCodeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("NotAllowed")) {
+		return PlaybackErrorCodeClass::NotAllowed;
+	}
+	if (str == QStringLiteral("NoCompatibleStream")) {
+		return PlaybackErrorCodeClass::NoCompatibleStream;
+	}
+	if (str == QStringLiteral("RateLimitExceeded")) {
+		return PlaybackErrorCodeClass::RateLimitExceeded;
+	}
+	
+	return PlaybackErrorCodeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

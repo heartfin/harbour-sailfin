@@ -32,101 +32,103 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <QUuid>
+#include <optional>
 
 #include "JellyfinQt/DTO/loglevel.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ActivityLogEntry : public QObject {
-	Q_OBJECT
-public:
-	explicit ActivityLogEntry(QObject *parent = nullptr);
-	static ActivityLogEntry *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ActivityLogEntry {
+public:
+	explicit ActivityLogEntry();
+	static ActivityLogEntry fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the identifier.
 	 */
-	Q_PROPERTY(qint64 jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	qint64 jellyfinId() const;
+	/**
+	* @brief Gets or sets the identifier.
+	*/
+	void setJellyfinId(qint64 newJellyfinId);
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the overview.
 	 */
-	Q_PROPERTY(QString overview READ overview WRITE setOverview NOTIFY overviewChanged)
+	QString overview() const;
+	/**
+	* @brief Gets or sets the overview.
+	*/
+	void setOverview(QString newOverview);
 	/**
 	 * @brief Gets or sets the short overview.
 	 */
-	Q_PROPERTY(QString shortOverview READ shortOverview WRITE setShortOverview NOTIFY shortOverviewChanged)
+	QString shortOverview() const;
+	/**
+	* @brief Gets or sets the short overview.
+	*/
+	void setShortOverview(QString newShortOverview);
 	/**
 	 * @brief Gets or sets the type.
 	 */
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
+	QString type() const;
+	/**
+	* @brief Gets or sets the type.
+	*/
+	void setType(QString newType);
 	/**
 	 * @brief Gets or sets the item identifier.
 	 */
-	Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
+	QString itemId() const;
+	/**
+	* @brief Gets or sets the item identifier.
+	*/
+	void setItemId(QString newItemId);
 	/**
 	 * @brief Gets or sets the date.
 	 */
-	Q_PROPERTY(QDateTime date READ date WRITE setDate NOTIFY dateChanged)
+	QDateTime date() const;
+	/**
+	* @brief Gets or sets the date.
+	*/
+	void setDate(QDateTime newDate);
 	/**
 	 * @brief Gets or sets the user identifier.
 	 */
-	Q_PROPERTY(QString userId READ userId WRITE setUserId NOTIFY userIdChanged)
+	QUuid userId() const;
+	/**
+	* @brief Gets or sets the user identifier.
+	*/
+	void setUserId(QUuid newUserId);
 	/**
 	 * @brief Gets or sets the user primary image tag.
 	 */
-	Q_PROPERTY(QString userPrimaryImageTag READ userPrimaryImageTag WRITE setUserPrimaryImageTag NOTIFY userPrimaryImageTagChanged)
-	Q_PROPERTY(LogLevel severity READ severity WRITE setSeverity NOTIFY severityChanged)
-
-	qint64 jellyfinId() const;
-	void setJellyfinId(qint64 newJellyfinId);
-	
-	QString name() const;
-	void setName(QString newName);
-	
-	QString overview() const;
-	void setOverview(QString newOverview);
-	
-	QString shortOverview() const;
-	void setShortOverview(QString newShortOverview);
-	
-	QString type() const;
-	void setType(QString newType);
-	
-	QString itemId() const;
-	void setItemId(QString newItemId);
-	
-	QDateTime date() const;
-	void setDate(QDateTime newDate);
-	
-	QString userId() const;
-	void setUserId(QString newUserId);
-	
 	QString userPrimaryImageTag() const;
+	/**
+	* @brief Gets or sets the user primary image tag.
+	*/
 	void setUserPrimaryImageTag(QString newUserPrimaryImageTag);
-	
+
 	LogLevel severity() const;
+
 	void setSeverity(LogLevel newSeverity);
-	
-signals:
-	void jellyfinIdChanged(qint64 newJellyfinId);
-	void nameChanged(QString newName);
-	void overviewChanged(QString newOverview);
-	void shortOverviewChanged(QString newShortOverview);
-	void typeChanged(QString newType);
-	void itemIdChanged(QString newItemId);
-	void dateChanged(QDateTime newDate);
-	void userIdChanged(QString newUserId);
-	void userPrimaryImageTagChanged(QString newUserPrimaryImageTag);
-	void severityChanged(LogLevel newSeverity);
+
 protected:
 	qint64 m_jellyfinId;
 	QString m_name;
@@ -135,10 +137,22 @@ protected:
 	QString m_type;
 	QString m_itemId;
 	QDateTime m_date;
-	QString m_userId;
+	QUuid m_userId;
 	QString m_userPrimaryImageTag;
 	LogLevel m_severity;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ActivityLogEntry = Jellyfin::DTO::ActivityLogEntry;
+
+template <>
+ActivityLogEntry fromJsonValue<ActivityLogEntry>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ActivityLogEntry::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

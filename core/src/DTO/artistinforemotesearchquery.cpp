@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-ArtistInfoRemoteSearchQuery::ArtistInfoRemoteSearchQuery(QObject *parent) : QObject(parent) {}
+ArtistInfoRemoteSearchQuery::ArtistInfoRemoteSearchQuery(QObject *parent) {}
 
-ArtistInfoRemoteSearchQuery *ArtistInfoRemoteSearchQuery::fromJSON(QJsonObject source, QObject *parent) {
-	ArtistInfoRemoteSearchQuery *instance = new ArtistInfoRemoteSearchQuery(parent);
-	instance->updateFromJSON(source);
+ArtistInfoRemoteSearchQuery ArtistInfoRemoteSearchQuery::fromJson(QJsonObject source) {ArtistInfoRemoteSearchQuery instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ArtistInfoRemoteSearchQuery::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ArtistInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
+	m_searchInfo = fromJsonValue<QSharedPointer<ArtistInfo>>(source["SearchInfo"]);
+	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+
 }
-QJsonObject ArtistInfoRemoteSearchQuery::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ArtistInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
+	result["SearchInfo"] = toJsonValue<QSharedPointer<ArtistInfo>>(m_searchInfo);
+	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+
 	return result;
 }
-ArtistInfo * ArtistInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
-void ArtistInfoRemoteSearchQuery::setSearchInfo(ArtistInfo * newSearchInfo) {
+
+QSharedPointer<ArtistInfo> ArtistInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
+
+void ArtistInfoRemoteSearchQuery::setSearchInfo(QSharedPointer<ArtistInfo> newSearchInfo) {
 	m_searchInfo = newSearchInfo;
-	emit searchInfoChanged(newSearchInfo);
 }
+QUuid ArtistInfoRemoteSearchQuery::itemId() const { return m_itemId; }
 
-QString ArtistInfoRemoteSearchQuery::itemId() const { return m_itemId; }
-void ArtistInfoRemoteSearchQuery::setItemId(QString newItemId) {
+void ArtistInfoRemoteSearchQuery::setItemId(QUuid newItemId) {
 	m_itemId = newItemId;
-	emit itemIdChanged(newItemId);
 }
-
 QString ArtistInfoRemoteSearchQuery::searchProviderName() const { return m_searchProviderName; }
+
 void ArtistInfoRemoteSearchQuery::setSearchProviderName(QString newSearchProviderName) {
 	m_searchProviderName = newSearchProviderName;
-	emit searchProviderNameChanged(newSearchProviderName);
 }
-
 bool ArtistInfoRemoteSearchQuery::includeDisabledProviders() const { return m_includeDisabledProviders; }
+
 void ArtistInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncludeDisabledProviders) {
 	m_includeDisabledProviders = newIncludeDisabledProviders;
-	emit includeDisabledProvidersChanged(newIncludeDisabledProviders);
 }
 
 

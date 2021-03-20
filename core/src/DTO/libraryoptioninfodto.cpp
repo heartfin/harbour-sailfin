@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-LibraryOptionInfoDto::LibraryOptionInfoDto(QObject *parent) : QObject(parent) {}
+LibraryOptionInfoDto::LibraryOptionInfoDto(QObject *parent) {}
 
-LibraryOptionInfoDto *LibraryOptionInfoDto::fromJSON(QJsonObject source, QObject *parent) {
-	LibraryOptionInfoDto *instance = new LibraryOptionInfoDto(parent);
-	instance->updateFromJSON(source);
+LibraryOptionInfoDto LibraryOptionInfoDto::fromJson(QJsonObject source) {LibraryOptionInfoDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void LibraryOptionInfoDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void LibraryOptionInfoDto::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_defaultEnabled = fromJsonValue<bool>(source["DefaultEnabled"]);
+
 }
-QJsonObject LibraryOptionInfoDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject LibraryOptionInfoDto::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["DefaultEnabled"] = toJsonValue<bool>(m_defaultEnabled);
+
 	return result;
 }
+
 QString LibraryOptionInfoDto::name() const { return m_name; }
+
 void LibraryOptionInfoDto::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 bool LibraryOptionInfoDto::defaultEnabled() const { return m_defaultEnabled; }
+
 void LibraryOptionInfoDto::setDefaultEnabled(bool newDefaultEnabled) {
 	m_defaultEnabled = newDefaultEnabled;
-	emit defaultEnabledChanged(newDefaultEnabled);
 }
 
 

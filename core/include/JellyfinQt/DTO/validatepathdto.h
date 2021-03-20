@@ -31,51 +31,66 @@
 #define JELLYFIN_DTO_VALIDATEPATHDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ValidatePathDto : public QObject {
-	Q_OBJECT
-public:
-	explicit ValidatePathDto(QObject *parent = nullptr);
-	static ValidatePathDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ValidatePathDto {
+public:
+	explicit ValidatePathDto();
+	static ValidatePathDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets a value indicating whether validate if path is writable.
 	 */
-	Q_PROPERTY(bool validateWritable READ validateWritable WRITE setValidateWritable NOTIFY validateWritableChanged)
+	bool validateWritable() const;
+	/**
+	* @brief Gets or sets a value indicating whether validate if path is writable.
+	*/
+	void setValidateWritable(bool newValidateWritable);
 	/**
 	 * @brief Gets or sets the path.
 	 */
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+	QString path() const;
+	/**
+	* @brief Gets or sets the path.
+	*/
+	void setPath(QString newPath);
 	/**
 	 * @brief Gets or sets is path file.
 	 */
-	Q_PROPERTY(bool isFile READ isFile WRITE setIsFile NOTIFY isFileChanged)
-
-	bool validateWritable() const;
-	void setValidateWritable(bool newValidateWritable);
-	
-	QString path() const;
-	void setPath(QString newPath);
-	
 	bool isFile() const;
+	/**
+	* @brief Gets or sets is path file.
+	*/
 	void setIsFile(bool newIsFile);
-	
-signals:
-	void validateWritableChanged(bool newValidateWritable);
-	void pathChanged(QString newPath);
-	void isFileChanged(bool newIsFile);
+
 protected:
 	bool m_validateWritable;
 	QString m_path;
 	bool m_isFile;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ValidatePathDto = Jellyfin::DTO::ValidatePathDto;
+
+template <>
+ValidatePathDto fromJsonValue<ValidatePathDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ValidatePathDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

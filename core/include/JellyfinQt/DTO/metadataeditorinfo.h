@@ -31,68 +31,77 @@
 #define JELLYFIN_DTO_METADATAEDITORINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/countryinfo.h"
+#include "JellyfinQt/DTO/culturedto.h"
+#include "JellyfinQt/DTO/externalidinfo.h"
+#include "JellyfinQt/DTO/namevaluepair.h"
+#include "JellyfinQt/DTO/parentalrating.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class CountryInfo;
-class CultureDto;
-class ExternalIdInfo;
-class NameValuePair;
-class ParentalRating;
 
-class MetadataEditorInfo : public QObject {
-	Q_OBJECT
+class MetadataEditorInfo {
 public:
-	explicit MetadataEditorInfo(QObject *parent = nullptr);
-	static MetadataEditorInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
+	explicit MetadataEditorInfo();
+	static MetadataEditorInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
-	Q_PROPERTY(QList<ParentalRating *> parentalRatingOptions READ parentalRatingOptions WRITE setParentalRatingOptions NOTIFY parentalRatingOptionsChanged)
-	Q_PROPERTY(QList<CountryInfo *> countries READ countries WRITE setCountries NOTIFY countriesChanged)
-	Q_PROPERTY(QList<CultureDto *> cultures READ cultures WRITE setCultures NOTIFY culturesChanged)
-	Q_PROPERTY(QList<ExternalIdInfo *> externalIdInfos READ externalIdInfos WRITE setExternalIdInfos NOTIFY externalIdInfosChanged)
-	Q_PROPERTY(QString contentType READ contentType WRITE setContentType NOTIFY contentTypeChanged)
-	Q_PROPERTY(QList<NameValuePair *> contentTypeOptions READ contentTypeOptions WRITE setContentTypeOptions NOTIFY contentTypeOptionsChanged)
+	QList<QSharedPointer<ParentalRating>> parentalRatingOptions() const;
 
-	QList<ParentalRating *> parentalRatingOptions() const;
-	void setParentalRatingOptions(QList<ParentalRating *> newParentalRatingOptions);
-	
-	QList<CountryInfo *> countries() const;
-	void setCountries(QList<CountryInfo *> newCountries);
-	
-	QList<CultureDto *> cultures() const;
-	void setCultures(QList<CultureDto *> newCultures);
-	
-	QList<ExternalIdInfo *> externalIdInfos() const;
-	void setExternalIdInfos(QList<ExternalIdInfo *> newExternalIdInfos);
-	
+	void setParentalRatingOptions(QList<QSharedPointer<ParentalRating>> newParentalRatingOptions);
+
+	QList<QSharedPointer<CountryInfo>> countries() const;
+
+	void setCountries(QList<QSharedPointer<CountryInfo>> newCountries);
+
+	QList<QSharedPointer<CultureDto>> cultures() const;
+
+	void setCultures(QList<QSharedPointer<CultureDto>> newCultures);
+
+	QList<QSharedPointer<ExternalIdInfo>> externalIdInfos() const;
+
+	void setExternalIdInfos(QList<QSharedPointer<ExternalIdInfo>> newExternalIdInfos);
+
 	QString contentType() const;
+
 	void setContentType(QString newContentType);
-	
-	QList<NameValuePair *> contentTypeOptions() const;
-	void setContentTypeOptions(QList<NameValuePair *> newContentTypeOptions);
-	
-signals:
-	void parentalRatingOptionsChanged(QList<ParentalRating *> newParentalRatingOptions);
-	void countriesChanged(QList<CountryInfo *> newCountries);
-	void culturesChanged(QList<CultureDto *> newCultures);
-	void externalIdInfosChanged(QList<ExternalIdInfo *> newExternalIdInfos);
-	void contentTypeChanged(QString newContentType);
-	void contentTypeOptionsChanged(QList<NameValuePair *> newContentTypeOptions);
+
+	QList<QSharedPointer<NameValuePair>> contentTypeOptions() const;
+
+	void setContentTypeOptions(QList<QSharedPointer<NameValuePair>> newContentTypeOptions);
+
 protected:
-	QList<ParentalRating *> m_parentalRatingOptions;
-	QList<CountryInfo *> m_countries;
-	QList<CultureDto *> m_cultures;
-	QList<ExternalIdInfo *> m_externalIdInfos;
+	QList<QSharedPointer<ParentalRating>> m_parentalRatingOptions;
+	QList<QSharedPointer<CountryInfo>> m_countries;
+	QList<QSharedPointer<CultureDto>> m_cultures;
+	QList<QSharedPointer<ExternalIdInfo>> m_externalIdInfos;
 	QString m_contentType;
-	QList<NameValuePair *> m_contentTypeOptions;
+	QList<QSharedPointer<NameValuePair>> m_contentTypeOptions;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MetadataEditorInfo = Jellyfin::DTO::MetadataEditorInfo;
+
+template <>
+MetadataEditorInfo fromJsonValue<MetadataEditorInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MetadataEditorInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

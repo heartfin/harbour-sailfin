@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_STARTUPUSERDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class StartupUserDto : public QObject {
-	Q_OBJECT
-public:
-	explicit StartupUserDto(QObject *parent = nullptr);
-	static StartupUserDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class StartupUserDto {
+public:
+	explicit StartupUserDto();
+	static StartupUserDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the username.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the username.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the user's password.
 	 */
-	Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
 	QString password() const;
+	/**
+	* @brief Gets or sets the user's password.
+	*/
 	void setPassword(QString newPassword);
-	
-signals:
-	void nameChanged(QString newName);
-	void passwordChanged(QString newPassword);
+
 protected:
 	QString m_name;
 	QString m_password;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using StartupUserDto = Jellyfin::DTO::StartupUserDto;
+
+template <>
+StartupUserDto fromJsonValue<StartupUserDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return StartupUserDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

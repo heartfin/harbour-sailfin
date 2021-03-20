@@ -31,30 +31,44 @@
 #define JELLYFIN_DTO_DEVICEOPTIONS_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class DeviceOptions : public QObject {
-	Q_OBJECT
-public:
-	explicit DeviceOptions(QObject *parent = nullptr);
-	static DeviceOptions *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString customName READ customName WRITE setCustomName NOTIFY customNameChanged)
+class DeviceOptions {
+public:
+	explicit DeviceOptions();
+	static DeviceOptions fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString customName() const;
+
 	void setCustomName(QString newCustomName);
-	
-signals:
-	void customNameChanged(QString newCustomName);
+
 protected:
 	QString m_customName;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DeviceOptions = Jellyfin::DTO::DeviceOptions;
+
+template <>
+DeviceOptions fromJsonValue<DeviceOptions>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceOptions::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

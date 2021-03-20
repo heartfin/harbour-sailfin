@@ -31,70 +31,73 @@
 #define JELLYFIN_DTO_BASEITEMPERSON_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class BaseItemPerson : public QObject {
-	Q_OBJECT
-public:
-	explicit BaseItemPerson(QObject *parent = nullptr);
-	static BaseItemPerson *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class BaseItemPerson {
+public:
+	explicit BaseItemPerson();
+	static BaseItemPerson fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the identifier.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the identifier.
+	*/
+	void setJellyfinId(QString newJellyfinId);
 	/**
 	 * @brief Gets or sets the role.
 	 */
-	Q_PROPERTY(QString role READ role WRITE setRole NOTIFY roleChanged)
+	QString role() const;
+	/**
+	* @brief Gets or sets the role.
+	*/
+	void setRole(QString newRole);
 	/**
 	 * @brief Gets or sets the type.
 	 */
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
+	QString type() const;
+	/**
+	* @brief Gets or sets the type.
+	*/
+	void setType(QString newType);
 	/**
 	 * @brief Gets or sets the primary image tag.
 	 */
-	Q_PROPERTY(QString primaryImageTag READ primaryImageTag WRITE setPrimaryImageTag NOTIFY primaryImageTagChanged)
+	QString primaryImageTag() const;
+	/**
+	* @brief Gets or sets the primary image tag.
+	*/
+	void setPrimaryImageTag(QString newPrimaryImageTag);
 	/**
 	 * @brief Gets or sets the primary image blurhash.
 	 */
-	Q_PROPERTY(QJsonObject imageBlurHashes READ imageBlurHashes WRITE setImageBlurHashes NOTIFY imageBlurHashesChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	QString role() const;
-	void setRole(QString newRole);
-	
-	QString type() const;
-	void setType(QString newType);
-	
-	QString primaryImageTag() const;
-	void setPrimaryImageTag(QString newPrimaryImageTag);
-	
 	QJsonObject imageBlurHashes() const;
+	/**
+	* @brief Gets or sets the primary image blurhash.
+	*/
 	void setImageBlurHashes(QJsonObject newImageBlurHashes);
-	
-signals:
-	void nameChanged(QString newName);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void roleChanged(QString newRole);
-	void typeChanged(QString newType);
-	void primaryImageTagChanged(QString newPrimaryImageTag);
-	void imageBlurHashesChanged(QJsonObject newImageBlurHashes);
+
 protected:
 	QString m_name;
 	QString m_jellyfinId;
@@ -103,6 +106,18 @@ protected:
 	QString m_primaryImageTag;
 	QJsonObject m_imageBlurHashes;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using BaseItemPerson = Jellyfin::DTO::BaseItemPerson;
+
+template <>
+BaseItemPerson fromJsonValue<BaseItemPerson>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return BaseItemPerson::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

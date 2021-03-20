@@ -31,115 +31,127 @@
 #define JELLYFIN_DTO_TASKINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
+#include "JellyfinQt/DTO/taskresult.h"
 #include "JellyfinQt/DTO/taskstate.h"
+#include "JellyfinQt/DTO/tasktriggerinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class TaskResult;
-class TaskTriggerInfo;
 
-class TaskInfo : public QObject {
-	Q_OBJECT
+class TaskInfo {
 public:
-	explicit TaskInfo(QObject *parent = nullptr);
-	static TaskInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit TaskInfo();
+	static TaskInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-	Q_PROPERTY(TaskState state READ state WRITE setState NOTIFY stateChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
+
+	TaskState state() const;
+
+	void setState(TaskState newState);
 	/**
 	 * @brief Gets or sets the progress.
 	 */
-	Q_PROPERTY(double currentProgressPercentage READ currentProgressPercentage WRITE setCurrentProgressPercentage NOTIFY currentProgressPercentageChanged)
+	double currentProgressPercentage() const;
+	/**
+	* @brief Gets or sets the progress.
+	*/
+	void setCurrentProgressPercentage(double newCurrentProgressPercentage);
 	/**
 	 * @brief Gets or sets the id.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-	Q_PROPERTY(TaskResult * lastExecutionResult READ lastExecutionResult WRITE setLastExecutionResult NOTIFY lastExecutionResultChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the id.
+	*/
+	void setJellyfinId(QString newJellyfinId);
+
+	QSharedPointer<TaskResult> lastExecutionResult() const;
+
+	void setLastExecutionResult(QSharedPointer<TaskResult> newLastExecutionResult);
 	/**
 	 * @brief Gets or sets the triggers.
 	 */
-	Q_PROPERTY(QList<TaskTriggerInfo *> triggers READ triggers WRITE setTriggers NOTIFY triggersChanged)
+	QList<QSharedPointer<TaskTriggerInfo>> triggers() const;
+	/**
+	* @brief Gets or sets the triggers.
+	*/
+	void setTriggers(QList<QSharedPointer<TaskTriggerInfo>> newTriggers);
 	/**
 	 * @brief Gets or sets the description.
 	 */
-	Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+	QString description() const;
+	/**
+	* @brief Gets or sets the description.
+	*/
+	void setDescription(QString newDescription);
 	/**
 	 * @brief Gets or sets the category.
 	 */
-	Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
+	QString category() const;
+	/**
+	* @brief Gets or sets the category.
+	*/
+	void setCategory(QString newCategory);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is hidden.
 	 */
-	Q_PROPERTY(bool isHidden READ isHidden WRITE setIsHidden NOTIFY isHiddenChanged)
+	bool isHidden() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is hidden.
+	*/
+	void setIsHidden(bool newIsHidden);
 	/**
 	 * @brief Gets or sets the key.
 	 */
-	Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	TaskState state() const;
-	void setState(TaskState newState);
-	
-	double currentProgressPercentage() const;
-	void setCurrentProgressPercentage(double newCurrentProgressPercentage);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	TaskResult * lastExecutionResult() const;
-	void setLastExecutionResult(TaskResult * newLastExecutionResult);
-	
-	QList<TaskTriggerInfo *> triggers() const;
-	void setTriggers(QList<TaskTriggerInfo *> newTriggers);
-	
-	QString description() const;
-	void setDescription(QString newDescription);
-	
-	QString category() const;
-	void setCategory(QString newCategory);
-	
-	bool isHidden() const;
-	void setIsHidden(bool newIsHidden);
-	
 	QString key() const;
+	/**
+	* @brief Gets or sets the key.
+	*/
 	void setKey(QString newKey);
-	
-signals:
-	void nameChanged(QString newName);
-	void stateChanged(TaskState newState);
-	void currentProgressPercentageChanged(double newCurrentProgressPercentage);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void lastExecutionResultChanged(TaskResult * newLastExecutionResult);
-	void triggersChanged(QList<TaskTriggerInfo *> newTriggers);
-	void descriptionChanged(QString newDescription);
-	void categoryChanged(QString newCategory);
-	void isHiddenChanged(bool newIsHidden);
-	void keyChanged(QString newKey);
+
 protected:
 	QString m_name;
 	TaskState m_state;
 	double m_currentProgressPercentage;
 	QString m_jellyfinId;
-	TaskResult * m_lastExecutionResult = nullptr;
-	QList<TaskTriggerInfo *> m_triggers;
+	QSharedPointer<TaskResult> m_lastExecutionResult = nullptr;
+	QList<QSharedPointer<TaskTriggerInfo>> m_triggers;
 	QString m_description;
 	QString m_category;
 	bool m_isHidden;
 	QString m_key;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TaskInfo = Jellyfin::DTO::TaskInfo;
+
+template <>
+TaskInfo fromJsonValue<TaskInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TaskInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

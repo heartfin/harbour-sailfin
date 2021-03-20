@@ -1,30 +1,23 @@
-{{className}}::{{className}}(QObject *parent) : QObject(parent) {}
+{{className}}::{{className}}(QObject *parent) {}
 
 
-{{className}} *{{className}}::fromJSON(QJsonObject source, QObject *parent) {
-	{{className}} *instance = new {{className}}(parent);
-	instance->updateFromJSON(source, false);
+{{className}} {{className}}::fromJson(QJsonObject source) {
+	{{className}} instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
 
-void {{className}}::updateFromJSON(QJsonObject source, bool emitSignals) {
+void {{className}}::setFromJson(QJsonObject source) {
 
 	{{#each properties as |property|}}
 	{{property.memberName}} = fromJsonValue<{{property.typeNameWithQualifiers}}>(source["{{property.originalName}}"]);
 
 	{{/each}}
-	
-	if (emitSignals) {
 
-	{{#each properties as |property|}}
-		emit {{property.name}}Changed({{property.memberName}});
-
-	{{/each}}
-	}
 }
 	
-QJsonObject {{className}}::toJSON() {
+QJsonObject {{className}}::toJson() {
 	QJsonObject result;
 
 	{{#each properties as |property|}}
@@ -33,7 +26,7 @@ QJsonObject {{className}}::toJSON() {
 	{{/each}}
 
 	return result;
-}"
+}
 
 
 {{#each properties as |property|}}
@@ -42,8 +35,14 @@ QJsonObject {{className}}::toJSON() {
 void {{className}}::set{{property.writeName}}({{property.typeNameWithQualifiers}} new{{property.writeName}}) {
 	
 	{{property.memberName}} = new{{property.writeName}};
-	emit {{property.name}}Changed(new{{property.writeName}});
 }
 
+{{#if property.isNullable}}
+bool {{className}}::is{{property.writeName}}Null() const {
+	return {{property.nullableCheck}};
+}
 
+void {{className}}::setNull() {
+	{{property.nullableSetter}};
+}
 {{/each}}

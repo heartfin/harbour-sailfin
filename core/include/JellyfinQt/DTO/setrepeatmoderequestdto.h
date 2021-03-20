@@ -31,31 +31,44 @@
 #define JELLYFIN_DTO_SETREPEATMODEREQUESTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
 
 #include "JellyfinQt/DTO/grouprepeatmode.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SetRepeatModeRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit SetRepeatModeRequestDto(QObject *parent = nullptr);
-	static SetRepeatModeRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(GroupRepeatMode mode READ mode WRITE setMode NOTIFY modeChanged)
+class SetRepeatModeRequestDto {
+public:
+	explicit SetRepeatModeRequestDto();
+	static SetRepeatModeRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	GroupRepeatMode mode() const;
+
 	void setMode(GroupRepeatMode newMode);
-	
-signals:
-	void modeChanged(GroupRepeatMode newMode);
+
 protected:
 	GroupRepeatMode m_mode;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SetRepeatModeRequestDto = Jellyfin::DTO::SetRepeatModeRequestDto;
+
+template <>
+SetRepeatModeRequestDto fromJsonValue<SetRepeatModeRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SetRepeatModeRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

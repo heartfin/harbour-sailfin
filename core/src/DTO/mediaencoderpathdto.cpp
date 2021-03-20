@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaEncoderPathDto::MediaEncoderPathDto(QObject *parent) : QObject(parent) {}
+MediaEncoderPathDto::MediaEncoderPathDto(QObject *parent) {}
 
-MediaEncoderPathDto *MediaEncoderPathDto::fromJSON(QJsonObject source, QObject *parent) {
-	MediaEncoderPathDto *instance = new MediaEncoderPathDto(parent);
-	instance->updateFromJSON(source);
+MediaEncoderPathDto MediaEncoderPathDto::fromJson(QJsonObject source) {MediaEncoderPathDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MediaEncoderPathDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MediaEncoderPathDto::setFromJson(QJsonObject source) {
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_pathType = fromJsonValue<QString>(source["PathType"]);
+
 }
-QJsonObject MediaEncoderPathDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MediaEncoderPathDto::toJson() {
 	QJsonObject result;
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["PathType"] = toJsonValue<QString>(m_pathType);
+
 	return result;
 }
+
 QString MediaEncoderPathDto::path() const { return m_path; }
+
 void MediaEncoderPathDto::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
-
 QString MediaEncoderPathDto::pathType() const { return m_pathType; }
+
 void MediaEncoderPathDto::setPathType(QString newPathType) {
 	m_pathType = newPathType;
-	emit pathTypeChanged(newPathType);
 }
 
 

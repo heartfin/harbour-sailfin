@@ -29,49 +29,54 @@
 
 #include <JellyfinQt/DTO/recommendationdto.h>
 
-#include <JellyfinQt/DTO/recommendationtype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-RecommendationDto::RecommendationDto(QObject *parent) : QObject(parent) {}
+RecommendationDto::RecommendationDto(QObject *parent) {}
 
-RecommendationDto *RecommendationDto::fromJSON(QJsonObject source, QObject *parent) {
-	RecommendationDto *instance = new RecommendationDto(parent);
-	instance->updateFromJSON(source);
+RecommendationDto RecommendationDto::fromJson(QJsonObject source) {RecommendationDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void RecommendationDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void RecommendationDto::setFromJson(QJsonObject source) {
+	m_items = fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
+	m_recommendationType = fromJsonValue<RecommendationType>(source["RecommendationType"]);
+	m_baselineItemName = fromJsonValue<QString>(source["BaselineItemName"]);
+	m_categoryId = fromJsonValue<QUuid>(source["CategoryId"]);
+
 }
-QJsonObject RecommendationDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject RecommendationDto::toJson() {
 	QJsonObject result;
+	result["Items"] = toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
+	result["RecommendationType"] = toJsonValue<RecommendationType>(m_recommendationType);
+	result["BaselineItemName"] = toJsonValue<QString>(m_baselineItemName);
+	result["CategoryId"] = toJsonValue<QUuid>(m_categoryId);
+
 	return result;
 }
-QList<BaseItemDto *> RecommendationDto::items() const { return m_items; }
-void RecommendationDto::setItems(QList<BaseItemDto *> newItems) {
-	m_items = newItems;
-	emit itemsChanged(newItems);
-}
 
+QList<QSharedPointer<BaseItemDto>> RecommendationDto::items() const { return m_items; }
+
+void RecommendationDto::setItems(QList<QSharedPointer<BaseItemDto>> newItems) {
+	m_items = newItems;
+}
 RecommendationType RecommendationDto::recommendationType() const { return m_recommendationType; }
+
 void RecommendationDto::setRecommendationType(RecommendationType newRecommendationType) {
 	m_recommendationType = newRecommendationType;
-	emit recommendationTypeChanged(newRecommendationType);
 }
-
 QString RecommendationDto::baselineItemName() const { return m_baselineItemName; }
+
 void RecommendationDto::setBaselineItemName(QString newBaselineItemName) {
 	m_baselineItemName = newBaselineItemName;
-	emit baselineItemNameChanged(newBaselineItemName);
 }
+QUuid RecommendationDto::categoryId() const { return m_categoryId; }
 
-QString RecommendationDto::categoryId() const { return m_categoryId; }
-void RecommendationDto::setCategoryId(QString newCategoryId) {
+void RecommendationDto::setCategoryId(QUuid newCategoryId) {
 	m_categoryId = newCategoryId;
-	emit categoryIdChanged(newCategoryId);
 }
 
 

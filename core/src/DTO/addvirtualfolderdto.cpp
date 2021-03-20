@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-AddVirtualFolderDto::AddVirtualFolderDto(QObject *parent) : QObject(parent) {}
+AddVirtualFolderDto::AddVirtualFolderDto(QObject *parent) {}
 
-AddVirtualFolderDto *AddVirtualFolderDto::fromJSON(QJsonObject source, QObject *parent) {
-	AddVirtualFolderDto *instance = new AddVirtualFolderDto(parent);
-	instance->updateFromJSON(source);
+AddVirtualFolderDto AddVirtualFolderDto::fromJson(QJsonObject source) {AddVirtualFolderDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void AddVirtualFolderDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void AddVirtualFolderDto::setFromJson(QJsonObject source) {
+	m_libraryOptions = fromJsonValue<QSharedPointer<LibraryOptions>>(source["LibraryOptions"]);
+
 }
-QJsonObject AddVirtualFolderDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject AddVirtualFolderDto::toJson() {
 	QJsonObject result;
+	result["LibraryOptions"] = toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
+
 	return result;
 }
-LibraryOptions * AddVirtualFolderDto::libraryOptions() const { return m_libraryOptions; }
-void AddVirtualFolderDto::setLibraryOptions(LibraryOptions * newLibraryOptions) {
+
+QSharedPointer<LibraryOptions> AddVirtualFolderDto::libraryOptions() const { return m_libraryOptions; }
+
+void AddVirtualFolderDto::setLibraryOptions(QSharedPointer<LibraryOptions> newLibraryOptions) {
 	m_libraryOptions = newLibraryOptions;
-	emit libraryOptionsChanged(newLibraryOptions);
 }
 
 

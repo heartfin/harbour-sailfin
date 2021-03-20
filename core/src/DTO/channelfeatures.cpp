@@ -29,99 +29,110 @@
 
 #include <JellyfinQt/DTO/channelfeatures.h>
 
-#include <JellyfinQt/DTO/channelitemsortfield.h>
-#include <JellyfinQt/DTO/channelmediacontenttype.h>
-#include <JellyfinQt/DTO/channelmediatype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ChannelFeatures::ChannelFeatures(QObject *parent) : QObject(parent) {}
+ChannelFeatures::ChannelFeatures(QObject *parent) {}
 
-ChannelFeatures *ChannelFeatures::fromJSON(QJsonObject source, QObject *parent) {
-	ChannelFeatures *instance = new ChannelFeatures(parent);
-	instance->updateFromJSON(source);
+ChannelFeatures ChannelFeatures::fromJson(QJsonObject source) {ChannelFeatures instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ChannelFeatures::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ChannelFeatures::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_canSearch = fromJsonValue<bool>(source["CanSearch"]);
+	m_mediaTypes = fromJsonValue<QList<ChannelMediaType>>(source["MediaTypes"]);
+	m_contentTypes = fromJsonValue<QList<ChannelMediaContentType>>(source["ContentTypes"]);
+	m_maxPageSize = fromJsonValue<qint32>(source["MaxPageSize"]);
+	m_autoRefreshLevels = fromJsonValue<qint32>(source["AutoRefreshLevels"]);
+	m_defaultSortFields = fromJsonValue<QList<ChannelItemSortField>>(source["DefaultSortFields"]);
+	m_supportsSortOrderToggle = fromJsonValue<bool>(source["SupportsSortOrderToggle"]);
+	m_supportsLatestMedia = fromJsonValue<bool>(source["SupportsLatestMedia"]);
+	m_canFilter = fromJsonValue<bool>(source["CanFilter"]);
+	m_supportsContentDownloading = fromJsonValue<bool>(source["SupportsContentDownloading"]);
+
 }
-QJsonObject ChannelFeatures::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ChannelFeatures::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["CanSearch"] = toJsonValue<bool>(m_canSearch);
+	result["MediaTypes"] = toJsonValue<QList<ChannelMediaType>>(m_mediaTypes);
+	result["ContentTypes"] = toJsonValue<QList<ChannelMediaContentType>>(m_contentTypes);
+	result["MaxPageSize"] = toJsonValue<qint32>(m_maxPageSize);
+	result["AutoRefreshLevels"] = toJsonValue<qint32>(m_autoRefreshLevels);
+	result["DefaultSortFields"] = toJsonValue<QList<ChannelItemSortField>>(m_defaultSortFields);
+	result["SupportsSortOrderToggle"] = toJsonValue<bool>(m_supportsSortOrderToggle);
+	result["SupportsLatestMedia"] = toJsonValue<bool>(m_supportsLatestMedia);
+	result["CanFilter"] = toJsonValue<bool>(m_canFilter);
+	result["SupportsContentDownloading"] = toJsonValue<bool>(m_supportsContentDownloading);
+
 	return result;
 }
+
 QString ChannelFeatures::name() const { return m_name; }
+
 void ChannelFeatures::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString ChannelFeatures::jellyfinId() const { return m_jellyfinId; }
+
 void ChannelFeatures::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 bool ChannelFeatures::canSearch() const { return m_canSearch; }
+
 void ChannelFeatures::setCanSearch(bool newCanSearch) {
 	m_canSearch = newCanSearch;
-	emit canSearchChanged(newCanSearch);
 }
-
 QList<ChannelMediaType> ChannelFeatures::mediaTypes() const { return m_mediaTypes; }
+
 void ChannelFeatures::setMediaTypes(QList<ChannelMediaType> newMediaTypes) {
 	m_mediaTypes = newMediaTypes;
-	emit mediaTypesChanged(newMediaTypes);
 }
-
 QList<ChannelMediaContentType> ChannelFeatures::contentTypes() const { return m_contentTypes; }
+
 void ChannelFeatures::setContentTypes(QList<ChannelMediaContentType> newContentTypes) {
 	m_contentTypes = newContentTypes;
-	emit contentTypesChanged(newContentTypes);
 }
-
 qint32 ChannelFeatures::maxPageSize() const { return m_maxPageSize; }
+
 void ChannelFeatures::setMaxPageSize(qint32 newMaxPageSize) {
 	m_maxPageSize = newMaxPageSize;
-	emit maxPageSizeChanged(newMaxPageSize);
 }
-
 qint32 ChannelFeatures::autoRefreshLevels() const { return m_autoRefreshLevels; }
+
 void ChannelFeatures::setAutoRefreshLevels(qint32 newAutoRefreshLevels) {
 	m_autoRefreshLevels = newAutoRefreshLevels;
-	emit autoRefreshLevelsChanged(newAutoRefreshLevels);
 }
-
 QList<ChannelItemSortField> ChannelFeatures::defaultSortFields() const { return m_defaultSortFields; }
+
 void ChannelFeatures::setDefaultSortFields(QList<ChannelItemSortField> newDefaultSortFields) {
 	m_defaultSortFields = newDefaultSortFields;
-	emit defaultSortFieldsChanged(newDefaultSortFields);
 }
-
 bool ChannelFeatures::supportsSortOrderToggle() const { return m_supportsSortOrderToggle; }
+
 void ChannelFeatures::setSupportsSortOrderToggle(bool newSupportsSortOrderToggle) {
 	m_supportsSortOrderToggle = newSupportsSortOrderToggle;
-	emit supportsSortOrderToggleChanged(newSupportsSortOrderToggle);
 }
-
 bool ChannelFeatures::supportsLatestMedia() const { return m_supportsLatestMedia; }
+
 void ChannelFeatures::setSupportsLatestMedia(bool newSupportsLatestMedia) {
 	m_supportsLatestMedia = newSupportsLatestMedia;
-	emit supportsLatestMediaChanged(newSupportsLatestMedia);
 }
-
 bool ChannelFeatures::canFilter() const { return m_canFilter; }
+
 void ChannelFeatures::setCanFilter(bool newCanFilter) {
 	m_canFilter = newCanFilter;
-	emit canFilterChanged(newCanFilter);
 }
-
 bool ChannelFeatures::supportsContentDownloading() const { return m_supportsContentDownloading; }
+
 void ChannelFeatures::setSupportsContentDownloading(bool newSupportsContentDownloading) {
 	m_supportsContentDownloading = newSupportsContentDownloading;
-	emit supportsContentDownloadingChanged(newSupportsContentDownloading);
 }
 
 

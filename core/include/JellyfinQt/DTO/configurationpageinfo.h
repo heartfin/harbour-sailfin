@@ -31,77 +31,79 @@
 #define JELLYFIN_DTO_CONFIGURATIONPAGEINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <QUuid>
+#include <optional>
 
 #include "JellyfinQt/DTO/configurationpagetype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ConfigurationPageInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit ConfigurationPageInfo(QObject *parent = nullptr);
-	static ConfigurationPageInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ConfigurationPageInfo {
+public:
+	explicit ConfigurationPageInfo();
+	static ConfigurationPageInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets a value indicating whether the configurations page is enabled in the main menu.
 	 */
-	Q_PROPERTY(bool enableInMainMenu READ enableInMainMenu WRITE setEnableInMainMenu NOTIFY enableInMainMenuChanged)
+	bool enableInMainMenu() const;
+	/**
+	* @brief Gets or sets a value indicating whether the configurations page is enabled in the main menu.
+	*/
+	void setEnableInMainMenu(bool newEnableInMainMenu);
 	/**
 	 * @brief Gets or sets the menu section.
 	 */
-	Q_PROPERTY(QString menuSection READ menuSection WRITE setMenuSection NOTIFY menuSectionChanged)
+	QString menuSection() const;
+	/**
+	* @brief Gets or sets the menu section.
+	*/
+	void setMenuSection(QString newMenuSection);
 	/**
 	 * @brief Gets or sets the menu icon.
 	 */
-	Q_PROPERTY(QString menuIcon READ menuIcon WRITE setMenuIcon NOTIFY menuIconChanged)
+	QString menuIcon() const;
+	/**
+	* @brief Gets or sets the menu icon.
+	*/
+	void setMenuIcon(QString newMenuIcon);
 	/**
 	 * @brief Gets or sets the display name.
 	 */
-	Q_PROPERTY(QString displayName READ displayName WRITE setDisplayName NOTIFY displayNameChanged)
-	Q_PROPERTY(ConfigurationPageType configurationPageType READ configurationPageType WRITE setConfigurationPageType NOTIFY configurationPageTypeChanged)
+	QString displayName() const;
+	/**
+	* @brief Gets or sets the display name.
+	*/
+	void setDisplayName(QString newDisplayName);
+
+	ConfigurationPageType configurationPageType() const;
+
+	void setConfigurationPageType(ConfigurationPageType newConfigurationPageType);
 	/**
 	 * @brief Gets or sets the plugin id.
 	 */
-	Q_PROPERTY(QString pluginId READ pluginId WRITE setPluginId NOTIFY pluginIdChanged)
+	QUuid pluginId() const;
+	/**
+	* @brief Gets or sets the plugin id.
+	*/
+	void setPluginId(QUuid newPluginId);
 
-	QString name() const;
-	void setName(QString newName);
-	
-	bool enableInMainMenu() const;
-	void setEnableInMainMenu(bool newEnableInMainMenu);
-	
-	QString menuSection() const;
-	void setMenuSection(QString newMenuSection);
-	
-	QString menuIcon() const;
-	void setMenuIcon(QString newMenuIcon);
-	
-	QString displayName() const;
-	void setDisplayName(QString newDisplayName);
-	
-	ConfigurationPageType configurationPageType() const;
-	void setConfigurationPageType(ConfigurationPageType newConfigurationPageType);
-	
-	QString pluginId() const;
-	void setPluginId(QString newPluginId);
-	
-signals:
-	void nameChanged(QString newName);
-	void enableInMainMenuChanged(bool newEnableInMainMenu);
-	void menuSectionChanged(QString newMenuSection);
-	void menuIconChanged(QString newMenuIcon);
-	void displayNameChanged(QString newDisplayName);
-	void configurationPageTypeChanged(ConfigurationPageType newConfigurationPageType);
-	void pluginIdChanged(QString newPluginId);
 protected:
 	QString m_name;
 	bool m_enableInMainMenu;
@@ -109,8 +111,20 @@ protected:
 	QString m_menuIcon;
 	QString m_displayName;
 	ConfigurationPageType m_configurationPageType;
-	QString m_pluginId;
+	QUuid m_pluginId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ConfigurationPageInfo = Jellyfin::DTO::ConfigurationPageInfo;
+
+template <>
+ConfigurationPageInfo fromJsonValue<ConfigurationPageInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ConfigurationPageInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,56 +31,70 @@
 #define JELLYFIN_DTO_MOVIEINFOREMOTESEARCHQUERY_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/movieinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MovieInfo;
 
-class MovieInfoRemoteSearchQuery : public QObject {
-	Q_OBJECT
+class MovieInfoRemoteSearchQuery {
 public:
-	explicit MovieInfoRemoteSearchQuery(QObject *parent = nullptr);
-	static MovieInfoRemoteSearchQuery *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
+	explicit MovieInfoRemoteSearchQuery();
+	static MovieInfoRemoteSearchQuery fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
-	Q_PROPERTY(MovieInfo * searchInfo READ searchInfo WRITE setSearchInfo NOTIFY searchInfoChanged)
-	Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
+	QSharedPointer<MovieInfo> searchInfo() const;
+
+	void setSearchInfo(QSharedPointer<MovieInfo> newSearchInfo);
+
+	QUuid itemId() const;
+
+	void setItemId(QUuid newItemId);
 	/**
 	 * @brief Will only search within the given provider when set.
 	 */
-	Q_PROPERTY(QString searchProviderName READ searchProviderName WRITE setSearchProviderName NOTIFY searchProviderNameChanged)
+	QString searchProviderName() const;
+	/**
+	* @brief Will only search within the given provider when set.
+	*/
+	void setSearchProviderName(QString newSearchProviderName);
 	/**
 	 * @brief Gets or sets a value indicating whether disabled providers should be included.
 	 */
-	Q_PROPERTY(bool includeDisabledProviders READ includeDisabledProviders WRITE setIncludeDisabledProviders NOTIFY includeDisabledProvidersChanged)
-
-	MovieInfo * searchInfo() const;
-	void setSearchInfo(MovieInfo * newSearchInfo);
-	
-	QString itemId() const;
-	void setItemId(QString newItemId);
-	
-	QString searchProviderName() const;
-	void setSearchProviderName(QString newSearchProviderName);
-	
 	bool includeDisabledProviders() const;
+	/**
+	* @brief Gets or sets a value indicating whether disabled providers should be included.
+	*/
 	void setIncludeDisabledProviders(bool newIncludeDisabledProviders);
-	
-signals:
-	void searchInfoChanged(MovieInfo * newSearchInfo);
-	void itemIdChanged(QString newItemId);
-	void searchProviderNameChanged(QString newSearchProviderName);
-	void includeDisabledProvidersChanged(bool newIncludeDisabledProviders);
+
 protected:
-	MovieInfo * m_searchInfo = nullptr;
-	QString m_itemId;
+	QSharedPointer<MovieInfo> m_searchInfo = nullptr;
+	QUuid m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MovieInfoRemoteSearchQuery = Jellyfin::DTO::MovieInfoRemoteSearchQuery;
+
+template <>
+MovieInfoRemoteSearchQuery fromJsonValue<MovieInfoRemoteSearchQuery>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MovieInfoRemoteSearchQuery::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

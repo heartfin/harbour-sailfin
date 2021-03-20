@@ -31,33 +31,48 @@
 #define JELLYFIN_DTO_PREVIOUSITEMREQUESTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PreviousItemRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit PreviousItemRequestDto(QObject *parent = nullptr);
-	static PreviousItemRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class PreviousItemRequestDto {
+public:
+	explicit PreviousItemRequestDto();
+	static PreviousItemRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the playing item identifier.
 	 */
-	Q_PROPERTY(QString playlistItemId READ playlistItemId WRITE setPlaylistItemId NOTIFY playlistItemIdChanged)
+	QUuid playlistItemId() const;
+	/**
+	* @brief Gets or sets the playing item identifier.
+	*/
+	void setPlaylistItemId(QUuid newPlaylistItemId);
 
-	QString playlistItemId() const;
-	void setPlaylistItemId(QString newPlaylistItemId);
-	
-signals:
-	void playlistItemIdChanged(QString newPlaylistItemId);
 protected:
-	QString m_playlistItemId;
+	QUuid m_playlistItemId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PreviousItemRequestDto = Jellyfin::DTO::PreviousItemRequestDto;
+
+template <>
+PreviousItemRequestDto fromJsonValue<PreviousItemRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PreviousItemRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

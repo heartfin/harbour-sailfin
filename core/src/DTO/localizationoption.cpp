@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-LocalizationOption::LocalizationOption(QObject *parent) : QObject(parent) {}
+LocalizationOption::LocalizationOption(QObject *parent) {}
 
-LocalizationOption *LocalizationOption::fromJSON(QJsonObject source, QObject *parent) {
-	LocalizationOption *instance = new LocalizationOption(parent);
-	instance->updateFromJSON(source);
+LocalizationOption LocalizationOption::fromJson(QJsonObject source) {LocalizationOption instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void LocalizationOption::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void LocalizationOption::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_value = fromJsonValue<QString>(source["Value"]);
+
 }
-QJsonObject LocalizationOption::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject LocalizationOption::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Value"] = toJsonValue<QString>(m_value);
+
 	return result;
 }
+
 QString LocalizationOption::name() const { return m_name; }
+
 void LocalizationOption::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString LocalizationOption::value() const { return m_value; }
+
 void LocalizationOption::setValue(QString newValue) {
 	m_value = newValue;
-	emit valueChanged(newValue);
 }
 
 

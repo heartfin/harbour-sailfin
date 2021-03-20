@@ -29,73 +29,82 @@
 
 #include <JellyfinQt/DTO/plugininfo.h>
 
-#include <JellyfinQt/DTO/pluginstatus.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-PluginInfo::PluginInfo(QObject *parent) : QObject(parent) {}
+PluginInfo::PluginInfo(QObject *parent) {}
 
-PluginInfo *PluginInfo::fromJSON(QJsonObject source, QObject *parent) {
-	PluginInfo *instance = new PluginInfo(parent);
-	instance->updateFromJSON(source);
+PluginInfo PluginInfo::fromJson(QJsonObject source) {PluginInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PluginInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PluginInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_version = fromJsonValue<QSharedPointer<Version>>(source["Version"]);
+	m_configurationFileName = fromJsonValue<QString>(source["ConfigurationFileName"]);
+	m_description = fromJsonValue<QString>(source["Description"]);
+	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
+	m_canUninstall = fromJsonValue<bool>(source["CanUninstall"]);
+	m_hasImage = fromJsonValue<bool>(source["HasImage"]);
+	m_status = fromJsonValue<PluginStatus>(source["Status"]);
+
 }
-QJsonObject PluginInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PluginInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Version"] = toJsonValue<QSharedPointer<Version>>(m_version);
+	result["ConfigurationFileName"] = toJsonValue<QString>(m_configurationFileName);
+	result["Description"] = toJsonValue<QString>(m_description);
+	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
+	result["CanUninstall"] = toJsonValue<bool>(m_canUninstall);
+	result["HasImage"] = toJsonValue<bool>(m_hasImage);
+	result["Status"] = toJsonValue<PluginStatus>(m_status);
+
 	return result;
 }
+
 QString PluginInfo::name() const { return m_name; }
+
 void PluginInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
+QSharedPointer<Version> PluginInfo::version() const { return m_version; }
 
-Version * PluginInfo::version() const { return m_version; }
-void PluginInfo::setVersion(Version * newVersion) {
+void PluginInfo::setVersion(QSharedPointer<Version> newVersion) {
 	m_version = newVersion;
-	emit versionChanged(newVersion);
 }
-
 QString PluginInfo::configurationFileName() const { return m_configurationFileName; }
+
 void PluginInfo::setConfigurationFileName(QString newConfigurationFileName) {
 	m_configurationFileName = newConfigurationFileName;
-	emit configurationFileNameChanged(newConfigurationFileName);
 }
-
 QString PluginInfo::description() const { return m_description; }
+
 void PluginInfo::setDescription(QString newDescription) {
 	m_description = newDescription;
-	emit descriptionChanged(newDescription);
 }
+QUuid PluginInfo::jellyfinId() const { return m_jellyfinId; }
 
-QString PluginInfo::jellyfinId() const { return m_jellyfinId; }
-void PluginInfo::setJellyfinId(QString newJellyfinId) {
+void PluginInfo::setJellyfinId(QUuid newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 bool PluginInfo::canUninstall() const { return m_canUninstall; }
+
 void PluginInfo::setCanUninstall(bool newCanUninstall) {
 	m_canUninstall = newCanUninstall;
-	emit canUninstallChanged(newCanUninstall);
 }
-
 bool PluginInfo::hasImage() const { return m_hasImage; }
+
 void PluginInfo::setHasImage(bool newHasImage) {
 	m_hasImage = newHasImage;
-	emit hasImageChanged(newHasImage);
 }
-
 PluginStatus PluginInfo::status() const { return m_status; }
+
 void PluginInfo::setStatus(PluginStatus newStatus) {
 	m_status = newStatus;
-	emit statusChanged(newStatus);
 }
 
 

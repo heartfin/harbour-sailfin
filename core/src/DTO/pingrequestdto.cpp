@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-PingRequestDto::PingRequestDto(QObject *parent) : QObject(parent) {}
+PingRequestDto::PingRequestDto(QObject *parent) {}
 
-PingRequestDto *PingRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	PingRequestDto *instance = new PingRequestDto(parent);
-	instance->updateFromJSON(source);
+PingRequestDto PingRequestDto::fromJson(QJsonObject source) {PingRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PingRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PingRequestDto::setFromJson(QJsonObject source) {
+	m_ping = fromJsonValue<qint64>(source["Ping"]);
+
 }
-QJsonObject PingRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PingRequestDto::toJson() {
 	QJsonObject result;
+	result["Ping"] = toJsonValue<qint64>(m_ping);
+
 	return result;
 }
+
 qint64 PingRequestDto::ping() const { return m_ping; }
+
 void PingRequestDto::setPing(qint64 newPing) {
 	m_ping = newPing;
-	emit pingChanged(newPing);
 }
 
 

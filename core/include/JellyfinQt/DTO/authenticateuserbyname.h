@@ -31,51 +31,66 @@
 #define JELLYFIN_DTO_AUTHENTICATEUSERBYNAME_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class AuthenticateUserByName : public QObject {
-	Q_OBJECT
-public:
-	explicit AuthenticateUserByName(QObject *parent = nullptr);
-	static AuthenticateUserByName *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class AuthenticateUserByName {
+public:
+	explicit AuthenticateUserByName();
+	static AuthenticateUserByName fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the username.
 	 */
-	Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
+	QString username() const;
+	/**
+	* @brief Gets or sets the username.
+	*/
+	void setUsername(QString newUsername);
 	/**
 	 * @brief Gets or sets the plain text password.
 	 */
-	Q_PROPERTY(QString pw READ pw WRITE setPw NOTIFY pwChanged)
+	QString pw() const;
+	/**
+	* @brief Gets or sets the plain text password.
+	*/
+	void setPw(QString newPw);
 	/**
 	 * @brief Gets or sets the sha1-hashed password.
 	 */
-	Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
-
-	QString username() const;
-	void setUsername(QString newUsername);
-	
-	QString pw() const;
-	void setPw(QString newPw);
-	
 	QString password() const;
+	/**
+	* @brief Gets or sets the sha1-hashed password.
+	*/
 	void setPassword(QString newPassword);
-	
-signals:
-	void usernameChanged(QString newUsername);
-	void pwChanged(QString newPw);
-	void passwordChanged(QString newPassword);
+
 protected:
 	QString m_username;
 	QString m_pw;
 	QString m_password;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using AuthenticateUserByName = Jellyfin::DTO::AuthenticateUserByName;
+
+template <>
+AuthenticateUserByName fromJsonValue<AuthenticateUserByName>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AuthenticateUserByName::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

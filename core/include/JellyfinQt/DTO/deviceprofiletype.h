@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_DEVICEPROFILETYPE_H
 #define JELLYFIN_DTO_DEVICEPROFILETYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class DeviceProfileTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		System,
 		User,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit DeviceProfileTypeClass();
 };
+
 typedef DeviceProfileTypeClass::Value DeviceProfileType;
+
+} // NS DTO
+
+namespace Support {
+
+using DeviceProfileType = Jellyfin::DTO::DeviceProfileType;
+using DeviceProfileTypeClass = Jellyfin::DTO::DeviceProfileTypeClass;
+
+template <>
+DeviceProfileType fromJsonValue<DeviceProfileType>(const QJsonValue &source) {
+	if (!source.isString()) return DeviceProfileTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("System")) {
+		return DeviceProfileTypeClass::System;
+	}
+	if (str == QStringLiteral("User")) {
+		return DeviceProfileTypeClass::User;
+	}
+	
+	return DeviceProfileTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

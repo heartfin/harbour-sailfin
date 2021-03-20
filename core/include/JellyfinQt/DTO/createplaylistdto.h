@@ -31,62 +31,78 @@
 #define JELLYFIN_DTO_CREATEPLAYLISTDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class CreatePlaylistDto : public QObject {
-	Q_OBJECT
-public:
-	explicit CreatePlaylistDto(QObject *parent = nullptr);
-	static CreatePlaylistDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class CreatePlaylistDto {
+public:
+	explicit CreatePlaylistDto();
+	static CreatePlaylistDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name of the new playlist.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name of the new playlist.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets item ids to add to the playlist.
 	 */
-	Q_PROPERTY(QStringList ids READ ids WRITE setIds NOTIFY idsChanged)
+	QList<QUuid> ids() const;
+	/**
+	* @brief Gets or sets item ids to add to the playlist.
+	*/
+	void setIds(QList<QUuid> newIds);
 	/**
 	 * @brief Gets or sets the user id.
 	 */
-	Q_PROPERTY(QString userId READ userId WRITE setUserId NOTIFY userIdChanged)
+	QUuid userId() const;
+	/**
+	* @brief Gets or sets the user id.
+	*/
+	void setUserId(QUuid newUserId);
 	/**
 	 * @brief Gets or sets the media type.
 	 */
-	Q_PROPERTY(QString mediaType READ mediaType WRITE setMediaType NOTIFY mediaTypeChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QStringList ids() const;
-	void setIds(QStringList newIds);
-	
-	QString userId() const;
-	void setUserId(QString newUserId);
-	
 	QString mediaType() const;
+	/**
+	* @brief Gets or sets the media type.
+	*/
 	void setMediaType(QString newMediaType);
-	
-signals:
-	void nameChanged(QString newName);
-	void idsChanged(QStringList newIds);
-	void userIdChanged(QString newUserId);
-	void mediaTypeChanged(QString newMediaType);
+
 protected:
 	QString m_name;
-	QStringList m_ids;
-	QString m_userId;
+	QList<QUuid> m_ids;
+	QUuid m_userId;
 	QString m_mediaType;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using CreatePlaylistDto = Jellyfin::DTO::CreatePlaylistDto;
+
+template <>
+CreatePlaylistDto fromJsonValue<CreatePlaylistDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return CreatePlaylistDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

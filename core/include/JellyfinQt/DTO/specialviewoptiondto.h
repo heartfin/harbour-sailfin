@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_SPECIALVIEWOPTIONDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SpecialViewOptionDto : public QObject {
-	Q_OBJECT
-public:
-	explicit SpecialViewOptionDto(QObject *parent = nullptr);
-	static SpecialViewOptionDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class SpecialViewOptionDto {
+public:
+	explicit SpecialViewOptionDto();
+	static SpecialViewOptionDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets view option name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets view option name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets view option id.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
 	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets view option id.
+	*/
 	void setJellyfinId(QString newJellyfinId);
-	
-signals:
-	void nameChanged(QString newName);
-	void jellyfinIdChanged(QString newJellyfinId);
+
 protected:
 	QString m_name;
 	QString m_jellyfinId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SpecialViewOptionDto = Jellyfin::DTO::SpecialViewOptionDto;
+
+template <>
+SpecialViewOptionDto fromJsonValue<SpecialViewOptionDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SpecialViewOptionDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

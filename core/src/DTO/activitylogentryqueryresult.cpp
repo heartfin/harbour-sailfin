@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-ActivityLogEntryQueryResult::ActivityLogEntryQueryResult(QObject *parent) : QObject(parent) {}
+ActivityLogEntryQueryResult::ActivityLogEntryQueryResult(QObject *parent) {}
 
-ActivityLogEntryQueryResult *ActivityLogEntryQueryResult::fromJSON(QJsonObject source, QObject *parent) {
-	ActivityLogEntryQueryResult *instance = new ActivityLogEntryQueryResult(parent);
-	instance->updateFromJSON(source);
+ActivityLogEntryQueryResult ActivityLogEntryQueryResult::fromJson(QJsonObject source) {ActivityLogEntryQueryResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ActivityLogEntryQueryResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ActivityLogEntryQueryResult::setFromJson(QJsonObject source) {
+	m_items = fromJsonValue<QList<QSharedPointer<ActivityLogEntry>>>(source["Items"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+
 }
-QJsonObject ActivityLogEntryQueryResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ActivityLogEntryQueryResult::toJson() {
 	QJsonObject result;
+	result["Items"] = toJsonValue<QList<QSharedPointer<ActivityLogEntry>>>(m_items);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+
 	return result;
 }
-QList<ActivityLogEntry *> ActivityLogEntryQueryResult::items() const { return m_items; }
-void ActivityLogEntryQueryResult::setItems(QList<ActivityLogEntry *> newItems) {
-	m_items = newItems;
-	emit itemsChanged(newItems);
-}
 
+QList<QSharedPointer<ActivityLogEntry>> ActivityLogEntryQueryResult::items() const { return m_items; }
+
+void ActivityLogEntryQueryResult::setItems(QList<QSharedPointer<ActivityLogEntry>> newItems) {
+	m_items = newItems;
+}
 qint32 ActivityLogEntryQueryResult::totalRecordCount() const { return m_totalRecordCount; }
+
 void ActivityLogEntryQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
-
 qint32 ActivityLogEntryQueryResult::startIndex() const { return m_startIndex; }
+
 void ActivityLogEntryQueryResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
-	emit startIndexChanged(newStartIndex);
 }
 
 

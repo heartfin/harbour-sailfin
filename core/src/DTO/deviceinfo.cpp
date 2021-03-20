@@ -32,74 +32,86 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceInfo::DeviceInfo(QObject *parent) : QObject(parent) {}
+DeviceInfo::DeviceInfo(QObject *parent) {}
 
-DeviceInfo *DeviceInfo::fromJSON(QJsonObject source, QObject *parent) {
-	DeviceInfo *instance = new DeviceInfo(parent);
-	instance->updateFromJSON(source);
+DeviceInfo DeviceInfo::fromJson(QJsonObject source) {DeviceInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void DeviceInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void DeviceInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_lastUserName = fromJsonValue<QString>(source["LastUserName"]);
+	m_appName = fromJsonValue<QString>(source["AppName"]);
+	m_appVersion = fromJsonValue<QString>(source["AppVersion"]);
+	m_lastUserId = fromJsonValue<QUuid>(source["LastUserId"]);
+	m_dateLastActivity = fromJsonValue<QDateTime>(source["DateLastActivity"]);
+	m_capabilities = fromJsonValue<QSharedPointer<ClientCapabilities>>(source["Capabilities"]);
+	m_iconUrl = fromJsonValue<QString>(source["IconUrl"]);
+
 }
-QJsonObject DeviceInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject DeviceInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["LastUserName"] = toJsonValue<QString>(m_lastUserName);
+	result["AppName"] = toJsonValue<QString>(m_appName);
+	result["AppVersion"] = toJsonValue<QString>(m_appVersion);
+	result["LastUserId"] = toJsonValue<QUuid>(m_lastUserId);
+	result["DateLastActivity"] = toJsonValue<QDateTime>(m_dateLastActivity);
+	result["Capabilities"] = toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);
+	result["IconUrl"] = toJsonValue<QString>(m_iconUrl);
+
 	return result;
 }
+
 QString DeviceInfo::name() const { return m_name; }
+
 void DeviceInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString DeviceInfo::jellyfinId() const { return m_jellyfinId; }
+
 void DeviceInfo::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 QString DeviceInfo::lastUserName() const { return m_lastUserName; }
+
 void DeviceInfo::setLastUserName(QString newLastUserName) {
 	m_lastUserName = newLastUserName;
-	emit lastUserNameChanged(newLastUserName);
 }
-
 QString DeviceInfo::appName() const { return m_appName; }
+
 void DeviceInfo::setAppName(QString newAppName) {
 	m_appName = newAppName;
-	emit appNameChanged(newAppName);
 }
-
 QString DeviceInfo::appVersion() const { return m_appVersion; }
+
 void DeviceInfo::setAppVersion(QString newAppVersion) {
 	m_appVersion = newAppVersion;
-	emit appVersionChanged(newAppVersion);
 }
+QUuid DeviceInfo::lastUserId() const { return m_lastUserId; }
 
-QString DeviceInfo::lastUserId() const { return m_lastUserId; }
-void DeviceInfo::setLastUserId(QString newLastUserId) {
+void DeviceInfo::setLastUserId(QUuid newLastUserId) {
 	m_lastUserId = newLastUserId;
-	emit lastUserIdChanged(newLastUserId);
 }
-
 QDateTime DeviceInfo::dateLastActivity() const { return m_dateLastActivity; }
+
 void DeviceInfo::setDateLastActivity(QDateTime newDateLastActivity) {
 	m_dateLastActivity = newDateLastActivity;
-	emit dateLastActivityChanged(newDateLastActivity);
 }
+QSharedPointer<ClientCapabilities> DeviceInfo::capabilities() const { return m_capabilities; }
 
-ClientCapabilities * DeviceInfo::capabilities() const { return m_capabilities; }
-void DeviceInfo::setCapabilities(ClientCapabilities * newCapabilities) {
+void DeviceInfo::setCapabilities(QSharedPointer<ClientCapabilities> newCapabilities) {
 	m_capabilities = newCapabilities;
-	emit capabilitiesChanged(newCapabilities);
 }
-
 QString DeviceInfo::iconUrl() const { return m_iconUrl; }
+
 void DeviceInfo::setIconUrl(QString newIconUrl) {
 	m_iconUrl = newIconUrl;
-	emit iconUrlChanged(newIconUrl);
 }
 
 

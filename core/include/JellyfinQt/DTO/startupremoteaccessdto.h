@@ -31,41 +31,56 @@
 #define JELLYFIN_DTO_STARTUPREMOTEACCESSDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class StartupRemoteAccessDto : public QObject {
-	Q_OBJECT
-public:
-	explicit StartupRemoteAccessDto(QObject *parent = nullptr);
-	static StartupRemoteAccessDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class StartupRemoteAccessDto {
+public:
+	explicit StartupRemoteAccessDto();
+	static StartupRemoteAccessDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets a value indicating whether enable remote access.
 	 */
-	Q_PROPERTY(bool enableRemoteAccess READ enableRemoteAccess WRITE setEnableRemoteAccess NOTIFY enableRemoteAccessChanged)
+	bool enableRemoteAccess() const;
+	/**
+	* @brief Gets or sets a value indicating whether enable remote access.
+	*/
+	void setEnableRemoteAccess(bool newEnableRemoteAccess);
 	/**
 	 * @brief Gets or sets a value indicating whether enable automatic port mapping.
 	 */
-	Q_PROPERTY(bool enableAutomaticPortMapping READ enableAutomaticPortMapping WRITE setEnableAutomaticPortMapping NOTIFY enableAutomaticPortMappingChanged)
-
-	bool enableRemoteAccess() const;
-	void setEnableRemoteAccess(bool newEnableRemoteAccess);
-	
 	bool enableAutomaticPortMapping() const;
+	/**
+	* @brief Gets or sets a value indicating whether enable automatic port mapping.
+	*/
 	void setEnableAutomaticPortMapping(bool newEnableAutomaticPortMapping);
-	
-signals:
-	void enableRemoteAccessChanged(bool newEnableRemoteAccess);
-	void enableAutomaticPortMappingChanged(bool newEnableAutomaticPortMapping);
+
 protected:
 	bool m_enableRemoteAccess;
 	bool m_enableAutomaticPortMapping;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using StartupRemoteAccessDto = Jellyfin::DTO::StartupRemoteAccessDto;
+
+template <>
+StartupRemoteAccessDto fromJsonValue<StartupRemoteAccessDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return StartupRemoteAccessDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

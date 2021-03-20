@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-QueryFiltersLegacy::QueryFiltersLegacy(QObject *parent) : QObject(parent) {}
+QueryFiltersLegacy::QueryFiltersLegacy(QObject *parent) {}
 
-QueryFiltersLegacy *QueryFiltersLegacy::fromJSON(QJsonObject source, QObject *parent) {
-	QueryFiltersLegacy *instance = new QueryFiltersLegacy(parent);
-	instance->updateFromJSON(source);
+QueryFiltersLegacy QueryFiltersLegacy::fromJson(QJsonObject source) {QueryFiltersLegacy instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void QueryFiltersLegacy::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void QueryFiltersLegacy::setFromJson(QJsonObject source) {
+	m_genres = fromJsonValue<QStringList>(source["Genres"]);
+	m_tags = fromJsonValue<QStringList>(source["Tags"]);
+	m_officialRatings = fromJsonValue<QStringList>(source["OfficialRatings"]);
+	m_years = fromJsonValue<QList<qint32>>(source["Years"]);
+
 }
-QJsonObject QueryFiltersLegacy::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject QueryFiltersLegacy::toJson() {
 	QJsonObject result;
+	result["Genres"] = toJsonValue<QStringList>(m_genres);
+	result["Tags"] = toJsonValue<QStringList>(m_tags);
+	result["OfficialRatings"] = toJsonValue<QStringList>(m_officialRatings);
+	result["Years"] = toJsonValue<QList<qint32>>(m_years);
+
 	return result;
 }
+
 QStringList QueryFiltersLegacy::genres() const { return m_genres; }
+
 void QueryFiltersLegacy::setGenres(QStringList newGenres) {
 	m_genres = newGenres;
-	emit genresChanged(newGenres);
 }
-
 QStringList QueryFiltersLegacy::tags() const { return m_tags; }
+
 void QueryFiltersLegacy::setTags(QStringList newTags) {
 	m_tags = newTags;
-	emit tagsChanged(newTags);
 }
-
 QStringList QueryFiltersLegacy::officialRatings() const { return m_officialRatings; }
+
 void QueryFiltersLegacy::setOfficialRatings(QStringList newOfficialRatings) {
 	m_officialRatings = newOfficialRatings;
-	emit officialRatingsChanged(newOfficialRatings);
 }
-
 QList<qint32> QueryFiltersLegacy::years() const { return m_years; }
+
 void QueryFiltersLegacy::setYears(QList<qint32> newYears) {
 	m_years = newYears;
-	emit yearsChanged(newYears);
 }
 
 

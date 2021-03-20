@@ -31,56 +31,70 @@
 #define JELLYFIN_DTO_BOOKINFOREMOTESEARCHQUERY_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/bookinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class BookInfo;
 
-class BookInfoRemoteSearchQuery : public QObject {
-	Q_OBJECT
+class BookInfoRemoteSearchQuery {
 public:
-	explicit BookInfoRemoteSearchQuery(QObject *parent = nullptr);
-	static BookInfoRemoteSearchQuery *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
+	explicit BookInfoRemoteSearchQuery();
+	static BookInfoRemoteSearchQuery fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
-	Q_PROPERTY(BookInfo * searchInfo READ searchInfo WRITE setSearchInfo NOTIFY searchInfoChanged)
-	Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
+	QSharedPointer<BookInfo> searchInfo() const;
+
+	void setSearchInfo(QSharedPointer<BookInfo> newSearchInfo);
+
+	QUuid itemId() const;
+
+	void setItemId(QUuid newItemId);
 	/**
 	 * @brief Will only search within the given provider when set.
 	 */
-	Q_PROPERTY(QString searchProviderName READ searchProviderName WRITE setSearchProviderName NOTIFY searchProviderNameChanged)
+	QString searchProviderName() const;
+	/**
+	* @brief Will only search within the given provider when set.
+	*/
+	void setSearchProviderName(QString newSearchProviderName);
 	/**
 	 * @brief Gets or sets a value indicating whether disabled providers should be included.
 	 */
-	Q_PROPERTY(bool includeDisabledProviders READ includeDisabledProviders WRITE setIncludeDisabledProviders NOTIFY includeDisabledProvidersChanged)
-
-	BookInfo * searchInfo() const;
-	void setSearchInfo(BookInfo * newSearchInfo);
-	
-	QString itemId() const;
-	void setItemId(QString newItemId);
-	
-	QString searchProviderName() const;
-	void setSearchProviderName(QString newSearchProviderName);
-	
 	bool includeDisabledProviders() const;
+	/**
+	* @brief Gets or sets a value indicating whether disabled providers should be included.
+	*/
 	void setIncludeDisabledProviders(bool newIncludeDisabledProviders);
-	
-signals:
-	void searchInfoChanged(BookInfo * newSearchInfo);
-	void itemIdChanged(QString newItemId);
-	void searchProviderNameChanged(QString newSearchProviderName);
-	void includeDisabledProvidersChanged(bool newIncludeDisabledProviders);
+
 protected:
-	BookInfo * m_searchInfo = nullptr;
-	QString m_itemId;
+	QSharedPointer<BookInfo> m_searchInfo = nullptr;
+	QUuid m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using BookInfoRemoteSearchQuery = Jellyfin::DTO::BookInfoRemoteSearchQuery;
+
+template <>
+BookInfoRemoteSearchQuery fromJsonValue<BookInfoRemoteSearchQuery>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return BookInfoRemoteSearchQuery::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/imageoption.h>
 
-#include <JellyfinQt/DTO/imagetype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ImageOption::ImageOption(QObject *parent) : QObject(parent) {}
+ImageOption::ImageOption(QObject *parent) {}
 
-ImageOption *ImageOption::fromJSON(QJsonObject source, QObject *parent) {
-	ImageOption *instance = new ImageOption(parent);
-	instance->updateFromJSON(source);
+ImageOption ImageOption::fromJson(QJsonObject source) {ImageOption instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ImageOption::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ImageOption::setFromJson(QJsonObject source) {
+	m_type = fromJsonValue<ImageType>(source["Type"]);
+	m_limit = fromJsonValue<qint32>(source["Limit"]);
+	m_minWidth = fromJsonValue<qint32>(source["MinWidth"]);
+
 }
-QJsonObject ImageOption::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ImageOption::toJson() {
 	QJsonObject result;
+	result["Type"] = toJsonValue<ImageType>(m_type);
+	result["Limit"] = toJsonValue<qint32>(m_limit);
+	result["MinWidth"] = toJsonValue<qint32>(m_minWidth);
+
 	return result;
 }
+
 ImageType ImageOption::type() const { return m_type; }
+
 void ImageOption::setType(ImageType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 qint32 ImageOption::limit() const { return m_limit; }
+
 void ImageOption::setLimit(qint32 newLimit) {
 	m_limit = newLimit;
-	emit limitChanged(newLimit);
 }
-
 qint32 ImageOption::minWidth() const { return m_minWidth; }
+
 void ImageOption::setMinWidth(qint32 newMinWidth) {
 	m_minWidth = newMinWidth;
-	emit minWidthChanged(newMinWidth);
 }
 
 

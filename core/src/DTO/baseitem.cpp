@@ -32,86 +32,100 @@
 namespace Jellyfin {
 namespace DTO {
 
-BaseItem::BaseItem(QObject *parent) : QObject(parent) {}
+BaseItem::BaseItem(QObject *parent) {}
 
-BaseItem *BaseItem::fromJSON(QJsonObject source, QObject *parent) {
-	BaseItem *instance = new BaseItem(parent);
-	instance->updateFromJSON(source);
+BaseItem BaseItem::fromJson(QJsonObject source) {BaseItem instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void BaseItem::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void BaseItem::setFromJson(QJsonObject source) {
+	m_size = fromJsonValue<qint64>(source["Size"]);
+	m_container = fromJsonValue<QString>(source["Container"]);
+	m_dateLastSaved = fromJsonValue<QDateTime>(source["DateLastSaved"]);
+	m_remoteTrailers = fromJsonValue<QList<QSharedPointer<MediaUrl>>>(source["RemoteTrailers"]);
+	m_isHD = fromJsonValue<bool>(source["IsHD"]);
+	m_isShortcut = fromJsonValue<bool>(source["IsShortcut"]);
+	m_shortcutPath = fromJsonValue<QString>(source["ShortcutPath"]);
+	m_width = fromJsonValue<qint32>(source["Width"]);
+	m_height = fromJsonValue<qint32>(source["Height"]);
+	m_extraIds = fromJsonValue<QList<QUuid>>(source["ExtraIds"]);
+	m_supportsExternalTransfer = fromJsonValue<bool>(source["SupportsExternalTransfer"]);
+
 }
-QJsonObject BaseItem::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject BaseItem::toJson() {
 	QJsonObject result;
+	result["Size"] = toJsonValue<qint64>(m_size);
+	result["Container"] = toJsonValue<QString>(m_container);
+	result["DateLastSaved"] = toJsonValue<QDateTime>(m_dateLastSaved);
+	result["RemoteTrailers"] = toJsonValue<QList<QSharedPointer<MediaUrl>>>(m_remoteTrailers);
+	result["IsHD"] = toJsonValue<bool>(m_isHD);
+	result["IsShortcut"] = toJsonValue<bool>(m_isShortcut);
+	result["ShortcutPath"] = toJsonValue<QString>(m_shortcutPath);
+	result["Width"] = toJsonValue<qint32>(m_width);
+	result["Height"] = toJsonValue<qint32>(m_height);
+	result["ExtraIds"] = toJsonValue<QList<QUuid>>(m_extraIds);
+	result["SupportsExternalTransfer"] = toJsonValue<bool>(m_supportsExternalTransfer);
+
 	return result;
 }
+
 qint64 BaseItem::size() const { return m_size; }
+
 void BaseItem::setSize(qint64 newSize) {
 	m_size = newSize;
-	emit sizeChanged(newSize);
 }
-
 QString BaseItem::container() const { return m_container; }
+
 void BaseItem::setContainer(QString newContainer) {
 	m_container = newContainer;
-	emit containerChanged(newContainer);
 }
-
 QDateTime BaseItem::dateLastSaved() const { return m_dateLastSaved; }
+
 void BaseItem::setDateLastSaved(QDateTime newDateLastSaved) {
 	m_dateLastSaved = newDateLastSaved;
-	emit dateLastSavedChanged(newDateLastSaved);
 }
+QList<QSharedPointer<MediaUrl>> BaseItem::remoteTrailers() const { return m_remoteTrailers; }
 
-QList<MediaUrl *> BaseItem::remoteTrailers() const { return m_remoteTrailers; }
-void BaseItem::setRemoteTrailers(QList<MediaUrl *> newRemoteTrailers) {
+void BaseItem::setRemoteTrailers(QList<QSharedPointer<MediaUrl>> newRemoteTrailers) {
 	m_remoteTrailers = newRemoteTrailers;
-	emit remoteTrailersChanged(newRemoteTrailers);
 }
-
 bool BaseItem::isHD() const { return m_isHD; }
+
 void BaseItem::setIsHD(bool newIsHD) {
 	m_isHD = newIsHD;
-	emit isHDChanged(newIsHD);
 }
-
 bool BaseItem::isShortcut() const { return m_isShortcut; }
+
 void BaseItem::setIsShortcut(bool newIsShortcut) {
 	m_isShortcut = newIsShortcut;
-	emit isShortcutChanged(newIsShortcut);
 }
-
 QString BaseItem::shortcutPath() const { return m_shortcutPath; }
+
 void BaseItem::setShortcutPath(QString newShortcutPath) {
 	m_shortcutPath = newShortcutPath;
-	emit shortcutPathChanged(newShortcutPath);
 }
-
 qint32 BaseItem::width() const { return m_width; }
+
 void BaseItem::setWidth(qint32 newWidth) {
 	m_width = newWidth;
-	emit widthChanged(newWidth);
 }
-
 qint32 BaseItem::height() const { return m_height; }
+
 void BaseItem::setHeight(qint32 newHeight) {
 	m_height = newHeight;
-	emit heightChanged(newHeight);
 }
+QList<QUuid> BaseItem::extraIds() const { return m_extraIds; }
 
-QStringList BaseItem::extraIds() const { return m_extraIds; }
-void BaseItem::setExtraIds(QStringList newExtraIds) {
+void BaseItem::setExtraIds(QList<QUuid> newExtraIds) {
 	m_extraIds = newExtraIds;
-	emit extraIdsChanged(newExtraIds);
 }
-
 bool BaseItem::supportsExternalTransfer() const { return m_supportsExternalTransfer; }
+
 void BaseItem::setSupportsExternalTransfer(bool newSupportsExternalTransfer) {
 	m_supportsExternalTransfer = newSupportsExternalTransfer;
-	emit supportsExternalTransferChanged(newSupportsExternalTransfer);
 }
 
 

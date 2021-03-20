@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-UploadSubtitleDto::UploadSubtitleDto(QObject *parent) : QObject(parent) {}
+UploadSubtitleDto::UploadSubtitleDto(QObject *parent) {}
 
-UploadSubtitleDto *UploadSubtitleDto::fromJSON(QJsonObject source, QObject *parent) {
-	UploadSubtitleDto *instance = new UploadSubtitleDto(parent);
-	instance->updateFromJSON(source);
+UploadSubtitleDto UploadSubtitleDto::fromJson(QJsonObject source) {UploadSubtitleDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void UploadSubtitleDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void UploadSubtitleDto::setFromJson(QJsonObject source) {
+	m_language = fromJsonValue<QString>(source["Language"]);
+	m_format = fromJsonValue<QString>(source["Format"]);
+	m_isForced = fromJsonValue<bool>(source["IsForced"]);
+	m_data = fromJsonValue<QString>(source["Data"]);
+
 }
-QJsonObject UploadSubtitleDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject UploadSubtitleDto::toJson() {
 	QJsonObject result;
+	result["Language"] = toJsonValue<QString>(m_language);
+	result["Format"] = toJsonValue<QString>(m_format);
+	result["IsForced"] = toJsonValue<bool>(m_isForced);
+	result["Data"] = toJsonValue<QString>(m_data);
+
 	return result;
 }
+
 QString UploadSubtitleDto::language() const { return m_language; }
+
 void UploadSubtitleDto::setLanguage(QString newLanguage) {
 	m_language = newLanguage;
-	emit languageChanged(newLanguage);
 }
-
 QString UploadSubtitleDto::format() const { return m_format; }
+
 void UploadSubtitleDto::setFormat(QString newFormat) {
 	m_format = newFormat;
-	emit formatChanged(newFormat);
 }
-
 bool UploadSubtitleDto::isForced() const { return m_isForced; }
+
 void UploadSubtitleDto::setIsForced(bool newIsForced) {
 	m_isForced = newIsForced;
-	emit isForcedChanged(newIsForced);
 }
-
 QString UploadSubtitleDto::data() const { return m_data; }
+
 void UploadSubtitleDto::setData(QString newData) {
 	m_data = newData;
-	emit dataChanged(newData);
 }
 
 

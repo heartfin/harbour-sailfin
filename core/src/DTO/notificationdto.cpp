@@ -29,73 +29,82 @@
 
 #include <JellyfinQt/DTO/notificationdto.h>
 
-#include <JellyfinQt/DTO/notificationlevel.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-NotificationDto::NotificationDto(QObject *parent) : QObject(parent) {}
+NotificationDto::NotificationDto(QObject *parent) {}
 
-NotificationDto *NotificationDto::fromJSON(QJsonObject source, QObject *parent) {
-	NotificationDto *instance = new NotificationDto(parent);
-	instance->updateFromJSON(source);
+NotificationDto NotificationDto::fromJson(QJsonObject source) {NotificationDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void NotificationDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void NotificationDto::setFromJson(QJsonObject source) {
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_userId = fromJsonValue<QString>(source["UserId"]);
+	m_date = fromJsonValue<QDateTime>(source["Date"]);
+	m_isRead = fromJsonValue<bool>(source["IsRead"]);
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_description = fromJsonValue<QString>(source["Description"]);
+	m_url = fromJsonValue<QString>(source["Url"]);
+	m_level = fromJsonValue<NotificationLevel>(source["Level"]);
+
 }
-QJsonObject NotificationDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject NotificationDto::toJson() {
 	QJsonObject result;
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["UserId"] = toJsonValue<QString>(m_userId);
+	result["Date"] = toJsonValue<QDateTime>(m_date);
+	result["IsRead"] = toJsonValue<bool>(m_isRead);
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Description"] = toJsonValue<QString>(m_description);
+	result["Url"] = toJsonValue<QString>(m_url);
+	result["Level"] = toJsonValue<NotificationLevel>(m_level);
+
 	return result;
 }
+
 QString NotificationDto::jellyfinId() const { return m_jellyfinId; }
+
 void NotificationDto::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 QString NotificationDto::userId() const { return m_userId; }
+
 void NotificationDto::setUserId(QString newUserId) {
 	m_userId = newUserId;
-	emit userIdChanged(newUserId);
 }
-
 QDateTime NotificationDto::date() const { return m_date; }
+
 void NotificationDto::setDate(QDateTime newDate) {
 	m_date = newDate;
-	emit dateChanged(newDate);
 }
-
 bool NotificationDto::isRead() const { return m_isRead; }
+
 void NotificationDto::setIsRead(bool newIsRead) {
 	m_isRead = newIsRead;
-	emit isReadChanged(newIsRead);
 }
-
 QString NotificationDto::name() const { return m_name; }
+
 void NotificationDto::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString NotificationDto::description() const { return m_description; }
+
 void NotificationDto::setDescription(QString newDescription) {
 	m_description = newDescription;
-	emit descriptionChanged(newDescription);
 }
-
 QString NotificationDto::url() const { return m_url; }
+
 void NotificationDto::setUrl(QString newUrl) {
 	m_url = newUrl;
-	emit urlChanged(newUrl);
 }
-
 NotificationLevel NotificationDto::level() const { return m_level; }
+
 void NotificationDto::setLevel(NotificationLevel newLevel) {
 	m_level = newLevel;
-	emit levelChanged(newLevel);
 }
 
 

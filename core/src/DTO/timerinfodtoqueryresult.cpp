@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-TimerInfoDtoQueryResult::TimerInfoDtoQueryResult(QObject *parent) : QObject(parent) {}
+TimerInfoDtoQueryResult::TimerInfoDtoQueryResult(QObject *parent) {}
 
-TimerInfoDtoQueryResult *TimerInfoDtoQueryResult::fromJSON(QJsonObject source, QObject *parent) {
-	TimerInfoDtoQueryResult *instance = new TimerInfoDtoQueryResult(parent);
-	instance->updateFromJSON(source);
+TimerInfoDtoQueryResult TimerInfoDtoQueryResult::fromJson(QJsonObject source) {TimerInfoDtoQueryResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TimerInfoDtoQueryResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TimerInfoDtoQueryResult::setFromJson(QJsonObject source) {
+	m_items = fromJsonValue<QList<QSharedPointer<TimerInfoDto>>>(source["Items"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+
 }
-QJsonObject TimerInfoDtoQueryResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TimerInfoDtoQueryResult::toJson() {
 	QJsonObject result;
+	result["Items"] = toJsonValue<QList<QSharedPointer<TimerInfoDto>>>(m_items);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+
 	return result;
 }
-QList<TimerInfoDto *> TimerInfoDtoQueryResult::items() const { return m_items; }
-void TimerInfoDtoQueryResult::setItems(QList<TimerInfoDto *> newItems) {
-	m_items = newItems;
-	emit itemsChanged(newItems);
-}
 
+QList<QSharedPointer<TimerInfoDto>> TimerInfoDtoQueryResult::items() const { return m_items; }
+
+void TimerInfoDtoQueryResult::setItems(QList<QSharedPointer<TimerInfoDto>> newItems) {
+	m_items = newItems;
+}
 qint32 TimerInfoDtoQueryResult::totalRecordCount() const { return m_totalRecordCount; }
+
 void TimerInfoDtoQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
-
 qint32 TimerInfoDtoQueryResult::startIndex() const { return m_startIndex; }
+
 void TimerInfoDtoQueryResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
-	emit startIndexChanged(newStartIndex);
 }
 
 

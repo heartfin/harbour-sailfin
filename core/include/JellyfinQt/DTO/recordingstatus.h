@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_RECORDINGSTATUS_H
 #define JELLYFIN_DTO_RECORDINGSTATUS_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class RecordingStatusClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		New,
 		InProgress,
 		Completed,
@@ -51,7 +56,45 @@ public:
 private:
 	explicit RecordingStatusClass();
 };
+
 typedef RecordingStatusClass::Value RecordingStatus;
+
+} // NS DTO
+
+namespace Support {
+
+using RecordingStatus = Jellyfin::DTO::RecordingStatus;
+using RecordingStatusClass = Jellyfin::DTO::RecordingStatusClass;
+
+template <>
+RecordingStatus fromJsonValue<RecordingStatus>(const QJsonValue &source) {
+	if (!source.isString()) return RecordingStatusClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("New")) {
+		return RecordingStatusClass::New;
+	}
+	if (str == QStringLiteral("InProgress")) {
+		return RecordingStatusClass::InProgress;
+	}
+	if (str == QStringLiteral("Completed")) {
+		return RecordingStatusClass::Completed;
+	}
+	if (str == QStringLiteral("Cancelled")) {
+		return RecordingStatusClass::Cancelled;
+	}
+	if (str == QStringLiteral("ConflictedOk")) {
+		return RecordingStatusClass::ConflictedOk;
+	}
+	if (str == QStringLiteral("ConflictedNotOk")) {
+		return RecordingStatusClass::ConflictedNotOk;
+	}
+	if (str == QStringLiteral("Error")) {
+		return RecordingStatusClass::Error;
+	}
+	
+	return RecordingStatusClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

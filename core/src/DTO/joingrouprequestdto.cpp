@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-JoinGroupRequestDto::JoinGroupRequestDto(QObject *parent) : QObject(parent) {}
+JoinGroupRequestDto::JoinGroupRequestDto(QObject *parent) {}
 
-JoinGroupRequestDto *JoinGroupRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	JoinGroupRequestDto *instance = new JoinGroupRequestDto(parent);
-	instance->updateFromJSON(source);
+JoinGroupRequestDto JoinGroupRequestDto::fromJson(QJsonObject source) {JoinGroupRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void JoinGroupRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void JoinGroupRequestDto::setFromJson(QJsonObject source) {
+	m_groupId = fromJsonValue<QUuid>(source["GroupId"]);
+
 }
-QJsonObject JoinGroupRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject JoinGroupRequestDto::toJson() {
 	QJsonObject result;
+	result["GroupId"] = toJsonValue<QUuid>(m_groupId);
+
 	return result;
 }
-QString JoinGroupRequestDto::groupId() const { return m_groupId; }
-void JoinGroupRequestDto::setGroupId(QString newGroupId) {
+
+QUuid JoinGroupRequestDto::groupId() const { return m_groupId; }
+
+void JoinGroupRequestDto::setGroupId(QUuid newGroupId) {
 	m_groupId = newGroupId;
-	emit groupIdChanged(newGroupId);
 }
 
 

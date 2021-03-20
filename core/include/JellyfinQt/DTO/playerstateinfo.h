@@ -31,99 +31,99 @@
 #define JELLYFIN_DTO_PLAYERSTATEINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/playmethod.h"
 #include "JellyfinQt/DTO/repeatmode.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PlayerStateInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit PlayerStateInfo(QObject *parent = nullptr);
-	static PlayerStateInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class PlayerStateInfo {
+public:
+	explicit PlayerStateInfo();
+	static PlayerStateInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the now playing position ticks.
 	 */
-	Q_PROPERTY(qint64 positionTicks READ positionTicks WRITE setPositionTicks NOTIFY positionTicksChanged)
+	qint64 positionTicks() const;
+	/**
+	* @brief Gets or sets the now playing position ticks.
+	*/
+	void setPositionTicks(qint64 newPositionTicks);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance can seek.
 	 */
-	Q_PROPERTY(bool canSeek READ canSeek WRITE setCanSeek NOTIFY canSeekChanged)
+	bool canSeek() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance can seek.
+	*/
+	void setCanSeek(bool newCanSeek);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is paused.
 	 */
-	Q_PROPERTY(bool isPaused READ isPaused WRITE setIsPaused NOTIFY isPausedChanged)
+	bool isPaused() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is paused.
+	*/
+	void setIsPaused(bool newIsPaused);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is muted.
 	 */
-	Q_PROPERTY(bool isMuted READ isMuted WRITE setIsMuted NOTIFY isMutedChanged)
+	bool isMuted() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is muted.
+	*/
+	void setIsMuted(bool newIsMuted);
 	/**
 	 * @brief Gets or sets the volume level.
 	 */
-	Q_PROPERTY(qint32 volumeLevel READ volumeLevel WRITE setVolumeLevel NOTIFY volumeLevelChanged)
+	qint32 volumeLevel() const;
+	/**
+	* @brief Gets or sets the volume level.
+	*/
+	void setVolumeLevel(qint32 newVolumeLevel);
 	/**
 	 * @brief Gets or sets the index of the now playing audio stream.
 	 */
-	Q_PROPERTY(qint32 audioStreamIndex READ audioStreamIndex WRITE setAudioStreamIndex NOTIFY audioStreamIndexChanged)
+	qint32 audioStreamIndex() const;
+	/**
+	* @brief Gets or sets the index of the now playing audio stream.
+	*/
+	void setAudioStreamIndex(qint32 newAudioStreamIndex);
 	/**
 	 * @brief Gets or sets the index of the now playing subtitle stream.
 	 */
-	Q_PROPERTY(qint32 subtitleStreamIndex READ subtitleStreamIndex WRITE setSubtitleStreamIndex NOTIFY subtitleStreamIndexChanged)
+	qint32 subtitleStreamIndex() const;
+	/**
+	* @brief Gets or sets the index of the now playing subtitle stream.
+	*/
+	void setSubtitleStreamIndex(qint32 newSubtitleStreamIndex);
 	/**
 	 * @brief Gets or sets the now playing media version identifier.
 	 */
-	Q_PROPERTY(QString mediaSourceId READ mediaSourceId WRITE setMediaSourceId NOTIFY mediaSourceIdChanged)
-	Q_PROPERTY(PlayMethod playMethod READ playMethod WRITE setPlayMethod NOTIFY playMethodChanged)
-	Q_PROPERTY(RepeatMode repeatMode READ repeatMode WRITE setRepeatMode NOTIFY repeatModeChanged)
-
-	qint64 positionTicks() const;
-	void setPositionTicks(qint64 newPositionTicks);
-	
-	bool canSeek() const;
-	void setCanSeek(bool newCanSeek);
-	
-	bool isPaused() const;
-	void setIsPaused(bool newIsPaused);
-	
-	bool isMuted() const;
-	void setIsMuted(bool newIsMuted);
-	
-	qint32 volumeLevel() const;
-	void setVolumeLevel(qint32 newVolumeLevel);
-	
-	qint32 audioStreamIndex() const;
-	void setAudioStreamIndex(qint32 newAudioStreamIndex);
-	
-	qint32 subtitleStreamIndex() const;
-	void setSubtitleStreamIndex(qint32 newSubtitleStreamIndex);
-	
 	QString mediaSourceId() const;
+	/**
+	* @brief Gets or sets the now playing media version identifier.
+	*/
 	void setMediaSourceId(QString newMediaSourceId);
-	
+
 	PlayMethod playMethod() const;
+
 	void setPlayMethod(PlayMethod newPlayMethod);
-	
+
 	RepeatMode repeatMode() const;
+
 	void setRepeatMode(RepeatMode newRepeatMode);
-	
-signals:
-	void positionTicksChanged(qint64 newPositionTicks);
-	void canSeekChanged(bool newCanSeek);
-	void isPausedChanged(bool newIsPaused);
-	void isMutedChanged(bool newIsMuted);
-	void volumeLevelChanged(qint32 newVolumeLevel);
-	void audioStreamIndexChanged(qint32 newAudioStreamIndex);
-	void subtitleStreamIndexChanged(qint32 newSubtitleStreamIndex);
-	void mediaSourceIdChanged(QString newMediaSourceId);
-	void playMethodChanged(PlayMethod newPlayMethod);
-	void repeatModeChanged(RepeatMode newRepeatMode);
+
 protected:
 	qint64 m_positionTicks;
 	bool m_canSeek;
@@ -136,6 +136,18 @@ protected:
 	PlayMethod m_playMethod;
 	RepeatMode m_repeatMode;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlayerStateInfo = Jellyfin::DTO::PlayerStateInfo;
+
+template <>
+PlayerStateInfo fromJsonValue<PlayerStateInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlayerStateInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

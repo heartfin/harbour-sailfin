@@ -31,105 +31,106 @@
 #define JELLYFIN_DTO_CLIENTCAPABILITIESDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
+#include "JellyfinQt/DTO/deviceprofile.h"
 #include "JellyfinQt/DTO/generalcommandtype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class DeviceProfile;
 
-class ClientCapabilitiesDto : public QObject {
-	Q_OBJECT
+class ClientCapabilitiesDto {
 public:
-	explicit ClientCapabilitiesDto(QObject *parent = nullptr);
-	static ClientCapabilitiesDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit ClientCapabilitiesDto();
+	static ClientCapabilitiesDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the list of playable media types.
 	 */
-	Q_PROPERTY(QStringList playableMediaTypes READ playableMediaTypes WRITE setPlayableMediaTypes NOTIFY playableMediaTypesChanged)
+	QStringList playableMediaTypes() const;
+	/**
+	* @brief Gets or sets the list of playable media types.
+	*/
+	void setPlayableMediaTypes(QStringList newPlayableMediaTypes);
 	/**
 	 * @brief Gets or sets the list of supported commands.
 	 */
-	Q_PROPERTY(QList<GeneralCommandType> supportedCommands READ supportedCommands WRITE setSupportedCommands NOTIFY supportedCommandsChanged)
+	QList<GeneralCommandType> supportedCommands() const;
+	/**
+	* @brief Gets or sets the list of supported commands.
+	*/
+	void setSupportedCommands(QList<GeneralCommandType> newSupportedCommands);
 	/**
 	 * @brief Gets or sets a value indicating whether session supports media control.
 	 */
-	Q_PROPERTY(bool supportsMediaControl READ supportsMediaControl WRITE setSupportsMediaControl NOTIFY supportsMediaControlChanged)
+	bool supportsMediaControl() const;
+	/**
+	* @brief Gets or sets a value indicating whether session supports media control.
+	*/
+	void setSupportsMediaControl(bool newSupportsMediaControl);
 	/**
 	 * @brief Gets or sets a value indicating whether session supports content uploading.
 	 */
-	Q_PROPERTY(bool supportsContentUploading READ supportsContentUploading WRITE setSupportsContentUploading NOTIFY supportsContentUploadingChanged)
+	bool supportsContentUploading() const;
+	/**
+	* @brief Gets or sets a value indicating whether session supports content uploading.
+	*/
+	void setSupportsContentUploading(bool newSupportsContentUploading);
 	/**
 	 * @brief Gets or sets the message callback url.
 	 */
-	Q_PROPERTY(QString messageCallbackUrl READ messageCallbackUrl WRITE setMessageCallbackUrl NOTIFY messageCallbackUrlChanged)
+	QString messageCallbackUrl() const;
+	/**
+	* @brief Gets or sets the message callback url.
+	*/
+	void setMessageCallbackUrl(QString newMessageCallbackUrl);
 	/**
 	 * @brief Gets or sets a value indicating whether session supports a persistent identifier.
 	 */
-	Q_PROPERTY(bool supportsPersistentIdentifier READ supportsPersistentIdentifier WRITE setSupportsPersistentIdentifier NOTIFY supportsPersistentIdentifierChanged)
+	bool supportsPersistentIdentifier() const;
+	/**
+	* @brief Gets or sets a value indicating whether session supports a persistent identifier.
+	*/
+	void setSupportsPersistentIdentifier(bool newSupportsPersistentIdentifier);
 	/**
 	 * @brief Gets or sets a value indicating whether session supports sync.
 	 */
-	Q_PROPERTY(bool supportsSync READ supportsSync WRITE setSupportsSync NOTIFY supportsSyncChanged)
-	Q_PROPERTY(DeviceProfile * deviceProfile READ deviceProfile WRITE setDeviceProfile NOTIFY deviceProfileChanged)
+	bool supportsSync() const;
+	/**
+	* @brief Gets or sets a value indicating whether session supports sync.
+	*/
+	void setSupportsSync(bool newSupportsSync);
+
+	QSharedPointer<DeviceProfile> deviceProfile() const;
+
+	void setDeviceProfile(QSharedPointer<DeviceProfile> newDeviceProfile);
 	/**
 	 * @brief Gets or sets the app store url.
 	 */
-	Q_PROPERTY(QString appStoreUrl READ appStoreUrl WRITE setAppStoreUrl NOTIFY appStoreUrlChanged)
+	QString appStoreUrl() const;
+	/**
+	* @brief Gets or sets the app store url.
+	*/
+	void setAppStoreUrl(QString newAppStoreUrl);
 	/**
 	 * @brief Gets or sets the icon url.
 	 */
-	Q_PROPERTY(QString iconUrl READ iconUrl WRITE setIconUrl NOTIFY iconUrlChanged)
-
-	QStringList playableMediaTypes() const;
-	void setPlayableMediaTypes(QStringList newPlayableMediaTypes);
-	
-	QList<GeneralCommandType> supportedCommands() const;
-	void setSupportedCommands(QList<GeneralCommandType> newSupportedCommands);
-	
-	bool supportsMediaControl() const;
-	void setSupportsMediaControl(bool newSupportsMediaControl);
-	
-	bool supportsContentUploading() const;
-	void setSupportsContentUploading(bool newSupportsContentUploading);
-	
-	QString messageCallbackUrl() const;
-	void setMessageCallbackUrl(QString newMessageCallbackUrl);
-	
-	bool supportsPersistentIdentifier() const;
-	void setSupportsPersistentIdentifier(bool newSupportsPersistentIdentifier);
-	
-	bool supportsSync() const;
-	void setSupportsSync(bool newSupportsSync);
-	
-	DeviceProfile * deviceProfile() const;
-	void setDeviceProfile(DeviceProfile * newDeviceProfile);
-	
-	QString appStoreUrl() const;
-	void setAppStoreUrl(QString newAppStoreUrl);
-	
 	QString iconUrl() const;
+	/**
+	* @brief Gets or sets the icon url.
+	*/
 	void setIconUrl(QString newIconUrl);
-	
-signals:
-	void playableMediaTypesChanged(QStringList newPlayableMediaTypes);
-	void supportedCommandsChanged(QList<GeneralCommandType> newSupportedCommands);
-	void supportsMediaControlChanged(bool newSupportsMediaControl);
-	void supportsContentUploadingChanged(bool newSupportsContentUploading);
-	void messageCallbackUrlChanged(QString newMessageCallbackUrl);
-	void supportsPersistentIdentifierChanged(bool newSupportsPersistentIdentifier);
-	void supportsSyncChanged(bool newSupportsSync);
-	void deviceProfileChanged(DeviceProfile * newDeviceProfile);
-	void appStoreUrlChanged(QString newAppStoreUrl);
-	void iconUrlChanged(QString newIconUrl);
+
 protected:
 	QStringList m_playableMediaTypes;
 	QList<GeneralCommandType> m_supportedCommands;
@@ -138,10 +139,22 @@ protected:
 	QString m_messageCallbackUrl;
 	bool m_supportsPersistentIdentifier;
 	bool m_supportsSync;
-	DeviceProfile * m_deviceProfile = nullptr;
+	QSharedPointer<DeviceProfile> m_deviceProfile = nullptr;
 	QString m_appStoreUrl;
 	QString m_iconUrl;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ClientCapabilitiesDto = Jellyfin::DTO::ClientCapabilitiesDto;
+
+template <>
+ClientCapabilitiesDto fromJsonValue<ClientCapabilitiesDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ClientCapabilitiesDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

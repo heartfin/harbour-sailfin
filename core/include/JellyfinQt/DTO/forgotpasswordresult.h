@@ -32,50 +32,63 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/forgotpasswordaction.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ForgotPasswordResult : public QObject {
-	Q_OBJECT
-public:
-	explicit ForgotPasswordResult(QObject *parent = nullptr);
-	static ForgotPasswordResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(ForgotPasswordAction action READ action WRITE setAction NOTIFY actionChanged)
+class ForgotPasswordResult {
+public:
+	explicit ForgotPasswordResult();
+	static ForgotPasswordResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
+
+	ForgotPasswordAction action() const;
+
+	void setAction(ForgotPasswordAction newAction);
 	/**
 	 * @brief Gets or sets the pin file.
 	 */
-	Q_PROPERTY(QString pinFile READ pinFile WRITE setPinFile NOTIFY pinFileChanged)
+	QString pinFile() const;
+	/**
+	* @brief Gets or sets the pin file.
+	*/
+	void setPinFile(QString newPinFile);
 	/**
 	 * @brief Gets or sets the pin expiration date.
 	 */
-	Q_PROPERTY(QDateTime pinExpirationDate READ pinExpirationDate WRITE setPinExpirationDate NOTIFY pinExpirationDateChanged)
-
-	ForgotPasswordAction action() const;
-	void setAction(ForgotPasswordAction newAction);
-	
-	QString pinFile() const;
-	void setPinFile(QString newPinFile);
-	
 	QDateTime pinExpirationDate() const;
+	/**
+	* @brief Gets or sets the pin expiration date.
+	*/
 	void setPinExpirationDate(QDateTime newPinExpirationDate);
-	
-signals:
-	void actionChanged(ForgotPasswordAction newAction);
-	void pinFileChanged(QString newPinFile);
-	void pinExpirationDateChanged(QDateTime newPinExpirationDate);
+
 protected:
 	ForgotPasswordAction m_action;
 	QString m_pinFile;
 	QDateTime m_pinExpirationDate;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ForgotPasswordResult = Jellyfin::DTO::ForgotPasswordResult;
+
+template <>
+ForgotPasswordResult fromJsonValue<ForgotPasswordResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ForgotPasswordResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

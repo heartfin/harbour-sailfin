@@ -31,51 +31,66 @@
 #define JELLYFIN_DTO_REPOSITORYINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class RepositoryInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit RepositoryInfo(QObject *parent = nullptr);
-	static RepositoryInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class RepositoryInfo {
+public:
+	explicit RepositoryInfo();
+	static RepositoryInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the URL.
 	 */
-	Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
+	QString url() const;
+	/**
+	* @brief Gets or sets the URL.
+	*/
+	void setUrl(QString newUrl);
 	/**
 	 * @brief Gets or sets a value indicating whether the repository is enabled.
 	 */
-	Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString url() const;
-	void setUrl(QString newUrl);
-	
 	bool enabled() const;
+	/**
+	* @brief Gets or sets a value indicating whether the repository is enabled.
+	*/
 	void setEnabled(bool newEnabled);
-	
-signals:
-	void nameChanged(QString newName);
-	void urlChanged(QString newUrl);
-	void enabledChanged(bool newEnabled);
+
 protected:
 	QString m_name;
 	QString m_url;
 	bool m_enabled;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using RepositoryInfo = Jellyfin::DTO::RepositoryInfo;
+
+template <>
+RepositoryInfo fromJsonValue<RepositoryInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RepositoryInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -29,67 +29,75 @@
 
 #include <JellyfinQt/DTO/responseprofile.h>
 
-#include <JellyfinQt/DTO/dlnaprofiletype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ResponseProfile::ResponseProfile(QObject *parent) : QObject(parent) {}
+ResponseProfile::ResponseProfile(QObject *parent) {}
 
-ResponseProfile *ResponseProfile::fromJSON(QJsonObject source, QObject *parent) {
-	ResponseProfile *instance = new ResponseProfile(parent);
-	instance->updateFromJSON(source);
+ResponseProfile ResponseProfile::fromJson(QJsonObject source) {ResponseProfile instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ResponseProfile::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ResponseProfile::setFromJson(QJsonObject source) {
+	m_container = fromJsonValue<QString>(source["Container"]);
+	m_audioCodec = fromJsonValue<QString>(source["AudioCodec"]);
+	m_videoCodec = fromJsonValue<QString>(source["VideoCodec"]);
+	m_type = fromJsonValue<DlnaProfileType>(source["Type"]);
+	m_orgPn = fromJsonValue<QString>(source["OrgPn"]);
+	m_mimeType = fromJsonValue<QString>(source["MimeType"]);
+	m_conditions = fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
+
 }
-QJsonObject ResponseProfile::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ResponseProfile::toJson() {
 	QJsonObject result;
+	result["Container"] = toJsonValue<QString>(m_container);
+	result["AudioCodec"] = toJsonValue<QString>(m_audioCodec);
+	result["VideoCodec"] = toJsonValue<QString>(m_videoCodec);
+	result["Type"] = toJsonValue<DlnaProfileType>(m_type);
+	result["OrgPn"] = toJsonValue<QString>(m_orgPn);
+	result["MimeType"] = toJsonValue<QString>(m_mimeType);
+	result["Conditions"] = toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
+
 	return result;
 }
+
 QString ResponseProfile::container() const { return m_container; }
+
 void ResponseProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
-	emit containerChanged(newContainer);
 }
-
 QString ResponseProfile::audioCodec() const { return m_audioCodec; }
+
 void ResponseProfile::setAudioCodec(QString newAudioCodec) {
 	m_audioCodec = newAudioCodec;
-	emit audioCodecChanged(newAudioCodec);
 }
-
 QString ResponseProfile::videoCodec() const { return m_videoCodec; }
+
 void ResponseProfile::setVideoCodec(QString newVideoCodec) {
 	m_videoCodec = newVideoCodec;
-	emit videoCodecChanged(newVideoCodec);
 }
-
 DlnaProfileType ResponseProfile::type() const { return m_type; }
+
 void ResponseProfile::setType(DlnaProfileType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 QString ResponseProfile::orgPn() const { return m_orgPn; }
+
 void ResponseProfile::setOrgPn(QString newOrgPn) {
 	m_orgPn = newOrgPn;
-	emit orgPnChanged(newOrgPn);
 }
-
 QString ResponseProfile::mimeType() const { return m_mimeType; }
+
 void ResponseProfile::setMimeType(QString newMimeType) {
 	m_mimeType = newMimeType;
-	emit mimeTypeChanged(newMimeType);
 }
+QList<QSharedPointer<ProfileCondition>> ResponseProfile::conditions() const { return m_conditions; }
 
-QList<ProfileCondition *> ResponseProfile::conditions() const { return m_conditions; }
-void ResponseProfile::setConditions(QList<ProfileCondition *> newConditions) {
+void ResponseProfile::setConditions(QList<QSharedPointer<ProfileCondition>> newConditions) {
 	m_conditions = newConditions;
-	emit conditionsChanged(newConditions);
 }
 
 

@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-RemoveFromPlaylistRequestDto::RemoveFromPlaylistRequestDto(QObject *parent) : QObject(parent) {}
+RemoveFromPlaylistRequestDto::RemoveFromPlaylistRequestDto(QObject *parent) {}
 
-RemoveFromPlaylistRequestDto *RemoveFromPlaylistRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	RemoveFromPlaylistRequestDto *instance = new RemoveFromPlaylistRequestDto(parent);
-	instance->updateFromJSON(source);
+RemoveFromPlaylistRequestDto RemoveFromPlaylistRequestDto::fromJson(QJsonObject source) {RemoveFromPlaylistRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void RemoveFromPlaylistRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void RemoveFromPlaylistRequestDto::setFromJson(QJsonObject source) {
+	m_playlistItemIds = fromJsonValue<QList<QUuid>>(source["PlaylistItemIds"]);
+
 }
-QJsonObject RemoveFromPlaylistRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject RemoveFromPlaylistRequestDto::toJson() {
 	QJsonObject result;
+	result["PlaylistItemIds"] = toJsonValue<QList<QUuid>>(m_playlistItemIds);
+
 	return result;
 }
-QStringList RemoveFromPlaylistRequestDto::playlistItemIds() const { return m_playlistItemIds; }
-void RemoveFromPlaylistRequestDto::setPlaylistItemIds(QStringList newPlaylistItemIds) {
+
+QList<QUuid> RemoveFromPlaylistRequestDto::playlistItemIds() const { return m_playlistItemIds; }
+
+void RemoveFromPlaylistRequestDto::setPlaylistItemIds(QList<QUuid> newPlaylistItemIds) {
 	m_playlistItemIds = newPlaylistItemIds;
-	emit playlistItemIdsChanged(newPlaylistItemIds);
 }
 
 

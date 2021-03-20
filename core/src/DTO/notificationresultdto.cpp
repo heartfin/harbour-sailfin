@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-NotificationResultDto::NotificationResultDto(QObject *parent) : QObject(parent) {}
+NotificationResultDto::NotificationResultDto(QObject *parent) {}
 
-NotificationResultDto *NotificationResultDto::fromJSON(QJsonObject source, QObject *parent) {
-	NotificationResultDto *instance = new NotificationResultDto(parent);
-	instance->updateFromJSON(source);
+NotificationResultDto NotificationResultDto::fromJson(QJsonObject source) {NotificationResultDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void NotificationResultDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void NotificationResultDto::setFromJson(QJsonObject source) {
+	m_notifications = fromJsonValue<QList<QSharedPointer<NotificationDto>>>(source["Notifications"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+
 }
-QJsonObject NotificationResultDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject NotificationResultDto::toJson() {
 	QJsonObject result;
+	result["Notifications"] = toJsonValue<QList<QSharedPointer<NotificationDto>>>(m_notifications);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+
 	return result;
 }
-QList<NotificationDto *> NotificationResultDto::notifications() const { return m_notifications; }
-void NotificationResultDto::setNotifications(QList<NotificationDto *> newNotifications) {
-	m_notifications = newNotifications;
-	emit notificationsChanged(newNotifications);
-}
 
+QList<QSharedPointer<NotificationDto>> NotificationResultDto::notifications() const { return m_notifications; }
+
+void NotificationResultDto::setNotifications(QList<QSharedPointer<NotificationDto>> newNotifications) {
+	m_notifications = newNotifications;
+}
 qint32 NotificationResultDto::totalRecordCount() const { return m_totalRecordCount; }
+
 void NotificationResultDto::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
 
 

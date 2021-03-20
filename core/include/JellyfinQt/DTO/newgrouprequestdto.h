@@ -31,33 +31,48 @@
 #define JELLYFIN_DTO_NEWGROUPREQUESTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class NewGroupRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit NewGroupRequestDto(QObject *parent = nullptr);
-	static NewGroupRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class NewGroupRequestDto {
+public:
+	explicit NewGroupRequestDto();
+	static NewGroupRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the group name.
 	 */
-	Q_PROPERTY(QString groupName READ groupName WRITE setGroupName NOTIFY groupNameChanged)
-
 	QString groupName() const;
+	/**
+	* @brief Gets or sets the group name.
+	*/
 	void setGroupName(QString newGroupName);
-	
-signals:
-	void groupNameChanged(QString newGroupName);
+
 protected:
 	QString m_groupName;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using NewGroupRequestDto = Jellyfin::DTO::NewGroupRequestDto;
+
+template <>
+NewGroupRequestDto fromJsonValue<NewGroupRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NewGroupRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

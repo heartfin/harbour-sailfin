@@ -31,44 +31,59 @@
 #define JELLYFIN_DTO_PINREDEEMRESULT_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PinRedeemResult : public QObject {
-	Q_OBJECT
-public:
-	explicit PinRedeemResult(QObject *parent = nullptr);
-	static PinRedeemResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class PinRedeemResult {
+public:
+	explicit PinRedeemResult();
+	static PinRedeemResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets a value indicating whether this MediaBrowser.Model.Users.PinRedeemResult is success.
 	 */
-	Q_PROPERTY(bool success READ success WRITE setSuccess NOTIFY successChanged)
+	bool success() const;
+	/**
+	* @brief Gets or sets a value indicating whether this MediaBrowser.Model.Users.PinRedeemResult is success.
+	*/
+	void setSuccess(bool newSuccess);
 	/**
 	 * @brief Gets or sets the users reset.
 	 */
-	Q_PROPERTY(QStringList usersReset READ usersReset WRITE setUsersReset NOTIFY usersResetChanged)
-
-	bool success() const;
-	void setSuccess(bool newSuccess);
-	
 	QStringList usersReset() const;
+	/**
+	* @brief Gets or sets the users reset.
+	*/
 	void setUsersReset(QStringList newUsersReset);
-	
-signals:
-	void successChanged(bool newSuccess);
-	void usersResetChanged(QStringList newUsersReset);
+
 protected:
 	bool m_success;
 	QStringList m_usersReset;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PinRedeemResult = Jellyfin::DTO::PinRedeemResult;
+
+template <>
+PinRedeemResult fromJsonValue<PinRedeemResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PinRedeemResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,50 +31,63 @@
 #define JELLYFIN_DTO_DEVICEPROFILEINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/deviceprofiletype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class DeviceProfileInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit DeviceProfileInfo(QObject *parent = nullptr);
-	static DeviceProfileInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class DeviceProfileInfo {
+public:
+	explicit DeviceProfileInfo();
+	static DeviceProfileInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the identifier.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the identifier.
+	*/
+	void setJellyfinId(QString newJellyfinId);
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-	Q_PROPERTY(DeviceProfileType type READ type WRITE setType NOTIFY typeChanged)
-
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
 	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
 	void setName(QString newName);
-	
+
 	DeviceProfileType type() const;
+
 	void setType(DeviceProfileType newType);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
-	void nameChanged(QString newName);
-	void typeChanged(DeviceProfileType newType);
+
 protected:
 	QString m_jellyfinId;
 	QString m_name;
 	DeviceProfileType m_type;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DeviceProfileInfo = Jellyfin::DTO::DeviceProfileInfo;
+
+template <>
+DeviceProfileInfo fromJsonValue<DeviceProfileInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceProfileInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

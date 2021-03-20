@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_MOVEPLAYLISTITEMREQUESTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MovePlaylistItemRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit MovePlaylistItemRequestDto(QObject *parent = nullptr);
-	static MovePlaylistItemRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class MovePlaylistItemRequestDto {
+public:
+	explicit MovePlaylistItemRequestDto();
+	static MovePlaylistItemRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the playlist identifier of the item.
 	 */
-	Q_PROPERTY(QString playlistItemId READ playlistItemId WRITE setPlaylistItemId NOTIFY playlistItemIdChanged)
+	QUuid playlistItemId() const;
+	/**
+	* @brief Gets or sets the playlist identifier of the item.
+	*/
+	void setPlaylistItemId(QUuid newPlaylistItemId);
 	/**
 	 * @brief Gets or sets the new position.
 	 */
-	Q_PROPERTY(qint32 newIndex READ newIndex WRITE setNewIndex NOTIFY newIndexChanged)
-
-	QString playlistItemId() const;
-	void setPlaylistItemId(QString newPlaylistItemId);
-	
 	qint32 newIndex() const;
+	/**
+	* @brief Gets or sets the new position.
+	*/
 	void setNewIndex(qint32 newNewIndex);
-	
-signals:
-	void playlistItemIdChanged(QString newPlaylistItemId);
-	void newIndexChanged(qint32 newNewIndex);
+
 protected:
-	QString m_playlistItemId;
+	QUuid m_playlistItemId;
 	qint32 m_newIndex;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MovePlaylistItemRequestDto = Jellyfin::DTO::MovePlaylistItemRequestDto;
+
+template <>
+MovePlaylistItemRequestDto fromJsonValue<MovePlaylistItemRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MovePlaylistItemRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

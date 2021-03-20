@@ -32,56 +32,65 @@
 namespace Jellyfin {
 namespace DTO {
 
-BaseItemPerson::BaseItemPerson(QObject *parent) : QObject(parent) {}
+BaseItemPerson::BaseItemPerson(QObject *parent) {}
 
-BaseItemPerson *BaseItemPerson::fromJSON(QJsonObject source, QObject *parent) {
-	BaseItemPerson *instance = new BaseItemPerson(parent);
-	instance->updateFromJSON(source);
+BaseItemPerson BaseItemPerson::fromJson(QJsonObject source) {BaseItemPerson instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void BaseItemPerson::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void BaseItemPerson::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_role = fromJsonValue<QString>(source["Role"]);
+	m_type = fromJsonValue<QString>(source["Type"]);
+	m_primaryImageTag = fromJsonValue<QString>(source["PrimaryImageTag"]);
+	m_imageBlurHashes = fromJsonValue<QJsonObject>(source["ImageBlurHashes"]);
+
 }
-QJsonObject BaseItemPerson::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject BaseItemPerson::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["Role"] = toJsonValue<QString>(m_role);
+	result["Type"] = toJsonValue<QString>(m_type);
+	result["PrimaryImageTag"] = toJsonValue<QString>(m_primaryImageTag);
+	result["ImageBlurHashes"] = toJsonValue<QJsonObject>(m_imageBlurHashes);
+
 	return result;
 }
+
 QString BaseItemPerson::name() const { return m_name; }
+
 void BaseItemPerson::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString BaseItemPerson::jellyfinId() const { return m_jellyfinId; }
+
 void BaseItemPerson::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 QString BaseItemPerson::role() const { return m_role; }
+
 void BaseItemPerson::setRole(QString newRole) {
 	m_role = newRole;
-	emit roleChanged(newRole);
 }
-
 QString BaseItemPerson::type() const { return m_type; }
+
 void BaseItemPerson::setType(QString newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 QString BaseItemPerson::primaryImageTag() const { return m_primaryImageTag; }
+
 void BaseItemPerson::setPrimaryImageTag(QString newPrimaryImageTag) {
 	m_primaryImageTag = newPrimaryImageTag;
-	emit primaryImageTagChanged(newPrimaryImageTag);
 }
-
 QJsonObject BaseItemPerson::imageBlurHashes() const { return m_imageBlurHashes; }
+
 void BaseItemPerson::setImageBlurHashes(QJsonObject newImageBlurHashes) {
 	m_imageBlurHashes = newImageBlurHashes;
-	emit imageBlurHashesChanged(newImageBlurHashes);
 }
 
 

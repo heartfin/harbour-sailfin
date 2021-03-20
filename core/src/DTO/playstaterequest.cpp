@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/playstaterequest.h>
 
-#include <JellyfinQt/DTO/playstatecommand.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-PlaystateRequest::PlaystateRequest(QObject *parent) : QObject(parent) {}
+PlaystateRequest::PlaystateRequest(QObject *parent) {}
 
-PlaystateRequest *PlaystateRequest::fromJSON(QJsonObject source, QObject *parent) {
-	PlaystateRequest *instance = new PlaystateRequest(parent);
-	instance->updateFromJSON(source);
+PlaystateRequest PlaystateRequest::fromJson(QJsonObject source) {PlaystateRequest instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PlaystateRequest::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PlaystateRequest::setFromJson(QJsonObject source) {
+	m_command = fromJsonValue<PlaystateCommand>(source["Command"]);
+	m_seekPositionTicks = fromJsonValue<qint64>(source["SeekPositionTicks"]);
+	m_controllingUserId = fromJsonValue<QString>(source["ControllingUserId"]);
+
 }
-QJsonObject PlaystateRequest::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PlaystateRequest::toJson() {
 	QJsonObject result;
+	result["Command"] = toJsonValue<PlaystateCommand>(m_command);
+	result["SeekPositionTicks"] = toJsonValue<qint64>(m_seekPositionTicks);
+	result["ControllingUserId"] = toJsonValue<QString>(m_controllingUserId);
+
 	return result;
 }
+
 PlaystateCommand PlaystateRequest::command() const { return m_command; }
+
 void PlaystateRequest::setCommand(PlaystateCommand newCommand) {
 	m_command = newCommand;
-	emit commandChanged(newCommand);
 }
-
 qint64 PlaystateRequest::seekPositionTicks() const { return m_seekPositionTicks; }
+
 void PlaystateRequest::setSeekPositionTicks(qint64 newSeekPositionTicks) {
 	m_seekPositionTicks = newSeekPositionTicks;
-	emit seekPositionTicksChanged(newSeekPositionTicks);
 }
-
 QString PlaystateRequest::controllingUserId() const { return m_controllingUserId; }
+
 void PlaystateRequest::setControllingUserId(QString newControllingUserId) {
 	m_controllingUserId = newControllingUserId;
-	emit controllingUserIdChanged(newControllingUserId);
 }
 
 

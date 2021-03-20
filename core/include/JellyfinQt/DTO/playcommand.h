@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_PLAYCOMMAND_H
 #define JELLYFIN_DTO_PLAYCOMMAND_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class PlayCommandClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		PlayNow,
 		PlayNext,
 		PlayLast,
@@ -49,7 +54,39 @@ public:
 private:
 	explicit PlayCommandClass();
 };
+
 typedef PlayCommandClass::Value PlayCommand;
+
+} // NS DTO
+
+namespace Support {
+
+using PlayCommand = Jellyfin::DTO::PlayCommand;
+using PlayCommandClass = Jellyfin::DTO::PlayCommandClass;
+
+template <>
+PlayCommand fromJsonValue<PlayCommand>(const QJsonValue &source) {
+	if (!source.isString()) return PlayCommandClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("PlayNow")) {
+		return PlayCommandClass::PlayNow;
+	}
+	if (str == QStringLiteral("PlayNext")) {
+		return PlayCommandClass::PlayNext;
+	}
+	if (str == QStringLiteral("PlayLast")) {
+		return PlayCommandClass::PlayLast;
+	}
+	if (str == QStringLiteral("PlayInstantMix")) {
+		return PlayCommandClass::PlayInstantMix;
+	}
+	if (str == QStringLiteral("PlayShuffle")) {
+		return PlayCommandClass::PlayShuffle;
+	}
+	
+	return PlayCommandClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

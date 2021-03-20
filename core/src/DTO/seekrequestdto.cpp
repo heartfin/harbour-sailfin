@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-SeekRequestDto::SeekRequestDto(QObject *parent) : QObject(parent) {}
+SeekRequestDto::SeekRequestDto(QObject *parent) {}
 
-SeekRequestDto *SeekRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	SeekRequestDto *instance = new SeekRequestDto(parent);
-	instance->updateFromJSON(source);
+SeekRequestDto SeekRequestDto::fromJson(QJsonObject source) {SeekRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SeekRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SeekRequestDto::setFromJson(QJsonObject source) {
+	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
+
 }
-QJsonObject SeekRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SeekRequestDto::toJson() {
 	QJsonObject result;
+	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
+
 	return result;
 }
+
 qint64 SeekRequestDto::positionTicks() const { return m_positionTicks; }
+
 void SeekRequestDto::setPositionTicks(qint64 newPositionTicks) {
 	m_positionTicks = newPositionTicks;
-	emit positionTicksChanged(newPositionTicks);
 }
 
 

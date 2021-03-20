@@ -31,652 +31,637 @@
 #define JELLYFIN_DTO_SERVERCONFIGURATION_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
 #include "JellyfinQt/DTO/imagesavingconvention.h"
+#include "JellyfinQt/DTO/metadataoptions.h"
+#include "JellyfinQt/DTO/namevaluepair.h"
+#include "JellyfinQt/DTO/pathsubstitution.h"
+#include "JellyfinQt/DTO/repositoryinfo.h"
+#include "JellyfinQt/DTO/version.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MetadataOptions;
-class NameValuePair;
-class PathSubstitution;
-class RepositoryInfo;
-class Version;
 
-class ServerConfiguration : public QObject {
-	Q_OBJECT
+class ServerConfiguration {
 public:
-	explicit ServerConfiguration(QObject *parent = nullptr);
-	static ServerConfiguration *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit ServerConfiguration();
+	static ServerConfiguration fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the number of days we should retain log files.
 	 */
-	Q_PROPERTY(qint32 logFileRetentionDays READ logFileRetentionDays WRITE setLogFileRetentionDays NOTIFY logFileRetentionDaysChanged)
+	qint32 logFileRetentionDays() const;
+	/**
+	* @brief Gets or sets the number of days we should retain log files.
+	*/
+	void setLogFileRetentionDays(qint32 newLogFileRetentionDays);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is first run.
 	 */
-	Q_PROPERTY(bool isStartupWizardCompleted READ isStartupWizardCompleted WRITE setIsStartupWizardCompleted NOTIFY isStartupWizardCompletedChanged)
+	bool isStartupWizardCompleted() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is first run.
+	*/
+	void setIsStartupWizardCompleted(bool newIsStartupWizardCompleted);
 	/**
 	 * @brief Gets or sets the cache path.
 	 */
-	Q_PROPERTY(QString cachePath READ cachePath WRITE setCachePath NOTIFY cachePathChanged)
-	Q_PROPERTY(Version * previousVersion READ previousVersion WRITE setPreviousVersion NOTIFY previousVersionChanged)
+	QString cachePath() const;
+	/**
+	* @brief Gets or sets the cache path.
+	*/
+	void setCachePath(QString newCachePath);
+
+	QSharedPointer<Version> previousVersion() const;
+
+	void setPreviousVersion(QSharedPointer<Version> newPreviousVersion);
 	/**
 	 * @brief Gets or sets the stringified PreviousVersion to be stored/loaded,
 because System.Version itself isn't xml-serializable.
 	 */
-	Q_PROPERTY(QString previousVersionStr READ previousVersionStr WRITE setPreviousVersionStr NOTIFY previousVersionStrChanged)
+	QString previousVersionStr() const;
+	/**
+	* @brief Gets or sets the stringified PreviousVersion to be stored/loaded,
+because System.Version itself isn't xml-serializable.
+	*/
+	void setPreviousVersionStr(QString newPreviousVersionStr);
 	/**
 	 * @brief Gets or sets a value indicating whether to enable automatic port forwarding.
 	 */
-	Q_PROPERTY(bool enableUPnP READ enableUPnP WRITE setEnableUPnP NOTIFY enableUPnPChanged)
+	bool enableUPnP() const;
+	/**
+	* @brief Gets or sets a value indicating whether to enable automatic port forwarding.
+	*/
+	void setEnableUPnP(bool newEnableUPnP);
 	/**
 	 * @brief Gets or sets a value indicating whether to enable prometheus metrics exporting.
 	 */
-	Q_PROPERTY(bool enableMetrics READ enableMetrics WRITE setEnableMetrics NOTIFY enableMetricsChanged)
+	bool enableMetrics() const;
+	/**
+	* @brief Gets or sets a value indicating whether to enable prometheus metrics exporting.
+	*/
+	void setEnableMetrics(bool newEnableMetrics);
 	/**
 	 * @brief Gets or sets the public mapped port.
 	 */
-	Q_PROPERTY(qint32 publicPort READ publicPort WRITE setPublicPort NOTIFY publicPortChanged)
+	qint32 publicPort() const;
+	/**
+	* @brief Gets or sets the public mapped port.
+	*/
+	void setPublicPort(qint32 newPublicPort);
 	/**
 	 * @brief Gets or sets a value indicating whether the http port should be mapped as part of UPnP automatic port forwarding.
 	 */
-	Q_PROPERTY(bool uPnPCreateHttpPortMap READ uPnPCreateHttpPortMap WRITE setUPnPCreateHttpPortMap NOTIFY uPnPCreateHttpPortMapChanged)
+	bool uPnPCreateHttpPortMap() const;
+	/**
+	* @brief Gets or sets a value indicating whether the http port should be mapped as part of UPnP automatic port forwarding.
+	*/
+	void setUPnPCreateHttpPortMap(bool newUPnPCreateHttpPortMap);
 	/**
 	 * @brief Gets or sets client udp port range.
 	 */
-	Q_PROPERTY(QString uDPPortRange READ uDPPortRange WRITE setUDPPortRange NOTIFY uDPPortRangeChanged)
+	QString uDPPortRange() const;
+	/**
+	* @brief Gets or sets client udp port range.
+	*/
+	void setUDPPortRange(QString newUDPPortRange);
 	/**
 	 * @brief Gets or sets a value indicating whether IPV6 capability is enabled.
 	 */
-	Q_PROPERTY(bool enableIPV6 READ enableIPV6 WRITE setEnableIPV6 NOTIFY enableIPV6Changed)
+	bool enableIPV6() const;
+	/**
+	* @brief Gets or sets a value indicating whether IPV6 capability is enabled.
+	*/
+	void setEnableIPV6(bool newEnableIPV6);
 	/**
 	 * @brief Gets or sets a value indicating whether IPV4 capability is enabled.
 	 */
-	Q_PROPERTY(bool enableIPV4 READ enableIPV4 WRITE setEnableIPV4 NOTIFY enableIPV4Changed)
+	bool enableIPV4() const;
+	/**
+	* @brief Gets or sets a value indicating whether IPV4 capability is enabled.
+	*/
+	void setEnableIPV4(bool newEnableIPV4);
 	/**
 	 * @brief Gets or sets a value indicating whether detailed ssdp logs are sent to the console/log.
 "Emby.Dlna": "Debug" must be set in logging.default.json for this property to work.
 	 */
-	Q_PROPERTY(bool enableSSDPTracing READ enableSSDPTracing WRITE setEnableSSDPTracing NOTIFY enableSSDPTracingChanged)
+	bool enableSSDPTracing() const;
+	/**
+	* @brief Gets or sets a value indicating whether detailed ssdp logs are sent to the console/log.
+"Emby.Dlna": "Debug" must be set in logging.default.json for this property to work.
+	*/
+	void setEnableSSDPTracing(bool newEnableSSDPTracing);
 	/**
 	 * @brief Gets or sets a value indicating whether an IP address is to be used to filter the detailed ssdp logs that are being sent to the console/log.
 If the setting "Emby.Dlna": "Debug" msut be set in logging.default.json for this property to work.
 	 */
-	Q_PROPERTY(QString sSDPTracingFilter READ sSDPTracingFilter WRITE setSSDPTracingFilter NOTIFY sSDPTracingFilterChanged)
+	QString sSDPTracingFilter() const;
+	/**
+	* @brief Gets or sets a value indicating whether an IP address is to be used to filter the detailed ssdp logs that are being sent to the console/log.
+If the setting "Emby.Dlna": "Debug" msut be set in logging.default.json for this property to work.
+	*/
+	void setSSDPTracingFilter(QString newSSDPTracingFilter);
 	/**
 	 * @brief Gets or sets the number of times SSDP UDP messages are sent.
 	 */
-	Q_PROPERTY(qint32 uDPSendCount READ uDPSendCount WRITE setUDPSendCount NOTIFY uDPSendCountChanged)
+	qint32 uDPSendCount() const;
+	/**
+	* @brief Gets or sets the number of times SSDP UDP messages are sent.
+	*/
+	void setUDPSendCount(qint32 newUDPSendCount);
 	/**
 	 * @brief Gets or sets the delay between each groups of SSDP messages (in ms).
 	 */
-	Q_PROPERTY(qint32 uDPSendDelay READ uDPSendDelay WRITE setUDPSendDelay NOTIFY uDPSendDelayChanged)
+	qint32 uDPSendDelay() const;
+	/**
+	* @brief Gets or sets the delay between each groups of SSDP messages (in ms).
+	*/
+	void setUDPSendDelay(qint32 newUDPSendDelay);
 	/**
 	 * @brief Gets or sets a value indicating whether address names that match MediaBrowser.Model.Configuration.ServerConfiguration.VirtualInterfaceNames should be Ignore for the purposes of binding.
 	 */
-	Q_PROPERTY(bool ignoreVirtualInterfaces READ ignoreVirtualInterfaces WRITE setIgnoreVirtualInterfaces NOTIFY ignoreVirtualInterfacesChanged)
+	bool ignoreVirtualInterfaces() const;
+	/**
+	* @brief Gets or sets a value indicating whether address names that match MediaBrowser.Model.Configuration.ServerConfiguration.VirtualInterfaceNames should be Ignore for the purposes of binding.
+	*/
+	void setIgnoreVirtualInterfaces(bool newIgnoreVirtualInterfaces);
 	/**
 	 * @brief Gets or sets a value indicating the interfaces that should be ignored. The list can be comma separated. <seealso cref="P:MediaBrowser.Model.Configuration.ServerConfiguration.IgnoreVirtualInterfaces" />.
 	 */
-	Q_PROPERTY(QString virtualInterfaceNames READ virtualInterfaceNames WRITE setVirtualInterfaceNames NOTIFY virtualInterfaceNamesChanged)
+	QString virtualInterfaceNames() const;
+	/**
+	* @brief Gets or sets a value indicating the interfaces that should be ignored. The list can be comma separated. <seealso cref="P:MediaBrowser.Model.Configuration.ServerConfiguration.IgnoreVirtualInterfaces" />.
+	*/
+	void setVirtualInterfaceNames(QString newVirtualInterfaceNames);
 	/**
 	 * @brief Gets or sets the time (in seconds) between the pings of SSDP gateway monitor.
 	 */
-	Q_PROPERTY(qint32 gatewayMonitorPeriod READ gatewayMonitorPeriod WRITE setGatewayMonitorPeriod NOTIFY gatewayMonitorPeriodChanged)
+	qint32 gatewayMonitorPeriod() const;
+	/**
+	* @brief Gets or sets the time (in seconds) between the pings of SSDP gateway monitor.
+	*/
+	void setGatewayMonitorPeriod(qint32 newGatewayMonitorPeriod);
 	/**
 	 * @brief Gets a value indicating whether multi-socket binding is available.
 	 */
-	Q_PROPERTY(bool enableMultiSocketBinding READ enableMultiSocketBinding WRITE setEnableMultiSocketBinding NOTIFY enableMultiSocketBindingChanged)
+	bool enableMultiSocketBinding() const;
+	/**
+	* @brief Gets a value indicating whether multi-socket binding is available.
+	*/
+	void setEnableMultiSocketBinding(bool newEnableMultiSocketBinding);
 	/**
 	 * @brief Gets or sets a value indicating whether all IPv6 interfaces should be treated as on the internal network.
 Depending on the address range implemented ULA ranges might not be used.
 	 */
-	Q_PROPERTY(bool trustAllIP6Interfaces READ trustAllIP6Interfaces WRITE setTrustAllIP6Interfaces NOTIFY trustAllIP6InterfacesChanged)
+	bool trustAllIP6Interfaces() const;
+	/**
+	* @brief Gets or sets a value indicating whether all IPv6 interfaces should be treated as on the internal network.
+Depending on the address range implemented ULA ranges might not be used.
+	*/
+	void setTrustAllIP6Interfaces(bool newTrustAllIP6Interfaces);
 	/**
 	 * @brief Gets or sets the ports that HDHomerun uses.
 	 */
-	Q_PROPERTY(QString hDHomerunPortRange READ hDHomerunPortRange WRITE setHDHomerunPortRange NOTIFY hDHomerunPortRangeChanged)
+	QString hDHomerunPortRange() const;
+	/**
+	* @brief Gets or sets the ports that HDHomerun uses.
+	*/
+	void setHDHomerunPortRange(QString newHDHomerunPortRange);
 	/**
 	 * @brief Gets or sets PublishedServerUri to advertise for specific subnets.
 	 */
-	Q_PROPERTY(QStringList publishedServerUriBySubnet READ publishedServerUriBySubnet WRITE setPublishedServerUriBySubnet NOTIFY publishedServerUriBySubnetChanged)
+	QStringList publishedServerUriBySubnet() const;
+	/**
+	* @brief Gets or sets PublishedServerUri to advertise for specific subnets.
+	*/
+	void setPublishedServerUriBySubnet(QStringList newPublishedServerUriBySubnet);
 	/**
 	 * @brief Gets or sets a value indicating whether Autodiscovery tracing is enabled.
 	 */
-	Q_PROPERTY(bool autoDiscoveryTracing READ autoDiscoveryTracing WRITE setAutoDiscoveryTracing NOTIFY autoDiscoveryTracingChanged)
+	bool autoDiscoveryTracing() const;
+	/**
+	* @brief Gets or sets a value indicating whether Autodiscovery tracing is enabled.
+	*/
+	void setAutoDiscoveryTracing(bool newAutoDiscoveryTracing);
 	/**
 	 * @brief Gets or sets a value indicating whether Autodiscovery is enabled.
 	 */
-	Q_PROPERTY(bool autoDiscovery READ autoDiscovery WRITE setAutoDiscovery NOTIFY autoDiscoveryChanged)
+	bool autoDiscovery() const;
+	/**
+	* @brief Gets or sets a value indicating whether Autodiscovery is enabled.
+	*/
+	void setAutoDiscovery(bool newAutoDiscovery);
 	/**
 	 * @brief Gets or sets the public HTTPS port.
 	 */
-	Q_PROPERTY(qint32 publicHttpsPort READ publicHttpsPort WRITE setPublicHttpsPort NOTIFY publicHttpsPortChanged)
+	qint32 publicHttpsPort() const;
+	/**
+	* @brief Gets or sets the public HTTPS port.
+	*/
+	void setPublicHttpsPort(qint32 newPublicHttpsPort);
 	/**
 	 * @brief Gets or sets the HTTP server port number.
 	 */
-	Q_PROPERTY(qint32 httpServerPortNumber READ httpServerPortNumber WRITE setHttpServerPortNumber NOTIFY httpServerPortNumberChanged)
+	qint32 httpServerPortNumber() const;
+	/**
+	* @brief Gets or sets the HTTP server port number.
+	*/
+	void setHttpServerPortNumber(qint32 newHttpServerPortNumber);
 	/**
 	 * @brief Gets or sets the HTTPS server port number.
 	 */
-	Q_PROPERTY(qint32 httpsPortNumber READ httpsPortNumber WRITE setHttpsPortNumber NOTIFY httpsPortNumberChanged)
+	qint32 httpsPortNumber() const;
+	/**
+	* @brief Gets or sets the HTTPS server port number.
+	*/
+	void setHttpsPortNumber(qint32 newHttpsPortNumber);
 	/**
 	 * @brief Gets or sets a value indicating whether to use HTTPS.
 	 */
-	Q_PROPERTY(bool enableHttps READ enableHttps WRITE setEnableHttps NOTIFY enableHttpsChanged)
-	Q_PROPERTY(bool enableNormalizedItemByNameIds READ enableNormalizedItemByNameIds WRITE setEnableNormalizedItemByNameIds NOTIFY enableNormalizedItemByNameIdsChanged)
+	bool enableHttps() const;
+	/**
+	* @brief Gets or sets a value indicating whether to use HTTPS.
+	*/
+	void setEnableHttps(bool newEnableHttps);
+
+	bool enableNormalizedItemByNameIds() const;
+
+	void setEnableNormalizedItemByNameIds(bool newEnableNormalizedItemByNameIds);
 	/**
 	 * @brief Gets or sets the filesystem path of an X.509 certificate to use for SSL.
 	 */
-	Q_PROPERTY(QString certificatePath READ certificatePath WRITE setCertificatePath NOTIFY certificatePathChanged)
+	QString certificatePath() const;
+	/**
+	* @brief Gets or sets the filesystem path of an X.509 certificate to use for SSL.
+	*/
+	void setCertificatePath(QString newCertificatePath);
 	/**
 	 * @brief Gets or sets the password required to access the X.509 certificate data in the file specified by MediaBrowser.Model.Configuration.ServerConfiguration.CertificatePath.
 	 */
-	Q_PROPERTY(QString certificatePassword READ certificatePassword WRITE setCertificatePassword NOTIFY certificatePasswordChanged)
+	QString certificatePassword() const;
+	/**
+	* @brief Gets or sets the password required to access the X.509 certificate data in the file specified by MediaBrowser.Model.Configuration.ServerConfiguration.CertificatePath.
+	*/
+	void setCertificatePassword(QString newCertificatePassword);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is port authorized.
 	 */
-	Q_PROPERTY(bool isPortAuthorized READ isPortAuthorized WRITE setIsPortAuthorized NOTIFY isPortAuthorizedChanged)
+	bool isPortAuthorized() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is port authorized.
+	*/
+	void setIsPortAuthorized(bool newIsPortAuthorized);
 	/**
 	 * @brief Gets or sets a value indicating whether quick connect is available for use on this server.
 	 */
-	Q_PROPERTY(bool quickConnectAvailable READ quickConnectAvailable WRITE setQuickConnectAvailable NOTIFY quickConnectAvailableChanged)
+	bool quickConnectAvailable() const;
+	/**
+	* @brief Gets or sets a value indicating whether quick connect is available for use on this server.
+	*/
+	void setQuickConnectAvailable(bool newQuickConnectAvailable);
 	/**
 	 * @brief Gets or sets a value indicating whether access outside of the LAN is permitted.
 	 */
-	Q_PROPERTY(bool enableRemoteAccess READ enableRemoteAccess WRITE setEnableRemoteAccess NOTIFY enableRemoteAccessChanged)
+	bool enableRemoteAccess() const;
+	/**
+	* @brief Gets or sets a value indicating whether access outside of the LAN is permitted.
+	*/
+	void setEnableRemoteAccess(bool newEnableRemoteAccess);
 	/**
 	 * @brief Gets or sets a value indicating whether [enable case sensitive item ids].
 	 */
-	Q_PROPERTY(bool enableCaseSensitiveItemIds READ enableCaseSensitiveItemIds WRITE setEnableCaseSensitiveItemIds NOTIFY enableCaseSensitiveItemIdsChanged)
-	Q_PROPERTY(bool disableLiveTvChannelUserDataName READ disableLiveTvChannelUserDataName WRITE setDisableLiveTvChannelUserDataName NOTIFY disableLiveTvChannelUserDataNameChanged)
+	bool enableCaseSensitiveItemIds() const;
+	/**
+	* @brief Gets or sets a value indicating whether [enable case sensitive item ids].
+	*/
+	void setEnableCaseSensitiveItemIds(bool newEnableCaseSensitiveItemIds);
+
+	bool disableLiveTvChannelUserDataName() const;
+
+	void setDisableLiveTvChannelUserDataName(bool newDisableLiveTvChannelUserDataName);
 	/**
 	 * @brief Gets or sets the metadata path.
 	 */
-	Q_PROPERTY(QString metadataPath READ metadataPath WRITE setMetadataPath NOTIFY metadataPathChanged)
-	Q_PROPERTY(QString metadataNetworkPath READ metadataNetworkPath WRITE setMetadataNetworkPath NOTIFY metadataNetworkPathChanged)
+	QString metadataPath() const;
+	/**
+	* @brief Gets or sets the metadata path.
+	*/
+	void setMetadataPath(QString newMetadataPath);
+
+	QString metadataNetworkPath() const;
+
+	void setMetadataNetworkPath(QString newMetadataNetworkPath);
 	/**
 	 * @brief Gets or sets the preferred metadata language.
 	 */
-	Q_PROPERTY(QString preferredMetadataLanguage READ preferredMetadataLanguage WRITE setPreferredMetadataLanguage NOTIFY preferredMetadataLanguageChanged)
+	QString preferredMetadataLanguage() const;
+	/**
+	* @brief Gets or sets the preferred metadata language.
+	*/
+	void setPreferredMetadataLanguage(QString newPreferredMetadataLanguage);
 	/**
 	 * @brief Gets or sets the metadata country code.
 	 */
-	Q_PROPERTY(QString metadataCountryCode READ metadataCountryCode WRITE setMetadataCountryCode NOTIFY metadataCountryCodeChanged)
+	QString metadataCountryCode() const;
+	/**
+	* @brief Gets or sets the metadata country code.
+	*/
+	void setMetadataCountryCode(QString newMetadataCountryCode);
 	/**
 	 * @brief Gets or sets characters to be replaced with a ' ' in strings to create a sort name.
 	 */
-	Q_PROPERTY(QStringList sortReplaceCharacters READ sortReplaceCharacters WRITE setSortReplaceCharacters NOTIFY sortReplaceCharactersChanged)
+	QStringList sortReplaceCharacters() const;
+	/**
+	* @brief Gets or sets characters to be replaced with a ' ' in strings to create a sort name.
+	*/
+	void setSortReplaceCharacters(QStringList newSortReplaceCharacters);
 	/**
 	 * @brief Gets or sets characters to be removed from strings to create a sort name.
 	 */
-	Q_PROPERTY(QStringList sortRemoveCharacters READ sortRemoveCharacters WRITE setSortRemoveCharacters NOTIFY sortRemoveCharactersChanged)
+	QStringList sortRemoveCharacters() const;
+	/**
+	* @brief Gets or sets characters to be removed from strings to create a sort name.
+	*/
+	void setSortRemoveCharacters(QStringList newSortRemoveCharacters);
 	/**
 	 * @brief Gets or sets words to be removed from strings to create a sort name.
 	 */
-	Q_PROPERTY(QStringList sortRemoveWords READ sortRemoveWords WRITE setSortRemoveWords NOTIFY sortRemoveWordsChanged)
+	QStringList sortRemoveWords() const;
+	/**
+	* @brief Gets or sets words to be removed from strings to create a sort name.
+	*/
+	void setSortRemoveWords(QStringList newSortRemoveWords);
 	/**
 	 * @brief Gets or sets the minimum percentage of an item that must be played in order for playstate to be updated.
 	 */
-	Q_PROPERTY(qint32 minResumePct READ minResumePct WRITE setMinResumePct NOTIFY minResumePctChanged)
+	qint32 minResumePct() const;
+	/**
+	* @brief Gets or sets the minimum percentage of an item that must be played in order for playstate to be updated.
+	*/
+	void setMinResumePct(qint32 newMinResumePct);
 	/**
 	 * @brief Gets or sets the maximum percentage of an item that can be played while still saving playstate. If this percentage is crossed playstate will be reset to the beginning and the item will be marked watched.
 	 */
-	Q_PROPERTY(qint32 maxResumePct READ maxResumePct WRITE setMaxResumePct NOTIFY maxResumePctChanged)
+	qint32 maxResumePct() const;
+	/**
+	* @brief Gets or sets the maximum percentage of an item that can be played while still saving playstate. If this percentage is crossed playstate will be reset to the beginning and the item will be marked watched.
+	*/
+	void setMaxResumePct(qint32 newMaxResumePct);
 	/**
 	 * @brief Gets or sets the minimum duration that an item must have in order to be eligible for playstate updates..
 	 */
-	Q_PROPERTY(qint32 minResumeDurationSeconds READ minResumeDurationSeconds WRITE setMinResumeDurationSeconds NOTIFY minResumeDurationSecondsChanged)
+	qint32 minResumeDurationSeconds() const;
+	/**
+	* @brief Gets or sets the minimum duration that an item must have in order to be eligible for playstate updates..
+	*/
+	void setMinResumeDurationSeconds(qint32 newMinResumeDurationSeconds);
 	/**
 	 * @brief Gets or sets the minimum minutes of a book that must be played in order for playstate to be updated.
 	 */
-	Q_PROPERTY(qint32 minAudiobookResume READ minAudiobookResume WRITE setMinAudiobookResume NOTIFY minAudiobookResumeChanged)
+	qint32 minAudiobookResume() const;
+	/**
+	* @brief Gets or sets the minimum minutes of a book that must be played in order for playstate to be updated.
+	*/
+	void setMinAudiobookResume(qint32 newMinAudiobookResume);
 	/**
 	 * @brief Gets or sets the remaining minutes of a book that can be played while still saving playstate. If this percentage is crossed playstate will be reset to the beginning and the item will be marked watched.
 	 */
-	Q_PROPERTY(qint32 maxAudiobookResume READ maxAudiobookResume WRITE setMaxAudiobookResume NOTIFY maxAudiobookResumeChanged)
+	qint32 maxAudiobookResume() const;
+	/**
+	* @brief Gets or sets the remaining minutes of a book that can be played while still saving playstate. If this percentage is crossed playstate will be reset to the beginning and the item will be marked watched.
+	*/
+	void setMaxAudiobookResume(qint32 newMaxAudiobookResume);
 	/**
 	 * @brief Gets or sets the delay in seconds that we will wait after a file system change to try and discover what has been added/removed
 Some delay is necessary with some items because their creation is not atomic.  It involves the creation of several
 different directories and files.
 	 */
-	Q_PROPERTY(qint32 libraryMonitorDelay READ libraryMonitorDelay WRITE setLibraryMonitorDelay NOTIFY libraryMonitorDelayChanged)
+	qint32 libraryMonitorDelay() const;
+	/**
+	* @brief Gets or sets the delay in seconds that we will wait after a file system change to try and discover what has been added/removed
+Some delay is necessary with some items because their creation is not atomic.  It involves the creation of several
+different directories and files.
+	*/
+	void setLibraryMonitorDelay(qint32 newLibraryMonitorDelay);
 	/**
 	 * @brief Gets or sets a value indicating whether [enable dashboard response caching].
 Allows potential contributors without visual studio to modify production dashboard code and test changes.
 	 */
-	Q_PROPERTY(bool enableDashboardResponseCaching READ enableDashboardResponseCaching WRITE setEnableDashboardResponseCaching NOTIFY enableDashboardResponseCachingChanged)
-	Q_PROPERTY(ImageSavingConvention imageSavingConvention READ imageSavingConvention WRITE setImageSavingConvention NOTIFY imageSavingConventionChanged)
-	Q_PROPERTY(QList<MetadataOptions *> metadataOptions READ metadataOptions WRITE setMetadataOptions NOTIFY metadataOptionsChanged)
-	Q_PROPERTY(bool skipDeserializationForBasicTypes READ skipDeserializationForBasicTypes WRITE setSkipDeserializationForBasicTypes NOTIFY skipDeserializationForBasicTypesChanged)
-	Q_PROPERTY(QString serverName READ serverName WRITE setServerName NOTIFY serverNameChanged)
-	Q_PROPERTY(QString baseUrl READ baseUrl WRITE setBaseUrl NOTIFY baseUrlChanged)
-	Q_PROPERTY(QString uICulture READ uICulture WRITE setUICulture NOTIFY uICultureChanged)
-	Q_PROPERTY(bool saveMetadataHidden READ saveMetadataHidden WRITE setSaveMetadataHidden NOTIFY saveMetadataHiddenChanged)
-	Q_PROPERTY(QList<NameValuePair *> contentTypes READ contentTypes WRITE setContentTypes NOTIFY contentTypesChanged)
-	Q_PROPERTY(qint32 remoteClientBitrateLimit READ remoteClientBitrateLimit WRITE setRemoteClientBitrateLimit NOTIFY remoteClientBitrateLimitChanged)
-	Q_PROPERTY(bool enableFolderView READ enableFolderView WRITE setEnableFolderView NOTIFY enableFolderViewChanged)
-	Q_PROPERTY(bool enableGroupingIntoCollections READ enableGroupingIntoCollections WRITE setEnableGroupingIntoCollections NOTIFY enableGroupingIntoCollectionsChanged)
-	Q_PROPERTY(bool displaySpecialsWithinSeasons READ displaySpecialsWithinSeasons WRITE setDisplaySpecialsWithinSeasons NOTIFY displaySpecialsWithinSeasonsChanged)
+	bool enableDashboardResponseCaching() const;
+	/**
+	* @brief Gets or sets a value indicating whether [enable dashboard response caching].
+Allows potential contributors without visual studio to modify production dashboard code and test changes.
+	*/
+	void setEnableDashboardResponseCaching(bool newEnableDashboardResponseCaching);
+
+	ImageSavingConvention imageSavingConvention() const;
+
+	void setImageSavingConvention(ImageSavingConvention newImageSavingConvention);
+
+	QList<QSharedPointer<MetadataOptions>> metadataOptions() const;
+
+	void setMetadataOptions(QList<QSharedPointer<MetadataOptions>> newMetadataOptions);
+
+	bool skipDeserializationForBasicTypes() const;
+
+	void setSkipDeserializationForBasicTypes(bool newSkipDeserializationForBasicTypes);
+
+	QString serverName() const;
+
+	void setServerName(QString newServerName);
+
+	QString baseUrl() const;
+
+	void setBaseUrl(QString newBaseUrl);
+
+	QString uICulture() const;
+
+	void setUICulture(QString newUICulture);
+
+	bool saveMetadataHidden() const;
+
+	void setSaveMetadataHidden(bool newSaveMetadataHidden);
+
+	QList<QSharedPointer<NameValuePair>> contentTypes() const;
+
+	void setContentTypes(QList<QSharedPointer<NameValuePair>> newContentTypes);
+
+	qint32 remoteClientBitrateLimit() const;
+
+	void setRemoteClientBitrateLimit(qint32 newRemoteClientBitrateLimit);
+
+	bool enableFolderView() const;
+
+	void setEnableFolderView(bool newEnableFolderView);
+
+	bool enableGroupingIntoCollections() const;
+
+	void setEnableGroupingIntoCollections(bool newEnableGroupingIntoCollections);
+
+	bool displaySpecialsWithinSeasons() const;
+
+	void setDisplaySpecialsWithinSeasons(bool newDisplaySpecialsWithinSeasons);
 	/**
 	 * @brief Gets or sets the subnets that are deemed to make up the LAN.
 	 */
-	Q_PROPERTY(QStringList localNetworkSubnets READ localNetworkSubnets WRITE setLocalNetworkSubnets NOTIFY localNetworkSubnetsChanged)
+	QStringList localNetworkSubnets() const;
+	/**
+	* @brief Gets or sets the subnets that are deemed to make up the LAN.
+	*/
+	void setLocalNetworkSubnets(QStringList newLocalNetworkSubnets);
 	/**
 	 * @brief Gets or sets the interface addresses which Jellyfin will bind to. If empty, all interfaces will be used.
 	 */
-	Q_PROPERTY(QStringList localNetworkAddresses READ localNetworkAddresses WRITE setLocalNetworkAddresses NOTIFY localNetworkAddressesChanged)
-	Q_PROPERTY(QStringList codecsUsed READ codecsUsed WRITE setCodecsUsed NOTIFY codecsUsedChanged)
-	Q_PROPERTY(QList<RepositoryInfo *> pluginRepositories READ pluginRepositories WRITE setPluginRepositories NOTIFY pluginRepositoriesChanged)
-	Q_PROPERTY(bool enableExternalContentInSuggestions READ enableExternalContentInSuggestions WRITE setEnableExternalContentInSuggestions NOTIFY enableExternalContentInSuggestionsChanged)
+	QStringList localNetworkAddresses() const;
+	/**
+	* @brief Gets or sets the interface addresses which Jellyfin will bind to. If empty, all interfaces will be used.
+	*/
+	void setLocalNetworkAddresses(QStringList newLocalNetworkAddresses);
+
+	QStringList codecsUsed() const;
+
+	void setCodecsUsed(QStringList newCodecsUsed);
+
+	QList<QSharedPointer<RepositoryInfo>> pluginRepositories() const;
+
+	void setPluginRepositories(QList<QSharedPointer<RepositoryInfo>> newPluginRepositories);
+
+	bool enableExternalContentInSuggestions() const;
+
+	void setEnableExternalContentInSuggestions(bool newEnableExternalContentInSuggestions);
 	/**
 	 * @brief Gets or sets a value indicating whether the server should force connections over HTTPS.
 	 */
-	Q_PROPERTY(bool requireHttps READ requireHttps WRITE setRequireHttps NOTIFY requireHttpsChanged)
-	Q_PROPERTY(bool enableNewOmdbSupport READ enableNewOmdbSupport WRITE setEnableNewOmdbSupport NOTIFY enableNewOmdbSupportChanged)
+	bool requireHttps() const;
+	/**
+	* @brief Gets or sets a value indicating whether the server should force connections over HTTPS.
+	*/
+	void setRequireHttps(bool newRequireHttps);
+
+	bool enableNewOmdbSupport() const;
+
+	void setEnableNewOmdbSupport(bool newEnableNewOmdbSupport);
 	/**
 	 * @brief Gets or sets the filter for remote IP connectivity. Used in conjuntion with <seealso cref="P:MediaBrowser.Model.Configuration.ServerConfiguration.IsRemoteIPFilterBlacklist" />.
 	 */
-	Q_PROPERTY(QStringList remoteIPFilter READ remoteIPFilter WRITE setRemoteIPFilter NOTIFY remoteIPFilterChanged)
+	QStringList remoteIPFilter() const;
+	/**
+	* @brief Gets or sets the filter for remote IP connectivity. Used in conjuntion with <seealso cref="P:MediaBrowser.Model.Configuration.ServerConfiguration.IsRemoteIPFilterBlacklist" />.
+	*/
+	void setRemoteIPFilter(QStringList newRemoteIPFilter);
 	/**
 	 * @brief Gets or sets a value indicating whether <seealso cref="P:MediaBrowser.Model.Configuration.ServerConfiguration.RemoteIPFilter" /> contains a blacklist or a whitelist. Default is a whitelist.
 	 */
-	Q_PROPERTY(bool isRemoteIPFilterBlacklist READ isRemoteIPFilterBlacklist WRITE setIsRemoteIPFilterBlacklist NOTIFY isRemoteIPFilterBlacklistChanged)
-	Q_PROPERTY(qint32 imageExtractionTimeoutMs READ imageExtractionTimeoutMs WRITE setImageExtractionTimeoutMs NOTIFY imageExtractionTimeoutMsChanged)
-	Q_PROPERTY(QList<PathSubstitution *> pathSubstitutions READ pathSubstitutions WRITE setPathSubstitutions NOTIFY pathSubstitutionsChanged)
-	Q_PROPERTY(bool enableSimpleArtistDetection READ enableSimpleArtistDetection WRITE setEnableSimpleArtistDetection NOTIFY enableSimpleArtistDetectionChanged)
-	Q_PROPERTY(QStringList uninstalledPlugins READ uninstalledPlugins WRITE setUninstalledPlugins NOTIFY uninstalledPluginsChanged)
+	bool isRemoteIPFilterBlacklist() const;
+	/**
+	* @brief Gets or sets a value indicating whether <seealso cref="P:MediaBrowser.Model.Configuration.ServerConfiguration.RemoteIPFilter" /> contains a blacklist or a whitelist. Default is a whitelist.
+	*/
+	void setIsRemoteIPFilterBlacklist(bool newIsRemoteIPFilterBlacklist);
+
+	qint32 imageExtractionTimeoutMs() const;
+
+	void setImageExtractionTimeoutMs(qint32 newImageExtractionTimeoutMs);
+
+	QList<QSharedPointer<PathSubstitution>> pathSubstitutions() const;
+
+	void setPathSubstitutions(QList<QSharedPointer<PathSubstitution>> newPathSubstitutions);
+
+	bool enableSimpleArtistDetection() const;
+
+	void setEnableSimpleArtistDetection(bool newEnableSimpleArtistDetection);
+
+	QStringList uninstalledPlugins() const;
+
+	void setUninstalledPlugins(QStringList newUninstalledPlugins);
 	/**
 	 * @brief Gets or sets a value indicating whether slow server responses should be logged as a warning.
 	 */
-	Q_PROPERTY(bool enableSlowResponseWarning READ enableSlowResponseWarning WRITE setEnableSlowResponseWarning NOTIFY enableSlowResponseWarningChanged)
+	bool enableSlowResponseWarning() const;
+	/**
+	* @brief Gets or sets a value indicating whether slow server responses should be logged as a warning.
+	*/
+	void setEnableSlowResponseWarning(bool newEnableSlowResponseWarning);
 	/**
 	 * @brief Gets or sets the threshold for the slow response time warning in ms.
 	 */
-	Q_PROPERTY(qint64 slowResponseThresholdMs READ slowResponseThresholdMs WRITE setSlowResponseThresholdMs NOTIFY slowResponseThresholdMsChanged)
+	qint64 slowResponseThresholdMs() const;
+	/**
+	* @brief Gets or sets the threshold for the slow response time warning in ms.
+	*/
+	void setSlowResponseThresholdMs(qint64 newSlowResponseThresholdMs);
 	/**
 	 * @brief Gets or sets the cors hosts.
 	 */
-	Q_PROPERTY(QStringList corsHosts READ corsHosts WRITE setCorsHosts NOTIFY corsHostsChanged)
+	QStringList corsHosts() const;
+	/**
+	* @brief Gets or sets the cors hosts.
+	*/
+	void setCorsHosts(QStringList newCorsHosts);
 	/**
 	 * @brief Gets or sets the known proxies.
 	 */
-	Q_PROPERTY(QStringList knownProxies READ knownProxies WRITE setKnownProxies NOTIFY knownProxiesChanged)
+	QStringList knownProxies() const;
+	/**
+	* @brief Gets or sets the known proxies.
+	*/
+	void setKnownProxies(QStringList newKnownProxies);
 	/**
 	 * @brief Gets or sets the number of days we should retain activity logs.
 	 */
-	Q_PROPERTY(qint32 activityLogRetentionDays READ activityLogRetentionDays WRITE setActivityLogRetentionDays NOTIFY activityLogRetentionDaysChanged)
+	qint32 activityLogRetentionDays() const;
+	/**
+	* @brief Gets or sets the number of days we should retain activity logs.
+	*/
+	void setActivityLogRetentionDays(qint32 newActivityLogRetentionDays);
 	/**
 	 * @brief Gets or sets the how the library scan fans out.
 	 */
-	Q_PROPERTY(qint32 libraryScanFanoutConcurrency READ libraryScanFanoutConcurrency WRITE setLibraryScanFanoutConcurrency NOTIFY libraryScanFanoutConcurrencyChanged)
+	qint32 libraryScanFanoutConcurrency() const;
+	/**
+	* @brief Gets or sets the how the library scan fans out.
+	*/
+	void setLibraryScanFanoutConcurrency(qint32 newLibraryScanFanoutConcurrency);
 	/**
 	 * @brief Gets or sets the how many metadata refreshes can run concurrently.
 	 */
-	Q_PROPERTY(qint32 libraryMetadataRefreshConcurrency READ libraryMetadataRefreshConcurrency WRITE setLibraryMetadataRefreshConcurrency NOTIFY libraryMetadataRefreshConcurrencyChanged)
+	qint32 libraryMetadataRefreshConcurrency() const;
+	/**
+	* @brief Gets or sets the how many metadata refreshes can run concurrently.
+	*/
+	void setLibraryMetadataRefreshConcurrency(qint32 newLibraryMetadataRefreshConcurrency);
 	/**
 	 * @brief Gets or sets a value indicating whether older plugins should automatically be deleted from the plugin folder.
 	 */
-	Q_PROPERTY(bool removeOldPlugins READ removeOldPlugins WRITE setRemoveOldPlugins NOTIFY removeOldPluginsChanged)
+	bool removeOldPlugins() const;
+	/**
+	* @brief Gets or sets a value indicating whether older plugins should automatically be deleted from the plugin folder.
+	*/
+	void setRemoveOldPlugins(bool newRemoveOldPlugins);
 	/**
 	 * @brief Gets or sets a value indicating whether plugin image should be disabled.
 	 */
-	Q_PROPERTY(bool disablePluginImages READ disablePluginImages WRITE setDisablePluginImages NOTIFY disablePluginImagesChanged)
-
-	qint32 logFileRetentionDays() const;
-	void setLogFileRetentionDays(qint32 newLogFileRetentionDays);
-	
-	bool isStartupWizardCompleted() const;
-	void setIsStartupWizardCompleted(bool newIsStartupWizardCompleted);
-	
-	QString cachePath() const;
-	void setCachePath(QString newCachePath);
-	
-	Version * previousVersion() const;
-	void setPreviousVersion(Version * newPreviousVersion);
-	
-	QString previousVersionStr() const;
-	void setPreviousVersionStr(QString newPreviousVersionStr);
-	
-	bool enableUPnP() const;
-	void setEnableUPnP(bool newEnableUPnP);
-	
-	bool enableMetrics() const;
-	void setEnableMetrics(bool newEnableMetrics);
-	
-	qint32 publicPort() const;
-	void setPublicPort(qint32 newPublicPort);
-	
-	bool uPnPCreateHttpPortMap() const;
-	void setUPnPCreateHttpPortMap(bool newUPnPCreateHttpPortMap);
-	
-	QString uDPPortRange() const;
-	void setUDPPortRange(QString newUDPPortRange);
-	
-	bool enableIPV6() const;
-	void setEnableIPV6(bool newEnableIPV6);
-	
-	bool enableIPV4() const;
-	void setEnableIPV4(bool newEnableIPV4);
-	
-	bool enableSSDPTracing() const;
-	void setEnableSSDPTracing(bool newEnableSSDPTracing);
-	
-	QString sSDPTracingFilter() const;
-	void setSSDPTracingFilter(QString newSSDPTracingFilter);
-	
-	qint32 uDPSendCount() const;
-	void setUDPSendCount(qint32 newUDPSendCount);
-	
-	qint32 uDPSendDelay() const;
-	void setUDPSendDelay(qint32 newUDPSendDelay);
-	
-	bool ignoreVirtualInterfaces() const;
-	void setIgnoreVirtualInterfaces(bool newIgnoreVirtualInterfaces);
-	
-	QString virtualInterfaceNames() const;
-	void setVirtualInterfaceNames(QString newVirtualInterfaceNames);
-	
-	qint32 gatewayMonitorPeriod() const;
-	void setGatewayMonitorPeriod(qint32 newGatewayMonitorPeriod);
-	
-	bool enableMultiSocketBinding() const;
-	void setEnableMultiSocketBinding(bool newEnableMultiSocketBinding);
-	
-	bool trustAllIP6Interfaces() const;
-	void setTrustAllIP6Interfaces(bool newTrustAllIP6Interfaces);
-	
-	QString hDHomerunPortRange() const;
-	void setHDHomerunPortRange(QString newHDHomerunPortRange);
-	
-	QStringList publishedServerUriBySubnet() const;
-	void setPublishedServerUriBySubnet(QStringList newPublishedServerUriBySubnet);
-	
-	bool autoDiscoveryTracing() const;
-	void setAutoDiscoveryTracing(bool newAutoDiscoveryTracing);
-	
-	bool autoDiscovery() const;
-	void setAutoDiscovery(bool newAutoDiscovery);
-	
-	qint32 publicHttpsPort() const;
-	void setPublicHttpsPort(qint32 newPublicHttpsPort);
-	
-	qint32 httpServerPortNumber() const;
-	void setHttpServerPortNumber(qint32 newHttpServerPortNumber);
-	
-	qint32 httpsPortNumber() const;
-	void setHttpsPortNumber(qint32 newHttpsPortNumber);
-	
-	bool enableHttps() const;
-	void setEnableHttps(bool newEnableHttps);
-	
-	bool enableNormalizedItemByNameIds() const;
-	void setEnableNormalizedItemByNameIds(bool newEnableNormalizedItemByNameIds);
-	
-	QString certificatePath() const;
-	void setCertificatePath(QString newCertificatePath);
-	
-	QString certificatePassword() const;
-	void setCertificatePassword(QString newCertificatePassword);
-	
-	bool isPortAuthorized() const;
-	void setIsPortAuthorized(bool newIsPortAuthorized);
-	
-	bool quickConnectAvailable() const;
-	void setQuickConnectAvailable(bool newQuickConnectAvailable);
-	
-	bool enableRemoteAccess() const;
-	void setEnableRemoteAccess(bool newEnableRemoteAccess);
-	
-	bool enableCaseSensitiveItemIds() const;
-	void setEnableCaseSensitiveItemIds(bool newEnableCaseSensitiveItemIds);
-	
-	bool disableLiveTvChannelUserDataName() const;
-	void setDisableLiveTvChannelUserDataName(bool newDisableLiveTvChannelUserDataName);
-	
-	QString metadataPath() const;
-	void setMetadataPath(QString newMetadataPath);
-	
-	QString metadataNetworkPath() const;
-	void setMetadataNetworkPath(QString newMetadataNetworkPath);
-	
-	QString preferredMetadataLanguage() const;
-	void setPreferredMetadataLanguage(QString newPreferredMetadataLanguage);
-	
-	QString metadataCountryCode() const;
-	void setMetadataCountryCode(QString newMetadataCountryCode);
-	
-	QStringList sortReplaceCharacters() const;
-	void setSortReplaceCharacters(QStringList newSortReplaceCharacters);
-	
-	QStringList sortRemoveCharacters() const;
-	void setSortRemoveCharacters(QStringList newSortRemoveCharacters);
-	
-	QStringList sortRemoveWords() const;
-	void setSortRemoveWords(QStringList newSortRemoveWords);
-	
-	qint32 minResumePct() const;
-	void setMinResumePct(qint32 newMinResumePct);
-	
-	qint32 maxResumePct() const;
-	void setMaxResumePct(qint32 newMaxResumePct);
-	
-	qint32 minResumeDurationSeconds() const;
-	void setMinResumeDurationSeconds(qint32 newMinResumeDurationSeconds);
-	
-	qint32 minAudiobookResume() const;
-	void setMinAudiobookResume(qint32 newMinAudiobookResume);
-	
-	qint32 maxAudiobookResume() const;
-	void setMaxAudiobookResume(qint32 newMaxAudiobookResume);
-	
-	qint32 libraryMonitorDelay() const;
-	void setLibraryMonitorDelay(qint32 newLibraryMonitorDelay);
-	
-	bool enableDashboardResponseCaching() const;
-	void setEnableDashboardResponseCaching(bool newEnableDashboardResponseCaching);
-	
-	ImageSavingConvention imageSavingConvention() const;
-	void setImageSavingConvention(ImageSavingConvention newImageSavingConvention);
-	
-	QList<MetadataOptions *> metadataOptions() const;
-	void setMetadataOptions(QList<MetadataOptions *> newMetadataOptions);
-	
-	bool skipDeserializationForBasicTypes() const;
-	void setSkipDeserializationForBasicTypes(bool newSkipDeserializationForBasicTypes);
-	
-	QString serverName() const;
-	void setServerName(QString newServerName);
-	
-	QString baseUrl() const;
-	void setBaseUrl(QString newBaseUrl);
-	
-	QString uICulture() const;
-	void setUICulture(QString newUICulture);
-	
-	bool saveMetadataHidden() const;
-	void setSaveMetadataHidden(bool newSaveMetadataHidden);
-	
-	QList<NameValuePair *> contentTypes() const;
-	void setContentTypes(QList<NameValuePair *> newContentTypes);
-	
-	qint32 remoteClientBitrateLimit() const;
-	void setRemoteClientBitrateLimit(qint32 newRemoteClientBitrateLimit);
-	
-	bool enableFolderView() const;
-	void setEnableFolderView(bool newEnableFolderView);
-	
-	bool enableGroupingIntoCollections() const;
-	void setEnableGroupingIntoCollections(bool newEnableGroupingIntoCollections);
-	
-	bool displaySpecialsWithinSeasons() const;
-	void setDisplaySpecialsWithinSeasons(bool newDisplaySpecialsWithinSeasons);
-	
-	QStringList localNetworkSubnets() const;
-	void setLocalNetworkSubnets(QStringList newLocalNetworkSubnets);
-	
-	QStringList localNetworkAddresses() const;
-	void setLocalNetworkAddresses(QStringList newLocalNetworkAddresses);
-	
-	QStringList codecsUsed() const;
-	void setCodecsUsed(QStringList newCodecsUsed);
-	
-	QList<RepositoryInfo *> pluginRepositories() const;
-	void setPluginRepositories(QList<RepositoryInfo *> newPluginRepositories);
-	
-	bool enableExternalContentInSuggestions() const;
-	void setEnableExternalContentInSuggestions(bool newEnableExternalContentInSuggestions);
-	
-	bool requireHttps() const;
-	void setRequireHttps(bool newRequireHttps);
-	
-	bool enableNewOmdbSupport() const;
-	void setEnableNewOmdbSupport(bool newEnableNewOmdbSupport);
-	
-	QStringList remoteIPFilter() const;
-	void setRemoteIPFilter(QStringList newRemoteIPFilter);
-	
-	bool isRemoteIPFilterBlacklist() const;
-	void setIsRemoteIPFilterBlacklist(bool newIsRemoteIPFilterBlacklist);
-	
-	qint32 imageExtractionTimeoutMs() const;
-	void setImageExtractionTimeoutMs(qint32 newImageExtractionTimeoutMs);
-	
-	QList<PathSubstitution *> pathSubstitutions() const;
-	void setPathSubstitutions(QList<PathSubstitution *> newPathSubstitutions);
-	
-	bool enableSimpleArtistDetection() const;
-	void setEnableSimpleArtistDetection(bool newEnableSimpleArtistDetection);
-	
-	QStringList uninstalledPlugins() const;
-	void setUninstalledPlugins(QStringList newUninstalledPlugins);
-	
-	bool enableSlowResponseWarning() const;
-	void setEnableSlowResponseWarning(bool newEnableSlowResponseWarning);
-	
-	qint64 slowResponseThresholdMs() const;
-	void setSlowResponseThresholdMs(qint64 newSlowResponseThresholdMs);
-	
-	QStringList corsHosts() const;
-	void setCorsHosts(QStringList newCorsHosts);
-	
-	QStringList knownProxies() const;
-	void setKnownProxies(QStringList newKnownProxies);
-	
-	qint32 activityLogRetentionDays() const;
-	void setActivityLogRetentionDays(qint32 newActivityLogRetentionDays);
-	
-	qint32 libraryScanFanoutConcurrency() const;
-	void setLibraryScanFanoutConcurrency(qint32 newLibraryScanFanoutConcurrency);
-	
-	qint32 libraryMetadataRefreshConcurrency() const;
-	void setLibraryMetadataRefreshConcurrency(qint32 newLibraryMetadataRefreshConcurrency);
-	
-	bool removeOldPlugins() const;
-	void setRemoveOldPlugins(bool newRemoveOldPlugins);
-	
 	bool disablePluginImages() const;
+	/**
+	* @brief Gets or sets a value indicating whether plugin image should be disabled.
+	*/
 	void setDisablePluginImages(bool newDisablePluginImages);
-	
-signals:
-	void logFileRetentionDaysChanged(qint32 newLogFileRetentionDays);
-	void isStartupWizardCompletedChanged(bool newIsStartupWizardCompleted);
-	void cachePathChanged(QString newCachePath);
-	void previousVersionChanged(Version * newPreviousVersion);
-	void previousVersionStrChanged(QString newPreviousVersionStr);
-	void enableUPnPChanged(bool newEnableUPnP);
-	void enableMetricsChanged(bool newEnableMetrics);
-	void publicPortChanged(qint32 newPublicPort);
-	void uPnPCreateHttpPortMapChanged(bool newUPnPCreateHttpPortMap);
-	void uDPPortRangeChanged(QString newUDPPortRange);
-	void enableIPV6Changed(bool newEnableIPV6);
-	void enableIPV4Changed(bool newEnableIPV4);
-	void enableSSDPTracingChanged(bool newEnableSSDPTracing);
-	void sSDPTracingFilterChanged(QString newSSDPTracingFilter);
-	void uDPSendCountChanged(qint32 newUDPSendCount);
-	void uDPSendDelayChanged(qint32 newUDPSendDelay);
-	void ignoreVirtualInterfacesChanged(bool newIgnoreVirtualInterfaces);
-	void virtualInterfaceNamesChanged(QString newVirtualInterfaceNames);
-	void gatewayMonitorPeriodChanged(qint32 newGatewayMonitorPeriod);
-	void enableMultiSocketBindingChanged(bool newEnableMultiSocketBinding);
-	void trustAllIP6InterfacesChanged(bool newTrustAllIP6Interfaces);
-	void hDHomerunPortRangeChanged(QString newHDHomerunPortRange);
-	void publishedServerUriBySubnetChanged(QStringList newPublishedServerUriBySubnet);
-	void autoDiscoveryTracingChanged(bool newAutoDiscoveryTracing);
-	void autoDiscoveryChanged(bool newAutoDiscovery);
-	void publicHttpsPortChanged(qint32 newPublicHttpsPort);
-	void httpServerPortNumberChanged(qint32 newHttpServerPortNumber);
-	void httpsPortNumberChanged(qint32 newHttpsPortNumber);
-	void enableHttpsChanged(bool newEnableHttps);
-	void enableNormalizedItemByNameIdsChanged(bool newEnableNormalizedItemByNameIds);
-	void certificatePathChanged(QString newCertificatePath);
-	void certificatePasswordChanged(QString newCertificatePassword);
-	void isPortAuthorizedChanged(bool newIsPortAuthorized);
-	void quickConnectAvailableChanged(bool newQuickConnectAvailable);
-	void enableRemoteAccessChanged(bool newEnableRemoteAccess);
-	void enableCaseSensitiveItemIdsChanged(bool newEnableCaseSensitiveItemIds);
-	void disableLiveTvChannelUserDataNameChanged(bool newDisableLiveTvChannelUserDataName);
-	void metadataPathChanged(QString newMetadataPath);
-	void metadataNetworkPathChanged(QString newMetadataNetworkPath);
-	void preferredMetadataLanguageChanged(QString newPreferredMetadataLanguage);
-	void metadataCountryCodeChanged(QString newMetadataCountryCode);
-	void sortReplaceCharactersChanged(QStringList newSortReplaceCharacters);
-	void sortRemoveCharactersChanged(QStringList newSortRemoveCharacters);
-	void sortRemoveWordsChanged(QStringList newSortRemoveWords);
-	void minResumePctChanged(qint32 newMinResumePct);
-	void maxResumePctChanged(qint32 newMaxResumePct);
-	void minResumeDurationSecondsChanged(qint32 newMinResumeDurationSeconds);
-	void minAudiobookResumeChanged(qint32 newMinAudiobookResume);
-	void maxAudiobookResumeChanged(qint32 newMaxAudiobookResume);
-	void libraryMonitorDelayChanged(qint32 newLibraryMonitorDelay);
-	void enableDashboardResponseCachingChanged(bool newEnableDashboardResponseCaching);
-	void imageSavingConventionChanged(ImageSavingConvention newImageSavingConvention);
-	void metadataOptionsChanged(QList<MetadataOptions *> newMetadataOptions);
-	void skipDeserializationForBasicTypesChanged(bool newSkipDeserializationForBasicTypes);
-	void serverNameChanged(QString newServerName);
-	void baseUrlChanged(QString newBaseUrl);
-	void uICultureChanged(QString newUICulture);
-	void saveMetadataHiddenChanged(bool newSaveMetadataHidden);
-	void contentTypesChanged(QList<NameValuePair *> newContentTypes);
-	void remoteClientBitrateLimitChanged(qint32 newRemoteClientBitrateLimit);
-	void enableFolderViewChanged(bool newEnableFolderView);
-	void enableGroupingIntoCollectionsChanged(bool newEnableGroupingIntoCollections);
-	void displaySpecialsWithinSeasonsChanged(bool newDisplaySpecialsWithinSeasons);
-	void localNetworkSubnetsChanged(QStringList newLocalNetworkSubnets);
-	void localNetworkAddressesChanged(QStringList newLocalNetworkAddresses);
-	void codecsUsedChanged(QStringList newCodecsUsed);
-	void pluginRepositoriesChanged(QList<RepositoryInfo *> newPluginRepositories);
-	void enableExternalContentInSuggestionsChanged(bool newEnableExternalContentInSuggestions);
-	void requireHttpsChanged(bool newRequireHttps);
-	void enableNewOmdbSupportChanged(bool newEnableNewOmdbSupport);
-	void remoteIPFilterChanged(QStringList newRemoteIPFilter);
-	void isRemoteIPFilterBlacklistChanged(bool newIsRemoteIPFilterBlacklist);
-	void imageExtractionTimeoutMsChanged(qint32 newImageExtractionTimeoutMs);
-	void pathSubstitutionsChanged(QList<PathSubstitution *> newPathSubstitutions);
-	void enableSimpleArtistDetectionChanged(bool newEnableSimpleArtistDetection);
-	void uninstalledPluginsChanged(QStringList newUninstalledPlugins);
-	void enableSlowResponseWarningChanged(bool newEnableSlowResponseWarning);
-	void slowResponseThresholdMsChanged(qint64 newSlowResponseThresholdMs);
-	void corsHostsChanged(QStringList newCorsHosts);
-	void knownProxiesChanged(QStringList newKnownProxies);
-	void activityLogRetentionDaysChanged(qint32 newActivityLogRetentionDays);
-	void libraryScanFanoutConcurrencyChanged(qint32 newLibraryScanFanoutConcurrency);
-	void libraryMetadataRefreshConcurrencyChanged(qint32 newLibraryMetadataRefreshConcurrency);
-	void removeOldPluginsChanged(bool newRemoveOldPlugins);
-	void disablePluginImagesChanged(bool newDisablePluginImages);
+
 protected:
 	qint32 m_logFileRetentionDays;
 	bool m_isStartupWizardCompleted;
 	QString m_cachePath;
-	Version * m_previousVersion = nullptr;
+	QSharedPointer<Version> m_previousVersion = nullptr;
 	QString m_previousVersionStr;
 	bool m_enableUPnP;
 	bool m_enableMetrics;
@@ -725,13 +710,13 @@ protected:
 	qint32 m_libraryMonitorDelay;
 	bool m_enableDashboardResponseCaching;
 	ImageSavingConvention m_imageSavingConvention;
-	QList<MetadataOptions *> m_metadataOptions;
+	QList<QSharedPointer<MetadataOptions>> m_metadataOptions;
 	bool m_skipDeserializationForBasicTypes;
 	QString m_serverName;
 	QString m_baseUrl;
 	QString m_uICulture;
 	bool m_saveMetadataHidden;
-	QList<NameValuePair *> m_contentTypes;
+	QList<QSharedPointer<NameValuePair>> m_contentTypes;
 	qint32 m_remoteClientBitrateLimit;
 	bool m_enableFolderView;
 	bool m_enableGroupingIntoCollections;
@@ -739,14 +724,14 @@ protected:
 	QStringList m_localNetworkSubnets;
 	QStringList m_localNetworkAddresses;
 	QStringList m_codecsUsed;
-	QList<RepositoryInfo *> m_pluginRepositories;
+	QList<QSharedPointer<RepositoryInfo>> m_pluginRepositories;
 	bool m_enableExternalContentInSuggestions;
 	bool m_requireHttps;
 	bool m_enableNewOmdbSupport;
 	QStringList m_remoteIPFilter;
 	bool m_isRemoteIPFilterBlacklist;
 	qint32 m_imageExtractionTimeoutMs;
-	QList<PathSubstitution *> m_pathSubstitutions;
+	QList<QSharedPointer<PathSubstitution>> m_pathSubstitutions;
 	bool m_enableSimpleArtistDetection;
 	QStringList m_uninstalledPlugins;
 	bool m_enableSlowResponseWarning;
@@ -759,6 +744,18 @@ protected:
 	bool m_removeOldPlugins;
 	bool m_disablePluginImages;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ServerConfiguration = Jellyfin::DTO::ServerConfiguration;
+
+template <>
+ServerConfiguration fromJsonValue<ServerConfiguration>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ServerConfiguration::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

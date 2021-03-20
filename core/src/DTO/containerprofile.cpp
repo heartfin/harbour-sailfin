@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/containerprofile.h>
 
-#include <JellyfinQt/DTO/dlnaprofiletype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ContainerProfile::ContainerProfile(QObject *parent) : QObject(parent) {}
+ContainerProfile::ContainerProfile(QObject *parent) {}
 
-ContainerProfile *ContainerProfile::fromJSON(QJsonObject source, QObject *parent) {
-	ContainerProfile *instance = new ContainerProfile(parent);
-	instance->updateFromJSON(source);
+ContainerProfile ContainerProfile::fromJson(QJsonObject source) {ContainerProfile instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ContainerProfile::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ContainerProfile::setFromJson(QJsonObject source) {
+	m_type = fromJsonValue<DlnaProfileType>(source["Type"]);
+	m_conditions = fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
+	m_container = fromJsonValue<QString>(source["Container"]);
+
 }
-QJsonObject ContainerProfile::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ContainerProfile::toJson() {
 	QJsonObject result;
+	result["Type"] = toJsonValue<DlnaProfileType>(m_type);
+	result["Conditions"] = toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
+	result["Container"] = toJsonValue<QString>(m_container);
+
 	return result;
 }
+
 DlnaProfileType ContainerProfile::type() const { return m_type; }
+
 void ContainerProfile::setType(DlnaProfileType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
+QList<QSharedPointer<ProfileCondition>> ContainerProfile::conditions() const { return m_conditions; }
 
-QList<ProfileCondition *> ContainerProfile::conditions() const { return m_conditions; }
-void ContainerProfile::setConditions(QList<ProfileCondition *> newConditions) {
+void ContainerProfile::setConditions(QList<QSharedPointer<ProfileCondition>> newConditions) {
 	m_conditions = newConditions;
-	emit conditionsChanged(newConditions);
 }
-
 QString ContainerProfile::container() const { return m_container; }
+
 void ContainerProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
-	emit containerChanged(newContainer);
 }
 
 

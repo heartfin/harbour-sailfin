@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-CollectionCreationResult::CollectionCreationResult(QObject *parent) : QObject(parent) {}
+CollectionCreationResult::CollectionCreationResult(QObject *parent) {}
 
-CollectionCreationResult *CollectionCreationResult::fromJSON(QJsonObject source, QObject *parent) {
-	CollectionCreationResult *instance = new CollectionCreationResult(parent);
-	instance->updateFromJSON(source);
+CollectionCreationResult CollectionCreationResult::fromJson(QJsonObject source) {CollectionCreationResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void CollectionCreationResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void CollectionCreationResult::setFromJson(QJsonObject source) {
+	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
+
 }
-QJsonObject CollectionCreationResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject CollectionCreationResult::toJson() {
 	QJsonObject result;
+	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
+
 	return result;
 }
-QString CollectionCreationResult::jellyfinId() const { return m_jellyfinId; }
-void CollectionCreationResult::setJellyfinId(QString newJellyfinId) {
+
+QUuid CollectionCreationResult::jellyfinId() const { return m_jellyfinId; }
+
+void CollectionCreationResult::setJellyfinId(QUuid newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
 
 

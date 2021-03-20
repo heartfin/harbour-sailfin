@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_CHANNELMEDIATYPE_H
 #define JELLYFIN_DTO_CHANNELMEDIATYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ChannelMediaTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Audio,
 		Video,
 		Photo,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit ChannelMediaTypeClass();
 };
+
 typedef ChannelMediaTypeClass::Value ChannelMediaType;
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelMediaType = Jellyfin::DTO::ChannelMediaType;
+using ChannelMediaTypeClass = Jellyfin::DTO::ChannelMediaTypeClass;
+
+template <>
+ChannelMediaType fromJsonValue<ChannelMediaType>(const QJsonValue &source) {
+	if (!source.isString()) return ChannelMediaTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Audio")) {
+		return ChannelMediaTypeClass::Audio;
+	}
+	if (str == QStringLiteral("Video")) {
+		return ChannelMediaTypeClass::Video;
+	}
+	if (str == QStringLiteral("Photo")) {
+		return ChannelMediaTypeClass::Photo;
+	}
+	
+	return ChannelMediaTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

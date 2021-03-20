@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_ISOTYPE_H
 #define JELLYFIN_DTO_ISOTYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class IsoTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Dvd,
 		BluRay,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit IsoTypeClass();
 };
+
 typedef IsoTypeClass::Value IsoType;
+
+} // NS DTO
+
+namespace Support {
+
+using IsoType = Jellyfin::DTO::IsoType;
+using IsoTypeClass = Jellyfin::DTO::IsoTypeClass;
+
+template <>
+IsoType fromJsonValue<IsoType>(const QJsonValue &source) {
+	if (!source.isString()) return IsoTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Dvd")) {
+		return IsoTypeClass::Dvd;
+	}
+	if (str == QStringLiteral("BluRay")) {
+		return IsoTypeClass::BluRay;
+	}
+	
+	return IsoTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,51 +31,66 @@
 #define JELLYFIN_DTO_UPDATEUSEREASYPASSWORD_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class UpdateUserEasyPassword : public QObject {
-	Q_OBJECT
-public:
-	explicit UpdateUserEasyPassword(QObject *parent = nullptr);
-	static UpdateUserEasyPassword *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class UpdateUserEasyPassword {
+public:
+	explicit UpdateUserEasyPassword();
+	static UpdateUserEasyPassword fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the new sha1-hashed password.
 	 */
-	Q_PROPERTY(QString newPassword READ newPassword WRITE setNewPassword NOTIFY newPasswordChanged)
+	QString newPassword() const;
+	/**
+	* @brief Gets or sets the new sha1-hashed password.
+	*/
+	void setNewPassword(QString newNewPassword);
 	/**
 	 * @brief Gets or sets the new password.
 	 */
-	Q_PROPERTY(QString newPw READ newPw WRITE setNewPw NOTIFY newPwChanged)
+	QString newPw() const;
+	/**
+	* @brief Gets or sets the new password.
+	*/
+	void setNewPw(QString newNewPw);
 	/**
 	 * @brief Gets or sets a value indicating whether to reset the password.
 	 */
-	Q_PROPERTY(bool resetPassword READ resetPassword WRITE setResetPassword NOTIFY resetPasswordChanged)
-
-	QString newPassword() const;
-	void setNewPassword(QString newNewPassword);
-	
-	QString newPw() const;
-	void setNewPw(QString newNewPw);
-	
 	bool resetPassword() const;
+	/**
+	* @brief Gets or sets a value indicating whether to reset the password.
+	*/
 	void setResetPassword(bool newResetPassword);
-	
-signals:
-	void newPasswordChanged(QString newNewPassword);
-	void newPwChanged(QString newNewPw);
-	void resetPasswordChanged(bool newResetPassword);
+
 protected:
 	QString m_newPassword;
 	QString m_newPw;
 	bool m_resetPassword;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UpdateUserEasyPassword = Jellyfin::DTO::UpdateUserEasyPassword;
+
+template <>
+UpdateUserEasyPassword fromJsonValue<UpdateUserEasyPassword>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UpdateUserEasyPassword::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

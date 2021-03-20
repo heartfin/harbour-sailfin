@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-IgnoreWaitRequestDto::IgnoreWaitRequestDto(QObject *parent) : QObject(parent) {}
+IgnoreWaitRequestDto::IgnoreWaitRequestDto(QObject *parent) {}
 
-IgnoreWaitRequestDto *IgnoreWaitRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	IgnoreWaitRequestDto *instance = new IgnoreWaitRequestDto(parent);
-	instance->updateFromJSON(source);
+IgnoreWaitRequestDto IgnoreWaitRequestDto::fromJson(QJsonObject source) {IgnoreWaitRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void IgnoreWaitRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void IgnoreWaitRequestDto::setFromJson(QJsonObject source) {
+	m_ignoreWait = fromJsonValue<bool>(source["IgnoreWait"]);
+
 }
-QJsonObject IgnoreWaitRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject IgnoreWaitRequestDto::toJson() {
 	QJsonObject result;
+	result["IgnoreWait"] = toJsonValue<bool>(m_ignoreWait);
+
 	return result;
 }
+
 bool IgnoreWaitRequestDto::ignoreWait() const { return m_ignoreWait; }
+
 void IgnoreWaitRequestDto::setIgnoreWait(bool newIgnoreWait) {
 	m_ignoreWait = newIgnoreWait;
-	emit ignoreWaitChanged(newIgnoreWait);
 }
 
 

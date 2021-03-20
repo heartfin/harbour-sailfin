@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-UtcTimeResponse::UtcTimeResponse(QObject *parent) : QObject(parent) {}
+UtcTimeResponse::UtcTimeResponse(QObject *parent) {}
 
-UtcTimeResponse *UtcTimeResponse::fromJSON(QJsonObject source, QObject *parent) {
-	UtcTimeResponse *instance = new UtcTimeResponse(parent);
-	instance->updateFromJSON(source);
+UtcTimeResponse UtcTimeResponse::fromJson(QJsonObject source) {UtcTimeResponse instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void UtcTimeResponse::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void UtcTimeResponse::setFromJson(QJsonObject source) {
+	m_requestReceptionTime = fromJsonValue<QDateTime>(source["RequestReceptionTime"]);
+	m_responseTransmissionTime = fromJsonValue<QDateTime>(source["ResponseTransmissionTime"]);
+
 }
-QJsonObject UtcTimeResponse::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject UtcTimeResponse::toJson() {
 	QJsonObject result;
+	result["RequestReceptionTime"] = toJsonValue<QDateTime>(m_requestReceptionTime);
+	result["ResponseTransmissionTime"] = toJsonValue<QDateTime>(m_responseTransmissionTime);
+
 	return result;
 }
+
 QDateTime UtcTimeResponse::requestReceptionTime() const { return m_requestReceptionTime; }
+
 void UtcTimeResponse::setRequestReceptionTime(QDateTime newRequestReceptionTime) {
 	m_requestReceptionTime = newRequestReceptionTime;
-	emit requestReceptionTimeChanged(newRequestReceptionTime);
 }
-
 QDateTime UtcTimeResponse::responseTransmissionTime() const { return m_responseTransmissionTime; }
+
 void UtcTimeResponse::setResponseTransmissionTime(QDateTime newResponseTransmissionTime) {
 	m_responseTransmissionTime = newResponseTransmissionTime;
-	emit responseTransmissionTimeChanged(newResponseTransmissionTime);
 }
 
 

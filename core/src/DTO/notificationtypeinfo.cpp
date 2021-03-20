@@ -32,50 +32,58 @@
 namespace Jellyfin {
 namespace DTO {
 
-NotificationTypeInfo::NotificationTypeInfo(QObject *parent) : QObject(parent) {}
+NotificationTypeInfo::NotificationTypeInfo(QObject *parent) {}
 
-NotificationTypeInfo *NotificationTypeInfo::fromJSON(QJsonObject source, QObject *parent) {
-	NotificationTypeInfo *instance = new NotificationTypeInfo(parent);
-	instance->updateFromJSON(source);
+NotificationTypeInfo NotificationTypeInfo::fromJson(QJsonObject source) {NotificationTypeInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void NotificationTypeInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void NotificationTypeInfo::setFromJson(QJsonObject source) {
+	m_type = fromJsonValue<QString>(source["Type"]);
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_enabled = fromJsonValue<bool>(source["Enabled"]);
+	m_category = fromJsonValue<QString>(source["Category"]);
+	m_isBasedOnUserEvent = fromJsonValue<bool>(source["IsBasedOnUserEvent"]);
+
 }
-QJsonObject NotificationTypeInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject NotificationTypeInfo::toJson() {
 	QJsonObject result;
+	result["Type"] = toJsonValue<QString>(m_type);
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Enabled"] = toJsonValue<bool>(m_enabled);
+	result["Category"] = toJsonValue<QString>(m_category);
+	result["IsBasedOnUserEvent"] = toJsonValue<bool>(m_isBasedOnUserEvent);
+
 	return result;
 }
+
 QString NotificationTypeInfo::type() const { return m_type; }
+
 void NotificationTypeInfo::setType(QString newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 QString NotificationTypeInfo::name() const { return m_name; }
+
 void NotificationTypeInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 bool NotificationTypeInfo::enabled() const { return m_enabled; }
+
 void NotificationTypeInfo::setEnabled(bool newEnabled) {
 	m_enabled = newEnabled;
-	emit enabledChanged(newEnabled);
 }
-
 QString NotificationTypeInfo::category() const { return m_category; }
+
 void NotificationTypeInfo::setCategory(QString newCategory) {
 	m_category = newCategory;
-	emit categoryChanged(newCategory);
 }
-
 bool NotificationTypeInfo::isBasedOnUserEvent() const { return m_isBasedOnUserEvent; }
+
 void NotificationTypeInfo::setIsBasedOnUserEvent(bool newIsBasedOnUserEvent) {
 	m_isBasedOnUserEvent = newIsBasedOnUserEvent;
-	emit isBasedOnUserEventChanged(newIsBasedOnUserEvent);
 }
 
 

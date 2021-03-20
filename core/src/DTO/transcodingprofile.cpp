@@ -29,117 +29,131 @@
 
 #include <JellyfinQt/DTO/transcodingprofile.h>
 
-#include <JellyfinQt/DTO/dlnaprofiletype.h>
-#include <JellyfinQt/DTO/encodingcontext.h>
-#include <JellyfinQt/DTO/transcodeseekinfo.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-TranscodingProfile::TranscodingProfile(QObject *parent) : QObject(parent) {}
+TranscodingProfile::TranscodingProfile(QObject *parent) {}
 
-TranscodingProfile *TranscodingProfile::fromJSON(QJsonObject source, QObject *parent) {
-	TranscodingProfile *instance = new TranscodingProfile(parent);
-	instance->updateFromJSON(source);
+TranscodingProfile TranscodingProfile::fromJson(QJsonObject source) {TranscodingProfile instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TranscodingProfile::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TranscodingProfile::setFromJson(QJsonObject source) {
+	m_container = fromJsonValue<QString>(source["Container"]);
+	m_type = fromJsonValue<DlnaProfileType>(source["Type"]);
+	m_videoCodec = fromJsonValue<QString>(source["VideoCodec"]);
+	m_audioCodec = fromJsonValue<QString>(source["AudioCodec"]);
+	m_protocol = fromJsonValue<QString>(source["Protocol"]);
+	m_estimateContentLength = fromJsonValue<bool>(source["EstimateContentLength"]);
+	m_enableMpegtsM2TsMode = fromJsonValue<bool>(source["EnableMpegtsM2TsMode"]);
+	m_transcodeSeekInfo = fromJsonValue<TranscodeSeekInfo>(source["TranscodeSeekInfo"]);
+	m_copyTimestamps = fromJsonValue<bool>(source["CopyTimestamps"]);
+	m_context = fromJsonValue<EncodingContext>(source["Context"]);
+	m_enableSubtitlesInManifest = fromJsonValue<bool>(source["EnableSubtitlesInManifest"]);
+	m_maxAudioChannels = fromJsonValue<QString>(source["MaxAudioChannels"]);
+	m_minSegments = fromJsonValue<qint32>(source["MinSegments"]);
+	m_segmentLength = fromJsonValue<qint32>(source["SegmentLength"]);
+	m_breakOnNonKeyFrames = fromJsonValue<bool>(source["BreakOnNonKeyFrames"]);
+
 }
-QJsonObject TranscodingProfile::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TranscodingProfile::toJson() {
 	QJsonObject result;
+	result["Container"] = toJsonValue<QString>(m_container);
+	result["Type"] = toJsonValue<DlnaProfileType>(m_type);
+	result["VideoCodec"] = toJsonValue<QString>(m_videoCodec);
+	result["AudioCodec"] = toJsonValue<QString>(m_audioCodec);
+	result["Protocol"] = toJsonValue<QString>(m_protocol);
+	result["EstimateContentLength"] = toJsonValue<bool>(m_estimateContentLength);
+	result["EnableMpegtsM2TsMode"] = toJsonValue<bool>(m_enableMpegtsM2TsMode);
+	result["TranscodeSeekInfo"] = toJsonValue<TranscodeSeekInfo>(m_transcodeSeekInfo);
+	result["CopyTimestamps"] = toJsonValue<bool>(m_copyTimestamps);
+	result["Context"] = toJsonValue<EncodingContext>(m_context);
+	result["EnableSubtitlesInManifest"] = toJsonValue<bool>(m_enableSubtitlesInManifest);
+	result["MaxAudioChannels"] = toJsonValue<QString>(m_maxAudioChannels);
+	result["MinSegments"] = toJsonValue<qint32>(m_minSegments);
+	result["SegmentLength"] = toJsonValue<qint32>(m_segmentLength);
+	result["BreakOnNonKeyFrames"] = toJsonValue<bool>(m_breakOnNonKeyFrames);
+
 	return result;
 }
+
 QString TranscodingProfile::container() const { return m_container; }
+
 void TranscodingProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
-	emit containerChanged(newContainer);
 }
-
 DlnaProfileType TranscodingProfile::type() const { return m_type; }
+
 void TranscodingProfile::setType(DlnaProfileType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 QString TranscodingProfile::videoCodec() const { return m_videoCodec; }
+
 void TranscodingProfile::setVideoCodec(QString newVideoCodec) {
 	m_videoCodec = newVideoCodec;
-	emit videoCodecChanged(newVideoCodec);
 }
-
 QString TranscodingProfile::audioCodec() const { return m_audioCodec; }
+
 void TranscodingProfile::setAudioCodec(QString newAudioCodec) {
 	m_audioCodec = newAudioCodec;
-	emit audioCodecChanged(newAudioCodec);
 }
-
 QString TranscodingProfile::protocol() const { return m_protocol; }
+
 void TranscodingProfile::setProtocol(QString newProtocol) {
 	m_protocol = newProtocol;
-	emit protocolChanged(newProtocol);
 }
-
 bool TranscodingProfile::estimateContentLength() const { return m_estimateContentLength; }
+
 void TranscodingProfile::setEstimateContentLength(bool newEstimateContentLength) {
 	m_estimateContentLength = newEstimateContentLength;
-	emit estimateContentLengthChanged(newEstimateContentLength);
 }
-
 bool TranscodingProfile::enableMpegtsM2TsMode() const { return m_enableMpegtsM2TsMode; }
+
 void TranscodingProfile::setEnableMpegtsM2TsMode(bool newEnableMpegtsM2TsMode) {
 	m_enableMpegtsM2TsMode = newEnableMpegtsM2TsMode;
-	emit enableMpegtsM2TsModeChanged(newEnableMpegtsM2TsMode);
 }
-
 TranscodeSeekInfo TranscodingProfile::transcodeSeekInfo() const { return m_transcodeSeekInfo; }
+
 void TranscodingProfile::setTranscodeSeekInfo(TranscodeSeekInfo newTranscodeSeekInfo) {
 	m_transcodeSeekInfo = newTranscodeSeekInfo;
-	emit transcodeSeekInfoChanged(newTranscodeSeekInfo);
 }
-
 bool TranscodingProfile::copyTimestamps() const { return m_copyTimestamps; }
+
 void TranscodingProfile::setCopyTimestamps(bool newCopyTimestamps) {
 	m_copyTimestamps = newCopyTimestamps;
-	emit copyTimestampsChanged(newCopyTimestamps);
 }
-
 EncodingContext TranscodingProfile::context() const { return m_context; }
+
 void TranscodingProfile::setContext(EncodingContext newContext) {
 	m_context = newContext;
-	emit contextChanged(newContext);
 }
-
 bool TranscodingProfile::enableSubtitlesInManifest() const { return m_enableSubtitlesInManifest; }
+
 void TranscodingProfile::setEnableSubtitlesInManifest(bool newEnableSubtitlesInManifest) {
 	m_enableSubtitlesInManifest = newEnableSubtitlesInManifest;
-	emit enableSubtitlesInManifestChanged(newEnableSubtitlesInManifest);
 }
-
 QString TranscodingProfile::maxAudioChannels() const { return m_maxAudioChannels; }
+
 void TranscodingProfile::setMaxAudioChannels(QString newMaxAudioChannels) {
 	m_maxAudioChannels = newMaxAudioChannels;
-	emit maxAudioChannelsChanged(newMaxAudioChannels);
 }
-
 qint32 TranscodingProfile::minSegments() const { return m_minSegments; }
+
 void TranscodingProfile::setMinSegments(qint32 newMinSegments) {
 	m_minSegments = newMinSegments;
-	emit minSegmentsChanged(newMinSegments);
 }
-
 qint32 TranscodingProfile::segmentLength() const { return m_segmentLength; }
+
 void TranscodingProfile::setSegmentLength(qint32 newSegmentLength) {
 	m_segmentLength = newSegmentLength;
-	emit segmentLengthChanged(newSegmentLength);
 }
-
 bool TranscodingProfile::breakOnNonKeyFrames() const { return m_breakOnNonKeyFrames; }
+
 void TranscodingProfile::setBreakOnNonKeyFrames(bool newBreakOnNonKeyFrames) {
 	m_breakOnNonKeyFrames = newBreakOnNonKeyFrames;
-	emit breakOnNonKeyFramesChanged(newBreakOnNonKeyFrames);
 }
 
 

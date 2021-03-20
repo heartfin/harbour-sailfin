@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_WAKEONLANINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class WakeOnLanInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit WakeOnLanInfo(QObject *parent = nullptr);
-	static WakeOnLanInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class WakeOnLanInfo {
+public:
+	explicit WakeOnLanInfo();
+	static WakeOnLanInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets the MAC address of the device.
 	 */
-	Q_PROPERTY(QString macAddress READ macAddress WRITE setMacAddress NOTIFY macAddressChanged)
+	QString macAddress() const;
+	/**
+	* @brief Gets the MAC address of the device.
+	*/
+	void setMacAddress(QString newMacAddress);
 	/**
 	 * @brief Gets or sets the wake-on-LAN port.
 	 */
-	Q_PROPERTY(qint32 port READ port WRITE setPort NOTIFY portChanged)
-
-	QString macAddress() const;
-	void setMacAddress(QString newMacAddress);
-	
 	qint32 port() const;
+	/**
+	* @brief Gets or sets the wake-on-LAN port.
+	*/
 	void setPort(qint32 newPort);
-	
-signals:
-	void macAddressChanged(QString newMacAddress);
-	void portChanged(qint32 newPort);
+
 protected:
 	QString m_macAddress;
 	qint32 m_port;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using WakeOnLanInfo = Jellyfin::DTO::WakeOnLanInfo;
+
+template <>
+WakeOnLanInfo fromJsonValue<WakeOnLanInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return WakeOnLanInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-BufferRequestDto::BufferRequestDto(QObject *parent) : QObject(parent) {}
+BufferRequestDto::BufferRequestDto(QObject *parent) {}
 
-BufferRequestDto *BufferRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	BufferRequestDto *instance = new BufferRequestDto(parent);
-	instance->updateFromJSON(source);
+BufferRequestDto BufferRequestDto::fromJson(QJsonObject source) {BufferRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void BufferRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void BufferRequestDto::setFromJson(QJsonObject source) {
+	m_when = fromJsonValue<QDateTime>(source["When"]);
+	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
+	m_isPlaying = fromJsonValue<bool>(source["IsPlaying"]);
+	m_playlistItemId = fromJsonValue<QUuid>(source["PlaylistItemId"]);
+
 }
-QJsonObject BufferRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject BufferRequestDto::toJson() {
 	QJsonObject result;
+	result["When"] = toJsonValue<QDateTime>(m_when);
+	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
+	result["IsPlaying"] = toJsonValue<bool>(m_isPlaying);
+	result["PlaylistItemId"] = toJsonValue<QUuid>(m_playlistItemId);
+
 	return result;
 }
+
 QDateTime BufferRequestDto::when() const { return m_when; }
+
 void BufferRequestDto::setWhen(QDateTime newWhen) {
 	m_when = newWhen;
-	emit whenChanged(newWhen);
 }
-
 qint64 BufferRequestDto::positionTicks() const { return m_positionTicks; }
+
 void BufferRequestDto::setPositionTicks(qint64 newPositionTicks) {
 	m_positionTicks = newPositionTicks;
-	emit positionTicksChanged(newPositionTicks);
 }
-
 bool BufferRequestDto::isPlaying() const { return m_isPlaying; }
+
 void BufferRequestDto::setIsPlaying(bool newIsPlaying) {
 	m_isPlaying = newIsPlaying;
-	emit isPlayingChanged(newIsPlaying);
 }
+QUuid BufferRequestDto::playlistItemId() const { return m_playlistItemId; }
 
-QString BufferRequestDto::playlistItemId() const { return m_playlistItemId; }
-void BufferRequestDto::setPlaylistItemId(QString newPlaylistItemId) {
+void BufferRequestDto::setPlaylistItemId(QUuid newPlaylistItemId) {
 	m_playlistItemId = newPlaylistItemId;
-	emit playlistItemIdChanged(newPlaylistItemId);
 }
 
 

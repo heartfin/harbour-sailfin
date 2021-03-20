@@ -31,77 +31,90 @@
 #define JELLYFIN_DTO_LIBRARYTYPEOPTIONSDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
+#include "JellyfinQt/DTO/imageoption.h"
 #include "JellyfinQt/DTO/imagetype.h"
+#include "JellyfinQt/DTO/libraryoptioninfodto.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ImageOption;
-class LibraryOptionInfoDto;
-class LibraryOptionInfoDto;
 
-class LibraryTypeOptionsDto : public QObject {
-	Q_OBJECT
+class LibraryTypeOptionsDto {
 public:
-	explicit LibraryTypeOptionsDto(QObject *parent = nullptr);
-	static LibraryTypeOptionsDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit LibraryTypeOptionsDto();
+	static LibraryTypeOptionsDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the type.
 	 */
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
+	QString type() const;
+	/**
+	* @brief Gets or sets the type.
+	*/
+	void setType(QString newType);
 	/**
 	 * @brief Gets or sets the metadata fetchers.
 	 */
-	Q_PROPERTY(QList<LibraryOptionInfoDto *> metadataFetchers READ metadataFetchers WRITE setMetadataFetchers NOTIFY metadataFetchersChanged)
+	QList<QSharedPointer<LibraryOptionInfoDto>> metadataFetchers() const;
+	/**
+	* @brief Gets or sets the metadata fetchers.
+	*/
+	void setMetadataFetchers(QList<QSharedPointer<LibraryOptionInfoDto>> newMetadataFetchers);
 	/**
 	 * @brief Gets or sets the image fetchers.
 	 */
-	Q_PROPERTY(QList<LibraryOptionInfoDto *> imageFetchers READ imageFetchers WRITE setImageFetchers NOTIFY imageFetchersChanged)
+	QList<QSharedPointer<LibraryOptionInfoDto>> imageFetchers() const;
+	/**
+	* @brief Gets or sets the image fetchers.
+	*/
+	void setImageFetchers(QList<QSharedPointer<LibraryOptionInfoDto>> newImageFetchers);
 	/**
 	 * @brief Gets or sets the supported image types.
 	 */
-	Q_PROPERTY(QList<ImageType> supportedImageTypes READ supportedImageTypes WRITE setSupportedImageTypes NOTIFY supportedImageTypesChanged)
+	QList<ImageType> supportedImageTypes() const;
+	/**
+	* @brief Gets or sets the supported image types.
+	*/
+	void setSupportedImageTypes(QList<ImageType> newSupportedImageTypes);
 	/**
 	 * @brief Gets or sets the default image options.
 	 */
-	Q_PROPERTY(QList<ImageOption *> defaultImageOptions READ defaultImageOptions WRITE setDefaultImageOptions NOTIFY defaultImageOptionsChanged)
+	QList<QSharedPointer<ImageOption>> defaultImageOptions() const;
+	/**
+	* @brief Gets or sets the default image options.
+	*/
+	void setDefaultImageOptions(QList<QSharedPointer<ImageOption>> newDefaultImageOptions);
 
-	QString type() const;
-	void setType(QString newType);
-	
-	QList<LibraryOptionInfoDto *> metadataFetchers() const;
-	void setMetadataFetchers(QList<LibraryOptionInfoDto *> newMetadataFetchers);
-	
-	QList<LibraryOptionInfoDto *> imageFetchers() const;
-	void setImageFetchers(QList<LibraryOptionInfoDto *> newImageFetchers);
-	
-	QList<ImageType> supportedImageTypes() const;
-	void setSupportedImageTypes(QList<ImageType> newSupportedImageTypes);
-	
-	QList<ImageOption *> defaultImageOptions() const;
-	void setDefaultImageOptions(QList<ImageOption *> newDefaultImageOptions);
-	
-signals:
-	void typeChanged(QString newType);
-	void metadataFetchersChanged(QList<LibraryOptionInfoDto *> newMetadataFetchers);
-	void imageFetchersChanged(QList<LibraryOptionInfoDto *> newImageFetchers);
-	void supportedImageTypesChanged(QList<ImageType> newSupportedImageTypes);
-	void defaultImageOptionsChanged(QList<ImageOption *> newDefaultImageOptions);
 protected:
 	QString m_type;
-	QList<LibraryOptionInfoDto *> m_metadataFetchers;
-	QList<LibraryOptionInfoDto *> m_imageFetchers;
+	QList<QSharedPointer<LibraryOptionInfoDto>> m_metadataFetchers;
+	QList<QSharedPointer<LibraryOptionInfoDto>> m_imageFetchers;
 	QList<ImageType> m_supportedImageTypes;
-	QList<ImageOption *> m_defaultImageOptions;
+	QList<QSharedPointer<ImageOption>> m_defaultImageOptions;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LibraryTypeOptionsDto = Jellyfin::DTO::LibraryTypeOptionsDto;
+
+template <>
+LibraryTypeOptionsDto fromJsonValue<LibraryTypeOptionsDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LibraryTypeOptionsDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

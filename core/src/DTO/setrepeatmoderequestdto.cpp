@@ -29,31 +29,33 @@
 
 #include <JellyfinQt/DTO/setrepeatmoderequestdto.h>
 
-#include <JellyfinQt/DTO/grouprepeatmode.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-SetRepeatModeRequestDto::SetRepeatModeRequestDto(QObject *parent) : QObject(parent) {}
+SetRepeatModeRequestDto::SetRepeatModeRequestDto(QObject *parent) {}
 
-SetRepeatModeRequestDto *SetRepeatModeRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	SetRepeatModeRequestDto *instance = new SetRepeatModeRequestDto(parent);
-	instance->updateFromJSON(source);
+SetRepeatModeRequestDto SetRepeatModeRequestDto::fromJson(QJsonObject source) {SetRepeatModeRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SetRepeatModeRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SetRepeatModeRequestDto::setFromJson(QJsonObject source) {
+	m_mode = fromJsonValue<GroupRepeatMode>(source["Mode"]);
+
 }
-QJsonObject SetRepeatModeRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SetRepeatModeRequestDto::toJson() {
 	QJsonObject result;
+	result["Mode"] = toJsonValue<GroupRepeatMode>(m_mode);
+
 	return result;
 }
+
 GroupRepeatMode SetRepeatModeRequestDto::mode() const { return m_mode; }
+
 void SetRepeatModeRequestDto::setMode(GroupRepeatMode newMode) {
 	m_mode = newMode;
-	emit modeChanged(newMode);
 }
 
 

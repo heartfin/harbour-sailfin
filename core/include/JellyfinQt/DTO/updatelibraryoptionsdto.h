@@ -31,41 +31,55 @@
 #define JELLYFIN_DTO_UPDATELIBRARYOPTIONSDTO_H
 
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QSharedPointer>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/libraryoptions.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LibraryOptions;
 
-class UpdateLibraryOptionsDto : public QObject {
-	Q_OBJECT
+class UpdateLibraryOptionsDto {
 public:
-	explicit UpdateLibraryOptionsDto(QObject *parent = nullptr);
-	static UpdateLibraryOptionsDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit UpdateLibraryOptionsDto();
+	static UpdateLibraryOptionsDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the library item id.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-	Q_PROPERTY(LibraryOptions * libraryOptions READ libraryOptions WRITE setLibraryOptions NOTIFY libraryOptionsChanged)
+	QUuid jellyfinId() const;
+	/**
+	* @brief Gets or sets the library item id.
+	*/
+	void setJellyfinId(QUuid newJellyfinId);
 
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	LibraryOptions * libraryOptions() const;
-	void setLibraryOptions(LibraryOptions * newLibraryOptions);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
-	void libraryOptionsChanged(LibraryOptions * newLibraryOptions);
+	QSharedPointer<LibraryOptions> libraryOptions() const;
+
+	void setLibraryOptions(QSharedPointer<LibraryOptions> newLibraryOptions);
+
 protected:
-	QString m_jellyfinId;
-	LibraryOptions * m_libraryOptions = nullptr;
+	QUuid m_jellyfinId;
+	QSharedPointer<LibraryOptions> m_libraryOptions = nullptr;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UpdateLibraryOptionsDto = Jellyfin::DTO::UpdateLibraryOptionsDto;
+
+template <>
+UpdateLibraryOptionsDto fromJsonValue<UpdateLibraryOptionsDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UpdateLibraryOptionsDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

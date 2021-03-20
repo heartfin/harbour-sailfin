@@ -31,66 +31,79 @@
 #define JELLYFIN_DTO_LIBRARYOPTIONSRESULTDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/libraryoptioninfodto.h"
+#include "JellyfinQt/DTO/librarytypeoptionsdto.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LibraryOptionInfoDto;
-class LibraryOptionInfoDto;
-class LibraryOptionInfoDto;
-class LibraryTypeOptionsDto;
 
-class LibraryOptionsResultDto : public QObject {
-	Q_OBJECT
+class LibraryOptionsResultDto {
 public:
-	explicit LibraryOptionsResultDto(QObject *parent = nullptr);
-	static LibraryOptionsResultDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit LibraryOptionsResultDto();
+	static LibraryOptionsResultDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the metadata savers.
 	 */
-	Q_PROPERTY(QList<LibraryOptionInfoDto *> metadataSavers READ metadataSavers WRITE setMetadataSavers NOTIFY metadataSaversChanged)
+	QList<QSharedPointer<LibraryOptionInfoDto>> metadataSavers() const;
+	/**
+	* @brief Gets or sets the metadata savers.
+	*/
+	void setMetadataSavers(QList<QSharedPointer<LibraryOptionInfoDto>> newMetadataSavers);
 	/**
 	 * @brief Gets or sets the metadata readers.
 	 */
-	Q_PROPERTY(QList<LibraryOptionInfoDto *> metadataReaders READ metadataReaders WRITE setMetadataReaders NOTIFY metadataReadersChanged)
+	QList<QSharedPointer<LibraryOptionInfoDto>> metadataReaders() const;
+	/**
+	* @brief Gets or sets the metadata readers.
+	*/
+	void setMetadataReaders(QList<QSharedPointer<LibraryOptionInfoDto>> newMetadataReaders);
 	/**
 	 * @brief Gets or sets the subtitle fetchers.
 	 */
-	Q_PROPERTY(QList<LibraryOptionInfoDto *> subtitleFetchers READ subtitleFetchers WRITE setSubtitleFetchers NOTIFY subtitleFetchersChanged)
+	QList<QSharedPointer<LibraryOptionInfoDto>> subtitleFetchers() const;
+	/**
+	* @brief Gets or sets the subtitle fetchers.
+	*/
+	void setSubtitleFetchers(QList<QSharedPointer<LibraryOptionInfoDto>> newSubtitleFetchers);
 	/**
 	 * @brief Gets or sets the type options.
 	 */
-	Q_PROPERTY(QList<LibraryTypeOptionsDto *> typeOptions READ typeOptions WRITE setTypeOptions NOTIFY typeOptionsChanged)
+	QList<QSharedPointer<LibraryTypeOptionsDto>> typeOptions() const;
+	/**
+	* @brief Gets or sets the type options.
+	*/
+	void setTypeOptions(QList<QSharedPointer<LibraryTypeOptionsDto>> newTypeOptions);
 
-	QList<LibraryOptionInfoDto *> metadataSavers() const;
-	void setMetadataSavers(QList<LibraryOptionInfoDto *> newMetadataSavers);
-	
-	QList<LibraryOptionInfoDto *> metadataReaders() const;
-	void setMetadataReaders(QList<LibraryOptionInfoDto *> newMetadataReaders);
-	
-	QList<LibraryOptionInfoDto *> subtitleFetchers() const;
-	void setSubtitleFetchers(QList<LibraryOptionInfoDto *> newSubtitleFetchers);
-	
-	QList<LibraryTypeOptionsDto *> typeOptions() const;
-	void setTypeOptions(QList<LibraryTypeOptionsDto *> newTypeOptions);
-	
-signals:
-	void metadataSaversChanged(QList<LibraryOptionInfoDto *> newMetadataSavers);
-	void metadataReadersChanged(QList<LibraryOptionInfoDto *> newMetadataReaders);
-	void subtitleFetchersChanged(QList<LibraryOptionInfoDto *> newSubtitleFetchers);
-	void typeOptionsChanged(QList<LibraryTypeOptionsDto *> newTypeOptions);
 protected:
-	QList<LibraryOptionInfoDto *> m_metadataSavers;
-	QList<LibraryOptionInfoDto *> m_metadataReaders;
-	QList<LibraryOptionInfoDto *> m_subtitleFetchers;
-	QList<LibraryTypeOptionsDto *> m_typeOptions;
+	QList<QSharedPointer<LibraryOptionInfoDto>> m_metadataSavers;
+	QList<QSharedPointer<LibraryOptionInfoDto>> m_metadataReaders;
+	QList<QSharedPointer<LibraryOptionInfoDto>> m_subtitleFetchers;
+	QList<QSharedPointer<LibraryTypeOptionsDto>> m_typeOptions;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LibraryOptionsResultDto = Jellyfin::DTO::LibraryOptionsResultDto;
+
+template <>
+LibraryOptionsResultDto fromJsonValue<LibraryOptionsResultDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LibraryOptionsResultDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

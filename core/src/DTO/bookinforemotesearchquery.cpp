@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-BookInfoRemoteSearchQuery::BookInfoRemoteSearchQuery(QObject *parent) : QObject(parent) {}
+BookInfoRemoteSearchQuery::BookInfoRemoteSearchQuery(QObject *parent) {}
 
-BookInfoRemoteSearchQuery *BookInfoRemoteSearchQuery::fromJSON(QJsonObject source, QObject *parent) {
-	BookInfoRemoteSearchQuery *instance = new BookInfoRemoteSearchQuery(parent);
-	instance->updateFromJSON(source);
+BookInfoRemoteSearchQuery BookInfoRemoteSearchQuery::fromJson(QJsonObject source) {BookInfoRemoteSearchQuery instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void BookInfoRemoteSearchQuery::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void BookInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
+	m_searchInfo = fromJsonValue<QSharedPointer<BookInfo>>(source["SearchInfo"]);
+	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+
 }
-QJsonObject BookInfoRemoteSearchQuery::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject BookInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
+	result["SearchInfo"] = toJsonValue<QSharedPointer<BookInfo>>(m_searchInfo);
+	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+
 	return result;
 }
-BookInfo * BookInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
-void BookInfoRemoteSearchQuery::setSearchInfo(BookInfo * newSearchInfo) {
+
+QSharedPointer<BookInfo> BookInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
+
+void BookInfoRemoteSearchQuery::setSearchInfo(QSharedPointer<BookInfo> newSearchInfo) {
 	m_searchInfo = newSearchInfo;
-	emit searchInfoChanged(newSearchInfo);
 }
+QUuid BookInfoRemoteSearchQuery::itemId() const { return m_itemId; }
 
-QString BookInfoRemoteSearchQuery::itemId() const { return m_itemId; }
-void BookInfoRemoteSearchQuery::setItemId(QString newItemId) {
+void BookInfoRemoteSearchQuery::setItemId(QUuid newItemId) {
 	m_itemId = newItemId;
-	emit itemIdChanged(newItemId);
 }
-
 QString BookInfoRemoteSearchQuery::searchProviderName() const { return m_searchProviderName; }
+
 void BookInfoRemoteSearchQuery::setSearchProviderName(QString newSearchProviderName) {
 	m_searchProviderName = newSearchProviderName;
-	emit searchProviderNameChanged(newSearchProviderName);
 }
-
 bool BookInfoRemoteSearchQuery::includeDisabledProviders() const { return m_includeDisabledProviders; }
+
 void BookInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncludeDisabledProviders) {
 	m_includeDisabledProviders = newIncludeDisabledProviders;
-	emit includeDisabledProvidersChanged(newIncludeDisabledProviders);
 }
 
 

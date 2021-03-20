@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_SORTORDER_H
 #define JELLYFIN_DTO_SORTORDER_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class SortOrderClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Ascending,
 		Descending,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit SortOrderClass();
 };
+
 typedef SortOrderClass::Value SortOrder;
+
+} // NS DTO
+
+namespace Support {
+
+using SortOrder = Jellyfin::DTO::SortOrder;
+using SortOrderClass = Jellyfin::DTO::SortOrderClass;
+
+template <>
+SortOrder fromJsonValue<SortOrder>(const QJsonValue &source) {
+	if (!source.isString()) return SortOrderClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Ascending")) {
+		return SortOrderClass::Ascending;
+	}
+	if (str == QStringLiteral("Descending")) {
+		return SortOrderClass::Descending;
+	}
+	
+	return SortOrderClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

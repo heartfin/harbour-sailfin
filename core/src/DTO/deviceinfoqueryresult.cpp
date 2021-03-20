@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceInfoQueryResult::DeviceInfoQueryResult(QObject *parent) : QObject(parent) {}
+DeviceInfoQueryResult::DeviceInfoQueryResult(QObject *parent) {}
 
-DeviceInfoQueryResult *DeviceInfoQueryResult::fromJSON(QJsonObject source, QObject *parent) {
-	DeviceInfoQueryResult *instance = new DeviceInfoQueryResult(parent);
-	instance->updateFromJSON(source);
+DeviceInfoQueryResult DeviceInfoQueryResult::fromJson(QJsonObject source) {DeviceInfoQueryResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void DeviceInfoQueryResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void DeviceInfoQueryResult::setFromJson(QJsonObject source) {
+	m_items = fromJsonValue<QList<QSharedPointer<DeviceInfo>>>(source["Items"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+
 }
-QJsonObject DeviceInfoQueryResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject DeviceInfoQueryResult::toJson() {
 	QJsonObject result;
+	result["Items"] = toJsonValue<QList<QSharedPointer<DeviceInfo>>>(m_items);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+
 	return result;
 }
-QList<DeviceInfo *> DeviceInfoQueryResult::items() const { return m_items; }
-void DeviceInfoQueryResult::setItems(QList<DeviceInfo *> newItems) {
-	m_items = newItems;
-	emit itemsChanged(newItems);
-}
 
+QList<QSharedPointer<DeviceInfo>> DeviceInfoQueryResult::items() const { return m_items; }
+
+void DeviceInfoQueryResult::setItems(QList<QSharedPointer<DeviceInfo>> newItems) {
+	m_items = newItems;
+}
 qint32 DeviceInfoQueryResult::totalRecordCount() const { return m_totalRecordCount; }
+
 void DeviceInfoQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
-
 qint32 DeviceInfoQueryResult::startIndex() const { return m_startIndex; }
+
 void DeviceInfoQueryResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
-	emit startIndexChanged(newStartIndex);
 }
 
 

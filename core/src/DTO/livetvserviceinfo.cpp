@@ -29,73 +29,82 @@
 
 #include <JellyfinQt/DTO/livetvserviceinfo.h>
 
-#include <JellyfinQt/DTO/livetvservicestatus.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-LiveTvServiceInfo::LiveTvServiceInfo(QObject *parent) : QObject(parent) {}
+LiveTvServiceInfo::LiveTvServiceInfo(QObject *parent) {}
 
-LiveTvServiceInfo *LiveTvServiceInfo::fromJSON(QJsonObject source, QObject *parent) {
-	LiveTvServiceInfo *instance = new LiveTvServiceInfo(parent);
-	instance->updateFromJSON(source);
+LiveTvServiceInfo LiveTvServiceInfo::fromJson(QJsonObject source) {LiveTvServiceInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void LiveTvServiceInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void LiveTvServiceInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_homePageUrl = fromJsonValue<QString>(source["HomePageUrl"]);
+	m_status = fromJsonValue<LiveTvServiceStatus>(source["Status"]);
+	m_statusMessage = fromJsonValue<QString>(source["StatusMessage"]);
+	m_version = fromJsonValue<QString>(source["Version"]);
+	m_hasUpdateAvailable = fromJsonValue<bool>(source["HasUpdateAvailable"]);
+	m_isVisible = fromJsonValue<bool>(source["IsVisible"]);
+	m_tuners = fromJsonValue<QStringList>(source["Tuners"]);
+
 }
-QJsonObject LiveTvServiceInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject LiveTvServiceInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["HomePageUrl"] = toJsonValue<QString>(m_homePageUrl);
+	result["Status"] = toJsonValue<LiveTvServiceStatus>(m_status);
+	result["StatusMessage"] = toJsonValue<QString>(m_statusMessage);
+	result["Version"] = toJsonValue<QString>(m_version);
+	result["HasUpdateAvailable"] = toJsonValue<bool>(m_hasUpdateAvailable);
+	result["IsVisible"] = toJsonValue<bool>(m_isVisible);
+	result["Tuners"] = toJsonValue<QStringList>(m_tuners);
+
 	return result;
 }
+
 QString LiveTvServiceInfo::name() const { return m_name; }
+
 void LiveTvServiceInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString LiveTvServiceInfo::homePageUrl() const { return m_homePageUrl; }
+
 void LiveTvServiceInfo::setHomePageUrl(QString newHomePageUrl) {
 	m_homePageUrl = newHomePageUrl;
-	emit homePageUrlChanged(newHomePageUrl);
 }
-
 LiveTvServiceStatus LiveTvServiceInfo::status() const { return m_status; }
+
 void LiveTvServiceInfo::setStatus(LiveTvServiceStatus newStatus) {
 	m_status = newStatus;
-	emit statusChanged(newStatus);
 }
-
 QString LiveTvServiceInfo::statusMessage() const { return m_statusMessage; }
+
 void LiveTvServiceInfo::setStatusMessage(QString newStatusMessage) {
 	m_statusMessage = newStatusMessage;
-	emit statusMessageChanged(newStatusMessage);
 }
-
 QString LiveTvServiceInfo::version() const { return m_version; }
+
 void LiveTvServiceInfo::setVersion(QString newVersion) {
 	m_version = newVersion;
-	emit versionChanged(newVersion);
 }
-
 bool LiveTvServiceInfo::hasUpdateAvailable() const { return m_hasUpdateAvailable; }
+
 void LiveTvServiceInfo::setHasUpdateAvailable(bool newHasUpdateAvailable) {
 	m_hasUpdateAvailable = newHasUpdateAvailable;
-	emit hasUpdateAvailableChanged(newHasUpdateAvailable);
 }
-
 bool LiveTvServiceInfo::isVisible() const { return m_isVisible; }
+
 void LiveTvServiceInfo::setIsVisible(bool newIsVisible) {
 	m_isVisible = newIsVisible;
-	emit isVisibleChanged(newIsVisible);
 }
-
 QStringList LiveTvServiceInfo::tuners() const { return m_tuners; }
+
 void LiveTvServiceInfo::setTuners(QStringList newTuners) {
 	m_tuners = newTuners;
-	emit tunersChanged(newTuners);
 }
 
 

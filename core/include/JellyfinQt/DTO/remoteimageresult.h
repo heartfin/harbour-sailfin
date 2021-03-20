@@ -31,54 +31,69 @@
 #define JELLYFIN_DTO_REMOTEIMAGERESULT_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/remoteimageinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class RemoteImageInfo;
 
-class RemoteImageResult : public QObject {
-	Q_OBJECT
+class RemoteImageResult {
 public:
-	explicit RemoteImageResult(QObject *parent = nullptr);
-	static RemoteImageResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit RemoteImageResult();
+	static RemoteImageResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the images.
 	 */
-	Q_PROPERTY(QList<RemoteImageInfo *> images READ images WRITE setImages NOTIFY imagesChanged)
+	QList<QSharedPointer<RemoteImageInfo>> images() const;
+	/**
+	* @brief Gets or sets the images.
+	*/
+	void setImages(QList<QSharedPointer<RemoteImageInfo>> newImages);
 	/**
 	 * @brief Gets or sets the total record count.
 	 */
-	Q_PROPERTY(qint32 totalRecordCount READ totalRecordCount WRITE setTotalRecordCount NOTIFY totalRecordCountChanged)
+	qint32 totalRecordCount() const;
+	/**
+	* @brief Gets or sets the total record count.
+	*/
+	void setTotalRecordCount(qint32 newTotalRecordCount);
 	/**
 	 * @brief Gets or sets the providers.
 	 */
-	Q_PROPERTY(QStringList providers READ providers WRITE setProviders NOTIFY providersChanged)
-
-	QList<RemoteImageInfo *> images() const;
-	void setImages(QList<RemoteImageInfo *> newImages);
-	
-	qint32 totalRecordCount() const;
-	void setTotalRecordCount(qint32 newTotalRecordCount);
-	
 	QStringList providers() const;
+	/**
+	* @brief Gets or sets the providers.
+	*/
 	void setProviders(QStringList newProviders);
-	
-signals:
-	void imagesChanged(QList<RemoteImageInfo *> newImages);
-	void totalRecordCountChanged(qint32 newTotalRecordCount);
-	void providersChanged(QStringList newProviders);
+
 protected:
-	QList<RemoteImageInfo *> m_images;
+	QList<QSharedPointer<RemoteImageInfo>> m_images;
 	qint32 m_totalRecordCount;
 	QStringList m_providers;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using RemoteImageResult = Jellyfin::DTO::RemoteImageResult;
+
+template <>
+RemoteImageResult fromJsonValue<RemoteImageResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RemoteImageResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

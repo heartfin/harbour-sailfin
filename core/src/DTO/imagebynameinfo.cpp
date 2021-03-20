@@ -32,50 +32,58 @@
 namespace Jellyfin {
 namespace DTO {
 
-ImageByNameInfo::ImageByNameInfo(QObject *parent) : QObject(parent) {}
+ImageByNameInfo::ImageByNameInfo(QObject *parent) {}
 
-ImageByNameInfo *ImageByNameInfo::fromJSON(QJsonObject source, QObject *parent) {
-	ImageByNameInfo *instance = new ImageByNameInfo(parent);
-	instance->updateFromJSON(source);
+ImageByNameInfo ImageByNameInfo::fromJson(QJsonObject source) {ImageByNameInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ImageByNameInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ImageByNameInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_theme = fromJsonValue<QString>(source["Theme"]);
+	m_context = fromJsonValue<QString>(source["Context"]);
+	m_fileLength = fromJsonValue<qint64>(source["FileLength"]);
+	m_format = fromJsonValue<QString>(source["Format"]);
+
 }
-QJsonObject ImageByNameInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ImageByNameInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Theme"] = toJsonValue<QString>(m_theme);
+	result["Context"] = toJsonValue<QString>(m_context);
+	result["FileLength"] = toJsonValue<qint64>(m_fileLength);
+	result["Format"] = toJsonValue<QString>(m_format);
+
 	return result;
 }
+
 QString ImageByNameInfo::name() const { return m_name; }
+
 void ImageByNameInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString ImageByNameInfo::theme() const { return m_theme; }
+
 void ImageByNameInfo::setTheme(QString newTheme) {
 	m_theme = newTheme;
-	emit themeChanged(newTheme);
 }
-
 QString ImageByNameInfo::context() const { return m_context; }
+
 void ImageByNameInfo::setContext(QString newContext) {
 	m_context = newContext;
-	emit contextChanged(newContext);
 }
-
 qint64 ImageByNameInfo::fileLength() const { return m_fileLength; }
+
 void ImageByNameInfo::setFileLength(qint64 newFileLength) {
 	m_fileLength = newFileLength;
-	emit fileLengthChanged(newFileLength);
 }
-
 QString ImageByNameInfo::format() const { return m_format; }
+
 void ImageByNameInfo::setFormat(QString newFormat) {
 	m_format = newFormat;
-	emit formatChanged(newFormat);
 }
 
 

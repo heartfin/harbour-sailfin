@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-ThemeMediaResult::ThemeMediaResult(QObject *parent) : QObject(parent) {}
+ThemeMediaResult::ThemeMediaResult(QObject *parent) {}
 
-ThemeMediaResult *ThemeMediaResult::fromJSON(QJsonObject source, QObject *parent) {
-	ThemeMediaResult *instance = new ThemeMediaResult(parent);
-	instance->updateFromJSON(source);
+ThemeMediaResult ThemeMediaResult::fromJson(QJsonObject source) {ThemeMediaResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ThemeMediaResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ThemeMediaResult::setFromJson(QJsonObject source) {
+	m_items = fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+	m_ownerId = fromJsonValue<QUuid>(source["OwnerId"]);
+
 }
-QJsonObject ThemeMediaResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ThemeMediaResult::toJson() {
 	QJsonObject result;
+	result["Items"] = toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+	result["OwnerId"] = toJsonValue<QUuid>(m_ownerId);
+
 	return result;
 }
-QList<BaseItemDto *> ThemeMediaResult::items() const { return m_items; }
-void ThemeMediaResult::setItems(QList<BaseItemDto *> newItems) {
-	m_items = newItems;
-	emit itemsChanged(newItems);
-}
 
+QList<QSharedPointer<BaseItemDto>> ThemeMediaResult::items() const { return m_items; }
+
+void ThemeMediaResult::setItems(QList<QSharedPointer<BaseItemDto>> newItems) {
+	m_items = newItems;
+}
 qint32 ThemeMediaResult::totalRecordCount() const { return m_totalRecordCount; }
+
 void ThemeMediaResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
-
 qint32 ThemeMediaResult::startIndex() const { return m_startIndex; }
+
 void ThemeMediaResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
-	emit startIndexChanged(newStartIndex);
 }
+QUuid ThemeMediaResult::ownerId() const { return m_ownerId; }
 
-QString ThemeMediaResult::ownerId() const { return m_ownerId; }
-void ThemeMediaResult::setOwnerId(QString newOwnerId) {
+void ThemeMediaResult::setOwnerId(QUuid newOwnerId) {
 	m_ownerId = newOwnerId;
-	emit ownerIdChanged(newOwnerId);
 }
 
 

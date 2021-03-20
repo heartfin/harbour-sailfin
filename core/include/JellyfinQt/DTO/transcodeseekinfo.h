@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_TRANSCODESEEKINFO_H
 #define JELLYFIN_DTO_TRANSCODESEEKINFO_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class TranscodeSeekInfoClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Auto,
 		Bytes,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit TranscodeSeekInfoClass();
 };
+
 typedef TranscodeSeekInfoClass::Value TranscodeSeekInfo;
+
+} // NS DTO
+
+namespace Support {
+
+using TranscodeSeekInfo = Jellyfin::DTO::TranscodeSeekInfo;
+using TranscodeSeekInfoClass = Jellyfin::DTO::TranscodeSeekInfoClass;
+
+template <>
+TranscodeSeekInfo fromJsonValue<TranscodeSeekInfo>(const QJsonValue &source) {
+	if (!source.isString()) return TranscodeSeekInfoClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Auto")) {
+		return TranscodeSeekInfoClass::Auto;
+	}
+	if (str == QStringLiteral("Bytes")) {
+		return TranscodeSeekInfoClass::Bytes;
+	}
+	
+	return TranscodeSeekInfoClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

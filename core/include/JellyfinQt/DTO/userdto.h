@@ -32,137 +32,140 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/userconfiguration.h"
+#include "JellyfinQt/DTO/userpolicy.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class UserConfiguration;
-class UserPolicy;
 
-class UserDto : public QObject {
-	Q_OBJECT
+class UserDto {
 public:
-	explicit UserDto(QObject *parent = nullptr);
-	static UserDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit UserDto();
+	static UserDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the server identifier.
 	 */
-	Q_PROPERTY(QString serverId READ serverId WRITE setServerId NOTIFY serverIdChanged)
+	QString serverId() const;
+	/**
+	* @brief Gets or sets the server identifier.
+	*/
+	void setServerId(QString newServerId);
 	/**
 	 * @brief Gets or sets the name of the server.
 This is not used by the server and is for client-side usage only.
 	 */
-	Q_PROPERTY(QString serverName READ serverName WRITE setServerName NOTIFY serverNameChanged)
+	QString serverName() const;
+	/**
+	* @brief Gets or sets the name of the server.
+This is not used by the server and is for client-side usage only.
+	*/
+	void setServerName(QString newServerName);
 	/**
 	 * @brief Gets or sets the id.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QUuid jellyfinId() const;
+	/**
+	* @brief Gets or sets the id.
+	*/
+	void setJellyfinId(QUuid newJellyfinId);
 	/**
 	 * @brief Gets or sets the primary image tag.
 	 */
-	Q_PROPERTY(QString primaryImageTag READ primaryImageTag WRITE setPrimaryImageTag NOTIFY primaryImageTagChanged)
+	QString primaryImageTag() const;
+	/**
+	* @brief Gets or sets the primary image tag.
+	*/
+	void setPrimaryImageTag(QString newPrimaryImageTag);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance has password.
 	 */
-	Q_PROPERTY(bool hasPassword READ hasPassword WRITE setHasPassword NOTIFY hasPasswordChanged)
+	bool hasPassword() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance has password.
+	*/
+	void setHasPassword(bool newHasPassword);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance has configured password.
 	 */
-	Q_PROPERTY(bool hasConfiguredPassword READ hasConfiguredPassword WRITE setHasConfiguredPassword NOTIFY hasConfiguredPasswordChanged)
+	bool hasConfiguredPassword() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance has configured password.
+	*/
+	void setHasConfiguredPassword(bool newHasConfiguredPassword);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance has configured easy password.
 	 */
-	Q_PROPERTY(bool hasConfiguredEasyPassword READ hasConfiguredEasyPassword WRITE setHasConfiguredEasyPassword NOTIFY hasConfiguredEasyPasswordChanged)
+	bool hasConfiguredEasyPassword() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance has configured easy password.
+	*/
+	void setHasConfiguredEasyPassword(bool newHasConfiguredEasyPassword);
 	/**
 	 * @brief Gets or sets whether async login is enabled or not.
 	 */
-	Q_PROPERTY(bool enableAutoLogin READ enableAutoLogin WRITE setEnableAutoLogin NOTIFY enableAutoLoginChanged)
+	bool enableAutoLogin() const;
+	/**
+	* @brief Gets or sets whether async login is enabled or not.
+	*/
+	void setEnableAutoLogin(bool newEnableAutoLogin);
 	/**
 	 * @brief Gets or sets the last login date.
 	 */
-	Q_PROPERTY(QDateTime lastLoginDate READ lastLoginDate WRITE setLastLoginDate NOTIFY lastLoginDateChanged)
+	QDateTime lastLoginDate() const;
+	/**
+	* @brief Gets or sets the last login date.
+	*/
+	void setLastLoginDate(QDateTime newLastLoginDate);
 	/**
 	 * @brief Gets or sets the last activity date.
 	 */
-	Q_PROPERTY(QDateTime lastActivityDate READ lastActivityDate WRITE setLastActivityDate NOTIFY lastActivityDateChanged)
-	Q_PROPERTY(UserConfiguration * configuration READ configuration WRITE setConfiguration NOTIFY configurationChanged)
-	Q_PROPERTY(UserPolicy * policy READ policy WRITE setPolicy NOTIFY policyChanged)
+	QDateTime lastActivityDate() const;
+	/**
+	* @brief Gets or sets the last activity date.
+	*/
+	void setLastActivityDate(QDateTime newLastActivityDate);
+
+	QSharedPointer<UserConfiguration> configuration() const;
+
+	void setConfiguration(QSharedPointer<UserConfiguration> newConfiguration);
+
+	QSharedPointer<UserPolicy> policy() const;
+
+	void setPolicy(QSharedPointer<UserPolicy> newPolicy);
 	/**
 	 * @brief Gets or sets the primary image aspect ratio.
 	 */
-	Q_PROPERTY(double primaryImageAspectRatio READ primaryImageAspectRatio WRITE setPrimaryImageAspectRatio NOTIFY primaryImageAspectRatioChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString serverId() const;
-	void setServerId(QString newServerId);
-	
-	QString serverName() const;
-	void setServerName(QString newServerName);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	QString primaryImageTag() const;
-	void setPrimaryImageTag(QString newPrimaryImageTag);
-	
-	bool hasPassword() const;
-	void setHasPassword(bool newHasPassword);
-	
-	bool hasConfiguredPassword() const;
-	void setHasConfiguredPassword(bool newHasConfiguredPassword);
-	
-	bool hasConfiguredEasyPassword() const;
-	void setHasConfiguredEasyPassword(bool newHasConfiguredEasyPassword);
-	
-	bool enableAutoLogin() const;
-	void setEnableAutoLogin(bool newEnableAutoLogin);
-	
-	QDateTime lastLoginDate() const;
-	void setLastLoginDate(QDateTime newLastLoginDate);
-	
-	QDateTime lastActivityDate() const;
-	void setLastActivityDate(QDateTime newLastActivityDate);
-	
-	UserConfiguration * configuration() const;
-	void setConfiguration(UserConfiguration * newConfiguration);
-	
-	UserPolicy * policy() const;
-	void setPolicy(UserPolicy * newPolicy);
-	
 	double primaryImageAspectRatio() const;
+	/**
+	* @brief Gets or sets the primary image aspect ratio.
+	*/
 	void setPrimaryImageAspectRatio(double newPrimaryImageAspectRatio);
-	
-signals:
-	void nameChanged(QString newName);
-	void serverIdChanged(QString newServerId);
-	void serverNameChanged(QString newServerName);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void primaryImageTagChanged(QString newPrimaryImageTag);
-	void hasPasswordChanged(bool newHasPassword);
-	void hasConfiguredPasswordChanged(bool newHasConfiguredPassword);
-	void hasConfiguredEasyPasswordChanged(bool newHasConfiguredEasyPassword);
-	void enableAutoLoginChanged(bool newEnableAutoLogin);
-	void lastLoginDateChanged(QDateTime newLastLoginDate);
-	void lastActivityDateChanged(QDateTime newLastActivityDate);
-	void configurationChanged(UserConfiguration * newConfiguration);
-	void policyChanged(UserPolicy * newPolicy);
-	void primaryImageAspectRatioChanged(double newPrimaryImageAspectRatio);
+
 protected:
 	QString m_name;
 	QString m_serverId;
 	QString m_serverName;
-	QString m_jellyfinId;
+	QUuid m_jellyfinId;
 	QString m_primaryImageTag;
 	bool m_hasPassword;
 	bool m_hasConfiguredPassword;
@@ -170,10 +173,22 @@ protected:
 	bool m_enableAutoLogin;
 	QDateTime m_lastLoginDate;
 	QDateTime m_lastActivityDate;
-	UserConfiguration * m_configuration = nullptr;
-	UserPolicy * m_policy = nullptr;
+	QSharedPointer<UserConfiguration> m_configuration = nullptr;
+	QSharedPointer<UserPolicy> m_policy = nullptr;
 	double m_primaryImageAspectRatio;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UserDto = Jellyfin::DTO::UserDto;
+
+template <>
+UserDto fromJsonValue<UserDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UserDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

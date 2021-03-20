@@ -31,39 +31,52 @@
 #define JELLYFIN_DTO_QUERYFILTERS_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/nameguidpair.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class NameGuidPair;
 
-class QueryFilters : public QObject {
-	Q_OBJECT
+class QueryFilters {
 public:
-	explicit QueryFilters(QObject *parent = nullptr);
-	static QueryFilters *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(QList<NameGuidPair *> genres READ genres WRITE setGenres NOTIFY genresChanged)
-	Q_PROPERTY(QStringList tags READ tags WRITE setTags NOTIFY tagsChanged)
-
-	QList<NameGuidPair *> genres() const;
-	void setGenres(QList<NameGuidPair *> newGenres);
+	explicit QueryFilters();
+	static QueryFilters fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
 	
+	// Properties
+
+	QList<QSharedPointer<NameGuidPair>> genres() const;
+
+	void setGenres(QList<QSharedPointer<NameGuidPair>> newGenres);
+
 	QStringList tags() const;
+
 	void setTags(QStringList newTags);
-	
-signals:
-	void genresChanged(QList<NameGuidPair *> newGenres);
-	void tagsChanged(QStringList newTags);
+
 protected:
-	QList<NameGuidPair *> m_genres;
+	QList<QSharedPointer<NameGuidPair>> m_genres;
 	QStringList m_tags;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using QueryFilters = Jellyfin::DTO::QueryFilters;
+
+template <>
+QueryFilters fromJsonValue<QueryFilters>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QueryFilters::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

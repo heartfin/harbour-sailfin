@@ -31,49 +31,62 @@
 #define JELLYFIN_DTO_IMAGEOPTION_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
 
 #include "JellyfinQt/DTO/imagetype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ImageOption : public QObject {
-	Q_OBJECT
-public:
-	explicit ImageOption(QObject *parent = nullptr);
-	static ImageOption *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(ImageType type READ type WRITE setType NOTIFY typeChanged)
+class ImageOption {
+public:
+	explicit ImageOption();
+	static ImageOption fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
+
+	ImageType type() const;
+
+	void setType(ImageType newType);
 	/**
 	 * @brief Gets or sets the limit.
 	 */
-	Q_PROPERTY(qint32 limit READ limit WRITE setLimit NOTIFY limitChanged)
+	qint32 limit() const;
+	/**
+	* @brief Gets or sets the limit.
+	*/
+	void setLimit(qint32 newLimit);
 	/**
 	 * @brief Gets or sets the minimum width.
 	 */
-	Q_PROPERTY(qint32 minWidth READ minWidth WRITE setMinWidth NOTIFY minWidthChanged)
-
-	ImageType type() const;
-	void setType(ImageType newType);
-	
-	qint32 limit() const;
-	void setLimit(qint32 newLimit);
-	
 	qint32 minWidth() const;
+	/**
+	* @brief Gets or sets the minimum width.
+	*/
 	void setMinWidth(qint32 newMinWidth);
-	
-signals:
-	void typeChanged(ImageType newType);
-	void limitChanged(qint32 newLimit);
-	void minWidthChanged(qint32 newMinWidth);
+
 protected:
 	ImageType m_type;
 	qint32 m_limit;
 	qint32 m_minWidth;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ImageOption = Jellyfin::DTO::ImageOption;
+
+template <>
+ImageOption fromJsonValue<ImageOption>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ImageOption::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

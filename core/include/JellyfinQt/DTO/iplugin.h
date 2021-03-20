@@ -31,86 +31,101 @@
 #define JELLYFIN_DTO_IPLUGIN_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/version.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class Version;
 
-class IPlugin : public QObject {
-	Q_OBJECT
+class IPlugin {
 public:
-	explicit IPlugin(QObject *parent = nullptr);
-	static IPlugin *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit IPlugin();
+	static IPlugin fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets the name of the plugin.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets the name of the plugin.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets the Description.
 	 */
-	Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
+	QString description() const;
+	/**
+	* @brief Gets the Description.
+	*/
+	void setDescription(QString newDescription);
 	/**
 	 * @brief Gets the unique id.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-	Q_PROPERTY(Version * version READ version WRITE setVersion NOTIFY versionChanged)
+	QUuid jellyfinId() const;
+	/**
+	* @brief Gets the unique id.
+	*/
+	void setJellyfinId(QUuid newJellyfinId);
+
+	QSharedPointer<Version> version() const;
+
+	void setVersion(QSharedPointer<Version> newVersion);
 	/**
 	 * @brief Gets the path to the assembly file.
 	 */
-	Q_PROPERTY(QString assemblyFilePath READ assemblyFilePath WRITE setAssemblyFilePath NOTIFY assemblyFilePathChanged)
+	QString assemblyFilePath() const;
+	/**
+	* @brief Gets the path to the assembly file.
+	*/
+	void setAssemblyFilePath(QString newAssemblyFilePath);
 	/**
 	 * @brief Gets a value indicating whether the plugin can be uninstalled.
 	 */
-	Q_PROPERTY(bool canUninstall READ canUninstall WRITE setCanUninstall NOTIFY canUninstallChanged)
+	bool canUninstall() const;
+	/**
+	* @brief Gets a value indicating whether the plugin can be uninstalled.
+	*/
+	void setCanUninstall(bool newCanUninstall);
 	/**
 	 * @brief Gets the full path to the data folder, where the plugin can store any miscellaneous files needed.
 	 */
-	Q_PROPERTY(QString dataFolderPath READ dataFolderPath WRITE setDataFolderPath NOTIFY dataFolderPathChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString description() const;
-	void setDescription(QString newDescription);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	Version * version() const;
-	void setVersion(Version * newVersion);
-	
-	QString assemblyFilePath() const;
-	void setAssemblyFilePath(QString newAssemblyFilePath);
-	
-	bool canUninstall() const;
-	void setCanUninstall(bool newCanUninstall);
-	
 	QString dataFolderPath() const;
+	/**
+	* @brief Gets the full path to the data folder, where the plugin can store any miscellaneous files needed.
+	*/
 	void setDataFolderPath(QString newDataFolderPath);
-	
-signals:
-	void nameChanged(QString newName);
-	void descriptionChanged(QString newDescription);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void versionChanged(Version * newVersion);
-	void assemblyFilePathChanged(QString newAssemblyFilePath);
-	void canUninstallChanged(bool newCanUninstall);
-	void dataFolderPathChanged(QString newDataFolderPath);
+
 protected:
 	QString m_name;
 	QString m_description;
-	QString m_jellyfinId;
-	Version * m_version = nullptr;
+	QUuid m_jellyfinId;
+	QSharedPointer<Version> m_version = nullptr;
 	QString m_assemblyFilePath;
 	bool m_canUninstall;
 	QString m_dataFolderPath;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using IPlugin = Jellyfin::DTO::IPlugin;
+
+template <>
+IPlugin fromJsonValue<IPlugin>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return IPlugin::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

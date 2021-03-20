@@ -31,84 +31,84 @@
 #define JELLYFIN_DTO_LIVETVSERVICEINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
 #include "JellyfinQt/DTO/livetvservicestatus.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LiveTvServiceInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit LiveTvServiceInfo(QObject *parent = nullptr);
-	static LiveTvServiceInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class LiveTvServiceInfo {
+public:
+	explicit LiveTvServiceInfo();
+	static LiveTvServiceInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the home page URL.
 	 */
-	Q_PROPERTY(QString homePageUrl READ homePageUrl WRITE setHomePageUrl NOTIFY homePageUrlChanged)
-	Q_PROPERTY(LiveTvServiceStatus status READ status WRITE setStatus NOTIFY statusChanged)
+	QString homePageUrl() const;
+	/**
+	* @brief Gets or sets the home page URL.
+	*/
+	void setHomePageUrl(QString newHomePageUrl);
+
+	LiveTvServiceStatus status() const;
+
+	void setStatus(LiveTvServiceStatus newStatus);
 	/**
 	 * @brief Gets or sets the status message.
 	 */
-	Q_PROPERTY(QString statusMessage READ statusMessage WRITE setStatusMessage NOTIFY statusMessageChanged)
+	QString statusMessage() const;
+	/**
+	* @brief Gets or sets the status message.
+	*/
+	void setStatusMessage(QString newStatusMessage);
 	/**
 	 * @brief Gets or sets the version.
 	 */
-	Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
+	QString version() const;
+	/**
+	* @brief Gets or sets the version.
+	*/
+	void setVersion(QString newVersion);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance has update available.
 	 */
-	Q_PROPERTY(bool hasUpdateAvailable READ hasUpdateAvailable WRITE setHasUpdateAvailable NOTIFY hasUpdateAvailableChanged)
+	bool hasUpdateAvailable() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance has update available.
+	*/
+	void setHasUpdateAvailable(bool newHasUpdateAvailable);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is visible.
 	 */
-	Q_PROPERTY(bool isVisible READ isVisible WRITE setIsVisible NOTIFY isVisibleChanged)
-	Q_PROPERTY(QStringList tuners READ tuners WRITE setTuners NOTIFY tunersChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString homePageUrl() const;
-	void setHomePageUrl(QString newHomePageUrl);
-	
-	LiveTvServiceStatus status() const;
-	void setStatus(LiveTvServiceStatus newStatus);
-	
-	QString statusMessage() const;
-	void setStatusMessage(QString newStatusMessage);
-	
-	QString version() const;
-	void setVersion(QString newVersion);
-	
-	bool hasUpdateAvailable() const;
-	void setHasUpdateAvailable(bool newHasUpdateAvailable);
-	
 	bool isVisible() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is visible.
+	*/
 	void setIsVisible(bool newIsVisible);
-	
+
 	QStringList tuners() const;
+
 	void setTuners(QStringList newTuners);
-	
-signals:
-	void nameChanged(QString newName);
-	void homePageUrlChanged(QString newHomePageUrl);
-	void statusChanged(LiveTvServiceStatus newStatus);
-	void statusMessageChanged(QString newStatusMessage);
-	void versionChanged(QString newVersion);
-	void hasUpdateAvailableChanged(bool newHasUpdateAvailable);
-	void isVisibleChanged(bool newIsVisible);
-	void tunersChanged(QStringList newTuners);
+
 protected:
 	QString m_name;
 	QString m_homePageUrl;
@@ -119,6 +119,18 @@ protected:
 	bool m_isVisible;
 	QStringList m_tuners;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LiveTvServiceInfo = Jellyfin::DTO::LiveTvServiceInfo;
+
+template <>
+LiveTvServiceInfo fromJsonValue<LiveTvServiceInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LiveTvServiceInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

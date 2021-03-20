@@ -31,31 +31,45 @@
 #define JELLYFIN_DTO_ADDVIRTUALFOLDERDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
+#include <optional>
+
+#include "JellyfinQt/DTO/libraryoptions.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LibraryOptions;
 
-class AddVirtualFolderDto : public QObject {
-	Q_OBJECT
+class AddVirtualFolderDto {
 public:
-	explicit AddVirtualFolderDto(QObject *parent = nullptr);
-	static AddVirtualFolderDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(LibraryOptions * libraryOptions READ libraryOptions WRITE setLibraryOptions NOTIFY libraryOptionsChanged)
-
-	LibraryOptions * libraryOptions() const;
-	void setLibraryOptions(LibraryOptions * newLibraryOptions);
+	explicit AddVirtualFolderDto();
+	static AddVirtualFolderDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
 	
-signals:
-	void libraryOptionsChanged(LibraryOptions * newLibraryOptions);
+	// Properties
+
+	QSharedPointer<LibraryOptions> libraryOptions() const;
+
+	void setLibraryOptions(QSharedPointer<LibraryOptions> newLibraryOptions);
+
 protected:
-	LibraryOptions * m_libraryOptions = nullptr;
+	QSharedPointer<LibraryOptions> m_libraryOptions = nullptr;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using AddVirtualFolderDto = Jellyfin::DTO::AddVirtualFolderDto;
+
+template <>
+AddVirtualFolderDto fromJsonValue<AddVirtualFolderDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AddVirtualFolderDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

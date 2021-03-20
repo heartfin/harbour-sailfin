@@ -31,64 +31,79 @@
 #define JELLYFIN_DTO_THEMEMEDIARESULT_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
-#include <QString>
+#include <QSharedPointer>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/baseitemdto.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class BaseItemDto;
 
-class ThemeMediaResult : public QObject {
-	Q_OBJECT
+class ThemeMediaResult {
 public:
-	explicit ThemeMediaResult(QObject *parent = nullptr);
-	static ThemeMediaResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit ThemeMediaResult();
+	static ThemeMediaResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the items.
 	 */
-	Q_PROPERTY(QList<BaseItemDto *> items READ items WRITE setItems NOTIFY itemsChanged)
+	QList<QSharedPointer<BaseItemDto>> items() const;
+	/**
+	* @brief Gets or sets the items.
+	*/
+	void setItems(QList<QSharedPointer<BaseItemDto>> newItems);
 	/**
 	 * @brief The total number of records available.
 	 */
-	Q_PROPERTY(qint32 totalRecordCount READ totalRecordCount WRITE setTotalRecordCount NOTIFY totalRecordCountChanged)
+	qint32 totalRecordCount() const;
+	/**
+	* @brief The total number of records available.
+	*/
+	void setTotalRecordCount(qint32 newTotalRecordCount);
 	/**
 	 * @brief The index of the first record in Items.
 	 */
-	Q_PROPERTY(qint32 startIndex READ startIndex WRITE setStartIndex NOTIFY startIndexChanged)
+	qint32 startIndex() const;
+	/**
+	* @brief The index of the first record in Items.
+	*/
+	void setStartIndex(qint32 newStartIndex);
 	/**
 	 * @brief Gets or sets the owner id.
 	 */
-	Q_PROPERTY(QString ownerId READ ownerId WRITE setOwnerId NOTIFY ownerIdChanged)
+	QUuid ownerId() const;
+	/**
+	* @brief Gets or sets the owner id.
+	*/
+	void setOwnerId(QUuid newOwnerId);
 
-	QList<BaseItemDto *> items() const;
-	void setItems(QList<BaseItemDto *> newItems);
-	
-	qint32 totalRecordCount() const;
-	void setTotalRecordCount(qint32 newTotalRecordCount);
-	
-	qint32 startIndex() const;
-	void setStartIndex(qint32 newStartIndex);
-	
-	QString ownerId() const;
-	void setOwnerId(QString newOwnerId);
-	
-signals:
-	void itemsChanged(QList<BaseItemDto *> newItems);
-	void totalRecordCountChanged(qint32 newTotalRecordCount);
-	void startIndexChanged(qint32 newStartIndex);
-	void ownerIdChanged(QString newOwnerId);
 protected:
-	QList<BaseItemDto *> m_items;
+	QList<QSharedPointer<BaseItemDto>> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
-	QString m_ownerId;
+	QUuid m_ownerId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ThemeMediaResult = Jellyfin::DTO::ThemeMediaResult;
+
+template <>
+ThemeMediaResult fromJsonValue<ThemeMediaResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ThemeMediaResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

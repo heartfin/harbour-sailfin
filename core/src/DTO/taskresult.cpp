@@ -29,73 +29,82 @@
 
 #include <JellyfinQt/DTO/taskresult.h>
 
-#include <JellyfinQt/DTO/taskcompletionstatus.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-TaskResult::TaskResult(QObject *parent) : QObject(parent) {}
+TaskResult::TaskResult(QObject *parent) {}
 
-TaskResult *TaskResult::fromJSON(QJsonObject source, QObject *parent) {
-	TaskResult *instance = new TaskResult(parent);
-	instance->updateFromJSON(source);
+TaskResult TaskResult::fromJson(QJsonObject source) {TaskResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TaskResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TaskResult::setFromJson(QJsonObject source) {
+	m_startTimeUtc = fromJsonValue<QDateTime>(source["StartTimeUtc"]);
+	m_endTimeUtc = fromJsonValue<QDateTime>(source["EndTimeUtc"]);
+	m_status = fromJsonValue<TaskCompletionStatus>(source["Status"]);
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_key = fromJsonValue<QString>(source["Key"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_errorMessage = fromJsonValue<QString>(source["ErrorMessage"]);
+	m_longErrorMessage = fromJsonValue<QString>(source["LongErrorMessage"]);
+
 }
-QJsonObject TaskResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TaskResult::toJson() {
 	QJsonObject result;
+	result["StartTimeUtc"] = toJsonValue<QDateTime>(m_startTimeUtc);
+	result["EndTimeUtc"] = toJsonValue<QDateTime>(m_endTimeUtc);
+	result["Status"] = toJsonValue<TaskCompletionStatus>(m_status);
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Key"] = toJsonValue<QString>(m_key);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["ErrorMessage"] = toJsonValue<QString>(m_errorMessage);
+	result["LongErrorMessage"] = toJsonValue<QString>(m_longErrorMessage);
+
 	return result;
 }
+
 QDateTime TaskResult::startTimeUtc() const { return m_startTimeUtc; }
+
 void TaskResult::setStartTimeUtc(QDateTime newStartTimeUtc) {
 	m_startTimeUtc = newStartTimeUtc;
-	emit startTimeUtcChanged(newStartTimeUtc);
 }
-
 QDateTime TaskResult::endTimeUtc() const { return m_endTimeUtc; }
+
 void TaskResult::setEndTimeUtc(QDateTime newEndTimeUtc) {
 	m_endTimeUtc = newEndTimeUtc;
-	emit endTimeUtcChanged(newEndTimeUtc);
 }
-
 TaskCompletionStatus TaskResult::status() const { return m_status; }
+
 void TaskResult::setStatus(TaskCompletionStatus newStatus) {
 	m_status = newStatus;
-	emit statusChanged(newStatus);
 }
-
 QString TaskResult::name() const { return m_name; }
+
 void TaskResult::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString TaskResult::key() const { return m_key; }
+
 void TaskResult::setKey(QString newKey) {
 	m_key = newKey;
-	emit keyChanged(newKey);
 }
-
 QString TaskResult::jellyfinId() const { return m_jellyfinId; }
+
 void TaskResult::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
-
 QString TaskResult::errorMessage() const { return m_errorMessage; }
+
 void TaskResult::setErrorMessage(QString newErrorMessage) {
 	m_errorMessage = newErrorMessage;
-	emit errorMessageChanged(newErrorMessage);
 }
-
 QString TaskResult::longErrorMessage() const { return m_longErrorMessage; }
+
 void TaskResult::setLongErrorMessage(QString newLongErrorMessage) {
 	m_longErrorMessage = newLongErrorMessage;
-	emit longErrorMessageChanged(newLongErrorMessage);
 }
 
 

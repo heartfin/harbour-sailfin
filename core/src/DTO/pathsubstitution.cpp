@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-PathSubstitution::PathSubstitution(QObject *parent) : QObject(parent) {}
+PathSubstitution::PathSubstitution(QObject *parent) {}
 
-PathSubstitution *PathSubstitution::fromJSON(QJsonObject source, QObject *parent) {
-	PathSubstitution *instance = new PathSubstitution(parent);
-	instance->updateFromJSON(source);
+PathSubstitution PathSubstitution::fromJson(QJsonObject source) {PathSubstitution instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PathSubstitution::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PathSubstitution::setFromJson(QJsonObject source) {
+	m_from = fromJsonValue<QString>(source["From"]);
+	m_to = fromJsonValue<QString>(source["To"]);
+
 }
-QJsonObject PathSubstitution::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PathSubstitution::toJson() {
 	QJsonObject result;
+	result["From"] = toJsonValue<QString>(m_from);
+	result["To"] = toJsonValue<QString>(m_to);
+
 	return result;
 }
+
 QString PathSubstitution::from() const { return m_from; }
+
 void PathSubstitution::setFrom(QString newFrom) {
 	m_from = newFrom;
-	emit fromChanged(newFrom);
 }
-
 QString PathSubstitution::to() const { return m_to; }
+
 void PathSubstitution::setTo(QString newTo) {
 	m_to = newTo;
-	emit toChanged(newTo);
 }
 
 

@@ -31,225 +31,223 @@
 #define JELLYFIN_DTO_SYSTEMINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
 #include "JellyfinQt/DTO/architecture.h"
 #include "JellyfinQt/DTO/ffmpeglocation.h"
+#include "JellyfinQt/DTO/installationinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class InstallationInfo;
 
-class SystemInfo : public QObject {
-	Q_OBJECT
+class SystemInfo {
 public:
-	explicit SystemInfo(QObject *parent = nullptr);
-	static SystemInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit SystemInfo();
+	static SystemInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the local address.
 	 */
-	Q_PROPERTY(QString localAddress READ localAddress WRITE setLocalAddress NOTIFY localAddressChanged)
+	QString localAddress() const;
+	/**
+	* @brief Gets or sets the local address.
+	*/
+	void setLocalAddress(QString newLocalAddress);
 	/**
 	 * @brief Gets or sets the name of the server.
 	 */
-	Q_PROPERTY(QString serverName READ serverName WRITE setServerName NOTIFY serverNameChanged)
+	QString serverName() const;
+	/**
+	* @brief Gets or sets the name of the server.
+	*/
+	void setServerName(QString newServerName);
 	/**
 	 * @brief Gets or sets the server version.
 	 */
-	Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
+	QString version() const;
+	/**
+	* @brief Gets or sets the server version.
+	*/
+	void setVersion(QString newVersion);
 	/**
 	 * @brief Gets or sets the product name. This is the AssemblyProduct name.
 	 */
-	Q_PROPERTY(QString productName READ productName WRITE setProductName NOTIFY productNameChanged)
+	QString productName() const;
+	/**
+	* @brief Gets or sets the product name. This is the AssemblyProduct name.
+	*/
+	void setProductName(QString newProductName);
 	/**
 	 * @brief Gets or sets the operating system.
 	 */
-	Q_PROPERTY(QString operatingSystem READ operatingSystem WRITE setOperatingSystem NOTIFY operatingSystemChanged)
+	QString operatingSystem() const;
+	/**
+	* @brief Gets or sets the operating system.
+	*/
+	void setOperatingSystem(QString newOperatingSystem);
 	/**
 	 * @brief Gets or sets the id.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the id.
+	*/
+	void setJellyfinId(QString newJellyfinId);
 	/**
 	 * @brief Gets or sets a value indicating whether the startup wizard is completed.
 	 */
-	Q_PROPERTY(bool startupWizardCompleted READ startupWizardCompleted WRITE setStartupWizardCompleted NOTIFY startupWizardCompletedChanged)
+	bool startupWizardCompleted() const;
+	/**
+	* @brief Gets or sets a value indicating whether the startup wizard is completed.
+	*/
+	void setStartupWizardCompleted(bool newStartupWizardCompleted);
 	/**
 	 * @brief Gets or sets the display name of the operating system.
 	 */
-	Q_PROPERTY(QString operatingSystemDisplayName READ operatingSystemDisplayName WRITE setOperatingSystemDisplayName NOTIFY operatingSystemDisplayNameChanged)
+	QString operatingSystemDisplayName() const;
+	/**
+	* @brief Gets or sets the display name of the operating system.
+	*/
+	void setOperatingSystemDisplayName(QString newOperatingSystemDisplayName);
 	/**
 	 * @brief Get or sets the package name.
 	 */
-	Q_PROPERTY(QString packageName READ packageName WRITE setPackageName NOTIFY packageNameChanged)
+	QString packageName() const;
+	/**
+	* @brief Get or sets the package name.
+	*/
+	void setPackageName(QString newPackageName);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance has pending restart.
 	 */
-	Q_PROPERTY(bool hasPendingRestart READ hasPendingRestart WRITE setHasPendingRestart NOTIFY hasPendingRestartChanged)
-	Q_PROPERTY(bool isShuttingDown READ isShuttingDown WRITE setIsShuttingDown NOTIFY isShuttingDownChanged)
+	bool hasPendingRestart() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance has pending restart.
+	*/
+	void setHasPendingRestart(bool newHasPendingRestart);
+
+	bool isShuttingDown() const;
+
+	void setIsShuttingDown(bool newIsShuttingDown);
 	/**
 	 * @brief Gets or sets a value indicating whether [supports library monitor].
 	 */
-	Q_PROPERTY(bool supportsLibraryMonitor READ supportsLibraryMonitor WRITE setSupportsLibraryMonitor NOTIFY supportsLibraryMonitorChanged)
+	bool supportsLibraryMonitor() const;
+	/**
+	* @brief Gets or sets a value indicating whether [supports library monitor].
+	*/
+	void setSupportsLibraryMonitor(bool newSupportsLibraryMonitor);
 	/**
 	 * @brief Gets or sets the web socket port number.
 	 */
-	Q_PROPERTY(qint32 webSocketPortNumber READ webSocketPortNumber WRITE setWebSocketPortNumber NOTIFY webSocketPortNumberChanged)
+	qint32 webSocketPortNumber() const;
+	/**
+	* @brief Gets or sets the web socket port number.
+	*/
+	void setWebSocketPortNumber(qint32 newWebSocketPortNumber);
 	/**
 	 * @brief Gets or sets the completed installations.
 	 */
-	Q_PROPERTY(QList<InstallationInfo *> completedInstallations READ completedInstallations WRITE setCompletedInstallations NOTIFY completedInstallationsChanged)
+	QList<QSharedPointer<InstallationInfo>> completedInstallations() const;
+	/**
+	* @brief Gets or sets the completed installations.
+	*/
+	void setCompletedInstallations(QList<QSharedPointer<InstallationInfo>> newCompletedInstallations);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance can self restart.
 	 */
-	Q_PROPERTY(bool canSelfRestart READ canSelfRestart WRITE setCanSelfRestart NOTIFY canSelfRestartChanged)
-	Q_PROPERTY(bool canLaunchWebBrowser READ canLaunchWebBrowser WRITE setCanLaunchWebBrowser NOTIFY canLaunchWebBrowserChanged)
+	bool canSelfRestart() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance can self restart.
+	*/
+	void setCanSelfRestart(bool newCanSelfRestart);
+
+	bool canLaunchWebBrowser() const;
+
+	void setCanLaunchWebBrowser(bool newCanLaunchWebBrowser);
 	/**
 	 * @brief Gets or sets the program data path.
 	 */
-	Q_PROPERTY(QString programDataPath READ programDataPath WRITE setProgramDataPath NOTIFY programDataPathChanged)
+	QString programDataPath() const;
+	/**
+	* @brief Gets or sets the program data path.
+	*/
+	void setProgramDataPath(QString newProgramDataPath);
 	/**
 	 * @brief Gets or sets the web UI resources path.
 	 */
-	Q_PROPERTY(QString webPath READ webPath WRITE setWebPath NOTIFY webPathChanged)
+	QString webPath() const;
+	/**
+	* @brief Gets or sets the web UI resources path.
+	*/
+	void setWebPath(QString newWebPath);
 	/**
 	 * @brief Gets or sets the items by name path.
 	 */
-	Q_PROPERTY(QString itemsByNamePath READ itemsByNamePath WRITE setItemsByNamePath NOTIFY itemsByNamePathChanged)
+	QString itemsByNamePath() const;
+	/**
+	* @brief Gets or sets the items by name path.
+	*/
+	void setItemsByNamePath(QString newItemsByNamePath);
 	/**
 	 * @brief Gets or sets the cache path.
 	 */
-	Q_PROPERTY(QString cachePath READ cachePath WRITE setCachePath NOTIFY cachePathChanged)
+	QString cachePath() const;
+	/**
+	* @brief Gets or sets the cache path.
+	*/
+	void setCachePath(QString newCachePath);
 	/**
 	 * @brief Gets or sets the log path.
 	 */
-	Q_PROPERTY(QString logPath READ logPath WRITE setLogPath NOTIFY logPathChanged)
+	QString logPath() const;
+	/**
+	* @brief Gets or sets the log path.
+	*/
+	void setLogPath(QString newLogPath);
 	/**
 	 * @brief Gets or sets the internal metadata path.
 	 */
-	Q_PROPERTY(QString internalMetadataPath READ internalMetadataPath WRITE setInternalMetadataPath NOTIFY internalMetadataPathChanged)
+	QString internalMetadataPath() const;
+	/**
+	* @brief Gets or sets the internal metadata path.
+	*/
+	void setInternalMetadataPath(QString newInternalMetadataPath);
 	/**
 	 * @brief Gets or sets the transcode path.
 	 */
-	Q_PROPERTY(QString transcodingTempPath READ transcodingTempPath WRITE setTranscodingTempPath NOTIFY transcodingTempPathChanged)
+	QString transcodingTempPath() const;
+	/**
+	* @brief Gets or sets the transcode path.
+	*/
+	void setTranscodingTempPath(QString newTranscodingTempPath);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance has update available.
 	 */
-	Q_PROPERTY(bool hasUpdateAvailable READ hasUpdateAvailable WRITE setHasUpdateAvailable NOTIFY hasUpdateAvailableChanged)
-	Q_PROPERTY(FFmpegLocation encoderLocation READ encoderLocation WRITE setEncoderLocation NOTIFY encoderLocationChanged)
-	Q_PROPERTY(Architecture systemArchitecture READ systemArchitecture WRITE setSystemArchitecture NOTIFY systemArchitectureChanged)
-
-	QString localAddress() const;
-	void setLocalAddress(QString newLocalAddress);
-	
-	QString serverName() const;
-	void setServerName(QString newServerName);
-	
-	QString version() const;
-	void setVersion(QString newVersion);
-	
-	QString productName() const;
-	void setProductName(QString newProductName);
-	
-	QString operatingSystem() const;
-	void setOperatingSystem(QString newOperatingSystem);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	bool startupWizardCompleted() const;
-	void setStartupWizardCompleted(bool newStartupWizardCompleted);
-	
-	QString operatingSystemDisplayName() const;
-	void setOperatingSystemDisplayName(QString newOperatingSystemDisplayName);
-	
-	QString packageName() const;
-	void setPackageName(QString newPackageName);
-	
-	bool hasPendingRestart() const;
-	void setHasPendingRestart(bool newHasPendingRestart);
-	
-	bool isShuttingDown() const;
-	void setIsShuttingDown(bool newIsShuttingDown);
-	
-	bool supportsLibraryMonitor() const;
-	void setSupportsLibraryMonitor(bool newSupportsLibraryMonitor);
-	
-	qint32 webSocketPortNumber() const;
-	void setWebSocketPortNumber(qint32 newWebSocketPortNumber);
-	
-	QList<InstallationInfo *> completedInstallations() const;
-	void setCompletedInstallations(QList<InstallationInfo *> newCompletedInstallations);
-	
-	bool canSelfRestart() const;
-	void setCanSelfRestart(bool newCanSelfRestart);
-	
-	bool canLaunchWebBrowser() const;
-	void setCanLaunchWebBrowser(bool newCanLaunchWebBrowser);
-	
-	QString programDataPath() const;
-	void setProgramDataPath(QString newProgramDataPath);
-	
-	QString webPath() const;
-	void setWebPath(QString newWebPath);
-	
-	QString itemsByNamePath() const;
-	void setItemsByNamePath(QString newItemsByNamePath);
-	
-	QString cachePath() const;
-	void setCachePath(QString newCachePath);
-	
-	QString logPath() const;
-	void setLogPath(QString newLogPath);
-	
-	QString internalMetadataPath() const;
-	void setInternalMetadataPath(QString newInternalMetadataPath);
-	
-	QString transcodingTempPath() const;
-	void setTranscodingTempPath(QString newTranscodingTempPath);
-	
 	bool hasUpdateAvailable() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance has update available.
+	*/
 	void setHasUpdateAvailable(bool newHasUpdateAvailable);
-	
+
 	FFmpegLocation encoderLocation() const;
+
 	void setEncoderLocation(FFmpegLocation newEncoderLocation);
-	
+
 	Architecture systemArchitecture() const;
+
 	void setSystemArchitecture(Architecture newSystemArchitecture);
-	
-signals:
-	void localAddressChanged(QString newLocalAddress);
-	void serverNameChanged(QString newServerName);
-	void versionChanged(QString newVersion);
-	void productNameChanged(QString newProductName);
-	void operatingSystemChanged(QString newOperatingSystem);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void startupWizardCompletedChanged(bool newStartupWizardCompleted);
-	void operatingSystemDisplayNameChanged(QString newOperatingSystemDisplayName);
-	void packageNameChanged(QString newPackageName);
-	void hasPendingRestartChanged(bool newHasPendingRestart);
-	void isShuttingDownChanged(bool newIsShuttingDown);
-	void supportsLibraryMonitorChanged(bool newSupportsLibraryMonitor);
-	void webSocketPortNumberChanged(qint32 newWebSocketPortNumber);
-	void completedInstallationsChanged(QList<InstallationInfo *> newCompletedInstallations);
-	void canSelfRestartChanged(bool newCanSelfRestart);
-	void canLaunchWebBrowserChanged(bool newCanLaunchWebBrowser);
-	void programDataPathChanged(QString newProgramDataPath);
-	void webPathChanged(QString newWebPath);
-	void itemsByNamePathChanged(QString newItemsByNamePath);
-	void cachePathChanged(QString newCachePath);
-	void logPathChanged(QString newLogPath);
-	void internalMetadataPathChanged(QString newInternalMetadataPath);
-	void transcodingTempPathChanged(QString newTranscodingTempPath);
-	void hasUpdateAvailableChanged(bool newHasUpdateAvailable);
-	void encoderLocationChanged(FFmpegLocation newEncoderLocation);
-	void systemArchitectureChanged(Architecture newSystemArchitecture);
+
 protected:
 	QString m_localAddress;
 	QString m_serverName;
@@ -264,7 +262,7 @@ protected:
 	bool m_isShuttingDown;
 	bool m_supportsLibraryMonitor;
 	qint32 m_webSocketPortNumber;
-	QList<InstallationInfo *> m_completedInstallations;
+	QList<QSharedPointer<InstallationInfo>> m_completedInstallations;
 	bool m_canSelfRestart;
 	bool m_canLaunchWebBrowser;
 	QString m_programDataPath;
@@ -278,6 +276,18 @@ protected:
 	FFmpegLocation m_encoderLocation;
 	Architecture m_systemArchitecture;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SystemInfo = Jellyfin::DTO::SystemInfo;
+
+template <>
+SystemInfo fromJsonValue<SystemInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SystemInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

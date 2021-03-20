@@ -31,30 +31,44 @@
 #define JELLYFIN_DTO_COLLECTIONCREATIONRESULT_H
 
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class CollectionCreationResult : public QObject {
-	Q_OBJECT
+
+class CollectionCreationResult {
 public:
-	explicit CollectionCreationResult(QObject *parent = nullptr);
-	static CollectionCreationResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
+	explicit CollectionCreationResult();
+	static CollectionCreationResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
 	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
+	// Properties
+
+	QUuid jellyfinId() const;
+
+	void setJellyfinId(QUuid newJellyfinId);
+
 protected:
-	QString m_jellyfinId;
+	QUuid m_jellyfinId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using CollectionCreationResult = Jellyfin::DTO::CollectionCreationResult;
+
+template <>
+CollectionCreationResult fromJsonValue<CollectionCreationResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return CollectionCreationResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

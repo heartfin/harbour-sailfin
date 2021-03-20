@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-TunerChannelMapping::TunerChannelMapping(QObject *parent) : QObject(parent) {}
+TunerChannelMapping::TunerChannelMapping(QObject *parent) {}
 
-TunerChannelMapping *TunerChannelMapping::fromJSON(QJsonObject source, QObject *parent) {
-	TunerChannelMapping *instance = new TunerChannelMapping(parent);
-	instance->updateFromJSON(source);
+TunerChannelMapping TunerChannelMapping::fromJson(QJsonObject source) {TunerChannelMapping instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TunerChannelMapping::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TunerChannelMapping::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_providerChannelName = fromJsonValue<QString>(source["ProviderChannelName"]);
+	m_providerChannelId = fromJsonValue<QString>(source["ProviderChannelId"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+
 }
-QJsonObject TunerChannelMapping::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TunerChannelMapping::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["ProviderChannelName"] = toJsonValue<QString>(m_providerChannelName);
+	result["ProviderChannelId"] = toJsonValue<QString>(m_providerChannelId);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+
 	return result;
 }
+
 QString TunerChannelMapping::name() const { return m_name; }
+
 void TunerChannelMapping::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString TunerChannelMapping::providerChannelName() const { return m_providerChannelName; }
+
 void TunerChannelMapping::setProviderChannelName(QString newProviderChannelName) {
 	m_providerChannelName = newProviderChannelName;
-	emit providerChannelNameChanged(newProviderChannelName);
 }
-
 QString TunerChannelMapping::providerChannelId() const { return m_providerChannelId; }
+
 void TunerChannelMapping::setProviderChannelId(QString newProviderChannelId) {
 	m_providerChannelId = newProviderChannelId;
-	emit providerChannelIdChanged(newProviderChannelId);
 }
-
 QString TunerChannelMapping::jellyfinId() const { return m_jellyfinId; }
+
 void TunerChannelMapping::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
 
 

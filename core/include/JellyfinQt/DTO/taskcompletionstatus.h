@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_TASKCOMPLETIONSTATUS_H
 #define JELLYFIN_DTO_TASKCOMPLETIONSTATUS_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class TaskCompletionStatusClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Completed,
 		Failed,
 		Cancelled,
@@ -48,7 +53,36 @@ public:
 private:
 	explicit TaskCompletionStatusClass();
 };
+
 typedef TaskCompletionStatusClass::Value TaskCompletionStatus;
+
+} // NS DTO
+
+namespace Support {
+
+using TaskCompletionStatus = Jellyfin::DTO::TaskCompletionStatus;
+using TaskCompletionStatusClass = Jellyfin::DTO::TaskCompletionStatusClass;
+
+template <>
+TaskCompletionStatus fromJsonValue<TaskCompletionStatus>(const QJsonValue &source) {
+	if (!source.isString()) return TaskCompletionStatusClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Completed")) {
+		return TaskCompletionStatusClass::Completed;
+	}
+	if (str == QStringLiteral("Failed")) {
+		return TaskCompletionStatusClass::Failed;
+	}
+	if (str == QStringLiteral("Cancelled")) {
+		return TaskCompletionStatusClass::Cancelled;
+	}
+	if (str == QStringLiteral("Aborted")) {
+		return TaskCompletionStatusClass::Aborted;
+	}
+	
+	return TaskCompletionStatusClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

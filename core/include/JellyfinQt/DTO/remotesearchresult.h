@@ -32,94 +32,88 @@
 
 #include <QDateTime>
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
 
-class RemoteSearchResult : public QObject {
-	Q_OBJECT
+class RemoteSearchResult {
 public:
-	explicit RemoteSearchResult(QObject *parent = nullptr);
-	static RemoteSearchResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit RemoteSearchResult();
+	static RemoteSearchResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the provider ids.
 	 */
-	Q_PROPERTY(QJsonObject providerIds READ providerIds WRITE setProviderIds NOTIFY providerIdsChanged)
+	QJsonObject providerIds() const;
+	/**
+	* @brief Gets or sets the provider ids.
+	*/
+	void setProviderIds(QJsonObject newProviderIds);
 	/**
 	 * @brief Gets or sets the year.
 	 */
-	Q_PROPERTY(qint32 productionYear READ productionYear WRITE setProductionYear NOTIFY productionYearChanged)
-	Q_PROPERTY(qint32 indexNumber READ indexNumber WRITE setIndexNumber NOTIFY indexNumberChanged)
-	Q_PROPERTY(qint32 indexNumberEnd READ indexNumberEnd WRITE setIndexNumberEnd NOTIFY indexNumberEndChanged)
-	Q_PROPERTY(qint32 parentIndexNumber READ parentIndexNumber WRITE setParentIndexNumber NOTIFY parentIndexNumberChanged)
-	Q_PROPERTY(QDateTime premiereDate READ premiereDate WRITE setPremiereDate NOTIFY premiereDateChanged)
-	Q_PROPERTY(QString imageUrl READ imageUrl WRITE setImageUrl NOTIFY imageUrlChanged)
-	Q_PROPERTY(QString searchProviderName READ searchProviderName WRITE setSearchProviderName NOTIFY searchProviderNameChanged)
-	Q_PROPERTY(QString overview READ overview WRITE setOverview NOTIFY overviewChanged)
-	Q_PROPERTY(RemoteSearchResult * albumArtist READ albumArtist WRITE setAlbumArtist NOTIFY albumArtistChanged)
-	Q_PROPERTY(QList<RemoteSearchResult *> artists READ artists WRITE setArtists NOTIFY artistsChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QJsonObject providerIds() const;
-	void setProviderIds(QJsonObject newProviderIds);
-	
 	qint32 productionYear() const;
+	/**
+	* @brief Gets or sets the year.
+	*/
 	void setProductionYear(qint32 newProductionYear);
-	
+
 	qint32 indexNumber() const;
+
 	void setIndexNumber(qint32 newIndexNumber);
-	
+
 	qint32 indexNumberEnd() const;
+
 	void setIndexNumberEnd(qint32 newIndexNumberEnd);
-	
+
 	qint32 parentIndexNumber() const;
+
 	void setParentIndexNumber(qint32 newParentIndexNumber);
-	
+
 	QDateTime premiereDate() const;
+
 	void setPremiereDate(QDateTime newPremiereDate);
-	
+
 	QString imageUrl() const;
+
 	void setImageUrl(QString newImageUrl);
-	
+
 	QString searchProviderName() const;
+
 	void setSearchProviderName(QString newSearchProviderName);
-	
+
 	QString overview() const;
+
 	void setOverview(QString newOverview);
-	
-	RemoteSearchResult * albumArtist() const;
-	void setAlbumArtist(RemoteSearchResult * newAlbumArtist);
-	
-	QList<RemoteSearchResult *> artists() const;
-	void setArtists(QList<RemoteSearchResult *> newArtists);
-	
-signals:
-	void nameChanged(QString newName);
-	void providerIdsChanged(QJsonObject newProviderIds);
-	void productionYearChanged(qint32 newProductionYear);
-	void indexNumberChanged(qint32 newIndexNumber);
-	void indexNumberEndChanged(qint32 newIndexNumberEnd);
-	void parentIndexNumberChanged(qint32 newParentIndexNumber);
-	void premiereDateChanged(QDateTime newPremiereDate);
-	void imageUrlChanged(QString newImageUrl);
-	void searchProviderNameChanged(QString newSearchProviderName);
-	void overviewChanged(QString newOverview);
-	void albumArtistChanged(RemoteSearchResult * newAlbumArtist);
-	void artistsChanged(QList<RemoteSearchResult *> newArtists);
+
+	QSharedPointer<RemoteSearchResult> albumArtist() const;
+
+	void setAlbumArtist(QSharedPointer<RemoteSearchResult> newAlbumArtist);
+
+	QList<QSharedPointer<RemoteSearchResult>> artists() const;
+
+	void setArtists(QList<QSharedPointer<RemoteSearchResult>> newArtists);
+
 protected:
 	QString m_name;
 	QJsonObject m_providerIds;
@@ -131,9 +125,21 @@ protected:
 	QString m_imageUrl;
 	QString m_searchProviderName;
 	QString m_overview;
-	RemoteSearchResult * m_albumArtist = nullptr;
-	QList<RemoteSearchResult *> m_artists;
+	QSharedPointer<RemoteSearchResult> m_albumArtist = nullptr;
+	QList<QSharedPointer<RemoteSearchResult>> m_artists;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using RemoteSearchResult = Jellyfin::DTO::RemoteSearchResult;
+
+template <>
+RemoteSearchResult fromJsonValue<RemoteSearchResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RemoteSearchResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

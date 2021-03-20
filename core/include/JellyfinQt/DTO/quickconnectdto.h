@@ -31,33 +31,48 @@
 #define JELLYFIN_DTO_QUICKCONNECTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class QuickConnectDto : public QObject {
-	Q_OBJECT
-public:
-	explicit QuickConnectDto(QObject *parent = nullptr);
-	static QuickConnectDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class QuickConnectDto {
+public:
+	explicit QuickConnectDto();
+	static QuickConnectDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the quick connect token.
 	 */
-	Q_PROPERTY(QString token READ token WRITE setToken NOTIFY tokenChanged)
-
 	QString token() const;
+	/**
+	* @brief Gets or sets the quick connect token.
+	*/
 	void setToken(QString newToken);
-	
-signals:
-	void tokenChanged(QString newToken);
+
 protected:
 	QString m_token;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using QuickConnectDto = Jellyfin::DTO::QuickConnectDto;
+
+template <>
+QuickConnectDto fromJsonValue<QuickConnectDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QuickConnectDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-ReadyRequestDto::ReadyRequestDto(QObject *parent) : QObject(parent) {}
+ReadyRequestDto::ReadyRequestDto(QObject *parent) {}
 
-ReadyRequestDto *ReadyRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	ReadyRequestDto *instance = new ReadyRequestDto(parent);
-	instance->updateFromJSON(source);
+ReadyRequestDto ReadyRequestDto::fromJson(QJsonObject source) {ReadyRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ReadyRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ReadyRequestDto::setFromJson(QJsonObject source) {
+	m_when = fromJsonValue<QDateTime>(source["When"]);
+	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
+	m_isPlaying = fromJsonValue<bool>(source["IsPlaying"]);
+	m_playlistItemId = fromJsonValue<QUuid>(source["PlaylistItemId"]);
+
 }
-QJsonObject ReadyRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ReadyRequestDto::toJson() {
 	QJsonObject result;
+	result["When"] = toJsonValue<QDateTime>(m_when);
+	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
+	result["IsPlaying"] = toJsonValue<bool>(m_isPlaying);
+	result["PlaylistItemId"] = toJsonValue<QUuid>(m_playlistItemId);
+
 	return result;
 }
+
 QDateTime ReadyRequestDto::when() const { return m_when; }
+
 void ReadyRequestDto::setWhen(QDateTime newWhen) {
 	m_when = newWhen;
-	emit whenChanged(newWhen);
 }
-
 qint64 ReadyRequestDto::positionTicks() const { return m_positionTicks; }
+
 void ReadyRequestDto::setPositionTicks(qint64 newPositionTicks) {
 	m_positionTicks = newPositionTicks;
-	emit positionTicksChanged(newPositionTicks);
 }
-
 bool ReadyRequestDto::isPlaying() const { return m_isPlaying; }
+
 void ReadyRequestDto::setIsPlaying(bool newIsPlaying) {
 	m_isPlaying = newIsPlaying;
-	emit isPlayingChanged(newIsPlaying);
 }
+QUuid ReadyRequestDto::playlistItemId() const { return m_playlistItemId; }
 
-QString ReadyRequestDto::playlistItemId() const { return m_playlistItemId; }
-void ReadyRequestDto::setPlaylistItemId(QString newPlaylistItemId) {
+void ReadyRequestDto::setPlaylistItemId(QUuid newPlaylistItemId) {
 	m_playlistItemId = newPlaylistItemId;
-	emit playlistItemIdChanged(newPlaylistItemId);
 }
 
 

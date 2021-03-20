@@ -31,44 +31,55 @@
 #define JELLYFIN_DTO_GENERALCOMMAND_H
 
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QUuid>
+#include <optional>
 
 #include "JellyfinQt/DTO/generalcommandtype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class GeneralCommand : public QObject {
-	Q_OBJECT
-public:
-	explicit GeneralCommand(QObject *parent = nullptr);
-	static GeneralCommand *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(GeneralCommandType name READ name WRITE setName NOTIFY nameChanged)
-	Q_PROPERTY(QString controllingUserId READ controllingUserId WRITE setControllingUserId NOTIFY controllingUserIdChanged)
-	Q_PROPERTY(QJsonObject arguments READ arguments WRITE setArguments NOTIFY argumentsChanged)
+class GeneralCommand {
+public:
+	explicit GeneralCommand();
+	static GeneralCommand fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	GeneralCommandType name() const;
+
 	void setName(GeneralCommandType newName);
-	
-	QString controllingUserId() const;
-	void setControllingUserId(QString newControllingUserId);
-	
+
+	QUuid controllingUserId() const;
+
+	void setControllingUserId(QUuid newControllingUserId);
+
 	QJsonObject arguments() const;
+
 	void setArguments(QJsonObject newArguments);
-	
-signals:
-	void nameChanged(GeneralCommandType newName);
-	void controllingUserIdChanged(QString newControllingUserId);
-	void argumentsChanged(QJsonObject newArguments);
+
 protected:
 	GeneralCommandType m_name;
-	QString m_controllingUserId;
+	QUuid m_controllingUserId;
 	QJsonObject m_arguments;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using GeneralCommand = Jellyfin::DTO::GeneralCommand;
+
+template <>
+GeneralCommand fromJsonValue<GeneralCommand>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return GeneralCommand::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

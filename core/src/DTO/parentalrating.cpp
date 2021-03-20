@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-ParentalRating::ParentalRating(QObject *parent) : QObject(parent) {}
+ParentalRating::ParentalRating(QObject *parent) {}
 
-ParentalRating *ParentalRating::fromJSON(QJsonObject source, QObject *parent) {
-	ParentalRating *instance = new ParentalRating(parent);
-	instance->updateFromJSON(source);
+ParentalRating ParentalRating::fromJson(QJsonObject source) {ParentalRating instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ParentalRating::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ParentalRating::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_value = fromJsonValue<qint32>(source["Value"]);
+
 }
-QJsonObject ParentalRating::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ParentalRating::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Value"] = toJsonValue<qint32>(m_value);
+
 	return result;
 }
+
 QString ParentalRating::name() const { return m_name; }
+
 void ParentalRating::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 qint32 ParentalRating::value() const { return m_value; }
+
 void ParentalRating::setValue(qint32 newValue) {
 	m_value = newValue;
-	emit valueChanged(newValue);
 }
 
 

@@ -31,36 +31,49 @@
 #define JELLYFIN_DTO_MEDIAURL_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaUrl : public QObject {
-	Q_OBJECT
-public:
-	explicit MediaUrl(QObject *parent = nullptr);
-	static MediaUrl *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+class MediaUrl {
+public:
+	explicit MediaUrl();
+	static MediaUrl fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString url() const;
+
 	void setUrl(QString newUrl);
-	
+
 	QString name() const;
+
 	void setName(QString newName);
-	
-signals:
-	void urlChanged(QString newUrl);
-	void nameChanged(QString newName);
+
 protected:
 	QString m_url;
 	QString m_name;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaUrl = Jellyfin::DTO::MediaUrl;
+
+template <>
+MediaUrl fromJsonValue<MediaUrl>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaUrl::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

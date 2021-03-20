@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-RepositoryInfo::RepositoryInfo(QObject *parent) : QObject(parent) {}
+RepositoryInfo::RepositoryInfo(QObject *parent) {}
 
-RepositoryInfo *RepositoryInfo::fromJSON(QJsonObject source, QObject *parent) {
-	RepositoryInfo *instance = new RepositoryInfo(parent);
-	instance->updateFromJSON(source);
+RepositoryInfo RepositoryInfo::fromJson(QJsonObject source) {RepositoryInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void RepositoryInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void RepositoryInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_url = fromJsonValue<QString>(source["Url"]);
+	m_enabled = fromJsonValue<bool>(source["Enabled"]);
+
 }
-QJsonObject RepositoryInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject RepositoryInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Url"] = toJsonValue<QString>(m_url);
+	result["Enabled"] = toJsonValue<bool>(m_enabled);
+
 	return result;
 }
+
 QString RepositoryInfo::name() const { return m_name; }
+
 void RepositoryInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString RepositoryInfo::url() const { return m_url; }
+
 void RepositoryInfo::setUrl(QString newUrl) {
 	m_url = newUrl;
-	emit urlChanged(newUrl);
 }
-
 bool RepositoryInfo::enabled() const { return m_enabled; }
+
 void RepositoryInfo::setEnabled(bool newEnabled) {
 	m_enabled = newEnabled;
-	emit enabledChanged(newEnabled);
 }
 
 

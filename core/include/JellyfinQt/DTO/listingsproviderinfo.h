@@ -31,116 +31,101 @@
 #define JELLYFIN_DTO_LISTINGSPROVIDERINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/namevaluepair.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class NameValuePair;
 
-class ListingsProviderInfo : public QObject {
-	Q_OBJECT
+class ListingsProviderInfo {
 public:
-	explicit ListingsProviderInfo(QObject *parent = nullptr);
-	static ListingsProviderInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-	Q_PROPERTY(QString username READ username WRITE setUsername NOTIFY usernameChanged)
-	Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
-	Q_PROPERTY(QString listingsId READ listingsId WRITE setListingsId NOTIFY listingsIdChanged)
-	Q_PROPERTY(QString zipCode READ zipCode WRITE setZipCode NOTIFY zipCodeChanged)
-	Q_PROPERTY(QString country READ country WRITE setCountry NOTIFY countryChanged)
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
-	Q_PROPERTY(QStringList enabledTuners READ enabledTuners WRITE setEnabledTuners NOTIFY enabledTunersChanged)
-	Q_PROPERTY(bool enableAllTuners READ enableAllTuners WRITE setEnableAllTuners NOTIFY enableAllTunersChanged)
-	Q_PROPERTY(QStringList newsCategories READ newsCategories WRITE setNewsCategories NOTIFY newsCategoriesChanged)
-	Q_PROPERTY(QStringList sportsCategories READ sportsCategories WRITE setSportsCategories NOTIFY sportsCategoriesChanged)
-	Q_PROPERTY(QStringList kidsCategories READ kidsCategories WRITE setKidsCategories NOTIFY kidsCategoriesChanged)
-	Q_PROPERTY(QStringList movieCategories READ movieCategories WRITE setMovieCategories NOTIFY movieCategoriesChanged)
-	Q_PROPERTY(QList<NameValuePair *> channelMappings READ channelMappings WRITE setChannelMappings NOTIFY channelMappingsChanged)
-	Q_PROPERTY(QString moviePrefix READ moviePrefix WRITE setMoviePrefix NOTIFY moviePrefixChanged)
-	Q_PROPERTY(QString preferredLanguage READ preferredLanguage WRITE setPreferredLanguage NOTIFY preferredLanguageChanged)
-	Q_PROPERTY(QString userAgent READ userAgent WRITE setUserAgent NOTIFY userAgentChanged)
+	explicit ListingsProviderInfo();
+	static ListingsProviderInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString jellyfinId() const;
+
 	void setJellyfinId(QString newJellyfinId);
-	
+
 	QString type() const;
+
 	void setType(QString newType);
-	
+
 	QString username() const;
+
 	void setUsername(QString newUsername);
-	
+
 	QString password() const;
+
 	void setPassword(QString newPassword);
-	
+
 	QString listingsId() const;
+
 	void setListingsId(QString newListingsId);
-	
+
 	QString zipCode() const;
+
 	void setZipCode(QString newZipCode);
-	
+
 	QString country() const;
+
 	void setCountry(QString newCountry);
-	
+
 	QString path() const;
+
 	void setPath(QString newPath);
-	
+
 	QStringList enabledTuners() const;
+
 	void setEnabledTuners(QStringList newEnabledTuners);
-	
+
 	bool enableAllTuners() const;
+
 	void setEnableAllTuners(bool newEnableAllTuners);
-	
+
 	QStringList newsCategories() const;
+
 	void setNewsCategories(QStringList newNewsCategories);
-	
+
 	QStringList sportsCategories() const;
+
 	void setSportsCategories(QStringList newSportsCategories);
-	
+
 	QStringList kidsCategories() const;
+
 	void setKidsCategories(QStringList newKidsCategories);
-	
+
 	QStringList movieCategories() const;
+
 	void setMovieCategories(QStringList newMovieCategories);
-	
-	QList<NameValuePair *> channelMappings() const;
-	void setChannelMappings(QList<NameValuePair *> newChannelMappings);
-	
+
+	QList<QSharedPointer<NameValuePair>> channelMappings() const;
+
+	void setChannelMappings(QList<QSharedPointer<NameValuePair>> newChannelMappings);
+
 	QString moviePrefix() const;
+
 	void setMoviePrefix(QString newMoviePrefix);
-	
+
 	QString preferredLanguage() const;
+
 	void setPreferredLanguage(QString newPreferredLanguage);
-	
+
 	QString userAgent() const;
+
 	void setUserAgent(QString newUserAgent);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
-	void typeChanged(QString newType);
-	void usernameChanged(QString newUsername);
-	void passwordChanged(QString newPassword);
-	void listingsIdChanged(QString newListingsId);
-	void zipCodeChanged(QString newZipCode);
-	void countryChanged(QString newCountry);
-	void pathChanged(QString newPath);
-	void enabledTunersChanged(QStringList newEnabledTuners);
-	void enableAllTunersChanged(bool newEnableAllTuners);
-	void newsCategoriesChanged(QStringList newNewsCategories);
-	void sportsCategoriesChanged(QStringList newSportsCategories);
-	void kidsCategoriesChanged(QStringList newKidsCategories);
-	void movieCategoriesChanged(QStringList newMovieCategories);
-	void channelMappingsChanged(QList<NameValuePair *> newChannelMappings);
-	void moviePrefixChanged(QString newMoviePrefix);
-	void preferredLanguageChanged(QString newPreferredLanguage);
-	void userAgentChanged(QString newUserAgent);
+
 protected:
 	QString m_jellyfinId;
 	QString m_type;
@@ -156,11 +141,23 @@ protected:
 	QStringList m_sportsCategories;
 	QStringList m_kidsCategories;
 	QStringList m_movieCategories;
-	QList<NameValuePair *> m_channelMappings;
+	QList<QSharedPointer<NameValuePair>> m_channelMappings;
 	QString m_moviePrefix;
 	QString m_preferredLanguage;
 	QString m_userAgent;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ListingsProviderInfo = Jellyfin::DTO::ListingsProviderInfo;
+
+template <>
+ListingsProviderInfo fromJsonValue<ListingsProviderInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ListingsProviderInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

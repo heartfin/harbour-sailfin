@@ -31,51 +31,66 @@
 #define JELLYFIN_DTO_SETCHANNELMAPPINGDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SetChannelMappingDto : public QObject {
-	Q_OBJECT
-public:
-	explicit SetChannelMappingDto(QObject *parent = nullptr);
-	static SetChannelMappingDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class SetChannelMappingDto {
+public:
+	explicit SetChannelMappingDto();
+	static SetChannelMappingDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the provider id.
 	 */
-	Q_PROPERTY(QString providerId READ providerId WRITE setProviderId NOTIFY providerIdChanged)
+	QString providerId() const;
+	/**
+	* @brief Gets or sets the provider id.
+	*/
+	void setProviderId(QString newProviderId);
 	/**
 	 * @brief Gets or sets the tuner channel id.
 	 */
-	Q_PROPERTY(QString tunerChannelId READ tunerChannelId WRITE setTunerChannelId NOTIFY tunerChannelIdChanged)
+	QString tunerChannelId() const;
+	/**
+	* @brief Gets or sets the tuner channel id.
+	*/
+	void setTunerChannelId(QString newTunerChannelId);
 	/**
 	 * @brief Gets or sets the provider channel id.
 	 */
-	Q_PROPERTY(QString providerChannelId READ providerChannelId WRITE setProviderChannelId NOTIFY providerChannelIdChanged)
-
-	QString providerId() const;
-	void setProviderId(QString newProviderId);
-	
-	QString tunerChannelId() const;
-	void setTunerChannelId(QString newTunerChannelId);
-	
 	QString providerChannelId() const;
+	/**
+	* @brief Gets or sets the provider channel id.
+	*/
 	void setProviderChannelId(QString newProviderChannelId);
-	
-signals:
-	void providerIdChanged(QString newProviderId);
-	void tunerChannelIdChanged(QString newTunerChannelId);
-	void providerChannelIdChanged(QString newProviderChannelId);
+
 protected:
 	QString m_providerId;
 	QString m_tunerChannelId;
 	QString m_providerChannelId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SetChannelMappingDto = Jellyfin::DTO::SetChannelMappingDto;
+
+template <>
+SetChannelMappingDto fromJsonValue<SetChannelMappingDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SetChannelMappingDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -29,86 +29,96 @@
 
 #include <JellyfinQt/DTO/playerstateinfo.h>
 
-#include <JellyfinQt/DTO/playmethod.h>
-#include <JellyfinQt/DTO/repeatmode.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-PlayerStateInfo::PlayerStateInfo(QObject *parent) : QObject(parent) {}
+PlayerStateInfo::PlayerStateInfo(QObject *parent) {}
 
-PlayerStateInfo *PlayerStateInfo::fromJSON(QJsonObject source, QObject *parent) {
-	PlayerStateInfo *instance = new PlayerStateInfo(parent);
-	instance->updateFromJSON(source);
+PlayerStateInfo PlayerStateInfo::fromJson(QJsonObject source) {PlayerStateInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PlayerStateInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PlayerStateInfo::setFromJson(QJsonObject source) {
+	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
+	m_canSeek = fromJsonValue<bool>(source["CanSeek"]);
+	m_isPaused = fromJsonValue<bool>(source["IsPaused"]);
+	m_isMuted = fromJsonValue<bool>(source["IsMuted"]);
+	m_volumeLevel = fromJsonValue<qint32>(source["VolumeLevel"]);
+	m_audioStreamIndex = fromJsonValue<qint32>(source["AudioStreamIndex"]);
+	m_subtitleStreamIndex = fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
+	m_mediaSourceId = fromJsonValue<QString>(source["MediaSourceId"]);
+	m_playMethod = fromJsonValue<PlayMethod>(source["PlayMethod"]);
+	m_repeatMode = fromJsonValue<RepeatMode>(source["RepeatMode"]);
+
 }
-QJsonObject PlayerStateInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PlayerStateInfo::toJson() {
 	QJsonObject result;
+	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
+	result["CanSeek"] = toJsonValue<bool>(m_canSeek);
+	result["IsPaused"] = toJsonValue<bool>(m_isPaused);
+	result["IsMuted"] = toJsonValue<bool>(m_isMuted);
+	result["VolumeLevel"] = toJsonValue<qint32>(m_volumeLevel);
+	result["AudioStreamIndex"] = toJsonValue<qint32>(m_audioStreamIndex);
+	result["SubtitleStreamIndex"] = toJsonValue<qint32>(m_subtitleStreamIndex);
+	result["MediaSourceId"] = toJsonValue<QString>(m_mediaSourceId);
+	result["PlayMethod"] = toJsonValue<PlayMethod>(m_playMethod);
+	result["RepeatMode"] = toJsonValue<RepeatMode>(m_repeatMode);
+
 	return result;
 }
+
 qint64 PlayerStateInfo::positionTicks() const { return m_positionTicks; }
+
 void PlayerStateInfo::setPositionTicks(qint64 newPositionTicks) {
 	m_positionTicks = newPositionTicks;
-	emit positionTicksChanged(newPositionTicks);
 }
-
 bool PlayerStateInfo::canSeek() const { return m_canSeek; }
+
 void PlayerStateInfo::setCanSeek(bool newCanSeek) {
 	m_canSeek = newCanSeek;
-	emit canSeekChanged(newCanSeek);
 }
-
 bool PlayerStateInfo::isPaused() const { return m_isPaused; }
+
 void PlayerStateInfo::setIsPaused(bool newIsPaused) {
 	m_isPaused = newIsPaused;
-	emit isPausedChanged(newIsPaused);
 }
-
 bool PlayerStateInfo::isMuted() const { return m_isMuted; }
+
 void PlayerStateInfo::setIsMuted(bool newIsMuted) {
 	m_isMuted = newIsMuted;
-	emit isMutedChanged(newIsMuted);
 }
-
 qint32 PlayerStateInfo::volumeLevel() const { return m_volumeLevel; }
+
 void PlayerStateInfo::setVolumeLevel(qint32 newVolumeLevel) {
 	m_volumeLevel = newVolumeLevel;
-	emit volumeLevelChanged(newVolumeLevel);
 }
-
 qint32 PlayerStateInfo::audioStreamIndex() const { return m_audioStreamIndex; }
+
 void PlayerStateInfo::setAudioStreamIndex(qint32 newAudioStreamIndex) {
 	m_audioStreamIndex = newAudioStreamIndex;
-	emit audioStreamIndexChanged(newAudioStreamIndex);
 }
-
 qint32 PlayerStateInfo::subtitleStreamIndex() const { return m_subtitleStreamIndex; }
+
 void PlayerStateInfo::setSubtitleStreamIndex(qint32 newSubtitleStreamIndex) {
 	m_subtitleStreamIndex = newSubtitleStreamIndex;
-	emit subtitleStreamIndexChanged(newSubtitleStreamIndex);
 }
-
 QString PlayerStateInfo::mediaSourceId() const { return m_mediaSourceId; }
+
 void PlayerStateInfo::setMediaSourceId(QString newMediaSourceId) {
 	m_mediaSourceId = newMediaSourceId;
-	emit mediaSourceIdChanged(newMediaSourceId);
 }
-
 PlayMethod PlayerStateInfo::playMethod() const { return m_playMethod; }
+
 void PlayerStateInfo::setPlayMethod(PlayMethod newPlayMethod) {
 	m_playMethod = newPlayMethod;
-	emit playMethodChanged(newPlayMethod);
 }
-
 RepeatMode PlayerStateInfo::repeatMode() const { return m_repeatMode; }
+
 void PlayerStateInfo::setRepeatMode(RepeatMode newRepeatMode) {
 	m_repeatMode = newRepeatMode;
-	emit repeatModeChanged(newRepeatMode);
 }
 
 

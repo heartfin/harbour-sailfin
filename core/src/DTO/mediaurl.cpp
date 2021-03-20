@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaUrl::MediaUrl(QObject *parent) : QObject(parent) {}
+MediaUrl::MediaUrl(QObject *parent) {}
 
-MediaUrl *MediaUrl::fromJSON(QJsonObject source, QObject *parent) {
-	MediaUrl *instance = new MediaUrl(parent);
-	instance->updateFromJSON(source);
+MediaUrl MediaUrl::fromJson(QJsonObject source) {MediaUrl instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MediaUrl::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MediaUrl::setFromJson(QJsonObject source) {
+	m_url = fromJsonValue<QString>(source["Url"]);
+	m_name = fromJsonValue<QString>(source["Name"]);
+
 }
-QJsonObject MediaUrl::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MediaUrl::toJson() {
 	QJsonObject result;
+	result["Url"] = toJsonValue<QString>(m_url);
+	result["Name"] = toJsonValue<QString>(m_name);
+
 	return result;
 }
+
 QString MediaUrl::url() const { return m_url; }
+
 void MediaUrl::setUrl(QString newUrl) {
 	m_url = newUrl;
-	emit urlChanged(newUrl);
 }
-
 QString MediaUrl::name() const { return m_name; }
+
 void MediaUrl::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
 
 

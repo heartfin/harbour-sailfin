@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_FORGOTPASSWORDACTION_H
 #define JELLYFIN_DTO_FORGOTPASSWORDACTION_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ForgotPasswordActionClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		ContactAdmin,
 		PinCode,
 		InNetworkRequired,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit ForgotPasswordActionClass();
 };
+
 typedef ForgotPasswordActionClass::Value ForgotPasswordAction;
+
+} // NS DTO
+
+namespace Support {
+
+using ForgotPasswordAction = Jellyfin::DTO::ForgotPasswordAction;
+using ForgotPasswordActionClass = Jellyfin::DTO::ForgotPasswordActionClass;
+
+template <>
+ForgotPasswordAction fromJsonValue<ForgotPasswordAction>(const QJsonValue &source) {
+	if (!source.isString()) return ForgotPasswordActionClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("ContactAdmin")) {
+		return ForgotPasswordActionClass::ContactAdmin;
+	}
+	if (str == QStringLiteral("PinCode")) {
+		return ForgotPasswordActionClass::PinCode;
+	}
+	if (str == QStringLiteral("InNetworkRequired")) {
+		return ForgotPasswordActionClass::InNetworkRequired;
+	}
+	
+	return ForgotPasswordActionClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

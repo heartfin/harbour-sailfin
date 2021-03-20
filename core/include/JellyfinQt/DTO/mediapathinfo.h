@@ -31,36 +31,49 @@
 #define JELLYFIN_DTO_MEDIAPATHINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaPathInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit MediaPathInfo(QObject *parent = nullptr);
-	static MediaPathInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
-	Q_PROPERTY(QString networkPath READ networkPath WRITE setNetworkPath NOTIFY networkPathChanged)
+class MediaPathInfo {
+public:
+	explicit MediaPathInfo();
+	static MediaPathInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString path() const;
+
 	void setPath(QString newPath);
-	
+
 	QString networkPath() const;
+
 	void setNetworkPath(QString newNetworkPath);
-	
-signals:
-	void pathChanged(QString newPath);
-	void networkPathChanged(QString newNetworkPath);
+
 protected:
 	QString m_path;
 	QString m_networkPath;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaPathInfo = Jellyfin::DTO::MediaPathInfo;
+
+template <>
+MediaPathInfo fromJsonValue<MediaPathInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaPathInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

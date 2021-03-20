@@ -31,54 +31,67 @@
 #define JELLYFIN_DTO_PLAYBACKINFORESPONSE_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
+#include "JellyfinQt/DTO/mediasourceinfo.h"
 #include "JellyfinQt/DTO/playbackerrorcode.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaSourceInfo;
 
-class PlaybackInfoResponse : public QObject {
-	Q_OBJECT
+class PlaybackInfoResponse {
 public:
-	explicit PlaybackInfoResponse(QObject *parent = nullptr);
-	static PlaybackInfoResponse *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit PlaybackInfoResponse();
+	static PlaybackInfoResponse fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the media sources.
 	 */
-	Q_PROPERTY(QList<MediaSourceInfo *> mediaSources READ mediaSources WRITE setMediaSources NOTIFY mediaSourcesChanged)
+	QList<QSharedPointer<MediaSourceInfo>> mediaSources() const;
+	/**
+	* @brief Gets or sets the media sources.
+	*/
+	void setMediaSources(QList<QSharedPointer<MediaSourceInfo>> newMediaSources);
 	/**
 	 * @brief Gets or sets the play session identifier.
 	 */
-	Q_PROPERTY(QString playSessionId READ playSessionId WRITE setPlaySessionId NOTIFY playSessionIdChanged)
-	Q_PROPERTY(PlaybackErrorCode errorCode READ errorCode WRITE setErrorCode NOTIFY errorCodeChanged)
-
-	QList<MediaSourceInfo *> mediaSources() const;
-	void setMediaSources(QList<MediaSourceInfo *> newMediaSources);
-	
 	QString playSessionId() const;
+	/**
+	* @brief Gets or sets the play session identifier.
+	*/
 	void setPlaySessionId(QString newPlaySessionId);
-	
+
 	PlaybackErrorCode errorCode() const;
+
 	void setErrorCode(PlaybackErrorCode newErrorCode);
-	
-signals:
-	void mediaSourcesChanged(QList<MediaSourceInfo *> newMediaSources);
-	void playSessionIdChanged(QString newPlaySessionId);
-	void errorCodeChanged(PlaybackErrorCode newErrorCode);
+
 protected:
-	QList<MediaSourceInfo *> m_mediaSources;
+	QList<QSharedPointer<MediaSourceInfo>> m_mediaSources;
 	QString m_playSessionId;
 	PlaybackErrorCode m_errorCode;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlaybackInfoResponse = Jellyfin::DTO::PlaybackInfoResponse;
+
+template <>
+PlaybackInfoResponse fromJsonValue<PlaybackInfoResponse>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlaybackInfoResponse::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

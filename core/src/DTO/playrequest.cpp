@@ -29,73 +29,82 @@
 
 #include <JellyfinQt/DTO/playrequest.h>
 
-#include <JellyfinQt/DTO/playcommand.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-PlayRequest::PlayRequest(QObject *parent) : QObject(parent) {}
+PlayRequest::PlayRequest(QObject *parent) {}
 
-PlayRequest *PlayRequest::fromJSON(QJsonObject source, QObject *parent) {
-	PlayRequest *instance = new PlayRequest(parent);
-	instance->updateFromJSON(source);
+PlayRequest PlayRequest::fromJson(QJsonObject source) {PlayRequest instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PlayRequest::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PlayRequest::setFromJson(QJsonObject source) {
+	m_itemIds = fromJsonValue<QList<QUuid>>(source["ItemIds"]);
+	m_startPositionTicks = fromJsonValue<qint64>(source["StartPositionTicks"]);
+	m_playCommand = fromJsonValue<PlayCommand>(source["PlayCommand"]);
+	m_controllingUserId = fromJsonValue<QUuid>(source["ControllingUserId"]);
+	m_subtitleStreamIndex = fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
+	m_audioStreamIndex = fromJsonValue<qint32>(source["AudioStreamIndex"]);
+	m_mediaSourceId = fromJsonValue<QString>(source["MediaSourceId"]);
+	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+
 }
-QJsonObject PlayRequest::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PlayRequest::toJson() {
 	QJsonObject result;
+	result["ItemIds"] = toJsonValue<QList<QUuid>>(m_itemIds);
+	result["StartPositionTicks"] = toJsonValue<qint64>(m_startPositionTicks);
+	result["PlayCommand"] = toJsonValue<PlayCommand>(m_playCommand);
+	result["ControllingUserId"] = toJsonValue<QUuid>(m_controllingUserId);
+	result["SubtitleStreamIndex"] = toJsonValue<qint32>(m_subtitleStreamIndex);
+	result["AudioStreamIndex"] = toJsonValue<qint32>(m_audioStreamIndex);
+	result["MediaSourceId"] = toJsonValue<QString>(m_mediaSourceId);
+	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+
 	return result;
 }
-QStringList PlayRequest::itemIds() const { return m_itemIds; }
-void PlayRequest::setItemIds(QStringList newItemIds) {
-	m_itemIds = newItemIds;
-	emit itemIdsChanged(newItemIds);
-}
 
+QList<QUuid> PlayRequest::itemIds() const { return m_itemIds; }
+
+void PlayRequest::setItemIds(QList<QUuid> newItemIds) {
+	m_itemIds = newItemIds;
+}
 qint64 PlayRequest::startPositionTicks() const { return m_startPositionTicks; }
+
 void PlayRequest::setStartPositionTicks(qint64 newStartPositionTicks) {
 	m_startPositionTicks = newStartPositionTicks;
-	emit startPositionTicksChanged(newStartPositionTicks);
 }
-
 PlayCommand PlayRequest::playCommand() const { return m_playCommand; }
+
 void PlayRequest::setPlayCommand(PlayCommand newPlayCommand) {
 	m_playCommand = newPlayCommand;
-	emit playCommandChanged(newPlayCommand);
 }
+QUuid PlayRequest::controllingUserId() const { return m_controllingUserId; }
 
-QString PlayRequest::controllingUserId() const { return m_controllingUserId; }
-void PlayRequest::setControllingUserId(QString newControllingUserId) {
+void PlayRequest::setControllingUserId(QUuid newControllingUserId) {
 	m_controllingUserId = newControllingUserId;
-	emit controllingUserIdChanged(newControllingUserId);
 }
-
 qint32 PlayRequest::subtitleStreamIndex() const { return m_subtitleStreamIndex; }
+
 void PlayRequest::setSubtitleStreamIndex(qint32 newSubtitleStreamIndex) {
 	m_subtitleStreamIndex = newSubtitleStreamIndex;
-	emit subtitleStreamIndexChanged(newSubtitleStreamIndex);
 }
-
 qint32 PlayRequest::audioStreamIndex() const { return m_audioStreamIndex; }
+
 void PlayRequest::setAudioStreamIndex(qint32 newAudioStreamIndex) {
 	m_audioStreamIndex = newAudioStreamIndex;
-	emit audioStreamIndexChanged(newAudioStreamIndex);
 }
-
 QString PlayRequest::mediaSourceId() const { return m_mediaSourceId; }
+
 void PlayRequest::setMediaSourceId(QString newMediaSourceId) {
 	m_mediaSourceId = newMediaSourceId;
-	emit mediaSourceIdChanged(newMediaSourceId);
 }
-
 qint32 PlayRequest::startIndex() const { return m_startIndex; }
+
 void PlayRequest::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
-	emit startIndexChanged(newStartIndex);
 }
 
 

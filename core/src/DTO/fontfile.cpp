@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-FontFile::FontFile(QObject *parent) : QObject(parent) {}
+FontFile::FontFile(QObject *parent) {}
 
-FontFile *FontFile::fromJSON(QJsonObject source, QObject *parent) {
-	FontFile *instance = new FontFile(parent);
-	instance->updateFromJSON(source);
+FontFile FontFile::fromJson(QJsonObject source) {FontFile instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void FontFile::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void FontFile::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_size = fromJsonValue<qint64>(source["Size"]);
+	m_dateCreated = fromJsonValue<QDateTime>(source["DateCreated"]);
+	m_dateModified = fromJsonValue<QDateTime>(source["DateModified"]);
+
 }
-QJsonObject FontFile::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject FontFile::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Size"] = toJsonValue<qint64>(m_size);
+	result["DateCreated"] = toJsonValue<QDateTime>(m_dateCreated);
+	result["DateModified"] = toJsonValue<QDateTime>(m_dateModified);
+
 	return result;
 }
+
 QString FontFile::name() const { return m_name; }
+
 void FontFile::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 qint64 FontFile::size() const { return m_size; }
+
 void FontFile::setSize(qint64 newSize) {
 	m_size = newSize;
-	emit sizeChanged(newSize);
 }
-
 QDateTime FontFile::dateCreated() const { return m_dateCreated; }
+
 void FontFile::setDateCreated(QDateTime newDateCreated) {
 	m_dateCreated = newDateCreated;
-	emit dateCreatedChanged(newDateCreated);
 }
-
 QDateTime FontFile::dateModified() const { return m_dateModified; }
+
 void FontFile::setDateModified(QDateTime newDateModified) {
 	m_dateModified = newDateModified;
-	emit dateModifiedChanged(newDateModified);
 }
 
 

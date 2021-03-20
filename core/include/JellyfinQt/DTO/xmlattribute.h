@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_XMLATTRIBUTE_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class XmlAttribute : public QObject {
-	Q_OBJECT
-public:
-	explicit XmlAttribute(QObject *parent = nullptr);
-	static XmlAttribute *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class XmlAttribute {
+public:
+	explicit XmlAttribute();
+	static XmlAttribute fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name of the attribute.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name of the attribute.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the value of the attribute.
 	 */
-	Q_PROPERTY(QString value READ value WRITE setValue NOTIFY valueChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
 	QString value() const;
+	/**
+	* @brief Gets or sets the value of the attribute.
+	*/
 	void setValue(QString newValue);
-	
-signals:
-	void nameChanged(QString newName);
-	void valueChanged(QString newValue);
+
 protected:
 	QString m_name;
 	QString m_value;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using XmlAttribute = Jellyfin::DTO::XmlAttribute;
+
+template <>
+XmlAttribute fromJsonValue<XmlAttribute>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return XmlAttribute::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

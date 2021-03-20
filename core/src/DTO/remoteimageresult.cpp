@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-RemoteImageResult::RemoteImageResult(QObject *parent) : QObject(parent) {}
+RemoteImageResult::RemoteImageResult(QObject *parent) {}
 
-RemoteImageResult *RemoteImageResult::fromJSON(QJsonObject source, QObject *parent) {
-	RemoteImageResult *instance = new RemoteImageResult(parent);
-	instance->updateFromJSON(source);
+RemoteImageResult RemoteImageResult::fromJson(QJsonObject source) {RemoteImageResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void RemoteImageResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void RemoteImageResult::setFromJson(QJsonObject source) {
+	m_images = fromJsonValue<QList<QSharedPointer<RemoteImageInfo>>>(source["Images"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_providers = fromJsonValue<QStringList>(source["Providers"]);
+
 }
-QJsonObject RemoteImageResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject RemoteImageResult::toJson() {
 	QJsonObject result;
+	result["Images"] = toJsonValue<QList<QSharedPointer<RemoteImageInfo>>>(m_images);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["Providers"] = toJsonValue<QStringList>(m_providers);
+
 	return result;
 }
-QList<RemoteImageInfo *> RemoteImageResult::images() const { return m_images; }
-void RemoteImageResult::setImages(QList<RemoteImageInfo *> newImages) {
-	m_images = newImages;
-	emit imagesChanged(newImages);
-}
 
+QList<QSharedPointer<RemoteImageInfo>> RemoteImageResult::images() const { return m_images; }
+
+void RemoteImageResult::setImages(QList<QSharedPointer<RemoteImageInfo>> newImages) {
+	m_images = newImages;
+}
 qint32 RemoteImageResult::totalRecordCount() const { return m_totalRecordCount; }
+
 void RemoteImageResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
-
 QStringList RemoteImageResult::providers() const { return m_providers; }
+
 void RemoteImageResult::setProviders(QStringList newProviders) {
 	m_providers = newProviders;
-	emit providersChanged(newProviders);
 }
 
 

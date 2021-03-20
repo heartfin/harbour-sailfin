@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/playbackinforesponse.h>
 
-#include <JellyfinQt/DTO/playbackerrorcode.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-PlaybackInfoResponse::PlaybackInfoResponse(QObject *parent) : QObject(parent) {}
+PlaybackInfoResponse::PlaybackInfoResponse(QObject *parent) {}
 
-PlaybackInfoResponse *PlaybackInfoResponse::fromJSON(QJsonObject source, QObject *parent) {
-	PlaybackInfoResponse *instance = new PlaybackInfoResponse(parent);
-	instance->updateFromJSON(source);
+PlaybackInfoResponse PlaybackInfoResponse::fromJson(QJsonObject source) {PlaybackInfoResponse instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PlaybackInfoResponse::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PlaybackInfoResponse::setFromJson(QJsonObject source) {
+	m_mediaSources = fromJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(source["MediaSources"]);
+	m_playSessionId = fromJsonValue<QString>(source["PlaySessionId"]);
+	m_errorCode = fromJsonValue<PlaybackErrorCode>(source["ErrorCode"]);
+
 }
-QJsonObject PlaybackInfoResponse::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PlaybackInfoResponse::toJson() {
 	QJsonObject result;
+	result["MediaSources"] = toJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(m_mediaSources);
+	result["PlaySessionId"] = toJsonValue<QString>(m_playSessionId);
+	result["ErrorCode"] = toJsonValue<PlaybackErrorCode>(m_errorCode);
+
 	return result;
 }
-QList<MediaSourceInfo *> PlaybackInfoResponse::mediaSources() const { return m_mediaSources; }
-void PlaybackInfoResponse::setMediaSources(QList<MediaSourceInfo *> newMediaSources) {
-	m_mediaSources = newMediaSources;
-	emit mediaSourcesChanged(newMediaSources);
-}
 
+QList<QSharedPointer<MediaSourceInfo>> PlaybackInfoResponse::mediaSources() const { return m_mediaSources; }
+
+void PlaybackInfoResponse::setMediaSources(QList<QSharedPointer<MediaSourceInfo>> newMediaSources) {
+	m_mediaSources = newMediaSources;
+}
 QString PlaybackInfoResponse::playSessionId() const { return m_playSessionId; }
+
 void PlaybackInfoResponse::setPlaySessionId(QString newPlaySessionId) {
 	m_playSessionId = newPlaySessionId;
-	emit playSessionIdChanged(newPlaySessionId);
 }
-
 PlaybackErrorCode PlaybackInfoResponse::errorCode() const { return m_errorCode; }
+
 void PlaybackInfoResponse::setErrorCode(PlaybackErrorCode newErrorCode) {
 	m_errorCode = newErrorCode;
-	emit errorCodeChanged(newErrorCode);
 }
 
 

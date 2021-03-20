@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_VIDEOTYPE_H
 #define JELLYFIN_DTO_VIDEOTYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class VideoTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		VideoFile,
 		Iso,
 		Dvd,
@@ -48,7 +53,36 @@ public:
 private:
 	explicit VideoTypeClass();
 };
+
 typedef VideoTypeClass::Value VideoType;
+
+} // NS DTO
+
+namespace Support {
+
+using VideoType = Jellyfin::DTO::VideoType;
+using VideoTypeClass = Jellyfin::DTO::VideoTypeClass;
+
+template <>
+VideoType fromJsonValue<VideoType>(const QJsonValue &source) {
+	if (!source.isString()) return VideoTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("VideoFile")) {
+		return VideoTypeClass::VideoFile;
+	}
+	if (str == QStringLiteral("Iso")) {
+		return VideoTypeClass::Iso;
+	}
+	if (str == QStringLiteral("Dvd")) {
+		return VideoTypeClass::Dvd;
+	}
+	if (str == QStringLiteral("BluRay")) {
+		return VideoTypeClass::BluRay;
+	}
+	
+	return VideoTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

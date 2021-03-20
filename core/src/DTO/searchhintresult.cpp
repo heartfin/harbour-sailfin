@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-SearchHintResult::SearchHintResult(QObject *parent) : QObject(parent) {}
+SearchHintResult::SearchHintResult(QObject *parent) {}
 
-SearchHintResult *SearchHintResult::fromJSON(QJsonObject source, QObject *parent) {
-	SearchHintResult *instance = new SearchHintResult(parent);
-	instance->updateFromJSON(source);
+SearchHintResult SearchHintResult::fromJson(QJsonObject source) {SearchHintResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SearchHintResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SearchHintResult::setFromJson(QJsonObject source) {
+	m_searchHints = fromJsonValue<QList<QSharedPointer<SearchHint>>>(source["SearchHints"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+
 }
-QJsonObject SearchHintResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SearchHintResult::toJson() {
 	QJsonObject result;
+	result["SearchHints"] = toJsonValue<QList<QSharedPointer<SearchHint>>>(m_searchHints);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+
 	return result;
 }
-QList<SearchHint *> SearchHintResult::searchHints() const { return m_searchHints; }
-void SearchHintResult::setSearchHints(QList<SearchHint *> newSearchHints) {
-	m_searchHints = newSearchHints;
-	emit searchHintsChanged(newSearchHints);
-}
 
+QList<QSharedPointer<SearchHint>> SearchHintResult::searchHints() const { return m_searchHints; }
+
+void SearchHintResult::setSearchHints(QList<QSharedPointer<SearchHint>> newSearchHints) {
+	m_searchHints = newSearchHints;
+}
 qint32 SearchHintResult::totalRecordCount() const { return m_totalRecordCount; }
+
 void SearchHintResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
 
 

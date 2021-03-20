@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-GuideInfo::GuideInfo(QObject *parent) : QObject(parent) {}
+GuideInfo::GuideInfo(QObject *parent) {}
 
-GuideInfo *GuideInfo::fromJSON(QJsonObject source, QObject *parent) {
-	GuideInfo *instance = new GuideInfo(parent);
-	instance->updateFromJSON(source);
+GuideInfo GuideInfo::fromJson(QJsonObject source) {GuideInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void GuideInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void GuideInfo::setFromJson(QJsonObject source) {
+	m_startDate = fromJsonValue<QDateTime>(source["StartDate"]);
+	m_endDate = fromJsonValue<QDateTime>(source["EndDate"]);
+
 }
-QJsonObject GuideInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject GuideInfo::toJson() {
 	QJsonObject result;
+	result["StartDate"] = toJsonValue<QDateTime>(m_startDate);
+	result["EndDate"] = toJsonValue<QDateTime>(m_endDate);
+
 	return result;
 }
+
 QDateTime GuideInfo::startDate() const { return m_startDate; }
+
 void GuideInfo::setStartDate(QDateTime newStartDate) {
 	m_startDate = newStartDate;
-	emit startDateChanged(newStartDate);
 }
-
 QDateTime GuideInfo::endDate() const { return m_endDate; }
+
 void GuideInfo::setEndDate(QDateTime newEndDate) {
 	m_endDate = newEndDate;
-	emit endDateChanged(newEndDate);
 }
 
 

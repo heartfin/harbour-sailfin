@@ -29,37 +29,40 @@
 
 #include <JellyfinQt/DTO/imageproviderinfo.h>
 
-#include <JellyfinQt/DTO/imagetype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ImageProviderInfo::ImageProviderInfo(QObject *parent) : QObject(parent) {}
+ImageProviderInfo::ImageProviderInfo(QObject *parent) {}
 
-ImageProviderInfo *ImageProviderInfo::fromJSON(QJsonObject source, QObject *parent) {
-	ImageProviderInfo *instance = new ImageProviderInfo(parent);
-	instance->updateFromJSON(source);
+ImageProviderInfo ImageProviderInfo::fromJson(QJsonObject source) {ImageProviderInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ImageProviderInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ImageProviderInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_supportedImages = fromJsonValue<QList<ImageType>>(source["SupportedImages"]);
+
 }
-QJsonObject ImageProviderInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ImageProviderInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["SupportedImages"] = toJsonValue<QList<ImageType>>(m_supportedImages);
+
 	return result;
 }
+
 QString ImageProviderInfo::name() const { return m_name; }
+
 void ImageProviderInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QList<ImageType> ImageProviderInfo::supportedImages() const { return m_supportedImages; }
+
 void ImageProviderInfo::setSupportedImages(QList<ImageType> newSupportedImages) {
 	m_supportedImages = newSupportedImages;
-	emit supportedImagesChanged(newSupportedImages);
 }
 
 

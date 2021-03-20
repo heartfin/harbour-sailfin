@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-PinRedeemResult::PinRedeemResult(QObject *parent) : QObject(parent) {}
+PinRedeemResult::PinRedeemResult(QObject *parent) {}
 
-PinRedeemResult *PinRedeemResult::fromJSON(QJsonObject source, QObject *parent) {
-	PinRedeemResult *instance = new PinRedeemResult(parent);
-	instance->updateFromJSON(source);
+PinRedeemResult PinRedeemResult::fromJson(QJsonObject source) {PinRedeemResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PinRedeemResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PinRedeemResult::setFromJson(QJsonObject source) {
+	m_success = fromJsonValue<bool>(source["Success"]);
+	m_usersReset = fromJsonValue<QStringList>(source["UsersReset"]);
+
 }
-QJsonObject PinRedeemResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PinRedeemResult::toJson() {
 	QJsonObject result;
+	result["Success"] = toJsonValue<bool>(m_success);
+	result["UsersReset"] = toJsonValue<QStringList>(m_usersReset);
+
 	return result;
 }
+
 bool PinRedeemResult::success() const { return m_success; }
+
 void PinRedeemResult::setSuccess(bool newSuccess) {
 	m_success = newSuccess;
-	emit successChanged(newSuccess);
 }
-
 QStringList PinRedeemResult::usersReset() const { return m_usersReset; }
+
 void PinRedeemResult::setUsersReset(QStringList newUsersReset) {
 	m_usersReset = newUsersReset;
-	emit usersResetChanged(newUsersReset);
 }
 
 

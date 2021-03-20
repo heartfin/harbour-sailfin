@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_SCROLLDIRECTION_H
 #define JELLYFIN_DTO_SCROLLDIRECTION_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ScrollDirectionClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Horizontal,
 		Vertical,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit ScrollDirectionClass();
 };
+
 typedef ScrollDirectionClass::Value ScrollDirection;
+
+} // NS DTO
+
+namespace Support {
+
+using ScrollDirection = Jellyfin::DTO::ScrollDirection;
+using ScrollDirectionClass = Jellyfin::DTO::ScrollDirectionClass;
+
+template <>
+ScrollDirection fromJsonValue<ScrollDirection>(const QJsonValue &source) {
+	if (!source.isString()) return ScrollDirectionClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Horizontal")) {
+		return ScrollDirectionClass::Horizontal;
+	}
+	if (str == QStringLiteral("Vertical")) {
+		return ScrollDirectionClass::Vertical;
+	}
+	
+	return ScrollDirectionClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

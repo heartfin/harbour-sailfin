@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_EXTERNALIDMEDIATYPE_H
 #define JELLYFIN_DTO_EXTERNALIDMEDIATYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ExternalIdMediaTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Album,
 		AlbumArtist,
 		Artist,
@@ -56,7 +61,60 @@ public:
 private:
 	explicit ExternalIdMediaTypeClass();
 };
+
 typedef ExternalIdMediaTypeClass::Value ExternalIdMediaType;
+
+} // NS DTO
+
+namespace Support {
+
+using ExternalIdMediaType = Jellyfin::DTO::ExternalIdMediaType;
+using ExternalIdMediaTypeClass = Jellyfin::DTO::ExternalIdMediaTypeClass;
+
+template <>
+ExternalIdMediaType fromJsonValue<ExternalIdMediaType>(const QJsonValue &source) {
+	if (!source.isString()) return ExternalIdMediaTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Album")) {
+		return ExternalIdMediaTypeClass::Album;
+	}
+	if (str == QStringLiteral("AlbumArtist")) {
+		return ExternalIdMediaTypeClass::AlbumArtist;
+	}
+	if (str == QStringLiteral("Artist")) {
+		return ExternalIdMediaTypeClass::Artist;
+	}
+	if (str == QStringLiteral("BoxSet")) {
+		return ExternalIdMediaTypeClass::BoxSet;
+	}
+	if (str == QStringLiteral("Episode")) {
+		return ExternalIdMediaTypeClass::Episode;
+	}
+	if (str == QStringLiteral("Movie")) {
+		return ExternalIdMediaTypeClass::Movie;
+	}
+	if (str == QStringLiteral("OtherArtist")) {
+		return ExternalIdMediaTypeClass::OtherArtist;
+	}
+	if (str == QStringLiteral("Person")) {
+		return ExternalIdMediaTypeClass::Person;
+	}
+	if (str == QStringLiteral("ReleaseGroup")) {
+		return ExternalIdMediaTypeClass::ReleaseGroup;
+	}
+	if (str == QStringLiteral("Season")) {
+		return ExternalIdMediaTypeClass::Season;
+	}
+	if (str == QStringLiteral("Series")) {
+		return ExternalIdMediaTypeClass::Series;
+	}
+	if (str == QStringLiteral("Track")) {
+		return ExternalIdMediaTypeClass::Track;
+	}
+	
+	return ExternalIdMediaTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

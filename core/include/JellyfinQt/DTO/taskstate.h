@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_TASKSTATE_H
 #define JELLYFIN_DTO_TASKSTATE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class TaskStateClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Idle,
 		Cancelling,
 		Running,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit TaskStateClass();
 };
+
 typedef TaskStateClass::Value TaskState;
+
+} // NS DTO
+
+namespace Support {
+
+using TaskState = Jellyfin::DTO::TaskState;
+using TaskStateClass = Jellyfin::DTO::TaskStateClass;
+
+template <>
+TaskState fromJsonValue<TaskState>(const QJsonValue &source) {
+	if (!source.isString()) return TaskStateClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Idle")) {
+		return TaskStateClass::Idle;
+	}
+	if (str == QStringLiteral("Cancelling")) {
+		return TaskStateClass::Cancelling;
+	}
+	if (str == QStringLiteral("Running")) {
+		return TaskStateClass::Running;
+	}
+	
+	return TaskStateClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

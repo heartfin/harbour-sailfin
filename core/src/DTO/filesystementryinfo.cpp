@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/filesystementryinfo.h>
 
-#include <JellyfinQt/DTO/filesystementrytype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-FileSystemEntryInfo::FileSystemEntryInfo(QObject *parent) : QObject(parent) {}
+FileSystemEntryInfo::FileSystemEntryInfo(QObject *parent) {}
 
-FileSystemEntryInfo *FileSystemEntryInfo::fromJSON(QJsonObject source, QObject *parent) {
-	FileSystemEntryInfo *instance = new FileSystemEntryInfo(parent);
-	instance->updateFromJSON(source);
+FileSystemEntryInfo FileSystemEntryInfo::fromJson(QJsonObject source) {FileSystemEntryInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void FileSystemEntryInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void FileSystemEntryInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_type = fromJsonValue<FileSystemEntryType>(source["Type"]);
+
 }
-QJsonObject FileSystemEntryInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject FileSystemEntryInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["Type"] = toJsonValue<FileSystemEntryType>(m_type);
+
 	return result;
 }
+
 QString FileSystemEntryInfo::name() const { return m_name; }
+
 void FileSystemEntryInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString FileSystemEntryInfo::path() const { return m_path; }
+
 void FileSystemEntryInfo::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
-
 FileSystemEntryType FileSystemEntryInfo::type() const { return m_type; }
+
 void FileSystemEntryInfo::setType(FileSystemEntryType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
 
 

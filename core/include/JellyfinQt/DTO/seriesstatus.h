@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_SERIESSTATUS_H
 #define JELLYFIN_DTO_SERIESSTATUS_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class SeriesStatusClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Continuing,
 		Ended,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit SeriesStatusClass();
 };
+
 typedef SeriesStatusClass::Value SeriesStatus;
+
+} // NS DTO
+
+namespace Support {
+
+using SeriesStatus = Jellyfin::DTO::SeriesStatus;
+using SeriesStatusClass = Jellyfin::DTO::SeriesStatusClass;
+
+template <>
+SeriesStatus fromJsonValue<SeriesStatus>(const QJsonValue &source) {
+	if (!source.isString()) return SeriesStatusClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Continuing")) {
+		return SeriesStatusClass::Continuing;
+	}
+	if (str == QStringLiteral("Ended")) {
+		return SeriesStatusClass::Ended;
+	}
+	
+	return SeriesStatusClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

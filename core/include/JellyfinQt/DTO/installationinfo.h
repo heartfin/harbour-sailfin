@@ -31,77 +31,92 @@
 #define JELLYFIN_DTO_INSTALLATIONINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/version.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class Version;
 
-class InstallationInfo : public QObject {
-	Q_OBJECT
+class InstallationInfo {
 public:
-	explicit InstallationInfo(QObject *parent = nullptr);
-	static InstallationInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit InstallationInfo();
+	static InstallationInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the Id.
 	 */
-	Q_PROPERTY(QString guid READ guid WRITE setGuid NOTIFY guidChanged)
+	QUuid guid() const;
+	/**
+	* @brief Gets or sets the Id.
+	*/
+	void setGuid(QUuid newGuid);
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-	Q_PROPERTY(Version * version READ version WRITE setVersion NOTIFY versionChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
+
+	QSharedPointer<Version> version() const;
+
+	void setVersion(QSharedPointer<Version> newVersion);
 	/**
 	 * @brief Gets or sets the changelog for this version.
 	 */
-	Q_PROPERTY(QString changelog READ changelog WRITE setChangelog NOTIFY changelogChanged)
+	QString changelog() const;
+	/**
+	* @brief Gets or sets the changelog for this version.
+	*/
+	void setChangelog(QString newChangelog);
 	/**
 	 * @brief Gets or sets the source URL.
 	 */
-	Q_PROPERTY(QString sourceUrl READ sourceUrl WRITE setSourceUrl NOTIFY sourceUrlChanged)
+	QString sourceUrl() const;
+	/**
+	* @brief Gets or sets the source URL.
+	*/
+	void setSourceUrl(QString newSourceUrl);
 	/**
 	 * @brief Gets or sets a checksum for the binary.
 	 */
-	Q_PROPERTY(QString checksum READ checksum WRITE setChecksum NOTIFY checksumChanged)
-
-	QString guid() const;
-	void setGuid(QString newGuid);
-	
-	QString name() const;
-	void setName(QString newName);
-	
-	Version * version() const;
-	void setVersion(Version * newVersion);
-	
-	QString changelog() const;
-	void setChangelog(QString newChangelog);
-	
-	QString sourceUrl() const;
-	void setSourceUrl(QString newSourceUrl);
-	
 	QString checksum() const;
+	/**
+	* @brief Gets or sets a checksum for the binary.
+	*/
 	void setChecksum(QString newChecksum);
-	
-signals:
-	void guidChanged(QString newGuid);
-	void nameChanged(QString newName);
-	void versionChanged(Version * newVersion);
-	void changelogChanged(QString newChangelog);
-	void sourceUrlChanged(QString newSourceUrl);
-	void checksumChanged(QString newChecksum);
+
 protected:
-	QString m_guid;
+	QUuid m_guid;
 	QString m_name;
-	Version * m_version = nullptr;
+	QSharedPointer<Version> m_version = nullptr;
 	QString m_changelog;
 	QString m_sourceUrl;
 	QString m_checksum;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using InstallationInfo = Jellyfin::DTO::InstallationInfo;
+
+template <>
+InstallationInfo fromJsonValue<InstallationInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return InstallationInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

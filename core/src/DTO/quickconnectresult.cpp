@@ -32,56 +32,65 @@
 namespace Jellyfin {
 namespace DTO {
 
-QuickConnectResult::QuickConnectResult(QObject *parent) : QObject(parent) {}
+QuickConnectResult::QuickConnectResult(QObject *parent) {}
 
-QuickConnectResult *QuickConnectResult::fromJSON(QJsonObject source, QObject *parent) {
-	QuickConnectResult *instance = new QuickConnectResult(parent);
-	instance->updateFromJSON(source);
+QuickConnectResult QuickConnectResult::fromJson(QJsonObject source) {QuickConnectResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void QuickConnectResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void QuickConnectResult::setFromJson(QJsonObject source) {
+	m_authenticated = fromJsonValue<bool>(source["Authenticated"]);
+	m_secret = fromJsonValue<QString>(source["Secret"]);
+	m_code = fromJsonValue<QString>(source["Code"]);
+	m_authentication = fromJsonValue<QString>(source["Authentication"]);
+	m_error = fromJsonValue<QString>(source["Error"]);
+	m_dateAdded = fromJsonValue<QDateTime>(source["DateAdded"]);
+
 }
-QJsonObject QuickConnectResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject QuickConnectResult::toJson() {
 	QJsonObject result;
+	result["Authenticated"] = toJsonValue<bool>(m_authenticated);
+	result["Secret"] = toJsonValue<QString>(m_secret);
+	result["Code"] = toJsonValue<QString>(m_code);
+	result["Authentication"] = toJsonValue<QString>(m_authentication);
+	result["Error"] = toJsonValue<QString>(m_error);
+	result["DateAdded"] = toJsonValue<QDateTime>(m_dateAdded);
+
 	return result;
 }
+
 bool QuickConnectResult::authenticated() const { return m_authenticated; }
+
 void QuickConnectResult::setAuthenticated(bool newAuthenticated) {
 	m_authenticated = newAuthenticated;
-	emit authenticatedChanged(newAuthenticated);
 }
-
 QString QuickConnectResult::secret() const { return m_secret; }
+
 void QuickConnectResult::setSecret(QString newSecret) {
 	m_secret = newSecret;
-	emit secretChanged(newSecret);
 }
-
 QString QuickConnectResult::code() const { return m_code; }
+
 void QuickConnectResult::setCode(QString newCode) {
 	m_code = newCode;
-	emit codeChanged(newCode);
 }
-
 QString QuickConnectResult::authentication() const { return m_authentication; }
+
 void QuickConnectResult::setAuthentication(QString newAuthentication) {
 	m_authentication = newAuthentication;
-	emit authenticationChanged(newAuthentication);
 }
-
 QString QuickConnectResult::error() const { return m_error; }
+
 void QuickConnectResult::setError(QString newError) {
 	m_error = newError;
-	emit errorChanged(newError);
 }
-
 QDateTime QuickConnectResult::dateAdded() const { return m_dateAdded; }
+
 void QuickConnectResult::setDateAdded(QDateTime newDateAdded) {
 	m_dateAdded = newDateAdded;
-	emit dateAddedChanged(newDateAdded);
 }
 
 

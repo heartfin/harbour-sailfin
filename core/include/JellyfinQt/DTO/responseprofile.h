@@ -31,63 +31,58 @@
 #define JELLYFIN_DTO_RESPONSEPROFILE_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
 #include "JellyfinQt/DTO/dlnaprofiletype.h"
+#include "JellyfinQt/DTO/profilecondition.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ProfileCondition;
 
-class ResponseProfile : public QObject {
-	Q_OBJECT
+class ResponseProfile {
 public:
-	explicit ResponseProfile(QObject *parent = nullptr);
-	static ResponseProfile *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(QString container READ container WRITE setContainer NOTIFY containerChanged)
-	Q_PROPERTY(QString audioCodec READ audioCodec WRITE setAudioCodec NOTIFY audioCodecChanged)
-	Q_PROPERTY(QString videoCodec READ videoCodec WRITE setVideoCodec NOTIFY videoCodecChanged)
-	Q_PROPERTY(DlnaProfileType type READ type WRITE setType NOTIFY typeChanged)
-	Q_PROPERTY(QString orgPn READ orgPn WRITE setOrgPn NOTIFY orgPnChanged)
-	Q_PROPERTY(QString mimeType READ mimeType WRITE setMimeType NOTIFY mimeTypeChanged)
-	Q_PROPERTY(QList<ProfileCondition *> conditions READ conditions WRITE setConditions NOTIFY conditionsChanged)
+	explicit ResponseProfile();
+	static ResponseProfile fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString container() const;
+
 	void setContainer(QString newContainer);
-	
+
 	QString audioCodec() const;
+
 	void setAudioCodec(QString newAudioCodec);
-	
+
 	QString videoCodec() const;
+
 	void setVideoCodec(QString newVideoCodec);
-	
+
 	DlnaProfileType type() const;
+
 	void setType(DlnaProfileType newType);
-	
+
 	QString orgPn() const;
+
 	void setOrgPn(QString newOrgPn);
-	
+
 	QString mimeType() const;
+
 	void setMimeType(QString newMimeType);
-	
-	QList<ProfileCondition *> conditions() const;
-	void setConditions(QList<ProfileCondition *> newConditions);
-	
-signals:
-	void containerChanged(QString newContainer);
-	void audioCodecChanged(QString newAudioCodec);
-	void videoCodecChanged(QString newVideoCodec);
-	void typeChanged(DlnaProfileType newType);
-	void orgPnChanged(QString newOrgPn);
-	void mimeTypeChanged(QString newMimeType);
-	void conditionsChanged(QList<ProfileCondition *> newConditions);
+
+	QList<QSharedPointer<ProfileCondition>> conditions() const;
+
+	void setConditions(QList<QSharedPointer<ProfileCondition>> newConditions);
+
 protected:
 	QString m_container;
 	QString m_audioCodec;
@@ -95,8 +90,20 @@ protected:
 	DlnaProfileType m_type;
 	QString m_orgPn;
 	QString m_mimeType;
-	QList<ProfileCondition *> m_conditions;
+	QList<QSharedPointer<ProfileCondition>> m_conditions;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ResponseProfile = Jellyfin::DTO::ResponseProfile;
+
+template <>
+ResponseProfile fromJsonValue<ResponseProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ResponseProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

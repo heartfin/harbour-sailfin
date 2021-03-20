@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_SUBTITLEDELIVERYMETHOD_H
 #define JELLYFIN_DTO_SUBTITLEDELIVERYMETHOD_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class SubtitleDeliveryMethodClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Encode,
 		Embed,
 		External,
@@ -48,7 +53,36 @@ public:
 private:
 	explicit SubtitleDeliveryMethodClass();
 };
+
 typedef SubtitleDeliveryMethodClass::Value SubtitleDeliveryMethod;
+
+} // NS DTO
+
+namespace Support {
+
+using SubtitleDeliveryMethod = Jellyfin::DTO::SubtitleDeliveryMethod;
+using SubtitleDeliveryMethodClass = Jellyfin::DTO::SubtitleDeliveryMethodClass;
+
+template <>
+SubtitleDeliveryMethod fromJsonValue<SubtitleDeliveryMethod>(const QJsonValue &source) {
+	if (!source.isString()) return SubtitleDeliveryMethodClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Encode")) {
+		return SubtitleDeliveryMethodClass::Encode;
+	}
+	if (str == QStringLiteral("Embed")) {
+		return SubtitleDeliveryMethodClass::Embed;
+	}
+	if (str == QStringLiteral("External")) {
+		return SubtitleDeliveryMethodClass::External;
+	}
+	if (str == QStringLiteral("Hls")) {
+		return SubtitleDeliveryMethodClass::Hls;
+	}
+	
+	return SubtitleDeliveryMethodClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

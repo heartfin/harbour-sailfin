@@ -29,86 +29,96 @@
 
 #include <JellyfinQt/DTO/remoteimageinfo.h>
 
-#include <JellyfinQt/DTO/imagetype.h>
-#include <JellyfinQt/DTO/ratingtype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-RemoteImageInfo::RemoteImageInfo(QObject *parent) : QObject(parent) {}
+RemoteImageInfo::RemoteImageInfo(QObject *parent) {}
 
-RemoteImageInfo *RemoteImageInfo::fromJSON(QJsonObject source, QObject *parent) {
-	RemoteImageInfo *instance = new RemoteImageInfo(parent);
-	instance->updateFromJSON(source);
+RemoteImageInfo RemoteImageInfo::fromJson(QJsonObject source) {RemoteImageInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void RemoteImageInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void RemoteImageInfo::setFromJson(QJsonObject source) {
+	m_providerName = fromJsonValue<QString>(source["ProviderName"]);
+	m_url = fromJsonValue<QString>(source["Url"]);
+	m_thumbnailUrl = fromJsonValue<QString>(source["ThumbnailUrl"]);
+	m_height = fromJsonValue<qint32>(source["Height"]);
+	m_width = fromJsonValue<qint32>(source["Width"]);
+	m_communityRating = fromJsonValue<double>(source["CommunityRating"]);
+	m_voteCount = fromJsonValue<qint32>(source["VoteCount"]);
+	m_language = fromJsonValue<QString>(source["Language"]);
+	m_type = fromJsonValue<ImageType>(source["Type"]);
+	m_ratingType = fromJsonValue<RatingType>(source["RatingType"]);
+
 }
-QJsonObject RemoteImageInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject RemoteImageInfo::toJson() {
 	QJsonObject result;
+	result["ProviderName"] = toJsonValue<QString>(m_providerName);
+	result["Url"] = toJsonValue<QString>(m_url);
+	result["ThumbnailUrl"] = toJsonValue<QString>(m_thumbnailUrl);
+	result["Height"] = toJsonValue<qint32>(m_height);
+	result["Width"] = toJsonValue<qint32>(m_width);
+	result["CommunityRating"] = toJsonValue<double>(m_communityRating);
+	result["VoteCount"] = toJsonValue<qint32>(m_voteCount);
+	result["Language"] = toJsonValue<QString>(m_language);
+	result["Type"] = toJsonValue<ImageType>(m_type);
+	result["RatingType"] = toJsonValue<RatingType>(m_ratingType);
+
 	return result;
 }
+
 QString RemoteImageInfo::providerName() const { return m_providerName; }
+
 void RemoteImageInfo::setProviderName(QString newProviderName) {
 	m_providerName = newProviderName;
-	emit providerNameChanged(newProviderName);
 }
-
 QString RemoteImageInfo::url() const { return m_url; }
+
 void RemoteImageInfo::setUrl(QString newUrl) {
 	m_url = newUrl;
-	emit urlChanged(newUrl);
 }
-
 QString RemoteImageInfo::thumbnailUrl() const { return m_thumbnailUrl; }
+
 void RemoteImageInfo::setThumbnailUrl(QString newThumbnailUrl) {
 	m_thumbnailUrl = newThumbnailUrl;
-	emit thumbnailUrlChanged(newThumbnailUrl);
 }
-
 qint32 RemoteImageInfo::height() const { return m_height; }
+
 void RemoteImageInfo::setHeight(qint32 newHeight) {
 	m_height = newHeight;
-	emit heightChanged(newHeight);
 }
-
 qint32 RemoteImageInfo::width() const { return m_width; }
+
 void RemoteImageInfo::setWidth(qint32 newWidth) {
 	m_width = newWidth;
-	emit widthChanged(newWidth);
 }
-
 double RemoteImageInfo::communityRating() const { return m_communityRating; }
+
 void RemoteImageInfo::setCommunityRating(double newCommunityRating) {
 	m_communityRating = newCommunityRating;
-	emit communityRatingChanged(newCommunityRating);
 }
-
 qint32 RemoteImageInfo::voteCount() const { return m_voteCount; }
+
 void RemoteImageInfo::setVoteCount(qint32 newVoteCount) {
 	m_voteCount = newVoteCount;
-	emit voteCountChanged(newVoteCount);
 }
-
 QString RemoteImageInfo::language() const { return m_language; }
+
 void RemoteImageInfo::setLanguage(QString newLanguage) {
 	m_language = newLanguage;
-	emit languageChanged(newLanguage);
 }
-
 ImageType RemoteImageInfo::type() const { return m_type; }
+
 void RemoteImageInfo::setType(ImageType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 RatingType RemoteImageInfo::ratingType() const { return m_ratingType; }
+
 void RemoteImageInfo::setRatingType(RatingType newRatingType) {
 	m_ratingType = newRatingType;
-	emit ratingTypeChanged(newRatingType);
 }
 
 

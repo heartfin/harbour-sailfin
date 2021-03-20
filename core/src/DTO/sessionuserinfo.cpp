@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-SessionUserInfo::SessionUserInfo(QObject *parent) : QObject(parent) {}
+SessionUserInfo::SessionUserInfo(QObject *parent) {}
 
-SessionUserInfo *SessionUserInfo::fromJSON(QJsonObject source, QObject *parent) {
-	SessionUserInfo *instance = new SessionUserInfo(parent);
-	instance->updateFromJSON(source);
+SessionUserInfo SessionUserInfo::fromJson(QJsonObject source) {SessionUserInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SessionUserInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SessionUserInfo::setFromJson(QJsonObject source) {
+	m_userId = fromJsonValue<QUuid>(source["UserId"]);
+	m_userName = fromJsonValue<QString>(source["UserName"]);
+
 }
-QJsonObject SessionUserInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SessionUserInfo::toJson() {
 	QJsonObject result;
+	result["UserId"] = toJsonValue<QUuid>(m_userId);
+	result["UserName"] = toJsonValue<QString>(m_userName);
+
 	return result;
 }
-QString SessionUserInfo::userId() const { return m_userId; }
-void SessionUserInfo::setUserId(QString newUserId) {
-	m_userId = newUserId;
-	emit userIdChanged(newUserId);
-}
 
+QUuid SessionUserInfo::userId() const { return m_userId; }
+
+void SessionUserInfo::setUserId(QUuid newUserId) {
+	m_userId = newUserId;
+}
 QString SessionUserInfo::userName() const { return m_userName; }
+
 void SessionUserInfo::setUserName(QString newUserName) {
 	m_userName = newUserName;
-	emit userNameChanged(newUserName);
 }
 
 

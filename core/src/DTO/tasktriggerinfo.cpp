@@ -29,55 +29,61 @@
 
 #include <JellyfinQt/DTO/tasktriggerinfo.h>
 
-#include <JellyfinQt/DTO/dayofweek.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-TaskTriggerInfo::TaskTriggerInfo(QObject *parent) : QObject(parent) {}
+TaskTriggerInfo::TaskTriggerInfo(QObject *parent) {}
 
-TaskTriggerInfo *TaskTriggerInfo::fromJSON(QJsonObject source, QObject *parent) {
-	TaskTriggerInfo *instance = new TaskTriggerInfo(parent);
-	instance->updateFromJSON(source);
+TaskTriggerInfo TaskTriggerInfo::fromJson(QJsonObject source) {TaskTriggerInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TaskTriggerInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TaskTriggerInfo::setFromJson(QJsonObject source) {
+	m_type = fromJsonValue<QString>(source["Type"]);
+	m_timeOfDayTicks = fromJsonValue<qint64>(source["TimeOfDayTicks"]);
+	m_intervalTicks = fromJsonValue<qint64>(source["IntervalTicks"]);
+	m_dayOfWeek = fromJsonValue<DayOfWeek>(source["DayOfWeek"]);
+	m_maxRuntimeTicks = fromJsonValue<qint64>(source["MaxRuntimeTicks"]);
+
 }
-QJsonObject TaskTriggerInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TaskTriggerInfo::toJson() {
 	QJsonObject result;
+	result["Type"] = toJsonValue<QString>(m_type);
+	result["TimeOfDayTicks"] = toJsonValue<qint64>(m_timeOfDayTicks);
+	result["IntervalTicks"] = toJsonValue<qint64>(m_intervalTicks);
+	result["DayOfWeek"] = toJsonValue<DayOfWeek>(m_dayOfWeek);
+	result["MaxRuntimeTicks"] = toJsonValue<qint64>(m_maxRuntimeTicks);
+
 	return result;
 }
+
 QString TaskTriggerInfo::type() const { return m_type; }
+
 void TaskTriggerInfo::setType(QString newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 qint64 TaskTriggerInfo::timeOfDayTicks() const { return m_timeOfDayTicks; }
+
 void TaskTriggerInfo::setTimeOfDayTicks(qint64 newTimeOfDayTicks) {
 	m_timeOfDayTicks = newTimeOfDayTicks;
-	emit timeOfDayTicksChanged(newTimeOfDayTicks);
 }
-
 qint64 TaskTriggerInfo::intervalTicks() const { return m_intervalTicks; }
+
 void TaskTriggerInfo::setIntervalTicks(qint64 newIntervalTicks) {
 	m_intervalTicks = newIntervalTicks;
-	emit intervalTicksChanged(newIntervalTicks);
 }
-
 DayOfWeek TaskTriggerInfo::dayOfWeek() const { return m_dayOfWeek; }
+
 void TaskTriggerInfo::setDayOfWeek(DayOfWeek newDayOfWeek) {
 	m_dayOfWeek = newDayOfWeek;
-	emit dayOfWeekChanged(newDayOfWeek);
 }
-
 qint64 TaskTriggerInfo::maxRuntimeTicks() const { return m_maxRuntimeTicks; }
+
 void TaskTriggerInfo::setMaxRuntimeTicks(qint64 newMaxRuntimeTicks) {
 	m_maxRuntimeTicks = newMaxRuntimeTicks;
-	emit maxRuntimeTicksChanged(newMaxRuntimeTicks);
 }
 
 

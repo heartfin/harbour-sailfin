@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_BRANDINGOPTIONS_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class BrandingOptions : public QObject {
-	Q_OBJECT
-public:
-	explicit BrandingOptions(QObject *parent = nullptr);
-	static BrandingOptions *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class BrandingOptions {
+public:
+	explicit BrandingOptions();
+	static BrandingOptions fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the login disclaimer.
 	 */
-	Q_PROPERTY(QString loginDisclaimer READ loginDisclaimer WRITE setLoginDisclaimer NOTIFY loginDisclaimerChanged)
+	QString loginDisclaimer() const;
+	/**
+	* @brief Gets or sets the login disclaimer.
+	*/
+	void setLoginDisclaimer(QString newLoginDisclaimer);
 	/**
 	 * @brief Gets or sets the custom CSS.
 	 */
-	Q_PROPERTY(QString customCss READ customCss WRITE setCustomCss NOTIFY customCssChanged)
-
-	QString loginDisclaimer() const;
-	void setLoginDisclaimer(QString newLoginDisclaimer);
-	
 	QString customCss() const;
+	/**
+	* @brief Gets or sets the custom CSS.
+	*/
 	void setCustomCss(QString newCustomCss);
-	
-signals:
-	void loginDisclaimerChanged(QString newLoginDisclaimer);
-	void customCssChanged(QString newCustomCss);
+
 protected:
 	QString m_loginDisclaimer;
 	QString m_customCss;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using BrandingOptions = Jellyfin::DTO::BrandingOptions;
+
+template <>
+BrandingOptions fromJsonValue<BrandingOptions>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return BrandingOptions::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,50 +31,63 @@
 #define JELLYFIN_DTO_FILESYSTEMENTRYINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/filesystementrytype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class FileSystemEntryInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit FileSystemEntryInfo(QObject *parent = nullptr);
-	static FileSystemEntryInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class FileSystemEntryInfo {
+public:
+	explicit FileSystemEntryInfo();
+	static FileSystemEntryInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets the path.
 	 */
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
-	Q_PROPERTY(FileSystemEntryType type READ type WRITE setType NOTIFY typeChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
 	QString path() const;
+	/**
+	* @brief Gets the path.
+	*/
 	void setPath(QString newPath);
-	
+
 	FileSystemEntryType type() const;
+
 	void setType(FileSystemEntryType newType);
-	
-signals:
-	void nameChanged(QString newName);
-	void pathChanged(QString newPath);
-	void typeChanged(FileSystemEntryType newType);
+
 protected:
 	QString m_name;
 	QString m_path;
 	FileSystemEntryType m_type;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using FileSystemEntryInfo = Jellyfin::DTO::FileSystemEntryInfo;
+
+template <>
+FileSystemEntryInfo fromJsonValue<FileSystemEntryInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return FileSystemEntryInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

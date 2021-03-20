@@ -29,37 +29,40 @@
 
 #include <JellyfinQt/DTO/notificationssummarydto.h>
 
-#include <JellyfinQt/DTO/notificationlevel.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-NotificationsSummaryDto::NotificationsSummaryDto(QObject *parent) : QObject(parent) {}
+NotificationsSummaryDto::NotificationsSummaryDto(QObject *parent) {}
 
-NotificationsSummaryDto *NotificationsSummaryDto::fromJSON(QJsonObject source, QObject *parent) {
-	NotificationsSummaryDto *instance = new NotificationsSummaryDto(parent);
-	instance->updateFromJSON(source);
+NotificationsSummaryDto NotificationsSummaryDto::fromJson(QJsonObject source) {NotificationsSummaryDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void NotificationsSummaryDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void NotificationsSummaryDto::setFromJson(QJsonObject source) {
+	m_unreadCount = fromJsonValue<qint32>(source["UnreadCount"]);
+	m_maxUnreadNotificationLevel = fromJsonValue<NotificationLevel>(source["MaxUnreadNotificationLevel"]);
+
 }
-QJsonObject NotificationsSummaryDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject NotificationsSummaryDto::toJson() {
 	QJsonObject result;
+	result["UnreadCount"] = toJsonValue<qint32>(m_unreadCount);
+	result["MaxUnreadNotificationLevel"] = toJsonValue<NotificationLevel>(m_maxUnreadNotificationLevel);
+
 	return result;
 }
+
 qint32 NotificationsSummaryDto::unreadCount() const { return m_unreadCount; }
+
 void NotificationsSummaryDto::setUnreadCount(qint32 newUnreadCount) {
 	m_unreadCount = newUnreadCount;
-	emit unreadCountChanged(newUnreadCount);
 }
-
 NotificationLevel NotificationsSummaryDto::maxUnreadNotificationLevel() const { return m_maxUnreadNotificationLevel; }
+
 void NotificationsSummaryDto::setMaxUnreadNotificationLevel(NotificationLevel newMaxUnreadNotificationLevel) {
 	m_maxUnreadNotificationLevel = newMaxUnreadNotificationLevel;
-	emit maxUnreadNotificationLevelChanged(newMaxUnreadNotificationLevel);
 }
 
 

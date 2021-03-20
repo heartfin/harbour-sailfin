@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_IMAGETYPE_H
 #define JELLYFIN_DTO_IMAGETYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ImageTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Primary,
 		Art,
 		Backdrop,
@@ -57,7 +62,63 @@ public:
 private:
 	explicit ImageTypeClass();
 };
+
 typedef ImageTypeClass::Value ImageType;
+
+} // NS DTO
+
+namespace Support {
+
+using ImageType = Jellyfin::DTO::ImageType;
+using ImageTypeClass = Jellyfin::DTO::ImageTypeClass;
+
+template <>
+ImageType fromJsonValue<ImageType>(const QJsonValue &source) {
+	if (!source.isString()) return ImageTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Primary")) {
+		return ImageTypeClass::Primary;
+	}
+	if (str == QStringLiteral("Art")) {
+		return ImageTypeClass::Art;
+	}
+	if (str == QStringLiteral("Backdrop")) {
+		return ImageTypeClass::Backdrop;
+	}
+	if (str == QStringLiteral("Banner")) {
+		return ImageTypeClass::Banner;
+	}
+	if (str == QStringLiteral("Logo")) {
+		return ImageTypeClass::Logo;
+	}
+	if (str == QStringLiteral("Thumb")) {
+		return ImageTypeClass::Thumb;
+	}
+	if (str == QStringLiteral("Disc")) {
+		return ImageTypeClass::Disc;
+	}
+	if (str == QStringLiteral("Box")) {
+		return ImageTypeClass::Box;
+	}
+	if (str == QStringLiteral("Screenshot")) {
+		return ImageTypeClass::Screenshot;
+	}
+	if (str == QStringLiteral("Menu")) {
+		return ImageTypeClass::Menu;
+	}
+	if (str == QStringLiteral("Chapter")) {
+		return ImageTypeClass::Chapter;
+	}
+	if (str == QStringLiteral("BoxRear")) {
+		return ImageTypeClass::BoxRear;
+	}
+	if (str == QStringLiteral("Profile")) {
+		return ImageTypeClass::Profile;
+	}
+	
+	return ImageTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

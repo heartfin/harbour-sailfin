@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-PersonLookupInfoRemoteSearchQuery::PersonLookupInfoRemoteSearchQuery(QObject *parent) : QObject(parent) {}
+PersonLookupInfoRemoteSearchQuery::PersonLookupInfoRemoteSearchQuery(QObject *parent) {}
 
-PersonLookupInfoRemoteSearchQuery *PersonLookupInfoRemoteSearchQuery::fromJSON(QJsonObject source, QObject *parent) {
-	PersonLookupInfoRemoteSearchQuery *instance = new PersonLookupInfoRemoteSearchQuery(parent);
-	instance->updateFromJSON(source);
+PersonLookupInfoRemoteSearchQuery PersonLookupInfoRemoteSearchQuery::fromJson(QJsonObject source) {PersonLookupInfoRemoteSearchQuery instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PersonLookupInfoRemoteSearchQuery::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PersonLookupInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
+	m_searchInfo = fromJsonValue<QSharedPointer<PersonLookupInfo>>(source["SearchInfo"]);
+	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+
 }
-QJsonObject PersonLookupInfoRemoteSearchQuery::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PersonLookupInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
+	result["SearchInfo"] = toJsonValue<QSharedPointer<PersonLookupInfo>>(m_searchInfo);
+	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+
 	return result;
 }
-PersonLookupInfo * PersonLookupInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
-void PersonLookupInfoRemoteSearchQuery::setSearchInfo(PersonLookupInfo * newSearchInfo) {
+
+QSharedPointer<PersonLookupInfo> PersonLookupInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
+
+void PersonLookupInfoRemoteSearchQuery::setSearchInfo(QSharedPointer<PersonLookupInfo> newSearchInfo) {
 	m_searchInfo = newSearchInfo;
-	emit searchInfoChanged(newSearchInfo);
 }
+QUuid PersonLookupInfoRemoteSearchQuery::itemId() const { return m_itemId; }
 
-QString PersonLookupInfoRemoteSearchQuery::itemId() const { return m_itemId; }
-void PersonLookupInfoRemoteSearchQuery::setItemId(QString newItemId) {
+void PersonLookupInfoRemoteSearchQuery::setItemId(QUuid newItemId) {
 	m_itemId = newItemId;
-	emit itemIdChanged(newItemId);
 }
-
 QString PersonLookupInfoRemoteSearchQuery::searchProviderName() const { return m_searchProviderName; }
+
 void PersonLookupInfoRemoteSearchQuery::setSearchProviderName(QString newSearchProviderName) {
 	m_searchProviderName = newSearchProviderName;
-	emit searchProviderNameChanged(newSearchProviderName);
 }
-
 bool PersonLookupInfoRemoteSearchQuery::includeDisabledProviders() const { return m_includeDisabledProviders; }
+
 void PersonLookupInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncludeDisabledProviders) {
 	m_includeDisabledProviders = newIncludeDisabledProviders;
-	emit includeDisabledProvidersChanged(newIncludeDisabledProviders);
 }
 
 

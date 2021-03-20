@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_NOTIFICATIONLEVEL_H
 #define JELLYFIN_DTO_NOTIFICATIONLEVEL_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class NotificationLevelClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Normal,
 		Warning,
 		Error,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit NotificationLevelClass();
 };
+
 typedef NotificationLevelClass::Value NotificationLevel;
+
+} // NS DTO
+
+namespace Support {
+
+using NotificationLevel = Jellyfin::DTO::NotificationLevel;
+using NotificationLevelClass = Jellyfin::DTO::NotificationLevelClass;
+
+template <>
+NotificationLevel fromJsonValue<NotificationLevel>(const QJsonValue &source) {
+	if (!source.isString()) return NotificationLevelClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Normal")) {
+		return NotificationLevelClass::Normal;
+	}
+	if (str == QStringLiteral("Warning")) {
+		return NotificationLevelClass::Warning;
+	}
+	if (str == QStringLiteral("Error")) {
+		return NotificationLevelClass::Error;
+	}
+	
+	return NotificationLevelClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

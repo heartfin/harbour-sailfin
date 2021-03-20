@@ -31,54 +31,65 @@
 #define JELLYFIN_DTO_RECOMMENDATIONDTO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
 
+#include "JellyfinQt/DTO/baseitemdto.h"
 #include "JellyfinQt/DTO/recommendationtype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class BaseItemDto;
 
-class RecommendationDto : public QObject {
-	Q_OBJECT
+class RecommendationDto {
 public:
-	explicit RecommendationDto(QObject *parent = nullptr);
-	static RecommendationDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(QList<BaseItemDto *> items READ items WRITE setItems NOTIFY itemsChanged)
-	Q_PROPERTY(RecommendationType recommendationType READ recommendationType WRITE setRecommendationType NOTIFY recommendationTypeChanged)
-	Q_PROPERTY(QString baselineItemName READ baselineItemName WRITE setBaselineItemName NOTIFY baselineItemNameChanged)
-	Q_PROPERTY(QString categoryId READ categoryId WRITE setCategoryId NOTIFY categoryIdChanged)
-
-	QList<BaseItemDto *> items() const;
-	void setItems(QList<BaseItemDto *> newItems);
+	explicit RecommendationDto();
+	static RecommendationDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
 	
+	// Properties
+
+	QList<QSharedPointer<BaseItemDto>> items() const;
+
+	void setItems(QList<QSharedPointer<BaseItemDto>> newItems);
+
 	RecommendationType recommendationType() const;
+
 	void setRecommendationType(RecommendationType newRecommendationType);
-	
+
 	QString baselineItemName() const;
+
 	void setBaselineItemName(QString newBaselineItemName);
-	
-	QString categoryId() const;
-	void setCategoryId(QString newCategoryId);
-	
-signals:
-	void itemsChanged(QList<BaseItemDto *> newItems);
-	void recommendationTypeChanged(RecommendationType newRecommendationType);
-	void baselineItemNameChanged(QString newBaselineItemName);
-	void categoryIdChanged(QString newCategoryId);
+
+	QUuid categoryId() const;
+
+	void setCategoryId(QUuid newCategoryId);
+
 protected:
-	QList<BaseItemDto *> m_items;
+	QList<QSharedPointer<BaseItemDto>> m_items;
 	RecommendationType m_recommendationType;
 	QString m_baselineItemName;
-	QString m_categoryId;
+	QUuid m_categoryId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using RecommendationDto = Jellyfin::DTO::RecommendationDto;
+
+template <>
+RecommendationDto fromJsonValue<RecommendationDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RecommendationDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

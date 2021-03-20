@@ -32,244 +32,242 @@
 
 #include <QDateTime>
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
 
+#include "JellyfinQt/DTO/baseitemdto.h"
 #include "JellyfinQt/DTO/keepuntil.h"
 #include "JellyfinQt/DTO/recordingstatus.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class BaseItemDto;
 
-class TimerInfoDto : public QObject {
-	Q_OBJECT
+class TimerInfoDto {
 public:
-	explicit TimerInfoDto(QObject *parent = nullptr);
-	static TimerInfoDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit TimerInfoDto();
+	static TimerInfoDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Id of the recording.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Id of the recording.
+	*/
+	void setJellyfinId(QString newJellyfinId);
+
+	QString type() const;
+
+	void setType(QString newType);
 	/**
 	 * @brief Gets or sets the server identifier.
 	 */
-	Q_PROPERTY(QString serverId READ serverId WRITE setServerId NOTIFY serverIdChanged)
+	QString serverId() const;
+	/**
+	* @brief Gets or sets the server identifier.
+	*/
+	void setServerId(QString newServerId);
 	/**
 	 * @brief Gets or sets the external identifier.
 	 */
-	Q_PROPERTY(QString externalId READ externalId WRITE setExternalId NOTIFY externalIdChanged)
+	QString externalId() const;
+	/**
+	* @brief Gets or sets the external identifier.
+	*/
+	void setExternalId(QString newExternalId);
 	/**
 	 * @brief ChannelId of the recording.
 	 */
-	Q_PROPERTY(QString channelId READ channelId WRITE setChannelId NOTIFY channelIdChanged)
+	QUuid channelId() const;
+	/**
+	* @brief ChannelId of the recording.
+	*/
+	void setChannelId(QUuid newChannelId);
 	/**
 	 * @brief Gets or sets the external channel identifier.
 	 */
-	Q_PROPERTY(QString externalChannelId READ externalChannelId WRITE setExternalChannelId NOTIFY externalChannelIdChanged)
+	QString externalChannelId() const;
+	/**
+	* @brief Gets or sets the external channel identifier.
+	*/
+	void setExternalChannelId(QString newExternalChannelId);
 	/**
 	 * @brief ChannelName of the recording.
 	 */
-	Q_PROPERTY(QString channelName READ channelName WRITE setChannelName NOTIFY channelNameChanged)
-	Q_PROPERTY(QString channelPrimaryImageTag READ channelPrimaryImageTag WRITE setChannelPrimaryImageTag NOTIFY channelPrimaryImageTagChanged)
+	QString channelName() const;
+	/**
+	* @brief ChannelName of the recording.
+	*/
+	void setChannelName(QString newChannelName);
+
+	QString channelPrimaryImageTag() const;
+
+	void setChannelPrimaryImageTag(QString newChannelPrimaryImageTag);
 	/**
 	 * @brief Gets or sets the program identifier.
 	 */
-	Q_PROPERTY(QString programId READ programId WRITE setProgramId NOTIFY programIdChanged)
+	QString programId() const;
+	/**
+	* @brief Gets or sets the program identifier.
+	*/
+	void setProgramId(QString newProgramId);
 	/**
 	 * @brief Gets or sets the external program identifier.
 	 */
-	Q_PROPERTY(QString externalProgramId READ externalProgramId WRITE setExternalProgramId NOTIFY externalProgramIdChanged)
+	QString externalProgramId() const;
+	/**
+	* @brief Gets or sets the external program identifier.
+	*/
+	void setExternalProgramId(QString newExternalProgramId);
 	/**
 	 * @brief Name of the recording.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Name of the recording.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Description of the recording.
 	 */
-	Q_PROPERTY(QString overview READ overview WRITE setOverview NOTIFY overviewChanged)
+	QString overview() const;
+	/**
+	* @brief Description of the recording.
+	*/
+	void setOverview(QString newOverview);
 	/**
 	 * @brief The start date of the recording, in UTC.
 	 */
-	Q_PROPERTY(QDateTime startDate READ startDate WRITE setStartDate NOTIFY startDateChanged)
+	QDateTime startDate() const;
+	/**
+	* @brief The start date of the recording, in UTC.
+	*/
+	void setStartDate(QDateTime newStartDate);
 	/**
 	 * @brief The end date of the recording, in UTC.
 	 */
-	Q_PROPERTY(QDateTime endDate READ endDate WRITE setEndDate NOTIFY endDateChanged)
+	QDateTime endDate() const;
+	/**
+	* @brief The end date of the recording, in UTC.
+	*/
+	void setEndDate(QDateTime newEndDate);
 	/**
 	 * @brief Gets or sets the name of the service.
 	 */
-	Q_PROPERTY(QString serviceName READ serviceName WRITE setServiceName NOTIFY serviceNameChanged)
+	QString serviceName() const;
+	/**
+	* @brief Gets or sets the name of the service.
+	*/
+	void setServiceName(QString newServiceName);
 	/**
 	 * @brief Gets or sets the priority.
 	 */
-	Q_PROPERTY(qint32 priority READ priority WRITE setPriority NOTIFY priorityChanged)
+	qint32 priority() const;
+	/**
+	* @brief Gets or sets the priority.
+	*/
+	void setPriority(qint32 newPriority);
 	/**
 	 * @brief Gets or sets the pre padding seconds.
 	 */
-	Q_PROPERTY(qint32 prePaddingSeconds READ prePaddingSeconds WRITE setPrePaddingSeconds NOTIFY prePaddingSecondsChanged)
+	qint32 prePaddingSeconds() const;
+	/**
+	* @brief Gets or sets the pre padding seconds.
+	*/
+	void setPrePaddingSeconds(qint32 newPrePaddingSeconds);
 	/**
 	 * @brief Gets or sets the post padding seconds.
 	 */
-	Q_PROPERTY(qint32 postPaddingSeconds READ postPaddingSeconds WRITE setPostPaddingSeconds NOTIFY postPaddingSecondsChanged)
+	qint32 postPaddingSeconds() const;
+	/**
+	* @brief Gets or sets the post padding seconds.
+	*/
+	void setPostPaddingSeconds(qint32 newPostPaddingSeconds);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is pre padding required.
 	 */
-	Q_PROPERTY(bool isPrePaddingRequired READ isPrePaddingRequired WRITE setIsPrePaddingRequired NOTIFY isPrePaddingRequiredChanged)
+	bool isPrePaddingRequired() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is pre padding required.
+	*/
+	void setIsPrePaddingRequired(bool newIsPrePaddingRequired);
 	/**
 	 * @brief If the item does not have any backdrops, this will hold the Id of the Parent that has one.
 	 */
-	Q_PROPERTY(QString parentBackdropItemId READ parentBackdropItemId WRITE setParentBackdropItemId NOTIFY parentBackdropItemIdChanged)
+	QString parentBackdropItemId() const;
+	/**
+	* @brief If the item does not have any backdrops, this will hold the Id of the Parent that has one.
+	*/
+	void setParentBackdropItemId(QString newParentBackdropItemId);
 	/**
 	 * @brief Gets or sets the parent backdrop image tags.
 	 */
-	Q_PROPERTY(QStringList parentBackdropImageTags READ parentBackdropImageTags WRITE setParentBackdropImageTags NOTIFY parentBackdropImageTagsChanged)
+	QStringList parentBackdropImageTags() const;
+	/**
+	* @brief Gets or sets the parent backdrop image tags.
+	*/
+	void setParentBackdropImageTags(QStringList newParentBackdropImageTags);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is post padding required.
 	 */
-	Q_PROPERTY(bool isPostPaddingRequired READ isPostPaddingRequired WRITE setIsPostPaddingRequired NOTIFY isPostPaddingRequiredChanged)
-	Q_PROPERTY(KeepUntil keepUntil READ keepUntil WRITE setKeepUntil NOTIFY keepUntilChanged)
-	Q_PROPERTY(RecordingStatus status READ status WRITE setStatus NOTIFY statusChanged)
+	bool isPostPaddingRequired() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is post padding required.
+	*/
+	void setIsPostPaddingRequired(bool newIsPostPaddingRequired);
+
+	KeepUntil keepUntil() const;
+
+	void setKeepUntil(KeepUntil newKeepUntil);
+
+	RecordingStatus status() const;
+
+	void setStatus(RecordingStatus newStatus);
 	/**
 	 * @brief Gets or sets the series timer identifier.
 	 */
-	Q_PROPERTY(QString seriesTimerId READ seriesTimerId WRITE setSeriesTimerId NOTIFY seriesTimerIdChanged)
+	QString seriesTimerId() const;
+	/**
+	* @brief Gets or sets the series timer identifier.
+	*/
+	void setSeriesTimerId(QString newSeriesTimerId);
 	/**
 	 * @brief Gets or sets the external series timer identifier.
 	 */
-	Q_PROPERTY(QString externalSeriesTimerId READ externalSeriesTimerId WRITE setExternalSeriesTimerId NOTIFY externalSeriesTimerIdChanged)
+	QString externalSeriesTimerId() const;
+	/**
+	* @brief Gets or sets the external series timer identifier.
+	*/
+	void setExternalSeriesTimerId(QString newExternalSeriesTimerId);
 	/**
 	 * @brief Gets or sets the run time ticks.
 	 */
-	Q_PROPERTY(qint64 runTimeTicks READ runTimeTicks WRITE setRunTimeTicks NOTIFY runTimeTicksChanged)
-	Q_PROPERTY(BaseItemDto * programInfo READ programInfo WRITE setProgramInfo NOTIFY programInfoChanged)
-
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	QString type() const;
-	void setType(QString newType);
-	
-	QString serverId() const;
-	void setServerId(QString newServerId);
-	
-	QString externalId() const;
-	void setExternalId(QString newExternalId);
-	
-	QString channelId() const;
-	void setChannelId(QString newChannelId);
-	
-	QString externalChannelId() const;
-	void setExternalChannelId(QString newExternalChannelId);
-	
-	QString channelName() const;
-	void setChannelName(QString newChannelName);
-	
-	QString channelPrimaryImageTag() const;
-	void setChannelPrimaryImageTag(QString newChannelPrimaryImageTag);
-	
-	QString programId() const;
-	void setProgramId(QString newProgramId);
-	
-	QString externalProgramId() const;
-	void setExternalProgramId(QString newExternalProgramId);
-	
-	QString name() const;
-	void setName(QString newName);
-	
-	QString overview() const;
-	void setOverview(QString newOverview);
-	
-	QDateTime startDate() const;
-	void setStartDate(QDateTime newStartDate);
-	
-	QDateTime endDate() const;
-	void setEndDate(QDateTime newEndDate);
-	
-	QString serviceName() const;
-	void setServiceName(QString newServiceName);
-	
-	qint32 priority() const;
-	void setPriority(qint32 newPriority);
-	
-	qint32 prePaddingSeconds() const;
-	void setPrePaddingSeconds(qint32 newPrePaddingSeconds);
-	
-	qint32 postPaddingSeconds() const;
-	void setPostPaddingSeconds(qint32 newPostPaddingSeconds);
-	
-	bool isPrePaddingRequired() const;
-	void setIsPrePaddingRequired(bool newIsPrePaddingRequired);
-	
-	QString parentBackdropItemId() const;
-	void setParentBackdropItemId(QString newParentBackdropItemId);
-	
-	QStringList parentBackdropImageTags() const;
-	void setParentBackdropImageTags(QStringList newParentBackdropImageTags);
-	
-	bool isPostPaddingRequired() const;
-	void setIsPostPaddingRequired(bool newIsPostPaddingRequired);
-	
-	KeepUntil keepUntil() const;
-	void setKeepUntil(KeepUntil newKeepUntil);
-	
-	RecordingStatus status() const;
-	void setStatus(RecordingStatus newStatus);
-	
-	QString seriesTimerId() const;
-	void setSeriesTimerId(QString newSeriesTimerId);
-	
-	QString externalSeriesTimerId() const;
-	void setExternalSeriesTimerId(QString newExternalSeriesTimerId);
-	
 	qint64 runTimeTicks() const;
+	/**
+	* @brief Gets or sets the run time ticks.
+	*/
 	void setRunTimeTicks(qint64 newRunTimeTicks);
-	
-	BaseItemDto * programInfo() const;
-	void setProgramInfo(BaseItemDto * newProgramInfo);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
-	void typeChanged(QString newType);
-	void serverIdChanged(QString newServerId);
-	void externalIdChanged(QString newExternalId);
-	void channelIdChanged(QString newChannelId);
-	void externalChannelIdChanged(QString newExternalChannelId);
-	void channelNameChanged(QString newChannelName);
-	void channelPrimaryImageTagChanged(QString newChannelPrimaryImageTag);
-	void programIdChanged(QString newProgramId);
-	void externalProgramIdChanged(QString newExternalProgramId);
-	void nameChanged(QString newName);
-	void overviewChanged(QString newOverview);
-	void startDateChanged(QDateTime newStartDate);
-	void endDateChanged(QDateTime newEndDate);
-	void serviceNameChanged(QString newServiceName);
-	void priorityChanged(qint32 newPriority);
-	void prePaddingSecondsChanged(qint32 newPrePaddingSeconds);
-	void postPaddingSecondsChanged(qint32 newPostPaddingSeconds);
-	void isPrePaddingRequiredChanged(bool newIsPrePaddingRequired);
-	void parentBackdropItemIdChanged(QString newParentBackdropItemId);
-	void parentBackdropImageTagsChanged(QStringList newParentBackdropImageTags);
-	void isPostPaddingRequiredChanged(bool newIsPostPaddingRequired);
-	void keepUntilChanged(KeepUntil newKeepUntil);
-	void statusChanged(RecordingStatus newStatus);
-	void seriesTimerIdChanged(QString newSeriesTimerId);
-	void externalSeriesTimerIdChanged(QString newExternalSeriesTimerId);
-	void runTimeTicksChanged(qint64 newRunTimeTicks);
-	void programInfoChanged(BaseItemDto * newProgramInfo);
+
+	QSharedPointer<BaseItemDto> programInfo() const;
+
+	void setProgramInfo(QSharedPointer<BaseItemDto> newProgramInfo);
+
 protected:
 	QString m_jellyfinId;
 	QString m_type;
 	QString m_serverId;
 	QString m_externalId;
-	QString m_channelId;
+	QUuid m_channelId;
 	QString m_externalChannelId;
 	QString m_channelName;
 	QString m_channelPrimaryImageTag;
@@ -292,8 +290,20 @@ protected:
 	QString m_seriesTimerId;
 	QString m_externalSeriesTimerId;
 	qint64 m_runTimeTicks;
-	BaseItemDto * m_programInfo = nullptr;
+	QSharedPointer<BaseItemDto> m_programInfo = nullptr;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TimerInfoDto = Jellyfin::DTO::TimerInfoDto;
+
+template <>
+TimerInfoDto fromJsonValue<TimerInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TimerInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

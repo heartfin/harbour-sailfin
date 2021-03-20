@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_GROUPSHUFFLEMODE_H
 #define JELLYFIN_DTO_GROUPSHUFFLEMODE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class GroupShuffleModeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Sorted,
 		Shuffle,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit GroupShuffleModeClass();
 };
+
 typedef GroupShuffleModeClass::Value GroupShuffleMode;
+
+} // NS DTO
+
+namespace Support {
+
+using GroupShuffleMode = Jellyfin::DTO::GroupShuffleMode;
+using GroupShuffleModeClass = Jellyfin::DTO::GroupShuffleModeClass;
+
+template <>
+GroupShuffleMode fromJsonValue<GroupShuffleMode>(const QJsonValue &source) {
+	if (!source.isString()) return GroupShuffleModeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Sorted")) {
+		return GroupShuffleModeClass::Sorted;
+	}
+	if (str == QStringLiteral("Shuffle")) {
+		return GroupShuffleModeClass::Shuffle;
+	}
+	
+	return GroupShuffleModeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

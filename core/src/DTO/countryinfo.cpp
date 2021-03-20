@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-CountryInfo::CountryInfo(QObject *parent) : QObject(parent) {}
+CountryInfo::CountryInfo(QObject *parent) {}
 
-CountryInfo *CountryInfo::fromJSON(QJsonObject source, QObject *parent) {
-	CountryInfo *instance = new CountryInfo(parent);
-	instance->updateFromJSON(source);
+CountryInfo CountryInfo::fromJson(QJsonObject source) {CountryInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void CountryInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void CountryInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_displayName = fromJsonValue<QString>(source["DisplayName"]);
+	m_twoLetterISORegionName = fromJsonValue<QString>(source["TwoLetterISORegionName"]);
+	m_threeLetterISORegionName = fromJsonValue<QString>(source["ThreeLetterISORegionName"]);
+
 }
-QJsonObject CountryInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject CountryInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["DisplayName"] = toJsonValue<QString>(m_displayName);
+	result["TwoLetterISORegionName"] = toJsonValue<QString>(m_twoLetterISORegionName);
+	result["ThreeLetterISORegionName"] = toJsonValue<QString>(m_threeLetterISORegionName);
+
 	return result;
 }
+
 QString CountryInfo::name() const { return m_name; }
+
 void CountryInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString CountryInfo::displayName() const { return m_displayName; }
+
 void CountryInfo::setDisplayName(QString newDisplayName) {
 	m_displayName = newDisplayName;
-	emit displayNameChanged(newDisplayName);
 }
-
 QString CountryInfo::twoLetterISORegionName() const { return m_twoLetterISORegionName; }
+
 void CountryInfo::setTwoLetterISORegionName(QString newTwoLetterISORegionName) {
 	m_twoLetterISORegionName = newTwoLetterISORegionName;
-	emit twoLetterISORegionNameChanged(newTwoLetterISORegionName);
 }
-
 QString CountryInfo::threeLetterISORegionName() const { return m_threeLetterISORegionName; }
+
 void CountryInfo::setThreeLetterISORegionName(QString newThreeLetterISORegionName) {
 	m_threeLetterISORegionName = newThreeLetterISORegionName;
-	emit threeLetterISORegionNameChanged(newThreeLetterISORegionName);
 }
 
 

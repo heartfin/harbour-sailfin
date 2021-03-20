@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-CreatePlaylistDto::CreatePlaylistDto(QObject *parent) : QObject(parent) {}
+CreatePlaylistDto::CreatePlaylistDto(QObject *parent) {}
 
-CreatePlaylistDto *CreatePlaylistDto::fromJSON(QJsonObject source, QObject *parent) {
-	CreatePlaylistDto *instance = new CreatePlaylistDto(parent);
-	instance->updateFromJSON(source);
+CreatePlaylistDto CreatePlaylistDto::fromJson(QJsonObject source) {CreatePlaylistDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void CreatePlaylistDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void CreatePlaylistDto::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_ids = fromJsonValue<QList<QUuid>>(source["Ids"]);
+	m_userId = fromJsonValue<QUuid>(source["UserId"]);
+	m_mediaType = fromJsonValue<QString>(source["MediaType"]);
+
 }
-QJsonObject CreatePlaylistDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject CreatePlaylistDto::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Ids"] = toJsonValue<QList<QUuid>>(m_ids);
+	result["UserId"] = toJsonValue<QUuid>(m_userId);
+	result["MediaType"] = toJsonValue<QString>(m_mediaType);
+
 	return result;
 }
+
 QString CreatePlaylistDto::name() const { return m_name; }
+
 void CreatePlaylistDto::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
+QList<QUuid> CreatePlaylistDto::ids() const { return m_ids; }
 
-QStringList CreatePlaylistDto::ids() const { return m_ids; }
-void CreatePlaylistDto::setIds(QStringList newIds) {
+void CreatePlaylistDto::setIds(QList<QUuid> newIds) {
 	m_ids = newIds;
-	emit idsChanged(newIds);
 }
+QUuid CreatePlaylistDto::userId() const { return m_userId; }
 
-QString CreatePlaylistDto::userId() const { return m_userId; }
-void CreatePlaylistDto::setUserId(QString newUserId) {
+void CreatePlaylistDto::setUserId(QUuid newUserId) {
 	m_userId = newUserId;
-	emit userIdChanged(newUserId);
 }
-
 QString CreatePlaylistDto::mediaType() const { return m_mediaType; }
+
 void CreatePlaylistDto::setMediaType(QString newMediaType) {
 	m_mediaType = newMediaType;
-	emit mediaTypeChanged(newMediaType);
 }
 
 

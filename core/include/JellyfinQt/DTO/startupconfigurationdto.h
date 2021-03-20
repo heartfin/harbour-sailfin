@@ -31,51 +31,66 @@
 #define JELLYFIN_DTO_STARTUPCONFIGURATIONDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class StartupConfigurationDto : public QObject {
-	Q_OBJECT
-public:
-	explicit StartupConfigurationDto(QObject *parent = nullptr);
-	static StartupConfigurationDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class StartupConfigurationDto {
+public:
+	explicit StartupConfigurationDto();
+	static StartupConfigurationDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets UI language culture.
 	 */
-	Q_PROPERTY(QString uICulture READ uICulture WRITE setUICulture NOTIFY uICultureChanged)
+	QString uICulture() const;
+	/**
+	* @brief Gets or sets UI language culture.
+	*/
+	void setUICulture(QString newUICulture);
 	/**
 	 * @brief Gets or sets the metadata country code.
 	 */
-	Q_PROPERTY(QString metadataCountryCode READ metadataCountryCode WRITE setMetadataCountryCode NOTIFY metadataCountryCodeChanged)
+	QString metadataCountryCode() const;
+	/**
+	* @brief Gets or sets the metadata country code.
+	*/
+	void setMetadataCountryCode(QString newMetadataCountryCode);
 	/**
 	 * @brief Gets or sets the preferred language for the metadata.
 	 */
-	Q_PROPERTY(QString preferredMetadataLanguage READ preferredMetadataLanguage WRITE setPreferredMetadataLanguage NOTIFY preferredMetadataLanguageChanged)
-
-	QString uICulture() const;
-	void setUICulture(QString newUICulture);
-	
-	QString metadataCountryCode() const;
-	void setMetadataCountryCode(QString newMetadataCountryCode);
-	
 	QString preferredMetadataLanguage() const;
+	/**
+	* @brief Gets or sets the preferred language for the metadata.
+	*/
 	void setPreferredMetadataLanguage(QString newPreferredMetadataLanguage);
-	
-signals:
-	void uICultureChanged(QString newUICulture);
-	void metadataCountryCodeChanged(QString newMetadataCountryCode);
-	void preferredMetadataLanguageChanged(QString newPreferredMetadataLanguage);
+
 protected:
 	QString m_uICulture;
 	QString m_metadataCountryCode;
 	QString m_preferredMetadataLanguage;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using StartupConfigurationDto = Jellyfin::DTO::StartupConfigurationDto;
+
+template <>
+StartupConfigurationDto fromJsonValue<StartupConfigurationDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return StartupConfigurationDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

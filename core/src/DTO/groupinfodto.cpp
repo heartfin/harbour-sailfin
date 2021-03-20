@@ -29,55 +29,61 @@
 
 #include <JellyfinQt/DTO/groupinfodto.h>
 
-#include <JellyfinQt/DTO/groupstatetype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-GroupInfoDto::GroupInfoDto(QObject *parent) : QObject(parent) {}
+GroupInfoDto::GroupInfoDto(QObject *parent) {}
 
-GroupInfoDto *GroupInfoDto::fromJSON(QJsonObject source, QObject *parent) {
-	GroupInfoDto *instance = new GroupInfoDto(parent);
-	instance->updateFromJSON(source);
+GroupInfoDto GroupInfoDto::fromJson(QJsonObject source) {GroupInfoDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void GroupInfoDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void GroupInfoDto::setFromJson(QJsonObject source) {
+	m_groupId = fromJsonValue<QUuid>(source["GroupId"]);
+	m_groupName = fromJsonValue<QString>(source["GroupName"]);
+	m_state = fromJsonValue<GroupStateType>(source["State"]);
+	m_participants = fromJsonValue<QStringList>(source["Participants"]);
+	m_lastUpdatedAt = fromJsonValue<QDateTime>(source["LastUpdatedAt"]);
+
 }
-QJsonObject GroupInfoDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject GroupInfoDto::toJson() {
 	QJsonObject result;
+	result["GroupId"] = toJsonValue<QUuid>(m_groupId);
+	result["GroupName"] = toJsonValue<QString>(m_groupName);
+	result["State"] = toJsonValue<GroupStateType>(m_state);
+	result["Participants"] = toJsonValue<QStringList>(m_participants);
+	result["LastUpdatedAt"] = toJsonValue<QDateTime>(m_lastUpdatedAt);
+
 	return result;
 }
-QString GroupInfoDto::groupId() const { return m_groupId; }
-void GroupInfoDto::setGroupId(QString newGroupId) {
-	m_groupId = newGroupId;
-	emit groupIdChanged(newGroupId);
-}
 
+QUuid GroupInfoDto::groupId() const { return m_groupId; }
+
+void GroupInfoDto::setGroupId(QUuid newGroupId) {
+	m_groupId = newGroupId;
+}
 QString GroupInfoDto::groupName() const { return m_groupName; }
+
 void GroupInfoDto::setGroupName(QString newGroupName) {
 	m_groupName = newGroupName;
-	emit groupNameChanged(newGroupName);
 }
-
 GroupStateType GroupInfoDto::state() const { return m_state; }
+
 void GroupInfoDto::setState(GroupStateType newState) {
 	m_state = newState;
-	emit stateChanged(newState);
 }
-
 QStringList GroupInfoDto::participants() const { return m_participants; }
+
 void GroupInfoDto::setParticipants(QStringList newParticipants) {
 	m_participants = newParticipants;
-	emit participantsChanged(newParticipants);
 }
-
 QDateTime GroupInfoDto::lastUpdatedAt() const { return m_lastUpdatedAt; }
+
 void GroupInfoDto::setLastUpdatedAt(QDateTime newLastUpdatedAt) {
 	m_lastUpdatedAt = newLastUpdatedAt;
-	emit lastUpdatedAtChanged(newLastUpdatedAt);
 }
 
 

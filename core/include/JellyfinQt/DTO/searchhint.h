@@ -32,241 +32,239 @@
 
 #include <QDateTime>
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SearchHint : public QObject {
-	Q_OBJECT
-public:
-	explicit SearchHint(QObject *parent = nullptr);
-	static SearchHint *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class SearchHint {
+public:
+	explicit SearchHint();
+	static SearchHint fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the item id.
 	 */
-	Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QUuid itemId() const;
+	/**
+	* @brief Gets or sets the item id.
+	*/
+	void setItemId(QUuid newItemId);
+
+	QUuid jellyfinId() const;
+
+	void setJellyfinId(QUuid newJellyfinId);
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the matched term.
 	 */
-	Q_PROPERTY(QString matchedTerm READ matchedTerm WRITE setMatchedTerm NOTIFY matchedTermChanged)
+	QString matchedTerm() const;
+	/**
+	* @brief Gets or sets the matched term.
+	*/
+	void setMatchedTerm(QString newMatchedTerm);
 	/**
 	 * @brief Gets or sets the index number.
 	 */
-	Q_PROPERTY(qint32 indexNumber READ indexNumber WRITE setIndexNumber NOTIFY indexNumberChanged)
+	qint32 indexNumber() const;
+	/**
+	* @brief Gets or sets the index number.
+	*/
+	void setIndexNumber(qint32 newIndexNumber);
 	/**
 	 * @brief Gets or sets the production year.
 	 */
-	Q_PROPERTY(qint32 productionYear READ productionYear WRITE setProductionYear NOTIFY productionYearChanged)
+	qint32 productionYear() const;
+	/**
+	* @brief Gets or sets the production year.
+	*/
+	void setProductionYear(qint32 newProductionYear);
 	/**
 	 * @brief Gets or sets the parent index number.
 	 */
-	Q_PROPERTY(qint32 parentIndexNumber READ parentIndexNumber WRITE setParentIndexNumber NOTIFY parentIndexNumberChanged)
+	qint32 parentIndexNumber() const;
+	/**
+	* @brief Gets or sets the parent index number.
+	*/
+	void setParentIndexNumber(qint32 newParentIndexNumber);
 	/**
 	 * @brief Gets or sets the image tag.
 	 */
-	Q_PROPERTY(QString primaryImageTag READ primaryImageTag WRITE setPrimaryImageTag NOTIFY primaryImageTagChanged)
+	QString primaryImageTag() const;
+	/**
+	* @brief Gets or sets the image tag.
+	*/
+	void setPrimaryImageTag(QString newPrimaryImageTag);
 	/**
 	 * @brief Gets or sets the thumb image tag.
 	 */
-	Q_PROPERTY(QString thumbImageTag READ thumbImageTag WRITE setThumbImageTag NOTIFY thumbImageTagChanged)
+	QString thumbImageTag() const;
+	/**
+	* @brief Gets or sets the thumb image tag.
+	*/
+	void setThumbImageTag(QString newThumbImageTag);
 	/**
 	 * @brief Gets or sets the thumb image item identifier.
 	 */
-	Q_PROPERTY(QString thumbImageItemId READ thumbImageItemId WRITE setThumbImageItemId NOTIFY thumbImageItemIdChanged)
+	QString thumbImageItemId() const;
+	/**
+	* @brief Gets or sets the thumb image item identifier.
+	*/
+	void setThumbImageItemId(QString newThumbImageItemId);
 	/**
 	 * @brief Gets or sets the backdrop image tag.
 	 */
-	Q_PROPERTY(QString backdropImageTag READ backdropImageTag WRITE setBackdropImageTag NOTIFY backdropImageTagChanged)
+	QString backdropImageTag() const;
+	/**
+	* @brief Gets or sets the backdrop image tag.
+	*/
+	void setBackdropImageTag(QString newBackdropImageTag);
 	/**
 	 * @brief Gets or sets the backdrop image item identifier.
 	 */
-	Q_PROPERTY(QString backdropImageItemId READ backdropImageItemId WRITE setBackdropImageItemId NOTIFY backdropImageItemIdChanged)
+	QString backdropImageItemId() const;
+	/**
+	* @brief Gets or sets the backdrop image item identifier.
+	*/
+	void setBackdropImageItemId(QString newBackdropImageItemId);
 	/**
 	 * @brief Gets or sets the type.
 	 */
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-	Q_PROPERTY(bool isFolder READ isFolder WRITE setIsFolder NOTIFY isFolderChanged)
+	QString type() const;
+	/**
+	* @brief Gets or sets the type.
+	*/
+	void setType(QString newType);
+
+	bool isFolder() const;
+
+	void setIsFolder(bool newIsFolder);
 	/**
 	 * @brief Gets or sets the run time ticks.
 	 */
-	Q_PROPERTY(qint64 runTimeTicks READ runTimeTicks WRITE setRunTimeTicks NOTIFY runTimeTicksChanged)
+	qint64 runTimeTicks() const;
+	/**
+	* @brief Gets or sets the run time ticks.
+	*/
+	void setRunTimeTicks(qint64 newRunTimeTicks);
 	/**
 	 * @brief Gets or sets the type of the media.
 	 */
-	Q_PROPERTY(QString mediaType READ mediaType WRITE setMediaType NOTIFY mediaTypeChanged)
-	Q_PROPERTY(QDateTime startDate READ startDate WRITE setStartDate NOTIFY startDateChanged)
-	Q_PROPERTY(QDateTime endDate READ endDate WRITE setEndDate NOTIFY endDateChanged)
+	QString mediaType() const;
+	/**
+	* @brief Gets or sets the type of the media.
+	*/
+	void setMediaType(QString newMediaType);
+
+	QDateTime startDate() const;
+
+	void setStartDate(QDateTime newStartDate);
+
+	QDateTime endDate() const;
+
+	void setEndDate(QDateTime newEndDate);
 	/**
 	 * @brief Gets or sets the series.
 	 */
-	Q_PROPERTY(QString series READ series WRITE setSeries NOTIFY seriesChanged)
-	Q_PROPERTY(QString status READ status WRITE setStatus NOTIFY statusChanged)
+	QString series() const;
+	/**
+	* @brief Gets or sets the series.
+	*/
+	void setSeries(QString newSeries);
+
+	QString status() const;
+
+	void setStatus(QString newStatus);
 	/**
 	 * @brief Gets or sets the album.
 	 */
-	Q_PROPERTY(QString album READ album WRITE setAlbum NOTIFY albumChanged)
-	Q_PROPERTY(QString albumId READ albumId WRITE setAlbumId NOTIFY albumIdChanged)
+	QString album() const;
+	/**
+	* @brief Gets or sets the album.
+	*/
+	void setAlbum(QString newAlbum);
+
+	QUuid albumId() const;
+
+	void setAlbumId(QUuid newAlbumId);
 	/**
 	 * @brief Gets or sets the album artist.
 	 */
-	Q_PROPERTY(QString albumArtist READ albumArtist WRITE setAlbumArtist NOTIFY albumArtistChanged)
+	QString albumArtist() const;
+	/**
+	* @brief Gets or sets the album artist.
+	*/
+	void setAlbumArtist(QString newAlbumArtist);
 	/**
 	 * @brief Gets or sets the artists.
 	 */
-	Q_PROPERTY(QStringList artists READ artists WRITE setArtists NOTIFY artistsChanged)
+	QStringList artists() const;
+	/**
+	* @brief Gets or sets the artists.
+	*/
+	void setArtists(QStringList newArtists);
 	/**
 	 * @brief Gets or sets the song count.
 	 */
-	Q_PROPERTY(qint32 songCount READ songCount WRITE setSongCount NOTIFY songCountChanged)
+	qint32 songCount() const;
+	/**
+	* @brief Gets or sets the song count.
+	*/
+	void setSongCount(qint32 newSongCount);
 	/**
 	 * @brief Gets or sets the episode count.
 	 */
-	Q_PROPERTY(qint32 episodeCount READ episodeCount WRITE setEpisodeCount NOTIFY episodeCountChanged)
+	qint32 episodeCount() const;
+	/**
+	* @brief Gets or sets the episode count.
+	*/
+	void setEpisodeCount(qint32 newEpisodeCount);
 	/**
 	 * @brief Gets or sets the channel identifier.
 	 */
-	Q_PROPERTY(QString channelId READ channelId WRITE setChannelId NOTIFY channelIdChanged)
+	QUuid channelId() const;
+	/**
+	* @brief Gets or sets the channel identifier.
+	*/
+	void setChannelId(QUuid newChannelId);
 	/**
 	 * @brief Gets or sets the name of the channel.
 	 */
-	Q_PROPERTY(QString channelName READ channelName WRITE setChannelName NOTIFY channelNameChanged)
+	QString channelName() const;
+	/**
+	* @brief Gets or sets the name of the channel.
+	*/
+	void setChannelName(QString newChannelName);
 	/**
 	 * @brief Gets or sets the primary image aspect ratio.
 	 */
-	Q_PROPERTY(double primaryImageAspectRatio READ primaryImageAspectRatio WRITE setPrimaryImageAspectRatio NOTIFY primaryImageAspectRatioChanged)
-
-	QString itemId() const;
-	void setItemId(QString newItemId);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	QString name() const;
-	void setName(QString newName);
-	
-	QString matchedTerm() const;
-	void setMatchedTerm(QString newMatchedTerm);
-	
-	qint32 indexNumber() const;
-	void setIndexNumber(qint32 newIndexNumber);
-	
-	qint32 productionYear() const;
-	void setProductionYear(qint32 newProductionYear);
-	
-	qint32 parentIndexNumber() const;
-	void setParentIndexNumber(qint32 newParentIndexNumber);
-	
-	QString primaryImageTag() const;
-	void setPrimaryImageTag(QString newPrimaryImageTag);
-	
-	QString thumbImageTag() const;
-	void setThumbImageTag(QString newThumbImageTag);
-	
-	QString thumbImageItemId() const;
-	void setThumbImageItemId(QString newThumbImageItemId);
-	
-	QString backdropImageTag() const;
-	void setBackdropImageTag(QString newBackdropImageTag);
-	
-	QString backdropImageItemId() const;
-	void setBackdropImageItemId(QString newBackdropImageItemId);
-	
-	QString type() const;
-	void setType(QString newType);
-	
-	bool isFolder() const;
-	void setIsFolder(bool newIsFolder);
-	
-	qint64 runTimeTicks() const;
-	void setRunTimeTicks(qint64 newRunTimeTicks);
-	
-	QString mediaType() const;
-	void setMediaType(QString newMediaType);
-	
-	QDateTime startDate() const;
-	void setStartDate(QDateTime newStartDate);
-	
-	QDateTime endDate() const;
-	void setEndDate(QDateTime newEndDate);
-	
-	QString series() const;
-	void setSeries(QString newSeries);
-	
-	QString status() const;
-	void setStatus(QString newStatus);
-	
-	QString album() const;
-	void setAlbum(QString newAlbum);
-	
-	QString albumId() const;
-	void setAlbumId(QString newAlbumId);
-	
-	QString albumArtist() const;
-	void setAlbumArtist(QString newAlbumArtist);
-	
-	QStringList artists() const;
-	void setArtists(QStringList newArtists);
-	
-	qint32 songCount() const;
-	void setSongCount(qint32 newSongCount);
-	
-	qint32 episodeCount() const;
-	void setEpisodeCount(qint32 newEpisodeCount);
-	
-	QString channelId() const;
-	void setChannelId(QString newChannelId);
-	
-	QString channelName() const;
-	void setChannelName(QString newChannelName);
-	
 	double primaryImageAspectRatio() const;
+	/**
+	* @brief Gets or sets the primary image aspect ratio.
+	*/
 	void setPrimaryImageAspectRatio(double newPrimaryImageAspectRatio);
-	
-signals:
-	void itemIdChanged(QString newItemId);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void nameChanged(QString newName);
-	void matchedTermChanged(QString newMatchedTerm);
-	void indexNumberChanged(qint32 newIndexNumber);
-	void productionYearChanged(qint32 newProductionYear);
-	void parentIndexNumberChanged(qint32 newParentIndexNumber);
-	void primaryImageTagChanged(QString newPrimaryImageTag);
-	void thumbImageTagChanged(QString newThumbImageTag);
-	void thumbImageItemIdChanged(QString newThumbImageItemId);
-	void backdropImageTagChanged(QString newBackdropImageTag);
-	void backdropImageItemIdChanged(QString newBackdropImageItemId);
-	void typeChanged(QString newType);
-	void isFolderChanged(bool newIsFolder);
-	void runTimeTicksChanged(qint64 newRunTimeTicks);
-	void mediaTypeChanged(QString newMediaType);
-	void startDateChanged(QDateTime newStartDate);
-	void endDateChanged(QDateTime newEndDate);
-	void seriesChanged(QString newSeries);
-	void statusChanged(QString newStatus);
-	void albumChanged(QString newAlbum);
-	void albumIdChanged(QString newAlbumId);
-	void albumArtistChanged(QString newAlbumArtist);
-	void artistsChanged(QStringList newArtists);
-	void songCountChanged(qint32 newSongCount);
-	void episodeCountChanged(qint32 newEpisodeCount);
-	void channelIdChanged(QString newChannelId);
-	void channelNameChanged(QString newChannelName);
-	void primaryImageAspectRatioChanged(double newPrimaryImageAspectRatio);
+
 protected:
-	QString m_itemId;
-	QString m_jellyfinId;
+	QUuid m_itemId;
+	QUuid m_jellyfinId;
 	QString m_name;
 	QString m_matchedTerm;
 	qint32 m_indexNumber;
@@ -286,15 +284,27 @@ protected:
 	QString m_series;
 	QString m_status;
 	QString m_album;
-	QString m_albumId;
+	QUuid m_albumId;
 	QString m_albumArtist;
 	QStringList m_artists;
 	qint32 m_songCount;
 	qint32 m_episodeCount;
-	QString m_channelId;
+	QUuid m_channelId;
 	QString m_channelName;
 	double m_primaryImageAspectRatio;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SearchHint = Jellyfin::DTO::SearchHint;
+
+template <>
+SearchHint fromJsonValue<SearchHint>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SearchHint::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

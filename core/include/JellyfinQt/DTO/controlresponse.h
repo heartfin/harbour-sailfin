@@ -31,42 +31,54 @@
 #define JELLYFIN_DTO_CONTROLRESPONSE_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ControlResponse : public QObject {
-	Q_OBJECT
-public:
-	explicit ControlResponse(QObject *parent = nullptr);
-	static ControlResponse *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QJsonObject headers READ headers WRITE setHeaders NOTIFY headersChanged)
-	Q_PROPERTY(QString xml READ xml WRITE setXml NOTIFY xmlChanged)
-	Q_PROPERTY(bool isSuccessful READ isSuccessful WRITE setIsSuccessful NOTIFY isSuccessfulChanged)
+class ControlResponse {
+public:
+	explicit ControlResponse();
+	static ControlResponse fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QJsonObject headers() const;
+
 	void setHeaders(QJsonObject newHeaders);
-	
+
 	QString xml() const;
+
 	void setXml(QString newXml);
-	
+
 	bool isSuccessful() const;
+
 	void setIsSuccessful(bool newIsSuccessful);
-	
-signals:
-	void headersChanged(QJsonObject newHeaders);
-	void xmlChanged(QString newXml);
-	void isSuccessfulChanged(bool newIsSuccessful);
+
 protected:
 	QJsonObject m_headers;
 	QString m_xml;
 	bool m_isSuccessful;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ControlResponse = Jellyfin::DTO::ControlResponse;
+
+template <>
+ControlResponse fromJsonValue<ControlResponse>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ControlResponse::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

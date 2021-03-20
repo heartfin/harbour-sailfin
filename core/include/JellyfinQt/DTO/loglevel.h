@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_LOGLEVEL_H
 #define JELLYFIN_DTO_LOGLEVEL_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class LogLevelClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Trace,
 		Debug,
 		Information,
@@ -51,7 +56,45 @@ public:
 private:
 	explicit LogLevelClass();
 };
+
 typedef LogLevelClass::Value LogLevel;
+
+} // NS DTO
+
+namespace Support {
+
+using LogLevel = Jellyfin::DTO::LogLevel;
+using LogLevelClass = Jellyfin::DTO::LogLevelClass;
+
+template <>
+LogLevel fromJsonValue<LogLevel>(const QJsonValue &source) {
+	if (!source.isString()) return LogLevelClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Trace")) {
+		return LogLevelClass::Trace;
+	}
+	if (str == QStringLiteral("Debug")) {
+		return LogLevelClass::Debug;
+	}
+	if (str == QStringLiteral("Information")) {
+		return LogLevelClass::Information;
+	}
+	if (str == QStringLiteral("Warning")) {
+		return LogLevelClass::Warning;
+	}
+	if (str == QStringLiteral("Error")) {
+		return LogLevelClass::Error;
+	}
+	if (str == QStringLiteral("Critical")) {
+		return LogLevelClass::Critical;
+	}
+	if (str == QStringLiteral("None")) {
+		return LogLevelClass::None;
+	}
+	
+	return LogLevelClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

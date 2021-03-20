@@ -29,49 +29,54 @@
 
 #include <JellyfinQt/DTO/directplayprofile.h>
 
-#include <JellyfinQt/DTO/dlnaprofiletype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-DirectPlayProfile::DirectPlayProfile(QObject *parent) : QObject(parent) {}
+DirectPlayProfile::DirectPlayProfile(QObject *parent) {}
 
-DirectPlayProfile *DirectPlayProfile::fromJSON(QJsonObject source, QObject *parent) {
-	DirectPlayProfile *instance = new DirectPlayProfile(parent);
-	instance->updateFromJSON(source);
+DirectPlayProfile DirectPlayProfile::fromJson(QJsonObject source) {DirectPlayProfile instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void DirectPlayProfile::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void DirectPlayProfile::setFromJson(QJsonObject source) {
+	m_container = fromJsonValue<QString>(source["Container"]);
+	m_audioCodec = fromJsonValue<QString>(source["AudioCodec"]);
+	m_videoCodec = fromJsonValue<QString>(source["VideoCodec"]);
+	m_type = fromJsonValue<DlnaProfileType>(source["Type"]);
+
 }
-QJsonObject DirectPlayProfile::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject DirectPlayProfile::toJson() {
 	QJsonObject result;
+	result["Container"] = toJsonValue<QString>(m_container);
+	result["AudioCodec"] = toJsonValue<QString>(m_audioCodec);
+	result["VideoCodec"] = toJsonValue<QString>(m_videoCodec);
+	result["Type"] = toJsonValue<DlnaProfileType>(m_type);
+
 	return result;
 }
+
 QString DirectPlayProfile::container() const { return m_container; }
+
 void DirectPlayProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
-	emit containerChanged(newContainer);
 }
-
 QString DirectPlayProfile::audioCodec() const { return m_audioCodec; }
+
 void DirectPlayProfile::setAudioCodec(QString newAudioCodec) {
 	m_audioCodec = newAudioCodec;
-	emit audioCodecChanged(newAudioCodec);
 }
-
 QString DirectPlayProfile::videoCodec() const { return m_videoCodec; }
+
 void DirectPlayProfile::setVideoCodec(QString newVideoCodec) {
 	m_videoCodec = newVideoCodec;
-	emit videoCodecChanged(newVideoCodec);
 }
-
 DlnaProfileType DirectPlayProfile::type() const { return m_type; }
+
 void DirectPlayProfile::setType(DlnaProfileType newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
 
 

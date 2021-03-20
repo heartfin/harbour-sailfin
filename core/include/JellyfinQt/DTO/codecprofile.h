@@ -31,61 +31,69 @@
 #define JELLYFIN_DTO_CODECPROFILE_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
 #include "JellyfinQt/DTO/codectype.h"
+#include "JellyfinQt/DTO/profilecondition.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ProfileCondition;
-class ProfileCondition;
 
-class CodecProfile : public QObject {
-	Q_OBJECT
+class CodecProfile {
 public:
-	explicit CodecProfile(QObject *parent = nullptr);
-	static CodecProfile *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(CodecType type READ type WRITE setType NOTIFY typeChanged)
-	Q_PROPERTY(QList<ProfileCondition *> conditions READ conditions WRITE setConditions NOTIFY conditionsChanged)
-	Q_PROPERTY(QList<ProfileCondition *> applyConditions READ applyConditions WRITE setApplyConditions NOTIFY applyConditionsChanged)
-	Q_PROPERTY(QString codec READ codec WRITE setCodec NOTIFY codecChanged)
-	Q_PROPERTY(QString container READ container WRITE setContainer NOTIFY containerChanged)
+	explicit CodecProfile();
+	static CodecProfile fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	CodecType type() const;
+
 	void setType(CodecType newType);
-	
-	QList<ProfileCondition *> conditions() const;
-	void setConditions(QList<ProfileCondition *> newConditions);
-	
-	QList<ProfileCondition *> applyConditions() const;
-	void setApplyConditions(QList<ProfileCondition *> newApplyConditions);
-	
+
+	QList<QSharedPointer<ProfileCondition>> conditions() const;
+
+	void setConditions(QList<QSharedPointer<ProfileCondition>> newConditions);
+
+	QList<QSharedPointer<ProfileCondition>> applyConditions() const;
+
+	void setApplyConditions(QList<QSharedPointer<ProfileCondition>> newApplyConditions);
+
 	QString codec() const;
+
 	void setCodec(QString newCodec);
-	
+
 	QString container() const;
+
 	void setContainer(QString newContainer);
-	
-signals:
-	void typeChanged(CodecType newType);
-	void conditionsChanged(QList<ProfileCondition *> newConditions);
-	void applyConditionsChanged(QList<ProfileCondition *> newApplyConditions);
-	void codecChanged(QString newCodec);
-	void containerChanged(QString newContainer);
+
 protected:
 	CodecType m_type;
-	QList<ProfileCondition *> m_conditions;
-	QList<ProfileCondition *> m_applyConditions;
+	QList<QSharedPointer<ProfileCondition>> m_conditions;
+	QList<QSharedPointer<ProfileCondition>> m_applyConditions;
 	QString m_codec;
 	QString m_container;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using CodecProfile = Jellyfin::DTO::CodecProfile;
+
+template <>
+CodecProfile fromJsonValue<CodecProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return CodecProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

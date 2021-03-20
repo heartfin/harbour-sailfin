@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-MovieInfoRemoteSearchQuery::MovieInfoRemoteSearchQuery(QObject *parent) : QObject(parent) {}
+MovieInfoRemoteSearchQuery::MovieInfoRemoteSearchQuery(QObject *parent) {}
 
-MovieInfoRemoteSearchQuery *MovieInfoRemoteSearchQuery::fromJSON(QJsonObject source, QObject *parent) {
-	MovieInfoRemoteSearchQuery *instance = new MovieInfoRemoteSearchQuery(parent);
-	instance->updateFromJSON(source);
+MovieInfoRemoteSearchQuery MovieInfoRemoteSearchQuery::fromJson(QJsonObject source) {MovieInfoRemoteSearchQuery instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MovieInfoRemoteSearchQuery::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MovieInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
+	m_searchInfo = fromJsonValue<QSharedPointer<MovieInfo>>(source["SearchInfo"]);
+	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+
 }
-QJsonObject MovieInfoRemoteSearchQuery::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MovieInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
+	result["SearchInfo"] = toJsonValue<QSharedPointer<MovieInfo>>(m_searchInfo);
+	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+
 	return result;
 }
-MovieInfo * MovieInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
-void MovieInfoRemoteSearchQuery::setSearchInfo(MovieInfo * newSearchInfo) {
+
+QSharedPointer<MovieInfo> MovieInfoRemoteSearchQuery::searchInfo() const { return m_searchInfo; }
+
+void MovieInfoRemoteSearchQuery::setSearchInfo(QSharedPointer<MovieInfo> newSearchInfo) {
 	m_searchInfo = newSearchInfo;
-	emit searchInfoChanged(newSearchInfo);
 }
+QUuid MovieInfoRemoteSearchQuery::itemId() const { return m_itemId; }
 
-QString MovieInfoRemoteSearchQuery::itemId() const { return m_itemId; }
-void MovieInfoRemoteSearchQuery::setItemId(QString newItemId) {
+void MovieInfoRemoteSearchQuery::setItemId(QUuid newItemId) {
 	m_itemId = newItemId;
-	emit itemIdChanged(newItemId);
 }
-
 QString MovieInfoRemoteSearchQuery::searchProviderName() const { return m_searchProviderName; }
+
 void MovieInfoRemoteSearchQuery::setSearchProviderName(QString newSearchProviderName) {
 	m_searchProviderName = newSearchProviderName;
-	emit searchProviderNameChanged(newSearchProviderName);
 }
-
 bool MovieInfoRemoteSearchQuery::includeDisabledProviders() const { return m_includeDisabledProviders; }
+
 void MovieInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncludeDisabledProviders) {
 	m_includeDisabledProviders = newIncludeDisabledProviders;
-	emit includeDisabledProvidersChanged(newIncludeDisabledProviders);
 }
 
 

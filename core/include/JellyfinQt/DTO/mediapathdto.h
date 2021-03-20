@@ -31,50 +31,64 @@
 #define JELLYFIN_DTO_MEDIAPATHDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/DTO/mediapathinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaPathInfo;
 
-class MediaPathDto : public QObject {
-	Q_OBJECT
+class MediaPathDto {
 public:
-	explicit MediaPathDto(QObject *parent = nullptr);
-	static MediaPathDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit MediaPathDto();
+	static MediaPathDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name of the library.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name of the library.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the path to add.
 	 */
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
-	Q_PROPERTY(MediaPathInfo * pathInfo READ pathInfo WRITE setPathInfo NOTIFY pathInfoChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
 	QString path() const;
+	/**
+	* @brief Gets or sets the path to add.
+	*/
 	void setPath(QString newPath);
-	
-	MediaPathInfo * pathInfo() const;
-	void setPathInfo(MediaPathInfo * newPathInfo);
-	
-signals:
-	void nameChanged(QString newName);
-	void pathChanged(QString newPath);
-	void pathInfoChanged(MediaPathInfo * newPathInfo);
+
+	QSharedPointer<MediaPathInfo> pathInfo() const;
+
+	void setPathInfo(QSharedPointer<MediaPathInfo> newPathInfo);
+
 protected:
 	QString m_name;
 	QString m_path;
-	MediaPathInfo * m_pathInfo = nullptr;
+	QSharedPointer<MediaPathInfo> m_pathInfo = nullptr;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaPathDto = Jellyfin::DTO::MediaPathDto;
+
+template <>
+MediaPathDto fromJsonValue<MediaPathDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaPathDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

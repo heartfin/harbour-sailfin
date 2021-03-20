@@ -31,45 +31,60 @@
 #define JELLYFIN_DTO_SEARCHHINTRESULT_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/searchhint.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class SearchHint;
 
-class SearchHintResult : public QObject {
-	Q_OBJECT
+class SearchHintResult {
 public:
-	explicit SearchHintResult(QObject *parent = nullptr);
-	static SearchHintResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit SearchHintResult();
+	static SearchHintResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the search hints.
 	 */
-	Q_PROPERTY(QList<SearchHint *> searchHints READ searchHints WRITE setSearchHints NOTIFY searchHintsChanged)
+	QList<QSharedPointer<SearchHint>> searchHints() const;
+	/**
+	* @brief Gets or sets the search hints.
+	*/
+	void setSearchHints(QList<QSharedPointer<SearchHint>> newSearchHints);
 	/**
 	 * @brief Gets or sets the total record count.
 	 */
-	Q_PROPERTY(qint32 totalRecordCount READ totalRecordCount WRITE setTotalRecordCount NOTIFY totalRecordCountChanged)
-
-	QList<SearchHint *> searchHints() const;
-	void setSearchHints(QList<SearchHint *> newSearchHints);
-	
 	qint32 totalRecordCount() const;
+	/**
+	* @brief Gets or sets the total record count.
+	*/
 	void setTotalRecordCount(qint32 newTotalRecordCount);
-	
-signals:
-	void searchHintsChanged(QList<SearchHint *> newSearchHints);
-	void totalRecordCountChanged(qint32 newTotalRecordCount);
+
 protected:
-	QList<SearchHint *> m_searchHints;
+	QList<QSharedPointer<SearchHint>> m_searchHints;
 	qint32 m_totalRecordCount;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SearchHintResult = Jellyfin::DTO::SearchHintResult;
+
+template <>
+SearchHintResult fromJsonValue<SearchHintResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SearchHintResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

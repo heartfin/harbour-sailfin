@@ -32,68 +32,79 @@
 namespace Jellyfin {
 namespace DTO {
 
-PackageInfo::PackageInfo(QObject *parent) : QObject(parent) {}
+PackageInfo::PackageInfo(QObject *parent) {}
 
-PackageInfo *PackageInfo::fromJSON(QJsonObject source, QObject *parent) {
-	PackageInfo *instance = new PackageInfo(parent);
-	instance->updateFromJSON(source);
+PackageInfo PackageInfo::fromJson(QJsonObject source) {PackageInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void PackageInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void PackageInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["name"]);
+	m_description = fromJsonValue<QString>(source["description"]);
+	m_overview = fromJsonValue<QString>(source["overview"]);
+	m_owner = fromJsonValue<QString>(source["owner"]);
+	m_category = fromJsonValue<QString>(source["category"]);
+	m_guid = fromJsonValue<QString>(source["guid"]);
+	m_versions = fromJsonValue<QList<QSharedPointer<VersionInfo>>>(source["versions"]);
+	m_imageUrl = fromJsonValue<QString>(source["imageUrl"]);
+
 }
-QJsonObject PackageInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject PackageInfo::toJson() {
 	QJsonObject result;
+	result["name"] = toJsonValue<QString>(m_name);
+	result["description"] = toJsonValue<QString>(m_description);
+	result["overview"] = toJsonValue<QString>(m_overview);
+	result["owner"] = toJsonValue<QString>(m_owner);
+	result["category"] = toJsonValue<QString>(m_category);
+	result["guid"] = toJsonValue<QString>(m_guid);
+	result["versions"] = toJsonValue<QList<QSharedPointer<VersionInfo>>>(m_versions);
+	result["imageUrl"] = toJsonValue<QString>(m_imageUrl);
+
 	return result;
 }
+
 QString PackageInfo::name() const { return m_name; }
+
 void PackageInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString PackageInfo::description() const { return m_description; }
+
 void PackageInfo::setDescription(QString newDescription) {
 	m_description = newDescription;
-	emit descriptionChanged(newDescription);
 }
-
 QString PackageInfo::overview() const { return m_overview; }
+
 void PackageInfo::setOverview(QString newOverview) {
 	m_overview = newOverview;
-	emit overviewChanged(newOverview);
 }
-
 QString PackageInfo::owner() const { return m_owner; }
+
 void PackageInfo::setOwner(QString newOwner) {
 	m_owner = newOwner;
-	emit ownerChanged(newOwner);
 }
-
 QString PackageInfo::category() const { return m_category; }
+
 void PackageInfo::setCategory(QString newCategory) {
 	m_category = newCategory;
-	emit categoryChanged(newCategory);
 }
-
 QString PackageInfo::guid() const { return m_guid; }
+
 void PackageInfo::setGuid(QString newGuid) {
 	m_guid = newGuid;
-	emit guidChanged(newGuid);
 }
+QList<QSharedPointer<VersionInfo>> PackageInfo::versions() const { return m_versions; }
 
-QList<VersionInfo *> PackageInfo::versions() const { return m_versions; }
-void PackageInfo::setVersions(QList<VersionInfo *> newVersions) {
+void PackageInfo::setVersions(QList<QSharedPointer<VersionInfo>> newVersions) {
 	m_versions = newVersions;
-	emit versionsChanged(newVersions);
 }
-
 QString PackageInfo::imageUrl() const { return m_imageUrl; }
+
 void PackageInfo::setImageUrl(QString newImageUrl) {
 	m_imageUrl = newImageUrl;
-	emit imageUrlChanged(newImageUrl);
 }
 
 

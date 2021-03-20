@@ -5,13 +5,12 @@ class {{className}};
 {{/if}}
 {{/each}}
 
-class {{className}} : public QObject {
-	Q_OBJECT
+class {{className}} {
 public:
-	explicit {{className}}(QObject *parent = nullptr);
-	static {{className}} *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source, bool emitSignals = true);
-	QJsonObject toJSON();
+	explicit {{className}}();
+	static {{className}} fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
 	
 	// Properties
 
@@ -23,26 +22,22 @@ public:
 	 */
 {{/if}}
 
-	Q_PROPERTY({{p.typeNameWithQualifiers}} {{p.name}} READ {{p.name}} WRITE set{{p.writeName}} NOTIFY {{p.name}}Changed)
-
-{{/each}}
-
-	// Getters
-
-	{{#each properties as |p|}}
 	{{p.typeNameWithQualifiers}} {{p.name}}() const;
+
+{{#if p.description.length > 0}}
+	/**
+	* @brief {{p.description}}
+
+	*/
+{{/if}}
+
 	void set{{p.writeName}}({{p.typeNameWithQualifiers}} new{{p.writeName}});
 
-
-	{{/each}}
-	
-	// Signals
-signals:
-
-	{{#each properties as |p|}}
-	void {{p.name}}Changed({{p.typeNameWithQualifiers}} new{{p.writeName}});
-
-	{{/each}}
+{{#if p.isNullable}}
+	bool is{{p.writeName}}Null() const;
+	void set{{p.writeName}}Null();
+{{/if}}
+{{/each}}
 
 protected:
 
@@ -55,3 +50,16 @@ protected:
 
 {{/each}}
 };
+
+} // NS DTO
+
+namespace Support {
+
+using {{className}} = Jellyfin::DTO::{{className}};
+
+template <>
+
+{{className}} fromJsonValue<{{className}}>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return {{className}}::fromJson(source.toObject());
+}

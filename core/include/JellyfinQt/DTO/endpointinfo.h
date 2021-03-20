@@ -31,35 +31,48 @@
 #define JELLYFIN_DTO_ENDPOINTINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class EndPointInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit EndPointInfo(QObject *parent = nullptr);
-	static EndPointInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(bool isLocal READ isLocal WRITE setIsLocal NOTIFY isLocalChanged)
-	Q_PROPERTY(bool isInNetwork READ isInNetwork WRITE setIsInNetwork NOTIFY isInNetworkChanged)
+class EndPointInfo {
+public:
+	explicit EndPointInfo();
+	static EndPointInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	bool isLocal() const;
+
 	void setIsLocal(bool newIsLocal);
-	
+
 	bool isInNetwork() const;
+
 	void setIsInNetwork(bool newIsInNetwork);
-	
-signals:
-	void isLocalChanged(bool newIsLocal);
-	void isInNetworkChanged(bool newIsInNetwork);
+
 protected:
 	bool m_isLocal;
 	bool m_isInNetwork;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using EndPointInfo = Jellyfin::DTO::EndPointInfo;
+
+template <>
+EndPointInfo fromJsonValue<EndPointInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return EndPointInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

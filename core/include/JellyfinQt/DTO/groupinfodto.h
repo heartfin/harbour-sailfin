@@ -32,70 +32,84 @@
 
 #include <QDateTime>
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QUuid>
+#include <optional>
 
 #include "JellyfinQt/DTO/groupstatetype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class GroupInfoDto : public QObject {
-	Q_OBJECT
-public:
-	explicit GroupInfoDto(QObject *parent = nullptr);
-	static GroupInfoDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class GroupInfoDto {
+public:
+	explicit GroupInfoDto();
+	static GroupInfoDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets the group identifier.
 	 */
-	Q_PROPERTY(QString groupId READ groupId WRITE setGroupId NOTIFY groupIdChanged)
+	QUuid groupId() const;
+	/**
+	* @brief Gets the group identifier.
+	*/
+	void setGroupId(QUuid newGroupId);
 	/**
 	 * @brief Gets the group name.
 	 */
-	Q_PROPERTY(QString groupName READ groupName WRITE setGroupName NOTIFY groupNameChanged)
-	Q_PROPERTY(GroupStateType state READ state WRITE setState NOTIFY stateChanged)
+	QString groupName() const;
+	/**
+	* @brief Gets the group name.
+	*/
+	void setGroupName(QString newGroupName);
+
+	GroupStateType state() const;
+
+	void setState(GroupStateType newState);
 	/**
 	 * @brief Gets the participants.
 	 */
-	Q_PROPERTY(QStringList participants READ participants WRITE setParticipants NOTIFY participantsChanged)
+	QStringList participants() const;
+	/**
+	* @brief Gets the participants.
+	*/
+	void setParticipants(QStringList newParticipants);
 	/**
 	 * @brief Gets the date when this DTO has been created.
 	 */
-	Q_PROPERTY(QDateTime lastUpdatedAt READ lastUpdatedAt WRITE setLastUpdatedAt NOTIFY lastUpdatedAtChanged)
-
-	QString groupId() const;
-	void setGroupId(QString newGroupId);
-	
-	QString groupName() const;
-	void setGroupName(QString newGroupName);
-	
-	GroupStateType state() const;
-	void setState(GroupStateType newState);
-	
-	QStringList participants() const;
-	void setParticipants(QStringList newParticipants);
-	
 	QDateTime lastUpdatedAt() const;
+	/**
+	* @brief Gets the date when this DTO has been created.
+	*/
 	void setLastUpdatedAt(QDateTime newLastUpdatedAt);
-	
-signals:
-	void groupIdChanged(QString newGroupId);
-	void groupNameChanged(QString newGroupName);
-	void stateChanged(GroupStateType newState);
-	void participantsChanged(QStringList newParticipants);
-	void lastUpdatedAtChanged(QDateTime newLastUpdatedAt);
+
 protected:
-	QString m_groupId;
+	QUuid m_groupId;
 	QString m_groupName;
 	GroupStateType m_state;
 	QStringList m_participants;
 	QDateTime m_lastUpdatedAt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using GroupInfoDto = Jellyfin::DTO::GroupInfoDto;
+
+template <>
+GroupInfoDto fromJsonValue<GroupInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return GroupInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

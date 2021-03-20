@@ -32,74 +32,86 @@
 namespace Jellyfin {
 namespace DTO {
 
-VersionInfo::VersionInfo(QObject *parent) : QObject(parent) {}
+VersionInfo::VersionInfo(QObject *parent) {}
 
-VersionInfo *VersionInfo::fromJSON(QJsonObject source, QObject *parent) {
-	VersionInfo *instance = new VersionInfo(parent);
-	instance->updateFromJSON(source);
+VersionInfo VersionInfo::fromJson(QJsonObject source) {VersionInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void VersionInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void VersionInfo::setFromJson(QJsonObject source) {
+	m_version = fromJsonValue<QString>(source["version"]);
+	m_versionNumber = fromJsonValue<QSharedPointer<Version>>(source["VersionNumber"]);
+	m_changelog = fromJsonValue<QString>(source["changelog"]);
+	m_targetAbi = fromJsonValue<QString>(source["targetAbi"]);
+	m_sourceUrl = fromJsonValue<QString>(source["sourceUrl"]);
+	m_checksum = fromJsonValue<QString>(source["checksum"]);
+	m_timestamp = fromJsonValue<QString>(source["timestamp"]);
+	m_repositoryName = fromJsonValue<QString>(source["repositoryName"]);
+	m_repositoryUrl = fromJsonValue<QString>(source["repositoryUrl"]);
+
 }
-QJsonObject VersionInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject VersionInfo::toJson() {
 	QJsonObject result;
+	result["version"] = toJsonValue<QString>(m_version);
+	result["VersionNumber"] = toJsonValue<QSharedPointer<Version>>(m_versionNumber);
+	result["changelog"] = toJsonValue<QString>(m_changelog);
+	result["targetAbi"] = toJsonValue<QString>(m_targetAbi);
+	result["sourceUrl"] = toJsonValue<QString>(m_sourceUrl);
+	result["checksum"] = toJsonValue<QString>(m_checksum);
+	result["timestamp"] = toJsonValue<QString>(m_timestamp);
+	result["repositoryName"] = toJsonValue<QString>(m_repositoryName);
+	result["repositoryUrl"] = toJsonValue<QString>(m_repositoryUrl);
+
 	return result;
 }
+
 QString VersionInfo::version() const { return m_version; }
+
 void VersionInfo::setVersion(QString newVersion) {
 	m_version = newVersion;
-	emit versionChanged(newVersion);
 }
+QSharedPointer<Version> VersionInfo::versionNumber() const { return m_versionNumber; }
 
-Version * VersionInfo::versionNumber() const { return m_versionNumber; }
-void VersionInfo::setVersionNumber(Version * newVersionNumber) {
+void VersionInfo::setVersionNumber(QSharedPointer<Version> newVersionNumber) {
 	m_versionNumber = newVersionNumber;
-	emit versionNumberChanged(newVersionNumber);
 }
-
 QString VersionInfo::changelog() const { return m_changelog; }
+
 void VersionInfo::setChangelog(QString newChangelog) {
 	m_changelog = newChangelog;
-	emit changelogChanged(newChangelog);
 }
-
 QString VersionInfo::targetAbi() const { return m_targetAbi; }
+
 void VersionInfo::setTargetAbi(QString newTargetAbi) {
 	m_targetAbi = newTargetAbi;
-	emit targetAbiChanged(newTargetAbi);
 }
-
 QString VersionInfo::sourceUrl() const { return m_sourceUrl; }
+
 void VersionInfo::setSourceUrl(QString newSourceUrl) {
 	m_sourceUrl = newSourceUrl;
-	emit sourceUrlChanged(newSourceUrl);
 }
-
 QString VersionInfo::checksum() const { return m_checksum; }
+
 void VersionInfo::setChecksum(QString newChecksum) {
 	m_checksum = newChecksum;
-	emit checksumChanged(newChecksum);
 }
-
 QString VersionInfo::timestamp() const { return m_timestamp; }
+
 void VersionInfo::setTimestamp(QString newTimestamp) {
 	m_timestamp = newTimestamp;
-	emit timestampChanged(newTimestamp);
 }
-
 QString VersionInfo::repositoryName() const { return m_repositoryName; }
+
 void VersionInfo::setRepositoryName(QString newRepositoryName) {
 	m_repositoryName = newRepositoryName;
-	emit repositoryNameChanged(newRepositoryName);
 }
-
 QString VersionInfo::repositoryUrl() const { return m_repositoryUrl; }
+
 void VersionInfo::setRepositoryUrl(QString newRepositoryUrl) {
 	m_repositoryUrl = newRepositoryUrl;
-	emit repositoryUrlChanged(newRepositoryUrl);
 }
 
 

@@ -32,26 +32,30 @@
 namespace Jellyfin {
 namespace DTO {
 
-QuickConnectDto::QuickConnectDto(QObject *parent) : QObject(parent) {}
+QuickConnectDto::QuickConnectDto(QObject *parent) {}
 
-QuickConnectDto *QuickConnectDto::fromJSON(QJsonObject source, QObject *parent) {
-	QuickConnectDto *instance = new QuickConnectDto(parent);
-	instance->updateFromJSON(source);
+QuickConnectDto QuickConnectDto::fromJson(QJsonObject source) {QuickConnectDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void QuickConnectDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void QuickConnectDto::setFromJson(QJsonObject source) {
+	m_token = fromJsonValue<QString>(source["Token"]);
+
 }
-QJsonObject QuickConnectDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject QuickConnectDto::toJson() {
 	QJsonObject result;
+	result["Token"] = toJsonValue<QString>(m_token);
+
 	return result;
 }
+
 QString QuickConnectDto::token() const { return m_token; }
+
 void QuickConnectDto::setToken(QString newToken) {
 	m_token = newToken;
-	emit tokenChanged(newToken);
 }
 
 

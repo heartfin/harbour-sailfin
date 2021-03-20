@@ -32,254 +32,296 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceProfile::DeviceProfile(QObject *parent) : QObject(parent) {}
+DeviceProfile::DeviceProfile(QObject *parent) {}
 
-DeviceProfile *DeviceProfile::fromJSON(QJsonObject source, QObject *parent) {
-	DeviceProfile *instance = new DeviceProfile(parent);
-	instance->updateFromJSON(source);
+DeviceProfile DeviceProfile::fromJson(QJsonObject source) {DeviceProfile instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void DeviceProfile::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void DeviceProfile::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_identification = fromJsonValue<QSharedPointer<DeviceIdentification>>(source["Identification"]);
+	m_friendlyName = fromJsonValue<QString>(source["FriendlyName"]);
+	m_manufacturer = fromJsonValue<QString>(source["Manufacturer"]);
+	m_manufacturerUrl = fromJsonValue<QString>(source["ManufacturerUrl"]);
+	m_modelName = fromJsonValue<QString>(source["ModelName"]);
+	m_modelDescription = fromJsonValue<QString>(source["ModelDescription"]);
+	m_modelNumber = fromJsonValue<QString>(source["ModelNumber"]);
+	m_modelUrl = fromJsonValue<QString>(source["ModelUrl"]);
+	m_serialNumber = fromJsonValue<QString>(source["SerialNumber"]);
+	m_enableAlbumArtInDidl = fromJsonValue<bool>(source["EnableAlbumArtInDidl"]);
+	m_enableSingleAlbumArtLimit = fromJsonValue<bool>(source["EnableSingleAlbumArtLimit"]);
+	m_enableSingleSubtitleLimit = fromJsonValue<bool>(source["EnableSingleSubtitleLimit"]);
+	m_supportedMediaTypes = fromJsonValue<QString>(source["SupportedMediaTypes"]);
+	m_userId = fromJsonValue<QString>(source["UserId"]);
+	m_albumArtPn = fromJsonValue<QString>(source["AlbumArtPn"]);
+	m_maxAlbumArtWidth = fromJsonValue<qint32>(source["MaxAlbumArtWidth"]);
+	m_maxAlbumArtHeight = fromJsonValue<qint32>(source["MaxAlbumArtHeight"]);
+	m_maxIconWidth = fromJsonValue<qint32>(source["MaxIconWidth"]);
+	m_maxIconHeight = fromJsonValue<qint32>(source["MaxIconHeight"]);
+	m_maxStreamingBitrate = fromJsonValue<qint32>(source["MaxStreamingBitrate"]);
+	m_maxStaticBitrate = fromJsonValue<qint32>(source["MaxStaticBitrate"]);
+	m_musicStreamingTranscodingBitrate = fromJsonValue<qint32>(source["MusicStreamingTranscodingBitrate"]);
+	m_maxStaticMusicBitrate = fromJsonValue<qint32>(source["MaxStaticMusicBitrate"]);
+	m_sonyAggregationFlags = fromJsonValue<QString>(source["SonyAggregationFlags"]);
+	m_protocolInfo = fromJsonValue<QString>(source["ProtocolInfo"]);
+	m_timelineOffsetSeconds = fromJsonValue<qint32>(source["TimelineOffsetSeconds"]);
+	m_requiresPlainVideoItems = fromJsonValue<bool>(source["RequiresPlainVideoItems"]);
+	m_requiresPlainFolders = fromJsonValue<bool>(source["RequiresPlainFolders"]);
+	m_enableMSMediaReceiverRegistrar = fromJsonValue<bool>(source["EnableMSMediaReceiverRegistrar"]);
+	m_ignoreTranscodeByteRangeRequests = fromJsonValue<bool>(source["IgnoreTranscodeByteRangeRequests"]);
+	m_xmlRootAttributes = fromJsonValue<QList<QSharedPointer<XmlAttribute>>>(source["XmlRootAttributes"]);
+	m_directPlayProfiles = fromJsonValue<QList<QSharedPointer<DirectPlayProfile>>>(source["DirectPlayProfiles"]);
+	m_transcodingProfiles = fromJsonValue<QList<QSharedPointer<TranscodingProfile>>>(source["TranscodingProfiles"]);
+	m_containerProfiles = fromJsonValue<QList<QSharedPointer<ContainerProfile>>>(source["ContainerProfiles"]);
+	m_codecProfiles = fromJsonValue<QList<QSharedPointer<CodecProfile>>>(source["CodecProfiles"]);
+	m_responseProfiles = fromJsonValue<QList<QSharedPointer<ResponseProfile>>>(source["ResponseProfiles"]);
+	m_subtitleProfiles = fromJsonValue<QList<QSharedPointer<SubtitleProfile>>>(source["SubtitleProfiles"]);
+
 }
-QJsonObject DeviceProfile::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject DeviceProfile::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["Identification"] = toJsonValue<QSharedPointer<DeviceIdentification>>(m_identification);
+	result["FriendlyName"] = toJsonValue<QString>(m_friendlyName);
+	result["Manufacturer"] = toJsonValue<QString>(m_manufacturer);
+	result["ManufacturerUrl"] = toJsonValue<QString>(m_manufacturerUrl);
+	result["ModelName"] = toJsonValue<QString>(m_modelName);
+	result["ModelDescription"] = toJsonValue<QString>(m_modelDescription);
+	result["ModelNumber"] = toJsonValue<QString>(m_modelNumber);
+	result["ModelUrl"] = toJsonValue<QString>(m_modelUrl);
+	result["SerialNumber"] = toJsonValue<QString>(m_serialNumber);
+	result["EnableAlbumArtInDidl"] = toJsonValue<bool>(m_enableAlbumArtInDidl);
+	result["EnableSingleAlbumArtLimit"] = toJsonValue<bool>(m_enableSingleAlbumArtLimit);
+	result["EnableSingleSubtitleLimit"] = toJsonValue<bool>(m_enableSingleSubtitleLimit);
+	result["SupportedMediaTypes"] = toJsonValue<QString>(m_supportedMediaTypes);
+	result["UserId"] = toJsonValue<QString>(m_userId);
+	result["AlbumArtPn"] = toJsonValue<QString>(m_albumArtPn);
+	result["MaxAlbumArtWidth"] = toJsonValue<qint32>(m_maxAlbumArtWidth);
+	result["MaxAlbumArtHeight"] = toJsonValue<qint32>(m_maxAlbumArtHeight);
+	result["MaxIconWidth"] = toJsonValue<qint32>(m_maxIconWidth);
+	result["MaxIconHeight"] = toJsonValue<qint32>(m_maxIconHeight);
+	result["MaxStreamingBitrate"] = toJsonValue<qint32>(m_maxStreamingBitrate);
+	result["MaxStaticBitrate"] = toJsonValue<qint32>(m_maxStaticBitrate);
+	result["MusicStreamingTranscodingBitrate"] = toJsonValue<qint32>(m_musicStreamingTranscodingBitrate);
+	result["MaxStaticMusicBitrate"] = toJsonValue<qint32>(m_maxStaticMusicBitrate);
+	result["SonyAggregationFlags"] = toJsonValue<QString>(m_sonyAggregationFlags);
+	result["ProtocolInfo"] = toJsonValue<QString>(m_protocolInfo);
+	result["TimelineOffsetSeconds"] = toJsonValue<qint32>(m_timelineOffsetSeconds);
+	result["RequiresPlainVideoItems"] = toJsonValue<bool>(m_requiresPlainVideoItems);
+	result["RequiresPlainFolders"] = toJsonValue<bool>(m_requiresPlainFolders);
+	result["EnableMSMediaReceiverRegistrar"] = toJsonValue<bool>(m_enableMSMediaReceiverRegistrar);
+	result["IgnoreTranscodeByteRangeRequests"] = toJsonValue<bool>(m_ignoreTranscodeByteRangeRequests);
+	result["XmlRootAttributes"] = toJsonValue<QList<QSharedPointer<XmlAttribute>>>(m_xmlRootAttributes);
+	result["DirectPlayProfiles"] = toJsonValue<QList<QSharedPointer<DirectPlayProfile>>>(m_directPlayProfiles);
+	result["TranscodingProfiles"] = toJsonValue<QList<QSharedPointer<TranscodingProfile>>>(m_transcodingProfiles);
+	result["ContainerProfiles"] = toJsonValue<QList<QSharedPointer<ContainerProfile>>>(m_containerProfiles);
+	result["CodecProfiles"] = toJsonValue<QList<QSharedPointer<CodecProfile>>>(m_codecProfiles);
+	result["ResponseProfiles"] = toJsonValue<QList<QSharedPointer<ResponseProfile>>>(m_responseProfiles);
+	result["SubtitleProfiles"] = toJsonValue<QList<QSharedPointer<SubtitleProfile>>>(m_subtitleProfiles);
+
 	return result;
 }
+
 QString DeviceProfile::name() const { return m_name; }
+
 void DeviceProfile::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString DeviceProfile::jellyfinId() const { return m_jellyfinId; }
+
 void DeviceProfile::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
+QSharedPointer<DeviceIdentification> DeviceProfile::identification() const { return m_identification; }
 
-DeviceIdentification * DeviceProfile::identification() const { return m_identification; }
-void DeviceProfile::setIdentification(DeviceIdentification * newIdentification) {
+void DeviceProfile::setIdentification(QSharedPointer<DeviceIdentification> newIdentification) {
 	m_identification = newIdentification;
-	emit identificationChanged(newIdentification);
 }
-
 QString DeviceProfile::friendlyName() const { return m_friendlyName; }
+
 void DeviceProfile::setFriendlyName(QString newFriendlyName) {
 	m_friendlyName = newFriendlyName;
-	emit friendlyNameChanged(newFriendlyName);
 }
-
 QString DeviceProfile::manufacturer() const { return m_manufacturer; }
+
 void DeviceProfile::setManufacturer(QString newManufacturer) {
 	m_manufacturer = newManufacturer;
-	emit manufacturerChanged(newManufacturer);
 }
-
 QString DeviceProfile::manufacturerUrl() const { return m_manufacturerUrl; }
+
 void DeviceProfile::setManufacturerUrl(QString newManufacturerUrl) {
 	m_manufacturerUrl = newManufacturerUrl;
-	emit manufacturerUrlChanged(newManufacturerUrl);
 }
-
 QString DeviceProfile::modelName() const { return m_modelName; }
+
 void DeviceProfile::setModelName(QString newModelName) {
 	m_modelName = newModelName;
-	emit modelNameChanged(newModelName);
 }
-
 QString DeviceProfile::modelDescription() const { return m_modelDescription; }
+
 void DeviceProfile::setModelDescription(QString newModelDescription) {
 	m_modelDescription = newModelDescription;
-	emit modelDescriptionChanged(newModelDescription);
 }
-
 QString DeviceProfile::modelNumber() const { return m_modelNumber; }
+
 void DeviceProfile::setModelNumber(QString newModelNumber) {
 	m_modelNumber = newModelNumber;
-	emit modelNumberChanged(newModelNumber);
 }
-
 QString DeviceProfile::modelUrl() const { return m_modelUrl; }
+
 void DeviceProfile::setModelUrl(QString newModelUrl) {
 	m_modelUrl = newModelUrl;
-	emit modelUrlChanged(newModelUrl);
 }
-
 QString DeviceProfile::serialNumber() const { return m_serialNumber; }
+
 void DeviceProfile::setSerialNumber(QString newSerialNumber) {
 	m_serialNumber = newSerialNumber;
-	emit serialNumberChanged(newSerialNumber);
 }
-
 bool DeviceProfile::enableAlbumArtInDidl() const { return m_enableAlbumArtInDidl; }
+
 void DeviceProfile::setEnableAlbumArtInDidl(bool newEnableAlbumArtInDidl) {
 	m_enableAlbumArtInDidl = newEnableAlbumArtInDidl;
-	emit enableAlbumArtInDidlChanged(newEnableAlbumArtInDidl);
 }
-
 bool DeviceProfile::enableSingleAlbumArtLimit() const { return m_enableSingleAlbumArtLimit; }
+
 void DeviceProfile::setEnableSingleAlbumArtLimit(bool newEnableSingleAlbumArtLimit) {
 	m_enableSingleAlbumArtLimit = newEnableSingleAlbumArtLimit;
-	emit enableSingleAlbumArtLimitChanged(newEnableSingleAlbumArtLimit);
 }
-
 bool DeviceProfile::enableSingleSubtitleLimit() const { return m_enableSingleSubtitleLimit; }
+
 void DeviceProfile::setEnableSingleSubtitleLimit(bool newEnableSingleSubtitleLimit) {
 	m_enableSingleSubtitleLimit = newEnableSingleSubtitleLimit;
-	emit enableSingleSubtitleLimitChanged(newEnableSingleSubtitleLimit);
 }
-
 QString DeviceProfile::supportedMediaTypes() const { return m_supportedMediaTypes; }
+
 void DeviceProfile::setSupportedMediaTypes(QString newSupportedMediaTypes) {
 	m_supportedMediaTypes = newSupportedMediaTypes;
-	emit supportedMediaTypesChanged(newSupportedMediaTypes);
 }
-
 QString DeviceProfile::userId() const { return m_userId; }
+
 void DeviceProfile::setUserId(QString newUserId) {
 	m_userId = newUserId;
-	emit userIdChanged(newUserId);
 }
-
 QString DeviceProfile::albumArtPn() const { return m_albumArtPn; }
+
 void DeviceProfile::setAlbumArtPn(QString newAlbumArtPn) {
 	m_albumArtPn = newAlbumArtPn;
-	emit albumArtPnChanged(newAlbumArtPn);
 }
-
 qint32 DeviceProfile::maxAlbumArtWidth() const { return m_maxAlbumArtWidth; }
+
 void DeviceProfile::setMaxAlbumArtWidth(qint32 newMaxAlbumArtWidth) {
 	m_maxAlbumArtWidth = newMaxAlbumArtWidth;
-	emit maxAlbumArtWidthChanged(newMaxAlbumArtWidth);
 }
-
 qint32 DeviceProfile::maxAlbumArtHeight() const { return m_maxAlbumArtHeight; }
+
 void DeviceProfile::setMaxAlbumArtHeight(qint32 newMaxAlbumArtHeight) {
 	m_maxAlbumArtHeight = newMaxAlbumArtHeight;
-	emit maxAlbumArtHeightChanged(newMaxAlbumArtHeight);
 }
-
 qint32 DeviceProfile::maxIconWidth() const { return m_maxIconWidth; }
+
 void DeviceProfile::setMaxIconWidth(qint32 newMaxIconWidth) {
 	m_maxIconWidth = newMaxIconWidth;
-	emit maxIconWidthChanged(newMaxIconWidth);
 }
-
 qint32 DeviceProfile::maxIconHeight() const { return m_maxIconHeight; }
+
 void DeviceProfile::setMaxIconHeight(qint32 newMaxIconHeight) {
 	m_maxIconHeight = newMaxIconHeight;
-	emit maxIconHeightChanged(newMaxIconHeight);
 }
-
 qint32 DeviceProfile::maxStreamingBitrate() const { return m_maxStreamingBitrate; }
+
 void DeviceProfile::setMaxStreamingBitrate(qint32 newMaxStreamingBitrate) {
 	m_maxStreamingBitrate = newMaxStreamingBitrate;
-	emit maxStreamingBitrateChanged(newMaxStreamingBitrate);
 }
-
 qint32 DeviceProfile::maxStaticBitrate() const { return m_maxStaticBitrate; }
+
 void DeviceProfile::setMaxStaticBitrate(qint32 newMaxStaticBitrate) {
 	m_maxStaticBitrate = newMaxStaticBitrate;
-	emit maxStaticBitrateChanged(newMaxStaticBitrate);
 }
-
 qint32 DeviceProfile::musicStreamingTranscodingBitrate() const { return m_musicStreamingTranscodingBitrate; }
+
 void DeviceProfile::setMusicStreamingTranscodingBitrate(qint32 newMusicStreamingTranscodingBitrate) {
 	m_musicStreamingTranscodingBitrate = newMusicStreamingTranscodingBitrate;
-	emit musicStreamingTranscodingBitrateChanged(newMusicStreamingTranscodingBitrate);
 }
-
 qint32 DeviceProfile::maxStaticMusicBitrate() const { return m_maxStaticMusicBitrate; }
+
 void DeviceProfile::setMaxStaticMusicBitrate(qint32 newMaxStaticMusicBitrate) {
 	m_maxStaticMusicBitrate = newMaxStaticMusicBitrate;
-	emit maxStaticMusicBitrateChanged(newMaxStaticMusicBitrate);
 }
-
 QString DeviceProfile::sonyAggregationFlags() const { return m_sonyAggregationFlags; }
+
 void DeviceProfile::setSonyAggregationFlags(QString newSonyAggregationFlags) {
 	m_sonyAggregationFlags = newSonyAggregationFlags;
-	emit sonyAggregationFlagsChanged(newSonyAggregationFlags);
 }
-
 QString DeviceProfile::protocolInfo() const { return m_protocolInfo; }
+
 void DeviceProfile::setProtocolInfo(QString newProtocolInfo) {
 	m_protocolInfo = newProtocolInfo;
-	emit protocolInfoChanged(newProtocolInfo);
 }
-
 qint32 DeviceProfile::timelineOffsetSeconds() const { return m_timelineOffsetSeconds; }
+
 void DeviceProfile::setTimelineOffsetSeconds(qint32 newTimelineOffsetSeconds) {
 	m_timelineOffsetSeconds = newTimelineOffsetSeconds;
-	emit timelineOffsetSecondsChanged(newTimelineOffsetSeconds);
 }
-
 bool DeviceProfile::requiresPlainVideoItems() const { return m_requiresPlainVideoItems; }
+
 void DeviceProfile::setRequiresPlainVideoItems(bool newRequiresPlainVideoItems) {
 	m_requiresPlainVideoItems = newRequiresPlainVideoItems;
-	emit requiresPlainVideoItemsChanged(newRequiresPlainVideoItems);
 }
-
 bool DeviceProfile::requiresPlainFolders() const { return m_requiresPlainFolders; }
+
 void DeviceProfile::setRequiresPlainFolders(bool newRequiresPlainFolders) {
 	m_requiresPlainFolders = newRequiresPlainFolders;
-	emit requiresPlainFoldersChanged(newRequiresPlainFolders);
 }
-
 bool DeviceProfile::enableMSMediaReceiverRegistrar() const { return m_enableMSMediaReceiverRegistrar; }
+
 void DeviceProfile::setEnableMSMediaReceiverRegistrar(bool newEnableMSMediaReceiverRegistrar) {
 	m_enableMSMediaReceiverRegistrar = newEnableMSMediaReceiverRegistrar;
-	emit enableMSMediaReceiverRegistrarChanged(newEnableMSMediaReceiverRegistrar);
 }
-
 bool DeviceProfile::ignoreTranscodeByteRangeRequests() const { return m_ignoreTranscodeByteRangeRequests; }
+
 void DeviceProfile::setIgnoreTranscodeByteRangeRequests(bool newIgnoreTranscodeByteRangeRequests) {
 	m_ignoreTranscodeByteRangeRequests = newIgnoreTranscodeByteRangeRequests;
-	emit ignoreTranscodeByteRangeRequestsChanged(newIgnoreTranscodeByteRangeRequests);
 }
+QList<QSharedPointer<XmlAttribute>> DeviceProfile::xmlRootAttributes() const { return m_xmlRootAttributes; }
 
-QList<XmlAttribute *> DeviceProfile::xmlRootAttributes() const { return m_xmlRootAttributes; }
-void DeviceProfile::setXmlRootAttributes(QList<XmlAttribute *> newXmlRootAttributes) {
+void DeviceProfile::setXmlRootAttributes(QList<QSharedPointer<XmlAttribute>> newXmlRootAttributes) {
 	m_xmlRootAttributes = newXmlRootAttributes;
-	emit xmlRootAttributesChanged(newXmlRootAttributes);
 }
+QList<QSharedPointer<DirectPlayProfile>> DeviceProfile::directPlayProfiles() const { return m_directPlayProfiles; }
 
-QList<DirectPlayProfile *> DeviceProfile::directPlayProfiles() const { return m_directPlayProfiles; }
-void DeviceProfile::setDirectPlayProfiles(QList<DirectPlayProfile *> newDirectPlayProfiles) {
+void DeviceProfile::setDirectPlayProfiles(QList<QSharedPointer<DirectPlayProfile>> newDirectPlayProfiles) {
 	m_directPlayProfiles = newDirectPlayProfiles;
-	emit directPlayProfilesChanged(newDirectPlayProfiles);
 }
+QList<QSharedPointer<TranscodingProfile>> DeviceProfile::transcodingProfiles() const { return m_transcodingProfiles; }
 
-QList<TranscodingProfile *> DeviceProfile::transcodingProfiles() const { return m_transcodingProfiles; }
-void DeviceProfile::setTranscodingProfiles(QList<TranscodingProfile *> newTranscodingProfiles) {
+void DeviceProfile::setTranscodingProfiles(QList<QSharedPointer<TranscodingProfile>> newTranscodingProfiles) {
 	m_transcodingProfiles = newTranscodingProfiles;
-	emit transcodingProfilesChanged(newTranscodingProfiles);
 }
+QList<QSharedPointer<ContainerProfile>> DeviceProfile::containerProfiles() const { return m_containerProfiles; }
 
-QList<ContainerProfile *> DeviceProfile::containerProfiles() const { return m_containerProfiles; }
-void DeviceProfile::setContainerProfiles(QList<ContainerProfile *> newContainerProfiles) {
+void DeviceProfile::setContainerProfiles(QList<QSharedPointer<ContainerProfile>> newContainerProfiles) {
 	m_containerProfiles = newContainerProfiles;
-	emit containerProfilesChanged(newContainerProfiles);
 }
+QList<QSharedPointer<CodecProfile>> DeviceProfile::codecProfiles() const { return m_codecProfiles; }
 
-QList<CodecProfile *> DeviceProfile::codecProfiles() const { return m_codecProfiles; }
-void DeviceProfile::setCodecProfiles(QList<CodecProfile *> newCodecProfiles) {
+void DeviceProfile::setCodecProfiles(QList<QSharedPointer<CodecProfile>> newCodecProfiles) {
 	m_codecProfiles = newCodecProfiles;
-	emit codecProfilesChanged(newCodecProfiles);
 }
+QList<QSharedPointer<ResponseProfile>> DeviceProfile::responseProfiles() const { return m_responseProfiles; }
 
-QList<ResponseProfile *> DeviceProfile::responseProfiles() const { return m_responseProfiles; }
-void DeviceProfile::setResponseProfiles(QList<ResponseProfile *> newResponseProfiles) {
+void DeviceProfile::setResponseProfiles(QList<QSharedPointer<ResponseProfile>> newResponseProfiles) {
 	m_responseProfiles = newResponseProfiles;
-	emit responseProfilesChanged(newResponseProfiles);
 }
+QList<QSharedPointer<SubtitleProfile>> DeviceProfile::subtitleProfiles() const { return m_subtitleProfiles; }
 
-QList<SubtitleProfile *> DeviceProfile::subtitleProfiles() const { return m_subtitleProfiles; }
-void DeviceProfile::setSubtitleProfiles(QList<SubtitleProfile *> newSubtitleProfiles) {
+void DeviceProfile::setSubtitleProfiles(QList<QSharedPointer<SubtitleProfile>> newSubtitleProfiles) {
 	m_subtitleProfiles = newSubtitleProfiles;
-	emit subtitleProfilesChanged(newSubtitleProfiles);
 }
 
 

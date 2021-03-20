@@ -31,48 +31,59 @@
 #define JELLYFIN_DTO_CONTAINERPROFILE_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
 #include "JellyfinQt/DTO/dlnaprofiletype.h"
+#include "JellyfinQt/DTO/profilecondition.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ProfileCondition;
 
-class ContainerProfile : public QObject {
-	Q_OBJECT
+class ContainerProfile {
 public:
-	explicit ContainerProfile(QObject *parent = nullptr);
-	static ContainerProfile *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(DlnaProfileType type READ type WRITE setType NOTIFY typeChanged)
-	Q_PROPERTY(QList<ProfileCondition *> conditions READ conditions WRITE setConditions NOTIFY conditionsChanged)
-	Q_PROPERTY(QString container READ container WRITE setContainer NOTIFY containerChanged)
+	explicit ContainerProfile();
+	static ContainerProfile fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	DlnaProfileType type() const;
+
 	void setType(DlnaProfileType newType);
-	
-	QList<ProfileCondition *> conditions() const;
-	void setConditions(QList<ProfileCondition *> newConditions);
-	
+
+	QList<QSharedPointer<ProfileCondition>> conditions() const;
+
+	void setConditions(QList<QSharedPointer<ProfileCondition>> newConditions);
+
 	QString container() const;
+
 	void setContainer(QString newContainer);
-	
-signals:
-	void typeChanged(DlnaProfileType newType);
-	void conditionsChanged(QList<ProfileCondition *> newConditions);
-	void containerChanged(QString newContainer);
+
 protected:
 	DlnaProfileType m_type;
-	QList<ProfileCondition *> m_conditions;
+	QList<QSharedPointer<ProfileCondition>> m_conditions;
 	QString m_container;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ContainerProfile = Jellyfin::DTO::ContainerProfile;
+
+template <>
+ContainerProfile fromJsonValue<ContainerProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ContainerProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-UpdateUserPassword::UpdateUserPassword(QObject *parent) : QObject(parent) {}
+UpdateUserPassword::UpdateUserPassword(QObject *parent) {}
 
-UpdateUserPassword *UpdateUserPassword::fromJSON(QJsonObject source, QObject *parent) {
-	UpdateUserPassword *instance = new UpdateUserPassword(parent);
-	instance->updateFromJSON(source);
+UpdateUserPassword UpdateUserPassword::fromJson(QJsonObject source) {UpdateUserPassword instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void UpdateUserPassword::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void UpdateUserPassword::setFromJson(QJsonObject source) {
+	m_currentPassword = fromJsonValue<QString>(source["CurrentPassword"]);
+	m_currentPw = fromJsonValue<QString>(source["CurrentPw"]);
+	m_newPw = fromJsonValue<QString>(source["NewPw"]);
+	m_resetPassword = fromJsonValue<bool>(source["ResetPassword"]);
+
 }
-QJsonObject UpdateUserPassword::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject UpdateUserPassword::toJson() {
 	QJsonObject result;
+	result["CurrentPassword"] = toJsonValue<QString>(m_currentPassword);
+	result["CurrentPw"] = toJsonValue<QString>(m_currentPw);
+	result["NewPw"] = toJsonValue<QString>(m_newPw);
+	result["ResetPassword"] = toJsonValue<bool>(m_resetPassword);
+
 	return result;
 }
+
 QString UpdateUserPassword::currentPassword() const { return m_currentPassword; }
+
 void UpdateUserPassword::setCurrentPassword(QString newCurrentPassword) {
 	m_currentPassword = newCurrentPassword;
-	emit currentPasswordChanged(newCurrentPassword);
 }
-
 QString UpdateUserPassword::currentPw() const { return m_currentPw; }
+
 void UpdateUserPassword::setCurrentPw(QString newCurrentPw) {
 	m_currentPw = newCurrentPw;
-	emit currentPwChanged(newCurrentPw);
 }
-
 QString UpdateUserPassword::newPw() const { return m_newPw; }
+
 void UpdateUserPassword::setNewPw(QString newNewPw) {
 	m_newPw = newNewPw;
-	emit newPwChanged(newNewPw);
 }
-
 bool UpdateUserPassword::resetPassword() const { return m_resetPassword; }
+
 void UpdateUserPassword::setResetPassword(bool newResetPassword) {
 	m_resetPassword = newResetPassword;
-	emit resetPasswordChanged(newResetPassword);
 }
 
 

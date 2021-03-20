@@ -29,73 +29,82 @@
 
 #include <JellyfinQt/DTO/imageinfo.h>
 
-#include <JellyfinQt/DTO/imagetype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ImageInfo::ImageInfo(QObject *parent) : QObject(parent) {}
+ImageInfo::ImageInfo(QObject *parent) {}
 
-ImageInfo *ImageInfo::fromJSON(QJsonObject source, QObject *parent) {
-	ImageInfo *instance = new ImageInfo(parent);
-	instance->updateFromJSON(source);
+ImageInfo ImageInfo::fromJson(QJsonObject source) {ImageInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ImageInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ImageInfo::setFromJson(QJsonObject source) {
+	m_imageType = fromJsonValue<ImageType>(source["ImageType"]);
+	m_imageIndex = fromJsonValue<qint32>(source["ImageIndex"]);
+	m_imageTag = fromJsonValue<QString>(source["ImageTag"]);
+	m_path = fromJsonValue<QString>(source["Path"]);
+	m_blurHash = fromJsonValue<QString>(source["BlurHash"]);
+	m_height = fromJsonValue<qint32>(source["Height"]);
+	m_width = fromJsonValue<qint32>(source["Width"]);
+	m_size = fromJsonValue<qint64>(source["Size"]);
+
 }
-QJsonObject ImageInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ImageInfo::toJson() {
 	QJsonObject result;
+	result["ImageType"] = toJsonValue<ImageType>(m_imageType);
+	result["ImageIndex"] = toJsonValue<qint32>(m_imageIndex);
+	result["ImageTag"] = toJsonValue<QString>(m_imageTag);
+	result["Path"] = toJsonValue<QString>(m_path);
+	result["BlurHash"] = toJsonValue<QString>(m_blurHash);
+	result["Height"] = toJsonValue<qint32>(m_height);
+	result["Width"] = toJsonValue<qint32>(m_width);
+	result["Size"] = toJsonValue<qint64>(m_size);
+
 	return result;
 }
+
 ImageType ImageInfo::imageType() const { return m_imageType; }
+
 void ImageInfo::setImageType(ImageType newImageType) {
 	m_imageType = newImageType;
-	emit imageTypeChanged(newImageType);
 }
-
 qint32 ImageInfo::imageIndex() const { return m_imageIndex; }
+
 void ImageInfo::setImageIndex(qint32 newImageIndex) {
 	m_imageIndex = newImageIndex;
-	emit imageIndexChanged(newImageIndex);
 }
-
 QString ImageInfo::imageTag() const { return m_imageTag; }
+
 void ImageInfo::setImageTag(QString newImageTag) {
 	m_imageTag = newImageTag;
-	emit imageTagChanged(newImageTag);
 }
-
 QString ImageInfo::path() const { return m_path; }
+
 void ImageInfo::setPath(QString newPath) {
 	m_path = newPath;
-	emit pathChanged(newPath);
 }
-
 QString ImageInfo::blurHash() const { return m_blurHash; }
+
 void ImageInfo::setBlurHash(QString newBlurHash) {
 	m_blurHash = newBlurHash;
-	emit blurHashChanged(newBlurHash);
 }
-
 qint32 ImageInfo::height() const { return m_height; }
+
 void ImageInfo::setHeight(qint32 newHeight) {
 	m_height = newHeight;
-	emit heightChanged(newHeight);
 }
-
 qint32 ImageInfo::width() const { return m_width; }
+
 void ImageInfo::setWidth(qint32 newWidth) {
 	m_width = newWidth;
-	emit widthChanged(newWidth);
 }
-
 qint64 ImageInfo::size() const { return m_size; }
+
 void ImageInfo::setSize(qint64 newSize) {
 	m_size = newSize;
-	emit sizeChanged(newSize);
 }
 
 

@@ -31,54 +31,69 @@
 #define JELLYFIN_DTO_AUTHENTICATIONINFOQUERYRESULT_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/authenticationinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class AuthenticationInfo;
 
-class AuthenticationInfoQueryResult : public QObject {
-	Q_OBJECT
+class AuthenticationInfoQueryResult {
 public:
-	explicit AuthenticationInfoQueryResult(QObject *parent = nullptr);
-	static AuthenticationInfoQueryResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit AuthenticationInfoQueryResult();
+	static AuthenticationInfoQueryResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the items.
 	 */
-	Q_PROPERTY(QList<AuthenticationInfo *> items READ items WRITE setItems NOTIFY itemsChanged)
+	QList<QSharedPointer<AuthenticationInfo>> items() const;
+	/**
+	* @brief Gets or sets the items.
+	*/
+	void setItems(QList<QSharedPointer<AuthenticationInfo>> newItems);
 	/**
 	 * @brief The total number of records available.
 	 */
-	Q_PROPERTY(qint32 totalRecordCount READ totalRecordCount WRITE setTotalRecordCount NOTIFY totalRecordCountChanged)
+	qint32 totalRecordCount() const;
+	/**
+	* @brief The total number of records available.
+	*/
+	void setTotalRecordCount(qint32 newTotalRecordCount);
 	/**
 	 * @brief The index of the first record in Items.
 	 */
-	Q_PROPERTY(qint32 startIndex READ startIndex WRITE setStartIndex NOTIFY startIndexChanged)
-
-	QList<AuthenticationInfo *> items() const;
-	void setItems(QList<AuthenticationInfo *> newItems);
-	
-	qint32 totalRecordCount() const;
-	void setTotalRecordCount(qint32 newTotalRecordCount);
-	
 	qint32 startIndex() const;
+	/**
+	* @brief The index of the first record in Items.
+	*/
 	void setStartIndex(qint32 newStartIndex);
-	
-signals:
-	void itemsChanged(QList<AuthenticationInfo *> newItems);
-	void totalRecordCountChanged(qint32 newTotalRecordCount);
-	void startIndexChanged(qint32 newStartIndex);
+
 protected:
-	QList<AuthenticationInfo *> m_items;
+	QList<QSharedPointer<AuthenticationInfo>> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using AuthenticationInfoQueryResult = Jellyfin::DTO::AuthenticationInfoQueryResult;
+
+template <>
+AuthenticationInfoQueryResult fromJsonValue<AuthenticationInfoQueryResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AuthenticationInfoQueryResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

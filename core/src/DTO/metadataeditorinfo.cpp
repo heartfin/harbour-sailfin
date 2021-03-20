@@ -32,56 +32,65 @@
 namespace Jellyfin {
 namespace DTO {
 
-MetadataEditorInfo::MetadataEditorInfo(QObject *parent) : QObject(parent) {}
+MetadataEditorInfo::MetadataEditorInfo(QObject *parent) {}
 
-MetadataEditorInfo *MetadataEditorInfo::fromJSON(QJsonObject source, QObject *parent) {
-	MetadataEditorInfo *instance = new MetadataEditorInfo(parent);
-	instance->updateFromJSON(source);
+MetadataEditorInfo MetadataEditorInfo::fromJson(QJsonObject source) {MetadataEditorInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MetadataEditorInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MetadataEditorInfo::setFromJson(QJsonObject source) {
+	m_parentalRatingOptions = fromJsonValue<QList<QSharedPointer<ParentalRating>>>(source["ParentalRatingOptions"]);
+	m_countries = fromJsonValue<QList<QSharedPointer<CountryInfo>>>(source["Countries"]);
+	m_cultures = fromJsonValue<QList<QSharedPointer<CultureDto>>>(source["Cultures"]);
+	m_externalIdInfos = fromJsonValue<QList<QSharedPointer<ExternalIdInfo>>>(source["ExternalIdInfos"]);
+	m_contentType = fromJsonValue<QString>(source["ContentType"]);
+	m_contentTypeOptions = fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["ContentTypeOptions"]);
+
 }
-QJsonObject MetadataEditorInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MetadataEditorInfo::toJson() {
 	QJsonObject result;
+	result["ParentalRatingOptions"] = toJsonValue<QList<QSharedPointer<ParentalRating>>>(m_parentalRatingOptions);
+	result["Countries"] = toJsonValue<QList<QSharedPointer<CountryInfo>>>(m_countries);
+	result["Cultures"] = toJsonValue<QList<QSharedPointer<CultureDto>>>(m_cultures);
+	result["ExternalIdInfos"] = toJsonValue<QList<QSharedPointer<ExternalIdInfo>>>(m_externalIdInfos);
+	result["ContentType"] = toJsonValue<QString>(m_contentType);
+	result["ContentTypeOptions"] = toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_contentTypeOptions);
+
 	return result;
 }
-QList<ParentalRating *> MetadataEditorInfo::parentalRatingOptions() const { return m_parentalRatingOptions; }
-void MetadataEditorInfo::setParentalRatingOptions(QList<ParentalRating *> newParentalRatingOptions) {
+
+QList<QSharedPointer<ParentalRating>> MetadataEditorInfo::parentalRatingOptions() const { return m_parentalRatingOptions; }
+
+void MetadataEditorInfo::setParentalRatingOptions(QList<QSharedPointer<ParentalRating>> newParentalRatingOptions) {
 	m_parentalRatingOptions = newParentalRatingOptions;
-	emit parentalRatingOptionsChanged(newParentalRatingOptions);
 }
+QList<QSharedPointer<CountryInfo>> MetadataEditorInfo::countries() const { return m_countries; }
 
-QList<CountryInfo *> MetadataEditorInfo::countries() const { return m_countries; }
-void MetadataEditorInfo::setCountries(QList<CountryInfo *> newCountries) {
+void MetadataEditorInfo::setCountries(QList<QSharedPointer<CountryInfo>> newCountries) {
 	m_countries = newCountries;
-	emit countriesChanged(newCountries);
 }
+QList<QSharedPointer<CultureDto>> MetadataEditorInfo::cultures() const { return m_cultures; }
 
-QList<CultureDto *> MetadataEditorInfo::cultures() const { return m_cultures; }
-void MetadataEditorInfo::setCultures(QList<CultureDto *> newCultures) {
+void MetadataEditorInfo::setCultures(QList<QSharedPointer<CultureDto>> newCultures) {
 	m_cultures = newCultures;
-	emit culturesChanged(newCultures);
 }
+QList<QSharedPointer<ExternalIdInfo>> MetadataEditorInfo::externalIdInfos() const { return m_externalIdInfos; }
 
-QList<ExternalIdInfo *> MetadataEditorInfo::externalIdInfos() const { return m_externalIdInfos; }
-void MetadataEditorInfo::setExternalIdInfos(QList<ExternalIdInfo *> newExternalIdInfos) {
+void MetadataEditorInfo::setExternalIdInfos(QList<QSharedPointer<ExternalIdInfo>> newExternalIdInfos) {
 	m_externalIdInfos = newExternalIdInfos;
-	emit externalIdInfosChanged(newExternalIdInfos);
 }
-
 QString MetadataEditorInfo::contentType() const { return m_contentType; }
+
 void MetadataEditorInfo::setContentType(QString newContentType) {
 	m_contentType = newContentType;
-	emit contentTypeChanged(newContentType);
 }
+QList<QSharedPointer<NameValuePair>> MetadataEditorInfo::contentTypeOptions() const { return m_contentTypeOptions; }
 
-QList<NameValuePair *> MetadataEditorInfo::contentTypeOptions() const { return m_contentTypeOptions; }
-void MetadataEditorInfo::setContentTypeOptions(QList<NameValuePair *> newContentTypeOptions) {
+void MetadataEditorInfo::setContentTypeOptions(QList<QSharedPointer<NameValuePair>> newContentTypeOptions) {
 	m_contentTypeOptions = newContentTypeOptions;
-	emit contentTypeOptionsChanged(newContentTypeOptions);
 }
 
 

@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_SYNCPLAYUSERACCESSTYPE_H
 #define JELLYFIN_DTO_SYNCPLAYUSERACCESSTYPE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class SyncPlayUserAccessTypeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		CreateAndJoinGroups,
 		JoinGroups,
 		None,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit SyncPlayUserAccessTypeClass();
 };
+
 typedef SyncPlayUserAccessTypeClass::Value SyncPlayUserAccessType;
+
+} // NS DTO
+
+namespace Support {
+
+using SyncPlayUserAccessType = Jellyfin::DTO::SyncPlayUserAccessType;
+using SyncPlayUserAccessTypeClass = Jellyfin::DTO::SyncPlayUserAccessTypeClass;
+
+template <>
+SyncPlayUserAccessType fromJsonValue<SyncPlayUserAccessType>(const QJsonValue &source) {
+	if (!source.isString()) return SyncPlayUserAccessTypeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("CreateAndJoinGroups")) {
+		return SyncPlayUserAccessTypeClass::CreateAndJoinGroups;
+	}
+	if (str == QStringLiteral("JoinGroups")) {
+		return SyncPlayUserAccessTypeClass::JoinGroups;
+	}
+	if (str == QStringLiteral("None")) {
+		return SyncPlayUserAccessTypeClass::None;
+	}
+	
+	return SyncPlayUserAccessTypeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

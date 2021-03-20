@@ -32,62 +32,72 @@
 namespace Jellyfin {
 namespace DTO {
 
-MetadataOptions::MetadataOptions(QObject *parent) : QObject(parent) {}
+MetadataOptions::MetadataOptions(QObject *parent) {}
 
-MetadataOptions *MetadataOptions::fromJSON(QJsonObject source, QObject *parent) {
-	MetadataOptions *instance = new MetadataOptions(parent);
-	instance->updateFromJSON(source);
+MetadataOptions MetadataOptions::fromJson(QJsonObject source) {MetadataOptions instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void MetadataOptions::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void MetadataOptions::setFromJson(QJsonObject source) {
+	m_itemType = fromJsonValue<QString>(source["ItemType"]);
+	m_disabledMetadataSavers = fromJsonValue<QStringList>(source["DisabledMetadataSavers"]);
+	m_localMetadataReaderOrder = fromJsonValue<QStringList>(source["LocalMetadataReaderOrder"]);
+	m_disabledMetadataFetchers = fromJsonValue<QStringList>(source["DisabledMetadataFetchers"]);
+	m_metadataFetcherOrder = fromJsonValue<QStringList>(source["MetadataFetcherOrder"]);
+	m_disabledImageFetchers = fromJsonValue<QStringList>(source["DisabledImageFetchers"]);
+	m_imageFetcherOrder = fromJsonValue<QStringList>(source["ImageFetcherOrder"]);
+
 }
-QJsonObject MetadataOptions::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject MetadataOptions::toJson() {
 	QJsonObject result;
+	result["ItemType"] = toJsonValue<QString>(m_itemType);
+	result["DisabledMetadataSavers"] = toJsonValue<QStringList>(m_disabledMetadataSavers);
+	result["LocalMetadataReaderOrder"] = toJsonValue<QStringList>(m_localMetadataReaderOrder);
+	result["DisabledMetadataFetchers"] = toJsonValue<QStringList>(m_disabledMetadataFetchers);
+	result["MetadataFetcherOrder"] = toJsonValue<QStringList>(m_metadataFetcherOrder);
+	result["DisabledImageFetchers"] = toJsonValue<QStringList>(m_disabledImageFetchers);
+	result["ImageFetcherOrder"] = toJsonValue<QStringList>(m_imageFetcherOrder);
+
 	return result;
 }
+
 QString MetadataOptions::itemType() const { return m_itemType; }
+
 void MetadataOptions::setItemType(QString newItemType) {
 	m_itemType = newItemType;
-	emit itemTypeChanged(newItemType);
 }
-
 QStringList MetadataOptions::disabledMetadataSavers() const { return m_disabledMetadataSavers; }
+
 void MetadataOptions::setDisabledMetadataSavers(QStringList newDisabledMetadataSavers) {
 	m_disabledMetadataSavers = newDisabledMetadataSavers;
-	emit disabledMetadataSaversChanged(newDisabledMetadataSavers);
 }
-
 QStringList MetadataOptions::localMetadataReaderOrder() const { return m_localMetadataReaderOrder; }
+
 void MetadataOptions::setLocalMetadataReaderOrder(QStringList newLocalMetadataReaderOrder) {
 	m_localMetadataReaderOrder = newLocalMetadataReaderOrder;
-	emit localMetadataReaderOrderChanged(newLocalMetadataReaderOrder);
 }
-
 QStringList MetadataOptions::disabledMetadataFetchers() const { return m_disabledMetadataFetchers; }
+
 void MetadataOptions::setDisabledMetadataFetchers(QStringList newDisabledMetadataFetchers) {
 	m_disabledMetadataFetchers = newDisabledMetadataFetchers;
-	emit disabledMetadataFetchersChanged(newDisabledMetadataFetchers);
 }
-
 QStringList MetadataOptions::metadataFetcherOrder() const { return m_metadataFetcherOrder; }
+
 void MetadataOptions::setMetadataFetcherOrder(QStringList newMetadataFetcherOrder) {
 	m_metadataFetcherOrder = newMetadataFetcherOrder;
-	emit metadataFetcherOrderChanged(newMetadataFetcherOrder);
 }
-
 QStringList MetadataOptions::disabledImageFetchers() const { return m_disabledImageFetchers; }
+
 void MetadataOptions::setDisabledImageFetchers(QStringList newDisabledImageFetchers) {
 	m_disabledImageFetchers = newDisabledImageFetchers;
-	emit disabledImageFetchersChanged(newDisabledImageFetchers);
 }
-
 QStringList MetadataOptions::imageFetcherOrder() const { return m_imageFetcherOrder; }
+
 void MetadataOptions::setImageFetcherOrder(QStringList newImageFetcherOrder) {
 	m_imageFetcherOrder = newImageFetcherOrder;
-	emit imageFetcherOrderChanged(newImageFetcherOrder);
 }
 
 

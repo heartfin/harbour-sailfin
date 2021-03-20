@@ -31,33 +31,48 @@
 #define JELLYFIN_DTO_FORGOTPASSWORDDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ForgotPasswordDto : public QObject {
-	Q_OBJECT
-public:
-	explicit ForgotPasswordDto(QObject *parent = nullptr);
-	static ForgotPasswordDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ForgotPasswordDto {
+public:
+	explicit ForgotPasswordDto();
+	static ForgotPasswordDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the entered username to have its password reset.
 	 */
-	Q_PROPERTY(QString enteredUsername READ enteredUsername WRITE setEnteredUsername NOTIFY enteredUsernameChanged)
-
 	QString enteredUsername() const;
+	/**
+	* @brief Gets or sets the entered username to have its password reset.
+	*/
 	void setEnteredUsername(QString newEnteredUsername);
-	
-signals:
-	void enteredUsernameChanged(QString newEnteredUsername);
+
 protected:
 	QString m_enteredUsername;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ForgotPasswordDto = Jellyfin::DTO::ForgotPasswordDto;
+
+template <>
+ForgotPasswordDto fromJsonValue<ForgotPasswordDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ForgotPasswordDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

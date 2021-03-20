@@ -31,78 +31,81 @@
 #define JELLYFIN_DTO_PUBLICSYSTEMINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PublicSystemInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit PublicSystemInfo(QObject *parent = nullptr);
-	static PublicSystemInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class PublicSystemInfo {
+public:
+	explicit PublicSystemInfo();
+	static PublicSystemInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the local address.
 	 */
-	Q_PROPERTY(QString localAddress READ localAddress WRITE setLocalAddress NOTIFY localAddressChanged)
+	QString localAddress() const;
+	/**
+	* @brief Gets or sets the local address.
+	*/
+	void setLocalAddress(QString newLocalAddress);
 	/**
 	 * @brief Gets or sets the name of the server.
 	 */
-	Q_PROPERTY(QString serverName READ serverName WRITE setServerName NOTIFY serverNameChanged)
+	QString serverName() const;
+	/**
+	* @brief Gets or sets the name of the server.
+	*/
+	void setServerName(QString newServerName);
 	/**
 	 * @brief Gets or sets the server version.
 	 */
-	Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
+	QString version() const;
+	/**
+	* @brief Gets or sets the server version.
+	*/
+	void setVersion(QString newVersion);
 	/**
 	 * @brief Gets or sets the product name. This is the AssemblyProduct name.
 	 */
-	Q_PROPERTY(QString productName READ productName WRITE setProductName NOTIFY productNameChanged)
+	QString productName() const;
+	/**
+	* @brief Gets or sets the product name. This is the AssemblyProduct name.
+	*/
+	void setProductName(QString newProductName);
 	/**
 	 * @brief Gets or sets the operating system.
 	 */
-	Q_PROPERTY(QString operatingSystem READ operatingSystem WRITE setOperatingSystem NOTIFY operatingSystemChanged)
+	QString operatingSystem() const;
+	/**
+	* @brief Gets or sets the operating system.
+	*/
+	void setOperatingSystem(QString newOperatingSystem);
 	/**
 	 * @brief Gets or sets the id.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the id.
+	*/
+	void setJellyfinId(QString newJellyfinId);
 	/**
 	 * @brief Gets or sets a value indicating whether the startup wizard is completed.
 	 */
-	Q_PROPERTY(bool startupWizardCompleted READ startupWizardCompleted WRITE setStartupWizardCompleted NOTIFY startupWizardCompletedChanged)
-
-	QString localAddress() const;
-	void setLocalAddress(QString newLocalAddress);
-	
-	QString serverName() const;
-	void setServerName(QString newServerName);
-	
-	QString version() const;
-	void setVersion(QString newVersion);
-	
-	QString productName() const;
-	void setProductName(QString newProductName);
-	
-	QString operatingSystem() const;
-	void setOperatingSystem(QString newOperatingSystem);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
 	bool startupWizardCompleted() const;
+	/**
+	* @brief Gets or sets a value indicating whether the startup wizard is completed.
+	*/
 	void setStartupWizardCompleted(bool newStartupWizardCompleted);
-	
-signals:
-	void localAddressChanged(QString newLocalAddress);
-	void serverNameChanged(QString newServerName);
-	void versionChanged(QString newVersion);
-	void productNameChanged(QString newProductName);
-	void operatingSystemChanged(QString newOperatingSystem);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void startupWizardCompletedChanged(bool newStartupWizardCompleted);
+
 protected:
 	QString m_localAddress;
 	QString m_serverName;
@@ -112,6 +115,18 @@ protected:
 	QString m_jellyfinId;
 	bool m_startupWizardCompleted;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PublicSystemInfo = Jellyfin::DTO::PublicSystemInfo;
+
+template <>
+PublicSystemInfo fromJsonValue<PublicSystemInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PublicSystemInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

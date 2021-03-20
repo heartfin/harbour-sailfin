@@ -31,117 +31,120 @@
 #define JELLYFIN_DTO_ITEMCOUNTS_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ItemCounts : public QObject {
-	Q_OBJECT
-public:
-	explicit ItemCounts(QObject *parent = nullptr);
-	static ItemCounts *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ItemCounts {
+public:
+	explicit ItemCounts();
+	static ItemCounts fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the movie count.
 	 */
-	Q_PROPERTY(qint32 movieCount READ movieCount WRITE setMovieCount NOTIFY movieCountChanged)
+	qint32 movieCount() const;
+	/**
+	* @brief Gets or sets the movie count.
+	*/
+	void setMovieCount(qint32 newMovieCount);
 	/**
 	 * @brief Gets or sets the series count.
 	 */
-	Q_PROPERTY(qint32 seriesCount READ seriesCount WRITE setSeriesCount NOTIFY seriesCountChanged)
+	qint32 seriesCount() const;
+	/**
+	* @brief Gets or sets the series count.
+	*/
+	void setSeriesCount(qint32 newSeriesCount);
 	/**
 	 * @brief Gets or sets the episode count.
 	 */
-	Q_PROPERTY(qint32 episodeCount READ episodeCount WRITE setEpisodeCount NOTIFY episodeCountChanged)
+	qint32 episodeCount() const;
+	/**
+	* @brief Gets or sets the episode count.
+	*/
+	void setEpisodeCount(qint32 newEpisodeCount);
 	/**
 	 * @brief Gets or sets the artist count.
 	 */
-	Q_PROPERTY(qint32 artistCount READ artistCount WRITE setArtistCount NOTIFY artistCountChanged)
+	qint32 artistCount() const;
+	/**
+	* @brief Gets or sets the artist count.
+	*/
+	void setArtistCount(qint32 newArtistCount);
 	/**
 	 * @brief Gets or sets the program count.
 	 */
-	Q_PROPERTY(qint32 programCount READ programCount WRITE setProgramCount NOTIFY programCountChanged)
+	qint32 programCount() const;
+	/**
+	* @brief Gets or sets the program count.
+	*/
+	void setProgramCount(qint32 newProgramCount);
 	/**
 	 * @brief Gets or sets the trailer count.
 	 */
-	Q_PROPERTY(qint32 trailerCount READ trailerCount WRITE setTrailerCount NOTIFY trailerCountChanged)
+	qint32 trailerCount() const;
+	/**
+	* @brief Gets or sets the trailer count.
+	*/
+	void setTrailerCount(qint32 newTrailerCount);
 	/**
 	 * @brief Gets or sets the song count.
 	 */
-	Q_PROPERTY(qint32 songCount READ songCount WRITE setSongCount NOTIFY songCountChanged)
+	qint32 songCount() const;
+	/**
+	* @brief Gets or sets the song count.
+	*/
+	void setSongCount(qint32 newSongCount);
 	/**
 	 * @brief Gets or sets the album count.
 	 */
-	Q_PROPERTY(qint32 albumCount READ albumCount WRITE setAlbumCount NOTIFY albumCountChanged)
+	qint32 albumCount() const;
+	/**
+	* @brief Gets or sets the album count.
+	*/
+	void setAlbumCount(qint32 newAlbumCount);
 	/**
 	 * @brief Gets or sets the music video count.
 	 */
-	Q_PROPERTY(qint32 musicVideoCount READ musicVideoCount WRITE setMusicVideoCount NOTIFY musicVideoCountChanged)
+	qint32 musicVideoCount() const;
+	/**
+	* @brief Gets or sets the music video count.
+	*/
+	void setMusicVideoCount(qint32 newMusicVideoCount);
 	/**
 	 * @brief Gets or sets the box set count.
 	 */
-	Q_PROPERTY(qint32 boxSetCount READ boxSetCount WRITE setBoxSetCount NOTIFY boxSetCountChanged)
+	qint32 boxSetCount() const;
+	/**
+	* @brief Gets or sets the box set count.
+	*/
+	void setBoxSetCount(qint32 newBoxSetCount);
 	/**
 	 * @brief Gets or sets the book count.
 	 */
-	Q_PROPERTY(qint32 bookCount READ bookCount WRITE setBookCount NOTIFY bookCountChanged)
+	qint32 bookCount() const;
+	/**
+	* @brief Gets or sets the book count.
+	*/
+	void setBookCount(qint32 newBookCount);
 	/**
 	 * @brief Gets or sets the item count.
 	 */
-	Q_PROPERTY(qint32 itemCount READ itemCount WRITE setItemCount NOTIFY itemCountChanged)
-
-	qint32 movieCount() const;
-	void setMovieCount(qint32 newMovieCount);
-	
-	qint32 seriesCount() const;
-	void setSeriesCount(qint32 newSeriesCount);
-	
-	qint32 episodeCount() const;
-	void setEpisodeCount(qint32 newEpisodeCount);
-	
-	qint32 artistCount() const;
-	void setArtistCount(qint32 newArtistCount);
-	
-	qint32 programCount() const;
-	void setProgramCount(qint32 newProgramCount);
-	
-	qint32 trailerCount() const;
-	void setTrailerCount(qint32 newTrailerCount);
-	
-	qint32 songCount() const;
-	void setSongCount(qint32 newSongCount);
-	
-	qint32 albumCount() const;
-	void setAlbumCount(qint32 newAlbumCount);
-	
-	qint32 musicVideoCount() const;
-	void setMusicVideoCount(qint32 newMusicVideoCount);
-	
-	qint32 boxSetCount() const;
-	void setBoxSetCount(qint32 newBoxSetCount);
-	
-	qint32 bookCount() const;
-	void setBookCount(qint32 newBookCount);
-	
 	qint32 itemCount() const;
+	/**
+	* @brief Gets or sets the item count.
+	*/
 	void setItemCount(qint32 newItemCount);
-	
-signals:
-	void movieCountChanged(qint32 newMovieCount);
-	void seriesCountChanged(qint32 newSeriesCount);
-	void episodeCountChanged(qint32 newEpisodeCount);
-	void artistCountChanged(qint32 newArtistCount);
-	void programCountChanged(qint32 newProgramCount);
-	void trailerCountChanged(qint32 newTrailerCount);
-	void songCountChanged(qint32 newSongCount);
-	void albumCountChanged(qint32 newAlbumCount);
-	void musicVideoCountChanged(qint32 newMusicVideoCount);
-	void boxSetCountChanged(qint32 newBoxSetCount);
-	void bookCountChanged(qint32 newBookCount);
-	void itemCountChanged(qint32 newItemCount);
+
 protected:
 	qint32 m_movieCount;
 	qint32 m_seriesCount;
@@ -156,6 +159,18 @@ protected:
 	qint32 m_bookCount;
 	qint32 m_itemCount;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ItemCounts = Jellyfin::DTO::ItemCounts;
+
+template <>
+ItemCounts fromJsonValue<ItemCounts>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ItemCounts::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

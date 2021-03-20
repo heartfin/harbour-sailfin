@@ -31,374 +31,367 @@
 #define JELLYFIN_DTO_MEDIASTREAM_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/mediastreamtype.h"
 #include "JellyfinQt/DTO/subtitledeliverymethod.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaStream : public QObject {
-	Q_OBJECT
-public:
-	explicit MediaStream(QObject *parent = nullptr);
-	static MediaStream *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class MediaStream {
+public:
+	explicit MediaStream();
+	static MediaStream fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the codec.
 	 */
-	Q_PROPERTY(QString codec READ codec WRITE setCodec NOTIFY codecChanged)
+	QString codec() const;
+	/**
+	* @brief Gets or sets the codec.
+	*/
+	void setCodec(QString newCodec);
 	/**
 	 * @brief Gets or sets the codec tag.
 	 */
-	Q_PROPERTY(QString codecTag READ codecTag WRITE setCodecTag NOTIFY codecTagChanged)
+	QString codecTag() const;
+	/**
+	* @brief Gets or sets the codec tag.
+	*/
+	void setCodecTag(QString newCodecTag);
 	/**
 	 * @brief Gets or sets the language.
 	 */
-	Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
+	QString language() const;
+	/**
+	* @brief Gets or sets the language.
+	*/
+	void setLanguage(QString newLanguage);
 	/**
 	 * @brief Gets or sets the color range.
 	 */
-	Q_PROPERTY(QString colorRange READ colorRange WRITE setColorRange NOTIFY colorRangeChanged)
+	QString colorRange() const;
+	/**
+	* @brief Gets or sets the color range.
+	*/
+	void setColorRange(QString newColorRange);
 	/**
 	 * @brief Gets or sets the color space.
 	 */
-	Q_PROPERTY(QString colorSpace READ colorSpace WRITE setColorSpace NOTIFY colorSpaceChanged)
+	QString colorSpace() const;
+	/**
+	* @brief Gets or sets the color space.
+	*/
+	void setColorSpace(QString newColorSpace);
 	/**
 	 * @brief Gets or sets the color transfer.
 	 */
-	Q_PROPERTY(QString colorTransfer READ colorTransfer WRITE setColorTransfer NOTIFY colorTransferChanged)
+	QString colorTransfer() const;
+	/**
+	* @brief Gets or sets the color transfer.
+	*/
+	void setColorTransfer(QString newColorTransfer);
 	/**
 	 * @brief Gets or sets the color primaries.
 	 */
-	Q_PROPERTY(QString colorPrimaries READ colorPrimaries WRITE setColorPrimaries NOTIFY colorPrimariesChanged)
+	QString colorPrimaries() const;
+	/**
+	* @brief Gets or sets the color primaries.
+	*/
+	void setColorPrimaries(QString newColorPrimaries);
 	/**
 	 * @brief Gets or sets the comment.
 	 */
-	Q_PROPERTY(QString comment READ comment WRITE setComment NOTIFY commentChanged)
+	QString comment() const;
+	/**
+	* @brief Gets or sets the comment.
+	*/
+	void setComment(QString newComment);
 	/**
 	 * @brief Gets or sets the time base.
 	 */
-	Q_PROPERTY(QString timeBase READ timeBase WRITE setTimeBase NOTIFY timeBaseChanged)
+	QString timeBase() const;
+	/**
+	* @brief Gets or sets the time base.
+	*/
+	void setTimeBase(QString newTimeBase);
 	/**
 	 * @brief Gets or sets the codec time base.
 	 */
-	Q_PROPERTY(QString codecTimeBase READ codecTimeBase WRITE setCodecTimeBase NOTIFY codecTimeBaseChanged)
+	QString codecTimeBase() const;
+	/**
+	* @brief Gets or sets the codec time base.
+	*/
+	void setCodecTimeBase(QString newCodecTimeBase);
 	/**
 	 * @brief Gets or sets the title.
 	 */
-	Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+	QString title() const;
+	/**
+	* @brief Gets or sets the title.
+	*/
+	void setTitle(QString newTitle);
 	/**
 	 * @brief Gets or sets the video range.
 	 */
-	Q_PROPERTY(QString videoRange READ videoRange WRITE setVideoRange NOTIFY videoRangeChanged)
-	Q_PROPERTY(QString localizedUndefined READ localizedUndefined WRITE setLocalizedUndefined NOTIFY localizedUndefinedChanged)
-	Q_PROPERTY(QString localizedDefault READ localizedDefault WRITE setLocalizedDefault NOTIFY localizedDefaultChanged)
-	Q_PROPERTY(QString localizedForced READ localizedForced WRITE setLocalizedForced NOTIFY localizedForcedChanged)
-	Q_PROPERTY(QString displayTitle READ displayTitle WRITE setDisplayTitle NOTIFY displayTitleChanged)
-	Q_PROPERTY(QString nalLengthSize READ nalLengthSize WRITE setNalLengthSize NOTIFY nalLengthSizeChanged)
+	QString videoRange() const;
+	/**
+	* @brief Gets or sets the video range.
+	*/
+	void setVideoRange(QString newVideoRange);
+
+	QString localizedUndefined() const;
+
+	void setLocalizedUndefined(QString newLocalizedUndefined);
+
+	QString localizedDefault() const;
+
+	void setLocalizedDefault(QString newLocalizedDefault);
+
+	QString localizedForced() const;
+
+	void setLocalizedForced(QString newLocalizedForced);
+
+	QString displayTitle() const;
+
+	void setDisplayTitle(QString newDisplayTitle);
+
+	QString nalLengthSize() const;
+
+	void setNalLengthSize(QString newNalLengthSize);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is interlaced.
 	 */
-	Q_PROPERTY(bool isInterlaced READ isInterlaced WRITE setIsInterlaced NOTIFY isInterlacedChanged)
-	Q_PROPERTY(bool isAVC READ isAVC WRITE setIsAVC NOTIFY isAVCChanged)
+	bool isInterlaced() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is interlaced.
+	*/
+	void setIsInterlaced(bool newIsInterlaced);
+
+	bool isAVC() const;
+
+	void setIsAVC(bool newIsAVC);
 	/**
 	 * @brief Gets or sets the channel layout.
 	 */
-	Q_PROPERTY(QString channelLayout READ channelLayout WRITE setChannelLayout NOTIFY channelLayoutChanged)
+	QString channelLayout() const;
+	/**
+	* @brief Gets or sets the channel layout.
+	*/
+	void setChannelLayout(QString newChannelLayout);
 	/**
 	 * @brief Gets or sets the bit rate.
 	 */
-	Q_PROPERTY(qint32 bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
+	qint32 bitRate() const;
+	/**
+	* @brief Gets or sets the bit rate.
+	*/
+	void setBitRate(qint32 newBitRate);
 	/**
 	 * @brief Gets or sets the bit depth.
 	 */
-	Q_PROPERTY(qint32 bitDepth READ bitDepth WRITE setBitDepth NOTIFY bitDepthChanged)
+	qint32 bitDepth() const;
+	/**
+	* @brief Gets or sets the bit depth.
+	*/
+	void setBitDepth(qint32 newBitDepth);
 	/**
 	 * @brief Gets or sets the reference frames.
 	 */
-	Q_PROPERTY(qint32 refFrames READ refFrames WRITE setRefFrames NOTIFY refFramesChanged)
+	qint32 refFrames() const;
+	/**
+	* @brief Gets or sets the reference frames.
+	*/
+	void setRefFrames(qint32 newRefFrames);
 	/**
 	 * @brief Gets or sets the length of the packet.
 	 */
-	Q_PROPERTY(qint32 packetLength READ packetLength WRITE setPacketLength NOTIFY packetLengthChanged)
+	qint32 packetLength() const;
+	/**
+	* @brief Gets or sets the length of the packet.
+	*/
+	void setPacketLength(qint32 newPacketLength);
 	/**
 	 * @brief Gets or sets the channels.
 	 */
-	Q_PROPERTY(qint32 channels READ channels WRITE setChannels NOTIFY channelsChanged)
+	qint32 channels() const;
+	/**
+	* @brief Gets or sets the channels.
+	*/
+	void setChannels(qint32 newChannels);
 	/**
 	 * @brief Gets or sets the sample rate.
 	 */
-	Q_PROPERTY(qint32 sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
+	qint32 sampleRate() const;
+	/**
+	* @brief Gets or sets the sample rate.
+	*/
+	void setSampleRate(qint32 newSampleRate);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is default.
 	 */
-	Q_PROPERTY(bool isDefault READ isDefault WRITE setIsDefault NOTIFY isDefaultChanged)
+	bool isDefault() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is default.
+	*/
+	void setIsDefault(bool newIsDefault);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is forced.
 	 */
-	Q_PROPERTY(bool isForced READ isForced WRITE setIsForced NOTIFY isForcedChanged)
+	bool isForced() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is forced.
+	*/
+	void setIsForced(bool newIsForced);
 	/**
 	 * @brief Gets or sets the height.
 	 */
-	Q_PROPERTY(qint32 height READ height WRITE setHeight NOTIFY heightChanged)
+	qint32 height() const;
+	/**
+	* @brief Gets or sets the height.
+	*/
+	void setHeight(qint32 newHeight);
 	/**
 	 * @brief Gets or sets the width.
 	 */
-	Q_PROPERTY(qint32 width READ width WRITE setWidth NOTIFY widthChanged)
+	qint32 width() const;
+	/**
+	* @brief Gets or sets the width.
+	*/
+	void setWidth(qint32 newWidth);
 	/**
 	 * @brief Gets or sets the average frame rate.
 	 */
-	Q_PROPERTY(float averageFrameRate READ averageFrameRate WRITE setAverageFrameRate NOTIFY averageFrameRateChanged)
+	float averageFrameRate() const;
+	/**
+	* @brief Gets or sets the average frame rate.
+	*/
+	void setAverageFrameRate(float newAverageFrameRate);
 	/**
 	 * @brief Gets or sets the real frame rate.
 	 */
-	Q_PROPERTY(float realFrameRate READ realFrameRate WRITE setRealFrameRate NOTIFY realFrameRateChanged)
+	float realFrameRate() const;
+	/**
+	* @brief Gets or sets the real frame rate.
+	*/
+	void setRealFrameRate(float newRealFrameRate);
 	/**
 	 * @brief Gets or sets the profile.
 	 */
-	Q_PROPERTY(QString profile READ profile WRITE setProfile NOTIFY profileChanged)
-	Q_PROPERTY(MediaStreamType type READ type WRITE setType NOTIFY typeChanged)
+	QString profile() const;
+	/**
+	* @brief Gets or sets the profile.
+	*/
+	void setProfile(QString newProfile);
+
+	MediaStreamType type() const;
+
+	void setType(MediaStreamType newType);
 	/**
 	 * @brief Gets or sets the aspect ratio.
 	 */
-	Q_PROPERTY(QString aspectRatio READ aspectRatio WRITE setAspectRatio NOTIFY aspectRatioChanged)
+	QString aspectRatio() const;
+	/**
+	* @brief Gets or sets the aspect ratio.
+	*/
+	void setAspectRatio(QString newAspectRatio);
 	/**
 	 * @brief Gets or sets the index.
 	 */
-	Q_PROPERTY(qint32 index READ index WRITE setIndex NOTIFY indexChanged)
+	qint32 index() const;
+	/**
+	* @brief Gets or sets the index.
+	*/
+	void setIndex(qint32 newIndex);
 	/**
 	 * @brief Gets or sets the score.
 	 */
-	Q_PROPERTY(qint32 score READ score WRITE setScore NOTIFY scoreChanged)
+	qint32 score() const;
+	/**
+	* @brief Gets or sets the score.
+	*/
+	void setScore(qint32 newScore);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is external.
 	 */
-	Q_PROPERTY(bool isExternal READ isExternal WRITE setIsExternal NOTIFY isExternalChanged)
-	Q_PROPERTY(SubtitleDeliveryMethod deliveryMethod READ deliveryMethod WRITE setDeliveryMethod NOTIFY deliveryMethodChanged)
+	bool isExternal() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is external.
+	*/
+	void setIsExternal(bool newIsExternal);
+
+	SubtitleDeliveryMethod deliveryMethod() const;
+
+	void setDeliveryMethod(SubtitleDeliveryMethod newDeliveryMethod);
 	/**
 	 * @brief Gets or sets the delivery URL.
 	 */
-	Q_PROPERTY(QString deliveryUrl READ deliveryUrl WRITE setDeliveryUrl NOTIFY deliveryUrlChanged)
+	QString deliveryUrl() const;
+	/**
+	* @brief Gets or sets the delivery URL.
+	*/
+	void setDeliveryUrl(QString newDeliveryUrl);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is external URL.
 	 */
-	Q_PROPERTY(bool isExternalUrl READ isExternalUrl WRITE setIsExternalUrl NOTIFY isExternalUrlChanged)
-	Q_PROPERTY(bool isTextSubtitleStream READ isTextSubtitleStream WRITE setIsTextSubtitleStream NOTIFY isTextSubtitleStreamChanged)
+	bool isExternalUrl() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is external URL.
+	*/
+	void setIsExternalUrl(bool newIsExternalUrl);
+
+	bool isTextSubtitleStream() const;
+
+	void setIsTextSubtitleStream(bool newIsTextSubtitleStream);
 	/**
 	 * @brief Gets or sets a value indicating whether [supports external stream].
 	 */
-	Q_PROPERTY(bool supportsExternalStream READ supportsExternalStream WRITE setSupportsExternalStream NOTIFY supportsExternalStreamChanged)
+	bool supportsExternalStream() const;
+	/**
+	* @brief Gets or sets a value indicating whether [supports external stream].
+	*/
+	void setSupportsExternalStream(bool newSupportsExternalStream);
 	/**
 	 * @brief Gets or sets the filename.
 	 */
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+	QString path() const;
+	/**
+	* @brief Gets or sets the filename.
+	*/
+	void setPath(QString newPath);
 	/**
 	 * @brief Gets or sets the pixel format.
 	 */
-	Q_PROPERTY(QString pixelFormat READ pixelFormat WRITE setPixelFormat NOTIFY pixelFormatChanged)
+	QString pixelFormat() const;
+	/**
+	* @brief Gets or sets the pixel format.
+	*/
+	void setPixelFormat(QString newPixelFormat);
 	/**
 	 * @brief Gets or sets the level.
 	 */
-	Q_PROPERTY(double level READ level WRITE setLevel NOTIFY levelChanged)
+	double level() const;
+	/**
+	* @brief Gets or sets the level.
+	*/
+	void setLevel(double newLevel);
 	/**
 	 * @brief Gets a value indicating whether this instance is anamorphic.
 	 */
-	Q_PROPERTY(bool isAnamorphic READ isAnamorphic WRITE setIsAnamorphic NOTIFY isAnamorphicChanged)
-
-	QString codec() const;
-	void setCodec(QString newCodec);
-	
-	QString codecTag() const;
-	void setCodecTag(QString newCodecTag);
-	
-	QString language() const;
-	void setLanguage(QString newLanguage);
-	
-	QString colorRange() const;
-	void setColorRange(QString newColorRange);
-	
-	QString colorSpace() const;
-	void setColorSpace(QString newColorSpace);
-	
-	QString colorTransfer() const;
-	void setColorTransfer(QString newColorTransfer);
-	
-	QString colorPrimaries() const;
-	void setColorPrimaries(QString newColorPrimaries);
-	
-	QString comment() const;
-	void setComment(QString newComment);
-	
-	QString timeBase() const;
-	void setTimeBase(QString newTimeBase);
-	
-	QString codecTimeBase() const;
-	void setCodecTimeBase(QString newCodecTimeBase);
-	
-	QString title() const;
-	void setTitle(QString newTitle);
-	
-	QString videoRange() const;
-	void setVideoRange(QString newVideoRange);
-	
-	QString localizedUndefined() const;
-	void setLocalizedUndefined(QString newLocalizedUndefined);
-	
-	QString localizedDefault() const;
-	void setLocalizedDefault(QString newLocalizedDefault);
-	
-	QString localizedForced() const;
-	void setLocalizedForced(QString newLocalizedForced);
-	
-	QString displayTitle() const;
-	void setDisplayTitle(QString newDisplayTitle);
-	
-	QString nalLengthSize() const;
-	void setNalLengthSize(QString newNalLengthSize);
-	
-	bool isInterlaced() const;
-	void setIsInterlaced(bool newIsInterlaced);
-	
-	bool isAVC() const;
-	void setIsAVC(bool newIsAVC);
-	
-	QString channelLayout() const;
-	void setChannelLayout(QString newChannelLayout);
-	
-	qint32 bitRate() const;
-	void setBitRate(qint32 newBitRate);
-	
-	qint32 bitDepth() const;
-	void setBitDepth(qint32 newBitDepth);
-	
-	qint32 refFrames() const;
-	void setRefFrames(qint32 newRefFrames);
-	
-	qint32 packetLength() const;
-	void setPacketLength(qint32 newPacketLength);
-	
-	qint32 channels() const;
-	void setChannels(qint32 newChannels);
-	
-	qint32 sampleRate() const;
-	void setSampleRate(qint32 newSampleRate);
-	
-	bool isDefault() const;
-	void setIsDefault(bool newIsDefault);
-	
-	bool isForced() const;
-	void setIsForced(bool newIsForced);
-	
-	qint32 height() const;
-	void setHeight(qint32 newHeight);
-	
-	qint32 width() const;
-	void setWidth(qint32 newWidth);
-	
-	float averageFrameRate() const;
-	void setAverageFrameRate(float newAverageFrameRate);
-	
-	float realFrameRate() const;
-	void setRealFrameRate(float newRealFrameRate);
-	
-	QString profile() const;
-	void setProfile(QString newProfile);
-	
-	MediaStreamType type() const;
-	void setType(MediaStreamType newType);
-	
-	QString aspectRatio() const;
-	void setAspectRatio(QString newAspectRatio);
-	
-	qint32 index() const;
-	void setIndex(qint32 newIndex);
-	
-	qint32 score() const;
-	void setScore(qint32 newScore);
-	
-	bool isExternal() const;
-	void setIsExternal(bool newIsExternal);
-	
-	SubtitleDeliveryMethod deliveryMethod() const;
-	void setDeliveryMethod(SubtitleDeliveryMethod newDeliveryMethod);
-	
-	QString deliveryUrl() const;
-	void setDeliveryUrl(QString newDeliveryUrl);
-	
-	bool isExternalUrl() const;
-	void setIsExternalUrl(bool newIsExternalUrl);
-	
-	bool isTextSubtitleStream() const;
-	void setIsTextSubtitleStream(bool newIsTextSubtitleStream);
-	
-	bool supportsExternalStream() const;
-	void setSupportsExternalStream(bool newSupportsExternalStream);
-	
-	QString path() const;
-	void setPath(QString newPath);
-	
-	QString pixelFormat() const;
-	void setPixelFormat(QString newPixelFormat);
-	
-	double level() const;
-	void setLevel(double newLevel);
-	
 	bool isAnamorphic() const;
+	/**
+	* @brief Gets a value indicating whether this instance is anamorphic.
+	*/
 	void setIsAnamorphic(bool newIsAnamorphic);
-	
-signals:
-	void codecChanged(QString newCodec);
-	void codecTagChanged(QString newCodecTag);
-	void languageChanged(QString newLanguage);
-	void colorRangeChanged(QString newColorRange);
-	void colorSpaceChanged(QString newColorSpace);
-	void colorTransferChanged(QString newColorTransfer);
-	void colorPrimariesChanged(QString newColorPrimaries);
-	void commentChanged(QString newComment);
-	void timeBaseChanged(QString newTimeBase);
-	void codecTimeBaseChanged(QString newCodecTimeBase);
-	void titleChanged(QString newTitle);
-	void videoRangeChanged(QString newVideoRange);
-	void localizedUndefinedChanged(QString newLocalizedUndefined);
-	void localizedDefaultChanged(QString newLocalizedDefault);
-	void localizedForcedChanged(QString newLocalizedForced);
-	void displayTitleChanged(QString newDisplayTitle);
-	void nalLengthSizeChanged(QString newNalLengthSize);
-	void isInterlacedChanged(bool newIsInterlaced);
-	void isAVCChanged(bool newIsAVC);
-	void channelLayoutChanged(QString newChannelLayout);
-	void bitRateChanged(qint32 newBitRate);
-	void bitDepthChanged(qint32 newBitDepth);
-	void refFramesChanged(qint32 newRefFrames);
-	void packetLengthChanged(qint32 newPacketLength);
-	void channelsChanged(qint32 newChannels);
-	void sampleRateChanged(qint32 newSampleRate);
-	void isDefaultChanged(bool newIsDefault);
-	void isForcedChanged(bool newIsForced);
-	void heightChanged(qint32 newHeight);
-	void widthChanged(qint32 newWidth);
-	void averageFrameRateChanged(float newAverageFrameRate);
-	void realFrameRateChanged(float newRealFrameRate);
-	void profileChanged(QString newProfile);
-	void typeChanged(MediaStreamType newType);
-	void aspectRatioChanged(QString newAspectRatio);
-	void indexChanged(qint32 newIndex);
-	void scoreChanged(qint32 newScore);
-	void isExternalChanged(bool newIsExternal);
-	void deliveryMethodChanged(SubtitleDeliveryMethod newDeliveryMethod);
-	void deliveryUrlChanged(QString newDeliveryUrl);
-	void isExternalUrlChanged(bool newIsExternalUrl);
-	void isTextSubtitleStreamChanged(bool newIsTextSubtitleStream);
-	void supportsExternalStreamChanged(bool newSupportsExternalStream);
-	void pathChanged(QString newPath);
-	void pixelFormatChanged(QString newPixelFormat);
-	void levelChanged(double newLevel);
-	void isAnamorphicChanged(bool newIsAnamorphic);
+
 protected:
 	QString m_codec;
 	QString m_codecTag;
@@ -448,6 +441,18 @@ protected:
 	double m_level;
 	bool m_isAnamorphic;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaStream = Jellyfin::DTO::MediaStream;
+
+template <>
+MediaStream fromJsonValue<MediaStream>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaStream::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

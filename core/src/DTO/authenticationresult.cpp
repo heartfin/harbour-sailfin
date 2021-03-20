@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-AuthenticationResult::AuthenticationResult(QObject *parent) : QObject(parent) {}
+AuthenticationResult::AuthenticationResult(QObject *parent) {}
 
-AuthenticationResult *AuthenticationResult::fromJSON(QJsonObject source, QObject *parent) {
-	AuthenticationResult *instance = new AuthenticationResult(parent);
-	instance->updateFromJSON(source);
+AuthenticationResult AuthenticationResult::fromJson(QJsonObject source) {AuthenticationResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void AuthenticationResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void AuthenticationResult::setFromJson(QJsonObject source) {
+	m_user = fromJsonValue<QSharedPointer<UserDto>>(source["User"]);
+	m_sessionInfo = fromJsonValue<QSharedPointer<SessionInfo>>(source["SessionInfo"]);
+	m_accessToken = fromJsonValue<QString>(source["AccessToken"]);
+	m_serverId = fromJsonValue<QString>(source["ServerId"]);
+
 }
-QJsonObject AuthenticationResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject AuthenticationResult::toJson() {
 	QJsonObject result;
+	result["User"] = toJsonValue<QSharedPointer<UserDto>>(m_user);
+	result["SessionInfo"] = toJsonValue<QSharedPointer<SessionInfo>>(m_sessionInfo);
+	result["AccessToken"] = toJsonValue<QString>(m_accessToken);
+	result["ServerId"] = toJsonValue<QString>(m_serverId);
+
 	return result;
 }
-UserDto * AuthenticationResult::user() const { return m_user; }
-void AuthenticationResult::setUser(UserDto * newUser) {
+
+QSharedPointer<UserDto> AuthenticationResult::user() const { return m_user; }
+
+void AuthenticationResult::setUser(QSharedPointer<UserDto> newUser) {
 	m_user = newUser;
-	emit userChanged(newUser);
 }
+QSharedPointer<SessionInfo> AuthenticationResult::sessionInfo() const { return m_sessionInfo; }
 
-SessionInfo * AuthenticationResult::sessionInfo() const { return m_sessionInfo; }
-void AuthenticationResult::setSessionInfo(SessionInfo * newSessionInfo) {
+void AuthenticationResult::setSessionInfo(QSharedPointer<SessionInfo> newSessionInfo) {
 	m_sessionInfo = newSessionInfo;
-	emit sessionInfoChanged(newSessionInfo);
 }
-
 QString AuthenticationResult::accessToken() const { return m_accessToken; }
+
 void AuthenticationResult::setAccessToken(QString newAccessToken) {
 	m_accessToken = newAccessToken;
-	emit accessTokenChanged(newAccessToken);
 }
-
 QString AuthenticationResult::serverId() const { return m_serverId; }
+
 void AuthenticationResult::setServerId(QString newServerId) {
 	m_serverId = newServerId;
-	emit serverIdChanged(newServerId);
 }
 
 

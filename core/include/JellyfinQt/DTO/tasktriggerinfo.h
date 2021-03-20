@@ -31,61 +31,62 @@
 #define JELLYFIN_DTO_TASKTRIGGERINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/dayofweek.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class TaskTriggerInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit TaskTriggerInfo(QObject *parent = nullptr);
-	static TaskTriggerInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class TaskTriggerInfo {
+public:
+	explicit TaskTriggerInfo();
+	static TaskTriggerInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the type.
 	 */
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
+	QString type() const;
+	/**
+	* @brief Gets or sets the type.
+	*/
+	void setType(QString newType);
 	/**
 	 * @brief Gets or sets the time of day.
 	 */
-	Q_PROPERTY(qint64 timeOfDayTicks READ timeOfDayTicks WRITE setTimeOfDayTicks NOTIFY timeOfDayTicksChanged)
+	qint64 timeOfDayTicks() const;
+	/**
+	* @brief Gets or sets the time of day.
+	*/
+	void setTimeOfDayTicks(qint64 newTimeOfDayTicks);
 	/**
 	 * @brief Gets or sets the interval.
 	 */
-	Q_PROPERTY(qint64 intervalTicks READ intervalTicks WRITE setIntervalTicks NOTIFY intervalTicksChanged)
-	Q_PROPERTY(DayOfWeek dayOfWeek READ dayOfWeek WRITE setDayOfWeek NOTIFY dayOfWeekChanged)
+	qint64 intervalTicks() const;
+	/**
+	* @brief Gets or sets the interval.
+	*/
+	void setIntervalTicks(qint64 newIntervalTicks);
+
+	DayOfWeek dayOfWeek() const;
+
+	void setDayOfWeek(DayOfWeek newDayOfWeek);
 	/**
 	 * @brief Gets or sets the maximum runtime ticks.
 	 */
-	Q_PROPERTY(qint64 maxRuntimeTicks READ maxRuntimeTicks WRITE setMaxRuntimeTicks NOTIFY maxRuntimeTicksChanged)
-
-	QString type() const;
-	void setType(QString newType);
-	
-	qint64 timeOfDayTicks() const;
-	void setTimeOfDayTicks(qint64 newTimeOfDayTicks);
-	
-	qint64 intervalTicks() const;
-	void setIntervalTicks(qint64 newIntervalTicks);
-	
-	DayOfWeek dayOfWeek() const;
-	void setDayOfWeek(DayOfWeek newDayOfWeek);
-	
 	qint64 maxRuntimeTicks() const;
+	/**
+	* @brief Gets or sets the maximum runtime ticks.
+	*/
 	void setMaxRuntimeTicks(qint64 newMaxRuntimeTicks);
-	
-signals:
-	void typeChanged(QString newType);
-	void timeOfDayTicksChanged(qint64 newTimeOfDayTicks);
-	void intervalTicksChanged(qint64 newIntervalTicks);
-	void dayOfWeekChanged(DayOfWeek newDayOfWeek);
-	void maxRuntimeTicksChanged(qint64 newMaxRuntimeTicks);
+
 protected:
 	QString m_type;
 	qint64 m_timeOfDayTicks;
@@ -93,6 +94,18 @@ protected:
 	DayOfWeek m_dayOfWeek;
 	qint64 m_maxRuntimeTicks;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TaskTriggerInfo = Jellyfin::DTO::TaskTriggerInfo;
+
+template <>
+TaskTriggerInfo fromJsonValue<TaskTriggerInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TaskTriggerInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

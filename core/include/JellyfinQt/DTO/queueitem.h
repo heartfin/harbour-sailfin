@@ -31,36 +31,50 @@
 #define JELLYFIN_DTO_QUEUEITEM_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class QueueItem : public QObject {
-	Q_OBJECT
+
+class QueueItem {
 public:
-	explicit QueueItem(QObject *parent = nullptr);
-	static QueueItem *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-	Q_PROPERTY(QString playlistItemId READ playlistItemId WRITE setPlaylistItemId NOTIFY playlistItemIdChanged)
-
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
+	explicit QueueItem();
+	static QueueItem fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
 	
+	// Properties
+
+	QUuid jellyfinId() const;
+
+	void setJellyfinId(QUuid newJellyfinId);
+
 	QString playlistItemId() const;
+
 	void setPlaylistItemId(QString newPlaylistItemId);
-	
-signals:
-	void jellyfinIdChanged(QString newJellyfinId);
-	void playlistItemIdChanged(QString newPlaylistItemId);
+
 protected:
-	QString m_jellyfinId;
+	QUuid m_jellyfinId;
 	QString m_playlistItemId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using QueueItem = Jellyfin::DTO::QueueItem;
+
+template <>
+QueueItem fromJsonValue<QueueItem>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QueueItem::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

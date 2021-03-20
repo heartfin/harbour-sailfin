@@ -32,56 +32,65 @@
 namespace Jellyfin {
 namespace DTO {
 
-TypeOptions::TypeOptions(QObject *parent) : QObject(parent) {}
+TypeOptions::TypeOptions(QObject *parent) {}
 
-TypeOptions *TypeOptions::fromJSON(QJsonObject source, QObject *parent) {
-	TypeOptions *instance = new TypeOptions(parent);
-	instance->updateFromJSON(source);
+TypeOptions TypeOptions::fromJson(QJsonObject source) {TypeOptions instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TypeOptions::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TypeOptions::setFromJson(QJsonObject source) {
+	m_type = fromJsonValue<QString>(source["Type"]);
+	m_metadataFetchers = fromJsonValue<QStringList>(source["MetadataFetchers"]);
+	m_metadataFetcherOrder = fromJsonValue<QStringList>(source["MetadataFetcherOrder"]);
+	m_imageFetchers = fromJsonValue<QStringList>(source["ImageFetchers"]);
+	m_imageFetcherOrder = fromJsonValue<QStringList>(source["ImageFetcherOrder"]);
+	m_imageOptions = fromJsonValue<QList<QSharedPointer<ImageOption>>>(source["ImageOptions"]);
+
 }
-QJsonObject TypeOptions::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TypeOptions::toJson() {
 	QJsonObject result;
+	result["Type"] = toJsonValue<QString>(m_type);
+	result["MetadataFetchers"] = toJsonValue<QStringList>(m_metadataFetchers);
+	result["MetadataFetcherOrder"] = toJsonValue<QStringList>(m_metadataFetcherOrder);
+	result["ImageFetchers"] = toJsonValue<QStringList>(m_imageFetchers);
+	result["ImageFetcherOrder"] = toJsonValue<QStringList>(m_imageFetcherOrder);
+	result["ImageOptions"] = toJsonValue<QList<QSharedPointer<ImageOption>>>(m_imageOptions);
+
 	return result;
 }
+
 QString TypeOptions::type() const { return m_type; }
+
 void TypeOptions::setType(QString newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 QStringList TypeOptions::metadataFetchers() const { return m_metadataFetchers; }
+
 void TypeOptions::setMetadataFetchers(QStringList newMetadataFetchers) {
 	m_metadataFetchers = newMetadataFetchers;
-	emit metadataFetchersChanged(newMetadataFetchers);
 }
-
 QStringList TypeOptions::metadataFetcherOrder() const { return m_metadataFetcherOrder; }
+
 void TypeOptions::setMetadataFetcherOrder(QStringList newMetadataFetcherOrder) {
 	m_metadataFetcherOrder = newMetadataFetcherOrder;
-	emit metadataFetcherOrderChanged(newMetadataFetcherOrder);
 }
-
 QStringList TypeOptions::imageFetchers() const { return m_imageFetchers; }
+
 void TypeOptions::setImageFetchers(QStringList newImageFetchers) {
 	m_imageFetchers = newImageFetchers;
-	emit imageFetchersChanged(newImageFetchers);
 }
-
 QStringList TypeOptions::imageFetcherOrder() const { return m_imageFetcherOrder; }
+
 void TypeOptions::setImageFetcherOrder(QStringList newImageFetcherOrder) {
 	m_imageFetcherOrder = newImageFetcherOrder;
-	emit imageFetcherOrderChanged(newImageFetcherOrder);
 }
+QList<QSharedPointer<ImageOption>> TypeOptions::imageOptions() const { return m_imageOptions; }
 
-QList<ImageOption *> TypeOptions::imageOptions() const { return m_imageOptions; }
-void TypeOptions::setImageOptions(QList<ImageOption *> newImageOptions) {
+void TypeOptions::setImageOptions(QList<QSharedPointer<ImageOption>> newImageOptions) {
 	m_imageOptions = newImageOptions;
-	emit imageOptionsChanged(newImageOptions);
 }
 
 

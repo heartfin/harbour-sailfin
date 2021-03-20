@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_PLUGINSECURITYINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class PluginSecurityInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit PluginSecurityInfo(QObject *parent = nullptr);
-	static PluginSecurityInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class PluginSecurityInfo {
+public:
+	explicit PluginSecurityInfo();
+	static PluginSecurityInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the supporter key.
 	 */
-	Q_PROPERTY(QString supporterKey READ supporterKey WRITE setSupporterKey NOTIFY supporterKeyChanged)
+	QString supporterKey() const;
+	/**
+	* @brief Gets or sets the supporter key.
+	*/
+	void setSupporterKey(QString newSupporterKey);
 	/**
 	 * @brief Gets or sets a value indicating whether is mb supporter.
 	 */
-	Q_PROPERTY(bool isMbSupporter READ isMbSupporter WRITE setIsMbSupporter NOTIFY isMbSupporterChanged)
-
-	QString supporterKey() const;
-	void setSupporterKey(QString newSupporterKey);
-	
 	bool isMbSupporter() const;
+	/**
+	* @brief Gets or sets a value indicating whether is mb supporter.
+	*/
 	void setIsMbSupporter(bool newIsMbSupporter);
-	
-signals:
-	void supporterKeyChanged(QString newSupporterKey);
-	void isMbSupporterChanged(bool newIsMbSupporter);
+
 protected:
 	QString m_supporterKey;
 	bool m_isMbSupporter;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PluginSecurityInfo = Jellyfin::DTO::PluginSecurityInfo;
+
+template <>
+PluginSecurityInfo fromJsonValue<PluginSecurityInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PluginSecurityInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

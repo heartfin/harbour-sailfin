@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-LibraryOptionsResultDto::LibraryOptionsResultDto(QObject *parent) : QObject(parent) {}
+LibraryOptionsResultDto::LibraryOptionsResultDto(QObject *parent) {}
 
-LibraryOptionsResultDto *LibraryOptionsResultDto::fromJSON(QJsonObject source, QObject *parent) {
-	LibraryOptionsResultDto *instance = new LibraryOptionsResultDto(parent);
-	instance->updateFromJSON(source);
+LibraryOptionsResultDto LibraryOptionsResultDto::fromJson(QJsonObject source) {LibraryOptionsResultDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void LibraryOptionsResultDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void LibraryOptionsResultDto::setFromJson(QJsonObject source) {
+	m_metadataSavers = fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["MetadataSavers"]);
+	m_metadataReaders = fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["MetadataReaders"]);
+	m_subtitleFetchers = fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["SubtitleFetchers"]);
+	m_typeOptions = fromJsonValue<QList<QSharedPointer<LibraryTypeOptionsDto>>>(source["TypeOptions"]);
+
 }
-QJsonObject LibraryOptionsResultDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject LibraryOptionsResultDto::toJson() {
 	QJsonObject result;
+	result["MetadataSavers"] = toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_metadataSavers);
+	result["MetadataReaders"] = toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_metadataReaders);
+	result["SubtitleFetchers"] = toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_subtitleFetchers);
+	result["TypeOptions"] = toJsonValue<QList<QSharedPointer<LibraryTypeOptionsDto>>>(m_typeOptions);
+
 	return result;
 }
-QList<LibraryOptionInfoDto *> LibraryOptionsResultDto::metadataSavers() const { return m_metadataSavers; }
-void LibraryOptionsResultDto::setMetadataSavers(QList<LibraryOptionInfoDto *> newMetadataSavers) {
+
+QList<QSharedPointer<LibraryOptionInfoDto>> LibraryOptionsResultDto::metadataSavers() const { return m_metadataSavers; }
+
+void LibraryOptionsResultDto::setMetadataSavers(QList<QSharedPointer<LibraryOptionInfoDto>> newMetadataSavers) {
 	m_metadataSavers = newMetadataSavers;
-	emit metadataSaversChanged(newMetadataSavers);
 }
+QList<QSharedPointer<LibraryOptionInfoDto>> LibraryOptionsResultDto::metadataReaders() const { return m_metadataReaders; }
 
-QList<LibraryOptionInfoDto *> LibraryOptionsResultDto::metadataReaders() const { return m_metadataReaders; }
-void LibraryOptionsResultDto::setMetadataReaders(QList<LibraryOptionInfoDto *> newMetadataReaders) {
+void LibraryOptionsResultDto::setMetadataReaders(QList<QSharedPointer<LibraryOptionInfoDto>> newMetadataReaders) {
 	m_metadataReaders = newMetadataReaders;
-	emit metadataReadersChanged(newMetadataReaders);
 }
+QList<QSharedPointer<LibraryOptionInfoDto>> LibraryOptionsResultDto::subtitleFetchers() const { return m_subtitleFetchers; }
 
-QList<LibraryOptionInfoDto *> LibraryOptionsResultDto::subtitleFetchers() const { return m_subtitleFetchers; }
-void LibraryOptionsResultDto::setSubtitleFetchers(QList<LibraryOptionInfoDto *> newSubtitleFetchers) {
+void LibraryOptionsResultDto::setSubtitleFetchers(QList<QSharedPointer<LibraryOptionInfoDto>> newSubtitleFetchers) {
 	m_subtitleFetchers = newSubtitleFetchers;
-	emit subtitleFetchersChanged(newSubtitleFetchers);
 }
+QList<QSharedPointer<LibraryTypeOptionsDto>> LibraryOptionsResultDto::typeOptions() const { return m_typeOptions; }
 
-QList<LibraryTypeOptionsDto *> LibraryOptionsResultDto::typeOptions() const { return m_typeOptions; }
-void LibraryOptionsResultDto::setTypeOptions(QList<LibraryTypeOptionsDto *> newTypeOptions) {
+void LibraryOptionsResultDto::setTypeOptions(QList<QSharedPointer<LibraryTypeOptionsDto>> newTypeOptions) {
 	m_typeOptions = newTypeOptions;
-	emit typeOptionsChanged(newTypeOptions);
 }
 
 

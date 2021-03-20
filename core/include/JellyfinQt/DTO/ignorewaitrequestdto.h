@@ -31,32 +31,47 @@
 #define JELLYFIN_DTO_IGNOREWAITREQUESTDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class IgnoreWaitRequestDto : public QObject {
-	Q_OBJECT
-public:
-	explicit IgnoreWaitRequestDto(QObject *parent = nullptr);
-	static IgnoreWaitRequestDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class IgnoreWaitRequestDto {
+public:
+	explicit IgnoreWaitRequestDto();
+	static IgnoreWaitRequestDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets a value indicating whether the client should be ignored.
 	 */
-	Q_PROPERTY(bool ignoreWait READ ignoreWait WRITE setIgnoreWait NOTIFY ignoreWaitChanged)
-
 	bool ignoreWait() const;
+	/**
+	* @brief Gets or sets a value indicating whether the client should be ignored.
+	*/
 	void setIgnoreWait(bool newIgnoreWait);
-	
-signals:
-	void ignoreWaitChanged(bool newIgnoreWait);
+
 protected:
 	bool m_ignoreWait;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using IgnoreWaitRequestDto = Jellyfin::DTO::IgnoreWaitRequestDto;
+
+template <>
+IgnoreWaitRequestDto fromJsonValue<IgnoreWaitRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return IgnoreWaitRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

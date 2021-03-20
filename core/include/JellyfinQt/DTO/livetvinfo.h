@@ -31,54 +31,69 @@
 #define JELLYFIN_DTO_LIVETVINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/livetvserviceinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class LiveTvServiceInfo;
 
-class LiveTvInfo : public QObject {
-	Q_OBJECT
+class LiveTvInfo {
 public:
-	explicit LiveTvInfo(QObject *parent = nullptr);
-	static LiveTvInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit LiveTvInfo();
+	static LiveTvInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the services.
 	 */
-	Q_PROPERTY(QList<LiveTvServiceInfo *> services READ services WRITE setServices NOTIFY servicesChanged)
+	QList<QSharedPointer<LiveTvServiceInfo>> services() const;
+	/**
+	* @brief Gets or sets the services.
+	*/
+	void setServices(QList<QSharedPointer<LiveTvServiceInfo>> newServices);
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is enabled.
 	 */
-	Q_PROPERTY(bool isEnabled READ isEnabled WRITE setIsEnabled NOTIFY isEnabledChanged)
+	bool isEnabled() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is enabled.
+	*/
+	void setIsEnabled(bool newIsEnabled);
 	/**
 	 * @brief Gets or sets the enabled users.
 	 */
-	Q_PROPERTY(QStringList enabledUsers READ enabledUsers WRITE setEnabledUsers NOTIFY enabledUsersChanged)
-
-	QList<LiveTvServiceInfo *> services() const;
-	void setServices(QList<LiveTvServiceInfo *> newServices);
-	
-	bool isEnabled() const;
-	void setIsEnabled(bool newIsEnabled);
-	
 	QStringList enabledUsers() const;
+	/**
+	* @brief Gets or sets the enabled users.
+	*/
 	void setEnabledUsers(QStringList newEnabledUsers);
-	
-signals:
-	void servicesChanged(QList<LiveTvServiceInfo *> newServices);
-	void isEnabledChanged(bool newIsEnabled);
-	void enabledUsersChanged(QStringList newEnabledUsers);
+
 protected:
-	QList<LiveTvServiceInfo *> m_services;
+	QList<QSharedPointer<LiveTvServiceInfo>> m_services;
 	bool m_isEnabled;
 	QStringList m_enabledUsers;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LiveTvInfo = Jellyfin::DTO::LiveTvInfo;
+
+template <>
+LiveTvInfo fromJsonValue<LiveTvInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LiveTvInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_NAMEIDPAIR_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class NameIdPair : public QObject {
-	Q_OBJECT
-public:
-	explicit NameIdPair(QObject *parent = nullptr);
-	static NameIdPair *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class NameIdPair {
+public:
+	explicit NameIdPair();
+	static NameIdPair fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the identifier.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
 	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the identifier.
+	*/
 	void setJellyfinId(QString newJellyfinId);
-	
-signals:
-	void nameChanged(QString newName);
-	void jellyfinIdChanged(QString newJellyfinId);
+
 protected:
 	QString m_name;
 	QString m_jellyfinId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using NameIdPair = Jellyfin::DTO::NameIdPair;
+
+template <>
+NameIdPair fromJsonValue<NameIdPair>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NameIdPair::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,62 +32,72 @@
 namespace Jellyfin {
 namespace DTO {
 
-IPlugin::IPlugin(QObject *parent) : QObject(parent) {}
+IPlugin::IPlugin(QObject *parent) {}
 
-IPlugin *IPlugin::fromJSON(QJsonObject source, QObject *parent) {
-	IPlugin *instance = new IPlugin(parent);
-	instance->updateFromJSON(source);
+IPlugin IPlugin::fromJson(QJsonObject source) {IPlugin instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void IPlugin::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void IPlugin::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_description = fromJsonValue<QString>(source["Description"]);
+	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
+	m_version = fromJsonValue<QSharedPointer<Version>>(source["Version"]);
+	m_assemblyFilePath = fromJsonValue<QString>(source["AssemblyFilePath"]);
+	m_canUninstall = fromJsonValue<bool>(source["CanUninstall"]);
+	m_dataFolderPath = fromJsonValue<QString>(source["DataFolderPath"]);
+
 }
-QJsonObject IPlugin::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject IPlugin::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Description"] = toJsonValue<QString>(m_description);
+	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
+	result["Version"] = toJsonValue<QSharedPointer<Version>>(m_version);
+	result["AssemblyFilePath"] = toJsonValue<QString>(m_assemblyFilePath);
+	result["CanUninstall"] = toJsonValue<bool>(m_canUninstall);
+	result["DataFolderPath"] = toJsonValue<QString>(m_dataFolderPath);
+
 	return result;
 }
+
 QString IPlugin::name() const { return m_name; }
+
 void IPlugin::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString IPlugin::description() const { return m_description; }
+
 void IPlugin::setDescription(QString newDescription) {
 	m_description = newDescription;
-	emit descriptionChanged(newDescription);
 }
+QUuid IPlugin::jellyfinId() const { return m_jellyfinId; }
 
-QString IPlugin::jellyfinId() const { return m_jellyfinId; }
-void IPlugin::setJellyfinId(QString newJellyfinId) {
+void IPlugin::setJellyfinId(QUuid newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
+QSharedPointer<Version> IPlugin::version() const { return m_version; }
 
-Version * IPlugin::version() const { return m_version; }
-void IPlugin::setVersion(Version * newVersion) {
+void IPlugin::setVersion(QSharedPointer<Version> newVersion) {
 	m_version = newVersion;
-	emit versionChanged(newVersion);
 }
-
 QString IPlugin::assemblyFilePath() const { return m_assemblyFilePath; }
+
 void IPlugin::setAssemblyFilePath(QString newAssemblyFilePath) {
 	m_assemblyFilePath = newAssemblyFilePath;
-	emit assemblyFilePathChanged(newAssemblyFilePath);
 }
-
 bool IPlugin::canUninstall() const { return m_canUninstall; }
+
 void IPlugin::setCanUninstall(bool newCanUninstall) {
 	m_canUninstall = newCanUninstall;
-	emit canUninstallChanged(newCanUninstall);
 }
-
 QString IPlugin::dataFolderPath() const { return m_dataFolderPath; }
+
 void IPlugin::setDataFolderPath(QString newDataFolderPath) {
 	m_dataFolderPath = newDataFolderPath;
-	emit dataFolderPathChanged(newDataFolderPath);
 }
 
 

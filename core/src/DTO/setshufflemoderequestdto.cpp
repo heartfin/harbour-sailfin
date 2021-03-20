@@ -29,31 +29,33 @@
 
 #include <JellyfinQt/DTO/setshufflemoderequestdto.h>
 
-#include <JellyfinQt/DTO/groupshufflemode.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-SetShuffleModeRequestDto::SetShuffleModeRequestDto(QObject *parent) : QObject(parent) {}
+SetShuffleModeRequestDto::SetShuffleModeRequestDto(QObject *parent) {}
 
-SetShuffleModeRequestDto *SetShuffleModeRequestDto::fromJSON(QJsonObject source, QObject *parent) {
-	SetShuffleModeRequestDto *instance = new SetShuffleModeRequestDto(parent);
-	instance->updateFromJSON(source);
+SetShuffleModeRequestDto SetShuffleModeRequestDto::fromJson(QJsonObject source) {SetShuffleModeRequestDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SetShuffleModeRequestDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SetShuffleModeRequestDto::setFromJson(QJsonObject source) {
+	m_mode = fromJsonValue<GroupShuffleMode>(source["Mode"]);
+
 }
-QJsonObject SetShuffleModeRequestDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SetShuffleModeRequestDto::toJson() {
 	QJsonObject result;
+	result["Mode"] = toJsonValue<GroupShuffleMode>(m_mode);
+
 	return result;
 }
+
 GroupShuffleMode SetShuffleModeRequestDto::mode() const { return m_mode; }
+
 void SetShuffleModeRequestDto::setMode(GroupShuffleMode newMode) {
 	m_mode = newMode;
-	emit modeChanged(newMode);
 }
 
 

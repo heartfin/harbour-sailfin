@@ -32,44 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-LogFile::LogFile(QObject *parent) : QObject(parent) {}
+LogFile::LogFile(QObject *parent) {}
 
-LogFile *LogFile::fromJSON(QJsonObject source, QObject *parent) {
-	LogFile *instance = new LogFile(parent);
-	instance->updateFromJSON(source);
+LogFile LogFile::fromJson(QJsonObject source) {LogFile instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void LogFile::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void LogFile::setFromJson(QJsonObject source) {
+	m_dateCreated = fromJsonValue<QDateTime>(source["DateCreated"]);
+	m_dateModified = fromJsonValue<QDateTime>(source["DateModified"]);
+	m_size = fromJsonValue<qint64>(source["Size"]);
+	m_name = fromJsonValue<QString>(source["Name"]);
+
 }
-QJsonObject LogFile::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject LogFile::toJson() {
 	QJsonObject result;
+	result["DateCreated"] = toJsonValue<QDateTime>(m_dateCreated);
+	result["DateModified"] = toJsonValue<QDateTime>(m_dateModified);
+	result["Size"] = toJsonValue<qint64>(m_size);
+	result["Name"] = toJsonValue<QString>(m_name);
+
 	return result;
 }
+
 QDateTime LogFile::dateCreated() const { return m_dateCreated; }
+
 void LogFile::setDateCreated(QDateTime newDateCreated) {
 	m_dateCreated = newDateCreated;
-	emit dateCreatedChanged(newDateCreated);
 }
-
 QDateTime LogFile::dateModified() const { return m_dateModified; }
+
 void LogFile::setDateModified(QDateTime newDateModified) {
 	m_dateModified = newDateModified;
-	emit dateModifiedChanged(newDateModified);
 }
-
 qint64 LogFile::size() const { return m_size; }
+
 void LogFile::setSize(qint64 newSize) {
 	m_size = newSize;
-	emit sizeChanged(newSize);
 }
-
 QString LogFile::name() const { return m_name; }
+
 void LogFile::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
 
 

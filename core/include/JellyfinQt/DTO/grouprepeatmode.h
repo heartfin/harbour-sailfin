@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_GROUPREPEATMODE_H
 #define JELLYFIN_DTO_GROUPREPEATMODE_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class GroupRepeatModeClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		RepeatOne,
 		RepeatAll,
 		RepeatNone,
@@ -47,7 +52,33 @@ public:
 private:
 	explicit GroupRepeatModeClass();
 };
+
 typedef GroupRepeatModeClass::Value GroupRepeatMode;
+
+} // NS DTO
+
+namespace Support {
+
+using GroupRepeatMode = Jellyfin::DTO::GroupRepeatMode;
+using GroupRepeatModeClass = Jellyfin::DTO::GroupRepeatModeClass;
+
+template <>
+GroupRepeatMode fromJsonValue<GroupRepeatMode>(const QJsonValue &source) {
+	if (!source.isString()) return GroupRepeatModeClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("RepeatOne")) {
+		return GroupRepeatModeClass::RepeatOne;
+	}
+	if (str == QStringLiteral("RepeatAll")) {
+		return GroupRepeatModeClass::RepeatAll;
+	}
+	if (str == QStringLiteral("RepeatNone")) {
+		return GroupRepeatModeClass::RepeatNone;
+	}
+	
+	return GroupRepeatModeClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

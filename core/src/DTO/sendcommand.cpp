@@ -29,61 +29,68 @@
 
 #include <JellyfinQt/DTO/sendcommand.h>
 
-#include <JellyfinQt/DTO/sendcommandtype.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-SendCommand::SendCommand(QObject *parent) : QObject(parent) {}
+SendCommand::SendCommand(QObject *parent) {}
 
-SendCommand *SendCommand::fromJSON(QJsonObject source, QObject *parent) {
-	SendCommand *instance = new SendCommand(parent);
-	instance->updateFromJSON(source);
+SendCommand SendCommand::fromJson(QJsonObject source) {SendCommand instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SendCommand::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SendCommand::setFromJson(QJsonObject source) {
+	m_groupId = fromJsonValue<QUuid>(source["GroupId"]);
+	m_playlistItemId = fromJsonValue<QUuid>(source["PlaylistItemId"]);
+	m_when = fromJsonValue<QDateTime>(source["When"]);
+	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
+	m_command = fromJsonValue<SendCommandType>(source["Command"]);
+	m_emittedAt = fromJsonValue<QDateTime>(source["EmittedAt"]);
+
 }
-QJsonObject SendCommand::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SendCommand::toJson() {
 	QJsonObject result;
+	result["GroupId"] = toJsonValue<QUuid>(m_groupId);
+	result["PlaylistItemId"] = toJsonValue<QUuid>(m_playlistItemId);
+	result["When"] = toJsonValue<QDateTime>(m_when);
+	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
+	result["Command"] = toJsonValue<SendCommandType>(m_command);
+	result["EmittedAt"] = toJsonValue<QDateTime>(m_emittedAt);
+
 	return result;
 }
-QString SendCommand::groupId() const { return m_groupId; }
-void SendCommand::setGroupId(QString newGroupId) {
+
+QUuid SendCommand::groupId() const { return m_groupId; }
+
+void SendCommand::setGroupId(QUuid newGroupId) {
 	m_groupId = newGroupId;
-	emit groupIdChanged(newGroupId);
 }
+QUuid SendCommand::playlistItemId() const { return m_playlistItemId; }
 
-QString SendCommand::playlistItemId() const { return m_playlistItemId; }
-void SendCommand::setPlaylistItemId(QString newPlaylistItemId) {
+void SendCommand::setPlaylistItemId(QUuid newPlaylistItemId) {
 	m_playlistItemId = newPlaylistItemId;
-	emit playlistItemIdChanged(newPlaylistItemId);
 }
-
 QDateTime SendCommand::when() const { return m_when; }
+
 void SendCommand::setWhen(QDateTime newWhen) {
 	m_when = newWhen;
-	emit whenChanged(newWhen);
 }
-
 qint64 SendCommand::positionTicks() const { return m_positionTicks; }
+
 void SendCommand::setPositionTicks(qint64 newPositionTicks) {
 	m_positionTicks = newPositionTicks;
-	emit positionTicksChanged(newPositionTicks);
 }
-
 SendCommandType SendCommand::command() const { return m_command; }
+
 void SendCommand::setCommand(SendCommandType newCommand) {
 	m_command = newCommand;
-	emit commandChanged(newCommand);
 }
-
 QDateTime SendCommand::emittedAt() const { return m_emittedAt; }
+
 void SendCommand::setEmittedAt(QDateTime newEmittedAt) {
 	m_emittedAt = newEmittedAt;
-	emit emittedAtChanged(newEmittedAt);
 }
 
 

@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_PLAYACCESS_H
 #define JELLYFIN_DTO_PLAYACCESS_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class PlayAccessClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Full,
 		None,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit PlayAccessClass();
 };
+
 typedef PlayAccessClass::Value PlayAccess;
+
+} // NS DTO
+
+namespace Support {
+
+using PlayAccess = Jellyfin::DTO::PlayAccess;
+using PlayAccessClass = Jellyfin::DTO::PlayAccessClass;
+
+template <>
+PlayAccess fromJsonValue<PlayAccess>(const QJsonValue &source) {
+	if (!source.isString()) return PlayAccessClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Full")) {
+		return PlayAccessClass::Full;
+	}
+	if (str == QStringLiteral("None")) {
+		return PlayAccessClass::None;
+	}
+	
+	return PlayAccessClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

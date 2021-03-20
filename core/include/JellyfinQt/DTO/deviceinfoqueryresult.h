@@ -31,54 +31,69 @@
 #define JELLYFIN_DTO_DEVICEINFOQUERYRESULT_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/deviceinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class DeviceInfo;
 
-class DeviceInfoQueryResult : public QObject {
-	Q_OBJECT
+class DeviceInfoQueryResult {
 public:
-	explicit DeviceInfoQueryResult(QObject *parent = nullptr);
-	static DeviceInfoQueryResult *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit DeviceInfoQueryResult();
+	static DeviceInfoQueryResult fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the items.
 	 */
-	Q_PROPERTY(QList<DeviceInfo *> items READ items WRITE setItems NOTIFY itemsChanged)
+	QList<QSharedPointer<DeviceInfo>> items() const;
+	/**
+	* @brief Gets or sets the items.
+	*/
+	void setItems(QList<QSharedPointer<DeviceInfo>> newItems);
 	/**
 	 * @brief The total number of records available.
 	 */
-	Q_PROPERTY(qint32 totalRecordCount READ totalRecordCount WRITE setTotalRecordCount NOTIFY totalRecordCountChanged)
+	qint32 totalRecordCount() const;
+	/**
+	* @brief The total number of records available.
+	*/
+	void setTotalRecordCount(qint32 newTotalRecordCount);
 	/**
 	 * @brief The index of the first record in Items.
 	 */
-	Q_PROPERTY(qint32 startIndex READ startIndex WRITE setStartIndex NOTIFY startIndexChanged)
-
-	QList<DeviceInfo *> items() const;
-	void setItems(QList<DeviceInfo *> newItems);
-	
-	qint32 totalRecordCount() const;
-	void setTotalRecordCount(qint32 newTotalRecordCount);
-	
 	qint32 startIndex() const;
+	/**
+	* @brief The index of the first record in Items.
+	*/
 	void setStartIndex(qint32 newStartIndex);
-	
-signals:
-	void itemsChanged(QList<DeviceInfo *> newItems);
-	void totalRecordCountChanged(qint32 newTotalRecordCount);
-	void startIndexChanged(qint32 newStartIndex);
+
 protected:
-	QList<DeviceInfo *> m_items;
+	QList<QSharedPointer<DeviceInfo>> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DeviceInfoQueryResult = Jellyfin::DTO::DeviceInfoQueryResult;
+
+template <>
+DeviceInfoQueryResult fromJsonValue<DeviceInfoQueryResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceInfoQueryResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

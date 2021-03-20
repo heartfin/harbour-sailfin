@@ -31,51 +31,64 @@
 #define JELLYFIN_DTO_OBJECTGROUPUPDATE_H
 
 #include <QJsonObject>
-#include <QObject>
-#include <QString>
+#include <QJsonValue>
+#include <QUuid>
 #include <QVariant>
+#include <optional>
 
 #include "JellyfinQt/DTO/groupupdatetype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ObjectGroupUpdate : public QObject {
-	Q_OBJECT
-public:
-	explicit ObjectGroupUpdate(QObject *parent = nullptr);
-	static ObjectGroupUpdate *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ObjectGroupUpdate {
+public:
+	explicit ObjectGroupUpdate();
+	static ObjectGroupUpdate fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets the group identifier.
 	 */
-	Q_PROPERTY(QString groupId READ groupId WRITE setGroupId NOTIFY groupIdChanged)
-	Q_PROPERTY(GroupUpdateType type READ type WRITE setType NOTIFY typeChanged)
+	QUuid groupId() const;
+	/**
+	* @brief Gets the group identifier.
+	*/
+	void setGroupId(QUuid newGroupId);
+
+	GroupUpdateType type() const;
+
+	void setType(GroupUpdateType newType);
 	/**
 	 * @brief Gets the update data.
 	 */
-	Q_PROPERTY(QVariant data READ data WRITE setData NOTIFY dataChanged)
-
-	QString groupId() const;
-	void setGroupId(QString newGroupId);
-	
-	GroupUpdateType type() const;
-	void setType(GroupUpdateType newType);
-	
 	QVariant data() const;
+	/**
+	* @brief Gets the update data.
+	*/
 	void setData(QVariant newData);
-	
-signals:
-	void groupIdChanged(QString newGroupId);
-	void typeChanged(GroupUpdateType newType);
-	void dataChanged(QVariant newData);
+
 protected:
-	QString m_groupId;
+	QUuid m_groupId;
 	GroupUpdateType m_type;
 	QVariant m_data;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ObjectGroupUpdate = Jellyfin::DTO::ObjectGroupUpdate;
+
+template <>
+ObjectGroupUpdate fromJsonValue<ObjectGroupUpdate>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ObjectGroupUpdate::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

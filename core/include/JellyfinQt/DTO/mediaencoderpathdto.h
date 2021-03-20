@@ -31,42 +31,57 @@
 #define JELLYFIN_DTO_MEDIAENCODERPATHDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class MediaEncoderPathDto : public QObject {
-	Q_OBJECT
-public:
-	explicit MediaEncoderPathDto(QObject *parent = nullptr);
-	static MediaEncoderPathDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class MediaEncoderPathDto {
+public:
+	explicit MediaEncoderPathDto();
+	static MediaEncoderPathDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets media encoder path.
 	 */
-	Q_PROPERTY(QString path READ path WRITE setPath NOTIFY pathChanged)
+	QString path() const;
+	/**
+	* @brief Gets or sets media encoder path.
+	*/
+	void setPath(QString newPath);
 	/**
 	 * @brief Gets or sets media encoder path type.
 	 */
-	Q_PROPERTY(QString pathType READ pathType WRITE setPathType NOTIFY pathTypeChanged)
-
-	QString path() const;
-	void setPath(QString newPath);
-	
 	QString pathType() const;
+	/**
+	* @brief Gets or sets media encoder path type.
+	*/
 	void setPathType(QString newPathType);
-	
-signals:
-	void pathChanged(QString newPath);
-	void pathTypeChanged(QString newPathType);
+
 protected:
 	QString m_path;
 	QString m_pathType;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaEncoderPathDto = Jellyfin::DTO::MediaEncoderPathDto;
+
+template <>
+MediaEncoderPathDto fromJsonValue<MediaEncoderPathDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaEncoderPathDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

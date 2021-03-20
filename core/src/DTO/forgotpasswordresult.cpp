@@ -29,43 +29,47 @@
 
 #include <JellyfinQt/DTO/forgotpasswordresult.h>
 
-#include <JellyfinQt/DTO/forgotpasswordaction.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-ForgotPasswordResult::ForgotPasswordResult(QObject *parent) : QObject(parent) {}
+ForgotPasswordResult::ForgotPasswordResult(QObject *parent) {}
 
-ForgotPasswordResult *ForgotPasswordResult::fromJSON(QJsonObject source, QObject *parent) {
-	ForgotPasswordResult *instance = new ForgotPasswordResult(parent);
-	instance->updateFromJSON(source);
+ForgotPasswordResult ForgotPasswordResult::fromJson(QJsonObject source) {ForgotPasswordResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ForgotPasswordResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ForgotPasswordResult::setFromJson(QJsonObject source) {
+	m_action = fromJsonValue<ForgotPasswordAction>(source["Action"]);
+	m_pinFile = fromJsonValue<QString>(source["PinFile"]);
+	m_pinExpirationDate = fromJsonValue<QDateTime>(source["PinExpirationDate"]);
+
 }
-QJsonObject ForgotPasswordResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ForgotPasswordResult::toJson() {
 	QJsonObject result;
+	result["Action"] = toJsonValue<ForgotPasswordAction>(m_action);
+	result["PinFile"] = toJsonValue<QString>(m_pinFile);
+	result["PinExpirationDate"] = toJsonValue<QDateTime>(m_pinExpirationDate);
+
 	return result;
 }
+
 ForgotPasswordAction ForgotPasswordResult::action() const { return m_action; }
+
 void ForgotPasswordResult::setAction(ForgotPasswordAction newAction) {
 	m_action = newAction;
-	emit actionChanged(newAction);
 }
-
 QString ForgotPasswordResult::pinFile() const { return m_pinFile; }
+
 void ForgotPasswordResult::setPinFile(QString newPinFile) {
 	m_pinFile = newPinFile;
-	emit pinFileChanged(newPinFile);
 }
-
 QDateTime ForgotPasswordResult::pinExpirationDate() const { return m_pinExpirationDate; }
+
 void ForgotPasswordResult::setPinExpirationDate(QDateTime newPinExpirationDate) {
 	m_pinExpirationDate = newPinExpirationDate;
-	emit pinExpirationDateChanged(newPinExpirationDate);
 }
 
 

@@ -32,74 +32,86 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceIdentification::DeviceIdentification(QObject *parent) : QObject(parent) {}
+DeviceIdentification::DeviceIdentification(QObject *parent) {}
 
-DeviceIdentification *DeviceIdentification::fromJSON(QJsonObject source, QObject *parent) {
-	DeviceIdentification *instance = new DeviceIdentification(parent);
-	instance->updateFromJSON(source);
+DeviceIdentification DeviceIdentification::fromJson(QJsonObject source) {DeviceIdentification instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void DeviceIdentification::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void DeviceIdentification::setFromJson(QJsonObject source) {
+	m_friendlyName = fromJsonValue<QString>(source["FriendlyName"]);
+	m_modelNumber = fromJsonValue<QString>(source["ModelNumber"]);
+	m_serialNumber = fromJsonValue<QString>(source["SerialNumber"]);
+	m_modelName = fromJsonValue<QString>(source["ModelName"]);
+	m_modelDescription = fromJsonValue<QString>(source["ModelDescription"]);
+	m_modelUrl = fromJsonValue<QString>(source["ModelUrl"]);
+	m_manufacturer = fromJsonValue<QString>(source["Manufacturer"]);
+	m_manufacturerUrl = fromJsonValue<QString>(source["ManufacturerUrl"]);
+	m_headers = fromJsonValue<QList<QSharedPointer<HttpHeaderInfo>>>(source["Headers"]);
+
 }
-QJsonObject DeviceIdentification::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject DeviceIdentification::toJson() {
 	QJsonObject result;
+	result["FriendlyName"] = toJsonValue<QString>(m_friendlyName);
+	result["ModelNumber"] = toJsonValue<QString>(m_modelNumber);
+	result["SerialNumber"] = toJsonValue<QString>(m_serialNumber);
+	result["ModelName"] = toJsonValue<QString>(m_modelName);
+	result["ModelDescription"] = toJsonValue<QString>(m_modelDescription);
+	result["ModelUrl"] = toJsonValue<QString>(m_modelUrl);
+	result["Manufacturer"] = toJsonValue<QString>(m_manufacturer);
+	result["ManufacturerUrl"] = toJsonValue<QString>(m_manufacturerUrl);
+	result["Headers"] = toJsonValue<QList<QSharedPointer<HttpHeaderInfo>>>(m_headers);
+
 	return result;
 }
+
 QString DeviceIdentification::friendlyName() const { return m_friendlyName; }
+
 void DeviceIdentification::setFriendlyName(QString newFriendlyName) {
 	m_friendlyName = newFriendlyName;
-	emit friendlyNameChanged(newFriendlyName);
 }
-
 QString DeviceIdentification::modelNumber() const { return m_modelNumber; }
+
 void DeviceIdentification::setModelNumber(QString newModelNumber) {
 	m_modelNumber = newModelNumber;
-	emit modelNumberChanged(newModelNumber);
 }
-
 QString DeviceIdentification::serialNumber() const { return m_serialNumber; }
+
 void DeviceIdentification::setSerialNumber(QString newSerialNumber) {
 	m_serialNumber = newSerialNumber;
-	emit serialNumberChanged(newSerialNumber);
 }
-
 QString DeviceIdentification::modelName() const { return m_modelName; }
+
 void DeviceIdentification::setModelName(QString newModelName) {
 	m_modelName = newModelName;
-	emit modelNameChanged(newModelName);
 }
-
 QString DeviceIdentification::modelDescription() const { return m_modelDescription; }
+
 void DeviceIdentification::setModelDescription(QString newModelDescription) {
 	m_modelDescription = newModelDescription;
-	emit modelDescriptionChanged(newModelDescription);
 }
-
 QString DeviceIdentification::modelUrl() const { return m_modelUrl; }
+
 void DeviceIdentification::setModelUrl(QString newModelUrl) {
 	m_modelUrl = newModelUrl;
-	emit modelUrlChanged(newModelUrl);
 }
-
 QString DeviceIdentification::manufacturer() const { return m_manufacturer; }
+
 void DeviceIdentification::setManufacturer(QString newManufacturer) {
 	m_manufacturer = newManufacturer;
-	emit manufacturerChanged(newManufacturer);
 }
-
 QString DeviceIdentification::manufacturerUrl() const { return m_manufacturerUrl; }
+
 void DeviceIdentification::setManufacturerUrl(QString newManufacturerUrl) {
 	m_manufacturerUrl = newManufacturerUrl;
-	emit manufacturerUrlChanged(newManufacturerUrl);
 }
+QList<QSharedPointer<HttpHeaderInfo>> DeviceIdentification::headers() const { return m_headers; }
 
-QList<HttpHeaderInfo *> DeviceIdentification::headers() const { return m_headers; }
-void DeviceIdentification::setHeaders(QList<HttpHeaderInfo *> newHeaders) {
+void DeviceIdentification::setHeaders(QList<QSharedPointer<HttpHeaderInfo>> newHeaders) {
 	m_headers = newHeaders;
-	emit headersChanged(newHeaders);
 }
 
 

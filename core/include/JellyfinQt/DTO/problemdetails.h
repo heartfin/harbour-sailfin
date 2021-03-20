@@ -31,47 +31,45 @@
 #define JELLYFIN_DTO_PROBLEMDETAILS_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ProblemDetails : public QObject {
-	Q_OBJECT
-public:
-	explicit ProblemDetails(QObject *parent = nullptr);
-	static ProblemDetails *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-	Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
-	Q_PROPERTY(qint32 status READ status WRITE setStatus NOTIFY statusChanged)
-	Q_PROPERTY(QString detail READ detail WRITE setDetail NOTIFY detailChanged)
-	Q_PROPERTY(QString instance READ instance WRITE setInstance NOTIFY instanceChanged)
+class ProblemDetails {
+public:
+	explicit ProblemDetails();
+	static ProblemDetails fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString type() const;
+
 	void setType(QString newType);
-	
+
 	QString title() const;
+
 	void setTitle(QString newTitle);
-	
+
 	qint32 status() const;
+
 	void setStatus(qint32 newStatus);
-	
+
 	QString detail() const;
+
 	void setDetail(QString newDetail);
-	
+
 	QString instance() const;
+
 	void setInstance(QString newInstance);
-	
-signals:
-	void typeChanged(QString newType);
-	void titleChanged(QString newTitle);
-	void statusChanged(qint32 newStatus);
-	void detailChanged(QString newDetail);
-	void instanceChanged(QString newInstance);
+
 protected:
 	QString m_type;
 	QString m_title;
@@ -79,6 +77,18 @@ protected:
 	QString m_detail;
 	QString m_instance;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ProblemDetails = Jellyfin::DTO::ProblemDetails;
+
+template <>
+ProblemDetails fromJsonValue<ProblemDetails>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ProblemDetails::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

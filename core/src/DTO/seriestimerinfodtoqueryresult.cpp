@@ -32,38 +32,44 @@
 namespace Jellyfin {
 namespace DTO {
 
-SeriesTimerInfoDtoQueryResult::SeriesTimerInfoDtoQueryResult(QObject *parent) : QObject(parent) {}
+SeriesTimerInfoDtoQueryResult::SeriesTimerInfoDtoQueryResult(QObject *parent) {}
 
-SeriesTimerInfoDtoQueryResult *SeriesTimerInfoDtoQueryResult::fromJSON(QJsonObject source, QObject *parent) {
-	SeriesTimerInfoDtoQueryResult *instance = new SeriesTimerInfoDtoQueryResult(parent);
-	instance->updateFromJSON(source);
+SeriesTimerInfoDtoQueryResult SeriesTimerInfoDtoQueryResult::fromJson(QJsonObject source) {SeriesTimerInfoDtoQueryResult instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void SeriesTimerInfoDtoQueryResult::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void SeriesTimerInfoDtoQueryResult::setFromJson(QJsonObject source) {
+	m_items = fromJsonValue<QList<QSharedPointer<SeriesTimerInfoDto>>>(source["Items"]);
+	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+
 }
-QJsonObject SeriesTimerInfoDtoQueryResult::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject SeriesTimerInfoDtoQueryResult::toJson() {
 	QJsonObject result;
+	result["Items"] = toJsonValue<QList<QSharedPointer<SeriesTimerInfoDto>>>(m_items);
+	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+
 	return result;
 }
-QList<SeriesTimerInfoDto *> SeriesTimerInfoDtoQueryResult::items() const { return m_items; }
-void SeriesTimerInfoDtoQueryResult::setItems(QList<SeriesTimerInfoDto *> newItems) {
-	m_items = newItems;
-	emit itemsChanged(newItems);
-}
 
+QList<QSharedPointer<SeriesTimerInfoDto>> SeriesTimerInfoDtoQueryResult::items() const { return m_items; }
+
+void SeriesTimerInfoDtoQueryResult::setItems(QList<QSharedPointer<SeriesTimerInfoDto>> newItems) {
+	m_items = newItems;
+}
 qint32 SeriesTimerInfoDtoQueryResult::totalRecordCount() const { return m_totalRecordCount; }
+
 void SeriesTimerInfoDtoQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
-	emit totalRecordCountChanged(newTotalRecordCount);
 }
-
 qint32 SeriesTimerInfoDtoQueryResult::startIndex() const { return m_startIndex; }
+
 void SeriesTimerInfoDtoQueryResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
-	emit startIndexChanged(newStartIndex);
 }
 
 

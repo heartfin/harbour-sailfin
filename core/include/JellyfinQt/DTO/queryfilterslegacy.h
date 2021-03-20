@@ -31,50 +31,61 @@
 #define JELLYFIN_DTO_QUERYFILTERSLEGACY_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class QueryFiltersLegacy : public QObject {
-	Q_OBJECT
-public:
-	explicit QueryFiltersLegacy(QObject *parent = nullptr);
-	static QueryFiltersLegacy *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QStringList genres READ genres WRITE setGenres NOTIFY genresChanged)
-	Q_PROPERTY(QStringList tags READ tags WRITE setTags NOTIFY tagsChanged)
-	Q_PROPERTY(QStringList officialRatings READ officialRatings WRITE setOfficialRatings NOTIFY officialRatingsChanged)
-	Q_PROPERTY(QList<qint32> years READ years WRITE setYears NOTIFY yearsChanged)
+class QueryFiltersLegacy {
+public:
+	explicit QueryFiltersLegacy();
+	static QueryFiltersLegacy fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QStringList genres() const;
+
 	void setGenres(QStringList newGenres);
-	
+
 	QStringList tags() const;
+
 	void setTags(QStringList newTags);
-	
+
 	QStringList officialRatings() const;
+
 	void setOfficialRatings(QStringList newOfficialRatings);
-	
+
 	QList<qint32> years() const;
+
 	void setYears(QList<qint32> newYears);
-	
-signals:
-	void genresChanged(QStringList newGenres);
-	void tagsChanged(QStringList newTags);
-	void officialRatingsChanged(QStringList newOfficialRatings);
-	void yearsChanged(QList<qint32> newYears);
+
 protected:
 	QStringList m_genres;
 	QStringList m_tags;
 	QStringList m_officialRatings;
 	QList<qint32> m_years;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using QueryFiltersLegacy = Jellyfin::DTO::QueryFiltersLegacy;
+
+template <>
+QueryFiltersLegacy fromJsonValue<QueryFiltersLegacy>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QueryFiltersLegacy::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

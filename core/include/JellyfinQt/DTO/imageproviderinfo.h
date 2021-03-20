@@ -31,46 +31,60 @@
 #define JELLYFIN_DTO_IMAGEPROVIDERINFO_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <optional>
 
 #include "JellyfinQt/DTO/imagetype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ImageProviderInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit ImageProviderInfo(QObject *parent = nullptr);
-	static ImageProviderInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ImageProviderInfo {
+public:
+	explicit ImageProviderInfo();
+	static ImageProviderInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets the name.
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets the name.
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets the supported image types.
 	 */
-	Q_PROPERTY(QList<ImageType> supportedImages READ supportedImages WRITE setSupportedImages NOTIFY supportedImagesChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
 	QList<ImageType> supportedImages() const;
+	/**
+	* @brief Gets the supported image types.
+	*/
 	void setSupportedImages(QList<ImageType> newSupportedImages);
-	
-signals:
-	void nameChanged(QString newName);
-	void supportedImagesChanged(QList<ImageType> newSupportedImages);
+
 protected:
 	QString m_name;
 	QList<ImageType> m_supportedImages;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ImageProviderInfo = Jellyfin::DTO::ImageProviderInfo;
+
+template <>
+ImageProviderInfo fromJsonValue<ImageProviderInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ImageProviderInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

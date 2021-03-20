@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_IMAGEFORMAT_H
 #define JELLYFIN_DTO_IMAGEFORMAT_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class ImageFormatClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Bmp,
 		Gif,
 		Jpg,
@@ -49,7 +54,39 @@ public:
 private:
 	explicit ImageFormatClass();
 };
+
 typedef ImageFormatClass::Value ImageFormat;
+
+} // NS DTO
+
+namespace Support {
+
+using ImageFormat = Jellyfin::DTO::ImageFormat;
+using ImageFormatClass = Jellyfin::DTO::ImageFormatClass;
+
+template <>
+ImageFormat fromJsonValue<ImageFormat>(const QJsonValue &source) {
+	if (!source.isString()) return ImageFormatClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Bmp")) {
+		return ImageFormatClass::Bmp;
+	}
+	if (str == QStringLiteral("Gif")) {
+		return ImageFormatClass::Gif;
+	}
+	if (str == QStringLiteral("Jpg")) {
+		return ImageFormatClass::Jpg;
+	}
+	if (str == QStringLiteral("Png")) {
+		return ImageFormatClass::Png;
+	}
+	if (str == QStringLiteral("Webp")) {
+		return ImageFormatClass::Webp;
+	}
+	
+	return ImageFormatClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

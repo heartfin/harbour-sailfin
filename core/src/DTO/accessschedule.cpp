@@ -29,55 +29,61 @@
 
 #include <JellyfinQt/DTO/accessschedule.h>
 
-#include <JellyfinQt/DTO/dynamicdayofweek.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-AccessSchedule::AccessSchedule(QObject *parent) : QObject(parent) {}
+AccessSchedule::AccessSchedule(QObject *parent) {}
 
-AccessSchedule *AccessSchedule::fromJSON(QJsonObject source, QObject *parent) {
-	AccessSchedule *instance = new AccessSchedule(parent);
-	instance->updateFromJSON(source);
+AccessSchedule AccessSchedule::fromJson(QJsonObject source) {AccessSchedule instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void AccessSchedule::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void AccessSchedule::setFromJson(QJsonObject source) {
+	m_jellyfinId = fromJsonValue<qint32>(source["Id"]);
+	m_userId = fromJsonValue<QUuid>(source["UserId"]);
+	m_dayOfWeek = fromJsonValue<DynamicDayOfWeek>(source["DayOfWeek"]);
+	m_startHour = fromJsonValue<double>(source["StartHour"]);
+	m_endHour = fromJsonValue<double>(source["EndHour"]);
+
 }
-QJsonObject AccessSchedule::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject AccessSchedule::toJson() {
 	QJsonObject result;
+	result["Id"] = toJsonValue<qint32>(m_jellyfinId);
+	result["UserId"] = toJsonValue<QUuid>(m_userId);
+	result["DayOfWeek"] = toJsonValue<DynamicDayOfWeek>(m_dayOfWeek);
+	result["StartHour"] = toJsonValue<double>(m_startHour);
+	result["EndHour"] = toJsonValue<double>(m_endHour);
+
 	return result;
 }
+
 qint32 AccessSchedule::jellyfinId() const { return m_jellyfinId; }
+
 void AccessSchedule::setJellyfinId(qint32 newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
+QUuid AccessSchedule::userId() const { return m_userId; }
 
-QString AccessSchedule::userId() const { return m_userId; }
-void AccessSchedule::setUserId(QString newUserId) {
+void AccessSchedule::setUserId(QUuid newUserId) {
 	m_userId = newUserId;
-	emit userIdChanged(newUserId);
 }
-
 DynamicDayOfWeek AccessSchedule::dayOfWeek() const { return m_dayOfWeek; }
+
 void AccessSchedule::setDayOfWeek(DynamicDayOfWeek newDayOfWeek) {
 	m_dayOfWeek = newDayOfWeek;
-	emit dayOfWeekChanged(newDayOfWeek);
 }
-
 double AccessSchedule::startHour() const { return m_startHour; }
+
 void AccessSchedule::setStartHour(double newStartHour) {
 	m_startHour = newStartHour;
-	emit startHourChanged(newStartHour);
 }
-
 double AccessSchedule::endHour() const { return m_endHour; }
+
 void AccessSchedule::setEndHour(double newEndHour) {
 	m_endHour = newEndHour;
-	emit endHourChanged(newEndHour);
 }
 
 

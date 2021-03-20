@@ -31,98 +31,101 @@
 #define JELLYFIN_DTO_DEVICEIDENTIFICATION_H
 
 #include <QJsonObject>
+#include <QJsonValue>
 #include <QList>
-#include <QObject>
+#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
+#include <optional>
+
+#include "JellyfinQt/DTO/httpheaderinfo.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class HttpHeaderInfo;
 
-class DeviceIdentification : public QObject {
-	Q_OBJECT
+class DeviceIdentification {
 public:
-	explicit DeviceIdentification(QObject *parent = nullptr);
-	static DeviceIdentification *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
-
+	explicit DeviceIdentification();
+	static DeviceIdentification fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the name of the friendly.
 	 */
-	Q_PROPERTY(QString friendlyName READ friendlyName WRITE setFriendlyName NOTIFY friendlyNameChanged)
+	QString friendlyName() const;
+	/**
+	* @brief Gets or sets the name of the friendly.
+	*/
+	void setFriendlyName(QString newFriendlyName);
 	/**
 	 * @brief Gets or sets the model number.
 	 */
-	Q_PROPERTY(QString modelNumber READ modelNumber WRITE setModelNumber NOTIFY modelNumberChanged)
+	QString modelNumber() const;
+	/**
+	* @brief Gets or sets the model number.
+	*/
+	void setModelNumber(QString newModelNumber);
 	/**
 	 * @brief Gets or sets the serial number.
 	 */
-	Q_PROPERTY(QString serialNumber READ serialNumber WRITE setSerialNumber NOTIFY serialNumberChanged)
+	QString serialNumber() const;
+	/**
+	* @brief Gets or sets the serial number.
+	*/
+	void setSerialNumber(QString newSerialNumber);
 	/**
 	 * @brief Gets or sets the name of the model.
 	 */
-	Q_PROPERTY(QString modelName READ modelName WRITE setModelName NOTIFY modelNameChanged)
+	QString modelName() const;
+	/**
+	* @brief Gets or sets the name of the model.
+	*/
+	void setModelName(QString newModelName);
 	/**
 	 * @brief Gets or sets the model description.
 	 */
-	Q_PROPERTY(QString modelDescription READ modelDescription WRITE setModelDescription NOTIFY modelDescriptionChanged)
+	QString modelDescription() const;
+	/**
+	* @brief Gets or sets the model description.
+	*/
+	void setModelDescription(QString newModelDescription);
 	/**
 	 * @brief Gets or sets the model URL.
 	 */
-	Q_PROPERTY(QString modelUrl READ modelUrl WRITE setModelUrl NOTIFY modelUrlChanged)
+	QString modelUrl() const;
+	/**
+	* @brief Gets or sets the model URL.
+	*/
+	void setModelUrl(QString newModelUrl);
 	/**
 	 * @brief Gets or sets the manufacturer.
 	 */
-	Q_PROPERTY(QString manufacturer READ manufacturer WRITE setManufacturer NOTIFY manufacturerChanged)
+	QString manufacturer() const;
+	/**
+	* @brief Gets or sets the manufacturer.
+	*/
+	void setManufacturer(QString newManufacturer);
 	/**
 	 * @brief Gets or sets the manufacturer URL.
 	 */
-	Q_PROPERTY(QString manufacturerUrl READ manufacturerUrl WRITE setManufacturerUrl NOTIFY manufacturerUrlChanged)
+	QString manufacturerUrl() const;
+	/**
+	* @brief Gets or sets the manufacturer URL.
+	*/
+	void setManufacturerUrl(QString newManufacturerUrl);
 	/**
 	 * @brief Gets or sets the headers.
 	 */
-	Q_PROPERTY(QList<HttpHeaderInfo *> headers READ headers WRITE setHeaders NOTIFY headersChanged)
+	QList<QSharedPointer<HttpHeaderInfo>> headers() const;
+	/**
+	* @brief Gets or sets the headers.
+	*/
+	void setHeaders(QList<QSharedPointer<HttpHeaderInfo>> newHeaders);
 
-	QString friendlyName() const;
-	void setFriendlyName(QString newFriendlyName);
-	
-	QString modelNumber() const;
-	void setModelNumber(QString newModelNumber);
-	
-	QString serialNumber() const;
-	void setSerialNumber(QString newSerialNumber);
-	
-	QString modelName() const;
-	void setModelName(QString newModelName);
-	
-	QString modelDescription() const;
-	void setModelDescription(QString newModelDescription);
-	
-	QString modelUrl() const;
-	void setModelUrl(QString newModelUrl);
-	
-	QString manufacturer() const;
-	void setManufacturer(QString newManufacturer);
-	
-	QString manufacturerUrl() const;
-	void setManufacturerUrl(QString newManufacturerUrl);
-	
-	QList<HttpHeaderInfo *> headers() const;
-	void setHeaders(QList<HttpHeaderInfo *> newHeaders);
-	
-signals:
-	void friendlyNameChanged(QString newFriendlyName);
-	void modelNumberChanged(QString newModelNumber);
-	void serialNumberChanged(QString newSerialNumber);
-	void modelNameChanged(QString newModelName);
-	void modelDescriptionChanged(QString newModelDescription);
-	void modelUrlChanged(QString newModelUrl);
-	void manufacturerChanged(QString newManufacturer);
-	void manufacturerUrlChanged(QString newManufacturerUrl);
-	void headersChanged(QList<HttpHeaderInfo *> newHeaders);
 protected:
 	QString m_friendlyName;
 	QString m_modelNumber;
@@ -132,8 +135,20 @@ protected:
 	QString m_modelUrl;
 	QString m_manufacturer;
 	QString m_manufacturerUrl;
-	QList<HttpHeaderInfo *> m_headers;
+	QList<QSharedPointer<HttpHeaderInfo>> m_headers;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DeviceIdentification = Jellyfin::DTO::DeviceIdentification;
+
+template <>
+DeviceIdentification fromJsonValue<DeviceIdentification>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceIdentification::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

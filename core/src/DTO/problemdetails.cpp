@@ -32,50 +32,58 @@
 namespace Jellyfin {
 namespace DTO {
 
-ProblemDetails::ProblemDetails(QObject *parent) : QObject(parent) {}
+ProblemDetails::ProblemDetails(QObject *parent) {}
 
-ProblemDetails *ProblemDetails::fromJSON(QJsonObject source, QObject *parent) {
-	ProblemDetails *instance = new ProblemDetails(parent);
-	instance->updateFromJSON(source);
+ProblemDetails ProblemDetails::fromJson(QJsonObject source) {ProblemDetails instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void ProblemDetails::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void ProblemDetails::setFromJson(QJsonObject source) {
+	m_type = fromJsonValue<QString>(source["type"]);
+	m_title = fromJsonValue<QString>(source["title"]);
+	m_status = fromJsonValue<qint32>(source["status"]);
+	m_detail = fromJsonValue<QString>(source["detail"]);
+	m_instance = fromJsonValue<QString>(source["instance"]);
+
 }
-QJsonObject ProblemDetails::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject ProblemDetails::toJson() {
 	QJsonObject result;
+	result["type"] = toJsonValue<QString>(m_type);
+	result["title"] = toJsonValue<QString>(m_title);
+	result["status"] = toJsonValue<qint32>(m_status);
+	result["detail"] = toJsonValue<QString>(m_detail);
+	result["instance"] = toJsonValue<QString>(m_instance);
+
 	return result;
 }
+
 QString ProblemDetails::type() const { return m_type; }
+
 void ProblemDetails::setType(QString newType) {
 	m_type = newType;
-	emit typeChanged(newType);
 }
-
 QString ProblemDetails::title() const { return m_title; }
+
 void ProblemDetails::setTitle(QString newTitle) {
 	m_title = newTitle;
-	emit titleChanged(newTitle);
 }
-
 qint32 ProblemDetails::status() const { return m_status; }
+
 void ProblemDetails::setStatus(qint32 newStatus) {
 	m_status = newStatus;
-	emit statusChanged(newStatus);
 }
-
 QString ProblemDetails::detail() const { return m_detail; }
+
 void ProblemDetails::setDetail(QString newDetail) {
 	m_detail = newDetail;
-	emit detailChanged(newDetail);
 }
-
 QString ProblemDetails::instance() const { return m_instance; }
+
 void ProblemDetails::setInstance(QString newInstance) {
 	m_instance = newInstance;
-	emit instanceChanged(newInstance);
 }
 
 

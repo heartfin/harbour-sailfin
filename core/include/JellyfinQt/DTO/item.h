@@ -30,7 +30,7 @@
 #ifndef JELLYFIN_DTO_ITEM_H
 #define JELLYFIN_DTO_ITEM_H
 
-#include "JellyfinQt/DTO/baseitemdto.h"
+#include "JellyfinQt/BaseItemDto"
 
 namespace Jellyfin {
 namespace DTO {

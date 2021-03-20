@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-XmlAttribute::XmlAttribute(QObject *parent) : QObject(parent) {}
+XmlAttribute::XmlAttribute(QObject *parent) {}
 
-XmlAttribute *XmlAttribute::fromJSON(QJsonObject source, QObject *parent) {
-	XmlAttribute *instance = new XmlAttribute(parent);
-	instance->updateFromJSON(source);
+XmlAttribute XmlAttribute::fromJson(QJsonObject source) {XmlAttribute instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void XmlAttribute::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void XmlAttribute::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_value = fromJsonValue<QString>(source["Value"]);
+
 }
-QJsonObject XmlAttribute::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject XmlAttribute::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Value"] = toJsonValue<QString>(m_value);
+
 	return result;
 }
+
 QString XmlAttribute::name() const { return m_name; }
+
 void XmlAttribute::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString XmlAttribute::value() const { return m_value; }
+
 void XmlAttribute::setValue(QString newValue) {
 	m_value = newValue;
-	emit valueChanged(newValue);
 }
 
 

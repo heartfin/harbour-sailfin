@@ -31,47 +31,45 @@
 #define JELLYFIN_DTO_NOTIFICATIONTYPEINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class NotificationTypeInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit NotificationTypeInfo(QObject *parent = nullptr);
-	static NotificationTypeInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
-	Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-	Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY enabledChanged)
-	Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged)
-	Q_PROPERTY(bool isBasedOnUserEvent READ isBasedOnUserEvent WRITE setIsBasedOnUserEvent NOTIFY isBasedOnUserEventChanged)
+class NotificationTypeInfo {
+public:
+	explicit NotificationTypeInfo();
+	static NotificationTypeInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
 	QString type() const;
+
 	void setType(QString newType);
-	
+
 	QString name() const;
+
 	void setName(QString newName);
-	
+
 	bool enabled() const;
+
 	void setEnabled(bool newEnabled);
-	
+
 	QString category() const;
+
 	void setCategory(QString newCategory);
-	
+
 	bool isBasedOnUserEvent() const;
+
 	void setIsBasedOnUserEvent(bool newIsBasedOnUserEvent);
-	
-signals:
-	void typeChanged(QString newType);
-	void nameChanged(QString newName);
-	void enabledChanged(bool newEnabled);
-	void categoryChanged(QString newCategory);
-	void isBasedOnUserEventChanged(bool newIsBasedOnUserEvent);
+
 protected:
 	QString m_type;
 	QString m_name;
@@ -79,6 +77,18 @@ protected:
 	QString m_category;
 	bool m_isBasedOnUserEvent;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using NotificationTypeInfo = Jellyfin::DTO::NotificationTypeInfo;
+
+template <>
+NotificationTypeInfo fromJsonValue<NotificationTypeInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NotificationTypeInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-StartupUserDto::StartupUserDto(QObject *parent) : QObject(parent) {}
+StartupUserDto::StartupUserDto(QObject *parent) {}
 
-StartupUserDto *StartupUserDto::fromJSON(QJsonObject source, QObject *parent) {
-	StartupUserDto *instance = new StartupUserDto(parent);
-	instance->updateFromJSON(source);
+StartupUserDto StartupUserDto::fromJson(QJsonObject source) {StartupUserDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void StartupUserDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void StartupUserDto::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_password = fromJsonValue<QString>(source["Password"]);
+
 }
-QJsonObject StartupUserDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject StartupUserDto::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["Password"] = toJsonValue<QString>(m_password);
+
 	return result;
 }
+
 QString StartupUserDto::name() const { return m_name; }
+
 void StartupUserDto::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 QString StartupUserDto::password() const { return m_password; }
+
 void StartupUserDto::setPassword(QString newPassword) {
 	m_password = newPassword;
-	emit passwordChanged(newPassword);
 }
 
 

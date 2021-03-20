@@ -32,32 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-UpdateLibraryOptionsDto::UpdateLibraryOptionsDto(QObject *parent) : QObject(parent) {}
+UpdateLibraryOptionsDto::UpdateLibraryOptionsDto(QObject *parent) {}
 
-UpdateLibraryOptionsDto *UpdateLibraryOptionsDto::fromJSON(QJsonObject source, QObject *parent) {
-	UpdateLibraryOptionsDto *instance = new UpdateLibraryOptionsDto(parent);
-	instance->updateFromJSON(source);
+UpdateLibraryOptionsDto UpdateLibraryOptionsDto::fromJson(QJsonObject source) {UpdateLibraryOptionsDto instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void UpdateLibraryOptionsDto::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void UpdateLibraryOptionsDto::setFromJson(QJsonObject source) {
+	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
+	m_libraryOptions = fromJsonValue<QSharedPointer<LibraryOptions>>(source["LibraryOptions"]);
+
 }
-QJsonObject UpdateLibraryOptionsDto::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject UpdateLibraryOptionsDto::toJson() {
 	QJsonObject result;
+	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
+	result["LibraryOptions"] = toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
+
 	return result;
 }
-QString UpdateLibraryOptionsDto::jellyfinId() const { return m_jellyfinId; }
-void UpdateLibraryOptionsDto::setJellyfinId(QString newJellyfinId) {
-	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
-}
 
-LibraryOptions * UpdateLibraryOptionsDto::libraryOptions() const { return m_libraryOptions; }
-void UpdateLibraryOptionsDto::setLibraryOptions(LibraryOptions * newLibraryOptions) {
+QUuid UpdateLibraryOptionsDto::jellyfinId() const { return m_jellyfinId; }
+
+void UpdateLibraryOptionsDto::setJellyfinId(QUuid newJellyfinId) {
+	m_jellyfinId = newJellyfinId;
+}
+QSharedPointer<LibraryOptions> UpdateLibraryOptionsDto::libraryOptions() const { return m_libraryOptions; }
+
+void UpdateLibraryOptionsDto::setLibraryOptions(QSharedPointer<LibraryOptions> newLibraryOptions) {
 	m_libraryOptions = newLibraryOptions;
-	emit libraryOptionsChanged(newLibraryOptions);
 }
 
 

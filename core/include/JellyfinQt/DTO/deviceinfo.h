@@ -32,98 +32,111 @@
 
 #include <QDateTime>
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <QSharedPointer>
 #include <QString>
+#include <QUuid>
+#include <optional>
+
+#include "JellyfinQt/DTO/clientcapabilities.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ClientCapabilities;
 
-class DeviceInfo : public QObject {
-	Q_OBJECT
+class DeviceInfo {
 public:
-	explicit DeviceInfo(QObject *parent = nullptr);
-	static DeviceInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
+	explicit DeviceInfo();
+	static DeviceInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the identifier.
 	 */
-	Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
+	QString jellyfinId() const;
+	/**
+	* @brief Gets or sets the identifier.
+	*/
+	void setJellyfinId(QString newJellyfinId);
 	/**
 	 * @brief Gets or sets the last name of the user.
 	 */
-	Q_PROPERTY(QString lastUserName READ lastUserName WRITE setLastUserName NOTIFY lastUserNameChanged)
+	QString lastUserName() const;
+	/**
+	* @brief Gets or sets the last name of the user.
+	*/
+	void setLastUserName(QString newLastUserName);
 	/**
 	 * @brief Gets or sets the name of the application.
 	 */
-	Q_PROPERTY(QString appName READ appName WRITE setAppName NOTIFY appNameChanged)
+	QString appName() const;
+	/**
+	* @brief Gets or sets the name of the application.
+	*/
+	void setAppName(QString newAppName);
 	/**
 	 * @brief Gets or sets the application version.
 	 */
-	Q_PROPERTY(QString appVersion READ appVersion WRITE setAppVersion NOTIFY appVersionChanged)
+	QString appVersion() const;
+	/**
+	* @brief Gets or sets the application version.
+	*/
+	void setAppVersion(QString newAppVersion);
 	/**
 	 * @brief Gets or sets the last user identifier.
 	 */
-	Q_PROPERTY(QString lastUserId READ lastUserId WRITE setLastUserId NOTIFY lastUserIdChanged)
+	QUuid lastUserId() const;
+	/**
+	* @brief Gets or sets the last user identifier.
+	*/
+	void setLastUserId(QUuid newLastUserId);
 	/**
 	 * @brief Gets or sets the date last modified.
 	 */
-	Q_PROPERTY(QDateTime dateLastActivity READ dateLastActivity WRITE setDateLastActivity NOTIFY dateLastActivityChanged)
-	Q_PROPERTY(ClientCapabilities * capabilities READ capabilities WRITE setCapabilities NOTIFY capabilitiesChanged)
-	Q_PROPERTY(QString iconUrl READ iconUrl WRITE setIconUrl NOTIFY iconUrlChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-	
-	QString lastUserName() const;
-	void setLastUserName(QString newLastUserName);
-	
-	QString appName() const;
-	void setAppName(QString newAppName);
-	
-	QString appVersion() const;
-	void setAppVersion(QString newAppVersion);
-	
-	QString lastUserId() const;
-	void setLastUserId(QString newLastUserId);
-	
 	QDateTime dateLastActivity() const;
+	/**
+	* @brief Gets or sets the date last modified.
+	*/
 	void setDateLastActivity(QDateTime newDateLastActivity);
-	
-	ClientCapabilities * capabilities() const;
-	void setCapabilities(ClientCapabilities * newCapabilities);
-	
+
+	QSharedPointer<ClientCapabilities> capabilities() const;
+
+	void setCapabilities(QSharedPointer<ClientCapabilities> newCapabilities);
+
 	QString iconUrl() const;
+
 	void setIconUrl(QString newIconUrl);
-	
-signals:
-	void nameChanged(QString newName);
-	void jellyfinIdChanged(QString newJellyfinId);
-	void lastUserNameChanged(QString newLastUserName);
-	void appNameChanged(QString newAppName);
-	void appVersionChanged(QString newAppVersion);
-	void lastUserIdChanged(QString newLastUserId);
-	void dateLastActivityChanged(QDateTime newDateLastActivity);
-	void capabilitiesChanged(ClientCapabilities * newCapabilities);
-	void iconUrlChanged(QString newIconUrl);
+
 protected:
 	QString m_name;
 	QString m_jellyfinId;
 	QString m_lastUserName;
 	QString m_appName;
 	QString m_appVersion;
-	QString m_lastUserId;
+	QUuid m_lastUserId;
 	QDateTime m_dateLastActivity;
-	ClientCapabilities * m_capabilities = nullptr;
+	QSharedPointer<ClientCapabilities> m_capabilities = nullptr;
 	QString m_iconUrl;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DeviceInfo = Jellyfin::DTO::DeviceInfo;
+
+template <>
+DeviceInfo fromJsonValue<DeviceInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

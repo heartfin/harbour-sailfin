@@ -31,59 +31,72 @@
 #define JELLYFIN_DTO_EXTERNALIDINFO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
 #include <QString>
+#include <optional>
 
 #include "JellyfinQt/DTO/externalidmediatype.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class ExternalIdInfo : public QObject {
-	Q_OBJECT
-public:
-	explicit ExternalIdInfo(QObject *parent = nullptr);
-	static ExternalIdInfo *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class ExternalIdInfo {
+public:
+	explicit ExternalIdInfo();
+	static ExternalIdInfo fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the display name of the external id provider (IE: IMDB, MusicBrainz, etc).
 	 */
-	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	QString name() const;
+	/**
+	* @brief Gets or sets the display name of the external id provider (IE: IMDB, MusicBrainz, etc).
+	*/
+	void setName(QString newName);
 	/**
 	 * @brief Gets or sets the unique key for this id. This key should be unique across all providers.
 	 */
-	Q_PROPERTY(QString key READ key WRITE setKey NOTIFY keyChanged)
-	Q_PROPERTY(ExternalIdMediaType type READ type WRITE setType NOTIFY typeChanged)
+	QString key() const;
+	/**
+	* @brief Gets or sets the unique key for this id. This key should be unique across all providers.
+	*/
+	void setKey(QString newKey);
+
+	ExternalIdMediaType type() const;
+
+	void setType(ExternalIdMediaType newType);
 	/**
 	 * @brief Gets or sets the URL format string.
 	 */
-	Q_PROPERTY(QString urlFormatString READ urlFormatString WRITE setUrlFormatString NOTIFY urlFormatStringChanged)
-
-	QString name() const;
-	void setName(QString newName);
-	
-	QString key() const;
-	void setKey(QString newKey);
-	
-	ExternalIdMediaType type() const;
-	void setType(ExternalIdMediaType newType);
-	
 	QString urlFormatString() const;
+	/**
+	* @brief Gets or sets the URL format string.
+	*/
 	void setUrlFormatString(QString newUrlFormatString);
-	
-signals:
-	void nameChanged(QString newName);
-	void keyChanged(QString newKey);
-	void typeChanged(ExternalIdMediaType newType);
-	void urlFormatStringChanged(QString newUrlFormatString);
+
 protected:
 	QString m_name;
 	QString m_key;
 	ExternalIdMediaType m_type;
 	QString m_urlFormatString;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ExternalIdInfo = Jellyfin::DTO::ExternalIdInfo;
+
+template <>
+ExternalIdInfo fromJsonValue<ExternalIdInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ExternalIdInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

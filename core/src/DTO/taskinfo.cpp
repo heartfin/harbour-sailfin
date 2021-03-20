@@ -29,85 +29,96 @@
 
 #include <JellyfinQt/DTO/taskinfo.h>
 
-#include <JellyfinQt/DTO/taskstate.h>
-
 namespace Jellyfin {
 namespace DTO {
 
-TaskInfo::TaskInfo(QObject *parent) : QObject(parent) {}
+TaskInfo::TaskInfo(QObject *parent) {}
 
-TaskInfo *TaskInfo::fromJSON(QJsonObject source, QObject *parent) {
-	TaskInfo *instance = new TaskInfo(parent);
-	instance->updateFromJSON(source);
+TaskInfo TaskInfo::fromJson(QJsonObject source) {TaskInfo instance;
+	instance->setFromJson(source, false);
 	return instance;
 }
 
-void TaskInfo::updateFromJSON(QJsonObject source) {
-	Q_UNIMPLEMENTED();
+
+void TaskInfo::setFromJson(QJsonObject source) {
+	m_name = fromJsonValue<QString>(source["Name"]);
+	m_state = fromJsonValue<TaskState>(source["State"]);
+	m_currentProgressPercentage = fromJsonValue<double>(source["CurrentProgressPercentage"]);
+	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_lastExecutionResult = fromJsonValue<QSharedPointer<TaskResult>>(source["LastExecutionResult"]);
+	m_triggers = fromJsonValue<QList<QSharedPointer<TaskTriggerInfo>>>(source["Triggers"]);
+	m_description = fromJsonValue<QString>(source["Description"]);
+	m_category = fromJsonValue<QString>(source["Category"]);
+	m_isHidden = fromJsonValue<bool>(source["IsHidden"]);
+	m_key = fromJsonValue<QString>(source["Key"]);
+
 }
-QJsonObject TaskInfo::toJSON() {
-	Q_UNIMPLEMENTED();
+	
+QJsonObject TaskInfo::toJson() {
 	QJsonObject result;
+	result["Name"] = toJsonValue<QString>(m_name);
+	result["State"] = toJsonValue<TaskState>(m_state);
+	result["CurrentProgressPercentage"] = toJsonValue<double>(m_currentProgressPercentage);
+	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["LastExecutionResult"] = toJsonValue<QSharedPointer<TaskResult>>(m_lastExecutionResult);
+	result["Triggers"] = toJsonValue<QList<QSharedPointer<TaskTriggerInfo>>>(m_triggers);
+	result["Description"] = toJsonValue<QString>(m_description);
+	result["Category"] = toJsonValue<QString>(m_category);
+	result["IsHidden"] = toJsonValue<bool>(m_isHidden);
+	result["Key"] = toJsonValue<QString>(m_key);
+
 	return result;
 }
+
 QString TaskInfo::name() const { return m_name; }
+
 void TaskInfo::setName(QString newName) {
 	m_name = newName;
-	emit nameChanged(newName);
 }
-
 TaskState TaskInfo::state() const { return m_state; }
+
 void TaskInfo::setState(TaskState newState) {
 	m_state = newState;
-	emit stateChanged(newState);
 }
-
 double TaskInfo::currentProgressPercentage() const { return m_currentProgressPercentage; }
+
 void TaskInfo::setCurrentProgressPercentage(double newCurrentProgressPercentage) {
 	m_currentProgressPercentage = newCurrentProgressPercentage;
-	emit currentProgressPercentageChanged(newCurrentProgressPercentage);
 }
-
 QString TaskInfo::jellyfinId() const { return m_jellyfinId; }
+
 void TaskInfo::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
-	emit jellyfinIdChanged(newJellyfinId);
 }
+QSharedPointer<TaskResult> TaskInfo::lastExecutionResult() const { return m_lastExecutionResult; }
 
-TaskResult * TaskInfo::lastExecutionResult() const { return m_lastExecutionResult; }
-void TaskInfo::setLastExecutionResult(TaskResult * newLastExecutionResult) {
+void TaskInfo::setLastExecutionResult(QSharedPointer<TaskResult> newLastExecutionResult) {
 	m_lastExecutionResult = newLastExecutionResult;
-	emit lastExecutionResultChanged(newLastExecutionResult);
 }
+QList<QSharedPointer<TaskTriggerInfo>> TaskInfo::triggers() const { return m_triggers; }
 
-QList<TaskTriggerInfo *> TaskInfo::triggers() const { return m_triggers; }
-void TaskInfo::setTriggers(QList<TaskTriggerInfo *> newTriggers) {
+void TaskInfo::setTriggers(QList<QSharedPointer<TaskTriggerInfo>> newTriggers) {
 	m_triggers = newTriggers;
-	emit triggersChanged(newTriggers);
 }
-
 QString TaskInfo::description() const { return m_description; }
+
 void TaskInfo::setDescription(QString newDescription) {
 	m_description = newDescription;
-	emit descriptionChanged(newDescription);
 }
-
 QString TaskInfo::category() const { return m_category; }
+
 void TaskInfo::setCategory(QString newCategory) {
 	m_category = newCategory;
-	emit categoryChanged(newCategory);
 }
-
 bool TaskInfo::isHidden() const { return m_isHidden; }
+
 void TaskInfo::setIsHidden(bool newIsHidden) {
 	m_isHidden = newIsHidden;
-	emit isHiddenChanged(newIsHidden);
 }
-
 QString TaskInfo::key() const { return m_key; }
+
 void TaskInfo::setKey(QString newKey) {
 	m_key = newKey;
-	emit keyChanged(newKey);
 }
 
 

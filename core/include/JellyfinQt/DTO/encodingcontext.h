@@ -30,7 +30,11 @@
 #ifndef JELLYFIN_DTO_ENCODINGCONTEXT_H
 #define JELLYFIN_DTO_ENCODINGCONTEXT_H
 
+#include <QJsonValue>
 #include <QObject>
+#include <QString>
+
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
@@ -39,6 +43,7 @@ class EncodingContextClass {
 	Q_GADGET
 public:
 	enum Value {
+		EnumNotSet,
 		Streaming,
 		Static,
 	};
@@ -46,7 +51,30 @@ public:
 private:
 	explicit EncodingContextClass();
 };
+
 typedef EncodingContextClass::Value EncodingContext;
+
+} // NS DTO
+
+namespace Support {
+
+using EncodingContext = Jellyfin::DTO::EncodingContext;
+using EncodingContextClass = Jellyfin::DTO::EncodingContextClass;
+
+template <>
+EncodingContext fromJsonValue<EncodingContext>(const QJsonValue &source) {
+	if (!source.isString()) return EncodingContextClass::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Streaming")) {
+		return EncodingContextClass::Streaming;
+	}
+	if (str == QStringLiteral("Static")) {
+		return EncodingContextClass::Static;
+	}
+	
+	return EncodingContextClass::EnumNotSet;
+}
 
 } // NS Jellyfin
 } // NS DTO

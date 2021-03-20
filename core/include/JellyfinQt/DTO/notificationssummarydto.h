@@ -31,40 +31,53 @@
 #define JELLYFIN_DTO_NOTIFICATIONSSUMMARYDTO_H
 
 #include <QJsonObject>
-#include <QObject>
+#include <QJsonValue>
+#include <optional>
 
 #include "JellyfinQt/DTO/notificationlevel.h"
+#include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
 namespace DTO {
 
-class NotificationsSummaryDto : public QObject {
-	Q_OBJECT
-public:
-	explicit NotificationsSummaryDto(QObject *parent = nullptr);
-	static NotificationsSummaryDto *fromJSON(QJsonObject source, QObject *parent = nullptr);
-	void updateFromJSON(QJsonObject source);
-	QJsonObject toJSON();
 
+class NotificationsSummaryDto {
+public:
+	explicit NotificationsSummaryDto();
+	static NotificationsSummaryDto fromJson(QJsonObject source);
+	void setFromJson(QJsonObject source);
+	QJsonObject toJson();
+	
+	// Properties
 	/**
 	 * @brief Gets or sets the number of unread notifications.
 	 */
-	Q_PROPERTY(qint32 unreadCount READ unreadCount WRITE setUnreadCount NOTIFY unreadCountChanged)
-	Q_PROPERTY(NotificationLevel maxUnreadNotificationLevel READ maxUnreadNotificationLevel WRITE setMaxUnreadNotificationLevel NOTIFY maxUnreadNotificationLevelChanged)
-
 	qint32 unreadCount() const;
+	/**
+	* @brief Gets or sets the number of unread notifications.
+	*/
 	void setUnreadCount(qint32 newUnreadCount);
-	
+
 	NotificationLevel maxUnreadNotificationLevel() const;
+
 	void setMaxUnreadNotificationLevel(NotificationLevel newMaxUnreadNotificationLevel);
-	
-signals:
-	void unreadCountChanged(qint32 newUnreadCount);
-	void maxUnreadNotificationLevelChanged(NotificationLevel newMaxUnreadNotificationLevel);
+
 protected:
 	qint32 m_unreadCount;
 	NotificationLevel m_maxUnreadNotificationLevel;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using NotificationsSummaryDto = Jellyfin::DTO::NotificationsSummaryDto;
+
+template <>
+NotificationsSummaryDto fromJsonValue<NotificationsSummaryDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NotificationsSummaryDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

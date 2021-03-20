@@ -32,72 +32,73 @@
 namespace Jellyfin {
 namespace DTO {
 
-SystemInfo::SystemInfo(QObject *parent) {}
+SystemInfo::SystemInfo() {}
 
-SystemInfo SystemInfo::fromJson(QJsonObject source) {SystemInfo instance;
-	instance->setFromJson(source, false);
+SystemInfo SystemInfo::fromJson(QJsonObject source) {
+	SystemInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SystemInfo::setFromJson(QJsonObject source) {
-	m_localAddress = fromJsonValue<QString>(source["LocalAddress"]);
-	m_serverName = fromJsonValue<QString>(source["ServerName"]);
-	m_version = fromJsonValue<QString>(source["Version"]);
-	m_productName = fromJsonValue<QString>(source["ProductName"]);
-	m_operatingSystem = fromJsonValue<QString>(source["OperatingSystem"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_startupWizardCompleted = fromJsonValue<bool>(source["StartupWizardCompleted"]);
-	m_operatingSystemDisplayName = fromJsonValue<QString>(source["OperatingSystemDisplayName"]);
-	m_packageName = fromJsonValue<QString>(source["PackageName"]);
-	m_hasPendingRestart = fromJsonValue<bool>(source["HasPendingRestart"]);
-	m_isShuttingDown = fromJsonValue<bool>(source["IsShuttingDown"]);
-	m_supportsLibraryMonitor = fromJsonValue<bool>(source["SupportsLibraryMonitor"]);
-	m_webSocketPortNumber = fromJsonValue<qint32>(source["WebSocketPortNumber"]);
-	m_completedInstallations = fromJsonValue<QList<QSharedPointer<InstallationInfo>>>(source["CompletedInstallations"]);
-	m_canSelfRestart = fromJsonValue<bool>(source["CanSelfRestart"]);
-	m_canLaunchWebBrowser = fromJsonValue<bool>(source["CanLaunchWebBrowser"]);
-	m_programDataPath = fromJsonValue<QString>(source["ProgramDataPath"]);
-	m_webPath = fromJsonValue<QString>(source["WebPath"]);
-	m_itemsByNamePath = fromJsonValue<QString>(source["ItemsByNamePath"]);
-	m_cachePath = fromJsonValue<QString>(source["CachePath"]);
-	m_logPath = fromJsonValue<QString>(source["LogPath"]);
-	m_internalMetadataPath = fromJsonValue<QString>(source["InternalMetadataPath"]);
-	m_transcodingTempPath = fromJsonValue<QString>(source["TranscodingTempPath"]);
-	m_hasUpdateAvailable = fromJsonValue<bool>(source["HasUpdateAvailable"]);
-	m_encoderLocation = fromJsonValue<FFmpegLocation>(source["EncoderLocation"]);
-	m_systemArchitecture = fromJsonValue<Architecture>(source["SystemArchitecture"]);
+	m_localAddress = Jellyfin::Support::fromJsonValue<QString>(source["LocalAddress"]);
+	m_serverName = Jellyfin::Support::fromJsonValue<QString>(source["ServerName"]);
+	m_version = Jellyfin::Support::fromJsonValue<QString>(source["Version"]);
+	m_productName = Jellyfin::Support::fromJsonValue<QString>(source["ProductName"]);
+	m_operatingSystem = Jellyfin::Support::fromJsonValue<QString>(source["OperatingSystem"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_startupWizardCompleted = Jellyfin::Support::fromJsonValue<bool>(source["StartupWizardCompleted"]);
+	m_operatingSystemDisplayName = Jellyfin::Support::fromJsonValue<QString>(source["OperatingSystemDisplayName"]);
+	m_packageName = Jellyfin::Support::fromJsonValue<QString>(source["PackageName"]);
+	m_hasPendingRestart = Jellyfin::Support::fromJsonValue<bool>(source["HasPendingRestart"]);
+	m_isShuttingDown = Jellyfin::Support::fromJsonValue<bool>(source["IsShuttingDown"]);
+	m_supportsLibraryMonitor = Jellyfin::Support::fromJsonValue<bool>(source["SupportsLibraryMonitor"]);
+	m_webSocketPortNumber = Jellyfin::Support::fromJsonValue<qint32>(source["WebSocketPortNumber"]);
+	m_completedInstallations = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<InstallationInfo>>>(source["CompletedInstallations"]);
+	m_canSelfRestart = Jellyfin::Support::fromJsonValue<bool>(source["CanSelfRestart"]);
+	m_canLaunchWebBrowser = Jellyfin::Support::fromJsonValue<bool>(source["CanLaunchWebBrowser"]);
+	m_programDataPath = Jellyfin::Support::fromJsonValue<QString>(source["ProgramDataPath"]);
+	m_webPath = Jellyfin::Support::fromJsonValue<QString>(source["WebPath"]);
+	m_itemsByNamePath = Jellyfin::Support::fromJsonValue<QString>(source["ItemsByNamePath"]);
+	m_cachePath = Jellyfin::Support::fromJsonValue<QString>(source["CachePath"]);
+	m_logPath = Jellyfin::Support::fromJsonValue<QString>(source["LogPath"]);
+	m_internalMetadataPath = Jellyfin::Support::fromJsonValue<QString>(source["InternalMetadataPath"]);
+	m_transcodingTempPath = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingTempPath"]);
+	m_hasUpdateAvailable = Jellyfin::Support::fromJsonValue<bool>(source["HasUpdateAvailable"]);
+	m_encoderLocation = Jellyfin::Support::fromJsonValue<FFmpegLocation>(source["EncoderLocation"]);
+	m_systemArchitecture = Jellyfin::Support::fromJsonValue<Architecture>(source["SystemArchitecture"]);
 
 }
 	
 QJsonObject SystemInfo::toJson() {
 	QJsonObject result;
-	result["LocalAddress"] = toJsonValue<QString>(m_localAddress);
-	result["ServerName"] = toJsonValue<QString>(m_serverName);
-	result["Version"] = toJsonValue<QString>(m_version);
-	result["ProductName"] = toJsonValue<QString>(m_productName);
-	result["OperatingSystem"] = toJsonValue<QString>(m_operatingSystem);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["StartupWizardCompleted"] = toJsonValue<bool>(m_startupWizardCompleted);
-	result["OperatingSystemDisplayName"] = toJsonValue<QString>(m_operatingSystemDisplayName);
-	result["PackageName"] = toJsonValue<QString>(m_packageName);
-	result["HasPendingRestart"] = toJsonValue<bool>(m_hasPendingRestart);
-	result["IsShuttingDown"] = toJsonValue<bool>(m_isShuttingDown);
-	result["SupportsLibraryMonitor"] = toJsonValue<bool>(m_supportsLibraryMonitor);
-	result["WebSocketPortNumber"] = toJsonValue<qint32>(m_webSocketPortNumber);
-	result["CompletedInstallations"] = toJsonValue<QList<QSharedPointer<InstallationInfo>>>(m_completedInstallations);
-	result["CanSelfRestart"] = toJsonValue<bool>(m_canSelfRestart);
-	result["CanLaunchWebBrowser"] = toJsonValue<bool>(m_canLaunchWebBrowser);
-	result["ProgramDataPath"] = toJsonValue<QString>(m_programDataPath);
-	result["WebPath"] = toJsonValue<QString>(m_webPath);
-	result["ItemsByNamePath"] = toJsonValue<QString>(m_itemsByNamePath);
-	result["CachePath"] = toJsonValue<QString>(m_cachePath);
-	result["LogPath"] = toJsonValue<QString>(m_logPath);
-	result["InternalMetadataPath"] = toJsonValue<QString>(m_internalMetadataPath);
-	result["TranscodingTempPath"] = toJsonValue<QString>(m_transcodingTempPath);
-	result["HasUpdateAvailable"] = toJsonValue<bool>(m_hasUpdateAvailable);
-	result["EncoderLocation"] = toJsonValue<FFmpegLocation>(m_encoderLocation);
-	result["SystemArchitecture"] = toJsonValue<Architecture>(m_systemArchitecture);
+	result["LocalAddress"] = Jellyfin::Support::toJsonValue<QString>(m_localAddress);
+	result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
+	result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	result["ProductName"] = Jellyfin::Support::toJsonValue<QString>(m_productName);
+	result["OperatingSystem"] = Jellyfin::Support::toJsonValue<QString>(m_operatingSystem);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["StartupWizardCompleted"] = Jellyfin::Support::toJsonValue<bool>(m_startupWizardCompleted);
+	result["OperatingSystemDisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_operatingSystemDisplayName);
+	result["PackageName"] = Jellyfin::Support::toJsonValue<QString>(m_packageName);
+	result["HasPendingRestart"] = Jellyfin::Support::toJsonValue<bool>(m_hasPendingRestart);
+	result["IsShuttingDown"] = Jellyfin::Support::toJsonValue<bool>(m_isShuttingDown);
+	result["SupportsLibraryMonitor"] = Jellyfin::Support::toJsonValue<bool>(m_supportsLibraryMonitor);
+	result["WebSocketPortNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_webSocketPortNumber);
+	result["CompletedInstallations"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<InstallationInfo>>>(m_completedInstallations);
+	result["CanSelfRestart"] = Jellyfin::Support::toJsonValue<bool>(m_canSelfRestart);
+	result["CanLaunchWebBrowser"] = Jellyfin::Support::toJsonValue<bool>(m_canLaunchWebBrowser);
+	result["ProgramDataPath"] = Jellyfin::Support::toJsonValue<QString>(m_programDataPath);
+	result["WebPath"] = Jellyfin::Support::toJsonValue<QString>(m_webPath);
+	result["ItemsByNamePath"] = Jellyfin::Support::toJsonValue<QString>(m_itemsByNamePath);
+	result["CachePath"] = Jellyfin::Support::toJsonValue<QString>(m_cachePath);
+	result["LogPath"] = Jellyfin::Support::toJsonValue<QString>(m_logPath);
+	result["InternalMetadataPath"] = Jellyfin::Support::toJsonValue<QString>(m_internalMetadataPath);
+	result["TranscodingTempPath"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingTempPath);
+	result["HasUpdateAvailable"] = Jellyfin::Support::toJsonValue<bool>(m_hasUpdateAvailable);
+	result["EncoderLocation"] = Jellyfin::Support::toJsonValue<FFmpegLocation>(m_encoderLocation);
+	result["SystemArchitecture"] = Jellyfin::Support::toJsonValue<Architecture>(m_systemArchitecture);
 
 	return result;
 }
@@ -233,6 +234,17 @@ void SystemInfo::setSystemArchitecture(Architecture newSystemArchitecture) {
 	m_systemArchitecture = newSystemArchitecture;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SystemInfo = Jellyfin::DTO::SystemInfo;
+
+template <>
+SystemInfo fromJsonValue<SystemInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SystemInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

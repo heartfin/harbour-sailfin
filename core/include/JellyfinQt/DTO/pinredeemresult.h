@@ -73,18 +73,6 @@ protected:
 	QStringList m_usersReset;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PinRedeemResult = Jellyfin::DTO::PinRedeemResult;
-
-template <>
-PinRedeemResult fromJsonValue<PinRedeemResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PinRedeemResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

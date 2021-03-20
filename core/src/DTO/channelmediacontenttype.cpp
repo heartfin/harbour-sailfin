@@ -34,5 +34,45 @@ namespace DTO {
 
 ChannelMediaContentTypeClass::ChannelMediaContentTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelMediaContentType = Jellyfin::DTO::ChannelMediaContentType;
+
+template <>
+ChannelMediaContentType fromJsonValue<ChannelMediaContentType>(const QJsonValue &source) {
+	if (!source.isString()) return ChannelMediaContentType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Clip")) {
+		return ChannelMediaContentType::Clip;
+	}
+	if (str == QStringLiteral("Podcast")) {
+		return ChannelMediaContentType::Podcast;
+	}
+	if (str == QStringLiteral("Trailer")) {
+		return ChannelMediaContentType::Trailer;
+	}
+	if (str == QStringLiteral("Movie")) {
+		return ChannelMediaContentType::Movie;
+	}
+	if (str == QStringLiteral("Episode")) {
+		return ChannelMediaContentType::Episode;
+	}
+	if (str == QStringLiteral("Song")) {
+		return ChannelMediaContentType::Song;
+	}
+	if (str == QStringLiteral("MovieExtra")) {
+		return ChannelMediaContentType::MovieExtra;
+	}
+	if (str == QStringLiteral("TvExtra")) {
+		return ChannelMediaContentType::TvExtra;
+	}
+	
+	return ChannelMediaContentType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

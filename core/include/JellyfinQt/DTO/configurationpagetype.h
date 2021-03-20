@@ -54,28 +54,6 @@ private:
 
 typedef ConfigurationPageTypeClass::Value ConfigurationPageType;
 
-} // NS DTO
-
-namespace Support {
-
-using ConfigurationPageType = Jellyfin::DTO::ConfigurationPageType;
-using ConfigurationPageTypeClass = Jellyfin::DTO::ConfigurationPageTypeClass;
-
-template <>
-ConfigurationPageType fromJsonValue<ConfigurationPageType>(const QJsonValue &source) {
-	if (!source.isString()) return ConfigurationPageTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("PluginConfiguration")) {
-		return ConfigurationPageTypeClass::PluginConfiguration;
-	}
-	if (str == QStringLiteral("None")) {
-		return ConfigurationPageTypeClass::None;
-	}
-	
-	return ConfigurationPageTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

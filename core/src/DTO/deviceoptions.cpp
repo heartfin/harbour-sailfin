@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceOptions::DeviceOptions(QObject *parent) {}
+DeviceOptions::DeviceOptions() {}
 
-DeviceOptions DeviceOptions::fromJson(QJsonObject source) {DeviceOptions instance;
-	instance->setFromJson(source, false);
+DeviceOptions DeviceOptions::fromJson(QJsonObject source) {
+	DeviceOptions instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void DeviceOptions::setFromJson(QJsonObject source) {
-	m_customName = fromJsonValue<QString>(source["CustomName"]);
+	m_customName = Jellyfin::Support::fromJsonValue<QString>(source["CustomName"]);
 
 }
 	
 QJsonObject DeviceOptions::toJson() {
 	QJsonObject result;
-	result["CustomName"] = toJsonValue<QString>(m_customName);
+	result["CustomName"] = Jellyfin::Support::toJsonValue<QString>(m_customName);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void DeviceOptions::setCustomName(QString newCustomName) {
 	m_customName = newCustomName;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using DeviceOptions = Jellyfin::DTO::DeviceOptions;
+
+template <>
+DeviceOptions fromJsonValue<DeviceOptions>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceOptions::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

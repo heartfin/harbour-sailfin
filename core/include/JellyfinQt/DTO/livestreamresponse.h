@@ -59,18 +59,6 @@ protected:
 	QSharedPointer<MediaSourceInfo> m_mediaSource = nullptr;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using LiveStreamResponse = Jellyfin::DTO::LiveStreamResponse;
-
-template <>
-LiveStreamResponse fromJsonValue<LiveStreamResponse>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return LiveStreamResponse::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

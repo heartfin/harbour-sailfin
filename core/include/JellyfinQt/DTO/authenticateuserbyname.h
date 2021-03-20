@@ -80,18 +80,6 @@ protected:
 	QString m_password;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using AuthenticateUserByName = Jellyfin::DTO::AuthenticateUserByName;
-
-template <>
-AuthenticateUserByName fromJsonValue<AuthenticateUserByName>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return AuthenticateUserByName::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

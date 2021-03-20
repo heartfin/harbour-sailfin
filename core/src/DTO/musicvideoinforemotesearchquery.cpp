@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-MusicVideoInfoRemoteSearchQuery::MusicVideoInfoRemoteSearchQuery(QObject *parent) {}
+MusicVideoInfoRemoteSearchQuery::MusicVideoInfoRemoteSearchQuery() {}
 
-MusicVideoInfoRemoteSearchQuery MusicVideoInfoRemoteSearchQuery::fromJson(QJsonObject source) {MusicVideoInfoRemoteSearchQuery instance;
-	instance->setFromJson(source, false);
+MusicVideoInfoRemoteSearchQuery MusicVideoInfoRemoteSearchQuery::fromJson(QJsonObject source) {
+	MusicVideoInfoRemoteSearchQuery instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MusicVideoInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
-	m_searchInfo = fromJsonValue<QSharedPointer<MusicVideoInfo>>(source["SearchInfo"]);
-	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
-	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
-	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+	m_searchInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<MusicVideoInfo>>(source["SearchInfo"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = Jellyfin::Support::fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = Jellyfin::Support::fromJsonValue<bool>(source["IncludeDisabledProviders"]);
 
 }
 	
 QJsonObject MusicVideoInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
-	result["SearchInfo"] = toJsonValue<QSharedPointer<MusicVideoInfo>>(m_searchInfo);
-	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
-	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
-	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<MusicVideoInfo>>(m_searchInfo);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = Jellyfin::Support::toJsonValue<bool>(m_includeDisabledProviders);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void MusicVideoInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newInclud
 	m_includeDisabledProviders = newIncludeDisabledProviders;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MusicVideoInfoRemoteSearchQuery = Jellyfin::DTO::MusicVideoInfoRemoteSearchQuery;
+
+template <>
+MusicVideoInfoRemoteSearchQuery fromJsonValue<MusicVideoInfoRemoteSearchQuery>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MusicVideoInfoRemoteSearchQuery::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

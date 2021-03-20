@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-AccessSchedule::AccessSchedule(QObject *parent) {}
+AccessSchedule::AccessSchedule() {}
 
-AccessSchedule AccessSchedule::fromJson(QJsonObject source) {AccessSchedule instance;
-	instance->setFromJson(source, false);
+AccessSchedule AccessSchedule::fromJson(QJsonObject source) {
+	AccessSchedule instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void AccessSchedule::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<qint32>(source["Id"]);
-	m_userId = fromJsonValue<QUuid>(source["UserId"]);
-	m_dayOfWeek = fromJsonValue<DynamicDayOfWeek>(source["DayOfWeek"]);
-	m_startHour = fromJsonValue<double>(source["StartHour"]);
-	m_endHour = fromJsonValue<double>(source["EndHour"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<qint32>(source["Id"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QUuid>(source["UserId"]);
+	m_dayOfWeek = Jellyfin::Support::fromJsonValue<DynamicDayOfWeek>(source["DayOfWeek"]);
+	m_startHour = Jellyfin::Support::fromJsonValue<double>(source["StartHour"]);
+	m_endHour = Jellyfin::Support::fromJsonValue<double>(source["EndHour"]);
 
 }
 	
 QJsonObject AccessSchedule::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<qint32>(m_jellyfinId);
-	result["UserId"] = toJsonValue<QUuid>(m_userId);
-	result["DayOfWeek"] = toJsonValue<DynamicDayOfWeek>(m_dayOfWeek);
-	result["StartHour"] = toJsonValue<double>(m_startHour);
-	result["EndHour"] = toJsonValue<double>(m_endHour);
+	result["Id"] = Jellyfin::Support::toJsonValue<qint32>(m_jellyfinId);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_userId);
+	result["DayOfWeek"] = Jellyfin::Support::toJsonValue<DynamicDayOfWeek>(m_dayOfWeek);
+	result["StartHour"] = Jellyfin::Support::toJsonValue<double>(m_startHour);
+	result["EndHour"] = Jellyfin::Support::toJsonValue<double>(m_endHour);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void AccessSchedule::setEndHour(double newEndHour) {
 	m_endHour = newEndHour;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using AccessSchedule = Jellyfin::DTO::AccessSchedule;
+
+template <>
+AccessSchedule fromJsonValue<AccessSchedule>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AccessSchedule::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

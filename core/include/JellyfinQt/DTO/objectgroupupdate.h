@@ -78,18 +78,6 @@ protected:
 	QVariant m_data;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ObjectGroupUpdate = Jellyfin::DTO::ObjectGroupUpdate;
-
-template <>
-ObjectGroupUpdate fromJsonValue<ObjectGroupUpdate>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ObjectGroupUpdate::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

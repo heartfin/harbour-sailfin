@@ -80,18 +80,6 @@ protected:
 	bool m_resetPassword;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using UpdateUserEasyPassword = Jellyfin::DTO::UpdateUserEasyPassword;
-
-template <>
-UpdateUserEasyPassword fromJsonValue<UpdateUserEasyPassword>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return UpdateUserEasyPassword::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

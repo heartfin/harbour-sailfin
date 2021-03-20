@@ -105,18 +105,6 @@ protected:
 	QDateTime m_emittedAt;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SendCommand = Jellyfin::DTO::SendCommand;
-
-template <>
-SendCommand fromJsonValue<SendCommand>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SendCommand::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

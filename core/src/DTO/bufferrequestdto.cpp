@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-BufferRequestDto::BufferRequestDto(QObject *parent) {}
+BufferRequestDto::BufferRequestDto() {}
 
-BufferRequestDto BufferRequestDto::fromJson(QJsonObject source) {BufferRequestDto instance;
-	instance->setFromJson(source, false);
+BufferRequestDto BufferRequestDto::fromJson(QJsonObject source) {
+	BufferRequestDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void BufferRequestDto::setFromJson(QJsonObject source) {
-	m_when = fromJsonValue<QDateTime>(source["When"]);
-	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
-	m_isPlaying = fromJsonValue<bool>(source["IsPlaying"]);
-	m_playlistItemId = fromJsonValue<QUuid>(source["PlaylistItemId"]);
+	m_when = Jellyfin::Support::fromJsonValue<QDateTime>(source["When"]);
+	m_positionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["PositionTicks"]);
+	m_isPlaying = Jellyfin::Support::fromJsonValue<bool>(source["IsPlaying"]);
+	m_playlistItemId = Jellyfin::Support::fromJsonValue<QUuid>(source["PlaylistItemId"]);
 
 }
 	
 QJsonObject BufferRequestDto::toJson() {
 	QJsonObject result;
-	result["When"] = toJsonValue<QDateTime>(m_when);
-	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
-	result["IsPlaying"] = toJsonValue<bool>(m_isPlaying);
-	result["PlaylistItemId"] = toJsonValue<QUuid>(m_playlistItemId);
+	result["When"] = Jellyfin::Support::toJsonValue<QDateTime>(m_when);
+	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
+	result["IsPlaying"] = Jellyfin::Support::toJsonValue<bool>(m_isPlaying);
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_playlistItemId);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void BufferRequestDto::setPlaylistItemId(QUuid newPlaylistItemId) {
 	m_playlistItemId = newPlaylistItemId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using BufferRequestDto = Jellyfin::DTO::BufferRequestDto;
+
+template <>
+BufferRequestDto fromJsonValue<BufferRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return BufferRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

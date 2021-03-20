@@ -32,42 +32,43 @@
 namespace Jellyfin {
 namespace DTO {
 
-TunerHostInfo::TunerHostInfo(QObject *parent) {}
+TunerHostInfo::TunerHostInfo() {}
 
-TunerHostInfo TunerHostInfo::fromJson(QJsonObject source) {TunerHostInfo instance;
-	instance->setFromJson(source, false);
+TunerHostInfo TunerHostInfo::fromJson(QJsonObject source) {
+	TunerHostInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void TunerHostInfo::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_url = fromJsonValue<QString>(source["Url"]);
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_deviceId = fromJsonValue<QString>(source["DeviceId"]);
-	m_friendlyName = fromJsonValue<QString>(source["FriendlyName"]);
-	m_importFavoritesOnly = fromJsonValue<bool>(source["ImportFavoritesOnly"]);
-	m_allowHWTranscoding = fromJsonValue<bool>(source["AllowHWTranscoding"]);
-	m_enableStreamLooping = fromJsonValue<bool>(source["EnableStreamLooping"]);
-	m_source = fromJsonValue<QString>(source["Source"]);
-	m_tunerCount = fromJsonValue<qint32>(source["TunerCount"]);
-	m_userAgent = fromJsonValue<QString>(source["UserAgent"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_url = Jellyfin::Support::fromJsonValue<QString>(source["Url"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_deviceId = Jellyfin::Support::fromJsonValue<QString>(source["DeviceId"]);
+	m_friendlyName = Jellyfin::Support::fromJsonValue<QString>(source["FriendlyName"]);
+	m_importFavoritesOnly = Jellyfin::Support::fromJsonValue<bool>(source["ImportFavoritesOnly"]);
+	m_allowHWTranscoding = Jellyfin::Support::fromJsonValue<bool>(source["AllowHWTranscoding"]);
+	m_enableStreamLooping = Jellyfin::Support::fromJsonValue<bool>(source["EnableStreamLooping"]);
+	m_source = Jellyfin::Support::fromJsonValue<QString>(source["Source"]);
+	m_tunerCount = Jellyfin::Support::fromJsonValue<qint32>(source["TunerCount"]);
+	m_userAgent = Jellyfin::Support::fromJsonValue<QString>(source["UserAgent"]);
 
 }
 	
 QJsonObject TunerHostInfo::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["Url"] = toJsonValue<QString>(m_url);
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["DeviceId"] = toJsonValue<QString>(m_deviceId);
-	result["FriendlyName"] = toJsonValue<QString>(m_friendlyName);
-	result["ImportFavoritesOnly"] = toJsonValue<bool>(m_importFavoritesOnly);
-	result["AllowHWTranscoding"] = toJsonValue<bool>(m_allowHWTranscoding);
-	result["EnableStreamLooping"] = toJsonValue<bool>(m_enableStreamLooping);
-	result["Source"] = toJsonValue<QString>(m_source);
-	result["TunerCount"] = toJsonValue<qint32>(m_tunerCount);
-	result["UserAgent"] = toJsonValue<QString>(m_userAgent);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["DeviceId"] = Jellyfin::Support::toJsonValue<QString>(m_deviceId);
+	result["FriendlyName"] = Jellyfin::Support::toJsonValue<QString>(m_friendlyName);
+	result["ImportFavoritesOnly"] = Jellyfin::Support::toJsonValue<bool>(m_importFavoritesOnly);
+	result["AllowHWTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_allowHWTranscoding);
+	result["EnableStreamLooping"] = Jellyfin::Support::toJsonValue<bool>(m_enableStreamLooping);
+	result["Source"] = Jellyfin::Support::toJsonValue<QString>(m_source);
+	result["TunerCount"] = Jellyfin::Support::toJsonValue<qint32>(m_tunerCount);
+	result["UserAgent"] = Jellyfin::Support::toJsonValue<QString>(m_userAgent);
 
 	return result;
 }
@@ -128,6 +129,17 @@ void TunerHostInfo::setUserAgent(QString newUserAgent) {
 	m_userAgent = newUserAgent;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using TunerHostInfo = Jellyfin::DTO::TunerHostInfo;
+
+template <>
+TunerHostInfo fromJsonValue<TunerHostInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TunerHostInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

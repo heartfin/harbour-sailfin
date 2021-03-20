@@ -56,34 +56,6 @@ private:
 
 typedef LocationTypeClass::Value LocationType;
 
-} // NS DTO
-
-namespace Support {
-
-using LocationType = Jellyfin::DTO::LocationType;
-using LocationTypeClass = Jellyfin::DTO::LocationTypeClass;
-
-template <>
-LocationType fromJsonValue<LocationType>(const QJsonValue &source) {
-	if (!source.isString()) return LocationTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("FileSystem")) {
-		return LocationTypeClass::FileSystem;
-	}
-	if (str == QStringLiteral("Remote")) {
-		return LocationTypeClass::Remote;
-	}
-	if (str == QStringLiteral("Virtual")) {
-		return LocationTypeClass::Virtual;
-	}
-	if (str == QStringLiteral("Offline")) {
-		return LocationTypeClass::Offline;
-	}
-	
-	return LocationTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

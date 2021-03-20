@@ -56,34 +56,6 @@ private:
 
 typedef FFmpegLocationClass::Value FFmpegLocation;
 
-} // NS DTO
-
-namespace Support {
-
-using FFmpegLocation = Jellyfin::DTO::FFmpegLocation;
-using FFmpegLocationClass = Jellyfin::DTO::FFmpegLocationClass;
-
-template <>
-FFmpegLocation fromJsonValue<FFmpegLocation>(const QJsonValue &source) {
-	if (!source.isString()) return FFmpegLocationClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("NotFound")) {
-		return FFmpegLocationClass::NotFound;
-	}
-	if (str == QStringLiteral("SetByArgument")) {
-		return FFmpegLocationClass::SetByArgument;
-	}
-	if (str == QStringLiteral("Custom")) {
-		return FFmpegLocationClass::Custom;
-	}
-	if (str == QStringLiteral("System")) {
-		return FFmpegLocationClass::System;
-	}
-	
-	return FFmpegLocationClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

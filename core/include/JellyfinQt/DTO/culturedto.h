@@ -96,18 +96,6 @@ protected:
 	QStringList m_threeLetterISOLanguageNames;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using CultureDto = Jellyfin::DTO::CultureDto;
-
-template <>
-CultureDto fromJsonValue<CultureDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return CultureDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-PathSubstitution::PathSubstitution(QObject *parent) {}
+PathSubstitution::PathSubstitution() {}
 
-PathSubstitution PathSubstitution::fromJson(QJsonObject source) {PathSubstitution instance;
-	instance->setFromJson(source, false);
+PathSubstitution PathSubstitution::fromJson(QJsonObject source) {
+	PathSubstitution instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PathSubstitution::setFromJson(QJsonObject source) {
-	m_from = fromJsonValue<QString>(source["From"]);
-	m_to = fromJsonValue<QString>(source["To"]);
+	m_from = Jellyfin::Support::fromJsonValue<QString>(source["From"]);
+	m_to = Jellyfin::Support::fromJsonValue<QString>(source["To"]);
 
 }
 	
 QJsonObject PathSubstitution::toJson() {
 	QJsonObject result;
-	result["From"] = toJsonValue<QString>(m_from);
-	result["To"] = toJsonValue<QString>(m_to);
+	result["From"] = Jellyfin::Support::toJsonValue<QString>(m_from);
+	result["To"] = Jellyfin::Support::toJsonValue<QString>(m_to);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void PathSubstitution::setTo(QString newTo) {
 	m_to = newTo;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PathSubstitution = Jellyfin::DTO::PathSubstitution;
+
+template <>
+PathSubstitution fromJsonValue<PathSubstitution>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PathSubstitution::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

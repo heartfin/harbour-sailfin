@@ -294,18 +294,6 @@ protected:
 	double m_primaryImageAspectRatio;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SearchHint = Jellyfin::DTO::SearchHint;
-
-template <>
-SearchHint fromJsonValue<SearchHint>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SearchHint::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

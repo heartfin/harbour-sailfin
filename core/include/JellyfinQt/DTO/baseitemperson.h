@@ -107,18 +107,6 @@ protected:
 	QJsonObject m_imageBlurHashes;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using BaseItemPerson = Jellyfin::DTO::BaseItemPerson;
-
-template <>
-BaseItemPerson fromJsonValue<BaseItemPerson>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return BaseItemPerson::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

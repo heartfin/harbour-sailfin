@@ -34,5 +34,30 @@ namespace DTO {
 
 MediaSourceTypeClass::MediaSourceTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using MediaSourceType = Jellyfin::DTO::MediaSourceType;
+
+template <>
+MediaSourceType fromJsonValue<MediaSourceType>(const QJsonValue &source) {
+	if (!source.isString()) return MediaSourceType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Default")) {
+		return MediaSourceType::Default;
+	}
+	if (str == QStringLiteral("Grouping")) {
+		return MediaSourceType::Grouping;
+	}
+	if (str == QStringLiteral("Placeholder")) {
+		return MediaSourceType::Placeholder;
+	}
+	
+	return MediaSourceType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

@@ -61,18 +61,6 @@ protected:
 	qint64 m_ping;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PingRequestDto = Jellyfin::DTO::PingRequestDto;
-
-template <>
-PingRequestDto fromJsonValue<PingRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PingRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

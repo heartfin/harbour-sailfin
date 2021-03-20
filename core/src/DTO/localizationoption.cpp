@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-LocalizationOption::LocalizationOption(QObject *parent) {}
+LocalizationOption::LocalizationOption() {}
 
-LocalizationOption LocalizationOption::fromJson(QJsonObject source) {LocalizationOption instance;
-	instance->setFromJson(source, false);
+LocalizationOption LocalizationOption::fromJson(QJsonObject source) {
+	LocalizationOption instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void LocalizationOption::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_value = fromJsonValue<QString>(source["Value"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_value = Jellyfin::Support::fromJsonValue<QString>(source["Value"]);
 
 }
 	
 QJsonObject LocalizationOption::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Value"] = toJsonValue<QString>(m_value);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void LocalizationOption::setValue(QString newValue) {
 	m_value = newValue;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using LocalizationOption = Jellyfin::DTO::LocalizationOption;
+
+template <>
+LocalizationOption fromJsonValue<LocalizationOption>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LocalizationOption::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -73,18 +73,6 @@ protected:
 	QString m_jellyfinId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TunerChannelMapping = Jellyfin::DTO::TunerChannelMapping;
-
-template <>
-TunerChannelMapping fromJsonValue<TunerChannelMapping>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TunerChannelMapping::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -34,5 +34,54 @@ namespace DTO {
 
 GroupUpdateTypeClass::GroupUpdateTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using GroupUpdateType = Jellyfin::DTO::GroupUpdateType;
+
+template <>
+GroupUpdateType fromJsonValue<GroupUpdateType>(const QJsonValue &source) {
+	if (!source.isString()) return GroupUpdateType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("UserJoined")) {
+		return GroupUpdateType::UserJoined;
+	}
+	if (str == QStringLiteral("UserLeft")) {
+		return GroupUpdateType::UserLeft;
+	}
+	if (str == QStringLiteral("GroupJoined")) {
+		return GroupUpdateType::GroupJoined;
+	}
+	if (str == QStringLiteral("GroupLeft")) {
+		return GroupUpdateType::GroupLeft;
+	}
+	if (str == QStringLiteral("StateUpdate")) {
+		return GroupUpdateType::StateUpdate;
+	}
+	if (str == QStringLiteral("PlayQueue")) {
+		return GroupUpdateType::PlayQueue;
+	}
+	if (str == QStringLiteral("NotInGroup")) {
+		return GroupUpdateType::NotInGroup;
+	}
+	if (str == QStringLiteral("GroupDoesNotExist")) {
+		return GroupUpdateType::GroupDoesNotExist;
+	}
+	if (str == QStringLiteral("CreateGroupDenied")) {
+		return GroupUpdateType::CreateGroupDenied;
+	}
+	if (str == QStringLiteral("JoinGroupDenied")) {
+		return GroupUpdateType::JoinGroupDenied;
+	}
+	if (str == QStringLiteral("LibraryAccessDenied")) {
+		return GroupUpdateType::LibraryAccessDenied;
+	}
+	
+	return GroupUpdateType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

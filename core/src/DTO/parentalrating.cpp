@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-ParentalRating::ParentalRating(QObject *parent) {}
+ParentalRating::ParentalRating() {}
 
-ParentalRating ParentalRating::fromJson(QJsonObject source) {ParentalRating instance;
-	instance->setFromJson(source, false);
+ParentalRating ParentalRating::fromJson(QJsonObject source) {
+	ParentalRating instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ParentalRating::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_value = fromJsonValue<qint32>(source["Value"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_value = Jellyfin::Support::fromJsonValue<qint32>(source["Value"]);
 
 }
 	
 QJsonObject ParentalRating::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Value"] = toJsonValue<qint32>(m_value);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Value"] = Jellyfin::Support::toJsonValue<qint32>(m_value);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void ParentalRating::setValue(qint32 newValue) {
 	m_value = newValue;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ParentalRating = Jellyfin::DTO::ParentalRating;
+
+template <>
+ParentalRating fromJsonValue<ParentalRating>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ParentalRating::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

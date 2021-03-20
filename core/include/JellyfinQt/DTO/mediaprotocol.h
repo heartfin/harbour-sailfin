@@ -59,43 +59,6 @@ private:
 
 typedef MediaProtocolClass::Value MediaProtocol;
 
-} // NS DTO
-
-namespace Support {
-
-using MediaProtocol = Jellyfin::DTO::MediaProtocol;
-using MediaProtocolClass = Jellyfin::DTO::MediaProtocolClass;
-
-template <>
-MediaProtocol fromJsonValue<MediaProtocol>(const QJsonValue &source) {
-	if (!source.isString()) return MediaProtocolClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("File")) {
-		return MediaProtocolClass::File;
-	}
-	if (str == QStringLiteral("Http")) {
-		return MediaProtocolClass::Http;
-	}
-	if (str == QStringLiteral("Rtmp")) {
-		return MediaProtocolClass::Rtmp;
-	}
-	if (str == QStringLiteral("Rtsp")) {
-		return MediaProtocolClass::Rtsp;
-	}
-	if (str == QStringLiteral("Udp")) {
-		return MediaProtocolClass::Udp;
-	}
-	if (str == QStringLiteral("Rtp")) {
-		return MediaProtocolClass::Rtp;
-	}
-	if (str == QStringLiteral("Ftp")) {
-		return MediaProtocolClass::Ftp;
-	}
-	
-	return MediaProtocolClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

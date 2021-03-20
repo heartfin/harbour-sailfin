@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-SubtitleProfile::SubtitleProfile(QObject *parent) {}
+SubtitleProfile::SubtitleProfile() {}
 
-SubtitleProfile SubtitleProfile::fromJson(QJsonObject source) {SubtitleProfile instance;
-	instance->setFromJson(source, false);
+SubtitleProfile SubtitleProfile::fromJson(QJsonObject source) {
+	SubtitleProfile instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SubtitleProfile::setFromJson(QJsonObject source) {
-	m_format = fromJsonValue<QString>(source["Format"]);
-	m_method = fromJsonValue<SubtitleDeliveryMethod>(source["Method"]);
-	m_didlMode = fromJsonValue<QString>(source["DidlMode"]);
-	m_language = fromJsonValue<QString>(source["Language"]);
-	m_container = fromJsonValue<QString>(source["Container"]);
+	m_format = Jellyfin::Support::fromJsonValue<QString>(source["Format"]);
+	m_method = Jellyfin::Support::fromJsonValue<SubtitleDeliveryMethod>(source["Method"]);
+	m_didlMode = Jellyfin::Support::fromJsonValue<QString>(source["DidlMode"]);
+	m_language = Jellyfin::Support::fromJsonValue<QString>(source["Language"]);
+	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
 
 }
 	
 QJsonObject SubtitleProfile::toJson() {
 	QJsonObject result;
-	result["Format"] = toJsonValue<QString>(m_format);
-	result["Method"] = toJsonValue<SubtitleDeliveryMethod>(m_method);
-	result["DidlMode"] = toJsonValue<QString>(m_didlMode);
-	result["Language"] = toJsonValue<QString>(m_language);
-	result["Container"] = toJsonValue<QString>(m_container);
+	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
+	result["Method"] = Jellyfin::Support::toJsonValue<SubtitleDeliveryMethod>(m_method);
+	result["DidlMode"] = Jellyfin::Support::toJsonValue<QString>(m_didlMode);
+	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void SubtitleProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SubtitleProfile = Jellyfin::DTO::SubtitleProfile;
+
+template <>
+SubtitleProfile fromJsonValue<SubtitleProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SubtitleProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

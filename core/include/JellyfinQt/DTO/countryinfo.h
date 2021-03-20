@@ -89,18 +89,6 @@ protected:
 	QString m_threeLetterISORegionName;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using CountryInfo = Jellyfin::DTO::CountryInfo;
-
-template <>
-CountryInfo fromJsonValue<CountryInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return CountryInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

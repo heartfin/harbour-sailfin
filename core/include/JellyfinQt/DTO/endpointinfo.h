@@ -62,18 +62,6 @@ protected:
 	bool m_isInNetwork;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using EndPointInfo = Jellyfin::DTO::EndPointInfo;
-
-template <>
-EndPointInfo fromJsonValue<EndPointInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return EndPointInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

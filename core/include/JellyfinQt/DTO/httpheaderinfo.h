@@ -69,18 +69,6 @@ protected:
 	HeaderMatchType m_match;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using HttpHeaderInfo = Jellyfin::DTO::HttpHeaderInfo;
-
-template <>
-HttpHeaderInfo fromJsonValue<HttpHeaderInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return HttpHeaderInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

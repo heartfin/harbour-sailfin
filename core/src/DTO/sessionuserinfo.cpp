@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-SessionUserInfo::SessionUserInfo(QObject *parent) {}
+SessionUserInfo::SessionUserInfo() {}
 
-SessionUserInfo SessionUserInfo::fromJson(QJsonObject source) {SessionUserInfo instance;
-	instance->setFromJson(source, false);
+SessionUserInfo SessionUserInfo::fromJson(QJsonObject source) {
+	SessionUserInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SessionUserInfo::setFromJson(QJsonObject source) {
-	m_userId = fromJsonValue<QUuid>(source["UserId"]);
-	m_userName = fromJsonValue<QString>(source["UserName"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QUuid>(source["UserId"]);
+	m_userName = Jellyfin::Support::fromJsonValue<QString>(source["UserName"]);
 
 }
 	
 QJsonObject SessionUserInfo::toJson() {
 	QJsonObject result;
-	result["UserId"] = toJsonValue<QUuid>(m_userId);
-	result["UserName"] = toJsonValue<QString>(m_userName);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_userId);
+	result["UserName"] = Jellyfin::Support::toJsonValue<QString>(m_userName);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void SessionUserInfo::setUserName(QString newUserName) {
 	m_userName = newUserName;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SessionUserInfo = Jellyfin::DTO::SessionUserInfo;
+
+template <>
+SessionUserInfo fromJsonValue<SessionUserInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SessionUserInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

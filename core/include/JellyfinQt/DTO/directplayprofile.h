@@ -74,18 +74,6 @@ protected:
 	DlnaProfileType m_type;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using DirectPlayProfile = Jellyfin::DTO::DirectPlayProfile;
-
-template <>
-DirectPlayProfile fromJsonValue<DirectPlayProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return DirectPlayProfile::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

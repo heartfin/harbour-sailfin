@@ -90,18 +90,6 @@ protected:
 	QStringList m_imageFetcherOrder;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MetadataOptions = Jellyfin::DTO::MetadataOptions;
-
-template <>
-MetadataOptions fromJsonValue<MetadataOptions>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MetadataOptions::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-ExternalUrl::ExternalUrl(QObject *parent) {}
+ExternalUrl::ExternalUrl() {}
 
-ExternalUrl ExternalUrl::fromJson(QJsonObject source) {ExternalUrl instance;
-	instance->setFromJson(source, false);
+ExternalUrl ExternalUrl::fromJson(QJsonObject source) {
+	ExternalUrl instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ExternalUrl::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_url = fromJsonValue<QString>(source["Url"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_url = Jellyfin::Support::fromJsonValue<QString>(source["Url"]);
 
 }
 	
 QJsonObject ExternalUrl::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Url"] = toJsonValue<QString>(m_url);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void ExternalUrl::setUrl(QString newUrl) {
 	m_url = newUrl;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ExternalUrl = Jellyfin::DTO::ExternalUrl;
+
+template <>
+ExternalUrl fromJsonValue<ExternalUrl>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ExternalUrl::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

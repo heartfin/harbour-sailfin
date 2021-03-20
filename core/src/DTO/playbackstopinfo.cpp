@@ -32,42 +32,43 @@
 namespace Jellyfin {
 namespace DTO {
 
-PlaybackStopInfo::PlaybackStopInfo(QObject *parent) {}
+PlaybackStopInfo::PlaybackStopInfo() {}
 
-PlaybackStopInfo PlaybackStopInfo::fromJson(QJsonObject source) {PlaybackStopInfo instance;
-	instance->setFromJson(source, false);
+PlaybackStopInfo PlaybackStopInfo::fromJson(QJsonObject source) {
+	PlaybackStopInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PlaybackStopInfo::setFromJson(QJsonObject source) {
-	m_item = fromJsonValue<QSharedPointer<BaseItemDto>>(source["Item"]);
-	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
-	m_sessionId = fromJsonValue<QString>(source["SessionId"]);
-	m_mediaSourceId = fromJsonValue<QString>(source["MediaSourceId"]);
-	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
-	m_liveStreamId = fromJsonValue<QString>(source["LiveStreamId"]);
-	m_playSessionId = fromJsonValue<QString>(source["PlaySessionId"]);
-	m_failed = fromJsonValue<bool>(source["Failed"]);
-	m_nextMediaType = fromJsonValue<QString>(source["NextMediaType"]);
-	m_playlistItemId = fromJsonValue<QString>(source["PlaylistItemId"]);
-	m_nowPlayingQueue = fromJsonValue<QList<QSharedPointer<QueueItem>>>(source["NowPlayingQueue"]);
+	m_item = Jellyfin::Support::fromJsonValue<QSharedPointer<BaseItemDto>>(source["Item"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QUuid>(source["ItemId"]);
+	m_sessionId = Jellyfin::Support::fromJsonValue<QString>(source["SessionId"]);
+	m_mediaSourceId = Jellyfin::Support::fromJsonValue<QString>(source["MediaSourceId"]);
+	m_positionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["PositionTicks"]);
+	m_liveStreamId = Jellyfin::Support::fromJsonValue<QString>(source["LiveStreamId"]);
+	m_playSessionId = Jellyfin::Support::fromJsonValue<QString>(source["PlaySessionId"]);
+	m_failed = Jellyfin::Support::fromJsonValue<bool>(source["Failed"]);
+	m_nextMediaType = Jellyfin::Support::fromJsonValue<QString>(source["NextMediaType"]);
+	m_playlistItemId = Jellyfin::Support::fromJsonValue<QString>(source["PlaylistItemId"]);
+	m_nowPlayingQueue = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<QueueItem>>>(source["NowPlayingQueue"]);
 
 }
 	
 QJsonObject PlaybackStopInfo::toJson() {
 	QJsonObject result;
-	result["Item"] = toJsonValue<QSharedPointer<BaseItemDto>>(m_item);
-	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
-	result["SessionId"] = toJsonValue<QString>(m_sessionId);
-	result["MediaSourceId"] = toJsonValue<QString>(m_mediaSourceId);
-	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
-	result["LiveStreamId"] = toJsonValue<QString>(m_liveStreamId);
-	result["PlaySessionId"] = toJsonValue<QString>(m_playSessionId);
-	result["Failed"] = toJsonValue<bool>(m_failed);
-	result["NextMediaType"] = toJsonValue<QString>(m_nextMediaType);
-	result["PlaylistItemId"] = toJsonValue<QString>(m_playlistItemId);
-	result["NowPlayingQueue"] = toJsonValue<QList<QSharedPointer<QueueItem>>>(m_nowPlayingQueue);
+	result["Item"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_item);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_itemId);
+	result["SessionId"] = Jellyfin::Support::toJsonValue<QString>(m_sessionId);
+	result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
+	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
+	result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
+	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
+	result["Failed"] = Jellyfin::Support::toJsonValue<bool>(m_failed);
+	result["NextMediaType"] = Jellyfin::Support::toJsonValue<QString>(m_nextMediaType);
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
+	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<QueueItem>>>(m_nowPlayingQueue);
 
 	return result;
 }
@@ -128,6 +129,17 @@ void PlaybackStopInfo::setNowPlayingQueue(QList<QSharedPointer<QueueItem>> newNo
 	m_nowPlayingQueue = newNowPlayingQueue;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PlaybackStopInfo = Jellyfin::DTO::PlaybackStopInfo;
+
+template <>
+PlaybackStopInfo fromJsonValue<PlaybackStopInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlaybackStopInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

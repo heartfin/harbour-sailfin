@@ -35,7 +35,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <functional>
 
 #include <JellyfinQt/DTO/baseitemdto.h>
-#include "remotedata.h"
+#include "support/jsonconv.h"
+#include "model/item.h"
 
 #include "apiclient.h"
 
@@ -78,7 +79,7 @@ public:
     Q_PROPERTY(PlayMethod playMethod READ playMethod NOTIFY playMethodChanged)
 
     // Current Item and queue informatoion
-    Q_PROPERTY(Item *item READ item NOTIFY itemChanged)
+    Q_PROPERTY(Model::Item *item READ item NOTIFY itemChanged)
     Q_PROPERTY(QAbstractItemModel *queue READ queue NOTIFY queueChanged)
     Q_PROPERTY(int queueIndex READ queueIndex NOTIFY queueIndexChanged)
 
@@ -92,7 +93,7 @@ public:
     Q_PROPERTY(QMediaPlayer::State playbackState READ playbackState NOTIFY playbackStateChanged)
     Q_PROPERTY(qint64 position READ position NOTIFY positionChanged)
 
-    BaseItemDto *item() const { return m_item->data(); }
+    Model::Item *item() const { return m_item; }
     void setApiClient(ApiClient *apiClient);
 
     QString streamUrl() const { return m_streamUrl; }
@@ -166,7 +167,7 @@ private slots:
 private:
     QTimer m_updateTimer;
     ApiClient *m_apiClient = nullptr;
-    RemoteItem *m_item;
+    Model::Item *m_item;
     QString m_streamUrl;
     QString m_playSessionId;
     int m_audioIndex = 0;
@@ -186,7 +187,7 @@ private:
     int m_queueIndex = 0;
     bool m_resumePlayback = true;
 
-    void setItem(BaseItemDto *newItem);
+    void setItem(Model::Item *newItem);
     void swapMediaPlayer();
 
     bool m_qmlIsParsingComponent = false;
@@ -199,12 +200,12 @@ private:
     /**
      * @brief Retrieves the URL of the stream to open.
      */
-    void fetchStreamUrl(const BaseItemDto *item, bool autoOpen, const FetchCallback &callback);
-    void fetchAndSetStreamUrl(const BaseItemDto *item);
+    void fetchStreamUrl(const Model::Item *item, bool autoOpen, const FetchCallback &callback);
+    void fetchAndSetStreamUrl(const Model::Item *item);
     void setStreamUrl(const QString &streamUrl);
     void setPlaybackState(QMediaPlayer::State newState);
 
-    BaseItemDto *nextItem();
+    Model::Item *nextItem();
     void setQueue(ItemModel *itemModel);
 
     // Factor to multiply with when converting from milliseconds to ticks.

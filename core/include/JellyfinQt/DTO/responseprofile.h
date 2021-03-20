@@ -93,18 +93,6 @@ protected:
 	QList<QSharedPointer<ProfileCondition>> m_conditions;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ResponseProfile = Jellyfin::DTO::ResponseProfile;
-
-template <>
-ResponseProfile fromJsonValue<ResponseProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ResponseProfile::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-NotificationResultDto::NotificationResultDto(QObject *parent) {}
+NotificationResultDto::NotificationResultDto() {}
 
-NotificationResultDto NotificationResultDto::fromJson(QJsonObject source) {NotificationResultDto instance;
-	instance->setFromJson(source, false);
+NotificationResultDto NotificationResultDto::fromJson(QJsonObject source) {
+	NotificationResultDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void NotificationResultDto::setFromJson(QJsonObject source) {
-	m_notifications = fromJsonValue<QList<QSharedPointer<NotificationDto>>>(source["Notifications"]);
-	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_notifications = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NotificationDto>>>(source["Notifications"]);
+	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 
 }
 	
 QJsonObject NotificationResultDto::toJson() {
 	QJsonObject result;
-	result["Notifications"] = toJsonValue<QList<QSharedPointer<NotificationDto>>>(m_notifications);
-	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["Notifications"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NotificationDto>>>(m_notifications);
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void NotificationResultDto::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using NotificationResultDto = Jellyfin::DTO::NotificationResultDto;
+
+template <>
+NotificationResultDto fromJsonValue<NotificationResultDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NotificationResultDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

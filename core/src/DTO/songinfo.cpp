@@ -32,46 +32,47 @@
 namespace Jellyfin {
 namespace DTO {
 
-SongInfo::SongInfo(QObject *parent) {}
+SongInfo::SongInfo() {}
 
-SongInfo SongInfo::fromJson(QJsonObject source) {SongInfo instance;
-	instance->setFromJson(source, false);
+SongInfo SongInfo::fromJson(QJsonObject source) {
+	SongInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SongInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_metadataLanguage = fromJsonValue<QString>(source["MetadataLanguage"]);
-	m_metadataCountryCode = fromJsonValue<QString>(source["MetadataCountryCode"]);
-	m_providerIds = fromJsonValue<QJsonObject>(source["ProviderIds"]);
-	m_year = fromJsonValue<qint32>(source["Year"]);
-	m_indexNumber = fromJsonValue<qint32>(source["IndexNumber"]);
-	m_parentIndexNumber = fromJsonValue<qint32>(source["ParentIndexNumber"]);
-	m_premiereDate = fromJsonValue<QDateTime>(source["PremiereDate"]);
-	m_isAutomated = fromJsonValue<bool>(source["IsAutomated"]);
-	m_albumArtists = fromJsonValue<QStringList>(source["AlbumArtists"]);
-	m_album = fromJsonValue<QString>(source["Album"]);
-	m_artists = fromJsonValue<QStringList>(source["Artists"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
+	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
+	m_providerIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ProviderIds"]);
+	m_year = Jellyfin::Support::fromJsonValue<qint32>(source["Year"]);
+	m_indexNumber = Jellyfin::Support::fromJsonValue<qint32>(source["IndexNumber"]);
+	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<qint32>(source["ParentIndexNumber"]);
+	m_premiereDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["PremiereDate"]);
+	m_isAutomated = Jellyfin::Support::fromJsonValue<bool>(source["IsAutomated"]);
+	m_albumArtists = Jellyfin::Support::fromJsonValue<QStringList>(source["AlbumArtists"]);
+	m_album = Jellyfin::Support::fromJsonValue<QString>(source["Album"]);
+	m_artists = Jellyfin::Support::fromJsonValue<QStringList>(source["Artists"]);
 
 }
 	
 QJsonObject SongInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["MetadataLanguage"] = toJsonValue<QString>(m_metadataLanguage);
-	result["MetadataCountryCode"] = toJsonValue<QString>(m_metadataCountryCode);
-	result["ProviderIds"] = toJsonValue<QJsonObject>(m_providerIds);
-	result["Year"] = toJsonValue<qint32>(m_year);
-	result["IndexNumber"] = toJsonValue<qint32>(m_indexNumber);
-	result["ParentIndexNumber"] = toJsonValue<qint32>(m_parentIndexNumber);
-	result["PremiereDate"] = toJsonValue<QDateTime>(m_premiereDate);
-	result["IsAutomated"] = toJsonValue<bool>(m_isAutomated);
-	result["AlbumArtists"] = toJsonValue<QStringList>(m_albumArtists);
-	result["Album"] = toJsonValue<QString>(m_album);
-	result["Artists"] = toJsonValue<QStringList>(m_artists);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["MetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_metadataLanguage);
+	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
+	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
+	result["Year"] = Jellyfin::Support::toJsonValue<qint32>(m_year);
+	result["IndexNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_indexNumber);
+	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_parentIndexNumber);
+	result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
+	result["IsAutomated"] = Jellyfin::Support::toJsonValue<bool>(m_isAutomated);
+	result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QStringList>(m_albumArtists);
+	result["Album"] = Jellyfin::Support::toJsonValue<QString>(m_album);
+	result["Artists"] = Jellyfin::Support::toJsonValue<QStringList>(m_artists);
 
 	return result;
 }
@@ -142,6 +143,17 @@ void SongInfo::setArtists(QStringList newArtists) {
 	m_artists = newArtists;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SongInfo = Jellyfin::DTO::SongInfo;
+
+template <>
+SongInfo fromJsonValue<SongInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SongInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

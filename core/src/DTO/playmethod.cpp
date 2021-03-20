@@ -34,5 +34,30 @@ namespace DTO {
 
 PlayMethodClass::PlayMethodClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using PlayMethod = Jellyfin::DTO::PlayMethod;
+
+template <>
+PlayMethod fromJsonValue<PlayMethod>(const QJsonValue &source) {
+	if (!source.isString()) return PlayMethod::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Transcode")) {
+		return PlayMethod::Transcode;
+	}
+	if (str == QStringLiteral("DirectStream")) {
+		return PlayMethod::DirectStream;
+	}
+	if (str == QStringLiteral("DirectPlay")) {
+		return PlayMethod::DirectPlay;
+	}
+	
+	return PlayMethod::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-ActivityLogEntryQueryResult::ActivityLogEntryQueryResult(QObject *parent) {}
+ActivityLogEntryQueryResult::ActivityLogEntryQueryResult() {}
 
-ActivityLogEntryQueryResult ActivityLogEntryQueryResult::fromJson(QJsonObject source) {ActivityLogEntryQueryResult instance;
-	instance->setFromJson(source, false);
+ActivityLogEntryQueryResult ActivityLogEntryQueryResult::fromJson(QJsonObject source) {
+	ActivityLogEntryQueryResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ActivityLogEntryQueryResult::setFromJson(QJsonObject source) {
-	m_items = fromJsonValue<QList<QSharedPointer<ActivityLogEntry>>>(source["Items"]);
-	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
-	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ActivityLogEntry>>>(source["Items"]);
+	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
 }
 	
 QJsonObject ActivityLogEntryQueryResult::toJson() {
 	QJsonObject result;
-	result["Items"] = toJsonValue<QList<QSharedPointer<ActivityLogEntry>>>(m_items);
-	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
-	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ActivityLogEntry>>>(m_items);
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void ActivityLogEntryQueryResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ActivityLogEntryQueryResult = Jellyfin::DTO::ActivityLogEntryQueryResult;
+
+template <>
+ActivityLogEntryQueryResult fromJsonValue<ActivityLogEntryQueryResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ActivityLogEntryQueryResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -55,31 +55,6 @@ private:
 
 typedef PlayMethodClass::Value PlayMethod;
 
-} // NS DTO
-
-namespace Support {
-
-using PlayMethod = Jellyfin::DTO::PlayMethod;
-using PlayMethodClass = Jellyfin::DTO::PlayMethodClass;
-
-template <>
-PlayMethod fromJsonValue<PlayMethod>(const QJsonValue &source) {
-	if (!source.isString()) return PlayMethodClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Transcode")) {
-		return PlayMethodClass::Transcode;
-	}
-	if (str == QStringLiteral("DirectStream")) {
-		return PlayMethodClass::DirectStream;
-	}
-	if (str == QStringLiteral("DirectPlay")) {
-		return PlayMethodClass::DirectPlay;
-	}
-	
-	return PlayMethodClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

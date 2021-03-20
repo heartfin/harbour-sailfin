@@ -34,5 +34,36 @@ namespace DTO {
 
 Video3DFormatClass::Video3DFormatClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using Video3DFormat = Jellyfin::DTO::Video3DFormat;
+
+template <>
+Video3DFormat fromJsonValue<Video3DFormat>(const QJsonValue &source) {
+	if (!source.isString()) return Video3DFormat::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("HalfSideBySide")) {
+		return Video3DFormat::HalfSideBySide;
+	}
+	if (str == QStringLiteral("FullSideBySide")) {
+		return Video3DFormat::FullSideBySide;
+	}
+	if (str == QStringLiteral("FullTopAndBottom")) {
+		return Video3DFormat::FullTopAndBottom;
+	}
+	if (str == QStringLiteral("HalfTopAndBottom")) {
+		return Video3DFormat::HalfTopAndBottom;
+	}
+	if (str == QStringLiteral("MVC")) {
+		return Video3DFormat::MVC;
+	}
+	
+	return Video3DFormat::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

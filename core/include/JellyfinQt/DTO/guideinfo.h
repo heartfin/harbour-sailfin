@@ -71,18 +71,6 @@ protected:
 	QDateTime m_endDate;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using GuideInfo = Jellyfin::DTO::GuideInfo;
-
-template <>
-GuideInfo fromJsonValue<GuideInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return GuideInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

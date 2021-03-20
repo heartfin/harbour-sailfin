@@ -34,5 +34,27 @@ namespace DTO {
 
 RatingTypeClass::RatingTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using RatingType = Jellyfin::DTO::RatingType;
+
+template <>
+RatingType fromJsonValue<RatingType>(const QJsonValue &source) {
+	if (!source.isString()) return RatingType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Score")) {
+		return RatingType::Score;
+	}
+	if (str == QStringLiteral("Likes")) {
+		return RatingType::Likes;
+	}
+	
+	return RatingType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

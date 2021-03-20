@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-PlaystateRequest::PlaystateRequest(QObject *parent) {}
+PlaystateRequest::PlaystateRequest() {}
 
-PlaystateRequest PlaystateRequest::fromJson(QJsonObject source) {PlaystateRequest instance;
-	instance->setFromJson(source, false);
+PlaystateRequest PlaystateRequest::fromJson(QJsonObject source) {
+	PlaystateRequest instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PlaystateRequest::setFromJson(QJsonObject source) {
-	m_command = fromJsonValue<PlaystateCommand>(source["Command"]);
-	m_seekPositionTicks = fromJsonValue<qint64>(source["SeekPositionTicks"]);
-	m_controllingUserId = fromJsonValue<QString>(source["ControllingUserId"]);
+	m_command = Jellyfin::Support::fromJsonValue<PlaystateCommand>(source["Command"]);
+	m_seekPositionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["SeekPositionTicks"]);
+	m_controllingUserId = Jellyfin::Support::fromJsonValue<QString>(source["ControllingUserId"]);
 
 }
 	
 QJsonObject PlaystateRequest::toJson() {
 	QJsonObject result;
-	result["Command"] = toJsonValue<PlaystateCommand>(m_command);
-	result["SeekPositionTicks"] = toJsonValue<qint64>(m_seekPositionTicks);
-	result["ControllingUserId"] = toJsonValue<QString>(m_controllingUserId);
+	result["Command"] = Jellyfin::Support::toJsonValue<PlaystateCommand>(m_command);
+	result["SeekPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_seekPositionTicks);
+	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QString>(m_controllingUserId);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void PlaystateRequest::setControllingUserId(QString newControllingUserId) {
 	m_controllingUserId = newControllingUserId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PlaystateRequest = Jellyfin::DTO::PlaystateRequest;
+
+template <>
+PlaystateRequest fromJsonValue<PlaystateRequest>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlaystateRequest::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

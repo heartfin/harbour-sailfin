@@ -34,5 +34,30 @@ namespace DTO {
 
 DayPatternClass::DayPatternClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using DayPattern = Jellyfin::DTO::DayPattern;
+
+template <>
+DayPattern fromJsonValue<DayPattern>(const QJsonValue &source) {
+	if (!source.isString()) return DayPattern::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Daily")) {
+		return DayPattern::Daily;
+	}
+	if (str == QStringLiteral("Weekdays")) {
+		return DayPattern::Weekdays;
+	}
+	if (str == QStringLiteral("Weekends")) {
+		return DayPattern::Weekends;
+	}
+	
+	return DayPattern::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

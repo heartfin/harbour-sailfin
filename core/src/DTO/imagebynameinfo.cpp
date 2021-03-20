@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-ImageByNameInfo::ImageByNameInfo(QObject *parent) {}
+ImageByNameInfo::ImageByNameInfo() {}
 
-ImageByNameInfo ImageByNameInfo::fromJson(QJsonObject source) {ImageByNameInfo instance;
-	instance->setFromJson(source, false);
+ImageByNameInfo ImageByNameInfo::fromJson(QJsonObject source) {
+	ImageByNameInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ImageByNameInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_theme = fromJsonValue<QString>(source["Theme"]);
-	m_context = fromJsonValue<QString>(source["Context"]);
-	m_fileLength = fromJsonValue<qint64>(source["FileLength"]);
-	m_format = fromJsonValue<QString>(source["Format"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_theme = Jellyfin::Support::fromJsonValue<QString>(source["Theme"]);
+	m_context = Jellyfin::Support::fromJsonValue<QString>(source["Context"]);
+	m_fileLength = Jellyfin::Support::fromJsonValue<qint64>(source["FileLength"]);
+	m_format = Jellyfin::Support::fromJsonValue<QString>(source["Format"]);
 
 }
 	
 QJsonObject ImageByNameInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Theme"] = toJsonValue<QString>(m_theme);
-	result["Context"] = toJsonValue<QString>(m_context);
-	result["FileLength"] = toJsonValue<qint64>(m_fileLength);
-	result["Format"] = toJsonValue<QString>(m_format);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Theme"] = Jellyfin::Support::toJsonValue<QString>(m_theme);
+	result["Context"] = Jellyfin::Support::toJsonValue<QString>(m_context);
+	result["FileLength"] = Jellyfin::Support::toJsonValue<qint64>(m_fileLength);
+	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void ImageByNameInfo::setFormat(QString newFormat) {
 	m_format = newFormat;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ImageByNameInfo = Jellyfin::DTO::ImageByNameInfo;
+
+template <>
+ImageByNameInfo fromJsonValue<ImageByNameInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ImageByNameInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

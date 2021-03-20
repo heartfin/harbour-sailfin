@@ -109,18 +109,6 @@ protected:
 	bool m_isHashMatch;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using RemoteSubtitleInfo = Jellyfin::DTO::RemoteSubtitleInfo;
-
-template <>
-RemoteSubtitleInfo fromJsonValue<RemoteSubtitleInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return RemoteSubtitleInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

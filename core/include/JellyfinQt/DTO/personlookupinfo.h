@@ -128,18 +128,6 @@ protected:
 	bool m_isAutomated;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PersonLookupInfo = Jellyfin::DTO::PersonLookupInfo;
-
-template <>
-PersonLookupInfo fromJsonValue<PersonLookupInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PersonLookupInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-LibraryTypeOptionsDto::LibraryTypeOptionsDto(QObject *parent) {}
+LibraryTypeOptionsDto::LibraryTypeOptionsDto() {}
 
-LibraryTypeOptionsDto LibraryTypeOptionsDto::fromJson(QJsonObject source) {LibraryTypeOptionsDto instance;
-	instance->setFromJson(source, false);
+LibraryTypeOptionsDto LibraryTypeOptionsDto::fromJson(QJsonObject source) {
+	LibraryTypeOptionsDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void LibraryTypeOptionsDto::setFromJson(QJsonObject source) {
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_metadataFetchers = fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["MetadataFetchers"]);
-	m_imageFetchers = fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["ImageFetchers"]);
-	m_supportedImageTypes = fromJsonValue<QList<ImageType>>(source["SupportedImageTypes"]);
-	m_defaultImageOptions = fromJsonValue<QList<QSharedPointer<ImageOption>>>(source["DefaultImageOptions"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_metadataFetchers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["MetadataFetchers"]);
+	m_imageFetchers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["ImageFetchers"]);
+	m_supportedImageTypes = Jellyfin::Support::fromJsonValue<QList<ImageType>>(source["SupportedImageTypes"]);
+	m_defaultImageOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ImageOption>>>(source["DefaultImageOptions"]);
 
 }
 	
 QJsonObject LibraryTypeOptionsDto::toJson() {
 	QJsonObject result;
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["MetadataFetchers"] = toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_metadataFetchers);
-	result["ImageFetchers"] = toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_imageFetchers);
-	result["SupportedImageTypes"] = toJsonValue<QList<ImageType>>(m_supportedImageTypes);
-	result["DefaultImageOptions"] = toJsonValue<QList<QSharedPointer<ImageOption>>>(m_defaultImageOptions);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["MetadataFetchers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_metadataFetchers);
+	result["ImageFetchers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_imageFetchers);
+	result["SupportedImageTypes"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImageTypes);
+	result["DefaultImageOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ImageOption>>>(m_defaultImageOptions);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void LibraryTypeOptionsDto::setDefaultImageOptions(QList<QSharedPointer<ImageOpt
 	m_defaultImageOptions = newDefaultImageOptions;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using LibraryTypeOptionsDto = Jellyfin::DTO::LibraryTypeOptionsDto;
+
+template <>
+LibraryTypeOptionsDto fromJsonValue<LibraryTypeOptionsDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LibraryTypeOptionsDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

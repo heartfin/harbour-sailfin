@@ -34,5 +34,27 @@ namespace DTO {
 
 IsoTypeClass::IsoTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using IsoType = Jellyfin::DTO::IsoType;
+
+template <>
+IsoType fromJsonValue<IsoType>(const QJsonValue &source) {
+	if (!source.isString()) return IsoType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Dvd")) {
+		return IsoType::Dvd;
+	}
+	if (str == QStringLiteral("BluRay")) {
+		return IsoType::BluRay;
+	}
+	
+	return IsoType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

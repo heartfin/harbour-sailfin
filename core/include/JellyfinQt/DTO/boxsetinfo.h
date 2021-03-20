@@ -128,18 +128,6 @@ protected:
 	bool m_isAutomated;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using BoxSetInfo = Jellyfin::DTO::BoxSetInfo;
-
-template <>
-BoxSetInfo fromJsonValue<BoxSetInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return BoxSetInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

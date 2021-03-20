@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-MovePlaylistItemRequestDto::MovePlaylistItemRequestDto(QObject *parent) {}
+MovePlaylistItemRequestDto::MovePlaylistItemRequestDto() {}
 
-MovePlaylistItemRequestDto MovePlaylistItemRequestDto::fromJson(QJsonObject source) {MovePlaylistItemRequestDto instance;
-	instance->setFromJson(source, false);
+MovePlaylistItemRequestDto MovePlaylistItemRequestDto::fromJson(QJsonObject source) {
+	MovePlaylistItemRequestDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MovePlaylistItemRequestDto::setFromJson(QJsonObject source) {
-	m_playlistItemId = fromJsonValue<QUuid>(source["PlaylistItemId"]);
-	m_newIndex = fromJsonValue<qint32>(source["NewIndex"]);
+	m_playlistItemId = Jellyfin::Support::fromJsonValue<QUuid>(source["PlaylistItemId"]);
+	m_newIndex = Jellyfin::Support::fromJsonValue<qint32>(source["NewIndex"]);
 
 }
 	
 QJsonObject MovePlaylistItemRequestDto::toJson() {
 	QJsonObject result;
-	result["PlaylistItemId"] = toJsonValue<QUuid>(m_playlistItemId);
-	result["NewIndex"] = toJsonValue<qint32>(m_newIndex);
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_playlistItemId);
+	result["NewIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_newIndex);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void MovePlaylistItemRequestDto::setNewIndex(qint32 newNewIndex) {
 	m_newIndex = newNewIndex;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MovePlaylistItemRequestDto = Jellyfin::DTO::MovePlaylistItemRequestDto;
+
+template <>
+MovePlaylistItemRequestDto fromJsonValue<MovePlaylistItemRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MovePlaylistItemRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

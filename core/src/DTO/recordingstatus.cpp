@@ -34,5 +34,42 @@ namespace DTO {
 
 RecordingStatusClass::RecordingStatusClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using RecordingStatus = Jellyfin::DTO::RecordingStatus;
+
+template <>
+RecordingStatus fromJsonValue<RecordingStatus>(const QJsonValue &source) {
+	if (!source.isString()) return RecordingStatus::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("New")) {
+		return RecordingStatus::New;
+	}
+	if (str == QStringLiteral("InProgress")) {
+		return RecordingStatus::InProgress;
+	}
+	if (str == QStringLiteral("Completed")) {
+		return RecordingStatus::Completed;
+	}
+	if (str == QStringLiteral("Cancelled")) {
+		return RecordingStatus::Cancelled;
+	}
+	if (str == QStringLiteral("ConflictedOk")) {
+		return RecordingStatus::ConflictedOk;
+	}
+	if (str == QStringLiteral("ConflictedNotOk")) {
+		return RecordingStatus::ConflictedNotOk;
+	}
+	if (str == QStringLiteral("Error")) {
+		return RecordingStatus::Error;
+	}
+	
+	return RecordingStatus::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

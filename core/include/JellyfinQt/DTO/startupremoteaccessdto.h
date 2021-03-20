@@ -70,18 +70,6 @@ protected:
 	bool m_enableAutomaticPortMapping;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using StartupRemoteAccessDto = Jellyfin::DTO::StartupRemoteAccessDto;
-
-template <>
-StartupRemoteAccessDto fromJsonValue<StartupRemoteAccessDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return StartupRemoteAccessDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

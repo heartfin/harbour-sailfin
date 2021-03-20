@@ -61,49 +61,6 @@ private:
 
 typedef ItemFilterClass::Value ItemFilter;
 
-} // NS DTO
-
-namespace Support {
-
-using ItemFilter = Jellyfin::DTO::ItemFilter;
-using ItemFilterClass = Jellyfin::DTO::ItemFilterClass;
-
-template <>
-ItemFilter fromJsonValue<ItemFilter>(const QJsonValue &source) {
-	if (!source.isString()) return ItemFilterClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("IsFolder")) {
-		return ItemFilterClass::IsFolder;
-	}
-	if (str == QStringLiteral("IsNotFolder")) {
-		return ItemFilterClass::IsNotFolder;
-	}
-	if (str == QStringLiteral("IsUnplayed")) {
-		return ItemFilterClass::IsUnplayed;
-	}
-	if (str == QStringLiteral("IsPlayed")) {
-		return ItemFilterClass::IsPlayed;
-	}
-	if (str == QStringLiteral("IsFavorite")) {
-		return ItemFilterClass::IsFavorite;
-	}
-	if (str == QStringLiteral("IsResumable")) {
-		return ItemFilterClass::IsResumable;
-	}
-	if (str == QStringLiteral("Likes")) {
-		return ItemFilterClass::Likes;
-	}
-	if (str == QStringLiteral("Dislikes")) {
-		return ItemFilterClass::Dislikes;
-	}
-	if (str == QStringLiteral("IsFavoriteOrLikes")) {
-		return ItemFilterClass::IsFavoriteOrLikes;
-	}
-	
-	return ItemFilterClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

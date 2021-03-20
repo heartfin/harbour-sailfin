@@ -32,40 +32,41 @@
 namespace Jellyfin {
 namespace DTO {
 
-RemoteImageInfo::RemoteImageInfo(QObject *parent) {}
+RemoteImageInfo::RemoteImageInfo() {}
 
-RemoteImageInfo RemoteImageInfo::fromJson(QJsonObject source) {RemoteImageInfo instance;
-	instance->setFromJson(source, false);
+RemoteImageInfo RemoteImageInfo::fromJson(QJsonObject source) {
+	RemoteImageInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void RemoteImageInfo::setFromJson(QJsonObject source) {
-	m_providerName = fromJsonValue<QString>(source["ProviderName"]);
-	m_url = fromJsonValue<QString>(source["Url"]);
-	m_thumbnailUrl = fromJsonValue<QString>(source["ThumbnailUrl"]);
-	m_height = fromJsonValue<qint32>(source["Height"]);
-	m_width = fromJsonValue<qint32>(source["Width"]);
-	m_communityRating = fromJsonValue<double>(source["CommunityRating"]);
-	m_voteCount = fromJsonValue<qint32>(source["VoteCount"]);
-	m_language = fromJsonValue<QString>(source["Language"]);
-	m_type = fromJsonValue<ImageType>(source["Type"]);
-	m_ratingType = fromJsonValue<RatingType>(source["RatingType"]);
+	m_providerName = Jellyfin::Support::fromJsonValue<QString>(source["ProviderName"]);
+	m_url = Jellyfin::Support::fromJsonValue<QString>(source["Url"]);
+	m_thumbnailUrl = Jellyfin::Support::fromJsonValue<QString>(source["ThumbnailUrl"]);
+	m_height = Jellyfin::Support::fromJsonValue<qint32>(source["Height"]);
+	m_width = Jellyfin::Support::fromJsonValue<qint32>(source["Width"]);
+	m_communityRating = Jellyfin::Support::fromJsonValue<double>(source["CommunityRating"]);
+	m_voteCount = Jellyfin::Support::fromJsonValue<qint32>(source["VoteCount"]);
+	m_language = Jellyfin::Support::fromJsonValue<QString>(source["Language"]);
+	m_type = Jellyfin::Support::fromJsonValue<ImageType>(source["Type"]);
+	m_ratingType = Jellyfin::Support::fromJsonValue<RatingType>(source["RatingType"]);
 
 }
 	
 QJsonObject RemoteImageInfo::toJson() {
 	QJsonObject result;
-	result["ProviderName"] = toJsonValue<QString>(m_providerName);
-	result["Url"] = toJsonValue<QString>(m_url);
-	result["ThumbnailUrl"] = toJsonValue<QString>(m_thumbnailUrl);
-	result["Height"] = toJsonValue<qint32>(m_height);
-	result["Width"] = toJsonValue<qint32>(m_width);
-	result["CommunityRating"] = toJsonValue<double>(m_communityRating);
-	result["VoteCount"] = toJsonValue<qint32>(m_voteCount);
-	result["Language"] = toJsonValue<QString>(m_language);
-	result["Type"] = toJsonValue<ImageType>(m_type);
-	result["RatingType"] = toJsonValue<RatingType>(m_ratingType);
+	result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
+	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	result["ThumbnailUrl"] = Jellyfin::Support::toJsonValue<QString>(m_thumbnailUrl);
+	result["Height"] = Jellyfin::Support::toJsonValue<qint32>(m_height);
+	result["Width"] = Jellyfin::Support::toJsonValue<qint32>(m_width);
+	result["CommunityRating"] = Jellyfin::Support::toJsonValue<double>(m_communityRating);
+	result["VoteCount"] = Jellyfin::Support::toJsonValue<qint32>(m_voteCount);
+	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
+	result["Type"] = Jellyfin::Support::toJsonValue<ImageType>(m_type);
+	result["RatingType"] = Jellyfin::Support::toJsonValue<RatingType>(m_ratingType);
 
 	return result;
 }
@@ -121,6 +122,17 @@ void RemoteImageInfo::setRatingType(RatingType newRatingType) {
 	m_ratingType = newRatingType;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using RemoteImageInfo = Jellyfin::DTO::RemoteImageInfo;
+
+template <>
+RemoteImageInfo fromJsonValue<RemoteImageInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RemoteImageInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

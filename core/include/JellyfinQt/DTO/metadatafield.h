@@ -61,49 +61,6 @@ private:
 
 typedef MetadataFieldClass::Value MetadataField;
 
-} // NS DTO
-
-namespace Support {
-
-using MetadataField = Jellyfin::DTO::MetadataField;
-using MetadataFieldClass = Jellyfin::DTO::MetadataFieldClass;
-
-template <>
-MetadataField fromJsonValue<MetadataField>(const QJsonValue &source) {
-	if (!source.isString()) return MetadataFieldClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Cast")) {
-		return MetadataFieldClass::Cast;
-	}
-	if (str == QStringLiteral("Genres")) {
-		return MetadataFieldClass::Genres;
-	}
-	if (str == QStringLiteral("ProductionLocations")) {
-		return MetadataFieldClass::ProductionLocations;
-	}
-	if (str == QStringLiteral("Studios")) {
-		return MetadataFieldClass::Studios;
-	}
-	if (str == QStringLiteral("Tags")) {
-		return MetadataFieldClass::Tags;
-	}
-	if (str == QStringLiteral("Name")) {
-		return MetadataFieldClass::Name;
-	}
-	if (str == QStringLiteral("Overview")) {
-		return MetadataFieldClass::Overview;
-	}
-	if (str == QStringLiteral("Runtime")) {
-		return MetadataFieldClass::Runtime;
-	}
-	if (str == QStringLiteral("OfficialRating")) {
-		return MetadataFieldClass::OfficialRating;
-	}
-	
-	return MetadataFieldClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

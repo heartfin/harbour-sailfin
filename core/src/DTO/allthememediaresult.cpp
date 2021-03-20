@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-AllThemeMediaResult::AllThemeMediaResult(QObject *parent) {}
+AllThemeMediaResult::AllThemeMediaResult() {}
 
-AllThemeMediaResult AllThemeMediaResult::fromJson(QJsonObject source) {AllThemeMediaResult instance;
-	instance->setFromJson(source, false);
+AllThemeMediaResult AllThemeMediaResult::fromJson(QJsonObject source) {
+	AllThemeMediaResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void AllThemeMediaResult::setFromJson(QJsonObject source) {
-	m_themeVideosResult = fromJsonValue<QSharedPointer<ThemeMediaResult>>(source["ThemeVideosResult"]);
-	m_themeSongsResult = fromJsonValue<QSharedPointer<ThemeMediaResult>>(source["ThemeSongsResult"]);
-	m_soundtrackSongsResult = fromJsonValue<QSharedPointer<ThemeMediaResult>>(source["SoundtrackSongsResult"]);
+	m_themeVideosResult = Jellyfin::Support::fromJsonValue<QSharedPointer<ThemeMediaResult>>(source["ThemeVideosResult"]);
+	m_themeSongsResult = Jellyfin::Support::fromJsonValue<QSharedPointer<ThemeMediaResult>>(source["ThemeSongsResult"]);
+	m_soundtrackSongsResult = Jellyfin::Support::fromJsonValue<QSharedPointer<ThemeMediaResult>>(source["SoundtrackSongsResult"]);
 
 }
 	
 QJsonObject AllThemeMediaResult::toJson() {
 	QJsonObject result;
-	result["ThemeVideosResult"] = toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeVideosResult);
-	result["ThemeSongsResult"] = toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeSongsResult);
-	result["SoundtrackSongsResult"] = toJsonValue<QSharedPointer<ThemeMediaResult>>(m_soundtrackSongsResult);
+	result["ThemeVideosResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeVideosResult);
+	result["ThemeSongsResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeSongsResult);
+	result["SoundtrackSongsResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_soundtrackSongsResult);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void AllThemeMediaResult::setSoundtrackSongsResult(QSharedPointer<ThemeMediaResu
 	m_soundtrackSongsResult = newSoundtrackSongsResult;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using AllThemeMediaResult = Jellyfin::DTO::AllThemeMediaResult;
+
+template <>
+AllThemeMediaResult fromJsonValue<AllThemeMediaResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AllThemeMediaResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

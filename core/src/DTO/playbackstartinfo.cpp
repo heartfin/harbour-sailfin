@@ -32,60 +32,61 @@
 namespace Jellyfin {
 namespace DTO {
 
-PlaybackStartInfo::PlaybackStartInfo(QObject *parent) {}
+PlaybackStartInfo::PlaybackStartInfo() {}
 
-PlaybackStartInfo PlaybackStartInfo::fromJson(QJsonObject source) {PlaybackStartInfo instance;
-	instance->setFromJson(source, false);
+PlaybackStartInfo PlaybackStartInfo::fromJson(QJsonObject source) {
+	PlaybackStartInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PlaybackStartInfo::setFromJson(QJsonObject source) {
-	m_canSeek = fromJsonValue<bool>(source["CanSeek"]);
-	m_item = fromJsonValue<QSharedPointer<BaseItemDto>>(source["Item"]);
-	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
-	m_sessionId = fromJsonValue<QString>(source["SessionId"]);
-	m_mediaSourceId = fromJsonValue<QString>(source["MediaSourceId"]);
-	m_audioStreamIndex = fromJsonValue<qint32>(source["AudioStreamIndex"]);
-	m_subtitleStreamIndex = fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
-	m_isPaused = fromJsonValue<bool>(source["IsPaused"]);
-	m_isMuted = fromJsonValue<bool>(source["IsMuted"]);
-	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
-	m_playbackStartTimeTicks = fromJsonValue<qint64>(source["PlaybackStartTimeTicks"]);
-	m_volumeLevel = fromJsonValue<qint32>(source["VolumeLevel"]);
-	m_brightness = fromJsonValue<qint32>(source["Brightness"]);
-	m_aspectRatio = fromJsonValue<QString>(source["AspectRatio"]);
-	m_playMethod = fromJsonValue<PlayMethod>(source["PlayMethod"]);
-	m_liveStreamId = fromJsonValue<QString>(source["LiveStreamId"]);
-	m_playSessionId = fromJsonValue<QString>(source["PlaySessionId"]);
-	m_repeatMode = fromJsonValue<RepeatMode>(source["RepeatMode"]);
-	m_nowPlayingQueue = fromJsonValue<QList<QSharedPointer<QueueItem>>>(source["NowPlayingQueue"]);
-	m_playlistItemId = fromJsonValue<QString>(source["PlaylistItemId"]);
+	m_canSeek = Jellyfin::Support::fromJsonValue<bool>(source["CanSeek"]);
+	m_item = Jellyfin::Support::fromJsonValue<QSharedPointer<BaseItemDto>>(source["Item"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QUuid>(source["ItemId"]);
+	m_sessionId = Jellyfin::Support::fromJsonValue<QString>(source["SessionId"]);
+	m_mediaSourceId = Jellyfin::Support::fromJsonValue<QString>(source["MediaSourceId"]);
+	m_audioStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["AudioStreamIndex"]);
+	m_subtitleStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
+	m_isPaused = Jellyfin::Support::fromJsonValue<bool>(source["IsPaused"]);
+	m_isMuted = Jellyfin::Support::fromJsonValue<bool>(source["IsMuted"]);
+	m_positionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["PositionTicks"]);
+	m_playbackStartTimeTicks = Jellyfin::Support::fromJsonValue<qint64>(source["PlaybackStartTimeTicks"]);
+	m_volumeLevel = Jellyfin::Support::fromJsonValue<qint32>(source["VolumeLevel"]);
+	m_brightness = Jellyfin::Support::fromJsonValue<qint32>(source["Brightness"]);
+	m_aspectRatio = Jellyfin::Support::fromJsonValue<QString>(source["AspectRatio"]);
+	m_playMethod = Jellyfin::Support::fromJsonValue<PlayMethod>(source["PlayMethod"]);
+	m_liveStreamId = Jellyfin::Support::fromJsonValue<QString>(source["LiveStreamId"]);
+	m_playSessionId = Jellyfin::Support::fromJsonValue<QString>(source["PlaySessionId"]);
+	m_repeatMode = Jellyfin::Support::fromJsonValue<RepeatMode>(source["RepeatMode"]);
+	m_nowPlayingQueue = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<QueueItem>>>(source["NowPlayingQueue"]);
+	m_playlistItemId = Jellyfin::Support::fromJsonValue<QString>(source["PlaylistItemId"]);
 
 }
 	
 QJsonObject PlaybackStartInfo::toJson() {
 	QJsonObject result;
-	result["CanSeek"] = toJsonValue<bool>(m_canSeek);
-	result["Item"] = toJsonValue<QSharedPointer<BaseItemDto>>(m_item);
-	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
-	result["SessionId"] = toJsonValue<QString>(m_sessionId);
-	result["MediaSourceId"] = toJsonValue<QString>(m_mediaSourceId);
-	result["AudioStreamIndex"] = toJsonValue<qint32>(m_audioStreamIndex);
-	result["SubtitleStreamIndex"] = toJsonValue<qint32>(m_subtitleStreamIndex);
-	result["IsPaused"] = toJsonValue<bool>(m_isPaused);
-	result["IsMuted"] = toJsonValue<bool>(m_isMuted);
-	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
-	result["PlaybackStartTimeTicks"] = toJsonValue<qint64>(m_playbackStartTimeTicks);
-	result["VolumeLevel"] = toJsonValue<qint32>(m_volumeLevel);
-	result["Brightness"] = toJsonValue<qint32>(m_brightness);
-	result["AspectRatio"] = toJsonValue<QString>(m_aspectRatio);
-	result["PlayMethod"] = toJsonValue<PlayMethod>(m_playMethod);
-	result["LiveStreamId"] = toJsonValue<QString>(m_liveStreamId);
-	result["PlaySessionId"] = toJsonValue<QString>(m_playSessionId);
-	result["RepeatMode"] = toJsonValue<RepeatMode>(m_repeatMode);
-	result["NowPlayingQueue"] = toJsonValue<QList<QSharedPointer<QueueItem>>>(m_nowPlayingQueue);
-	result["PlaylistItemId"] = toJsonValue<QString>(m_playlistItemId);
+	result["CanSeek"] = Jellyfin::Support::toJsonValue<bool>(m_canSeek);
+	result["Item"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_item);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_itemId);
+	result["SessionId"] = Jellyfin::Support::toJsonValue<QString>(m_sessionId);
+	result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
+	result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_audioStreamIndex);
+	result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_subtitleStreamIndex);
+	result["IsPaused"] = Jellyfin::Support::toJsonValue<bool>(m_isPaused);
+	result["IsMuted"] = Jellyfin::Support::toJsonValue<bool>(m_isMuted);
+	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
+	result["PlaybackStartTimeTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_playbackStartTimeTicks);
+	result["VolumeLevel"] = Jellyfin::Support::toJsonValue<qint32>(m_volumeLevel);
+	result["Brightness"] = Jellyfin::Support::toJsonValue<qint32>(m_brightness);
+	result["AspectRatio"] = Jellyfin::Support::toJsonValue<QString>(m_aspectRatio);
+	result["PlayMethod"] = Jellyfin::Support::toJsonValue<PlayMethod>(m_playMethod);
+	result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
+	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
+	result["RepeatMode"] = Jellyfin::Support::toJsonValue<RepeatMode>(m_repeatMode);
+	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<QueueItem>>>(m_nowPlayingQueue);
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
 
 	return result;
 }
@@ -191,6 +192,17 @@ void PlaybackStartInfo::setPlaylistItemId(QString newPlaylistItemId) {
 	m_playlistItemId = newPlaylistItemId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PlaybackStartInfo = Jellyfin::DTO::PlaybackStartInfo;
+
+template <>
+PlaybackStartInfo fromJsonValue<PlaybackStartInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlaybackStartInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

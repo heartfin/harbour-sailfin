@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-ValidatePathDto::ValidatePathDto(QObject *parent) {}
+ValidatePathDto::ValidatePathDto() {}
 
-ValidatePathDto ValidatePathDto::fromJson(QJsonObject source) {ValidatePathDto instance;
-	instance->setFromJson(source, false);
+ValidatePathDto ValidatePathDto::fromJson(QJsonObject source) {
+	ValidatePathDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ValidatePathDto::setFromJson(QJsonObject source) {
-	m_validateWritable = fromJsonValue<bool>(source["ValidateWritable"]);
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_isFile = fromJsonValue<bool>(source["IsFile"]);
+	m_validateWritable = Jellyfin::Support::fromJsonValue<bool>(source["ValidateWritable"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_isFile = Jellyfin::Support::fromJsonValue<bool>(source["IsFile"]);
 
 }
 	
 QJsonObject ValidatePathDto::toJson() {
 	QJsonObject result;
-	result["ValidateWritable"] = toJsonValue<bool>(m_validateWritable);
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["IsFile"] = toJsonValue<bool>(m_isFile);
+	result["ValidateWritable"] = Jellyfin::Support::toJsonValue<bool>(m_validateWritable);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["IsFile"] = Jellyfin::Support::toJsonValue<bool>(m_isFile);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void ValidatePathDto::setIsFile(bool newIsFile) {
 	m_isFile = newIsFile;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ValidatePathDto = Jellyfin::DTO::ValidatePathDto;
+
+template <>
+ValidatePathDto fromJsonValue<ValidatePathDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ValidatePathDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

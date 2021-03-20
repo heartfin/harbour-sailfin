@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-AuthenticateUserByName::AuthenticateUserByName(QObject *parent) {}
+AuthenticateUserByName::AuthenticateUserByName() {}
 
-AuthenticateUserByName AuthenticateUserByName::fromJson(QJsonObject source) {AuthenticateUserByName instance;
-	instance->setFromJson(source, false);
+AuthenticateUserByName AuthenticateUserByName::fromJson(QJsonObject source) {
+	AuthenticateUserByName instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void AuthenticateUserByName::setFromJson(QJsonObject source) {
-	m_username = fromJsonValue<QString>(source["Username"]);
-	m_pw = fromJsonValue<QString>(source["Pw"]);
-	m_password = fromJsonValue<QString>(source["Password"]);
+	m_username = Jellyfin::Support::fromJsonValue<QString>(source["Username"]);
+	m_pw = Jellyfin::Support::fromJsonValue<QString>(source["Pw"]);
+	m_password = Jellyfin::Support::fromJsonValue<QString>(source["Password"]);
 
 }
 	
 QJsonObject AuthenticateUserByName::toJson() {
 	QJsonObject result;
-	result["Username"] = toJsonValue<QString>(m_username);
-	result["Pw"] = toJsonValue<QString>(m_pw);
-	result["Password"] = toJsonValue<QString>(m_password);
+	result["Username"] = Jellyfin::Support::toJsonValue<QString>(m_username);
+	result["Pw"] = Jellyfin::Support::toJsonValue<QString>(m_pw);
+	result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void AuthenticateUserByName::setPassword(QString newPassword) {
 	m_password = newPassword;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using AuthenticateUserByName = Jellyfin::DTO::AuthenticateUserByName;
+
+template <>
+AuthenticateUserByName fromJsonValue<AuthenticateUserByName>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AuthenticateUserByName::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

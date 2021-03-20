@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-PlaylistCreationResult::PlaylistCreationResult(QObject *parent) {}
+PlaylistCreationResult::PlaylistCreationResult() {}
 
-PlaylistCreationResult PlaylistCreationResult::fromJson(QJsonObject source) {PlaylistCreationResult instance;
-	instance->setFromJson(source, false);
+PlaylistCreationResult PlaylistCreationResult::fromJson(QJsonObject source) {
+	PlaylistCreationResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PlaylistCreationResult::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
 
 }
 	
 QJsonObject PlaylistCreationResult::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void PlaylistCreationResult::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PlaylistCreationResult = Jellyfin::DTO::PlaylistCreationResult;
+
+template <>
+PlaylistCreationResult fromJsonValue<PlaylistCreationResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlaylistCreationResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

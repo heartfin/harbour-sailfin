@@ -123,18 +123,6 @@ protected:
 	NotificationLevel m_level;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using NotificationDto = Jellyfin::DTO::NotificationDto;
-
-template <>
-NotificationDto fromJsonValue<NotificationDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return NotificationDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

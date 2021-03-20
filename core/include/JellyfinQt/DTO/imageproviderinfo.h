@@ -74,18 +74,6 @@ protected:
 	QList<ImageType> m_supportedImages;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ImageProviderInfo = Jellyfin::DTO::ImageProviderInfo;
-
-template <>
-ImageProviderInfo fromJsonValue<ImageProviderInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ImageProviderInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

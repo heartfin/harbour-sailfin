@@ -32,56 +32,57 @@
 namespace Jellyfin {
 namespace DTO {
 
-ListingsProviderInfo::ListingsProviderInfo(QObject *parent) {}
+ListingsProviderInfo::ListingsProviderInfo() {}
 
-ListingsProviderInfo ListingsProviderInfo::fromJson(QJsonObject source) {ListingsProviderInfo instance;
-	instance->setFromJson(source, false);
+ListingsProviderInfo ListingsProviderInfo::fromJson(QJsonObject source) {
+	ListingsProviderInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ListingsProviderInfo::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_username = fromJsonValue<QString>(source["Username"]);
-	m_password = fromJsonValue<QString>(source["Password"]);
-	m_listingsId = fromJsonValue<QString>(source["ListingsId"]);
-	m_zipCode = fromJsonValue<QString>(source["ZipCode"]);
-	m_country = fromJsonValue<QString>(source["Country"]);
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_enabledTuners = fromJsonValue<QStringList>(source["EnabledTuners"]);
-	m_enableAllTuners = fromJsonValue<bool>(source["EnableAllTuners"]);
-	m_newsCategories = fromJsonValue<QStringList>(source["NewsCategories"]);
-	m_sportsCategories = fromJsonValue<QStringList>(source["SportsCategories"]);
-	m_kidsCategories = fromJsonValue<QStringList>(source["KidsCategories"]);
-	m_movieCategories = fromJsonValue<QStringList>(source["MovieCategories"]);
-	m_channelMappings = fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["ChannelMappings"]);
-	m_moviePrefix = fromJsonValue<QString>(source["MoviePrefix"]);
-	m_preferredLanguage = fromJsonValue<QString>(source["PreferredLanguage"]);
-	m_userAgent = fromJsonValue<QString>(source["UserAgent"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_username = Jellyfin::Support::fromJsonValue<QString>(source["Username"]);
+	m_password = Jellyfin::Support::fromJsonValue<QString>(source["Password"]);
+	m_listingsId = Jellyfin::Support::fromJsonValue<QString>(source["ListingsId"]);
+	m_zipCode = Jellyfin::Support::fromJsonValue<QString>(source["ZipCode"]);
+	m_country = Jellyfin::Support::fromJsonValue<QString>(source["Country"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_enabledTuners = Jellyfin::Support::fromJsonValue<QStringList>(source["EnabledTuners"]);
+	m_enableAllTuners = Jellyfin::Support::fromJsonValue<bool>(source["EnableAllTuners"]);
+	m_newsCategories = Jellyfin::Support::fromJsonValue<QStringList>(source["NewsCategories"]);
+	m_sportsCategories = Jellyfin::Support::fromJsonValue<QStringList>(source["SportsCategories"]);
+	m_kidsCategories = Jellyfin::Support::fromJsonValue<QStringList>(source["KidsCategories"]);
+	m_movieCategories = Jellyfin::Support::fromJsonValue<QStringList>(source["MovieCategories"]);
+	m_channelMappings = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["ChannelMappings"]);
+	m_moviePrefix = Jellyfin::Support::fromJsonValue<QString>(source["MoviePrefix"]);
+	m_preferredLanguage = Jellyfin::Support::fromJsonValue<QString>(source["PreferredLanguage"]);
+	m_userAgent = Jellyfin::Support::fromJsonValue<QString>(source["UserAgent"]);
 
 }
 	
 QJsonObject ListingsProviderInfo::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["Username"] = toJsonValue<QString>(m_username);
-	result["Password"] = toJsonValue<QString>(m_password);
-	result["ListingsId"] = toJsonValue<QString>(m_listingsId);
-	result["ZipCode"] = toJsonValue<QString>(m_zipCode);
-	result["Country"] = toJsonValue<QString>(m_country);
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["EnabledTuners"] = toJsonValue<QStringList>(m_enabledTuners);
-	result["EnableAllTuners"] = toJsonValue<bool>(m_enableAllTuners);
-	result["NewsCategories"] = toJsonValue<QStringList>(m_newsCategories);
-	result["SportsCategories"] = toJsonValue<QStringList>(m_sportsCategories);
-	result["KidsCategories"] = toJsonValue<QStringList>(m_kidsCategories);
-	result["MovieCategories"] = toJsonValue<QStringList>(m_movieCategories);
-	result["ChannelMappings"] = toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_channelMappings);
-	result["MoviePrefix"] = toJsonValue<QString>(m_moviePrefix);
-	result["PreferredLanguage"] = toJsonValue<QString>(m_preferredLanguage);
-	result["UserAgent"] = toJsonValue<QString>(m_userAgent);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["Username"] = Jellyfin::Support::toJsonValue<QString>(m_username);
+	result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
+	result["ListingsId"] = Jellyfin::Support::toJsonValue<QString>(m_listingsId);
+	result["ZipCode"] = Jellyfin::Support::toJsonValue<QString>(m_zipCode);
+	result["Country"] = Jellyfin::Support::toJsonValue<QString>(m_country);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["EnabledTuners"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledTuners);
+	result["EnableAllTuners"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllTuners);
+	result["NewsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_newsCategories);
+	result["SportsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_sportsCategories);
+	result["KidsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_kidsCategories);
+	result["MovieCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_movieCategories);
+	result["ChannelMappings"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_channelMappings);
+	result["MoviePrefix"] = Jellyfin::Support::toJsonValue<QString>(m_moviePrefix);
+	result["PreferredLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredLanguage);
+	result["UserAgent"] = Jellyfin::Support::toJsonValue<QString>(m_userAgent);
 
 	return result;
 }
@@ -177,6 +178,17 @@ void ListingsProviderInfo::setUserAgent(QString newUserAgent) {
 	m_userAgent = newUserAgent;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ListingsProviderInfo = Jellyfin::DTO::ListingsProviderInfo;
+
+template <>
+ListingsProviderInfo fromJsonValue<ListingsProviderInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ListingsProviderInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

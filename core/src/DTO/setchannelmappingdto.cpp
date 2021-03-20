@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-SetChannelMappingDto::SetChannelMappingDto(QObject *parent) {}
+SetChannelMappingDto::SetChannelMappingDto() {}
 
-SetChannelMappingDto SetChannelMappingDto::fromJson(QJsonObject source) {SetChannelMappingDto instance;
-	instance->setFromJson(source, false);
+SetChannelMappingDto SetChannelMappingDto::fromJson(QJsonObject source) {
+	SetChannelMappingDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SetChannelMappingDto::setFromJson(QJsonObject source) {
-	m_providerId = fromJsonValue<QString>(source["ProviderId"]);
-	m_tunerChannelId = fromJsonValue<QString>(source["TunerChannelId"]);
-	m_providerChannelId = fromJsonValue<QString>(source["ProviderChannelId"]);
+	m_providerId = Jellyfin::Support::fromJsonValue<QString>(source["ProviderId"]);
+	m_tunerChannelId = Jellyfin::Support::fromJsonValue<QString>(source["TunerChannelId"]);
+	m_providerChannelId = Jellyfin::Support::fromJsonValue<QString>(source["ProviderChannelId"]);
 
 }
 	
 QJsonObject SetChannelMappingDto::toJson() {
 	QJsonObject result;
-	result["ProviderId"] = toJsonValue<QString>(m_providerId);
-	result["TunerChannelId"] = toJsonValue<QString>(m_tunerChannelId);
-	result["ProviderChannelId"] = toJsonValue<QString>(m_providerChannelId);
+	result["ProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_providerId);
+	result["TunerChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_tunerChannelId);
+	result["ProviderChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_providerChannelId);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void SetChannelMappingDto::setProviderChannelId(QString newProviderChannelId) {
 	m_providerChannelId = newProviderChannelId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SetChannelMappingDto = Jellyfin::DTO::SetChannelMappingDto;
+
+template <>
+SetChannelMappingDto fromJsonValue<SetChannelMappingDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SetChannelMappingDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

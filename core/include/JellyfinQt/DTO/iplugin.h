@@ -115,18 +115,6 @@ protected:
 	QString m_dataFolderPath;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using IPlugin = Jellyfin::DTO::IPlugin;
-
-template <>
-IPlugin fromJsonValue<IPlugin>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return IPlugin::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

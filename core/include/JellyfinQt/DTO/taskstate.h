@@ -55,31 +55,6 @@ private:
 
 typedef TaskStateClass::Value TaskState;
 
-} // NS DTO
-
-namespace Support {
-
-using TaskState = Jellyfin::DTO::TaskState;
-using TaskStateClass = Jellyfin::DTO::TaskStateClass;
-
-template <>
-TaskState fromJsonValue<TaskState>(const QJsonValue &source) {
-	if (!source.isString()) return TaskStateClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Idle")) {
-		return TaskStateClass::Idle;
-	}
-	if (str == QStringLiteral("Cancelling")) {
-		return TaskStateClass::Cancelling;
-	}
-	if (str == QStringLiteral("Running")) {
-		return TaskStateClass::Running;
-	}
-	
-	return TaskStateClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

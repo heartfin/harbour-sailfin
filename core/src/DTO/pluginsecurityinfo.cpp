@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-PluginSecurityInfo::PluginSecurityInfo(QObject *parent) {}
+PluginSecurityInfo::PluginSecurityInfo() {}
 
-PluginSecurityInfo PluginSecurityInfo::fromJson(QJsonObject source) {PluginSecurityInfo instance;
-	instance->setFromJson(source, false);
+PluginSecurityInfo PluginSecurityInfo::fromJson(QJsonObject source) {
+	PluginSecurityInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PluginSecurityInfo::setFromJson(QJsonObject source) {
-	m_supporterKey = fromJsonValue<QString>(source["SupporterKey"]);
-	m_isMbSupporter = fromJsonValue<bool>(source["IsMbSupporter"]);
+	m_supporterKey = Jellyfin::Support::fromJsonValue<QString>(source["SupporterKey"]);
+	m_isMbSupporter = Jellyfin::Support::fromJsonValue<bool>(source["IsMbSupporter"]);
 
 }
 	
 QJsonObject PluginSecurityInfo::toJson() {
 	QJsonObject result;
-	result["SupporterKey"] = toJsonValue<QString>(m_supporterKey);
-	result["IsMbSupporter"] = toJsonValue<bool>(m_isMbSupporter);
+	result["SupporterKey"] = Jellyfin::Support::toJsonValue<QString>(m_supporterKey);
+	result["IsMbSupporter"] = Jellyfin::Support::toJsonValue<bool>(m_isMbSupporter);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void PluginSecurityInfo::setIsMbSupporter(bool newIsMbSupporter) {
 	m_isMbSupporter = newIsMbSupporter;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PluginSecurityInfo = Jellyfin::DTO::PluginSecurityInfo;
+
+template <>
+PluginSecurityInfo fromJsonValue<PluginSecurityInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PluginSecurityInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

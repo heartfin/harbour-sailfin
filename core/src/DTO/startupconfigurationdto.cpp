@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-StartupConfigurationDto::StartupConfigurationDto(QObject *parent) {}
+StartupConfigurationDto::StartupConfigurationDto() {}
 
-StartupConfigurationDto StartupConfigurationDto::fromJson(QJsonObject source) {StartupConfigurationDto instance;
-	instance->setFromJson(source, false);
+StartupConfigurationDto StartupConfigurationDto::fromJson(QJsonObject source) {
+	StartupConfigurationDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void StartupConfigurationDto::setFromJson(QJsonObject source) {
-	m_uICulture = fromJsonValue<QString>(source["UICulture"]);
-	m_metadataCountryCode = fromJsonValue<QString>(source["MetadataCountryCode"]);
-	m_preferredMetadataLanguage = fromJsonValue<QString>(source["PreferredMetadataLanguage"]);
+	m_uICulture = Jellyfin::Support::fromJsonValue<QString>(source["UICulture"]);
+	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
+	m_preferredMetadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["PreferredMetadataLanguage"]);
 
 }
 	
 QJsonObject StartupConfigurationDto::toJson() {
 	QJsonObject result;
-	result["UICulture"] = toJsonValue<QString>(m_uICulture);
-	result["MetadataCountryCode"] = toJsonValue<QString>(m_metadataCountryCode);
-	result["PreferredMetadataLanguage"] = toJsonValue<QString>(m_preferredMetadataLanguage);
+	result["UICulture"] = Jellyfin::Support::toJsonValue<QString>(m_uICulture);
+	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
+	result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void StartupConfigurationDto::setPreferredMetadataLanguage(QString newPreferredM
 	m_preferredMetadataLanguage = newPreferredMetadataLanguage;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using StartupConfigurationDto = Jellyfin::DTO::StartupConfigurationDto;
+
+template <>
+StartupConfigurationDto fromJsonValue<StartupConfigurationDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return StartupConfigurationDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

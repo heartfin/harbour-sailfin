@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-FontFile::FontFile(QObject *parent) {}
+FontFile::FontFile() {}
 
-FontFile FontFile::fromJson(QJsonObject source) {FontFile instance;
-	instance->setFromJson(source, false);
+FontFile FontFile::fromJson(QJsonObject source) {
+	FontFile instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void FontFile::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_size = fromJsonValue<qint64>(source["Size"]);
-	m_dateCreated = fromJsonValue<QDateTime>(source["DateCreated"]);
-	m_dateModified = fromJsonValue<QDateTime>(source["DateModified"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_size = Jellyfin::Support::fromJsonValue<qint64>(source["Size"]);
+	m_dateCreated = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateCreated"]);
+	m_dateModified = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateModified"]);
 
 }
 	
 QJsonObject FontFile::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Size"] = toJsonValue<qint64>(m_size);
-	result["DateCreated"] = toJsonValue<QDateTime>(m_dateCreated);
-	result["DateModified"] = toJsonValue<QDateTime>(m_dateModified);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);
+	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
+	result["DateModified"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateModified);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void FontFile::setDateModified(QDateTime newDateModified) {
 	m_dateModified = newDateModified;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using FontFile = Jellyfin::DTO::FontFile;
+
+template <>
+FontFile fromJsonValue<FontFile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return FontFile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

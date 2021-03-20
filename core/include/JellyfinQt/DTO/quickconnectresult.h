@@ -108,18 +108,6 @@ protected:
 	QDateTime m_dateAdded;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using QuickConnectResult = Jellyfin::DTO::QuickConnectResult;
-
-template <>
-QuickConnectResult fromJsonValue<QuickConnectResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return QuickConnectResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

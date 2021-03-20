@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-SearchHintResult::SearchHintResult(QObject *parent) {}
+SearchHintResult::SearchHintResult() {}
 
-SearchHintResult SearchHintResult::fromJson(QJsonObject source) {SearchHintResult instance;
-	instance->setFromJson(source, false);
+SearchHintResult SearchHintResult::fromJson(QJsonObject source) {
+	SearchHintResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SearchHintResult::setFromJson(QJsonObject source) {
-	m_searchHints = fromJsonValue<QList<QSharedPointer<SearchHint>>>(source["SearchHints"]);
-	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_searchHints = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SearchHint>>>(source["SearchHints"]);
+	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 
 }
 	
 QJsonObject SearchHintResult::toJson() {
 	QJsonObject result;
-	result["SearchHints"] = toJsonValue<QList<QSharedPointer<SearchHint>>>(m_searchHints);
-	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
+	result["SearchHints"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SearchHint>>>(m_searchHints);
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void SearchHintResult::setTotalRecordCount(qint32 newTotalRecordCount) {
 	m_totalRecordCount = newTotalRecordCount;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SearchHintResult = Jellyfin::DTO::SearchHintResult;
+
+template <>
+SearchHintResult fromJsonValue<SearchHintResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SearchHintResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

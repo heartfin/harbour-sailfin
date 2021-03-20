@@ -83,18 +83,6 @@ protected:
 	QString m_container;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using CodecProfile = Jellyfin::DTO::CodecProfile;
-
-template <>
-CodecProfile fromJsonValue<CodecProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return CodecProfile::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -77,18 +77,6 @@ protected:
 	DeviceProfileType m_type;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using DeviceProfileInfo = Jellyfin::DTO::DeviceProfileInfo;
-
-template <>
-DeviceProfileInfo fromJsonValue<DeviceProfileInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return DeviceProfileInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

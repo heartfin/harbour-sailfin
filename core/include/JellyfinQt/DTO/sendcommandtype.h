@@ -56,34 +56,6 @@ private:
 
 typedef SendCommandTypeClass::Value SendCommandType;
 
-} // NS DTO
-
-namespace Support {
-
-using SendCommandType = Jellyfin::DTO::SendCommandType;
-using SendCommandTypeClass = Jellyfin::DTO::SendCommandTypeClass;
-
-template <>
-SendCommandType fromJsonValue<SendCommandType>(const QJsonValue &source) {
-	if (!source.isString()) return SendCommandTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Unpause")) {
-		return SendCommandTypeClass::Unpause;
-	}
-	if (str == QStringLiteral("Pause")) {
-		return SendCommandTypeClass::Pause;
-	}
-	if (str == QStringLiteral("Stop")) {
-		return SendCommandTypeClass::Stop;
-	}
-	if (str == QStringLiteral("Seek")) {
-		return SendCommandTypeClass::Seek;
-	}
-	
-	return SendCommandTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

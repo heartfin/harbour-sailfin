@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-GuideInfo::GuideInfo(QObject *parent) {}
+GuideInfo::GuideInfo() {}
 
-GuideInfo GuideInfo::fromJson(QJsonObject source) {GuideInfo instance;
-	instance->setFromJson(source, false);
+GuideInfo GuideInfo::fromJson(QJsonObject source) {
+	GuideInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void GuideInfo::setFromJson(QJsonObject source) {
-	m_startDate = fromJsonValue<QDateTime>(source["StartDate"]);
-	m_endDate = fromJsonValue<QDateTime>(source["EndDate"]);
+	m_startDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["StartDate"]);
+	m_endDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["EndDate"]);
 
 }
 	
 QJsonObject GuideInfo::toJson() {
 	QJsonObject result;
-	result["StartDate"] = toJsonValue<QDateTime>(m_startDate);
-	result["EndDate"] = toJsonValue<QDateTime>(m_endDate);
+	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
+	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void GuideInfo::setEndDate(QDateTime newEndDate) {
 	m_endDate = newEndDate;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using GuideInfo = Jellyfin::DTO::GuideInfo;
+
+template <>
+GuideInfo fromJsonValue<GuideInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return GuideInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

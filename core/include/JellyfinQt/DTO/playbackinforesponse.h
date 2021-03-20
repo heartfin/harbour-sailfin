@@ -81,18 +81,6 @@ protected:
 	PlaybackErrorCode m_errorCode;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PlaybackInfoResponse = Jellyfin::DTO::PlaybackInfoResponse;
-
-template <>
-PlaybackInfoResponse fromJsonValue<PlaybackInfoResponse>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PlaybackInfoResponse::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

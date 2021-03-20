@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-GeneralCommand::GeneralCommand(QObject *parent) {}
+GeneralCommand::GeneralCommand() {}
 
-GeneralCommand GeneralCommand::fromJson(QJsonObject source) {GeneralCommand instance;
-	instance->setFromJson(source, false);
+GeneralCommand GeneralCommand::fromJson(QJsonObject source) {
+	GeneralCommand instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void GeneralCommand::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<GeneralCommandType>(source["Name"]);
-	m_controllingUserId = fromJsonValue<QUuid>(source["ControllingUserId"]);
-	m_arguments = fromJsonValue<QJsonObject>(source["Arguments"]);
+	m_name = Jellyfin::Support::fromJsonValue<GeneralCommandType>(source["Name"]);
+	m_controllingUserId = Jellyfin::Support::fromJsonValue<QUuid>(source["ControllingUserId"]);
+	m_arguments = Jellyfin::Support::fromJsonValue<QJsonObject>(source["Arguments"]);
 
 }
 	
 QJsonObject GeneralCommand::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<GeneralCommandType>(m_name);
-	result["ControllingUserId"] = toJsonValue<QUuid>(m_controllingUserId);
-	result["Arguments"] = toJsonValue<QJsonObject>(m_arguments);
+	result["Name"] = Jellyfin::Support::toJsonValue<GeneralCommandType>(m_name);
+	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_controllingUserId);
+	result["Arguments"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_arguments);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void GeneralCommand::setArguments(QJsonObject newArguments) {
 	m_arguments = newArguments;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using GeneralCommand = Jellyfin::DTO::GeneralCommand;
+
+template <>
+GeneralCommand fromJsonValue<GeneralCommand>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return GeneralCommand::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

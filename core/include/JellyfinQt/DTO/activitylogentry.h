@@ -142,18 +142,6 @@ protected:
 	LogLevel m_severity;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ActivityLogEntry = Jellyfin::DTO::ActivityLogEntry;
-
-template <>
-ActivityLogEntry fromJsonValue<ActivityLogEntry>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ActivityLogEntry::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -71,18 +71,6 @@ protected:
 	qint32 m_newIndex;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MovePlaylistItemRequestDto = Jellyfin::DTO::MovePlaylistItemRequestDto;
-
-template <>
-MovePlaylistItemRequestDto fromJsonValue<MovePlaylistItemRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MovePlaylistItemRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

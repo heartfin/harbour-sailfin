@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-AuthenticationResult::AuthenticationResult(QObject *parent) {}
+AuthenticationResult::AuthenticationResult() {}
 
-AuthenticationResult AuthenticationResult::fromJson(QJsonObject source) {AuthenticationResult instance;
-	instance->setFromJson(source, false);
+AuthenticationResult AuthenticationResult::fromJson(QJsonObject source) {
+	AuthenticationResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void AuthenticationResult::setFromJson(QJsonObject source) {
-	m_user = fromJsonValue<QSharedPointer<UserDto>>(source["User"]);
-	m_sessionInfo = fromJsonValue<QSharedPointer<SessionInfo>>(source["SessionInfo"]);
-	m_accessToken = fromJsonValue<QString>(source["AccessToken"]);
-	m_serverId = fromJsonValue<QString>(source["ServerId"]);
+	m_user = Jellyfin::Support::fromJsonValue<QSharedPointer<UserDto>>(source["User"]);
+	m_sessionInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<SessionInfo>>(source["SessionInfo"]);
+	m_accessToken = Jellyfin::Support::fromJsonValue<QString>(source["AccessToken"]);
+	m_serverId = Jellyfin::Support::fromJsonValue<QString>(source["ServerId"]);
 
 }
 	
 QJsonObject AuthenticationResult::toJson() {
 	QJsonObject result;
-	result["User"] = toJsonValue<QSharedPointer<UserDto>>(m_user);
-	result["SessionInfo"] = toJsonValue<QSharedPointer<SessionInfo>>(m_sessionInfo);
-	result["AccessToken"] = toJsonValue<QString>(m_accessToken);
-	result["ServerId"] = toJsonValue<QString>(m_serverId);
+	result["User"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserDto>>(m_user);
+	result["SessionInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<SessionInfo>>(m_sessionInfo);
+	result["AccessToken"] = Jellyfin::Support::toJsonValue<QString>(m_accessToken);
+	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void AuthenticationResult::setServerId(QString newServerId) {
 	m_serverId = newServerId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using AuthenticationResult = Jellyfin::DTO::AuthenticationResult;
+
+template <>
+AuthenticationResult fromJsonValue<AuthenticationResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AuthenticationResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

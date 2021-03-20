@@ -50,16 +50,3 @@ protected:
 
 {{/each}}
 };
-
-} // NS DTO
-
-namespace Support {
-
-using {{className}} = Jellyfin::DTO::{{className}};
-
-template <>
-
-{{className}} fromJsonValue<{{className}}>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return {{className}}::fromJson(source.toObject());
-}

@@ -78,18 +78,6 @@ protected:
 	QDateTime m_pinExpirationDate;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ForgotPasswordResult = Jellyfin::DTO::ForgotPasswordResult;
-
-template <>
-ForgotPasswordResult fromJsonValue<ForgotPasswordResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ForgotPasswordResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

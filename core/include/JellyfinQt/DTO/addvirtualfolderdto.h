@@ -59,18 +59,6 @@ protected:
 	QSharedPointer<LibraryOptions> m_libraryOptions = nullptr;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using AddVirtualFolderDto = Jellyfin::DTO::AddVirtualFolderDto;
-
-template <>
-AddVirtualFolderDto fromJsonValue<AddVirtualFolderDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return AddVirtualFolderDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

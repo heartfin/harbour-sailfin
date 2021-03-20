@@ -32,44 +32,45 @@
 namespace Jellyfin {
 namespace DTO {
 
-ChannelFeatures::ChannelFeatures(QObject *parent) {}
+ChannelFeatures::ChannelFeatures() {}
 
-ChannelFeatures ChannelFeatures::fromJson(QJsonObject source) {ChannelFeatures instance;
-	instance->setFromJson(source, false);
+ChannelFeatures ChannelFeatures::fromJson(QJsonObject source) {
+	ChannelFeatures instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ChannelFeatures::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_canSearch = fromJsonValue<bool>(source["CanSearch"]);
-	m_mediaTypes = fromJsonValue<QList<ChannelMediaType>>(source["MediaTypes"]);
-	m_contentTypes = fromJsonValue<QList<ChannelMediaContentType>>(source["ContentTypes"]);
-	m_maxPageSize = fromJsonValue<qint32>(source["MaxPageSize"]);
-	m_autoRefreshLevels = fromJsonValue<qint32>(source["AutoRefreshLevels"]);
-	m_defaultSortFields = fromJsonValue<QList<ChannelItemSortField>>(source["DefaultSortFields"]);
-	m_supportsSortOrderToggle = fromJsonValue<bool>(source["SupportsSortOrderToggle"]);
-	m_supportsLatestMedia = fromJsonValue<bool>(source["SupportsLatestMedia"]);
-	m_canFilter = fromJsonValue<bool>(source["CanFilter"]);
-	m_supportsContentDownloading = fromJsonValue<bool>(source["SupportsContentDownloading"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_canSearch = Jellyfin::Support::fromJsonValue<bool>(source["CanSearch"]);
+	m_mediaTypes = Jellyfin::Support::fromJsonValue<QList<ChannelMediaType>>(source["MediaTypes"]);
+	m_contentTypes = Jellyfin::Support::fromJsonValue<QList<ChannelMediaContentType>>(source["ContentTypes"]);
+	m_maxPageSize = Jellyfin::Support::fromJsonValue<qint32>(source["MaxPageSize"]);
+	m_autoRefreshLevels = Jellyfin::Support::fromJsonValue<qint32>(source["AutoRefreshLevels"]);
+	m_defaultSortFields = Jellyfin::Support::fromJsonValue<QList<ChannelItemSortField>>(source["DefaultSortFields"]);
+	m_supportsSortOrderToggle = Jellyfin::Support::fromJsonValue<bool>(source["SupportsSortOrderToggle"]);
+	m_supportsLatestMedia = Jellyfin::Support::fromJsonValue<bool>(source["SupportsLatestMedia"]);
+	m_canFilter = Jellyfin::Support::fromJsonValue<bool>(source["CanFilter"]);
+	m_supportsContentDownloading = Jellyfin::Support::fromJsonValue<bool>(source["SupportsContentDownloading"]);
 
 }
 	
 QJsonObject ChannelFeatures::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["CanSearch"] = toJsonValue<bool>(m_canSearch);
-	result["MediaTypes"] = toJsonValue<QList<ChannelMediaType>>(m_mediaTypes);
-	result["ContentTypes"] = toJsonValue<QList<ChannelMediaContentType>>(m_contentTypes);
-	result["MaxPageSize"] = toJsonValue<qint32>(m_maxPageSize);
-	result["AutoRefreshLevels"] = toJsonValue<qint32>(m_autoRefreshLevels);
-	result["DefaultSortFields"] = toJsonValue<QList<ChannelItemSortField>>(m_defaultSortFields);
-	result["SupportsSortOrderToggle"] = toJsonValue<bool>(m_supportsSortOrderToggle);
-	result["SupportsLatestMedia"] = toJsonValue<bool>(m_supportsLatestMedia);
-	result["CanFilter"] = toJsonValue<bool>(m_canFilter);
-	result["SupportsContentDownloading"] = toJsonValue<bool>(m_supportsContentDownloading);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["CanSearch"] = Jellyfin::Support::toJsonValue<bool>(m_canSearch);
+	result["MediaTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaType>>(m_mediaTypes);
+	result["ContentTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaContentType>>(m_contentTypes);
+	result["MaxPageSize"] = Jellyfin::Support::toJsonValue<qint32>(m_maxPageSize);
+	result["AutoRefreshLevels"] = Jellyfin::Support::toJsonValue<qint32>(m_autoRefreshLevels);
+	result["DefaultSortFields"] = Jellyfin::Support::toJsonValue<QList<ChannelItemSortField>>(m_defaultSortFields);
+	result["SupportsSortOrderToggle"] = Jellyfin::Support::toJsonValue<bool>(m_supportsSortOrderToggle);
+	result["SupportsLatestMedia"] = Jellyfin::Support::toJsonValue<bool>(m_supportsLatestMedia);
+	result["CanFilter"] = Jellyfin::Support::toJsonValue<bool>(m_canFilter);
+	result["SupportsContentDownloading"] = Jellyfin::Support::toJsonValue<bool>(m_supportsContentDownloading);
 
 	return result;
 }
@@ -135,6 +136,17 @@ void ChannelFeatures::setSupportsContentDownloading(bool newSupportsContentDownl
 	m_supportsContentDownloading = newSupportsContentDownloading;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ChannelFeatures = Jellyfin::DTO::ChannelFeatures;
+
+template <>
+ChannelFeatures fromJsonValue<ChannelFeatures>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ChannelFeatures::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

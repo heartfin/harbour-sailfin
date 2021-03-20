@@ -73,18 +73,6 @@ protected:
 	QString m_updateType;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MediaUpdateInfoDto = Jellyfin::DTO::MediaUpdateInfoDto;
-
-template <>
-MediaUpdateInfoDto fromJsonValue<MediaUpdateInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MediaUpdateInfoDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

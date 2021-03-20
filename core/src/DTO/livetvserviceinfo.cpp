@@ -32,36 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-LiveTvServiceInfo::LiveTvServiceInfo(QObject *parent) {}
+LiveTvServiceInfo::LiveTvServiceInfo() {}
 
-LiveTvServiceInfo LiveTvServiceInfo::fromJson(QJsonObject source) {LiveTvServiceInfo instance;
-	instance->setFromJson(source, false);
+LiveTvServiceInfo LiveTvServiceInfo::fromJson(QJsonObject source) {
+	LiveTvServiceInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void LiveTvServiceInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_homePageUrl = fromJsonValue<QString>(source["HomePageUrl"]);
-	m_status = fromJsonValue<LiveTvServiceStatus>(source["Status"]);
-	m_statusMessage = fromJsonValue<QString>(source["StatusMessage"]);
-	m_version = fromJsonValue<QString>(source["Version"]);
-	m_hasUpdateAvailable = fromJsonValue<bool>(source["HasUpdateAvailable"]);
-	m_isVisible = fromJsonValue<bool>(source["IsVisible"]);
-	m_tuners = fromJsonValue<QStringList>(source["Tuners"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_homePageUrl = Jellyfin::Support::fromJsonValue<QString>(source["HomePageUrl"]);
+	m_status = Jellyfin::Support::fromJsonValue<LiveTvServiceStatus>(source["Status"]);
+	m_statusMessage = Jellyfin::Support::fromJsonValue<QString>(source["StatusMessage"]);
+	m_version = Jellyfin::Support::fromJsonValue<QString>(source["Version"]);
+	m_hasUpdateAvailable = Jellyfin::Support::fromJsonValue<bool>(source["HasUpdateAvailable"]);
+	m_isVisible = Jellyfin::Support::fromJsonValue<bool>(source["IsVisible"]);
+	m_tuners = Jellyfin::Support::fromJsonValue<QStringList>(source["Tuners"]);
 
 }
 	
 QJsonObject LiveTvServiceInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["HomePageUrl"] = toJsonValue<QString>(m_homePageUrl);
-	result["Status"] = toJsonValue<LiveTvServiceStatus>(m_status);
-	result["StatusMessage"] = toJsonValue<QString>(m_statusMessage);
-	result["Version"] = toJsonValue<QString>(m_version);
-	result["HasUpdateAvailable"] = toJsonValue<bool>(m_hasUpdateAvailable);
-	result["IsVisible"] = toJsonValue<bool>(m_isVisible);
-	result["Tuners"] = toJsonValue<QStringList>(m_tuners);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["HomePageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_homePageUrl);
+	result["Status"] = Jellyfin::Support::toJsonValue<LiveTvServiceStatus>(m_status);
+	result["StatusMessage"] = Jellyfin::Support::toJsonValue<QString>(m_statusMessage);
+	result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	result["HasUpdateAvailable"] = Jellyfin::Support::toJsonValue<bool>(m_hasUpdateAvailable);
+	result["IsVisible"] = Jellyfin::Support::toJsonValue<bool>(m_isVisible);
+	result["Tuners"] = Jellyfin::Support::toJsonValue<QStringList>(m_tuners);
 
 	return result;
 }
@@ -107,6 +108,17 @@ void LiveTvServiceInfo::setTuners(QStringList newTuners) {
 	m_tuners = newTuners;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using LiveTvServiceInfo = Jellyfin::DTO::LiveTvServiceInfo;
+
+template <>
+LiveTvServiceInfo fromJsonValue<LiveTvServiceInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LiveTvServiceInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

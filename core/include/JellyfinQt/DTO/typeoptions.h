@@ -87,18 +87,6 @@ protected:
 	QList<QSharedPointer<ImageOption>> m_imageOptions;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TypeOptions = Jellyfin::DTO::TypeOptions;
-
-template <>
-TypeOptions fromJsonValue<TypeOptions>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TypeOptions::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

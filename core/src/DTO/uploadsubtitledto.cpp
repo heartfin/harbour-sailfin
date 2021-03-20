@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-UploadSubtitleDto::UploadSubtitleDto(QObject *parent) {}
+UploadSubtitleDto::UploadSubtitleDto() {}
 
-UploadSubtitleDto UploadSubtitleDto::fromJson(QJsonObject source) {UploadSubtitleDto instance;
-	instance->setFromJson(source, false);
+UploadSubtitleDto UploadSubtitleDto::fromJson(QJsonObject source) {
+	UploadSubtitleDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void UploadSubtitleDto::setFromJson(QJsonObject source) {
-	m_language = fromJsonValue<QString>(source["Language"]);
-	m_format = fromJsonValue<QString>(source["Format"]);
-	m_isForced = fromJsonValue<bool>(source["IsForced"]);
-	m_data = fromJsonValue<QString>(source["Data"]);
+	m_language = Jellyfin::Support::fromJsonValue<QString>(source["Language"]);
+	m_format = Jellyfin::Support::fromJsonValue<QString>(source["Format"]);
+	m_isForced = Jellyfin::Support::fromJsonValue<bool>(source["IsForced"]);
+	m_data = Jellyfin::Support::fromJsonValue<QString>(source["Data"]);
 
 }
 	
 QJsonObject UploadSubtitleDto::toJson() {
 	QJsonObject result;
-	result["Language"] = toJsonValue<QString>(m_language);
-	result["Format"] = toJsonValue<QString>(m_format);
-	result["IsForced"] = toJsonValue<bool>(m_isForced);
-	result["Data"] = toJsonValue<QString>(m_data);
+	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
+	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
+	result["IsForced"] = Jellyfin::Support::toJsonValue<bool>(m_isForced);
+	result["Data"] = Jellyfin::Support::toJsonValue<QString>(m_data);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void UploadSubtitleDto::setData(QString newData) {
 	m_data = newData;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using UploadSubtitleDto = Jellyfin::DTO::UploadSubtitleDto;
+
+template <>
+UploadSubtitleDto fromJsonValue<UploadSubtitleDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UploadSubtitleDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

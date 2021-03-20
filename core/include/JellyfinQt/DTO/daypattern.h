@@ -55,31 +55,6 @@ private:
 
 typedef DayPatternClass::Value DayPattern;
 
-} // NS DTO
-
-namespace Support {
-
-using DayPattern = Jellyfin::DTO::DayPattern;
-using DayPatternClass = Jellyfin::DTO::DayPatternClass;
-
-template <>
-DayPattern fromJsonValue<DayPattern>(const QJsonValue &source) {
-	if (!source.isString()) return DayPatternClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Daily")) {
-		return DayPatternClass::Daily;
-	}
-	if (str == QStringLiteral("Weekdays")) {
-		return DayPatternClass::Weekdays;
-	}
-	if (str == QStringLiteral("Weekends")) {
-		return DayPatternClass::Weekends;
-	}
-	
-	return DayPatternClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

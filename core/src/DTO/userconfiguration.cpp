@@ -32,50 +32,51 @@
 namespace Jellyfin {
 namespace DTO {
 
-UserConfiguration::UserConfiguration(QObject *parent) {}
+UserConfiguration::UserConfiguration() {}
 
-UserConfiguration UserConfiguration::fromJson(QJsonObject source) {UserConfiguration instance;
-	instance->setFromJson(source, false);
+UserConfiguration UserConfiguration::fromJson(QJsonObject source) {
+	UserConfiguration instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void UserConfiguration::setFromJson(QJsonObject source) {
-	m_audioLanguagePreference = fromJsonValue<QString>(source["AudioLanguagePreference"]);
-	m_playDefaultAudioTrack = fromJsonValue<bool>(source["PlayDefaultAudioTrack"]);
-	m_subtitleLanguagePreference = fromJsonValue<QString>(source["SubtitleLanguagePreference"]);
-	m_displayMissingEpisodes = fromJsonValue<bool>(source["DisplayMissingEpisodes"]);
-	m_groupedFolders = fromJsonValue<QStringList>(source["GroupedFolders"]);
-	m_subtitleMode = fromJsonValue<SubtitlePlaybackMode>(source["SubtitleMode"]);
-	m_displayCollectionsView = fromJsonValue<bool>(source["DisplayCollectionsView"]);
-	m_enableLocalPassword = fromJsonValue<bool>(source["EnableLocalPassword"]);
-	m_orderedViews = fromJsonValue<QStringList>(source["OrderedViews"]);
-	m_latestItemsExcludes = fromJsonValue<QStringList>(source["LatestItemsExcludes"]);
-	m_myMediaExcludes = fromJsonValue<QStringList>(source["MyMediaExcludes"]);
-	m_hidePlayedInLatest = fromJsonValue<bool>(source["HidePlayedInLatest"]);
-	m_rememberAudioSelections = fromJsonValue<bool>(source["RememberAudioSelections"]);
-	m_rememberSubtitleSelections = fromJsonValue<bool>(source["RememberSubtitleSelections"]);
-	m_enableNextEpisodeAutoPlay = fromJsonValue<bool>(source["EnableNextEpisodeAutoPlay"]);
+	m_audioLanguagePreference = Jellyfin::Support::fromJsonValue<QString>(source["AudioLanguagePreference"]);
+	m_playDefaultAudioTrack = Jellyfin::Support::fromJsonValue<bool>(source["PlayDefaultAudioTrack"]);
+	m_subtitleLanguagePreference = Jellyfin::Support::fromJsonValue<QString>(source["SubtitleLanguagePreference"]);
+	m_displayMissingEpisodes = Jellyfin::Support::fromJsonValue<bool>(source["DisplayMissingEpisodes"]);
+	m_groupedFolders = Jellyfin::Support::fromJsonValue<QStringList>(source["GroupedFolders"]);
+	m_subtitleMode = Jellyfin::Support::fromJsonValue<SubtitlePlaybackMode>(source["SubtitleMode"]);
+	m_displayCollectionsView = Jellyfin::Support::fromJsonValue<bool>(source["DisplayCollectionsView"]);
+	m_enableLocalPassword = Jellyfin::Support::fromJsonValue<bool>(source["EnableLocalPassword"]);
+	m_orderedViews = Jellyfin::Support::fromJsonValue<QStringList>(source["OrderedViews"]);
+	m_latestItemsExcludes = Jellyfin::Support::fromJsonValue<QStringList>(source["LatestItemsExcludes"]);
+	m_myMediaExcludes = Jellyfin::Support::fromJsonValue<QStringList>(source["MyMediaExcludes"]);
+	m_hidePlayedInLatest = Jellyfin::Support::fromJsonValue<bool>(source["HidePlayedInLatest"]);
+	m_rememberAudioSelections = Jellyfin::Support::fromJsonValue<bool>(source["RememberAudioSelections"]);
+	m_rememberSubtitleSelections = Jellyfin::Support::fromJsonValue<bool>(source["RememberSubtitleSelections"]);
+	m_enableNextEpisodeAutoPlay = Jellyfin::Support::fromJsonValue<bool>(source["EnableNextEpisodeAutoPlay"]);
 
 }
 	
 QJsonObject UserConfiguration::toJson() {
 	QJsonObject result;
-	result["AudioLanguagePreference"] = toJsonValue<QString>(m_audioLanguagePreference);
-	result["PlayDefaultAudioTrack"] = toJsonValue<bool>(m_playDefaultAudioTrack);
-	result["SubtitleLanguagePreference"] = toJsonValue<QString>(m_subtitleLanguagePreference);
-	result["DisplayMissingEpisodes"] = toJsonValue<bool>(m_displayMissingEpisodes);
-	result["GroupedFolders"] = toJsonValue<QStringList>(m_groupedFolders);
-	result["SubtitleMode"] = toJsonValue<SubtitlePlaybackMode>(m_subtitleMode);
-	result["DisplayCollectionsView"] = toJsonValue<bool>(m_displayCollectionsView);
-	result["EnableLocalPassword"] = toJsonValue<bool>(m_enableLocalPassword);
-	result["OrderedViews"] = toJsonValue<QStringList>(m_orderedViews);
-	result["LatestItemsExcludes"] = toJsonValue<QStringList>(m_latestItemsExcludes);
-	result["MyMediaExcludes"] = toJsonValue<QStringList>(m_myMediaExcludes);
-	result["HidePlayedInLatest"] = toJsonValue<bool>(m_hidePlayedInLatest);
-	result["RememberAudioSelections"] = toJsonValue<bool>(m_rememberAudioSelections);
-	result["RememberSubtitleSelections"] = toJsonValue<bool>(m_rememberSubtitleSelections);
-	result["EnableNextEpisodeAutoPlay"] = toJsonValue<bool>(m_enableNextEpisodeAutoPlay);
+	result["AudioLanguagePreference"] = Jellyfin::Support::toJsonValue<QString>(m_audioLanguagePreference);
+	result["PlayDefaultAudioTrack"] = Jellyfin::Support::toJsonValue<bool>(m_playDefaultAudioTrack);
+	result["SubtitleLanguagePreference"] = Jellyfin::Support::toJsonValue<QString>(m_subtitleLanguagePreference);
+	result["DisplayMissingEpisodes"] = Jellyfin::Support::toJsonValue<bool>(m_displayMissingEpisodes);
+	result["GroupedFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_groupedFolders);
+	result["SubtitleMode"] = Jellyfin::Support::toJsonValue<SubtitlePlaybackMode>(m_subtitleMode);
+	result["DisplayCollectionsView"] = Jellyfin::Support::toJsonValue<bool>(m_displayCollectionsView);
+	result["EnableLocalPassword"] = Jellyfin::Support::toJsonValue<bool>(m_enableLocalPassword);
+	result["OrderedViews"] = Jellyfin::Support::toJsonValue<QStringList>(m_orderedViews);
+	result["LatestItemsExcludes"] = Jellyfin::Support::toJsonValue<QStringList>(m_latestItemsExcludes);
+	result["MyMediaExcludes"] = Jellyfin::Support::toJsonValue<QStringList>(m_myMediaExcludes);
+	result["HidePlayedInLatest"] = Jellyfin::Support::toJsonValue<bool>(m_hidePlayedInLatest);
+	result["RememberAudioSelections"] = Jellyfin::Support::toJsonValue<bool>(m_rememberAudioSelections);
+	result["RememberSubtitleSelections"] = Jellyfin::Support::toJsonValue<bool>(m_rememberSubtitleSelections);
+	result["EnableNextEpisodeAutoPlay"] = Jellyfin::Support::toJsonValue<bool>(m_enableNextEpisodeAutoPlay);
 
 	return result;
 }
@@ -156,6 +157,17 @@ void UserConfiguration::setEnableNextEpisodeAutoPlay(bool newEnableNextEpisodeAu
 	m_enableNextEpisodeAutoPlay = newEnableNextEpisodeAutoPlay;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using UserConfiguration = Jellyfin::DTO::UserConfiguration;
+
+template <>
+UserConfiguration fromJsonValue<UserConfiguration>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UserConfiguration::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

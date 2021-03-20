@@ -55,31 +55,6 @@ private:
 
 typedef MediaSourceTypeClass::Value MediaSourceType;
 
-} // NS DTO
-
-namespace Support {
-
-using MediaSourceType = Jellyfin::DTO::MediaSourceType;
-using MediaSourceTypeClass = Jellyfin::DTO::MediaSourceTypeClass;
-
-template <>
-MediaSourceType fromJsonValue<MediaSourceType>(const QJsonValue &source) {
-	if (!source.isString()) return MediaSourceTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Default")) {
-		return MediaSourceTypeClass::Default;
-	}
-	if (str == QStringLiteral("Grouping")) {
-		return MediaSourceTypeClass::Grouping;
-	}
-	if (str == QStringLiteral("Placeholder")) {
-		return MediaSourceTypeClass::Placeholder;
-	}
-	
-	return MediaSourceTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,42 +32,43 @@
 namespace Jellyfin {
 namespace DTO {
 
-UserItemDataDto::UserItemDataDto(QObject *parent) {}
+UserItemDataDto::UserItemDataDto() {}
 
-UserItemDataDto UserItemDataDto::fromJson(QJsonObject source) {UserItemDataDto instance;
-	instance->setFromJson(source, false);
+UserItemDataDto UserItemDataDto::fromJson(QJsonObject source) {
+	UserItemDataDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void UserItemDataDto::setFromJson(QJsonObject source) {
-	m_rating = fromJsonValue<double>(source["Rating"]);
-	m_playedPercentage = fromJsonValue<double>(source["PlayedPercentage"]);
-	m_unplayedItemCount = fromJsonValue<qint32>(source["UnplayedItemCount"]);
-	m_playbackPositionTicks = fromJsonValue<qint64>(source["PlaybackPositionTicks"]);
-	m_playCount = fromJsonValue<qint32>(source["PlayCount"]);
-	m_isFavorite = fromJsonValue<bool>(source["IsFavorite"]);
-	m_likes = fromJsonValue<bool>(source["Likes"]);
-	m_lastPlayedDate = fromJsonValue<QDateTime>(source["LastPlayedDate"]);
-	m_played = fromJsonValue<bool>(source["Played"]);
-	m_key = fromJsonValue<QString>(source["Key"]);
-	m_itemId = fromJsonValue<QString>(source["ItemId"]);
+	m_rating = Jellyfin::Support::fromJsonValue<double>(source["Rating"]);
+	m_playedPercentage = Jellyfin::Support::fromJsonValue<double>(source["PlayedPercentage"]);
+	m_unplayedItemCount = Jellyfin::Support::fromJsonValue<qint32>(source["UnplayedItemCount"]);
+	m_playbackPositionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["PlaybackPositionTicks"]);
+	m_playCount = Jellyfin::Support::fromJsonValue<qint32>(source["PlayCount"]);
+	m_isFavorite = Jellyfin::Support::fromJsonValue<bool>(source["IsFavorite"]);
+	m_likes = Jellyfin::Support::fromJsonValue<bool>(source["Likes"]);
+	m_lastPlayedDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["LastPlayedDate"]);
+	m_played = Jellyfin::Support::fromJsonValue<bool>(source["Played"]);
+	m_key = Jellyfin::Support::fromJsonValue<QString>(source["Key"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QString>(source["ItemId"]);
 
 }
 	
 QJsonObject UserItemDataDto::toJson() {
 	QJsonObject result;
-	result["Rating"] = toJsonValue<double>(m_rating);
-	result["PlayedPercentage"] = toJsonValue<double>(m_playedPercentage);
-	result["UnplayedItemCount"] = toJsonValue<qint32>(m_unplayedItemCount);
-	result["PlaybackPositionTicks"] = toJsonValue<qint64>(m_playbackPositionTicks);
-	result["PlayCount"] = toJsonValue<qint32>(m_playCount);
-	result["IsFavorite"] = toJsonValue<bool>(m_isFavorite);
-	result["Likes"] = toJsonValue<bool>(m_likes);
-	result["LastPlayedDate"] = toJsonValue<QDateTime>(m_lastPlayedDate);
-	result["Played"] = toJsonValue<bool>(m_played);
-	result["Key"] = toJsonValue<QString>(m_key);
-	result["ItemId"] = toJsonValue<QString>(m_itemId);
+	result["Rating"] = Jellyfin::Support::toJsonValue<double>(m_rating);
+	result["PlayedPercentage"] = Jellyfin::Support::toJsonValue<double>(m_playedPercentage);
+	result["UnplayedItemCount"] = Jellyfin::Support::toJsonValue<qint32>(m_unplayedItemCount);
+	result["PlaybackPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_playbackPositionTicks);
+	result["PlayCount"] = Jellyfin::Support::toJsonValue<qint32>(m_playCount);
+	result["IsFavorite"] = Jellyfin::Support::toJsonValue<bool>(m_isFavorite);
+	result["Likes"] = Jellyfin::Support::toJsonValue<bool>(m_likes);
+	result["LastPlayedDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastPlayedDate);
+	result["Played"] = Jellyfin::Support::toJsonValue<bool>(m_played);
+	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
 
 	return result;
 }
@@ -128,6 +129,17 @@ void UserItemDataDto::setItemId(QString newItemId) {
 	m_itemId = newItemId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using UserItemDataDto = Jellyfin::DTO::UserItemDataDto;
+
+template <>
+UserItemDataDto fromJsonValue<UserItemDataDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UserItemDataDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

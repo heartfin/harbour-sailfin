@@ -54,28 +54,6 @@ private:
 
 typedef EncodingContextClass::Value EncodingContext;
 
-} // NS DTO
-
-namespace Support {
-
-using EncodingContext = Jellyfin::DTO::EncodingContext;
-using EncodingContextClass = Jellyfin::DTO::EncodingContextClass;
-
-template <>
-EncodingContext fromJsonValue<EncodingContext>(const QJsonValue &source) {
-	if (!source.isString()) return EncodingContextClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Streaming")) {
-		return EncodingContextClass::Streaming;
-	}
-	if (str == QStringLiteral("Static")) {
-		return EncodingContextClass::Static;
-	}
-	
-	return EncodingContextClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

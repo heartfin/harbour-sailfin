@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaUpdateInfoDto::MediaUpdateInfoDto(QObject *parent) {}
+MediaUpdateInfoDto::MediaUpdateInfoDto() {}
 
-MediaUpdateInfoDto MediaUpdateInfoDto::fromJson(QJsonObject source) {MediaUpdateInfoDto instance;
-	instance->setFromJson(source, false);
+MediaUpdateInfoDto MediaUpdateInfoDto::fromJson(QJsonObject source) {
+	MediaUpdateInfoDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MediaUpdateInfoDto::setFromJson(QJsonObject source) {
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_updateType = fromJsonValue<QString>(source["UpdateType"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_updateType = Jellyfin::Support::fromJsonValue<QString>(source["UpdateType"]);
 
 }
 	
 QJsonObject MediaUpdateInfoDto::toJson() {
 	QJsonObject result;
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["UpdateType"] = toJsonValue<QString>(m_updateType);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["UpdateType"] = Jellyfin::Support::toJsonValue<QString>(m_updateType);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void MediaUpdateInfoDto::setUpdateType(QString newUpdateType) {
 	m_updateType = newUpdateType;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MediaUpdateInfoDto = Jellyfin::DTO::MediaUpdateInfoDto;
+
+template <>
+MediaUpdateInfoDto fromJsonValue<MediaUpdateInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaUpdateInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

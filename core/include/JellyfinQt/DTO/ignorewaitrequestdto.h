@@ -61,18 +61,6 @@ protected:
 	bool m_ignoreWait;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using IgnoreWaitRequestDto = Jellyfin::DTO::IgnoreWaitRequestDto;
-
-template <>
-IgnoreWaitRequestDto fromJsonValue<IgnoreWaitRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return IgnoreWaitRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

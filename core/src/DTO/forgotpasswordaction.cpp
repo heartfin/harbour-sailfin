@@ -34,5 +34,30 @@ namespace DTO {
 
 ForgotPasswordActionClass::ForgotPasswordActionClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ForgotPasswordAction = Jellyfin::DTO::ForgotPasswordAction;
+
+template <>
+ForgotPasswordAction fromJsonValue<ForgotPasswordAction>(const QJsonValue &source) {
+	if (!source.isString()) return ForgotPasswordAction::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("ContactAdmin")) {
+		return ForgotPasswordAction::ContactAdmin;
+	}
+	if (str == QStringLiteral("PinCode")) {
+		return ForgotPasswordAction::PinCode;
+	}
+	if (str == QStringLiteral("InNetworkRequired")) {
+		return ForgotPasswordAction::InNetworkRequired;
+	}
+	
+	return ForgotPasswordAction::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

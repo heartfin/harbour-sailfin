@@ -54,28 +54,6 @@ private:
 
 typedef GroupShuffleModeClass::Value GroupShuffleMode;
 
-} // NS DTO
-
-namespace Support {
-
-using GroupShuffleMode = Jellyfin::DTO::GroupShuffleMode;
-using GroupShuffleModeClass = Jellyfin::DTO::GroupShuffleModeClass;
-
-template <>
-GroupShuffleMode fromJsonValue<GroupShuffleMode>(const QJsonValue &source) {
-	if (!source.isString()) return GroupShuffleModeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Sorted")) {
-		return GroupShuffleModeClass::Sorted;
-	}
-	if (str == QStringLiteral("Shuffle")) {
-		return GroupShuffleModeClass::Shuffle;
-	}
-	
-	return GroupShuffleModeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

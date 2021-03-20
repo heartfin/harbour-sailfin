@@ -34,5 +34,42 @@ namespace DTO {
 
 PluginStatusClass::PluginStatusClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using PluginStatus = Jellyfin::DTO::PluginStatus;
+
+template <>
+PluginStatus fromJsonValue<PluginStatus>(const QJsonValue &source) {
+	if (!source.isString()) return PluginStatus::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Active")) {
+		return PluginStatus::Active;
+	}
+	if (str == QStringLiteral("Restart")) {
+		return PluginStatus::Restart;
+	}
+	if (str == QStringLiteral("Deleted")) {
+		return PluginStatus::Deleted;
+	}
+	if (str == QStringLiteral("Superceded")) {
+		return PluginStatus::Superceded;
+	}
+	if (str == QStringLiteral("Malfunctioned")) {
+		return PluginStatus::Malfunctioned;
+	}
+	if (str == QStringLiteral("NotSupported")) {
+		return PluginStatus::NotSupported;
+	}
+	if (str == QStringLiteral("Disabled")) {
+		return PluginStatus::Disabled;
+	}
+	
+	return PluginStatus::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

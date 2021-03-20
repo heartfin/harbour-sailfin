@@ -80,18 +80,6 @@ protected:
 	QString m_providerChannelId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SetChannelMappingDto = Jellyfin::DTO::SetChannelMappingDto;
-
-template <>
-SetChannelMappingDto fromJsonValue<SetChannelMappingDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SetChannelMappingDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

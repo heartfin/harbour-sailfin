@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-CodecProfile::CodecProfile(QObject *parent) {}
+CodecProfile::CodecProfile() {}
 
-CodecProfile CodecProfile::fromJson(QJsonObject source) {CodecProfile instance;
-	instance->setFromJson(source, false);
+CodecProfile CodecProfile::fromJson(QJsonObject source) {
+	CodecProfile instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void CodecProfile::setFromJson(QJsonObject source) {
-	m_type = fromJsonValue<CodecType>(source["Type"]);
-	m_conditions = fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
-	m_applyConditions = fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["ApplyConditions"]);
-	m_codec = fromJsonValue<QString>(source["Codec"]);
-	m_container = fromJsonValue<QString>(source["Container"]);
+	m_type = Jellyfin::Support::fromJsonValue<CodecType>(source["Type"]);
+	m_conditions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
+	m_applyConditions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["ApplyConditions"]);
+	m_codec = Jellyfin::Support::fromJsonValue<QString>(source["Codec"]);
+	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
 
 }
 	
 QJsonObject CodecProfile::toJson() {
 	QJsonObject result;
-	result["Type"] = toJsonValue<CodecType>(m_type);
-	result["Conditions"] = toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
-	result["ApplyConditions"] = toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_applyConditions);
-	result["Codec"] = toJsonValue<QString>(m_codec);
-	result["Container"] = toJsonValue<QString>(m_container);
+	result["Type"] = Jellyfin::Support::toJsonValue<CodecType>(m_type);
+	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
+	result["ApplyConditions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_applyConditions);
+	result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void CodecProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using CodecProfile = Jellyfin::DTO::CodecProfile;
+
+template <>
+CodecProfile fromJsonValue<CodecProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return CodecProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

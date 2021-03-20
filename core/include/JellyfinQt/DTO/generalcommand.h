@@ -69,18 +69,6 @@ protected:
 	QJsonObject m_arguments;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using GeneralCommand = Jellyfin::DTO::GeneralCommand;
-
-template <>
-GeneralCommand fromJsonValue<GeneralCommand>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return GeneralCommand::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

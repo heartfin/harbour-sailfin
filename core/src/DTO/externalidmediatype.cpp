@@ -34,5 +34,57 @@ namespace DTO {
 
 ExternalIdMediaTypeClass::ExternalIdMediaTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ExternalIdMediaType = Jellyfin::DTO::ExternalIdMediaType;
+
+template <>
+ExternalIdMediaType fromJsonValue<ExternalIdMediaType>(const QJsonValue &source) {
+	if (!source.isString()) return ExternalIdMediaType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Album")) {
+		return ExternalIdMediaType::Album;
+	}
+	if (str == QStringLiteral("AlbumArtist")) {
+		return ExternalIdMediaType::AlbumArtist;
+	}
+	if (str == QStringLiteral("Artist")) {
+		return ExternalIdMediaType::Artist;
+	}
+	if (str == QStringLiteral("BoxSet")) {
+		return ExternalIdMediaType::BoxSet;
+	}
+	if (str == QStringLiteral("Episode")) {
+		return ExternalIdMediaType::Episode;
+	}
+	if (str == QStringLiteral("Movie")) {
+		return ExternalIdMediaType::Movie;
+	}
+	if (str == QStringLiteral("OtherArtist")) {
+		return ExternalIdMediaType::OtherArtist;
+	}
+	if (str == QStringLiteral("Person")) {
+		return ExternalIdMediaType::Person;
+	}
+	if (str == QStringLiteral("ReleaseGroup")) {
+		return ExternalIdMediaType::ReleaseGroup;
+	}
+	if (str == QStringLiteral("Season")) {
+		return ExternalIdMediaType::Season;
+	}
+	if (str == QStringLiteral("Series")) {
+		return ExternalIdMediaType::Series;
+	}
+	if (str == QStringLiteral("Track")) {
+		return ExternalIdMediaType::Track;
+	}
+	
+	return ExternalIdMediaType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

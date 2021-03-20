@@ -34,5 +34,27 @@ namespace DTO {
 
 DeviceProfileTypeClass::DeviceProfileTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using DeviceProfileType = Jellyfin::DTO::DeviceProfileType;
+
+template <>
+DeviceProfileType fromJsonValue<DeviceProfileType>(const QJsonValue &source) {
+	if (!source.isString()) return DeviceProfileType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("System")) {
+		return DeviceProfileType::System;
+	}
+	if (str == QStringLiteral("User")) {
+		return DeviceProfileType::User;
+	}
+	
+	return DeviceProfileType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

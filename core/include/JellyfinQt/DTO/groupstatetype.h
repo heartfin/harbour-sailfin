@@ -56,34 +56,6 @@ private:
 
 typedef GroupStateTypeClass::Value GroupStateType;
 
-} // NS DTO
-
-namespace Support {
-
-using GroupStateType = Jellyfin::DTO::GroupStateType;
-using GroupStateTypeClass = Jellyfin::DTO::GroupStateTypeClass;
-
-template <>
-GroupStateType fromJsonValue<GroupStateType>(const QJsonValue &source) {
-	if (!source.isString()) return GroupStateTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Idle")) {
-		return GroupStateTypeClass::Idle;
-	}
-	if (str == QStringLiteral("Waiting")) {
-		return GroupStateTypeClass::Waiting;
-	}
-	if (str == QStringLiteral("Paused")) {
-		return GroupStateTypeClass::Paused;
-	}
-	if (str == QStringLiteral("Playing")) {
-		return GroupStateTypeClass::Playing;
-	}
-	
-	return GroupStateTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

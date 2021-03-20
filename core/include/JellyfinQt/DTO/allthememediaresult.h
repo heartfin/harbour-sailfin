@@ -69,18 +69,6 @@ protected:
 	QSharedPointer<ThemeMediaResult> m_soundtrackSongsResult = nullptr;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using AllThemeMediaResult = Jellyfin::DTO::AllThemeMediaResult;
-
-template <>
-AllThemeMediaResult fromJsonValue<AllThemeMediaResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return AllThemeMediaResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -262,18 +262,6 @@ protected:
 	QList<GeneralCommandType> m_supportedCommands;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SessionInfo = Jellyfin::DTO::SessionInfo;
-
-template <>
-SessionInfo fromJsonValue<SessionInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SessionInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

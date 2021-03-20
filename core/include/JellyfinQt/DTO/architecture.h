@@ -57,37 +57,6 @@ private:
 
 typedef ArchitectureClass::Value Architecture;
 
-} // NS DTO
-
-namespace Support {
-
-using Architecture = Jellyfin::DTO::Architecture;
-using ArchitectureClass = Jellyfin::DTO::ArchitectureClass;
-
-template <>
-Architecture fromJsonValue<Architecture>(const QJsonValue &source) {
-	if (!source.isString()) return ArchitectureClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("X86")) {
-		return ArchitectureClass::X86;
-	}
-	if (str == QStringLiteral("X64")) {
-		return ArchitectureClass::X64;
-	}
-	if (str == QStringLiteral("Arm")) {
-		return ArchitectureClass::Arm;
-	}
-	if (str == QStringLiteral("Arm64")) {
-		return ArchitectureClass::Arm64;
-	}
-	if (str == QStringLiteral("Wasm")) {
-		return ArchitectureClass::Wasm;
-	}
-	
-	return ArchitectureClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -54,28 +54,6 @@ private:
 
 typedef LiveTvServiceStatusClass::Value LiveTvServiceStatus;
 
-} // NS DTO
-
-namespace Support {
-
-using LiveTvServiceStatus = Jellyfin::DTO::LiveTvServiceStatus;
-using LiveTvServiceStatusClass = Jellyfin::DTO::LiveTvServiceStatusClass;
-
-template <>
-LiveTvServiceStatus fromJsonValue<LiveTvServiceStatus>(const QJsonValue &source) {
-	if (!source.isString()) return LiveTvServiceStatusClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Ok")) {
-		return LiveTvServiceStatusClass::Ok;
-	}
-	if (str == QStringLiteral("Unavailable")) {
-		return LiveTvServiceStatusClass::Unavailable;
-	}
-	
-	return LiveTvServiceStatusClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

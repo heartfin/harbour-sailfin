@@ -32,36 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-ImageInfo::ImageInfo(QObject *parent) {}
+ImageInfo::ImageInfo() {}
 
-ImageInfo ImageInfo::fromJson(QJsonObject source) {ImageInfo instance;
-	instance->setFromJson(source, false);
+ImageInfo ImageInfo::fromJson(QJsonObject source) {
+	ImageInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ImageInfo::setFromJson(QJsonObject source) {
-	m_imageType = fromJsonValue<ImageType>(source["ImageType"]);
-	m_imageIndex = fromJsonValue<qint32>(source["ImageIndex"]);
-	m_imageTag = fromJsonValue<QString>(source["ImageTag"]);
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_blurHash = fromJsonValue<QString>(source["BlurHash"]);
-	m_height = fromJsonValue<qint32>(source["Height"]);
-	m_width = fromJsonValue<qint32>(source["Width"]);
-	m_size = fromJsonValue<qint64>(source["Size"]);
+	m_imageType = Jellyfin::Support::fromJsonValue<ImageType>(source["ImageType"]);
+	m_imageIndex = Jellyfin::Support::fromJsonValue<qint32>(source["ImageIndex"]);
+	m_imageTag = Jellyfin::Support::fromJsonValue<QString>(source["ImageTag"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_blurHash = Jellyfin::Support::fromJsonValue<QString>(source["BlurHash"]);
+	m_height = Jellyfin::Support::fromJsonValue<qint32>(source["Height"]);
+	m_width = Jellyfin::Support::fromJsonValue<qint32>(source["Width"]);
+	m_size = Jellyfin::Support::fromJsonValue<qint64>(source["Size"]);
 
 }
 	
 QJsonObject ImageInfo::toJson() {
 	QJsonObject result;
-	result["ImageType"] = toJsonValue<ImageType>(m_imageType);
-	result["ImageIndex"] = toJsonValue<qint32>(m_imageIndex);
-	result["ImageTag"] = toJsonValue<QString>(m_imageTag);
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["BlurHash"] = toJsonValue<QString>(m_blurHash);
-	result["Height"] = toJsonValue<qint32>(m_height);
-	result["Width"] = toJsonValue<qint32>(m_width);
-	result["Size"] = toJsonValue<qint64>(m_size);
+	result["ImageType"] = Jellyfin::Support::toJsonValue<ImageType>(m_imageType);
+	result["ImageIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_imageIndex);
+	result["ImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_imageTag);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["BlurHash"] = Jellyfin::Support::toJsonValue<QString>(m_blurHash);
+	result["Height"] = Jellyfin::Support::toJsonValue<qint32>(m_height);
+	result["Width"] = Jellyfin::Support::toJsonValue<qint32>(m_width);
+	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);
 
 	return result;
 }
@@ -107,6 +108,17 @@ void ImageInfo::setSize(qint64 newSize) {
 	m_size = newSize;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ImageInfo = Jellyfin::DTO::ImageInfo;
+
+template <>
+ImageInfo fromJsonValue<ImageInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ImageInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -34,5 +34,39 @@ namespace DTO {
 
 RecommendationTypeClass::RecommendationTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using RecommendationType = Jellyfin::DTO::RecommendationType;
+
+template <>
+RecommendationType fromJsonValue<RecommendationType>(const QJsonValue &source) {
+	if (!source.isString()) return RecommendationType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("SimilarToRecentlyPlayed")) {
+		return RecommendationType::SimilarToRecentlyPlayed;
+	}
+	if (str == QStringLiteral("SimilarToLikedItem")) {
+		return RecommendationType::SimilarToLikedItem;
+	}
+	if (str == QStringLiteral("HasDirectorFromRecentlyPlayed")) {
+		return RecommendationType::HasDirectorFromRecentlyPlayed;
+	}
+	if (str == QStringLiteral("HasActorFromRecentlyPlayed")) {
+		return RecommendationType::HasActorFromRecentlyPlayed;
+	}
+	if (str == QStringLiteral("HasLikedDirector")) {
+		return RecommendationType::HasLikedDirector;
+	}
+	if (str == QStringLiteral("HasLikedActor")) {
+		return RecommendationType::HasLikedActor;
+	}
+	
+	return RecommendationType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

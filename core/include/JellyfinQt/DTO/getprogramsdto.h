@@ -344,18 +344,6 @@ protected:
 	QList<ItemFields> m_fields;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using GetProgramsDto = Jellyfin::DTO::GetProgramsDto;
-
-template <>
-GetProgramsDto fromJsonValue<GetProgramsDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return GetProgramsDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

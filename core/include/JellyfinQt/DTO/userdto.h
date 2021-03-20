@@ -178,18 +178,6 @@ protected:
 	double m_primaryImageAspectRatio;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using UserDto = Jellyfin::DTO::UserDto;
-
-template <>
-UserDto fromJsonValue<UserDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return UserDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

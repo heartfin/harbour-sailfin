@@ -34,5 +34,36 @@ namespace DTO {
 
 PlayCommandClass::PlayCommandClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using PlayCommand = Jellyfin::DTO::PlayCommand;
+
+template <>
+PlayCommand fromJsonValue<PlayCommand>(const QJsonValue &source) {
+	if (!source.isString()) return PlayCommand::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("PlayNow")) {
+		return PlayCommand::PlayNow;
+	}
+	if (str == QStringLiteral("PlayNext")) {
+		return PlayCommand::PlayNext;
+	}
+	if (str == QStringLiteral("PlayLast")) {
+		return PlayCommand::PlayLast;
+	}
+	if (str == QStringLiteral("PlayInstantMix")) {
+		return PlayCommand::PlayInstantMix;
+	}
+	if (str == QStringLiteral("PlayShuffle")) {
+		return PlayCommand::PlayShuffle;
+	}
+	
+	return PlayCommand::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

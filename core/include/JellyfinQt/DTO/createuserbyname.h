@@ -71,18 +71,6 @@ protected:
 	QString m_password;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using CreateUserByName = Jellyfin::DTO::CreateUserByName;
-
-template <>
-CreateUserByName fromJsonValue<CreateUserByName>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return CreateUserByName::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

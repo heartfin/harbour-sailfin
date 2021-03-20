@@ -62,18 +62,6 @@ protected:
 	QString m_path;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using DefaultDirectoryBrowserInfoDto = Jellyfin::DTO::DefaultDirectoryBrowserInfoDto;
-
-template <>
-DefaultDirectoryBrowserInfoDto fromJsonValue<DefaultDirectoryBrowserInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return DefaultDirectoryBrowserInfoDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

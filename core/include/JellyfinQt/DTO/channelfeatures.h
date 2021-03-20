@@ -166,18 +166,6 @@ protected:
 	bool m_supportsContentDownloading;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ChannelFeatures = Jellyfin::DTO::ChannelFeatures;
-
-template <>
-ChannelFeatures fromJsonValue<ChannelFeatures>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ChannelFeatures::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

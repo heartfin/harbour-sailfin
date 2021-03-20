@@ -91,18 +91,6 @@ protected:
 	QString m_imageTag;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ChapterInfo = Jellyfin::DTO::ChapterInfo;
-
-template <>
-ChapterInfo fromJsonValue<ChapterInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ChapterInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

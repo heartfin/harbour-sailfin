@@ -66,18 +66,6 @@ protected:
 	QStringList m_tags;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using QueryFilters = Jellyfin::DTO::QueryFilters;
-
-template <>
-QueryFilters fromJsonValue<QueryFilters>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return QueryFilters::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

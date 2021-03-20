@@ -117,18 +117,6 @@ protected:
 	QString m_refreshStatus;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using VirtualFolderInfo = Jellyfin::DTO::VirtualFolderInfo;
-
-template <>
-VirtualFolderInfo fromJsonValue<VirtualFolderInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return VirtualFolderInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

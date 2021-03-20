@@ -71,18 +71,6 @@ protected:
 	qint32 m_port;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using WakeOnLanInfo = Jellyfin::DTO::WakeOnLanInfo;
-
-template <>
-WakeOnLanInfo fromJsonValue<WakeOnLanInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return WakeOnLanInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

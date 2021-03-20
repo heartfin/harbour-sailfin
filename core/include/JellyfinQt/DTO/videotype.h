@@ -56,34 +56,6 @@ private:
 
 typedef VideoTypeClass::Value VideoType;
 
-} // NS DTO
-
-namespace Support {
-
-using VideoType = Jellyfin::DTO::VideoType;
-using VideoTypeClass = Jellyfin::DTO::VideoTypeClass;
-
-template <>
-VideoType fromJsonValue<VideoType>(const QJsonValue &source) {
-	if (!source.isString()) return VideoTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("VideoFile")) {
-		return VideoTypeClass::VideoFile;
-	}
-	if (str == QStringLiteral("Iso")) {
-		return VideoTypeClass::Iso;
-	}
-	if (str == QStringLiteral("Dvd")) {
-		return VideoTypeClass::Dvd;
-	}
-	if (str == QStringLiteral("BluRay")) {
-		return VideoTypeClass::BluRay;
-	}
-	
-	return VideoTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-UpdateUserEasyPassword::UpdateUserEasyPassword(QObject *parent) {}
+UpdateUserEasyPassword::UpdateUserEasyPassword() {}
 
-UpdateUserEasyPassword UpdateUserEasyPassword::fromJson(QJsonObject source) {UpdateUserEasyPassword instance;
-	instance->setFromJson(source, false);
+UpdateUserEasyPassword UpdateUserEasyPassword::fromJson(QJsonObject source) {
+	UpdateUserEasyPassword instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void UpdateUserEasyPassword::setFromJson(QJsonObject source) {
-	m_newPassword = fromJsonValue<QString>(source["NewPassword"]);
-	m_newPw = fromJsonValue<QString>(source["NewPw"]);
-	m_resetPassword = fromJsonValue<bool>(source["ResetPassword"]);
+	m_newPassword = Jellyfin::Support::fromJsonValue<QString>(source["NewPassword"]);
+	m_newPw = Jellyfin::Support::fromJsonValue<QString>(source["NewPw"]);
+	m_resetPassword = Jellyfin::Support::fromJsonValue<bool>(source["ResetPassword"]);
 
 }
 	
 QJsonObject UpdateUserEasyPassword::toJson() {
 	QJsonObject result;
-	result["NewPassword"] = toJsonValue<QString>(m_newPassword);
-	result["NewPw"] = toJsonValue<QString>(m_newPw);
-	result["ResetPassword"] = toJsonValue<bool>(m_resetPassword);
+	result["NewPassword"] = Jellyfin::Support::toJsonValue<QString>(m_newPassword);
+	result["NewPw"] = Jellyfin::Support::toJsonValue<QString>(m_newPw);
+	result["ResetPassword"] = Jellyfin::Support::toJsonValue<bool>(m_resetPassword);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void UpdateUserEasyPassword::setResetPassword(bool newResetPassword) {
 	m_resetPassword = newResetPassword;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using UpdateUserEasyPassword = Jellyfin::DTO::UpdateUserEasyPassword;
+
+template <>
+UpdateUserEasyPassword fromJsonValue<UpdateUserEasyPassword>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UpdateUserEasyPassword::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

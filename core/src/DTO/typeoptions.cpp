@@ -32,32 +32,33 @@
 namespace Jellyfin {
 namespace DTO {
 
-TypeOptions::TypeOptions(QObject *parent) {}
+TypeOptions::TypeOptions() {}
 
-TypeOptions TypeOptions::fromJson(QJsonObject source) {TypeOptions instance;
-	instance->setFromJson(source, false);
+TypeOptions TypeOptions::fromJson(QJsonObject source) {
+	TypeOptions instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void TypeOptions::setFromJson(QJsonObject source) {
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_metadataFetchers = fromJsonValue<QStringList>(source["MetadataFetchers"]);
-	m_metadataFetcherOrder = fromJsonValue<QStringList>(source["MetadataFetcherOrder"]);
-	m_imageFetchers = fromJsonValue<QStringList>(source["ImageFetchers"]);
-	m_imageFetcherOrder = fromJsonValue<QStringList>(source["ImageFetcherOrder"]);
-	m_imageOptions = fromJsonValue<QList<QSharedPointer<ImageOption>>>(source["ImageOptions"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_metadataFetchers = Jellyfin::Support::fromJsonValue<QStringList>(source["MetadataFetchers"]);
+	m_metadataFetcherOrder = Jellyfin::Support::fromJsonValue<QStringList>(source["MetadataFetcherOrder"]);
+	m_imageFetchers = Jellyfin::Support::fromJsonValue<QStringList>(source["ImageFetchers"]);
+	m_imageFetcherOrder = Jellyfin::Support::fromJsonValue<QStringList>(source["ImageFetcherOrder"]);
+	m_imageOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ImageOption>>>(source["ImageOptions"]);
 
 }
 	
 QJsonObject TypeOptions::toJson() {
 	QJsonObject result;
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["MetadataFetchers"] = toJsonValue<QStringList>(m_metadataFetchers);
-	result["MetadataFetcherOrder"] = toJsonValue<QStringList>(m_metadataFetcherOrder);
-	result["ImageFetchers"] = toJsonValue<QStringList>(m_imageFetchers);
-	result["ImageFetcherOrder"] = toJsonValue<QStringList>(m_imageFetcherOrder);
-	result["ImageOptions"] = toJsonValue<QList<QSharedPointer<ImageOption>>>(m_imageOptions);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["MetadataFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetchers);
+	result["MetadataFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetcherOrder);
+	result["ImageFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetchers);
+	result["ImageFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetcherOrder);
+	result["ImageOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ImageOption>>>(m_imageOptions);
 
 	return result;
 }
@@ -93,6 +94,17 @@ void TypeOptions::setImageOptions(QList<QSharedPointer<ImageOption>> newImageOpt
 	m_imageOptions = newImageOptions;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using TypeOptions = Jellyfin::DTO::TypeOptions;
+
+template <>
+TypeOptions fromJsonValue<TypeOptions>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TypeOptions::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

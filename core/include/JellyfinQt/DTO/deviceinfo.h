@@ -126,18 +126,6 @@ protected:
 	QString m_iconUrl;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using DeviceInfo = Jellyfin::DTO::DeviceInfo;
-
-template <>
-DeviceInfo fromJsonValue<DeviceInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return DeviceInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

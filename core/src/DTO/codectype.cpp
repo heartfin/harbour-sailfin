@@ -34,5 +34,30 @@ namespace DTO {
 
 CodecTypeClass::CodecTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using CodecType = Jellyfin::DTO::CodecType;
+
+template <>
+CodecType fromJsonValue<CodecType>(const QJsonValue &source) {
+	if (!source.isString()) return CodecType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Video")) {
+		return CodecType::Video;
+	}
+	if (str == QStringLiteral("VideoAudio")) {
+		return CodecType::VideoAudio;
+	}
+	if (str == QStringLiteral("Audio")) {
+		return CodecType::Audio;
+	}
+	
+	return CodecType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-NotificationsSummaryDto::NotificationsSummaryDto(QObject *parent) {}
+NotificationsSummaryDto::NotificationsSummaryDto() {}
 
-NotificationsSummaryDto NotificationsSummaryDto::fromJson(QJsonObject source) {NotificationsSummaryDto instance;
-	instance->setFromJson(source, false);
+NotificationsSummaryDto NotificationsSummaryDto::fromJson(QJsonObject source) {
+	NotificationsSummaryDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void NotificationsSummaryDto::setFromJson(QJsonObject source) {
-	m_unreadCount = fromJsonValue<qint32>(source["UnreadCount"]);
-	m_maxUnreadNotificationLevel = fromJsonValue<NotificationLevel>(source["MaxUnreadNotificationLevel"]);
+	m_unreadCount = Jellyfin::Support::fromJsonValue<qint32>(source["UnreadCount"]);
+	m_maxUnreadNotificationLevel = Jellyfin::Support::fromJsonValue<NotificationLevel>(source["MaxUnreadNotificationLevel"]);
 
 }
 	
 QJsonObject NotificationsSummaryDto::toJson() {
 	QJsonObject result;
-	result["UnreadCount"] = toJsonValue<qint32>(m_unreadCount);
-	result["MaxUnreadNotificationLevel"] = toJsonValue<NotificationLevel>(m_maxUnreadNotificationLevel);
+	result["UnreadCount"] = Jellyfin::Support::toJsonValue<qint32>(m_unreadCount);
+	result["MaxUnreadNotificationLevel"] = Jellyfin::Support::toJsonValue<NotificationLevel>(m_maxUnreadNotificationLevel);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void NotificationsSummaryDto::setMaxUnreadNotificationLevel(NotificationLevel ne
 	m_maxUnreadNotificationLevel = newMaxUnreadNotificationLevel;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using NotificationsSummaryDto = Jellyfin::DTO::NotificationsSummaryDto;
+
+template <>
+NotificationsSummaryDto fromJsonValue<NotificationsSummaryDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NotificationsSummaryDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

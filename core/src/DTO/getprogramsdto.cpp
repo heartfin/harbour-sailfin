@@ -32,74 +32,75 @@
 namespace Jellyfin {
 namespace DTO {
 
-GetProgramsDto::GetProgramsDto(QObject *parent) {}
+GetProgramsDto::GetProgramsDto() {}
 
-GetProgramsDto GetProgramsDto::fromJson(QJsonObject source) {GetProgramsDto instance;
-	instance->setFromJson(source, false);
+GetProgramsDto GetProgramsDto::fromJson(QJsonObject source) {
+	GetProgramsDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void GetProgramsDto::setFromJson(QJsonObject source) {
-	m_channelIds = fromJsonValue<QList<QUuid>>(source["ChannelIds"]);
-	m_userId = fromJsonValue<QUuid>(source["UserId"]);
-	m_minStartDate = fromJsonValue<QDateTime>(source["MinStartDate"]);
-	m_hasAired = fromJsonValue<bool>(source["HasAired"]);
-	m_isAiring = fromJsonValue<bool>(source["IsAiring"]);
-	m_maxStartDate = fromJsonValue<QDateTime>(source["MaxStartDate"]);
-	m_minEndDate = fromJsonValue<QDateTime>(source["MinEndDate"]);
-	m_maxEndDate = fromJsonValue<QDateTime>(source["MaxEndDate"]);
-	m_isMovie = fromJsonValue<bool>(source["IsMovie"]);
-	m_isSeries = fromJsonValue<bool>(source["IsSeries"]);
-	m_isNews = fromJsonValue<bool>(source["IsNews"]);
-	m_isKids = fromJsonValue<bool>(source["IsKids"]);
-	m_isSports = fromJsonValue<bool>(source["IsSports"]);
-	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
-	m_limit = fromJsonValue<qint32>(source["Limit"]);
-	m_sortBy = fromJsonValue<QString>(source["SortBy"]);
-	m_sortOrder = fromJsonValue<QString>(source["SortOrder"]);
-	m_genres = fromJsonValue<QStringList>(source["Genres"]);
-	m_genreIds = fromJsonValue<QList<QUuid>>(source["GenreIds"]);
-	m_enableImages = fromJsonValue<bool>(source["EnableImages"]);
-	m_enableTotalRecordCount = fromJsonValue<bool>(source["EnableTotalRecordCount"]);
-	m_imageTypeLimit = fromJsonValue<qint32>(source["ImageTypeLimit"]);
-	m_enableImageTypes = fromJsonValue<QList<ImageType>>(source["EnableImageTypes"]);
-	m_enableUserData = fromJsonValue<bool>(source["EnableUserData"]);
-	m_seriesTimerId = fromJsonValue<QString>(source["SeriesTimerId"]);
-	m_librarySeriesId = fromJsonValue<QUuid>(source["LibrarySeriesId"]);
-	m_fields = fromJsonValue<QList<ItemFields>>(source["Fields"]);
+	m_channelIds = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["ChannelIds"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QUuid>(source["UserId"]);
+	m_minStartDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["MinStartDate"]);
+	m_hasAired = Jellyfin::Support::fromJsonValue<bool>(source["HasAired"]);
+	m_isAiring = Jellyfin::Support::fromJsonValue<bool>(source["IsAiring"]);
+	m_maxStartDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["MaxStartDate"]);
+	m_minEndDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["MinEndDate"]);
+	m_maxEndDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["MaxEndDate"]);
+	m_isMovie = Jellyfin::Support::fromJsonValue<bool>(source["IsMovie"]);
+	m_isSeries = Jellyfin::Support::fromJsonValue<bool>(source["IsSeries"]);
+	m_isNews = Jellyfin::Support::fromJsonValue<bool>(source["IsNews"]);
+	m_isKids = Jellyfin::Support::fromJsonValue<bool>(source["IsKids"]);
+	m_isSports = Jellyfin::Support::fromJsonValue<bool>(source["IsSports"]);
+	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
+	m_limit = Jellyfin::Support::fromJsonValue<qint32>(source["Limit"]);
+	m_sortBy = Jellyfin::Support::fromJsonValue<QString>(source["SortBy"]);
+	m_sortOrder = Jellyfin::Support::fromJsonValue<QString>(source["SortOrder"]);
+	m_genres = Jellyfin::Support::fromJsonValue<QStringList>(source["Genres"]);
+	m_genreIds = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["GenreIds"]);
+	m_enableImages = Jellyfin::Support::fromJsonValue<bool>(source["EnableImages"]);
+	m_enableTotalRecordCount = Jellyfin::Support::fromJsonValue<bool>(source["EnableTotalRecordCount"]);
+	m_imageTypeLimit = Jellyfin::Support::fromJsonValue<qint32>(source["ImageTypeLimit"]);
+	m_enableImageTypes = Jellyfin::Support::fromJsonValue<QList<ImageType>>(source["EnableImageTypes"]);
+	m_enableUserData = Jellyfin::Support::fromJsonValue<bool>(source["EnableUserData"]);
+	m_seriesTimerId = Jellyfin::Support::fromJsonValue<QString>(source["SeriesTimerId"]);
+	m_librarySeriesId = Jellyfin::Support::fromJsonValue<QUuid>(source["LibrarySeriesId"]);
+	m_fields = Jellyfin::Support::fromJsonValue<QList<ItemFields>>(source["Fields"]);
 
 }
 	
 QJsonObject GetProgramsDto::toJson() {
 	QJsonObject result;
-	result["ChannelIds"] = toJsonValue<QList<QUuid>>(m_channelIds);
-	result["UserId"] = toJsonValue<QUuid>(m_userId);
-	result["MinStartDate"] = toJsonValue<QDateTime>(m_minStartDate);
-	result["HasAired"] = toJsonValue<bool>(m_hasAired);
-	result["IsAiring"] = toJsonValue<bool>(m_isAiring);
-	result["MaxStartDate"] = toJsonValue<QDateTime>(m_maxStartDate);
-	result["MinEndDate"] = toJsonValue<QDateTime>(m_minEndDate);
-	result["MaxEndDate"] = toJsonValue<QDateTime>(m_maxEndDate);
-	result["IsMovie"] = toJsonValue<bool>(m_isMovie);
-	result["IsSeries"] = toJsonValue<bool>(m_isSeries);
-	result["IsNews"] = toJsonValue<bool>(m_isNews);
-	result["IsKids"] = toJsonValue<bool>(m_isKids);
-	result["IsSports"] = toJsonValue<bool>(m_isSports);
-	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
-	result["Limit"] = toJsonValue<qint32>(m_limit);
-	result["SortBy"] = toJsonValue<QString>(m_sortBy);
-	result["SortOrder"] = toJsonValue<QString>(m_sortOrder);
-	result["Genres"] = toJsonValue<QStringList>(m_genres);
-	result["GenreIds"] = toJsonValue<QList<QUuid>>(m_genreIds);
-	result["EnableImages"] = toJsonValue<bool>(m_enableImages);
-	result["EnableTotalRecordCount"] = toJsonValue<bool>(m_enableTotalRecordCount);
-	result["ImageTypeLimit"] = toJsonValue<qint32>(m_imageTypeLimit);
-	result["EnableImageTypes"] = toJsonValue<QList<ImageType>>(m_enableImageTypes);
-	result["EnableUserData"] = toJsonValue<bool>(m_enableUserData);
-	result["SeriesTimerId"] = toJsonValue<QString>(m_seriesTimerId);
-	result["LibrarySeriesId"] = toJsonValue<QUuid>(m_librarySeriesId);
-	result["Fields"] = toJsonValue<QList<ItemFields>>(m_fields);
+	result["ChannelIds"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_channelIds);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_userId);
+	result["MinStartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_minStartDate);
+	result["HasAired"] = Jellyfin::Support::toJsonValue<bool>(m_hasAired);
+	result["IsAiring"] = Jellyfin::Support::toJsonValue<bool>(m_isAiring);
+	result["MaxStartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_maxStartDate);
+	result["MinEndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_minEndDate);
+	result["MaxEndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_maxEndDate);
+	result["IsMovie"] = Jellyfin::Support::toJsonValue<bool>(m_isMovie);
+	result["IsSeries"] = Jellyfin::Support::toJsonValue<bool>(m_isSeries);
+	result["IsNews"] = Jellyfin::Support::toJsonValue<bool>(m_isNews);
+	result["IsKids"] = Jellyfin::Support::toJsonValue<bool>(m_isKids);
+	result["IsSports"] = Jellyfin::Support::toJsonValue<bool>(m_isSports);
+	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
+	result["Limit"] = Jellyfin::Support::toJsonValue<qint32>(m_limit);
+	result["SortBy"] = Jellyfin::Support::toJsonValue<QString>(m_sortBy);
+	result["SortOrder"] = Jellyfin::Support::toJsonValue<QString>(m_sortOrder);
+	result["Genres"] = Jellyfin::Support::toJsonValue<QStringList>(m_genres);
+	result["GenreIds"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_genreIds);
+	result["EnableImages"] = Jellyfin::Support::toJsonValue<bool>(m_enableImages);
+	result["EnableTotalRecordCount"] = Jellyfin::Support::toJsonValue<bool>(m_enableTotalRecordCount);
+	result["ImageTypeLimit"] = Jellyfin::Support::toJsonValue<qint32>(m_imageTypeLimit);
+	result["EnableImageTypes"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_enableImageTypes);
+	result["EnableUserData"] = Jellyfin::Support::toJsonValue<bool>(m_enableUserData);
+	result["SeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesTimerId);
+	result["LibrarySeriesId"] = Jellyfin::Support::toJsonValue<QUuid>(m_librarySeriesId);
+	result["Fields"] = Jellyfin::Support::toJsonValue<QList<ItemFields>>(m_fields);
 
 	return result;
 }
@@ -240,6 +241,17 @@ void GetProgramsDto::setFields(QList<ItemFields> newFields) {
 	m_fields = newFields;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using GetProgramsDto = Jellyfin::DTO::GetProgramsDto;
+
+template <>
+GetProgramsDto fromJsonValue<GetProgramsDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return GetProgramsDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

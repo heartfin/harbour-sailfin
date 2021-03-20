@@ -83,18 +83,6 @@ protected:
 	qint32 m_startIndex;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using AuthenticationInfoQueryResult = Jellyfin::DTO::AuthenticationInfoQueryResult;
-
-template <>
-AuthenticationInfoQueryResult fromJsonValue<AuthenticationInfoQueryResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return AuthenticationInfoQueryResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

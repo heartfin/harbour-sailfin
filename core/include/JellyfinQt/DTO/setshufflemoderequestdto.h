@@ -58,18 +58,6 @@ protected:
 	GroupShuffleMode m_mode;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SetShuffleModeRequestDto = Jellyfin::DTO::SetShuffleModeRequestDto;
-
-template <>
-SetShuffleModeRequestDto fromJsonValue<SetShuffleModeRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SetShuffleModeRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

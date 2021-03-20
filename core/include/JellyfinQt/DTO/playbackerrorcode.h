@@ -55,31 +55,6 @@ private:
 
 typedef PlaybackErrorCodeClass::Value PlaybackErrorCode;
 
-} // NS DTO
-
-namespace Support {
-
-using PlaybackErrorCode = Jellyfin::DTO::PlaybackErrorCode;
-using PlaybackErrorCodeClass = Jellyfin::DTO::PlaybackErrorCodeClass;
-
-template <>
-PlaybackErrorCode fromJsonValue<PlaybackErrorCode>(const QJsonValue &source) {
-	if (!source.isString()) return PlaybackErrorCodeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("NotAllowed")) {
-		return PlaybackErrorCodeClass::NotAllowed;
-	}
-	if (str == QStringLiteral("NoCompatibleStream")) {
-		return PlaybackErrorCodeClass::NoCompatibleStream;
-	}
-	if (str == QStringLiteral("RateLimitExceeded")) {
-		return PlaybackErrorCodeClass::RateLimitExceeded;
-	}
-	
-	return PlaybackErrorCodeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

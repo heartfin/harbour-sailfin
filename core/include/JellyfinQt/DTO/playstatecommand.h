@@ -61,49 +61,6 @@ private:
 
 typedef PlaystateCommandClass::Value PlaystateCommand;
 
-} // NS DTO
-
-namespace Support {
-
-using PlaystateCommand = Jellyfin::DTO::PlaystateCommand;
-using PlaystateCommandClass = Jellyfin::DTO::PlaystateCommandClass;
-
-template <>
-PlaystateCommand fromJsonValue<PlaystateCommand>(const QJsonValue &source) {
-	if (!source.isString()) return PlaystateCommandClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Stop")) {
-		return PlaystateCommandClass::Stop;
-	}
-	if (str == QStringLiteral("Pause")) {
-		return PlaystateCommandClass::Pause;
-	}
-	if (str == QStringLiteral("Unpause")) {
-		return PlaystateCommandClass::Unpause;
-	}
-	if (str == QStringLiteral("NextTrack")) {
-		return PlaystateCommandClass::NextTrack;
-	}
-	if (str == QStringLiteral("PreviousTrack")) {
-		return PlaystateCommandClass::PreviousTrack;
-	}
-	if (str == QStringLiteral("Seek")) {
-		return PlaystateCommandClass::Seek;
-	}
-	if (str == QStringLiteral("Rewind")) {
-		return PlaystateCommandClass::Rewind;
-	}
-	if (str == QStringLiteral("FastForward")) {
-		return PlaystateCommandClass::FastForward;
-	}
-	if (str == QStringLiteral("PlayPause")) {
-		return PlaystateCommandClass::PlayPause;
-	}
-	
-	return PlaystateCommandClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

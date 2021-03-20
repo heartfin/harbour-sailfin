@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-RecommendationDto::RecommendationDto(QObject *parent) {}
+RecommendationDto::RecommendationDto() {}
 
-RecommendationDto RecommendationDto::fromJson(QJsonObject source) {RecommendationDto instance;
-	instance->setFromJson(source, false);
+RecommendationDto RecommendationDto::fromJson(QJsonObject source) {
+	RecommendationDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void RecommendationDto::setFromJson(QJsonObject source) {
-	m_items = fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
-	m_recommendationType = fromJsonValue<RecommendationType>(source["RecommendationType"]);
-	m_baselineItemName = fromJsonValue<QString>(source["BaselineItemName"]);
-	m_categoryId = fromJsonValue<QUuid>(source["CategoryId"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
+	m_recommendationType = Jellyfin::Support::fromJsonValue<RecommendationType>(source["RecommendationType"]);
+	m_baselineItemName = Jellyfin::Support::fromJsonValue<QString>(source["BaselineItemName"]);
+	m_categoryId = Jellyfin::Support::fromJsonValue<QUuid>(source["CategoryId"]);
 
 }
 	
 QJsonObject RecommendationDto::toJson() {
 	QJsonObject result;
-	result["Items"] = toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
-	result["RecommendationType"] = toJsonValue<RecommendationType>(m_recommendationType);
-	result["BaselineItemName"] = toJsonValue<QString>(m_baselineItemName);
-	result["CategoryId"] = toJsonValue<QUuid>(m_categoryId);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
+	result["RecommendationType"] = Jellyfin::Support::toJsonValue<RecommendationType>(m_recommendationType);
+	result["BaselineItemName"] = Jellyfin::Support::toJsonValue<QString>(m_baselineItemName);
+	result["CategoryId"] = Jellyfin::Support::toJsonValue<QUuid>(m_categoryId);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void RecommendationDto::setCategoryId(QUuid newCategoryId) {
 	m_categoryId = newCategoryId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using RecommendationDto = Jellyfin::DTO::RecommendationDto;
+
+template <>
+RecommendationDto fromJsonValue<RecommendationDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RecommendationDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

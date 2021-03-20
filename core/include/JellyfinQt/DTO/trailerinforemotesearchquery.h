@@ -84,18 +84,6 @@ protected:
 	bool m_includeDisabledProviders;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TrailerInfoRemoteSearchQuery = Jellyfin::DTO::TrailerInfoRemoteSearchQuery;
-
-template <>
-TrailerInfoRemoteSearchQuery fromJsonValue<TrailerInfoRemoteSearchQuery>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TrailerInfoRemoteSearchQuery::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

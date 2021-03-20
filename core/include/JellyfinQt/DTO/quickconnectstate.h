@@ -55,31 +55,6 @@ private:
 
 typedef QuickConnectStateClass::Value QuickConnectState;
 
-} // NS DTO
-
-namespace Support {
-
-using QuickConnectState = Jellyfin::DTO::QuickConnectState;
-using QuickConnectStateClass = Jellyfin::DTO::QuickConnectStateClass;
-
-template <>
-QuickConnectState fromJsonValue<QuickConnectState>(const QJsonValue &source) {
-	if (!source.isString()) return QuickConnectStateClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Unavailable")) {
-		return QuickConnectStateClass::Unavailable;
-	}
-	if (str == QStringLiteral("Available")) {
-		return QuickConnectStateClass::Available;
-	}
-	if (str == QStringLiteral("Active")) {
-		return QuickConnectStateClass::Active;
-	}
-	
-	return QuickConnectStateClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

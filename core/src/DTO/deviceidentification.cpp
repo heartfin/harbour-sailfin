@@ -32,38 +32,39 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceIdentification::DeviceIdentification(QObject *parent) {}
+DeviceIdentification::DeviceIdentification() {}
 
-DeviceIdentification DeviceIdentification::fromJson(QJsonObject source) {DeviceIdentification instance;
-	instance->setFromJson(source, false);
+DeviceIdentification DeviceIdentification::fromJson(QJsonObject source) {
+	DeviceIdentification instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void DeviceIdentification::setFromJson(QJsonObject source) {
-	m_friendlyName = fromJsonValue<QString>(source["FriendlyName"]);
-	m_modelNumber = fromJsonValue<QString>(source["ModelNumber"]);
-	m_serialNumber = fromJsonValue<QString>(source["SerialNumber"]);
-	m_modelName = fromJsonValue<QString>(source["ModelName"]);
-	m_modelDescription = fromJsonValue<QString>(source["ModelDescription"]);
-	m_modelUrl = fromJsonValue<QString>(source["ModelUrl"]);
-	m_manufacturer = fromJsonValue<QString>(source["Manufacturer"]);
-	m_manufacturerUrl = fromJsonValue<QString>(source["ManufacturerUrl"]);
-	m_headers = fromJsonValue<QList<QSharedPointer<HttpHeaderInfo>>>(source["Headers"]);
+	m_friendlyName = Jellyfin::Support::fromJsonValue<QString>(source["FriendlyName"]);
+	m_modelNumber = Jellyfin::Support::fromJsonValue<QString>(source["ModelNumber"]);
+	m_serialNumber = Jellyfin::Support::fromJsonValue<QString>(source["SerialNumber"]);
+	m_modelName = Jellyfin::Support::fromJsonValue<QString>(source["ModelName"]);
+	m_modelDescription = Jellyfin::Support::fromJsonValue<QString>(source["ModelDescription"]);
+	m_modelUrl = Jellyfin::Support::fromJsonValue<QString>(source["ModelUrl"]);
+	m_manufacturer = Jellyfin::Support::fromJsonValue<QString>(source["Manufacturer"]);
+	m_manufacturerUrl = Jellyfin::Support::fromJsonValue<QString>(source["ManufacturerUrl"]);
+	m_headers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<HttpHeaderInfo>>>(source["Headers"]);
 
 }
 	
 QJsonObject DeviceIdentification::toJson() {
 	QJsonObject result;
-	result["FriendlyName"] = toJsonValue<QString>(m_friendlyName);
-	result["ModelNumber"] = toJsonValue<QString>(m_modelNumber);
-	result["SerialNumber"] = toJsonValue<QString>(m_serialNumber);
-	result["ModelName"] = toJsonValue<QString>(m_modelName);
-	result["ModelDescription"] = toJsonValue<QString>(m_modelDescription);
-	result["ModelUrl"] = toJsonValue<QString>(m_modelUrl);
-	result["Manufacturer"] = toJsonValue<QString>(m_manufacturer);
-	result["ManufacturerUrl"] = toJsonValue<QString>(m_manufacturerUrl);
-	result["Headers"] = toJsonValue<QList<QSharedPointer<HttpHeaderInfo>>>(m_headers);
+	result["FriendlyName"] = Jellyfin::Support::toJsonValue<QString>(m_friendlyName);
+	result["ModelNumber"] = Jellyfin::Support::toJsonValue<QString>(m_modelNumber);
+	result["SerialNumber"] = Jellyfin::Support::toJsonValue<QString>(m_serialNumber);
+	result["ModelName"] = Jellyfin::Support::toJsonValue<QString>(m_modelName);
+	result["ModelDescription"] = Jellyfin::Support::toJsonValue<QString>(m_modelDescription);
+	result["ModelUrl"] = Jellyfin::Support::toJsonValue<QString>(m_modelUrl);
+	result["Manufacturer"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturer);
+	result["ManufacturerUrl"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturerUrl);
+	result["Headers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<HttpHeaderInfo>>>(m_headers);
 
 	return result;
 }
@@ -114,6 +115,17 @@ void DeviceIdentification::setHeaders(QList<QSharedPointer<HttpHeaderInfo>> newH
 	m_headers = newHeaders;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using DeviceIdentification = Jellyfin::DTO::DeviceIdentification;
+
+template <>
+DeviceIdentification fromJsonValue<DeviceIdentification>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceIdentification::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -34,5 +34,27 @@ namespace DTO {
 
 EncodingContextClass::EncodingContextClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using EncodingContext = Jellyfin::DTO::EncodingContext;
+
+template <>
+EncodingContext fromJsonValue<EncodingContext>(const QJsonValue &source) {
+	if (!source.isString()) return EncodingContext::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Streaming")) {
+		return EncodingContext::Streaming;
+	}
+	if (str == QStringLiteral("Static")) {
+		return EncodingContext::Static;
+	}
+	
+	return EncodingContext::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

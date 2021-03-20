@@ -64,18 +64,6 @@ protected:
 	QUuid m_programId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TimerEventInfo = Jellyfin::DTO::TimerEventInfo;
-
-template <>
-TimerEventInfo fromJsonValue<TimerEventInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TimerEventInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

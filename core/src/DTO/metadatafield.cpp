@@ -34,5 +34,48 @@ namespace DTO {
 
 MetadataFieldClass::MetadataFieldClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using MetadataField = Jellyfin::DTO::MetadataField;
+
+template <>
+MetadataField fromJsonValue<MetadataField>(const QJsonValue &source) {
+	if (!source.isString()) return MetadataField::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Cast")) {
+		return MetadataField::Cast;
+	}
+	if (str == QStringLiteral("Genres")) {
+		return MetadataField::Genres;
+	}
+	if (str == QStringLiteral("ProductionLocations")) {
+		return MetadataField::ProductionLocations;
+	}
+	if (str == QStringLiteral("Studios")) {
+		return MetadataField::Studios;
+	}
+	if (str == QStringLiteral("Tags")) {
+		return MetadataField::Tags;
+	}
+	if (str == QStringLiteral("Name")) {
+		return MetadataField::Name;
+	}
+	if (str == QStringLiteral("Overview")) {
+		return MetadataField::Overview;
+	}
+	if (str == QStringLiteral("Runtime")) {
+		return MetadataField::Runtime;
+	}
+	if (str == QStringLiteral("OfficialRating")) {
+		return MetadataField::OfficialRating;
+	}
+	
+	return MetadataField::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

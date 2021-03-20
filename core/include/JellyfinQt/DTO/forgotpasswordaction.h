@@ -55,31 +55,6 @@ private:
 
 typedef ForgotPasswordActionClass::Value ForgotPasswordAction;
 
-} // NS DTO
-
-namespace Support {
-
-using ForgotPasswordAction = Jellyfin::DTO::ForgotPasswordAction;
-using ForgotPasswordActionClass = Jellyfin::DTO::ForgotPasswordActionClass;
-
-template <>
-ForgotPasswordAction fromJsonValue<ForgotPasswordAction>(const QJsonValue &source) {
-	if (!source.isString()) return ForgotPasswordActionClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("ContactAdmin")) {
-		return ForgotPasswordActionClass::ContactAdmin;
-	}
-	if (str == QStringLiteral("PinCode")) {
-		return ForgotPasswordActionClass::PinCode;
-	}
-	if (str == QStringLiteral("InNetworkRequired")) {
-		return ForgotPasswordActionClass::InNetworkRequired;
-	}
-	
-	return ForgotPasswordActionClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

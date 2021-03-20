@@ -121,18 +121,6 @@ protected:
 	PluginStatus m_status;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PluginInfo = Jellyfin::DTO::PluginInfo;
-
-template <>
-PluginInfo fromJsonValue<PluginInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PluginInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

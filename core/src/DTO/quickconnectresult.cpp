@@ -32,32 +32,33 @@
 namespace Jellyfin {
 namespace DTO {
 
-QuickConnectResult::QuickConnectResult(QObject *parent) {}
+QuickConnectResult::QuickConnectResult() {}
 
-QuickConnectResult QuickConnectResult::fromJson(QJsonObject source) {QuickConnectResult instance;
-	instance->setFromJson(source, false);
+QuickConnectResult QuickConnectResult::fromJson(QJsonObject source) {
+	QuickConnectResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void QuickConnectResult::setFromJson(QJsonObject source) {
-	m_authenticated = fromJsonValue<bool>(source["Authenticated"]);
-	m_secret = fromJsonValue<QString>(source["Secret"]);
-	m_code = fromJsonValue<QString>(source["Code"]);
-	m_authentication = fromJsonValue<QString>(source["Authentication"]);
-	m_error = fromJsonValue<QString>(source["Error"]);
-	m_dateAdded = fromJsonValue<QDateTime>(source["DateAdded"]);
+	m_authenticated = Jellyfin::Support::fromJsonValue<bool>(source["Authenticated"]);
+	m_secret = Jellyfin::Support::fromJsonValue<QString>(source["Secret"]);
+	m_code = Jellyfin::Support::fromJsonValue<QString>(source["Code"]);
+	m_authentication = Jellyfin::Support::fromJsonValue<QString>(source["Authentication"]);
+	m_error = Jellyfin::Support::fromJsonValue<QString>(source["Error"]);
+	m_dateAdded = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateAdded"]);
 
 }
 	
 QJsonObject QuickConnectResult::toJson() {
 	QJsonObject result;
-	result["Authenticated"] = toJsonValue<bool>(m_authenticated);
-	result["Secret"] = toJsonValue<QString>(m_secret);
-	result["Code"] = toJsonValue<QString>(m_code);
-	result["Authentication"] = toJsonValue<QString>(m_authentication);
-	result["Error"] = toJsonValue<QString>(m_error);
-	result["DateAdded"] = toJsonValue<QDateTime>(m_dateAdded);
+	result["Authenticated"] = Jellyfin::Support::toJsonValue<bool>(m_authenticated);
+	result["Secret"] = Jellyfin::Support::toJsonValue<QString>(m_secret);
+	result["Code"] = Jellyfin::Support::toJsonValue<QString>(m_code);
+	result["Authentication"] = Jellyfin::Support::toJsonValue<QString>(m_authentication);
+	result["Error"] = Jellyfin::Support::toJsonValue<QString>(m_error);
+	result["DateAdded"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateAdded);
 
 	return result;
 }
@@ -93,6 +94,17 @@ void QuickConnectResult::setDateAdded(QDateTime newDateAdded) {
 	m_dateAdded = newDateAdded;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using QuickConnectResult = Jellyfin::DTO::QuickConnectResult;
+
+template <>
+QuickConnectResult fromJsonValue<QuickConnectResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QuickConnectResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

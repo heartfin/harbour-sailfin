@@ -34,5 +34,27 @@ namespace DTO {
 
 SortOrderClass::SortOrderClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using SortOrder = Jellyfin::DTO::SortOrder;
+
+template <>
+SortOrder fromJsonValue<SortOrder>(const QJsonValue &source) {
+	if (!source.isString()) return SortOrder::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Ascending")) {
+		return SortOrder::Ascending;
+	}
+	if (str == QStringLiteral("Descending")) {
+		return SortOrder::Descending;
+	}
+	
+	return SortOrder::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

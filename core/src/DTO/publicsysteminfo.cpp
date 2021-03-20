@@ -32,34 +32,35 @@
 namespace Jellyfin {
 namespace DTO {
 
-PublicSystemInfo::PublicSystemInfo(QObject *parent) {}
+PublicSystemInfo::PublicSystemInfo() {}
 
-PublicSystemInfo PublicSystemInfo::fromJson(QJsonObject source) {PublicSystemInfo instance;
-	instance->setFromJson(source, false);
+PublicSystemInfo PublicSystemInfo::fromJson(QJsonObject source) {
+	PublicSystemInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PublicSystemInfo::setFromJson(QJsonObject source) {
-	m_localAddress = fromJsonValue<QString>(source["LocalAddress"]);
-	m_serverName = fromJsonValue<QString>(source["ServerName"]);
-	m_version = fromJsonValue<QString>(source["Version"]);
-	m_productName = fromJsonValue<QString>(source["ProductName"]);
-	m_operatingSystem = fromJsonValue<QString>(source["OperatingSystem"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_startupWizardCompleted = fromJsonValue<bool>(source["StartupWizardCompleted"]);
+	m_localAddress = Jellyfin::Support::fromJsonValue<QString>(source["LocalAddress"]);
+	m_serverName = Jellyfin::Support::fromJsonValue<QString>(source["ServerName"]);
+	m_version = Jellyfin::Support::fromJsonValue<QString>(source["Version"]);
+	m_productName = Jellyfin::Support::fromJsonValue<QString>(source["ProductName"]);
+	m_operatingSystem = Jellyfin::Support::fromJsonValue<QString>(source["OperatingSystem"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_startupWizardCompleted = Jellyfin::Support::fromJsonValue<bool>(source["StartupWizardCompleted"]);
 
 }
 	
 QJsonObject PublicSystemInfo::toJson() {
 	QJsonObject result;
-	result["LocalAddress"] = toJsonValue<QString>(m_localAddress);
-	result["ServerName"] = toJsonValue<QString>(m_serverName);
-	result["Version"] = toJsonValue<QString>(m_version);
-	result["ProductName"] = toJsonValue<QString>(m_productName);
-	result["OperatingSystem"] = toJsonValue<QString>(m_operatingSystem);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["StartupWizardCompleted"] = toJsonValue<bool>(m_startupWizardCompleted);
+	result["LocalAddress"] = Jellyfin::Support::toJsonValue<QString>(m_localAddress);
+	result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
+	result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	result["ProductName"] = Jellyfin::Support::toJsonValue<QString>(m_productName);
+	result["OperatingSystem"] = Jellyfin::Support::toJsonValue<QString>(m_operatingSystem);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["StartupWizardCompleted"] = Jellyfin::Support::toJsonValue<bool>(m_startupWizardCompleted);
 
 	return result;
 }
@@ -100,6 +101,17 @@ void PublicSystemInfo::setStartupWizardCompleted(bool newStartupWizardCompleted)
 	m_startupWizardCompleted = newStartupWizardCompleted;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PublicSystemInfo = Jellyfin::DTO::PublicSystemInfo;
+
+template <>
+PublicSystemInfo fromJsonValue<PublicSystemInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PublicSystemInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

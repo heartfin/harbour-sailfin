@@ -34,5 +34,30 @@ namespace DTO {
 
 GroupRepeatModeClass::GroupRepeatModeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using GroupRepeatMode = Jellyfin::DTO::GroupRepeatMode;
+
+template <>
+GroupRepeatMode fromJsonValue<GroupRepeatMode>(const QJsonValue &source) {
+	if (!source.isString()) return GroupRepeatMode::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("RepeatOne")) {
+		return GroupRepeatMode::RepeatOne;
+	}
+	if (str == QStringLiteral("RepeatAll")) {
+		return GroupRepeatMode::RepeatAll;
+	}
+	if (str == QStringLiteral("RepeatNone")) {
+		return GroupRepeatMode::RepeatNone;
+	}
+	
+	return GroupRepeatMode::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

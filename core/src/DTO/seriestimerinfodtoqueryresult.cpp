@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-SeriesTimerInfoDtoQueryResult::SeriesTimerInfoDtoQueryResult(QObject *parent) {}
+SeriesTimerInfoDtoQueryResult::SeriesTimerInfoDtoQueryResult() {}
 
-SeriesTimerInfoDtoQueryResult SeriesTimerInfoDtoQueryResult::fromJson(QJsonObject source) {SeriesTimerInfoDtoQueryResult instance;
-	instance->setFromJson(source, false);
+SeriesTimerInfoDtoQueryResult SeriesTimerInfoDtoQueryResult::fromJson(QJsonObject source) {
+	SeriesTimerInfoDtoQueryResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SeriesTimerInfoDtoQueryResult::setFromJson(QJsonObject source) {
-	m_items = fromJsonValue<QList<QSharedPointer<SeriesTimerInfoDto>>>(source["Items"]);
-	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
-	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SeriesTimerInfoDto>>>(source["Items"]);
+	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
 }
 	
 QJsonObject SeriesTimerInfoDtoQueryResult::toJson() {
 	QJsonObject result;
-	result["Items"] = toJsonValue<QList<QSharedPointer<SeriesTimerInfoDto>>>(m_items);
-	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
-	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SeriesTimerInfoDto>>>(m_items);
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void SeriesTimerInfoDtoQueryResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SeriesTimerInfoDtoQueryResult = Jellyfin::DTO::SeriesTimerInfoDtoQueryResult;
+
+template <>
+SeriesTimerInfoDtoQueryResult fromJsonValue<SeriesTimerInfoDtoQueryResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SeriesTimerInfoDtoQueryResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

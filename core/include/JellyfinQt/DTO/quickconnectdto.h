@@ -62,18 +62,6 @@ protected:
 	QString m_token;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using QuickConnectDto = Jellyfin::DTO::QuickConnectDto;
-
-template <>
-QuickConnectDto fromJsonValue<QuickConnectDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return QuickConnectDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

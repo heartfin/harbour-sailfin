@@ -92,18 +92,6 @@ protected:
 	QString m_mediaType;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using CreatePlaylistDto = Jellyfin::DTO::CreatePlaylistDto;
-
-template <>
-CreatePlaylistDto fromJsonValue<CreatePlaylistDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return CreatePlaylistDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

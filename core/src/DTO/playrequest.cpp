@@ -32,36 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-PlayRequest::PlayRequest(QObject *parent) {}
+PlayRequest::PlayRequest() {}
 
-PlayRequest PlayRequest::fromJson(QJsonObject source) {PlayRequest instance;
-	instance->setFromJson(source, false);
+PlayRequest PlayRequest::fromJson(QJsonObject source) {
+	PlayRequest instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PlayRequest::setFromJson(QJsonObject source) {
-	m_itemIds = fromJsonValue<QList<QUuid>>(source["ItemIds"]);
-	m_startPositionTicks = fromJsonValue<qint64>(source["StartPositionTicks"]);
-	m_playCommand = fromJsonValue<PlayCommand>(source["PlayCommand"]);
-	m_controllingUserId = fromJsonValue<QUuid>(source["ControllingUserId"]);
-	m_subtitleStreamIndex = fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
-	m_audioStreamIndex = fromJsonValue<qint32>(source["AudioStreamIndex"]);
-	m_mediaSourceId = fromJsonValue<QString>(source["MediaSourceId"]);
-	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+	m_itemIds = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["ItemIds"]);
+	m_startPositionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["StartPositionTicks"]);
+	m_playCommand = Jellyfin::Support::fromJsonValue<PlayCommand>(source["PlayCommand"]);
+	m_controllingUserId = Jellyfin::Support::fromJsonValue<QUuid>(source["ControllingUserId"]);
+	m_subtitleStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
+	m_audioStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["AudioStreamIndex"]);
+	m_mediaSourceId = Jellyfin::Support::fromJsonValue<QString>(source["MediaSourceId"]);
+	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
 }
 	
 QJsonObject PlayRequest::toJson() {
 	QJsonObject result;
-	result["ItemIds"] = toJsonValue<QList<QUuid>>(m_itemIds);
-	result["StartPositionTicks"] = toJsonValue<qint64>(m_startPositionTicks);
-	result["PlayCommand"] = toJsonValue<PlayCommand>(m_playCommand);
-	result["ControllingUserId"] = toJsonValue<QUuid>(m_controllingUserId);
-	result["SubtitleStreamIndex"] = toJsonValue<qint32>(m_subtitleStreamIndex);
-	result["AudioStreamIndex"] = toJsonValue<qint32>(m_audioStreamIndex);
-	result["MediaSourceId"] = toJsonValue<QString>(m_mediaSourceId);
-	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+	result["ItemIds"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_itemIds);
+	result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_startPositionTicks);
+	result["PlayCommand"] = Jellyfin::Support::toJsonValue<PlayCommand>(m_playCommand);
+	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_controllingUserId);
+	result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_subtitleStreamIndex);
+	result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_audioStreamIndex);
+	result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
+	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
@@ -107,6 +108,17 @@ void PlayRequest::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PlayRequest = Jellyfin::DTO::PlayRequest;
+
+template <>
+PlayRequest fromJsonValue<PlayRequest>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlayRequest::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

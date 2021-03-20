@@ -32,40 +32,41 @@
 namespace Jellyfin {
 namespace DTO {
 
-PlayerStateInfo::PlayerStateInfo(QObject *parent) {}
+PlayerStateInfo::PlayerStateInfo() {}
 
-PlayerStateInfo PlayerStateInfo::fromJson(QJsonObject source) {PlayerStateInfo instance;
-	instance->setFromJson(source, false);
+PlayerStateInfo PlayerStateInfo::fromJson(QJsonObject source) {
+	PlayerStateInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PlayerStateInfo::setFromJson(QJsonObject source) {
-	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
-	m_canSeek = fromJsonValue<bool>(source["CanSeek"]);
-	m_isPaused = fromJsonValue<bool>(source["IsPaused"]);
-	m_isMuted = fromJsonValue<bool>(source["IsMuted"]);
-	m_volumeLevel = fromJsonValue<qint32>(source["VolumeLevel"]);
-	m_audioStreamIndex = fromJsonValue<qint32>(source["AudioStreamIndex"]);
-	m_subtitleStreamIndex = fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
-	m_mediaSourceId = fromJsonValue<QString>(source["MediaSourceId"]);
-	m_playMethod = fromJsonValue<PlayMethod>(source["PlayMethod"]);
-	m_repeatMode = fromJsonValue<RepeatMode>(source["RepeatMode"]);
+	m_positionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["PositionTicks"]);
+	m_canSeek = Jellyfin::Support::fromJsonValue<bool>(source["CanSeek"]);
+	m_isPaused = Jellyfin::Support::fromJsonValue<bool>(source["IsPaused"]);
+	m_isMuted = Jellyfin::Support::fromJsonValue<bool>(source["IsMuted"]);
+	m_volumeLevel = Jellyfin::Support::fromJsonValue<qint32>(source["VolumeLevel"]);
+	m_audioStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["AudioStreamIndex"]);
+	m_subtitleStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
+	m_mediaSourceId = Jellyfin::Support::fromJsonValue<QString>(source["MediaSourceId"]);
+	m_playMethod = Jellyfin::Support::fromJsonValue<PlayMethod>(source["PlayMethod"]);
+	m_repeatMode = Jellyfin::Support::fromJsonValue<RepeatMode>(source["RepeatMode"]);
 
 }
 	
 QJsonObject PlayerStateInfo::toJson() {
 	QJsonObject result;
-	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
-	result["CanSeek"] = toJsonValue<bool>(m_canSeek);
-	result["IsPaused"] = toJsonValue<bool>(m_isPaused);
-	result["IsMuted"] = toJsonValue<bool>(m_isMuted);
-	result["VolumeLevel"] = toJsonValue<qint32>(m_volumeLevel);
-	result["AudioStreamIndex"] = toJsonValue<qint32>(m_audioStreamIndex);
-	result["SubtitleStreamIndex"] = toJsonValue<qint32>(m_subtitleStreamIndex);
-	result["MediaSourceId"] = toJsonValue<QString>(m_mediaSourceId);
-	result["PlayMethod"] = toJsonValue<PlayMethod>(m_playMethod);
-	result["RepeatMode"] = toJsonValue<RepeatMode>(m_repeatMode);
+	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
+	result["CanSeek"] = Jellyfin::Support::toJsonValue<bool>(m_canSeek);
+	result["IsPaused"] = Jellyfin::Support::toJsonValue<bool>(m_isPaused);
+	result["IsMuted"] = Jellyfin::Support::toJsonValue<bool>(m_isMuted);
+	result["VolumeLevel"] = Jellyfin::Support::toJsonValue<qint32>(m_volumeLevel);
+	result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_audioStreamIndex);
+	result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_subtitleStreamIndex);
+	result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
+	result["PlayMethod"] = Jellyfin::Support::toJsonValue<PlayMethod>(m_playMethod);
+	result["RepeatMode"] = Jellyfin::Support::toJsonValue<RepeatMode>(m_repeatMode);
 
 	return result;
 }
@@ -121,6 +122,17 @@ void PlayerStateInfo::setRepeatMode(RepeatMode newRepeatMode) {
 	m_repeatMode = newRepeatMode;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PlayerStateInfo = Jellyfin::DTO::PlayerStateInfo;
+
+template <>
+PlayerStateInfo fromJsonValue<PlayerStateInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlayerStateInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

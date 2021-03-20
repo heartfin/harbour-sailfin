@@ -116,18 +116,6 @@ protected:
 	bool m_startupWizardCompleted;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PublicSystemInfo = Jellyfin::DTO::PublicSystemInfo;
-
-template <>
-PublicSystemInfo fromJsonValue<PublicSystemInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PublicSystemInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

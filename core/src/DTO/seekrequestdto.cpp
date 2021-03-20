@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-SeekRequestDto::SeekRequestDto(QObject *parent) {}
+SeekRequestDto::SeekRequestDto() {}
 
-SeekRequestDto SeekRequestDto::fromJson(QJsonObject source) {SeekRequestDto instance;
-	instance->setFromJson(source, false);
+SeekRequestDto SeekRequestDto::fromJson(QJsonObject source) {
+	SeekRequestDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SeekRequestDto::setFromJson(QJsonObject source) {
-	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
+	m_positionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["PositionTicks"]);
 
 }
 	
 QJsonObject SeekRequestDto::toJson() {
 	QJsonObject result;
-	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
+	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void SeekRequestDto::setPositionTicks(qint64 newPositionTicks) {
 	m_positionTicks = newPositionTicks;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SeekRequestDto = Jellyfin::DTO::SeekRequestDto;
+
+template <>
+SeekRequestDto fromJsonValue<SeekRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SeekRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

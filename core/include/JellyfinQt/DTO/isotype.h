@@ -54,28 +54,6 @@ private:
 
 typedef IsoTypeClass::Value IsoType;
 
-} // NS DTO
-
-namespace Support {
-
-using IsoType = Jellyfin::DTO::IsoType;
-using IsoTypeClass = Jellyfin::DTO::IsoTypeClass;
-
-template <>
-IsoType fromJsonValue<IsoType>(const QJsonValue &source) {
-	if (!source.isString()) return IsoTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Dvd")) {
-		return IsoTypeClass::Dvd;
-	}
-	if (str == QStringLiteral("BluRay")) {
-		return IsoTypeClass::BluRay;
-	}
-	
-	return IsoTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

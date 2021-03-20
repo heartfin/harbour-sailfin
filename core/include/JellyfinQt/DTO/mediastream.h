@@ -442,18 +442,6 @@ protected:
 	bool m_isAnamorphic;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MediaStream = Jellyfin::DTO::MediaStream;
-
-template <>
-MediaStream fromJsonValue<MediaStream>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MediaStream::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

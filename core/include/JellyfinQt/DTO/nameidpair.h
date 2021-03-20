@@ -71,18 +71,6 @@ protected:
 	QString m_jellyfinId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using NameIdPair = Jellyfin::DTO::NameIdPair;
-
-template <>
-NameIdPair fromJsonValue<NameIdPair>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return NameIdPair::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

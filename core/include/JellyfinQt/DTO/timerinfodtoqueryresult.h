@@ -83,18 +83,6 @@ protected:
 	qint32 m_startIndex;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TimerInfoDtoQueryResult = Jellyfin::DTO::TimerInfoDtoQueryResult;
-
-template <>
-TimerInfoDtoQueryResult fromJsonValue<TimerInfoDtoQueryResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TimerInfoDtoQueryResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

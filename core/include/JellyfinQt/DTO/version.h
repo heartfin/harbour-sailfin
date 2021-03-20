@@ -82,18 +82,6 @@ protected:
 	qint32 m_minorRevision;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using Version = Jellyfin::DTO::Version;
-
-template <>
-Version fromJsonValue<Version>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return Version::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

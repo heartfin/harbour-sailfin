@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaEncoderPathDto::MediaEncoderPathDto(QObject *parent) {}
+MediaEncoderPathDto::MediaEncoderPathDto() {}
 
-MediaEncoderPathDto MediaEncoderPathDto::fromJson(QJsonObject source) {MediaEncoderPathDto instance;
-	instance->setFromJson(source, false);
+MediaEncoderPathDto MediaEncoderPathDto::fromJson(QJsonObject source) {
+	MediaEncoderPathDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MediaEncoderPathDto::setFromJson(QJsonObject source) {
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_pathType = fromJsonValue<QString>(source["PathType"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_pathType = Jellyfin::Support::fromJsonValue<QString>(source["PathType"]);
 
 }
 	
 QJsonObject MediaEncoderPathDto::toJson() {
 	QJsonObject result;
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["PathType"] = toJsonValue<QString>(m_pathType);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["PathType"] = Jellyfin::Support::toJsonValue<QString>(m_pathType);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void MediaEncoderPathDto::setPathType(QString newPathType) {
 	m_pathType = newPathType;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MediaEncoderPathDto = Jellyfin::DTO::MediaEncoderPathDto;
+
+template <>
+MediaEncoderPathDto fromJsonValue<MediaEncoderPathDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaEncoderPathDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

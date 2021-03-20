@@ -56,34 +56,6 @@ private:
 
 typedef FileSystemEntryTypeClass::Value FileSystemEntryType;
 
-} // NS DTO
-
-namespace Support {
-
-using FileSystemEntryType = Jellyfin::DTO::FileSystemEntryType;
-using FileSystemEntryTypeClass = Jellyfin::DTO::FileSystemEntryTypeClass;
-
-template <>
-FileSystemEntryType fromJsonValue<FileSystemEntryType>(const QJsonValue &source) {
-	if (!source.isString()) return FileSystemEntryTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("File")) {
-		return FileSystemEntryTypeClass::File;
-	}
-	if (str == QStringLiteral("Directory")) {
-		return FileSystemEntryTypeClass::Directory;
-	}
-	if (str == QStringLiteral("NetworkComputer")) {
-		return FileSystemEntryTypeClass::NetworkComputer;
-	}
-	if (str == QStringLiteral("NetworkShare")) {
-		return FileSystemEntryTypeClass::NetworkShare;
-	}
-	
-	return FileSystemEntryTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

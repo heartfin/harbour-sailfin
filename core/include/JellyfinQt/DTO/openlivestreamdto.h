@@ -172,18 +172,6 @@ protected:
 	QList<MediaProtocol> m_directPlayProtocols;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using OpenLiveStreamDto = Jellyfin::DTO::OpenLiveStreamDto;
-
-template <>
-OpenLiveStreamDto fromJsonValue<OpenLiveStreamDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return OpenLiveStreamDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

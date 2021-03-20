@@ -32,36 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-PackageInfo::PackageInfo(QObject *parent) {}
+PackageInfo::PackageInfo() {}
 
-PackageInfo PackageInfo::fromJson(QJsonObject source) {PackageInfo instance;
-	instance->setFromJson(source, false);
+PackageInfo PackageInfo::fromJson(QJsonObject source) {
+	PackageInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PackageInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["name"]);
-	m_description = fromJsonValue<QString>(source["description"]);
-	m_overview = fromJsonValue<QString>(source["overview"]);
-	m_owner = fromJsonValue<QString>(source["owner"]);
-	m_category = fromJsonValue<QString>(source["category"]);
-	m_guid = fromJsonValue<QString>(source["guid"]);
-	m_versions = fromJsonValue<QList<QSharedPointer<VersionInfo>>>(source["versions"]);
-	m_imageUrl = fromJsonValue<QString>(source["imageUrl"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["name"]);
+	m_description = Jellyfin::Support::fromJsonValue<QString>(source["description"]);
+	m_overview = Jellyfin::Support::fromJsonValue<QString>(source["overview"]);
+	m_owner = Jellyfin::Support::fromJsonValue<QString>(source["owner"]);
+	m_category = Jellyfin::Support::fromJsonValue<QString>(source["category"]);
+	m_guid = Jellyfin::Support::fromJsonValue<QString>(source["guid"]);
+	m_versions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<VersionInfo>>>(source["versions"]);
+	m_imageUrl = Jellyfin::Support::fromJsonValue<QString>(source["imageUrl"]);
 
 }
 	
 QJsonObject PackageInfo::toJson() {
 	QJsonObject result;
-	result["name"] = toJsonValue<QString>(m_name);
-	result["description"] = toJsonValue<QString>(m_description);
-	result["overview"] = toJsonValue<QString>(m_overview);
-	result["owner"] = toJsonValue<QString>(m_owner);
-	result["category"] = toJsonValue<QString>(m_category);
-	result["guid"] = toJsonValue<QString>(m_guid);
-	result["versions"] = toJsonValue<QList<QSharedPointer<VersionInfo>>>(m_versions);
-	result["imageUrl"] = toJsonValue<QString>(m_imageUrl);
+	result["name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
+	result["overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	result["owner"] = Jellyfin::Support::toJsonValue<QString>(m_owner);
+	result["category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
+	result["guid"] = Jellyfin::Support::toJsonValue<QString>(m_guid);
+	result["versions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<VersionInfo>>>(m_versions);
+	result["imageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_imageUrl);
 
 	return result;
 }
@@ -107,6 +108,17 @@ void PackageInfo::setImageUrl(QString newImageUrl) {
 	m_imageUrl = newImageUrl;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PackageInfo = Jellyfin::DTO::PackageInfo;
+
+template <>
+PackageInfo fromJsonValue<PackageInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PackageInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-ContainerProfile::ContainerProfile(QObject *parent) {}
+ContainerProfile::ContainerProfile() {}
 
-ContainerProfile ContainerProfile::fromJson(QJsonObject source) {ContainerProfile instance;
-	instance->setFromJson(source, false);
+ContainerProfile ContainerProfile::fromJson(QJsonObject source) {
+	ContainerProfile instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ContainerProfile::setFromJson(QJsonObject source) {
-	m_type = fromJsonValue<DlnaProfileType>(source["Type"]);
-	m_conditions = fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
-	m_container = fromJsonValue<QString>(source["Container"]);
+	m_type = Jellyfin::Support::fromJsonValue<DlnaProfileType>(source["Type"]);
+	m_conditions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
+	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
 
 }
 	
 QJsonObject ContainerProfile::toJson() {
 	QJsonObject result;
-	result["Type"] = toJsonValue<DlnaProfileType>(m_type);
-	result["Conditions"] = toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
-	result["Container"] = toJsonValue<QString>(m_container);
+	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
+	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void ContainerProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ContainerProfile = Jellyfin::DTO::ContainerProfile;
+
+template <>
+ContainerProfile fromJsonValue<ContainerProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ContainerProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

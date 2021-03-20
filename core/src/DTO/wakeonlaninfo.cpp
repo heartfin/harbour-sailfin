@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-WakeOnLanInfo::WakeOnLanInfo(QObject *parent) {}
+WakeOnLanInfo::WakeOnLanInfo() {}
 
-WakeOnLanInfo WakeOnLanInfo::fromJson(QJsonObject source) {WakeOnLanInfo instance;
-	instance->setFromJson(source, false);
+WakeOnLanInfo WakeOnLanInfo::fromJson(QJsonObject source) {
+	WakeOnLanInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void WakeOnLanInfo::setFromJson(QJsonObject source) {
-	m_macAddress = fromJsonValue<QString>(source["MacAddress"]);
-	m_port = fromJsonValue<qint32>(source["Port"]);
+	m_macAddress = Jellyfin::Support::fromJsonValue<QString>(source["MacAddress"]);
+	m_port = Jellyfin::Support::fromJsonValue<qint32>(source["Port"]);
 
 }
 	
 QJsonObject WakeOnLanInfo::toJson() {
 	QJsonObject result;
-	result["MacAddress"] = toJsonValue<QString>(m_macAddress);
-	result["Port"] = toJsonValue<qint32>(m_port);
+	result["MacAddress"] = Jellyfin::Support::toJsonValue<QString>(m_macAddress);
+	result["Port"] = Jellyfin::Support::toJsonValue<qint32>(m_port);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void WakeOnLanInfo::setPort(qint32 newPort) {
 	m_port = newPort;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using WakeOnLanInfo = Jellyfin::DTO::WakeOnLanInfo;
+
+template <>
+WakeOnLanInfo fromJsonValue<WakeOnLanInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return WakeOnLanInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

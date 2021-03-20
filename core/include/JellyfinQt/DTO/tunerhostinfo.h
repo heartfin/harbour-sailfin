@@ -108,18 +108,6 @@ protected:
 	QString m_userAgent;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TunerHostInfo = Jellyfin::DTO::TunerHostInfo;
-
-template <>
-TunerHostInfo fromJsonValue<TunerHostInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TunerHostInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

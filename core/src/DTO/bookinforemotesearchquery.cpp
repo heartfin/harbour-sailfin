@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-BookInfoRemoteSearchQuery::BookInfoRemoteSearchQuery(QObject *parent) {}
+BookInfoRemoteSearchQuery::BookInfoRemoteSearchQuery() {}
 
-BookInfoRemoteSearchQuery BookInfoRemoteSearchQuery::fromJson(QJsonObject source) {BookInfoRemoteSearchQuery instance;
-	instance->setFromJson(source, false);
+BookInfoRemoteSearchQuery BookInfoRemoteSearchQuery::fromJson(QJsonObject source) {
+	BookInfoRemoteSearchQuery instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void BookInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
-	m_searchInfo = fromJsonValue<QSharedPointer<BookInfo>>(source["SearchInfo"]);
-	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
-	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
-	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+	m_searchInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<BookInfo>>(source["SearchInfo"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = Jellyfin::Support::fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = Jellyfin::Support::fromJsonValue<bool>(source["IncludeDisabledProviders"]);
 
 }
 	
 QJsonObject BookInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
-	result["SearchInfo"] = toJsonValue<QSharedPointer<BookInfo>>(m_searchInfo);
-	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
-	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
-	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<BookInfo>>(m_searchInfo);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = Jellyfin::Support::toJsonValue<bool>(m_includeDisabledProviders);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void BookInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncludeDisab
 	m_includeDisabledProviders = newIncludeDisabledProviders;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using BookInfoRemoteSearchQuery = Jellyfin::DTO::BookInfoRemoteSearchQuery;
+
+template <>
+BookInfoRemoteSearchQuery fromJsonValue<BookInfoRemoteSearchQuery>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return BookInfoRemoteSearchQuery::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -79,18 +79,6 @@ protected:
 	QUuid m_categoryId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using RecommendationDto = Jellyfin::DTO::RecommendationDto;
-
-template <>
-RecommendationDto fromJsonValue<RecommendationDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return RecommendationDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

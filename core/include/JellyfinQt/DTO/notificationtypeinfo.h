@@ -78,18 +78,6 @@ protected:
 	bool m_isBasedOnUserEvent;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using NotificationTypeInfo = Jellyfin::DTO::NotificationTypeInfo;
-
-template <>
-NotificationTypeInfo fromJsonValue<NotificationTypeInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return NotificationTypeInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

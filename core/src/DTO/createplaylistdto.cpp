@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-CreatePlaylistDto::CreatePlaylistDto(QObject *parent) {}
+CreatePlaylistDto::CreatePlaylistDto() {}
 
-CreatePlaylistDto CreatePlaylistDto::fromJson(QJsonObject source) {CreatePlaylistDto instance;
-	instance->setFromJson(source, false);
+CreatePlaylistDto CreatePlaylistDto::fromJson(QJsonObject source) {
+	CreatePlaylistDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void CreatePlaylistDto::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_ids = fromJsonValue<QList<QUuid>>(source["Ids"]);
-	m_userId = fromJsonValue<QUuid>(source["UserId"]);
-	m_mediaType = fromJsonValue<QString>(source["MediaType"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_ids = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["Ids"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QUuid>(source["UserId"]);
+	m_mediaType = Jellyfin::Support::fromJsonValue<QString>(source["MediaType"]);
 
 }
 	
 QJsonObject CreatePlaylistDto::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Ids"] = toJsonValue<QList<QUuid>>(m_ids);
-	result["UserId"] = toJsonValue<QUuid>(m_userId);
-	result["MediaType"] = toJsonValue<QString>(m_mediaType);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Ids"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_ids);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_userId);
+	result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void CreatePlaylistDto::setMediaType(QString newMediaType) {
 	m_mediaType = newMediaType;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using CreatePlaylistDto = Jellyfin::DTO::CreatePlaylistDto;
+
+template <>
+CreatePlaylistDto fromJsonValue<CreatePlaylistDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return CreatePlaylistDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

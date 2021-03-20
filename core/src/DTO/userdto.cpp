@@ -32,48 +32,49 @@
 namespace Jellyfin {
 namespace DTO {
 
-UserDto::UserDto(QObject *parent) {}
+UserDto::UserDto() {}
 
-UserDto UserDto::fromJson(QJsonObject source) {UserDto instance;
-	instance->setFromJson(source, false);
+UserDto UserDto::fromJson(QJsonObject source) {
+	UserDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void UserDto::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_serverId = fromJsonValue<QString>(source["ServerId"]);
-	m_serverName = fromJsonValue<QString>(source["ServerName"]);
-	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
-	m_primaryImageTag = fromJsonValue<QString>(source["PrimaryImageTag"]);
-	m_hasPassword = fromJsonValue<bool>(source["HasPassword"]);
-	m_hasConfiguredPassword = fromJsonValue<bool>(source["HasConfiguredPassword"]);
-	m_hasConfiguredEasyPassword = fromJsonValue<bool>(source["HasConfiguredEasyPassword"]);
-	m_enableAutoLogin = fromJsonValue<bool>(source["EnableAutoLogin"]);
-	m_lastLoginDate = fromJsonValue<QDateTime>(source["LastLoginDate"]);
-	m_lastActivityDate = fromJsonValue<QDateTime>(source["LastActivityDate"]);
-	m_configuration = fromJsonValue<QSharedPointer<UserConfiguration>>(source["Configuration"]);
-	m_policy = fromJsonValue<QSharedPointer<UserPolicy>>(source["Policy"]);
-	m_primaryImageAspectRatio = fromJsonValue<double>(source["PrimaryImageAspectRatio"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_serverId = Jellyfin::Support::fromJsonValue<QString>(source["ServerId"]);
+	m_serverName = Jellyfin::Support::fromJsonValue<QString>(source["ServerName"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QUuid>(source["Id"]);
+	m_primaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["PrimaryImageTag"]);
+	m_hasPassword = Jellyfin::Support::fromJsonValue<bool>(source["HasPassword"]);
+	m_hasConfiguredPassword = Jellyfin::Support::fromJsonValue<bool>(source["HasConfiguredPassword"]);
+	m_hasConfiguredEasyPassword = Jellyfin::Support::fromJsonValue<bool>(source["HasConfiguredEasyPassword"]);
+	m_enableAutoLogin = Jellyfin::Support::fromJsonValue<bool>(source["EnableAutoLogin"]);
+	m_lastLoginDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["LastLoginDate"]);
+	m_lastActivityDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["LastActivityDate"]);
+	m_configuration = Jellyfin::Support::fromJsonValue<QSharedPointer<UserConfiguration>>(source["Configuration"]);
+	m_policy = Jellyfin::Support::fromJsonValue<QSharedPointer<UserPolicy>>(source["Policy"]);
+	m_primaryImageAspectRatio = Jellyfin::Support::fromJsonValue<double>(source["PrimaryImageAspectRatio"]);
 
 }
 	
 QJsonObject UserDto::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["ServerId"] = toJsonValue<QString>(m_serverId);
-	result["ServerName"] = toJsonValue<QString>(m_serverName);
-	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
-	result["PrimaryImageTag"] = toJsonValue<QString>(m_primaryImageTag);
-	result["HasPassword"] = toJsonValue<bool>(m_hasPassword);
-	result["HasConfiguredPassword"] = toJsonValue<bool>(m_hasConfiguredPassword);
-	result["HasConfiguredEasyPassword"] = toJsonValue<bool>(m_hasConfiguredEasyPassword);
-	result["EnableAutoLogin"] = toJsonValue<bool>(m_enableAutoLogin);
-	result["LastLoginDate"] = toJsonValue<QDateTime>(m_lastLoginDate);
-	result["LastActivityDate"] = toJsonValue<QDateTime>(m_lastActivityDate);
-	result["Configuration"] = toJsonValue<QSharedPointer<UserConfiguration>>(m_configuration);
-	result["Policy"] = toJsonValue<QSharedPointer<UserPolicy>>(m_policy);
-	result["PrimaryImageAspectRatio"] = toJsonValue<double>(m_primaryImageAspectRatio);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
+	result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
+	result["Id"] = Jellyfin::Support::toJsonValue<QUuid>(m_jellyfinId);
+	result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
+	result["HasPassword"] = Jellyfin::Support::toJsonValue<bool>(m_hasPassword);
+	result["HasConfiguredPassword"] = Jellyfin::Support::toJsonValue<bool>(m_hasConfiguredPassword);
+	result["HasConfiguredEasyPassword"] = Jellyfin::Support::toJsonValue<bool>(m_hasConfiguredEasyPassword);
+	result["EnableAutoLogin"] = Jellyfin::Support::toJsonValue<bool>(m_enableAutoLogin);
+	result["LastLoginDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastLoginDate);
+	result["LastActivityDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastActivityDate);
+	result["Configuration"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserConfiguration>>(m_configuration);
+	result["Policy"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserPolicy>>(m_policy);
+	result["PrimaryImageAspectRatio"] = Jellyfin::Support::toJsonValue<double>(m_primaryImageAspectRatio);
 
 	return result;
 }
@@ -149,6 +150,17 @@ void UserDto::setPrimaryImageAspectRatio(double newPrimaryImageAspectRatio) {
 	m_primaryImageAspectRatio = newPrimaryImageAspectRatio;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using UserDto = Jellyfin::DTO::UserDto;
+
+template <>
+UserDto fromJsonValue<UserDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UserDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

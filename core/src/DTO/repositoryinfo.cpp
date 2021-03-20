@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-RepositoryInfo::RepositoryInfo(QObject *parent) {}
+RepositoryInfo::RepositoryInfo() {}
 
-RepositoryInfo RepositoryInfo::fromJson(QJsonObject source) {RepositoryInfo instance;
-	instance->setFromJson(source, false);
+RepositoryInfo RepositoryInfo::fromJson(QJsonObject source) {
+	RepositoryInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void RepositoryInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_url = fromJsonValue<QString>(source["Url"]);
-	m_enabled = fromJsonValue<bool>(source["Enabled"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_url = Jellyfin::Support::fromJsonValue<QString>(source["Url"]);
+	m_enabled = Jellyfin::Support::fromJsonValue<bool>(source["Enabled"]);
 
 }
 	
 QJsonObject RepositoryInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Url"] = toJsonValue<QString>(m_url);
-	result["Enabled"] = toJsonValue<bool>(m_enabled);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	result["Enabled"] = Jellyfin::Support::toJsonValue<bool>(m_enabled);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void RepositoryInfo::setEnabled(bool newEnabled) {
 	m_enabled = newEnabled;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using RepositoryInfo = Jellyfin::DTO::RepositoryInfo;
+
+template <>
+RepositoryInfo fromJsonValue<RepositoryInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RepositoryInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

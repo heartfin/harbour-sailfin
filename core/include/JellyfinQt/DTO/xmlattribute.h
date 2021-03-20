@@ -71,18 +71,6 @@ protected:
 	QString m_value;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using XmlAttribute = Jellyfin::DTO::XmlAttribute;
-
-template <>
-XmlAttribute fromJsonValue<XmlAttribute>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return XmlAttribute::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-SpecialViewOptionDto::SpecialViewOptionDto(QObject *parent) {}
+SpecialViewOptionDto::SpecialViewOptionDto() {}
 
-SpecialViewOptionDto SpecialViewOptionDto::fromJson(QJsonObject source) {SpecialViewOptionDto instance;
-	instance->setFromJson(source, false);
+SpecialViewOptionDto SpecialViewOptionDto::fromJson(QJsonObject source) {
+	SpecialViewOptionDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SpecialViewOptionDto::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
 
 }
 	
 QJsonObject SpecialViewOptionDto::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void SpecialViewOptionDto::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SpecialViewOptionDto = Jellyfin::DTO::SpecialViewOptionDto;
+
+template <>
+SpecialViewOptionDto fromJsonValue<SpecialViewOptionDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SpecialViewOptionDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -131,18 +131,6 @@ protected:
 	bool m_breakOnNonKeyFrames;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TranscodingProfile = Jellyfin::DTO::TranscodingProfile;
-
-template <>
-TranscodingProfile fromJsonValue<TranscodingProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TranscodingProfile::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

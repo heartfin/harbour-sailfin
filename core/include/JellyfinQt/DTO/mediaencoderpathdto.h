@@ -71,18 +71,6 @@ protected:
 	QString m_pathType;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MediaEncoderPathDto = Jellyfin::DTO::MediaEncoderPathDto;
-
-template <>
-MediaEncoderPathDto fromJsonValue<MediaEncoderPathDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MediaEncoderPathDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

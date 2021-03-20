@@ -129,18 +129,6 @@ protected:
 	QList<QSharedPointer<RemoteSearchResult>> m_artists;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using RemoteSearchResult = Jellyfin::DTO::RemoteSearchResult;
-
-template <>
-RemoteSearchResult fromJsonValue<RemoteSearchResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return RemoteSearchResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

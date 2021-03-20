@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-ThemeMediaResult::ThemeMediaResult(QObject *parent) {}
+ThemeMediaResult::ThemeMediaResult() {}
 
-ThemeMediaResult ThemeMediaResult::fromJson(QJsonObject source) {ThemeMediaResult instance;
-	instance->setFromJson(source, false);
+ThemeMediaResult ThemeMediaResult::fromJson(QJsonObject source) {
+	ThemeMediaResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ThemeMediaResult::setFromJson(QJsonObject source) {
-	m_items = fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
-	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
-	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
-	m_ownerId = fromJsonValue<QUuid>(source["OwnerId"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
+	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
+	m_ownerId = Jellyfin::Support::fromJsonValue<QUuid>(source["OwnerId"]);
 
 }
 	
 QJsonObject ThemeMediaResult::toJson() {
 	QJsonObject result;
-	result["Items"] = toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
-	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
-	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
-	result["OwnerId"] = toJsonValue<QUuid>(m_ownerId);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
+	result["OwnerId"] = Jellyfin::Support::toJsonValue<QUuid>(m_ownerId);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void ThemeMediaResult::setOwnerId(QUuid newOwnerId) {
 	m_ownerId = newOwnerId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ThemeMediaResult = Jellyfin::DTO::ThemeMediaResult;
+
+template <>
+ThemeMediaResult fromJsonValue<ThemeMediaResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ThemeMediaResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

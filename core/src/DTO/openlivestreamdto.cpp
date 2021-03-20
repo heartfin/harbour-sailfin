@@ -32,46 +32,47 @@
 namespace Jellyfin {
 namespace DTO {
 
-OpenLiveStreamDto::OpenLiveStreamDto(QObject *parent) {}
+OpenLiveStreamDto::OpenLiveStreamDto() {}
 
-OpenLiveStreamDto OpenLiveStreamDto::fromJson(QJsonObject source) {OpenLiveStreamDto instance;
-	instance->setFromJson(source, false);
+OpenLiveStreamDto OpenLiveStreamDto::fromJson(QJsonObject source) {
+	OpenLiveStreamDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void OpenLiveStreamDto::setFromJson(QJsonObject source) {
-	m_openToken = fromJsonValue<QString>(source["OpenToken"]);
-	m_userId = fromJsonValue<QUuid>(source["UserId"]);
-	m_playSessionId = fromJsonValue<QString>(source["PlaySessionId"]);
-	m_maxStreamingBitrate = fromJsonValue<qint32>(source["MaxStreamingBitrate"]);
-	m_startTimeTicks = fromJsonValue<qint64>(source["StartTimeTicks"]);
-	m_audioStreamIndex = fromJsonValue<qint32>(source["AudioStreamIndex"]);
-	m_subtitleStreamIndex = fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
-	m_maxAudioChannels = fromJsonValue<qint32>(source["MaxAudioChannels"]);
-	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
-	m_enableDirectPlay = fromJsonValue<bool>(source["EnableDirectPlay"]);
-	m_enableDirectStream = fromJsonValue<bool>(source["EnableDirectStream"]);
-	m_deviceProfile = fromJsonValue<QSharedPointer<DeviceProfile>>(source["DeviceProfile"]);
-	m_directPlayProtocols = fromJsonValue<QList<MediaProtocol>>(source["DirectPlayProtocols"]);
+	m_openToken = Jellyfin::Support::fromJsonValue<QString>(source["OpenToken"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QUuid>(source["UserId"]);
+	m_playSessionId = Jellyfin::Support::fromJsonValue<QString>(source["PlaySessionId"]);
+	m_maxStreamingBitrate = Jellyfin::Support::fromJsonValue<qint32>(source["MaxStreamingBitrate"]);
+	m_startTimeTicks = Jellyfin::Support::fromJsonValue<qint64>(source["StartTimeTicks"]);
+	m_audioStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["AudioStreamIndex"]);
+	m_subtitleStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["SubtitleStreamIndex"]);
+	m_maxAudioChannels = Jellyfin::Support::fromJsonValue<qint32>(source["MaxAudioChannels"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QUuid>(source["ItemId"]);
+	m_enableDirectPlay = Jellyfin::Support::fromJsonValue<bool>(source["EnableDirectPlay"]);
+	m_enableDirectStream = Jellyfin::Support::fromJsonValue<bool>(source["EnableDirectStream"]);
+	m_deviceProfile = Jellyfin::Support::fromJsonValue<QSharedPointer<DeviceProfile>>(source["DeviceProfile"]);
+	m_directPlayProtocols = Jellyfin::Support::fromJsonValue<QList<MediaProtocol>>(source["DirectPlayProtocols"]);
 
 }
 	
 QJsonObject OpenLiveStreamDto::toJson() {
 	QJsonObject result;
-	result["OpenToken"] = toJsonValue<QString>(m_openToken);
-	result["UserId"] = toJsonValue<QUuid>(m_userId);
-	result["PlaySessionId"] = toJsonValue<QString>(m_playSessionId);
-	result["MaxStreamingBitrate"] = toJsonValue<qint32>(m_maxStreamingBitrate);
-	result["StartTimeTicks"] = toJsonValue<qint64>(m_startTimeTicks);
-	result["AudioStreamIndex"] = toJsonValue<qint32>(m_audioStreamIndex);
-	result["SubtitleStreamIndex"] = toJsonValue<qint32>(m_subtitleStreamIndex);
-	result["MaxAudioChannels"] = toJsonValue<qint32>(m_maxAudioChannels);
-	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
-	result["EnableDirectPlay"] = toJsonValue<bool>(m_enableDirectPlay);
-	result["EnableDirectStream"] = toJsonValue<bool>(m_enableDirectStream);
-	result["DeviceProfile"] = toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);
-	result["DirectPlayProtocols"] = toJsonValue<QList<MediaProtocol>>(m_directPlayProtocols);
+	result["OpenToken"] = Jellyfin::Support::toJsonValue<QString>(m_openToken);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_userId);
+	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
+	result["MaxStreamingBitrate"] = Jellyfin::Support::toJsonValue<qint32>(m_maxStreamingBitrate);
+	result["StartTimeTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_startTimeTicks);
+	result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_audioStreamIndex);
+	result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_subtitleStreamIndex);
+	result["MaxAudioChannels"] = Jellyfin::Support::toJsonValue<qint32>(m_maxAudioChannels);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_itemId);
+	result["EnableDirectPlay"] = Jellyfin::Support::toJsonValue<bool>(m_enableDirectPlay);
+	result["EnableDirectStream"] = Jellyfin::Support::toJsonValue<bool>(m_enableDirectStream);
+	result["DeviceProfile"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);
+	result["DirectPlayProtocols"] = Jellyfin::Support::toJsonValue<QList<MediaProtocol>>(m_directPlayProtocols);
 
 	return result;
 }
@@ -142,6 +143,17 @@ void OpenLiveStreamDto::setDirectPlayProtocols(QList<MediaProtocol> newDirectPla
 	m_directPlayProtocols = newDirectPlayProtocols;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using OpenLiveStreamDto = Jellyfin::DTO::OpenLiveStreamDto;
+
+template <>
+OpenLiveStreamDto fromJsonValue<OpenLiveStreamDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return OpenLiveStreamDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

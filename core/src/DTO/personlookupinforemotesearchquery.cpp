@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-PersonLookupInfoRemoteSearchQuery::PersonLookupInfoRemoteSearchQuery(QObject *parent) {}
+PersonLookupInfoRemoteSearchQuery::PersonLookupInfoRemoteSearchQuery() {}
 
-PersonLookupInfoRemoteSearchQuery PersonLookupInfoRemoteSearchQuery::fromJson(QJsonObject source) {PersonLookupInfoRemoteSearchQuery instance;
-	instance->setFromJson(source, false);
+PersonLookupInfoRemoteSearchQuery PersonLookupInfoRemoteSearchQuery::fromJson(QJsonObject source) {
+	PersonLookupInfoRemoteSearchQuery instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PersonLookupInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
-	m_searchInfo = fromJsonValue<QSharedPointer<PersonLookupInfo>>(source["SearchInfo"]);
-	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
-	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
-	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+	m_searchInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<PersonLookupInfo>>(source["SearchInfo"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = Jellyfin::Support::fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = Jellyfin::Support::fromJsonValue<bool>(source["IncludeDisabledProviders"]);
 
 }
 	
 QJsonObject PersonLookupInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
-	result["SearchInfo"] = toJsonValue<QSharedPointer<PersonLookupInfo>>(m_searchInfo);
-	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
-	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
-	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<PersonLookupInfo>>(m_searchInfo);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = Jellyfin::Support::toJsonValue<bool>(m_includeDisabledProviders);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void PersonLookupInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncl
 	m_includeDisabledProviders = newIncludeDisabledProviders;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PersonLookupInfoRemoteSearchQuery = Jellyfin::DTO::PersonLookupInfoRemoteSearchQuery;
+
+template <>
+PersonLookupInfoRemoteSearchQuery fromJsonValue<PersonLookupInfoRemoteSearchQuery>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PersonLookupInfoRemoteSearchQuery::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

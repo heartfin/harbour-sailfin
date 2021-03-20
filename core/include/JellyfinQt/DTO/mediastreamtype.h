@@ -56,34 +56,6 @@ private:
 
 typedef MediaStreamTypeClass::Value MediaStreamType;
 
-} // NS DTO
-
-namespace Support {
-
-using MediaStreamType = Jellyfin::DTO::MediaStreamType;
-using MediaStreamTypeClass = Jellyfin::DTO::MediaStreamTypeClass;
-
-template <>
-MediaStreamType fromJsonValue<MediaStreamType>(const QJsonValue &source) {
-	if (!source.isString()) return MediaStreamTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Audio")) {
-		return MediaStreamTypeClass::Audio;
-	}
-	if (str == QStringLiteral("Video")) {
-		return MediaStreamTypeClass::Video;
-	}
-	if (str == QStringLiteral("Subtitle")) {
-		return MediaStreamTypeClass::Subtitle;
-	}
-	if (str == QStringLiteral("EmbeddedImage")) {
-		return MediaStreamTypeClass::EmbeddedImage;
-	}
-	
-	return MediaStreamTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

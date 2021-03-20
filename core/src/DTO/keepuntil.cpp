@@ -34,5 +34,33 @@ namespace DTO {
 
 KeepUntilClass::KeepUntilClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using KeepUntil = Jellyfin::DTO::KeepUntil;
+
+template <>
+KeepUntil fromJsonValue<KeepUntil>(const QJsonValue &source) {
+	if (!source.isString()) return KeepUntil::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("UntilDeleted")) {
+		return KeepUntil::UntilDeleted;
+	}
+	if (str == QStringLiteral("UntilSpaceNeeded")) {
+		return KeepUntil::UntilSpaceNeeded;
+	}
+	if (str == QStringLiteral("UntilWatched")) {
+		return KeepUntil::UntilWatched;
+	}
+	if (str == QStringLiteral("UntilDate")) {
+		return KeepUntil::UntilDate;
+	}
+	
+	return KeepUntil::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

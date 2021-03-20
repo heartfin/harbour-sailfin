@@ -34,5 +34,30 @@ namespace DTO {
 
 NotificationLevelClass::NotificationLevelClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using NotificationLevel = Jellyfin::DTO::NotificationLevel;
+
+template <>
+NotificationLevel fromJsonValue<NotificationLevel>(const QJsonValue &source) {
+	if (!source.isString()) return NotificationLevel::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Normal")) {
+		return NotificationLevel::Normal;
+	}
+	if (str == QStringLiteral("Warning")) {
+		return NotificationLevel::Warning;
+	}
+	if (str == QStringLiteral("Error")) {
+		return NotificationLevel::Error;
+	}
+	
+	return NotificationLevel::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

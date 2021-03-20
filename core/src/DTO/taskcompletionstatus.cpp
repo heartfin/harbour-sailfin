@@ -34,5 +34,33 @@ namespace DTO {
 
 TaskCompletionStatusClass::TaskCompletionStatusClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using TaskCompletionStatus = Jellyfin::DTO::TaskCompletionStatus;
+
+template <>
+TaskCompletionStatus fromJsonValue<TaskCompletionStatus>(const QJsonValue &source) {
+	if (!source.isString()) return TaskCompletionStatus::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Completed")) {
+		return TaskCompletionStatus::Completed;
+	}
+	if (str == QStringLiteral("Failed")) {
+		return TaskCompletionStatus::Failed;
+	}
+	if (str == QStringLiteral("Cancelled")) {
+		return TaskCompletionStatus::Cancelled;
+	}
+	if (str == QStringLiteral("Aborted")) {
+		return TaskCompletionStatus::Aborted;
+	}
+	
+	return TaskCompletionStatus::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

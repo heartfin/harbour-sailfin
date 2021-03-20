@@ -34,5 +34,33 @@ namespace DTO {
 
 SendCommandTypeClass::SendCommandTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using SendCommandType = Jellyfin::DTO::SendCommandType;
+
+template <>
+SendCommandType fromJsonValue<SendCommandType>(const QJsonValue &source) {
+	if (!source.isString()) return SendCommandType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Unpause")) {
+		return SendCommandType::Unpause;
+	}
+	if (str == QStringLiteral("Pause")) {
+		return SendCommandType::Pause;
+	}
+	if (str == QStringLiteral("Stop")) {
+		return SendCommandType::Stop;
+	}
+	if (str == QStringLiteral("Seek")) {
+		return SendCommandType::Seek;
+	}
+	
+	return SendCommandType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

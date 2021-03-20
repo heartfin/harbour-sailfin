@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-ForgotPasswordResult::ForgotPasswordResult(QObject *parent) {}
+ForgotPasswordResult::ForgotPasswordResult() {}
 
-ForgotPasswordResult ForgotPasswordResult::fromJson(QJsonObject source) {ForgotPasswordResult instance;
-	instance->setFromJson(source, false);
+ForgotPasswordResult ForgotPasswordResult::fromJson(QJsonObject source) {
+	ForgotPasswordResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ForgotPasswordResult::setFromJson(QJsonObject source) {
-	m_action = fromJsonValue<ForgotPasswordAction>(source["Action"]);
-	m_pinFile = fromJsonValue<QString>(source["PinFile"]);
-	m_pinExpirationDate = fromJsonValue<QDateTime>(source["PinExpirationDate"]);
+	m_action = Jellyfin::Support::fromJsonValue<ForgotPasswordAction>(source["Action"]);
+	m_pinFile = Jellyfin::Support::fromJsonValue<QString>(source["PinFile"]);
+	m_pinExpirationDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["PinExpirationDate"]);
 
 }
 	
 QJsonObject ForgotPasswordResult::toJson() {
 	QJsonObject result;
-	result["Action"] = toJsonValue<ForgotPasswordAction>(m_action);
-	result["PinFile"] = toJsonValue<QString>(m_pinFile);
-	result["PinExpirationDate"] = toJsonValue<QDateTime>(m_pinExpirationDate);
+	result["Action"] = Jellyfin::Support::toJsonValue<ForgotPasswordAction>(m_action);
+	result["PinFile"] = Jellyfin::Support::toJsonValue<QString>(m_pinFile);
+	result["PinExpirationDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_pinExpirationDate);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void ForgotPasswordResult::setPinExpirationDate(QDateTime newPinExpirationDate) 
 	m_pinExpirationDate = newPinExpirationDate;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ForgotPasswordResult = Jellyfin::DTO::ForgotPasswordResult;
+
+template <>
+ForgotPasswordResult fromJsonValue<ForgotPasswordResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ForgotPasswordResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

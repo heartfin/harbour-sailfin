@@ -84,18 +84,6 @@ protected:
 	bool m_includeDisabledProviders;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PersonLookupInfoRemoteSearchQuery = Jellyfin::DTO::PersonLookupInfoRemoteSearchQuery;
-
-template <>
-PersonLookupInfoRemoteSearchQuery fromJsonValue<PersonLookupInfoRemoteSearchQuery>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PersonLookupInfoRemoteSearchQuery::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -95,18 +95,6 @@ protected:
 	qint64 m_maxRuntimeTicks;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TaskTriggerInfo = Jellyfin::DTO::TaskTriggerInfo;
-
-template <>
-TaskTriggerInfo fromJsonValue<TaskTriggerInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TaskTriggerInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

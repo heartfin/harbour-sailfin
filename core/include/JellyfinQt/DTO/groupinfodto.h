@@ -99,18 +99,6 @@ protected:
 	QDateTime m_lastUpdatedAt;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using GroupInfoDto = Jellyfin::DTO::GroupInfoDto;
-
-template <>
-GroupInfoDto fromJsonValue<GroupInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return GroupInfoDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

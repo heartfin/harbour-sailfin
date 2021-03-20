@@ -89,18 +89,6 @@ protected:
 	QString m_data;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using UploadSubtitleDto = Jellyfin::DTO::UploadSubtitleDto;
-
-template <>
-UploadSubtitleDto fromJsonValue<UploadSubtitleDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return UploadSubtitleDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

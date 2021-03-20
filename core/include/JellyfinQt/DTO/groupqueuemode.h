@@ -54,28 +54,6 @@ private:
 
 typedef GroupQueueModeClass::Value GroupQueueMode;
 
-} // NS DTO
-
-namespace Support {
-
-using GroupQueueMode = Jellyfin::DTO::GroupQueueMode;
-using GroupQueueModeClass = Jellyfin::DTO::GroupQueueModeClass;
-
-template <>
-GroupQueueMode fromJsonValue<GroupQueueMode>(const QJsonValue &source) {
-	if (!source.isString()) return GroupQueueModeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Queue")) {
-		return GroupQueueModeClass::Queue;
-	}
-	if (str == QStringLiteral("QueueNext")) {
-		return GroupQueueModeClass::QueueNext;
-	}
-	
-	return GroupQueueModeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

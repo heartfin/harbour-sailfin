@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "jsonhelper.h"
 
 #include "DTO/baseitemdto.h"
+#include "support/jsonconv.h"
 
 namespace Jellyfin {
 /**
@@ -197,7 +198,7 @@ protected:
     virtual void emitDataChanged() = 0;
 };
 
-class RemoteItem : public RemoteData<DTO::BaseItemDto> {
+/*class RemoteItem : public RemoteData<DTO::BaseItemDto> {
     Q_OBJECT
 public:
     RemoteItem(QObject *parent = nullptr);
@@ -206,14 +207,14 @@ public:
     Q_PROPERTY(QString jellyfinId READ jellyfinId WRITE setJellyfinId NOTIFY jellyfinIdChanged)
 
     QString getDataUrl() const override {
-        return QString("/Users/") + m_apiClient->userId() + "/Items/" + m_data->jellyfinId();
+        return QString("/Users/") + m_apiClient->userId() + "/Items/" + Support::uuidToString(m_data->jellyfinId());
     }
 
     bool canReload() const override {
         return RemoteData<DTO::BaseItemDto>::canReload() && !m_data->jellyfinId().isNull();
     }
 
-    QString jellyfinId() const { return m_data->jellyfinId(); }
+    QString jellyfinId() const { return Support::uuidToString(m_data->jellyfinId()); }
     void setJellyfinId(QString newId) {
         m_data->setJellyfinId(newId);
         if (canReload()) reload();
@@ -225,7 +226,7 @@ protected:
     void emitDataChanged() override {
         emit dataChanged(m_data);
     }
-};
+};*/
 
 void registerRemoteTypes(const char *uri);
 } // NS Jellyfin

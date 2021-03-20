@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-AlbumInfoRemoteSearchQuery::AlbumInfoRemoteSearchQuery(QObject *parent) {}
+AlbumInfoRemoteSearchQuery::AlbumInfoRemoteSearchQuery() {}
 
-AlbumInfoRemoteSearchQuery AlbumInfoRemoteSearchQuery::fromJson(QJsonObject source) {AlbumInfoRemoteSearchQuery instance;
-	instance->setFromJson(source, false);
+AlbumInfoRemoteSearchQuery AlbumInfoRemoteSearchQuery::fromJson(QJsonObject source) {
+	AlbumInfoRemoteSearchQuery instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void AlbumInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
-	m_searchInfo = fromJsonValue<QSharedPointer<AlbumInfo>>(source["SearchInfo"]);
-	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
-	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
-	m_includeDisabledProviders = fromJsonValue<bool>(source["IncludeDisabledProviders"]);
+	m_searchInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<AlbumInfo>>(source["SearchInfo"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QUuid>(source["ItemId"]);
+	m_searchProviderName = Jellyfin::Support::fromJsonValue<QString>(source["SearchProviderName"]);
+	m_includeDisabledProviders = Jellyfin::Support::fromJsonValue<bool>(source["IncludeDisabledProviders"]);
 
 }
 	
 QJsonObject AlbumInfoRemoteSearchQuery::toJson() {
 	QJsonObject result;
-	result["SearchInfo"] = toJsonValue<QSharedPointer<AlbumInfo>>(m_searchInfo);
-	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
-	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
-	result["IncludeDisabledProviders"] = toJsonValue<bool>(m_includeDisabledProviders);
+	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<AlbumInfo>>(m_searchInfo);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_itemId);
+	result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
+	result["IncludeDisabledProviders"] = Jellyfin::Support::toJsonValue<bool>(m_includeDisabledProviders);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void AlbumInfoRemoteSearchQuery::setIncludeDisabledProviders(bool newIncludeDisa
 	m_includeDisabledProviders = newIncludeDisabledProviders;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using AlbumInfoRemoteSearchQuery = Jellyfin::DTO::AlbumInfoRemoteSearchQuery;
+
+template <>
+AlbumInfoRemoteSearchQuery fromJsonValue<AlbumInfoRemoteSearchQuery>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AlbumInfoRemoteSearchQuery::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

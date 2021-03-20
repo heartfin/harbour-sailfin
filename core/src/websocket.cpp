@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "JellyfinQt/websocket.h"
 
-#include <JellyfinQt/DTO/userdata.h>
+#include <JellyfinQt/DTO/useritemdatadto.h>
 
 namespace Jellyfin {
 WebSocket::WebSocket(ApiClient *client)
@@ -105,9 +105,8 @@ void WebSocket::textMessageReceived(const QString &message) {
         }
         QJsonArray userDataList = data2["UserDataList"].toArray();
         for (QJsonValue val: userDataList) {
-            UserData* userData = UserItemDataDto::fromJSON(val.toObject(), this);
-            m_apiClient->onUserDataChanged(userData->itemId(), userData);
-            userData->deleteLater();
+            UserItemDataDto userData = UserItemDataDto::fromJson(val.toObject());
+            //m_apiClient->onUserDataChanged(userData->itemId(), userData);
         }
 
     }

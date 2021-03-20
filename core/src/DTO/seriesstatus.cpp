@@ -34,5 +34,27 @@ namespace DTO {
 
 SeriesStatusClass::SeriesStatusClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using SeriesStatus = Jellyfin::DTO::SeriesStatus;
+
+template <>
+SeriesStatus fromJsonValue<SeriesStatus>(const QJsonValue &source) {
+	if (!source.isString()) return SeriesStatus::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Continuing")) {
+		return SeriesStatus::Continuing;
+	}
+	if (str == QStringLiteral("Ended")) {
+		return SeriesStatus::Ended;
+	}
+	
+	return SeriesStatus::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

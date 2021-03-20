@@ -142,18 +142,6 @@ protected:
 	QList<QSharedPointer<QueueItem>> m_nowPlayingQueue;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PlaybackStopInfo = Jellyfin::DTO::PlaybackStopInfo;
-
-template <>
-PlaybackStopInfo fromJsonValue<PlaybackStopInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PlaybackStopInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

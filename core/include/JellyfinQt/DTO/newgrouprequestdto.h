@@ -62,18 +62,6 @@ protected:
 	QString m_groupName;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using NewGroupRequestDto = Jellyfin::DTO::NewGroupRequestDto;
-
-template <>
-NewGroupRequestDto fromJsonValue<NewGroupRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return NewGroupRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

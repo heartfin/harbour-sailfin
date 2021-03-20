@@ -34,5 +34,27 @@ namespace DTO {
 
 ConfigurationPageTypeClass::ConfigurationPageTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ConfigurationPageType = Jellyfin::DTO::ConfigurationPageType;
+
+template <>
+ConfigurationPageType fromJsonValue<ConfigurationPageType>(const QJsonValue &source) {
+	if (!source.isString()) return ConfigurationPageType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("PluginConfiguration")) {
+		return ConfigurationPageType::PluginConfiguration;
+	}
+	if (str == QStringLiteral("None")) {
+		return ConfigurationPageType::None;
+	}
+	
+	return ConfigurationPageType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

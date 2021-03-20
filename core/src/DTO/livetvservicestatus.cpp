@@ -34,5 +34,27 @@ namespace DTO {
 
 LiveTvServiceStatusClass::LiveTvServiceStatusClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using LiveTvServiceStatus = Jellyfin::DTO::LiveTvServiceStatus;
+
+template <>
+LiveTvServiceStatus fromJsonValue<LiveTvServiceStatus>(const QJsonValue &source) {
+	if (!source.isString()) return LiveTvServiceStatus::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Ok")) {
+		return LiveTvServiceStatus::Ok;
+	}
+	if (str == QStringLiteral("Unavailable")) {
+		return LiveTvServiceStatus::Unavailable;
+	}
+	
+	return LiveTvServiceStatus::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

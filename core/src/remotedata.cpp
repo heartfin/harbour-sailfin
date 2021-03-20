@@ -286,19 +286,19 @@ void RemoteDataBase::reload() {
 }
 
 
-RemoteItem::RemoteItem(QObject *parent)
+/*RemoteItem::RemoteItem(QObject *parent)
     : RemoteData<DTO::BaseItemDto>(parent) { }
 RemoteItem::RemoteItem(QString itemId, ApiClient *apiClient, QObject *parent)
-    : RemoteData<DTO::BaseItemDto>(parent) {
-    m_data = new BaseItemDto(this);
+    : RemoteData<DTO::BaseItemDto>(parent) {*/
+    /*m_data = new BaseItemDto(this);
     m_data->setJellyfinId(itemId);
     m_apiClient = apiClient;
-    connect(m_data, &BaseItemDto::jellyfinIdChanged, this, &RemoteItem::jellyfinIdChanged);
-}
+    connect(m_data, &BaseItemDto::jellyfinIdChanged, this, &RemoteItem::jellyfinIdChanged);*/
+//}
 
 void registerRemoteTypes(const char *uri) {
-    qmlRegisterUncreatableType<BaseItemDto>(uri, 1, 0, "JellyfinItem", "Please use RemoteItem instead");
-    qmlRegisterType<RemoteItem>(uri, 1, 0, "JellyfinItem");
+    //qmlRegisterUncreatableType<BaseItemDto>(uri, 1, 0, "JellyfinItem", "Please use RemoteItem instead");
+    //qmlRegisterType<RemoteItem>(uri, 1, 0, "JellyfinItem");
 }
 
 } // NS Jellyfin

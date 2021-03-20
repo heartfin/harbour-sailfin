@@ -32,42 +32,43 @@
 namespace Jellyfin {
 namespace DTO {
 
-BaseItem::BaseItem(QObject *parent) {}
+BaseItem::BaseItem() {}
 
-BaseItem BaseItem::fromJson(QJsonObject source) {BaseItem instance;
-	instance->setFromJson(source, false);
+BaseItem BaseItem::fromJson(QJsonObject source) {
+	BaseItem instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void BaseItem::setFromJson(QJsonObject source) {
-	m_size = fromJsonValue<qint64>(source["Size"]);
-	m_container = fromJsonValue<QString>(source["Container"]);
-	m_dateLastSaved = fromJsonValue<QDateTime>(source["DateLastSaved"]);
-	m_remoteTrailers = fromJsonValue<QList<QSharedPointer<MediaUrl>>>(source["RemoteTrailers"]);
-	m_isHD = fromJsonValue<bool>(source["IsHD"]);
-	m_isShortcut = fromJsonValue<bool>(source["IsShortcut"]);
-	m_shortcutPath = fromJsonValue<QString>(source["ShortcutPath"]);
-	m_width = fromJsonValue<qint32>(source["Width"]);
-	m_height = fromJsonValue<qint32>(source["Height"]);
-	m_extraIds = fromJsonValue<QList<QUuid>>(source["ExtraIds"]);
-	m_supportsExternalTransfer = fromJsonValue<bool>(source["SupportsExternalTransfer"]);
+	m_size = Jellyfin::Support::fromJsonValue<qint64>(source["Size"]);
+	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
+	m_dateLastSaved = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateLastSaved"]);
+	m_remoteTrailers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaUrl>>>(source["RemoteTrailers"]);
+	m_isHD = Jellyfin::Support::fromJsonValue<bool>(source["IsHD"]);
+	m_isShortcut = Jellyfin::Support::fromJsonValue<bool>(source["IsShortcut"]);
+	m_shortcutPath = Jellyfin::Support::fromJsonValue<QString>(source["ShortcutPath"]);
+	m_width = Jellyfin::Support::fromJsonValue<qint32>(source["Width"]);
+	m_height = Jellyfin::Support::fromJsonValue<qint32>(source["Height"]);
+	m_extraIds = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["ExtraIds"]);
+	m_supportsExternalTransfer = Jellyfin::Support::fromJsonValue<bool>(source["SupportsExternalTransfer"]);
 
 }
 	
 QJsonObject BaseItem::toJson() {
 	QJsonObject result;
-	result["Size"] = toJsonValue<qint64>(m_size);
-	result["Container"] = toJsonValue<QString>(m_container);
-	result["DateLastSaved"] = toJsonValue<QDateTime>(m_dateLastSaved);
-	result["RemoteTrailers"] = toJsonValue<QList<QSharedPointer<MediaUrl>>>(m_remoteTrailers);
-	result["IsHD"] = toJsonValue<bool>(m_isHD);
-	result["IsShortcut"] = toJsonValue<bool>(m_isShortcut);
-	result["ShortcutPath"] = toJsonValue<QString>(m_shortcutPath);
-	result["Width"] = toJsonValue<qint32>(m_width);
-	result["Height"] = toJsonValue<qint32>(m_height);
-	result["ExtraIds"] = toJsonValue<QList<QUuid>>(m_extraIds);
-	result["SupportsExternalTransfer"] = toJsonValue<bool>(m_supportsExternalTransfer);
+	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	result["DateLastSaved"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastSaved);
+	result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaUrl>>>(m_remoteTrailers);
+	result["IsHD"] = Jellyfin::Support::toJsonValue<bool>(m_isHD);
+	result["IsShortcut"] = Jellyfin::Support::toJsonValue<bool>(m_isShortcut);
+	result["ShortcutPath"] = Jellyfin::Support::toJsonValue<QString>(m_shortcutPath);
+	result["Width"] = Jellyfin::Support::toJsonValue<qint32>(m_width);
+	result["Height"] = Jellyfin::Support::toJsonValue<qint32>(m_height);
+	result["ExtraIds"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_extraIds);
+	result["SupportsExternalTransfer"] = Jellyfin::Support::toJsonValue<bool>(m_supportsExternalTransfer);
 
 	return result;
 }
@@ -128,6 +129,17 @@ void BaseItem::setSupportsExternalTransfer(bool newSupportsExternalTransfer) {
 	m_supportsExternalTransfer = newSupportsExternalTransfer;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using BaseItem = Jellyfin::DTO::BaseItem;
+
+template <>
+BaseItem fromJsonValue<BaseItem>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return BaseItem::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -34,5 +34,60 @@ namespace DTO {
 
 ImageTypeClass::ImageTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ImageType = Jellyfin::DTO::ImageType;
+
+template <>
+ImageType fromJsonValue<ImageType>(const QJsonValue &source) {
+	if (!source.isString()) return ImageType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Primary")) {
+		return ImageType::Primary;
+	}
+	if (str == QStringLiteral("Art")) {
+		return ImageType::Art;
+	}
+	if (str == QStringLiteral("Backdrop")) {
+		return ImageType::Backdrop;
+	}
+	if (str == QStringLiteral("Banner")) {
+		return ImageType::Banner;
+	}
+	if (str == QStringLiteral("Logo")) {
+		return ImageType::Logo;
+	}
+	if (str == QStringLiteral("Thumb")) {
+		return ImageType::Thumb;
+	}
+	if (str == QStringLiteral("Disc")) {
+		return ImageType::Disc;
+	}
+	if (str == QStringLiteral("Box")) {
+		return ImageType::Box;
+	}
+	if (str == QStringLiteral("Screenshot")) {
+		return ImageType::Screenshot;
+	}
+	if (str == QStringLiteral("Menu")) {
+		return ImageType::Menu;
+	}
+	if (str == QStringLiteral("Chapter")) {
+		return ImageType::Chapter;
+	}
+	if (str == QStringLiteral("BoxRear")) {
+		return ImageType::BoxRear;
+	}
+	if (str == QStringLiteral("Profile")) {
+		return ImageType::Profile;
+	}
+	
+	return ImageType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

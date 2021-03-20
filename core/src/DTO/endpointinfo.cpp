@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-EndPointInfo::EndPointInfo(QObject *parent) {}
+EndPointInfo::EndPointInfo() {}
 
-EndPointInfo EndPointInfo::fromJson(QJsonObject source) {EndPointInfo instance;
-	instance->setFromJson(source, false);
+EndPointInfo EndPointInfo::fromJson(QJsonObject source) {
+	EndPointInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void EndPointInfo::setFromJson(QJsonObject source) {
-	m_isLocal = fromJsonValue<bool>(source["IsLocal"]);
-	m_isInNetwork = fromJsonValue<bool>(source["IsInNetwork"]);
+	m_isLocal = Jellyfin::Support::fromJsonValue<bool>(source["IsLocal"]);
+	m_isInNetwork = Jellyfin::Support::fromJsonValue<bool>(source["IsInNetwork"]);
 
 }
 	
 QJsonObject EndPointInfo::toJson() {
 	QJsonObject result;
-	result["IsLocal"] = toJsonValue<bool>(m_isLocal);
-	result["IsInNetwork"] = toJsonValue<bool>(m_isInNetwork);
+	result["IsLocal"] = Jellyfin::Support::toJsonValue<bool>(m_isLocal);
+	result["IsInNetwork"] = Jellyfin::Support::toJsonValue<bool>(m_isInNetwork);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void EndPointInfo::setIsInNetwork(bool newIsInNetwork) {
 	m_isInNetwork = newIsInNetwork;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using EndPointInfo = Jellyfin::DTO::EndPointInfo;
+
+template <>
+EndPointInfo fromJsonValue<EndPointInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return EndPointInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

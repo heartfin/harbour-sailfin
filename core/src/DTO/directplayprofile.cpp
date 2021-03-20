@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-DirectPlayProfile::DirectPlayProfile(QObject *parent) {}
+DirectPlayProfile::DirectPlayProfile() {}
 
-DirectPlayProfile DirectPlayProfile::fromJson(QJsonObject source) {DirectPlayProfile instance;
-	instance->setFromJson(source, false);
+DirectPlayProfile DirectPlayProfile::fromJson(QJsonObject source) {
+	DirectPlayProfile instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void DirectPlayProfile::setFromJson(QJsonObject source) {
-	m_container = fromJsonValue<QString>(source["Container"]);
-	m_audioCodec = fromJsonValue<QString>(source["AudioCodec"]);
-	m_videoCodec = fromJsonValue<QString>(source["VideoCodec"]);
-	m_type = fromJsonValue<DlnaProfileType>(source["Type"]);
+	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
+	m_audioCodec = Jellyfin::Support::fromJsonValue<QString>(source["AudioCodec"]);
+	m_videoCodec = Jellyfin::Support::fromJsonValue<QString>(source["VideoCodec"]);
+	m_type = Jellyfin::Support::fromJsonValue<DlnaProfileType>(source["Type"]);
 
 }
 	
 QJsonObject DirectPlayProfile::toJson() {
 	QJsonObject result;
-	result["Container"] = toJsonValue<QString>(m_container);
-	result["AudioCodec"] = toJsonValue<QString>(m_audioCodec);
-	result["VideoCodec"] = toJsonValue<QString>(m_videoCodec);
-	result["Type"] = toJsonValue<DlnaProfileType>(m_type);
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
+	result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
+	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void DirectPlayProfile::setType(DlnaProfileType newType) {
 	m_type = newType;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using DirectPlayProfile = Jellyfin::DTO::DirectPlayProfile;
+
+template <>
+DirectPlayProfile fromJsonValue<DirectPlayProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DirectPlayProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

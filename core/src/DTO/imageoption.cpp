@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-ImageOption::ImageOption(QObject *parent) {}
+ImageOption::ImageOption() {}
 
-ImageOption ImageOption::fromJson(QJsonObject source) {ImageOption instance;
-	instance->setFromJson(source, false);
+ImageOption ImageOption::fromJson(QJsonObject source) {
+	ImageOption instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ImageOption::setFromJson(QJsonObject source) {
-	m_type = fromJsonValue<ImageType>(source["Type"]);
-	m_limit = fromJsonValue<qint32>(source["Limit"]);
-	m_minWidth = fromJsonValue<qint32>(source["MinWidth"]);
+	m_type = Jellyfin::Support::fromJsonValue<ImageType>(source["Type"]);
+	m_limit = Jellyfin::Support::fromJsonValue<qint32>(source["Limit"]);
+	m_minWidth = Jellyfin::Support::fromJsonValue<qint32>(source["MinWidth"]);
 
 }
 	
 QJsonObject ImageOption::toJson() {
 	QJsonObject result;
-	result["Type"] = toJsonValue<ImageType>(m_type);
-	result["Limit"] = toJsonValue<qint32>(m_limit);
-	result["MinWidth"] = toJsonValue<qint32>(m_minWidth);
+	result["Type"] = Jellyfin::Support::toJsonValue<ImageType>(m_type);
+	result["Limit"] = Jellyfin::Support::toJsonValue<qint32>(m_limit);
+	result["MinWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_minWidth);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void ImageOption::setMinWidth(qint32 newMinWidth) {
 	m_minWidth = newMinWidth;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ImageOption = Jellyfin::DTO::ImageOption;
+
+template <>
+ImageOption fromJsonValue<ImageOption>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ImageOption::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

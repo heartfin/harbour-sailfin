@@ -144,18 +144,6 @@ protected:
 	QString m_iconUrl;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ClientCapabilitiesDto = Jellyfin::DTO::ClientCapabilitiesDto;
-
-template <>
-ClientCapabilitiesDto fromJsonValue<ClientCapabilitiesDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ClientCapabilitiesDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

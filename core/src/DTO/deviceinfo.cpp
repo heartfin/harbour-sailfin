@@ -32,38 +32,39 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceInfo::DeviceInfo(QObject *parent) {}
+DeviceInfo::DeviceInfo() {}
 
-DeviceInfo DeviceInfo::fromJson(QJsonObject source) {DeviceInfo instance;
-	instance->setFromJson(source, false);
+DeviceInfo DeviceInfo::fromJson(QJsonObject source) {
+	DeviceInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void DeviceInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_lastUserName = fromJsonValue<QString>(source["LastUserName"]);
-	m_appName = fromJsonValue<QString>(source["AppName"]);
-	m_appVersion = fromJsonValue<QString>(source["AppVersion"]);
-	m_lastUserId = fromJsonValue<QUuid>(source["LastUserId"]);
-	m_dateLastActivity = fromJsonValue<QDateTime>(source["DateLastActivity"]);
-	m_capabilities = fromJsonValue<QSharedPointer<ClientCapabilities>>(source["Capabilities"]);
-	m_iconUrl = fromJsonValue<QString>(source["IconUrl"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_lastUserName = Jellyfin::Support::fromJsonValue<QString>(source["LastUserName"]);
+	m_appName = Jellyfin::Support::fromJsonValue<QString>(source["AppName"]);
+	m_appVersion = Jellyfin::Support::fromJsonValue<QString>(source["AppVersion"]);
+	m_lastUserId = Jellyfin::Support::fromJsonValue<QUuid>(source["LastUserId"]);
+	m_dateLastActivity = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateLastActivity"]);
+	m_capabilities = Jellyfin::Support::fromJsonValue<QSharedPointer<ClientCapabilities>>(source["Capabilities"]);
+	m_iconUrl = Jellyfin::Support::fromJsonValue<QString>(source["IconUrl"]);
 
 }
 	
 QJsonObject DeviceInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["LastUserName"] = toJsonValue<QString>(m_lastUserName);
-	result["AppName"] = toJsonValue<QString>(m_appName);
-	result["AppVersion"] = toJsonValue<QString>(m_appVersion);
-	result["LastUserId"] = toJsonValue<QUuid>(m_lastUserId);
-	result["DateLastActivity"] = toJsonValue<QDateTime>(m_dateLastActivity);
-	result["Capabilities"] = toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);
-	result["IconUrl"] = toJsonValue<QString>(m_iconUrl);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["LastUserName"] = Jellyfin::Support::toJsonValue<QString>(m_lastUserName);
+	result["AppName"] = Jellyfin::Support::toJsonValue<QString>(m_appName);
+	result["AppVersion"] = Jellyfin::Support::toJsonValue<QString>(m_appVersion);
+	result["LastUserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_lastUserId);
+	result["DateLastActivity"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastActivity);
+	result["Capabilities"] = Jellyfin::Support::toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);
+	result["IconUrl"] = Jellyfin::Support::toJsonValue<QString>(m_iconUrl);
 
 	return result;
 }
@@ -114,6 +115,17 @@ void DeviceInfo::setIconUrl(QString newIconUrl) {
 	m_iconUrl = newIconUrl;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using DeviceInfo = Jellyfin::DTO::DeviceInfo;
+
+template <>
+DeviceInfo fromJsonValue<DeviceInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

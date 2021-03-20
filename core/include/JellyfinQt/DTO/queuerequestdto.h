@@ -70,18 +70,6 @@ protected:
 	GroupQueueMode m_mode;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using QueueRequestDto = Jellyfin::DTO::QueueRequestDto;
-
-template <>
-QueueRequestDto fromJsonValue<QueueRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return QueueRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

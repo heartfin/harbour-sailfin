@@ -32,98 +32,99 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceProfile::DeviceProfile(QObject *parent) {}
+DeviceProfile::DeviceProfile() {}
 
-DeviceProfile DeviceProfile::fromJson(QJsonObject source) {DeviceProfile instance;
-	instance->setFromJson(source, false);
+DeviceProfile DeviceProfile::fromJson(QJsonObject source) {
+	DeviceProfile instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void DeviceProfile::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_identification = fromJsonValue<QSharedPointer<DeviceIdentification>>(source["Identification"]);
-	m_friendlyName = fromJsonValue<QString>(source["FriendlyName"]);
-	m_manufacturer = fromJsonValue<QString>(source["Manufacturer"]);
-	m_manufacturerUrl = fromJsonValue<QString>(source["ManufacturerUrl"]);
-	m_modelName = fromJsonValue<QString>(source["ModelName"]);
-	m_modelDescription = fromJsonValue<QString>(source["ModelDescription"]);
-	m_modelNumber = fromJsonValue<QString>(source["ModelNumber"]);
-	m_modelUrl = fromJsonValue<QString>(source["ModelUrl"]);
-	m_serialNumber = fromJsonValue<QString>(source["SerialNumber"]);
-	m_enableAlbumArtInDidl = fromJsonValue<bool>(source["EnableAlbumArtInDidl"]);
-	m_enableSingleAlbumArtLimit = fromJsonValue<bool>(source["EnableSingleAlbumArtLimit"]);
-	m_enableSingleSubtitleLimit = fromJsonValue<bool>(source["EnableSingleSubtitleLimit"]);
-	m_supportedMediaTypes = fromJsonValue<QString>(source["SupportedMediaTypes"]);
-	m_userId = fromJsonValue<QString>(source["UserId"]);
-	m_albumArtPn = fromJsonValue<QString>(source["AlbumArtPn"]);
-	m_maxAlbumArtWidth = fromJsonValue<qint32>(source["MaxAlbumArtWidth"]);
-	m_maxAlbumArtHeight = fromJsonValue<qint32>(source["MaxAlbumArtHeight"]);
-	m_maxIconWidth = fromJsonValue<qint32>(source["MaxIconWidth"]);
-	m_maxIconHeight = fromJsonValue<qint32>(source["MaxIconHeight"]);
-	m_maxStreamingBitrate = fromJsonValue<qint32>(source["MaxStreamingBitrate"]);
-	m_maxStaticBitrate = fromJsonValue<qint32>(source["MaxStaticBitrate"]);
-	m_musicStreamingTranscodingBitrate = fromJsonValue<qint32>(source["MusicStreamingTranscodingBitrate"]);
-	m_maxStaticMusicBitrate = fromJsonValue<qint32>(source["MaxStaticMusicBitrate"]);
-	m_sonyAggregationFlags = fromJsonValue<QString>(source["SonyAggregationFlags"]);
-	m_protocolInfo = fromJsonValue<QString>(source["ProtocolInfo"]);
-	m_timelineOffsetSeconds = fromJsonValue<qint32>(source["TimelineOffsetSeconds"]);
-	m_requiresPlainVideoItems = fromJsonValue<bool>(source["RequiresPlainVideoItems"]);
-	m_requiresPlainFolders = fromJsonValue<bool>(source["RequiresPlainFolders"]);
-	m_enableMSMediaReceiverRegistrar = fromJsonValue<bool>(source["EnableMSMediaReceiverRegistrar"]);
-	m_ignoreTranscodeByteRangeRequests = fromJsonValue<bool>(source["IgnoreTranscodeByteRangeRequests"]);
-	m_xmlRootAttributes = fromJsonValue<QList<QSharedPointer<XmlAttribute>>>(source["XmlRootAttributes"]);
-	m_directPlayProfiles = fromJsonValue<QList<QSharedPointer<DirectPlayProfile>>>(source["DirectPlayProfiles"]);
-	m_transcodingProfiles = fromJsonValue<QList<QSharedPointer<TranscodingProfile>>>(source["TranscodingProfiles"]);
-	m_containerProfiles = fromJsonValue<QList<QSharedPointer<ContainerProfile>>>(source["ContainerProfiles"]);
-	m_codecProfiles = fromJsonValue<QList<QSharedPointer<CodecProfile>>>(source["CodecProfiles"]);
-	m_responseProfiles = fromJsonValue<QList<QSharedPointer<ResponseProfile>>>(source["ResponseProfiles"]);
-	m_subtitleProfiles = fromJsonValue<QList<QSharedPointer<SubtitleProfile>>>(source["SubtitleProfiles"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_identification = Jellyfin::Support::fromJsonValue<QSharedPointer<DeviceIdentification>>(source["Identification"]);
+	m_friendlyName = Jellyfin::Support::fromJsonValue<QString>(source["FriendlyName"]);
+	m_manufacturer = Jellyfin::Support::fromJsonValue<QString>(source["Manufacturer"]);
+	m_manufacturerUrl = Jellyfin::Support::fromJsonValue<QString>(source["ManufacturerUrl"]);
+	m_modelName = Jellyfin::Support::fromJsonValue<QString>(source["ModelName"]);
+	m_modelDescription = Jellyfin::Support::fromJsonValue<QString>(source["ModelDescription"]);
+	m_modelNumber = Jellyfin::Support::fromJsonValue<QString>(source["ModelNumber"]);
+	m_modelUrl = Jellyfin::Support::fromJsonValue<QString>(source["ModelUrl"]);
+	m_serialNumber = Jellyfin::Support::fromJsonValue<QString>(source["SerialNumber"]);
+	m_enableAlbumArtInDidl = Jellyfin::Support::fromJsonValue<bool>(source["EnableAlbumArtInDidl"]);
+	m_enableSingleAlbumArtLimit = Jellyfin::Support::fromJsonValue<bool>(source["EnableSingleAlbumArtLimit"]);
+	m_enableSingleSubtitleLimit = Jellyfin::Support::fromJsonValue<bool>(source["EnableSingleSubtitleLimit"]);
+	m_supportedMediaTypes = Jellyfin::Support::fromJsonValue<QString>(source["SupportedMediaTypes"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QString>(source["UserId"]);
+	m_albumArtPn = Jellyfin::Support::fromJsonValue<QString>(source["AlbumArtPn"]);
+	m_maxAlbumArtWidth = Jellyfin::Support::fromJsonValue<qint32>(source["MaxAlbumArtWidth"]);
+	m_maxAlbumArtHeight = Jellyfin::Support::fromJsonValue<qint32>(source["MaxAlbumArtHeight"]);
+	m_maxIconWidth = Jellyfin::Support::fromJsonValue<qint32>(source["MaxIconWidth"]);
+	m_maxIconHeight = Jellyfin::Support::fromJsonValue<qint32>(source["MaxIconHeight"]);
+	m_maxStreamingBitrate = Jellyfin::Support::fromJsonValue<qint32>(source["MaxStreamingBitrate"]);
+	m_maxStaticBitrate = Jellyfin::Support::fromJsonValue<qint32>(source["MaxStaticBitrate"]);
+	m_musicStreamingTranscodingBitrate = Jellyfin::Support::fromJsonValue<qint32>(source["MusicStreamingTranscodingBitrate"]);
+	m_maxStaticMusicBitrate = Jellyfin::Support::fromJsonValue<qint32>(source["MaxStaticMusicBitrate"]);
+	m_sonyAggregationFlags = Jellyfin::Support::fromJsonValue<QString>(source["SonyAggregationFlags"]);
+	m_protocolInfo = Jellyfin::Support::fromJsonValue<QString>(source["ProtocolInfo"]);
+	m_timelineOffsetSeconds = Jellyfin::Support::fromJsonValue<qint32>(source["TimelineOffsetSeconds"]);
+	m_requiresPlainVideoItems = Jellyfin::Support::fromJsonValue<bool>(source["RequiresPlainVideoItems"]);
+	m_requiresPlainFolders = Jellyfin::Support::fromJsonValue<bool>(source["RequiresPlainFolders"]);
+	m_enableMSMediaReceiverRegistrar = Jellyfin::Support::fromJsonValue<bool>(source["EnableMSMediaReceiverRegistrar"]);
+	m_ignoreTranscodeByteRangeRequests = Jellyfin::Support::fromJsonValue<bool>(source["IgnoreTranscodeByteRangeRequests"]);
+	m_xmlRootAttributes = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<XmlAttribute>>>(source["XmlRootAttributes"]);
+	m_directPlayProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<DirectPlayProfile>>>(source["DirectPlayProfiles"]);
+	m_transcodingProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<TranscodingProfile>>>(source["TranscodingProfiles"]);
+	m_containerProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ContainerProfile>>>(source["ContainerProfiles"]);
+	m_codecProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<CodecProfile>>>(source["CodecProfiles"]);
+	m_responseProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ResponseProfile>>>(source["ResponseProfiles"]);
+	m_subtitleProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SubtitleProfile>>>(source["SubtitleProfiles"]);
 
 }
 	
 QJsonObject DeviceProfile::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["Identification"] = toJsonValue<QSharedPointer<DeviceIdentification>>(m_identification);
-	result["FriendlyName"] = toJsonValue<QString>(m_friendlyName);
-	result["Manufacturer"] = toJsonValue<QString>(m_manufacturer);
-	result["ManufacturerUrl"] = toJsonValue<QString>(m_manufacturerUrl);
-	result["ModelName"] = toJsonValue<QString>(m_modelName);
-	result["ModelDescription"] = toJsonValue<QString>(m_modelDescription);
-	result["ModelNumber"] = toJsonValue<QString>(m_modelNumber);
-	result["ModelUrl"] = toJsonValue<QString>(m_modelUrl);
-	result["SerialNumber"] = toJsonValue<QString>(m_serialNumber);
-	result["EnableAlbumArtInDidl"] = toJsonValue<bool>(m_enableAlbumArtInDidl);
-	result["EnableSingleAlbumArtLimit"] = toJsonValue<bool>(m_enableSingleAlbumArtLimit);
-	result["EnableSingleSubtitleLimit"] = toJsonValue<bool>(m_enableSingleSubtitleLimit);
-	result["SupportedMediaTypes"] = toJsonValue<QString>(m_supportedMediaTypes);
-	result["UserId"] = toJsonValue<QString>(m_userId);
-	result["AlbumArtPn"] = toJsonValue<QString>(m_albumArtPn);
-	result["MaxAlbumArtWidth"] = toJsonValue<qint32>(m_maxAlbumArtWidth);
-	result["MaxAlbumArtHeight"] = toJsonValue<qint32>(m_maxAlbumArtHeight);
-	result["MaxIconWidth"] = toJsonValue<qint32>(m_maxIconWidth);
-	result["MaxIconHeight"] = toJsonValue<qint32>(m_maxIconHeight);
-	result["MaxStreamingBitrate"] = toJsonValue<qint32>(m_maxStreamingBitrate);
-	result["MaxStaticBitrate"] = toJsonValue<qint32>(m_maxStaticBitrate);
-	result["MusicStreamingTranscodingBitrate"] = toJsonValue<qint32>(m_musicStreamingTranscodingBitrate);
-	result["MaxStaticMusicBitrate"] = toJsonValue<qint32>(m_maxStaticMusicBitrate);
-	result["SonyAggregationFlags"] = toJsonValue<QString>(m_sonyAggregationFlags);
-	result["ProtocolInfo"] = toJsonValue<QString>(m_protocolInfo);
-	result["TimelineOffsetSeconds"] = toJsonValue<qint32>(m_timelineOffsetSeconds);
-	result["RequiresPlainVideoItems"] = toJsonValue<bool>(m_requiresPlainVideoItems);
-	result["RequiresPlainFolders"] = toJsonValue<bool>(m_requiresPlainFolders);
-	result["EnableMSMediaReceiverRegistrar"] = toJsonValue<bool>(m_enableMSMediaReceiverRegistrar);
-	result["IgnoreTranscodeByteRangeRequests"] = toJsonValue<bool>(m_ignoreTranscodeByteRangeRequests);
-	result["XmlRootAttributes"] = toJsonValue<QList<QSharedPointer<XmlAttribute>>>(m_xmlRootAttributes);
-	result["DirectPlayProfiles"] = toJsonValue<QList<QSharedPointer<DirectPlayProfile>>>(m_directPlayProfiles);
-	result["TranscodingProfiles"] = toJsonValue<QList<QSharedPointer<TranscodingProfile>>>(m_transcodingProfiles);
-	result["ContainerProfiles"] = toJsonValue<QList<QSharedPointer<ContainerProfile>>>(m_containerProfiles);
-	result["CodecProfiles"] = toJsonValue<QList<QSharedPointer<CodecProfile>>>(m_codecProfiles);
-	result["ResponseProfiles"] = toJsonValue<QList<QSharedPointer<ResponseProfile>>>(m_responseProfiles);
-	result["SubtitleProfiles"] = toJsonValue<QList<QSharedPointer<SubtitleProfile>>>(m_subtitleProfiles);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["Identification"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceIdentification>>(m_identification);
+	result["FriendlyName"] = Jellyfin::Support::toJsonValue<QString>(m_friendlyName);
+	result["Manufacturer"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturer);
+	result["ManufacturerUrl"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturerUrl);
+	result["ModelName"] = Jellyfin::Support::toJsonValue<QString>(m_modelName);
+	result["ModelDescription"] = Jellyfin::Support::toJsonValue<QString>(m_modelDescription);
+	result["ModelNumber"] = Jellyfin::Support::toJsonValue<QString>(m_modelNumber);
+	result["ModelUrl"] = Jellyfin::Support::toJsonValue<QString>(m_modelUrl);
+	result["SerialNumber"] = Jellyfin::Support::toJsonValue<QString>(m_serialNumber);
+	result["EnableAlbumArtInDidl"] = Jellyfin::Support::toJsonValue<bool>(m_enableAlbumArtInDidl);
+	result["EnableSingleAlbumArtLimit"] = Jellyfin::Support::toJsonValue<bool>(m_enableSingleAlbumArtLimit);
+	result["EnableSingleSubtitleLimit"] = Jellyfin::Support::toJsonValue<bool>(m_enableSingleSubtitleLimit);
+	result["SupportedMediaTypes"] = Jellyfin::Support::toJsonValue<QString>(m_supportedMediaTypes);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
+	result["AlbumArtPn"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtPn);
+	result["MaxAlbumArtWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_maxAlbumArtWidth);
+	result["MaxAlbumArtHeight"] = Jellyfin::Support::toJsonValue<qint32>(m_maxAlbumArtHeight);
+	result["MaxIconWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_maxIconWidth);
+	result["MaxIconHeight"] = Jellyfin::Support::toJsonValue<qint32>(m_maxIconHeight);
+	result["MaxStreamingBitrate"] = Jellyfin::Support::toJsonValue<qint32>(m_maxStreamingBitrate);
+	result["MaxStaticBitrate"] = Jellyfin::Support::toJsonValue<qint32>(m_maxStaticBitrate);
+	result["MusicStreamingTranscodingBitrate"] = Jellyfin::Support::toJsonValue<qint32>(m_musicStreamingTranscodingBitrate);
+	result["MaxStaticMusicBitrate"] = Jellyfin::Support::toJsonValue<qint32>(m_maxStaticMusicBitrate);
+	result["SonyAggregationFlags"] = Jellyfin::Support::toJsonValue<QString>(m_sonyAggregationFlags);
+	result["ProtocolInfo"] = Jellyfin::Support::toJsonValue<QString>(m_protocolInfo);
+	result["TimelineOffsetSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_timelineOffsetSeconds);
+	result["RequiresPlainVideoItems"] = Jellyfin::Support::toJsonValue<bool>(m_requiresPlainVideoItems);
+	result["RequiresPlainFolders"] = Jellyfin::Support::toJsonValue<bool>(m_requiresPlainFolders);
+	result["EnableMSMediaReceiverRegistrar"] = Jellyfin::Support::toJsonValue<bool>(m_enableMSMediaReceiverRegistrar);
+	result["IgnoreTranscodeByteRangeRequests"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreTranscodeByteRangeRequests);
+	result["XmlRootAttributes"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<XmlAttribute>>>(m_xmlRootAttributes);
+	result["DirectPlayProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<DirectPlayProfile>>>(m_directPlayProfiles);
+	result["TranscodingProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<TranscodingProfile>>>(m_transcodingProfiles);
+	result["ContainerProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ContainerProfile>>>(m_containerProfiles);
+	result["CodecProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<CodecProfile>>>(m_codecProfiles);
+	result["ResponseProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ResponseProfile>>>(m_responseProfiles);
+	result["SubtitleProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SubtitleProfile>>>(m_subtitleProfiles);
 
 	return result;
 }
@@ -324,6 +325,17 @@ void DeviceProfile::setSubtitleProfiles(QList<QSharedPointer<SubtitleProfile>> n
 	m_subtitleProfiles = newSubtitleProfiles;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using DeviceProfile = Jellyfin::DTO::DeviceProfile;
+
+template <>
+DeviceProfile fromJsonValue<DeviceProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

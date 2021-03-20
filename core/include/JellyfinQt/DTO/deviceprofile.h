@@ -411,18 +411,6 @@ protected:
 	QList<QSharedPointer<SubtitleProfile>> m_subtitleProfiles;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using DeviceProfile = Jellyfin::DTO::DeviceProfile;
-
-template <>
-DeviceProfile fromJsonValue<DeviceProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return DeviceProfile::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

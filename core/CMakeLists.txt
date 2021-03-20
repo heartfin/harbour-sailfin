@@ -1,11 +1,47 @@
 project(jellyfin-qt VERSION 0.1.0)
 find_package(Qt5 5.6 COMPONENTS Multimedia Network Qml WebSockets REQUIRED)
 include(GNUInstallDirs)
+include(FetchContent)
+
+find_package(Boost REQUIRED)
+find_package(Immer)
+if(NOT Immer_FOUND)
+    message(STATUS "Using Immer from FetchContent")
+    set(immer_BUILD_TESTS OFF)
+    set(immer_BUILD_EXAMPLES OFF)
+    set(immer_BUILD_DOCS OFF)
+    set(immer_BUILD_EXTRAS OFF)
+    FetchContent_Declare(immer GIT_REPOSITORY https://github.com/arximboldi/immer GIT_TAG
+    800ddb04e528a3e83e69e8021d7e872e7c34cbcd)
+    FetchContent_MakeAvailable(immer)
+endif()
+
+find_package(Lager)
+if(NOT Lager_FOUND)
+    message(STATUS "Using lager from FetchContent")
+    set(lager_BUILD_TESTS OFF)
+    set(lager_BUILD_EXAMPLES OFF)
+    set(lager_BUILD_DOCS OFF)
+    set(lager_EMBED_RESOURCES_PATH OFF)
+    FetchContent_Declare(lager GIT_REPOSITORY https://github.com/arximboldi/lager GIT_TAG
+        71eca6b0ebbccf3e0e54324b6967f047e49ba92d)
+    FetchContent_MakeAvailable(lager)
+endif()
+
+find_package(cereal)
+if(NOT cereal_FOUND)
+    set(JUST_INSTALL_CEREAL ON)
+    FetchContent_Declare(cereal GIT_REPOSITORY https://github.com/USCiLab/cereal GIT_TAG v1.3.0)
+    FetchContent_MakeAvailable(cereal)
+endif()
+
 
 include(GeneratedSources.cmake)
 
 set(jellyfin-qt_SOURCES
         # src/DTO/dto.cpp
+        src/model/item.cpp
+        src/support/jsonconv.cpp
         src/support/loader.cpp
         src/apiclient.cpp
         src/apimodel.cpp
@@ -22,6 +58,8 @@ list(APPEND jellyfin-qt_SOURCES ${openapi_SOURCES})
 
 set(jellyfin-qt_HEADERS
         # include/JellyfinQt/DTO/dto.h
+        include/JellyfinQt/model/item.h
+        include/JellyfinQt/support/jsonconv.h
         include/JellyfinQt/support/loader.h
         include/JellyfinQt/apiclient.h
         include/JellyfinQt/apimodel.h

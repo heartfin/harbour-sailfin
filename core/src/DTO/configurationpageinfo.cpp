@@ -32,34 +32,35 @@
 namespace Jellyfin {
 namespace DTO {
 
-ConfigurationPageInfo::ConfigurationPageInfo(QObject *parent) {}
+ConfigurationPageInfo::ConfigurationPageInfo() {}
 
-ConfigurationPageInfo ConfigurationPageInfo::fromJson(QJsonObject source) {ConfigurationPageInfo instance;
-	instance->setFromJson(source, false);
+ConfigurationPageInfo ConfigurationPageInfo::fromJson(QJsonObject source) {
+	ConfigurationPageInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ConfigurationPageInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_enableInMainMenu = fromJsonValue<bool>(source["EnableInMainMenu"]);
-	m_menuSection = fromJsonValue<QString>(source["MenuSection"]);
-	m_menuIcon = fromJsonValue<QString>(source["MenuIcon"]);
-	m_displayName = fromJsonValue<QString>(source["DisplayName"]);
-	m_configurationPageType = fromJsonValue<ConfigurationPageType>(source["ConfigurationPageType"]);
-	m_pluginId = fromJsonValue<QUuid>(source["PluginId"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_enableInMainMenu = Jellyfin::Support::fromJsonValue<bool>(source["EnableInMainMenu"]);
+	m_menuSection = Jellyfin::Support::fromJsonValue<QString>(source["MenuSection"]);
+	m_menuIcon = Jellyfin::Support::fromJsonValue<QString>(source["MenuIcon"]);
+	m_displayName = Jellyfin::Support::fromJsonValue<QString>(source["DisplayName"]);
+	m_configurationPageType = Jellyfin::Support::fromJsonValue<ConfigurationPageType>(source["ConfigurationPageType"]);
+	m_pluginId = Jellyfin::Support::fromJsonValue<QUuid>(source["PluginId"]);
 
 }
 	
 QJsonObject ConfigurationPageInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["EnableInMainMenu"] = toJsonValue<bool>(m_enableInMainMenu);
-	result["MenuSection"] = toJsonValue<QString>(m_menuSection);
-	result["MenuIcon"] = toJsonValue<QString>(m_menuIcon);
-	result["DisplayName"] = toJsonValue<QString>(m_displayName);
-	result["ConfigurationPageType"] = toJsonValue<ConfigurationPageType>(m_configurationPageType);
-	result["PluginId"] = toJsonValue<QUuid>(m_pluginId);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["EnableInMainMenu"] = Jellyfin::Support::toJsonValue<bool>(m_enableInMainMenu);
+	result["MenuSection"] = Jellyfin::Support::toJsonValue<QString>(m_menuSection);
+	result["MenuIcon"] = Jellyfin::Support::toJsonValue<QString>(m_menuIcon);
+	result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
+	result["ConfigurationPageType"] = Jellyfin::Support::toJsonValue<ConfigurationPageType>(m_configurationPageType);
+	result["PluginId"] = Jellyfin::Support::toJsonValue<QUuid>(m_pluginId);
 
 	return result;
 }
@@ -100,6 +101,17 @@ void ConfigurationPageInfo::setPluginId(QUuid newPluginId) {
 	m_pluginId = newPluginId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ConfigurationPageInfo = Jellyfin::DTO::ConfigurationPageInfo;
+
+template <>
+ConfigurationPageInfo fromJsonValue<ConfigurationPageInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ConfigurationPageInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

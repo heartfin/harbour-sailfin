@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-ImageProviderInfo::ImageProviderInfo(QObject *parent) {}
+ImageProviderInfo::ImageProviderInfo() {}
 
-ImageProviderInfo ImageProviderInfo::fromJson(QJsonObject source) {ImageProviderInfo instance;
-	instance->setFromJson(source, false);
+ImageProviderInfo ImageProviderInfo::fromJson(QJsonObject source) {
+	ImageProviderInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ImageProviderInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_supportedImages = fromJsonValue<QList<ImageType>>(source["SupportedImages"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_supportedImages = Jellyfin::Support::fromJsonValue<QList<ImageType>>(source["SupportedImages"]);
 
 }
 	
 QJsonObject ImageProviderInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["SupportedImages"] = toJsonValue<QList<ImageType>>(m_supportedImages);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["SupportedImages"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImages);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void ImageProviderInfo::setSupportedImages(QList<ImageType> newSupportedImages) 
 	m_supportedImages = newSupportedImages;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ImageProviderInfo = Jellyfin::DTO::ImageProviderInfo;
+
+template <>
+ImageProviderInfo fromJsonValue<ImageProviderInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ImageProviderInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

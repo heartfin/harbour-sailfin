@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaUrl::MediaUrl(QObject *parent) {}
+MediaUrl::MediaUrl() {}
 
-MediaUrl MediaUrl::fromJson(QJsonObject source) {MediaUrl instance;
-	instance->setFromJson(source, false);
+MediaUrl MediaUrl::fromJson(QJsonObject source) {
+	MediaUrl instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MediaUrl::setFromJson(QJsonObject source) {
-	m_url = fromJsonValue<QString>(source["Url"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
+	m_url = Jellyfin::Support::fromJsonValue<QString>(source["Url"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
 
 }
 	
 QJsonObject MediaUrl::toJson() {
 	QJsonObject result;
-	result["Url"] = toJsonValue<QString>(m_url);
-	result["Name"] = toJsonValue<QString>(m_name);
+	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void MediaUrl::setName(QString newName) {
 	m_name = newName;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MediaUrl = Jellyfin::DTO::MediaUrl;
+
+template <>
+MediaUrl fromJsonValue<MediaUrl>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaUrl::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

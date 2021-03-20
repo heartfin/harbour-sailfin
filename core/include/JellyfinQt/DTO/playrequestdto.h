@@ -82,18 +82,6 @@ protected:
 	qint64 m_startPositionTicks;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PlayRequestDto = Jellyfin::DTO::PlayRequestDto;
-
-template <>
-PlayRequestDto fromJsonValue<PlayRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PlayRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -106,18 +106,6 @@ protected:
 	QString m_checksum;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using InstallationInfo = Jellyfin::DTO::InstallationInfo;
-
-template <>
-InstallationInfo fromJsonValue<InstallationInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return InstallationInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

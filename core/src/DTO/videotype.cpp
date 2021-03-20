@@ -34,5 +34,33 @@ namespace DTO {
 
 VideoTypeClass::VideoTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using VideoType = Jellyfin::DTO::VideoType;
+
+template <>
+VideoType fromJsonValue<VideoType>(const QJsonValue &source) {
+	if (!source.isString()) return VideoType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("VideoFile")) {
+		return VideoType::VideoFile;
+	}
+	if (str == QStringLiteral("Iso")) {
+		return VideoType::Iso;
+	}
+	if (str == QStringLiteral("Dvd")) {
+		return VideoType::Dvd;
+	}
+	if (str == QStringLiteral("BluRay")) {
+		return VideoType::BluRay;
+	}
+	
+	return VideoType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

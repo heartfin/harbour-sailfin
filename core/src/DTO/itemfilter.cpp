@@ -34,5 +34,48 @@ namespace DTO {
 
 ItemFilterClass::ItemFilterClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ItemFilter = Jellyfin::DTO::ItemFilter;
+
+template <>
+ItemFilter fromJsonValue<ItemFilter>(const QJsonValue &source) {
+	if (!source.isString()) return ItemFilter::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("IsFolder")) {
+		return ItemFilter::IsFolder;
+	}
+	if (str == QStringLiteral("IsNotFolder")) {
+		return ItemFilter::IsNotFolder;
+	}
+	if (str == QStringLiteral("IsUnplayed")) {
+		return ItemFilter::IsUnplayed;
+	}
+	if (str == QStringLiteral("IsPlayed")) {
+		return ItemFilter::IsPlayed;
+	}
+	if (str == QStringLiteral("IsFavorite")) {
+		return ItemFilter::IsFavorite;
+	}
+	if (str == QStringLiteral("IsResumable")) {
+		return ItemFilter::IsResumable;
+	}
+	if (str == QStringLiteral("Likes")) {
+		return ItemFilter::Likes;
+	}
+	if (str == QStringLiteral("Dislikes")) {
+		return ItemFilter::Dislikes;
+	}
+	if (str == QStringLiteral("IsFavoriteOrLikes")) {
+		return ItemFilter::IsFavoriteOrLikes;
+	}
+	
+	return ItemFilter::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

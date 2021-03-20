@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-NextItemRequestDto::NextItemRequestDto(QObject *parent) {}
+NextItemRequestDto::NextItemRequestDto() {}
 
-NextItemRequestDto NextItemRequestDto::fromJson(QJsonObject source) {NextItemRequestDto instance;
-	instance->setFromJson(source, false);
+NextItemRequestDto NextItemRequestDto::fromJson(QJsonObject source) {
+	NextItemRequestDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void NextItemRequestDto::setFromJson(QJsonObject source) {
-	m_playlistItemId = fromJsonValue<QUuid>(source["PlaylistItemId"]);
+	m_playlistItemId = Jellyfin::Support::fromJsonValue<QUuid>(source["PlaylistItemId"]);
 
 }
 	
 QJsonObject NextItemRequestDto::toJson() {
 	QJsonObject result;
-	result["PlaylistItemId"] = toJsonValue<QUuid>(m_playlistItemId);
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_playlistItemId);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void NextItemRequestDto::setPlaylistItemId(QUuid newPlaylistItemId) {
 	m_playlistItemId = newPlaylistItemId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using NextItemRequestDto = Jellyfin::DTO::NextItemRequestDto;
+
+template <>
+NextItemRequestDto fromJsonValue<NextItemRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NextItemRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

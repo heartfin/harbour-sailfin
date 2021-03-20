@@ -79,18 +79,6 @@ protected:
 	QString m_container;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SubtitleProfile = Jellyfin::DTO::SubtitleProfile;
-
-template <>
-SubtitleProfile fromJsonValue<SubtitleProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SubtitleProfile::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

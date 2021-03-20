@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-NotificationTypeInfo::NotificationTypeInfo(QObject *parent) {}
+NotificationTypeInfo::NotificationTypeInfo() {}
 
-NotificationTypeInfo NotificationTypeInfo::fromJson(QJsonObject source) {NotificationTypeInfo instance;
-	instance->setFromJson(source, false);
+NotificationTypeInfo NotificationTypeInfo::fromJson(QJsonObject source) {
+	NotificationTypeInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void NotificationTypeInfo::setFromJson(QJsonObject source) {
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_enabled = fromJsonValue<bool>(source["Enabled"]);
-	m_category = fromJsonValue<QString>(source["Category"]);
-	m_isBasedOnUserEvent = fromJsonValue<bool>(source["IsBasedOnUserEvent"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_enabled = Jellyfin::Support::fromJsonValue<bool>(source["Enabled"]);
+	m_category = Jellyfin::Support::fromJsonValue<QString>(source["Category"]);
+	m_isBasedOnUserEvent = Jellyfin::Support::fromJsonValue<bool>(source["IsBasedOnUserEvent"]);
 
 }
 	
 QJsonObject NotificationTypeInfo::toJson() {
 	QJsonObject result;
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Enabled"] = toJsonValue<bool>(m_enabled);
-	result["Category"] = toJsonValue<QString>(m_category);
-	result["IsBasedOnUserEvent"] = toJsonValue<bool>(m_isBasedOnUserEvent);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Enabled"] = Jellyfin::Support::toJsonValue<bool>(m_enabled);
+	result["Category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
+	result["IsBasedOnUserEvent"] = Jellyfin::Support::toJsonValue<bool>(m_isBasedOnUserEvent);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void NotificationTypeInfo::setIsBasedOnUserEvent(bool newIsBasedOnUserEvent) {
 	m_isBasedOnUserEvent = newIsBasedOnUserEvent;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using NotificationTypeInfo = Jellyfin::DTO::NotificationTypeInfo;
+
+template <>
+NotificationTypeInfo fromJsonValue<NotificationTypeInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NotificationTypeInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

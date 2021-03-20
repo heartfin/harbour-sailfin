@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-QuickConnectDto::QuickConnectDto(QObject *parent) {}
+QuickConnectDto::QuickConnectDto() {}
 
-QuickConnectDto QuickConnectDto::fromJson(QJsonObject source) {QuickConnectDto instance;
-	instance->setFromJson(source, false);
+QuickConnectDto QuickConnectDto::fromJson(QJsonObject source) {
+	QuickConnectDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void QuickConnectDto::setFromJson(QJsonObject source) {
-	m_token = fromJsonValue<QString>(source["Token"]);
+	m_token = Jellyfin::Support::fromJsonValue<QString>(source["Token"]);
 
 }
 	
 QJsonObject QuickConnectDto::toJson() {
 	QJsonObject result;
-	result["Token"] = toJsonValue<QString>(m_token);
+	result["Token"] = Jellyfin::Support::toJsonValue<QString>(m_token);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void QuickConnectDto::setToken(QString newToken) {
 	m_token = newToken;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using QuickConnectDto = Jellyfin::DTO::QuickConnectDto;
+
+template <>
+QuickConnectDto fromJsonValue<QuickConnectDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QuickConnectDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

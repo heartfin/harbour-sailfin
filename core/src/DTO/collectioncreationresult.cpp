@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-CollectionCreationResult::CollectionCreationResult(QObject *parent) {}
+CollectionCreationResult::CollectionCreationResult() {}
 
-CollectionCreationResult CollectionCreationResult::fromJson(QJsonObject source) {CollectionCreationResult instance;
-	instance->setFromJson(source, false);
+CollectionCreationResult CollectionCreationResult::fromJson(QJsonObject source) {
+	CollectionCreationResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void CollectionCreationResult::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QUuid>(source["Id"]);
 
 }
 	
 QJsonObject CollectionCreationResult::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
+	result["Id"] = Jellyfin::Support::toJsonValue<QUuid>(m_jellyfinId);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void CollectionCreationResult::setJellyfinId(QUuid newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using CollectionCreationResult = Jellyfin::DTO::CollectionCreationResult;
+
+template <>
+CollectionCreationResult fromJsonValue<CollectionCreationResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return CollectionCreationResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

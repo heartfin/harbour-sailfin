@@ -32,44 +32,45 @@
 namespace Jellyfin {
 namespace DTO {
 
-RemoteSearchResult::RemoteSearchResult(QObject *parent) {}
+RemoteSearchResult::RemoteSearchResult() {}
 
-RemoteSearchResult RemoteSearchResult::fromJson(QJsonObject source) {RemoteSearchResult instance;
-	instance->setFromJson(source, false);
+RemoteSearchResult RemoteSearchResult::fromJson(QJsonObject source) {
+	RemoteSearchResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void RemoteSearchResult::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_providerIds = fromJsonValue<QJsonObject>(source["ProviderIds"]);
-	m_productionYear = fromJsonValue<qint32>(source["ProductionYear"]);
-	m_indexNumber = fromJsonValue<qint32>(source["IndexNumber"]);
-	m_indexNumberEnd = fromJsonValue<qint32>(source["IndexNumberEnd"]);
-	m_parentIndexNumber = fromJsonValue<qint32>(source["ParentIndexNumber"]);
-	m_premiereDate = fromJsonValue<QDateTime>(source["PremiereDate"]);
-	m_imageUrl = fromJsonValue<QString>(source["ImageUrl"]);
-	m_searchProviderName = fromJsonValue<QString>(source["SearchProviderName"]);
-	m_overview = fromJsonValue<QString>(source["Overview"]);
-	m_albumArtist = fromJsonValue<QSharedPointer<RemoteSearchResult>>(source["AlbumArtist"]);
-	m_artists = fromJsonValue<QList<QSharedPointer<RemoteSearchResult>>>(source["Artists"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_providerIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ProviderIds"]);
+	m_productionYear = Jellyfin::Support::fromJsonValue<qint32>(source["ProductionYear"]);
+	m_indexNumber = Jellyfin::Support::fromJsonValue<qint32>(source["IndexNumber"]);
+	m_indexNumberEnd = Jellyfin::Support::fromJsonValue<qint32>(source["IndexNumberEnd"]);
+	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<qint32>(source["ParentIndexNumber"]);
+	m_premiereDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["PremiereDate"]);
+	m_imageUrl = Jellyfin::Support::fromJsonValue<QString>(source["ImageUrl"]);
+	m_searchProviderName = Jellyfin::Support::fromJsonValue<QString>(source["SearchProviderName"]);
+	m_overview = Jellyfin::Support::fromJsonValue<QString>(source["Overview"]);
+	m_albumArtist = Jellyfin::Support::fromJsonValue<QSharedPointer<RemoteSearchResult>>(source["AlbumArtist"]);
+	m_artists = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<RemoteSearchResult>>>(source["Artists"]);
 
 }
 	
 QJsonObject RemoteSearchResult::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["ProviderIds"] = toJsonValue<QJsonObject>(m_providerIds);
-	result["ProductionYear"] = toJsonValue<qint32>(m_productionYear);
-	result["IndexNumber"] = toJsonValue<qint32>(m_indexNumber);
-	result["IndexNumberEnd"] = toJsonValue<qint32>(m_indexNumberEnd);
-	result["ParentIndexNumber"] = toJsonValue<qint32>(m_parentIndexNumber);
-	result["PremiereDate"] = toJsonValue<QDateTime>(m_premiereDate);
-	result["ImageUrl"] = toJsonValue<QString>(m_imageUrl);
-	result["SearchProviderName"] = toJsonValue<QString>(m_searchProviderName);
-	result["Overview"] = toJsonValue<QString>(m_overview);
-	result["AlbumArtist"] = toJsonValue<QSharedPointer<RemoteSearchResult>>(m_albumArtist);
-	result["Artists"] = toJsonValue<QList<QSharedPointer<RemoteSearchResult>>>(m_artists);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
+	result["ProductionYear"] = Jellyfin::Support::toJsonValue<qint32>(m_productionYear);
+	result["IndexNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_indexNumber);
+	result["IndexNumberEnd"] = Jellyfin::Support::toJsonValue<qint32>(m_indexNumberEnd);
+	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_parentIndexNumber);
+	result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
+	result["ImageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_imageUrl);
+	result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
+	result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QSharedPointer<RemoteSearchResult>>(m_albumArtist);
+	result["Artists"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<RemoteSearchResult>>>(m_artists);
 
 	return result;
 }
@@ -135,6 +136,17 @@ void RemoteSearchResult::setArtists(QList<QSharedPointer<RemoteSearchResult>> ne
 	m_artists = newArtists;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using RemoteSearchResult = Jellyfin::DTO::RemoteSearchResult;
+
+template <>
+RemoteSearchResult fromJsonValue<RemoteSearchResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RemoteSearchResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

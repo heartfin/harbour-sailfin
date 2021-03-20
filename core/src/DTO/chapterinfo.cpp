@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-ChapterInfo::ChapterInfo(QObject *parent) {}
+ChapterInfo::ChapterInfo() {}
 
-ChapterInfo ChapterInfo::fromJson(QJsonObject source) {ChapterInfo instance;
-	instance->setFromJson(source, false);
+ChapterInfo ChapterInfo::fromJson(QJsonObject source) {
+	ChapterInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ChapterInfo::setFromJson(QJsonObject source) {
-	m_startPositionTicks = fromJsonValue<qint64>(source["StartPositionTicks"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_imagePath = fromJsonValue<QString>(source["ImagePath"]);
-	m_imageDateModified = fromJsonValue<QDateTime>(source["ImageDateModified"]);
-	m_imageTag = fromJsonValue<QString>(source["ImageTag"]);
+	m_startPositionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["StartPositionTicks"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_imagePath = Jellyfin::Support::fromJsonValue<QString>(source["ImagePath"]);
+	m_imageDateModified = Jellyfin::Support::fromJsonValue<QDateTime>(source["ImageDateModified"]);
+	m_imageTag = Jellyfin::Support::fromJsonValue<QString>(source["ImageTag"]);
 
 }
 	
 QJsonObject ChapterInfo::toJson() {
 	QJsonObject result;
-	result["StartPositionTicks"] = toJsonValue<qint64>(m_startPositionTicks);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["ImagePath"] = toJsonValue<QString>(m_imagePath);
-	result["ImageDateModified"] = toJsonValue<QDateTime>(m_imageDateModified);
-	result["ImageTag"] = toJsonValue<QString>(m_imageTag);
+	result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_startPositionTicks);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["ImagePath"] = Jellyfin::Support::toJsonValue<QString>(m_imagePath);
+	result["ImageDateModified"] = Jellyfin::Support::toJsonValue<QDateTime>(m_imageDateModified);
+	result["ImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_imageTag);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void ChapterInfo::setImageTag(QString newImageTag) {
 	m_imageTag = newImageTag;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ChapterInfo = Jellyfin::DTO::ChapterInfo;
+
+template <>
+ChapterInfo fromJsonValue<ChapterInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ChapterInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,78 +32,79 @@
 namespace Jellyfin {
 namespace DTO {
 
-SearchHint::SearchHint(QObject *parent) {}
+SearchHint::SearchHint() {}
 
-SearchHint SearchHint::fromJson(QJsonObject source) {SearchHint instance;
-	instance->setFromJson(source, false);
+SearchHint SearchHint::fromJson(QJsonObject source) {
+	SearchHint instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SearchHint::setFromJson(QJsonObject source) {
-	m_itemId = fromJsonValue<QUuid>(source["ItemId"]);
-	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_matchedTerm = fromJsonValue<QString>(source["MatchedTerm"]);
-	m_indexNumber = fromJsonValue<qint32>(source["IndexNumber"]);
-	m_productionYear = fromJsonValue<qint32>(source["ProductionYear"]);
-	m_parentIndexNumber = fromJsonValue<qint32>(source["ParentIndexNumber"]);
-	m_primaryImageTag = fromJsonValue<QString>(source["PrimaryImageTag"]);
-	m_thumbImageTag = fromJsonValue<QString>(source["ThumbImageTag"]);
-	m_thumbImageItemId = fromJsonValue<QString>(source["ThumbImageItemId"]);
-	m_backdropImageTag = fromJsonValue<QString>(source["BackdropImageTag"]);
-	m_backdropImageItemId = fromJsonValue<QString>(source["BackdropImageItemId"]);
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_isFolder = fromJsonValue<bool>(source["IsFolder"]);
-	m_runTimeTicks = fromJsonValue<qint64>(source["RunTimeTicks"]);
-	m_mediaType = fromJsonValue<QString>(source["MediaType"]);
-	m_startDate = fromJsonValue<QDateTime>(source["StartDate"]);
-	m_endDate = fromJsonValue<QDateTime>(source["EndDate"]);
-	m_series = fromJsonValue<QString>(source["Series"]);
-	m_status = fromJsonValue<QString>(source["Status"]);
-	m_album = fromJsonValue<QString>(source["Album"]);
-	m_albumId = fromJsonValue<QUuid>(source["AlbumId"]);
-	m_albumArtist = fromJsonValue<QString>(source["AlbumArtist"]);
-	m_artists = fromJsonValue<QStringList>(source["Artists"]);
-	m_songCount = fromJsonValue<qint32>(source["SongCount"]);
-	m_episodeCount = fromJsonValue<qint32>(source["EpisodeCount"]);
-	m_channelId = fromJsonValue<QUuid>(source["ChannelId"]);
-	m_channelName = fromJsonValue<QString>(source["ChannelName"]);
-	m_primaryImageAspectRatio = fromJsonValue<double>(source["PrimaryImageAspectRatio"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QUuid>(source["ItemId"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QUuid>(source["Id"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_matchedTerm = Jellyfin::Support::fromJsonValue<QString>(source["MatchedTerm"]);
+	m_indexNumber = Jellyfin::Support::fromJsonValue<qint32>(source["IndexNumber"]);
+	m_productionYear = Jellyfin::Support::fromJsonValue<qint32>(source["ProductionYear"]);
+	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<qint32>(source["ParentIndexNumber"]);
+	m_primaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["PrimaryImageTag"]);
+	m_thumbImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ThumbImageTag"]);
+	m_thumbImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["ThumbImageItemId"]);
+	m_backdropImageTag = Jellyfin::Support::fromJsonValue<QString>(source["BackdropImageTag"]);
+	m_backdropImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["BackdropImageItemId"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_isFolder = Jellyfin::Support::fromJsonValue<bool>(source["IsFolder"]);
+	m_runTimeTicks = Jellyfin::Support::fromJsonValue<qint64>(source["RunTimeTicks"]);
+	m_mediaType = Jellyfin::Support::fromJsonValue<QString>(source["MediaType"]);
+	m_startDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["StartDate"]);
+	m_endDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["EndDate"]);
+	m_series = Jellyfin::Support::fromJsonValue<QString>(source["Series"]);
+	m_status = Jellyfin::Support::fromJsonValue<QString>(source["Status"]);
+	m_album = Jellyfin::Support::fromJsonValue<QString>(source["Album"]);
+	m_albumId = Jellyfin::Support::fromJsonValue<QUuid>(source["AlbumId"]);
+	m_albumArtist = Jellyfin::Support::fromJsonValue<QString>(source["AlbumArtist"]);
+	m_artists = Jellyfin::Support::fromJsonValue<QStringList>(source["Artists"]);
+	m_songCount = Jellyfin::Support::fromJsonValue<qint32>(source["SongCount"]);
+	m_episodeCount = Jellyfin::Support::fromJsonValue<qint32>(source["EpisodeCount"]);
+	m_channelId = Jellyfin::Support::fromJsonValue<QUuid>(source["ChannelId"]);
+	m_channelName = Jellyfin::Support::fromJsonValue<QString>(source["ChannelName"]);
+	m_primaryImageAspectRatio = Jellyfin::Support::fromJsonValue<double>(source["PrimaryImageAspectRatio"]);
 
 }
 	
 QJsonObject SearchHint::toJson() {
 	QJsonObject result;
-	result["ItemId"] = toJsonValue<QUuid>(m_itemId);
-	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["MatchedTerm"] = toJsonValue<QString>(m_matchedTerm);
-	result["IndexNumber"] = toJsonValue<qint32>(m_indexNumber);
-	result["ProductionYear"] = toJsonValue<qint32>(m_productionYear);
-	result["ParentIndexNumber"] = toJsonValue<qint32>(m_parentIndexNumber);
-	result["PrimaryImageTag"] = toJsonValue<QString>(m_primaryImageTag);
-	result["ThumbImageTag"] = toJsonValue<QString>(m_thumbImageTag);
-	result["ThumbImageItemId"] = toJsonValue<QString>(m_thumbImageItemId);
-	result["BackdropImageTag"] = toJsonValue<QString>(m_backdropImageTag);
-	result["BackdropImageItemId"] = toJsonValue<QString>(m_backdropImageItemId);
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["IsFolder"] = toJsonValue<bool>(m_isFolder);
-	result["RunTimeTicks"] = toJsonValue<qint64>(m_runTimeTicks);
-	result["MediaType"] = toJsonValue<QString>(m_mediaType);
-	result["StartDate"] = toJsonValue<QDateTime>(m_startDate);
-	result["EndDate"] = toJsonValue<QDateTime>(m_endDate);
-	result["Series"] = toJsonValue<QString>(m_series);
-	result["Status"] = toJsonValue<QString>(m_status);
-	result["Album"] = toJsonValue<QString>(m_album);
-	result["AlbumId"] = toJsonValue<QUuid>(m_albumId);
-	result["AlbumArtist"] = toJsonValue<QString>(m_albumArtist);
-	result["Artists"] = toJsonValue<QStringList>(m_artists);
-	result["SongCount"] = toJsonValue<qint32>(m_songCount);
-	result["EpisodeCount"] = toJsonValue<qint32>(m_episodeCount);
-	result["ChannelId"] = toJsonValue<QUuid>(m_channelId);
-	result["ChannelName"] = toJsonValue<QString>(m_channelName);
-	result["PrimaryImageAspectRatio"] = toJsonValue<double>(m_primaryImageAspectRatio);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_itemId);
+	result["Id"] = Jellyfin::Support::toJsonValue<QUuid>(m_jellyfinId);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["MatchedTerm"] = Jellyfin::Support::toJsonValue<QString>(m_matchedTerm);
+	result["IndexNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_indexNumber);
+	result["ProductionYear"] = Jellyfin::Support::toJsonValue<qint32>(m_productionYear);
+	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_parentIndexNumber);
+	result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
+	result["ThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_thumbImageTag);
+	result["ThumbImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_thumbImageItemId);
+	result["BackdropImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_backdropImageTag);
+	result["BackdropImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_backdropImageItemId);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["IsFolder"] = Jellyfin::Support::toJsonValue<bool>(m_isFolder);
+	result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_runTimeTicks);
+	result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
+	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
+	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
+	result["Series"] = Jellyfin::Support::toJsonValue<QString>(m_series);
+	result["Status"] = Jellyfin::Support::toJsonValue<QString>(m_status);
+	result["Album"] = Jellyfin::Support::toJsonValue<QString>(m_album);
+	result["AlbumId"] = Jellyfin::Support::toJsonValue<QUuid>(m_albumId);
+	result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtist);
+	result["Artists"] = Jellyfin::Support::toJsonValue<QStringList>(m_artists);
+	result["SongCount"] = Jellyfin::Support::toJsonValue<qint32>(m_songCount);
+	result["EpisodeCount"] = Jellyfin::Support::toJsonValue<qint32>(m_episodeCount);
+	result["ChannelId"] = Jellyfin::Support::toJsonValue<QUuid>(m_channelId);
+	result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
+	result["PrimaryImageAspectRatio"] = Jellyfin::Support::toJsonValue<double>(m_primaryImageAspectRatio);
 
 	return result;
 }
@@ -254,6 +255,17 @@ void SearchHint::setPrimaryImageAspectRatio(double newPrimaryImageAspectRatio) {
 	m_primaryImageAspectRatio = newPrimaryImageAspectRatio;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SearchHint = Jellyfin::DTO::SearchHint;
+
+template <>
+SearchHint fromJsonValue<SearchHint>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SearchHint::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

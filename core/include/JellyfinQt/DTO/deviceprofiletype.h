@@ -54,28 +54,6 @@ private:
 
 typedef DeviceProfileTypeClass::Value DeviceProfileType;
 
-} // NS DTO
-
-namespace Support {
-
-using DeviceProfileType = Jellyfin::DTO::DeviceProfileType;
-using DeviceProfileTypeClass = Jellyfin::DTO::DeviceProfileTypeClass;
-
-template <>
-DeviceProfileType fromJsonValue<DeviceProfileType>(const QJsonValue &source) {
-	if (!source.isString()) return DeviceProfileTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("System")) {
-		return DeviceProfileTypeClass::System;
-	}
-	if (str == QStringLiteral("User")) {
-		return DeviceProfileTypeClass::User;
-	}
-	
-	return DeviceProfileTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

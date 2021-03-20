@@ -74,18 +74,6 @@ protected:
 	qint32 m_totalRecordCount;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SearchHintResult = Jellyfin::DTO::SearchHintResult;
-
-template <>
-SearchHintResult fromJsonValue<SearchHintResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SearchHintResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

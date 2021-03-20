@@ -76,18 +76,6 @@ protected:
 	QString m_serverId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using AuthenticationResult = Jellyfin::DTO::AuthenticationResult;
-
-template <>
-AuthenticationResult fromJsonValue<AuthenticationResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return AuthenticationResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

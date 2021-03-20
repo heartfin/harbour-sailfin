@@ -84,18 +84,6 @@ protected:
 	bool m_includeDisabledProviders;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using BoxSetInfoRemoteSearchQuery = Jellyfin::DTO::BoxSetInfoRemoteSearchQuery;
-
-template <>
-BoxSetInfoRemoteSearchQuery fromJsonValue<BoxSetInfoRemoteSearchQuery>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return BoxSetInfoRemoteSearchQuery::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-ExternalIdInfo::ExternalIdInfo(QObject *parent) {}
+ExternalIdInfo::ExternalIdInfo() {}
 
-ExternalIdInfo ExternalIdInfo::fromJson(QJsonObject source) {ExternalIdInfo instance;
-	instance->setFromJson(source, false);
+ExternalIdInfo ExternalIdInfo::fromJson(QJsonObject source) {
+	ExternalIdInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ExternalIdInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_key = fromJsonValue<QString>(source["Key"]);
-	m_type = fromJsonValue<ExternalIdMediaType>(source["Type"]);
-	m_urlFormatString = fromJsonValue<QString>(source["UrlFormatString"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_key = Jellyfin::Support::fromJsonValue<QString>(source["Key"]);
+	m_type = Jellyfin::Support::fromJsonValue<ExternalIdMediaType>(source["Type"]);
+	m_urlFormatString = Jellyfin::Support::fromJsonValue<QString>(source["UrlFormatString"]);
 
 }
 	
 QJsonObject ExternalIdInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Key"] = toJsonValue<QString>(m_key);
-	result["Type"] = toJsonValue<ExternalIdMediaType>(m_type);
-	result["UrlFormatString"] = toJsonValue<QString>(m_urlFormatString);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
+	result["Type"] = Jellyfin::Support::toJsonValue<ExternalIdMediaType>(m_type);
+	result["UrlFormatString"] = Jellyfin::Support::toJsonValue<QString>(m_urlFormatString);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void ExternalIdInfo::setUrlFormatString(QString newUrlFormatString) {
 	m_urlFormatString = newUrlFormatString;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ExternalIdInfo = Jellyfin::DTO::ExternalIdInfo;
+
+template <>
+ExternalIdInfo fromJsonValue<ExternalIdInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ExternalIdInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

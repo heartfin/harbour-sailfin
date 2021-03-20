@@ -32,44 +32,45 @@
 namespace Jellyfin {
 namespace DTO {
 
-TranscodingInfo::TranscodingInfo(QObject *parent) {}
+TranscodingInfo::TranscodingInfo() {}
 
-TranscodingInfo TranscodingInfo::fromJson(QJsonObject source) {TranscodingInfo instance;
-	instance->setFromJson(source, false);
+TranscodingInfo TranscodingInfo::fromJson(QJsonObject source) {
+	TranscodingInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void TranscodingInfo::setFromJson(QJsonObject source) {
-	m_audioCodec = fromJsonValue<QString>(source["AudioCodec"]);
-	m_videoCodec = fromJsonValue<QString>(source["VideoCodec"]);
-	m_container = fromJsonValue<QString>(source["Container"]);
-	m_isVideoDirect = fromJsonValue<bool>(source["IsVideoDirect"]);
-	m_isAudioDirect = fromJsonValue<bool>(source["IsAudioDirect"]);
-	m_bitrate = fromJsonValue<qint32>(source["Bitrate"]);
-	m_framerate = fromJsonValue<float>(source["Framerate"]);
-	m_completionPercentage = fromJsonValue<double>(source["CompletionPercentage"]);
-	m_width = fromJsonValue<qint32>(source["Width"]);
-	m_height = fromJsonValue<qint32>(source["Height"]);
-	m_audioChannels = fromJsonValue<qint32>(source["AudioChannels"]);
-	m_transcodeReasons = fromJsonValue<QList<TranscodeReason>>(source["TranscodeReasons"]);
+	m_audioCodec = Jellyfin::Support::fromJsonValue<QString>(source["AudioCodec"]);
+	m_videoCodec = Jellyfin::Support::fromJsonValue<QString>(source["VideoCodec"]);
+	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
+	m_isVideoDirect = Jellyfin::Support::fromJsonValue<bool>(source["IsVideoDirect"]);
+	m_isAudioDirect = Jellyfin::Support::fromJsonValue<bool>(source["IsAudioDirect"]);
+	m_bitrate = Jellyfin::Support::fromJsonValue<qint32>(source["Bitrate"]);
+	m_framerate = Jellyfin::Support::fromJsonValue<float>(source["Framerate"]);
+	m_completionPercentage = Jellyfin::Support::fromJsonValue<double>(source["CompletionPercentage"]);
+	m_width = Jellyfin::Support::fromJsonValue<qint32>(source["Width"]);
+	m_height = Jellyfin::Support::fromJsonValue<qint32>(source["Height"]);
+	m_audioChannels = Jellyfin::Support::fromJsonValue<qint32>(source["AudioChannels"]);
+	m_transcodeReasons = Jellyfin::Support::fromJsonValue<QList<TranscodeReason>>(source["TranscodeReasons"]);
 
 }
 	
 QJsonObject TranscodingInfo::toJson() {
 	QJsonObject result;
-	result["AudioCodec"] = toJsonValue<QString>(m_audioCodec);
-	result["VideoCodec"] = toJsonValue<QString>(m_videoCodec);
-	result["Container"] = toJsonValue<QString>(m_container);
-	result["IsVideoDirect"] = toJsonValue<bool>(m_isVideoDirect);
-	result["IsAudioDirect"] = toJsonValue<bool>(m_isAudioDirect);
-	result["Bitrate"] = toJsonValue<qint32>(m_bitrate);
-	result["Framerate"] = toJsonValue<float>(m_framerate);
-	result["CompletionPercentage"] = toJsonValue<double>(m_completionPercentage);
-	result["Width"] = toJsonValue<qint32>(m_width);
-	result["Height"] = toJsonValue<qint32>(m_height);
-	result["AudioChannels"] = toJsonValue<qint32>(m_audioChannels);
-	result["TranscodeReasons"] = toJsonValue<QList<TranscodeReason>>(m_transcodeReasons);
+	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
+	result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	result["IsVideoDirect"] = Jellyfin::Support::toJsonValue<bool>(m_isVideoDirect);
+	result["IsAudioDirect"] = Jellyfin::Support::toJsonValue<bool>(m_isAudioDirect);
+	result["Bitrate"] = Jellyfin::Support::toJsonValue<qint32>(m_bitrate);
+	result["Framerate"] = Jellyfin::Support::toJsonValue<float>(m_framerate);
+	result["CompletionPercentage"] = Jellyfin::Support::toJsonValue<double>(m_completionPercentage);
+	result["Width"] = Jellyfin::Support::toJsonValue<qint32>(m_width);
+	result["Height"] = Jellyfin::Support::toJsonValue<qint32>(m_height);
+	result["AudioChannels"] = Jellyfin::Support::toJsonValue<qint32>(m_audioChannels);
+	result["TranscodeReasons"] = Jellyfin::Support::toJsonValue<QList<TranscodeReason>>(m_transcodeReasons);
 
 	return result;
 }
@@ -135,6 +136,17 @@ void TranscodingInfo::setTranscodeReasons(QList<TranscodeReason> newTranscodeRea
 	m_transcodeReasons = newTranscodeReasons;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using TranscodingInfo = Jellyfin::DTO::TranscodingInfo;
+
+template <>
+TranscodingInfo fromJsonValue<TranscodingInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TranscodingInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

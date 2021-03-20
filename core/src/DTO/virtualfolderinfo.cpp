@@ -32,36 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-VirtualFolderInfo::VirtualFolderInfo(QObject *parent) {}
+VirtualFolderInfo::VirtualFolderInfo() {}
 
-VirtualFolderInfo VirtualFolderInfo::fromJson(QJsonObject source) {VirtualFolderInfo instance;
-	instance->setFromJson(source, false);
+VirtualFolderInfo VirtualFolderInfo::fromJson(QJsonObject source) {
+	VirtualFolderInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void VirtualFolderInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_locations = fromJsonValue<QStringList>(source["Locations"]);
-	m_collectionType = fromJsonValue<QString>(source["CollectionType"]);
-	m_libraryOptions = fromJsonValue<QSharedPointer<LibraryOptions>>(source["LibraryOptions"]);
-	m_itemId = fromJsonValue<QString>(source["ItemId"]);
-	m_primaryImageItemId = fromJsonValue<QString>(source["PrimaryImageItemId"]);
-	m_refreshProgress = fromJsonValue<double>(source["RefreshProgress"]);
-	m_refreshStatus = fromJsonValue<QString>(source["RefreshStatus"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_locations = Jellyfin::Support::fromJsonValue<QStringList>(source["Locations"]);
+	m_collectionType = Jellyfin::Support::fromJsonValue<QString>(source["CollectionType"]);
+	m_libraryOptions = Jellyfin::Support::fromJsonValue<QSharedPointer<LibraryOptions>>(source["LibraryOptions"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QString>(source["ItemId"]);
+	m_primaryImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["PrimaryImageItemId"]);
+	m_refreshProgress = Jellyfin::Support::fromJsonValue<double>(source["RefreshProgress"]);
+	m_refreshStatus = Jellyfin::Support::fromJsonValue<QString>(source["RefreshStatus"]);
 
 }
 	
 QJsonObject VirtualFolderInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Locations"] = toJsonValue<QStringList>(m_locations);
-	result["CollectionType"] = toJsonValue<QString>(m_collectionType);
-	result["LibraryOptions"] = toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
-	result["ItemId"] = toJsonValue<QString>(m_itemId);
-	result["PrimaryImageItemId"] = toJsonValue<QString>(m_primaryImageItemId);
-	result["RefreshProgress"] = toJsonValue<double>(m_refreshProgress);
-	result["RefreshStatus"] = toJsonValue<QString>(m_refreshStatus);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Locations"] = Jellyfin::Support::toJsonValue<QStringList>(m_locations);
+	result["CollectionType"] = Jellyfin::Support::toJsonValue<QString>(m_collectionType);
+	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
+	result["PrimaryImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageItemId);
+	result["RefreshProgress"] = Jellyfin::Support::toJsonValue<double>(m_refreshProgress);
+	result["RefreshStatus"] = Jellyfin::Support::toJsonValue<QString>(m_refreshStatus);
 
 	return result;
 }
@@ -107,6 +108,17 @@ void VirtualFolderInfo::setRefreshStatus(QString newRefreshStatus) {
 	m_refreshStatus = newRefreshStatus;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using VirtualFolderInfo = Jellyfin::DTO::VirtualFolderInfo;
+
+template <>
+VirtualFolderInfo fromJsonValue<VirtualFolderInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return VirtualFolderInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

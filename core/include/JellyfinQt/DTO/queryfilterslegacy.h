@@ -75,18 +75,6 @@ protected:
 	QList<qint32> m_years;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using QueryFiltersLegacy = Jellyfin::DTO::QueryFiltersLegacy;
-
-template <>
-QueryFiltersLegacy fromJsonValue<QueryFiltersLegacy>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return QueryFiltersLegacy::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

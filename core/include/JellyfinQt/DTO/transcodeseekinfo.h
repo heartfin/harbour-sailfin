@@ -54,28 +54,6 @@ private:
 
 typedef TranscodeSeekInfoClass::Value TranscodeSeekInfo;
 
-} // NS DTO
-
-namespace Support {
-
-using TranscodeSeekInfo = Jellyfin::DTO::TranscodeSeekInfo;
-using TranscodeSeekInfoClass = Jellyfin::DTO::TranscodeSeekInfoClass;
-
-template <>
-TranscodeSeekInfo fromJsonValue<TranscodeSeekInfo>(const QJsonValue &source) {
-	if (!source.isString()) return TranscodeSeekInfoClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Auto")) {
-		return TranscodeSeekInfoClass::Auto;
-	}
-	if (str == QStringLiteral("Bytes")) {
-		return TranscodeSeekInfoClass::Bytes;
-	}
-	
-	return TranscodeSeekInfoClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

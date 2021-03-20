@@ -34,7 +34,7 @@ namespace DTO {
 
 PlaybackManager::PlaybackManager(QObject *parent)
     : QObject(parent), m_mediaPlayer1(new QMediaPlayer(this)), m_mediaPlayer2(new QMediaPlayer(this)),
-    m_item(new RemoteItem(this)){
+    m_item(new Model::Item(this)){
     // Set up connections.
     swapMediaPlayer();
     m_updateTimer.setInterval(10000); // 10 seconds
@@ -43,16 +43,18 @@ PlaybackManager::PlaybackManager(QObject *parent)
 }
 
 void PlaybackManager::setApiClient(ApiClient *apiClient) {
-    m_item->setApiClient(apiClient);
+    //m_item->setApiClient(apiClient);
 }
 
-void PlaybackManager::fetchStreamUrl(const Item *item, bool autoOpen, const FetchCallback &callback) {
+void PlaybackManager::fetchStreamUrl(const Model::Item *item, bool autoOpen, const FetchCallback &callback) {
     if (item == nullptr || m_apiClient == nullptr) {
         qDebug() << "Item or apiClient not set";
+        return;
     }
+    QString itemId(Support::uuidToString(item->jellyfinId()));
     m_resumePosition = 0;
     if (m_resumePlayback && !item->property("userData").isNull()) {
-        UserData* userData = m_item->data()->userData();
+        QSharedPointer<UserData> userData = m_item->data()->userData();
         if (userData != nullptr) {
             m_resumePosition = userData->playbackPositionTicks();
         }
@@ -62,15 +64,15 @@ void PlaybackManager::fetchStreamUrl(const Item *item, bool autoOpen, const Fetc
     params.addQueryItem("StartTimeTicks", QString::number(m_resumePosition));
     params.addQueryItem("IsPlayback", "true");
     params.addQueryItem("AutoOpenLiveStream", autoOpen? "true" : "false");
-    params.addQueryItem("MediaSourceId", item->jellyfinId());
+    params.addQueryItem("MediaSourceId", itemId);
     params.addQueryItem("SubtitleStreamIndex", QString::number(m_subtitleIndex));
     params.addQueryItem("AudioStreamIndex", QString::number(m_audioIndex));
 
     QJsonObject root;
     root["DeviceProfile"] = m_apiClient->playbackDeviceProfile();
 
-    QNetworkReply *rep = m_apiClient->post("/Items/" + item->jellyfinId() + "/PlaybackInfo", QJsonDocument(root), params);
-    connect(rep, &QNetworkReply::finished, this, [this, rep, callback]() {
+    QNetworkReply *rep = m_apiClient->post("/Items/" + itemId + "/PlaybackInfo", QJsonDocument(root), params);
+    connect(rep, &QNetworkReply::finished, this, [this, rep, callback, itemId]() {
         QJsonObject root = QJsonDocument::fromJson(rep->readAll()).object();
         this->m_playSessionId = root["PlaySessionId"].toString();
         qDebug() << "Session id: " << this->m_playSessionId;
@@ -93,7 +95,7 @@ void PlaybackManager::fetchStreamUrl(const Item *item, bool autoOpen, const Fetc
                 } else if (m_item->data()->mediaType() == "Video") {
                     mediaType = "Videos";
                 }
-                QString streamUrl = this->m_apiClient->baseUrl() + "/" + mediaType + "/" + m_item->jellyfinId() + "/stream."
+                QString streamUrl = this->m_apiClient->baseUrl() + "/" + mediaType + "/" + itemId + "/stream."
                         + firstMediaSource["Container"].toString() + "?" + query.toString(QUrl::EncodeReserved);
                 callback(QUrl(streamUrl), DirectPlay);
             } else if (firstMediaSource["SupportsTranscoding"].toBool() && !firstMediaSource["TranscodingUrl"].isNull()) {
@@ -111,9 +113,9 @@ void PlaybackManager::fetchStreamUrl(const Item *item, bool autoOpen, const Fetc
     });
 }
 
-void PlaybackManager::fetchAndSetStreamUrl(const Item *item) {
+void PlaybackManager::fetchAndSetStreamUrl(const Model::Item *item) {
     fetchStreamUrl(item, m_autoOpen, [this, item](QUrl &&url, PlayMethod playbackMethod) {
-        if (m_item->data() == item) {
+        if (m_item == item) {
             setStreamUrl(url.toString());
             m_playMethod = playbackMethod;
             emit playMethodChanged(m_playMethod);
@@ -124,11 +126,11 @@ void PlaybackManager::fetchAndSetStreamUrl(const Item *item) {
 
 }
 
-void PlaybackManager::setItem(Item *newItem) {
+void PlaybackManager::setItem(Model::Item *newItem) {
     if (m_mediaPlayer != nullptr) m_mediaPlayer->stop();
 
-    this->m_item->setData(newItem);
-    emit itemChanged(newItem);
+    this->m_item = newItem;
+    //emit itemChanged(newItem);
 
     if (m_apiClient == nullptr) {
         qWarning() << "apiClient is not set on this MediaSource instance! Aborting.";
@@ -137,13 +139,7 @@ void PlaybackManager::setItem(Item *newItem) {
     // Deinitialize the streamUrl
     setStreamUrl("");
     if (newItem != nullptr) {
-        if (m_item->status() == RemoteDataBase::Ready) {
-            fetchAndSetStreamUrl(m_item->data());
-        } else {
-            connect(m_item, &RemoteDataBase::ready, [this]() -> void {
-                fetchAndSetStreamUrl(m_item->data());
-            });
-        }
+        fetchAndSetStreamUrl(newItem);
     }
 }
 
@@ -214,17 +210,17 @@ void PlaybackManager::updatePlaybackInfo() {
 }
 
 void PlaybackManager::playItem(const QString &itemId) {
-    RemoteItem *newItem = new RemoteItem(itemId, m_apiClient, this);
+    Q_UNUSED(itemId)
+    Q_UNIMPLEMENTED();
+    /*RemoteItem *newItem = new RemoteItem(itemId, m_apiClient, this);
     ItemModel *queue = new UserItemModel(this);
     setQueue(queue);
-    connect(newItem, &RemoteItem::ready, this, [this, queue, newItem](){
-        QString parentId = newItem->data()->parentId();
-        queue->setParentId(parentId);
-        queue->setLimit(10000);
-        queue->setApiClient(m_apiClient);
-        queue->reload();
-        setItem(newItem->data());
-    });
+    QString parentId = newItem->data()->parentId();
+    queue->setParentId(parentId);
+    queue->setLimit(10000);
+    queue->setApiClient(m_apiClient);
+    queue->reload();
+    setItem(newItem->data());
     connect(queue, &BaseApiModel::ready, this, [this, queue, newItem]() {
         for (int i = 0; i < queue->size(); i++) {
             if (queue->at(i)->jellyfinId() == newItem->jellyfinId()) {
@@ -233,7 +229,7 @@ void PlaybackManager::playItem(const QString &itemId) {
                 break;
             }
         }
-    });
+    });*/
     setPlaybackState(QMediaPlayer::PlayingState);
 }
 
@@ -242,7 +238,7 @@ void PlaybackManager::playItemInList(ItemModel *playlist, int itemIdx) {
     setQueue(playlist);
     m_queueIndex = itemIdx;
     emit queueIndexChanged(m_queueIndex);
-    setItem(playlist->at(itemIdx));
+    //setItem(playlist->at(itemIdx));
 }
 
 void PlaybackManager::next() {
@@ -261,7 +257,7 @@ void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
         qWarning() << "Item is null. Not posting playback info";
         return;
     }
-    root["ItemId"] = m_item->jellyfinId();
+    root["ItemId"] = Support::uuidToString(m_item->jellyfinId());
     root["SessionId"] = m_playSessionId;
 
     switch(type) {
@@ -328,11 +324,11 @@ void PlaybackManager::swapMediaPlayer() {
     connect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::error)), this, SLOT(mediaPlayerError(QmediaPlayer::error)));
 }
 
-Item *PlaybackManager::nextItem() {
+Model::Item *PlaybackManager::nextItem() {
     if (m_queue == nullptr) return nullptr;
     // TODO: shuffle etc.
     if (m_queueIndex < m_queue->size()) {
-        return m_queue->at(m_queueIndex + 1);
+        //return m_queue->at(m_queueIndex + 1);
     }
     return nullptr;
 }
@@ -353,13 +349,7 @@ void PlaybackManager::componentComplete() {
     if (m_apiClient == nullptr) qWarning() << "No ApiClient set for PlaybackManager";
     m_qmlIsParsingComponent = false;
     if (m_item != nullptr) {
-        if (m_item->status() == RemoteItem::Ready) {
-            fetchAndSetStreamUrl(m_item->data());
-        } else {
-            connect(m_item, &RemoteItem::ready, [this]() -> void {
-                fetchAndSetStreamUrl(m_item->data());
-            });
-        }
+        fetchAndSetStreamUrl(m_item);
     }
 }
 

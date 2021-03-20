@@ -84,18 +84,6 @@ protected:
 	bool m_includeDisabledProviders;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MusicVideoInfoRemoteSearchQuery = Jellyfin::DTO::MusicVideoInfoRemoteSearchQuery;
-
-template <>
-MusicVideoInfoRemoteSearchQuery fromJsonValue<MusicVideoInfoRemoteSearchQuery>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MusicVideoInfoRemoteSearchQuery::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

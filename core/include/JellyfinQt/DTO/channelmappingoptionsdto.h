@@ -95,18 +95,6 @@ protected:
 	QString m_providerName;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ChannelMappingOptionsDto = Jellyfin::DTO::ChannelMappingOptionsDto;
-
-template <>
-ChannelMappingOptionsDto fromJsonValue<ChannelMappingOptionsDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ChannelMappingOptionsDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

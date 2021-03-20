@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-LiveTvInfo::LiveTvInfo(QObject *parent) {}
+LiveTvInfo::LiveTvInfo() {}
 
-LiveTvInfo LiveTvInfo::fromJson(QJsonObject source) {LiveTvInfo instance;
-	instance->setFromJson(source, false);
+LiveTvInfo LiveTvInfo::fromJson(QJsonObject source) {
+	LiveTvInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void LiveTvInfo::setFromJson(QJsonObject source) {
-	m_services = fromJsonValue<QList<QSharedPointer<LiveTvServiceInfo>>>(source["Services"]);
-	m_isEnabled = fromJsonValue<bool>(source["IsEnabled"]);
-	m_enabledUsers = fromJsonValue<QStringList>(source["EnabledUsers"]);
+	m_services = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<LiveTvServiceInfo>>>(source["Services"]);
+	m_isEnabled = Jellyfin::Support::fromJsonValue<bool>(source["IsEnabled"]);
+	m_enabledUsers = Jellyfin::Support::fromJsonValue<QStringList>(source["EnabledUsers"]);
 
 }
 	
 QJsonObject LiveTvInfo::toJson() {
 	QJsonObject result;
-	result["Services"] = toJsonValue<QList<QSharedPointer<LiveTvServiceInfo>>>(m_services);
-	result["IsEnabled"] = toJsonValue<bool>(m_isEnabled);
-	result["EnabledUsers"] = toJsonValue<QStringList>(m_enabledUsers);
+	result["Services"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<LiveTvServiceInfo>>>(m_services);
+	result["IsEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_isEnabled);
+	result["EnabledUsers"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledUsers);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void LiveTvInfo::setEnabledUsers(QStringList newEnabledUsers) {
 	m_enabledUsers = newEnabledUsers;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using LiveTvInfo = Jellyfin::DTO::LiveTvInfo;
+
+template <>
+LiveTvInfo fromJsonValue<LiveTvInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LiveTvInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

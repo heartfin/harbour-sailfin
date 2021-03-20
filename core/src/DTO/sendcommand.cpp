@@ -32,32 +32,33 @@
 namespace Jellyfin {
 namespace DTO {
 
-SendCommand::SendCommand(QObject *parent) {}
+SendCommand::SendCommand() {}
 
-SendCommand SendCommand::fromJson(QJsonObject source) {SendCommand instance;
-	instance->setFromJson(source, false);
+SendCommand SendCommand::fromJson(QJsonObject source) {
+	SendCommand instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SendCommand::setFromJson(QJsonObject source) {
-	m_groupId = fromJsonValue<QUuid>(source["GroupId"]);
-	m_playlistItemId = fromJsonValue<QUuid>(source["PlaylistItemId"]);
-	m_when = fromJsonValue<QDateTime>(source["When"]);
-	m_positionTicks = fromJsonValue<qint64>(source["PositionTicks"]);
-	m_command = fromJsonValue<SendCommandType>(source["Command"]);
-	m_emittedAt = fromJsonValue<QDateTime>(source["EmittedAt"]);
+	m_groupId = Jellyfin::Support::fromJsonValue<QUuid>(source["GroupId"]);
+	m_playlistItemId = Jellyfin::Support::fromJsonValue<QUuid>(source["PlaylistItemId"]);
+	m_when = Jellyfin::Support::fromJsonValue<QDateTime>(source["When"]);
+	m_positionTicks = Jellyfin::Support::fromJsonValue<qint64>(source["PositionTicks"]);
+	m_command = Jellyfin::Support::fromJsonValue<SendCommandType>(source["Command"]);
+	m_emittedAt = Jellyfin::Support::fromJsonValue<QDateTime>(source["EmittedAt"]);
 
 }
 	
 QJsonObject SendCommand::toJson() {
 	QJsonObject result;
-	result["GroupId"] = toJsonValue<QUuid>(m_groupId);
-	result["PlaylistItemId"] = toJsonValue<QUuid>(m_playlistItemId);
-	result["When"] = toJsonValue<QDateTime>(m_when);
-	result["PositionTicks"] = toJsonValue<qint64>(m_positionTicks);
-	result["Command"] = toJsonValue<SendCommandType>(m_command);
-	result["EmittedAt"] = toJsonValue<QDateTime>(m_emittedAt);
+	result["GroupId"] = Jellyfin::Support::toJsonValue<QUuid>(m_groupId);
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QUuid>(m_playlistItemId);
+	result["When"] = Jellyfin::Support::toJsonValue<QDateTime>(m_when);
+	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
+	result["Command"] = Jellyfin::Support::toJsonValue<SendCommandType>(m_command);
+	result["EmittedAt"] = Jellyfin::Support::toJsonValue<QDateTime>(m_emittedAt);
 
 	return result;
 }
@@ -93,6 +94,17 @@ void SendCommand::setEmittedAt(QDateTime newEmittedAt) {
 	m_emittedAt = newEmittedAt;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SendCommand = Jellyfin::DTO::SendCommand;
+
+template <>
+SendCommand fromJsonValue<SendCommand>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SendCommand::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

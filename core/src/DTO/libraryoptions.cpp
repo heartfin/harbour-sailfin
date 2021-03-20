@@ -32,70 +32,71 @@
 namespace Jellyfin {
 namespace DTO {
 
-LibraryOptions::LibraryOptions(QObject *parent) {}
+LibraryOptions::LibraryOptions() {}
 
-LibraryOptions LibraryOptions::fromJson(QJsonObject source) {LibraryOptions instance;
-	instance->setFromJson(source, false);
+LibraryOptions LibraryOptions::fromJson(QJsonObject source) {
+	LibraryOptions instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void LibraryOptions::setFromJson(QJsonObject source) {
-	m_enablePhotos = fromJsonValue<bool>(source["EnablePhotos"]);
-	m_enableRealtimeMonitor = fromJsonValue<bool>(source["EnableRealtimeMonitor"]);
-	m_enableChapterImageExtraction = fromJsonValue<bool>(source["EnableChapterImageExtraction"]);
-	m_extractChapterImagesDuringLibraryScan = fromJsonValue<bool>(source["ExtractChapterImagesDuringLibraryScan"]);
-	m_pathInfos = fromJsonValue<QList<QSharedPointer<MediaPathInfo>>>(source["PathInfos"]);
-	m_saveLocalMetadata = fromJsonValue<bool>(source["SaveLocalMetadata"]);
-	m_enableInternetProviders = fromJsonValue<bool>(source["EnableInternetProviders"]);
-	m_enableAutomaticSeriesGrouping = fromJsonValue<bool>(source["EnableAutomaticSeriesGrouping"]);
-	m_enableEmbeddedTitles = fromJsonValue<bool>(source["EnableEmbeddedTitles"]);
-	m_enableEmbeddedEpisodeInfos = fromJsonValue<bool>(source["EnableEmbeddedEpisodeInfos"]);
-	m_automaticRefreshIntervalDays = fromJsonValue<qint32>(source["AutomaticRefreshIntervalDays"]);
-	m_preferredMetadataLanguage = fromJsonValue<QString>(source["PreferredMetadataLanguage"]);
-	m_metadataCountryCode = fromJsonValue<QString>(source["MetadataCountryCode"]);
-	m_seasonZeroDisplayName = fromJsonValue<QString>(source["SeasonZeroDisplayName"]);
-	m_metadataSavers = fromJsonValue<QStringList>(source["MetadataSavers"]);
-	m_disabledLocalMetadataReaders = fromJsonValue<QStringList>(source["DisabledLocalMetadataReaders"]);
-	m_localMetadataReaderOrder = fromJsonValue<QStringList>(source["LocalMetadataReaderOrder"]);
-	m_disabledSubtitleFetchers = fromJsonValue<QStringList>(source["DisabledSubtitleFetchers"]);
-	m_subtitleFetcherOrder = fromJsonValue<QStringList>(source["SubtitleFetcherOrder"]);
-	m_skipSubtitlesIfEmbeddedSubtitlesPresent = fromJsonValue<bool>(source["SkipSubtitlesIfEmbeddedSubtitlesPresent"]);
-	m_skipSubtitlesIfAudioTrackMatches = fromJsonValue<bool>(source["SkipSubtitlesIfAudioTrackMatches"]);
-	m_subtitleDownloadLanguages = fromJsonValue<QStringList>(source["SubtitleDownloadLanguages"]);
-	m_requirePerfectSubtitleMatch = fromJsonValue<bool>(source["RequirePerfectSubtitleMatch"]);
-	m_saveSubtitlesWithMedia = fromJsonValue<bool>(source["SaveSubtitlesWithMedia"]);
-	m_typeOptions = fromJsonValue<QList<QSharedPointer<TypeOptions>>>(source["TypeOptions"]);
+	m_enablePhotos = Jellyfin::Support::fromJsonValue<bool>(source["EnablePhotos"]);
+	m_enableRealtimeMonitor = Jellyfin::Support::fromJsonValue<bool>(source["EnableRealtimeMonitor"]);
+	m_enableChapterImageExtraction = Jellyfin::Support::fromJsonValue<bool>(source["EnableChapterImageExtraction"]);
+	m_extractChapterImagesDuringLibraryScan = Jellyfin::Support::fromJsonValue<bool>(source["ExtractChapterImagesDuringLibraryScan"]);
+	m_pathInfos = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaPathInfo>>>(source["PathInfos"]);
+	m_saveLocalMetadata = Jellyfin::Support::fromJsonValue<bool>(source["SaveLocalMetadata"]);
+	m_enableInternetProviders = Jellyfin::Support::fromJsonValue<bool>(source["EnableInternetProviders"]);
+	m_enableAutomaticSeriesGrouping = Jellyfin::Support::fromJsonValue<bool>(source["EnableAutomaticSeriesGrouping"]);
+	m_enableEmbeddedTitles = Jellyfin::Support::fromJsonValue<bool>(source["EnableEmbeddedTitles"]);
+	m_enableEmbeddedEpisodeInfos = Jellyfin::Support::fromJsonValue<bool>(source["EnableEmbeddedEpisodeInfos"]);
+	m_automaticRefreshIntervalDays = Jellyfin::Support::fromJsonValue<qint32>(source["AutomaticRefreshIntervalDays"]);
+	m_preferredMetadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["PreferredMetadataLanguage"]);
+	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
+	m_seasonZeroDisplayName = Jellyfin::Support::fromJsonValue<QString>(source["SeasonZeroDisplayName"]);
+	m_metadataSavers = Jellyfin::Support::fromJsonValue<QStringList>(source["MetadataSavers"]);
+	m_disabledLocalMetadataReaders = Jellyfin::Support::fromJsonValue<QStringList>(source["DisabledLocalMetadataReaders"]);
+	m_localMetadataReaderOrder = Jellyfin::Support::fromJsonValue<QStringList>(source["LocalMetadataReaderOrder"]);
+	m_disabledSubtitleFetchers = Jellyfin::Support::fromJsonValue<QStringList>(source["DisabledSubtitleFetchers"]);
+	m_subtitleFetcherOrder = Jellyfin::Support::fromJsonValue<QStringList>(source["SubtitleFetcherOrder"]);
+	m_skipSubtitlesIfEmbeddedSubtitlesPresent = Jellyfin::Support::fromJsonValue<bool>(source["SkipSubtitlesIfEmbeddedSubtitlesPresent"]);
+	m_skipSubtitlesIfAudioTrackMatches = Jellyfin::Support::fromJsonValue<bool>(source["SkipSubtitlesIfAudioTrackMatches"]);
+	m_subtitleDownloadLanguages = Jellyfin::Support::fromJsonValue<QStringList>(source["SubtitleDownloadLanguages"]);
+	m_requirePerfectSubtitleMatch = Jellyfin::Support::fromJsonValue<bool>(source["RequirePerfectSubtitleMatch"]);
+	m_saveSubtitlesWithMedia = Jellyfin::Support::fromJsonValue<bool>(source["SaveSubtitlesWithMedia"]);
+	m_typeOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<TypeOptions>>>(source["TypeOptions"]);
 
 }
 	
 QJsonObject LibraryOptions::toJson() {
 	QJsonObject result;
-	result["EnablePhotos"] = toJsonValue<bool>(m_enablePhotos);
-	result["EnableRealtimeMonitor"] = toJsonValue<bool>(m_enableRealtimeMonitor);
-	result["EnableChapterImageExtraction"] = toJsonValue<bool>(m_enableChapterImageExtraction);
-	result["ExtractChapterImagesDuringLibraryScan"] = toJsonValue<bool>(m_extractChapterImagesDuringLibraryScan);
-	result["PathInfos"] = toJsonValue<QList<QSharedPointer<MediaPathInfo>>>(m_pathInfos);
-	result["SaveLocalMetadata"] = toJsonValue<bool>(m_saveLocalMetadata);
-	result["EnableInternetProviders"] = toJsonValue<bool>(m_enableInternetProviders);
-	result["EnableAutomaticSeriesGrouping"] = toJsonValue<bool>(m_enableAutomaticSeriesGrouping);
-	result["EnableEmbeddedTitles"] = toJsonValue<bool>(m_enableEmbeddedTitles);
-	result["EnableEmbeddedEpisodeInfos"] = toJsonValue<bool>(m_enableEmbeddedEpisodeInfos);
-	result["AutomaticRefreshIntervalDays"] = toJsonValue<qint32>(m_automaticRefreshIntervalDays);
-	result["PreferredMetadataLanguage"] = toJsonValue<QString>(m_preferredMetadataLanguage);
-	result["MetadataCountryCode"] = toJsonValue<QString>(m_metadataCountryCode);
-	result["SeasonZeroDisplayName"] = toJsonValue<QString>(m_seasonZeroDisplayName);
-	result["MetadataSavers"] = toJsonValue<QStringList>(m_metadataSavers);
-	result["DisabledLocalMetadataReaders"] = toJsonValue<QStringList>(m_disabledLocalMetadataReaders);
-	result["LocalMetadataReaderOrder"] = toJsonValue<QStringList>(m_localMetadataReaderOrder);
-	result["DisabledSubtitleFetchers"] = toJsonValue<QStringList>(m_disabledSubtitleFetchers);
-	result["SubtitleFetcherOrder"] = toJsonValue<QStringList>(m_subtitleFetcherOrder);
-	result["SkipSubtitlesIfEmbeddedSubtitlesPresent"] = toJsonValue<bool>(m_skipSubtitlesIfEmbeddedSubtitlesPresent);
-	result["SkipSubtitlesIfAudioTrackMatches"] = toJsonValue<bool>(m_skipSubtitlesIfAudioTrackMatches);
-	result["SubtitleDownloadLanguages"] = toJsonValue<QStringList>(m_subtitleDownloadLanguages);
-	result["RequirePerfectSubtitleMatch"] = toJsonValue<bool>(m_requirePerfectSubtitleMatch);
-	result["SaveSubtitlesWithMedia"] = toJsonValue<bool>(m_saveSubtitlesWithMedia);
-	result["TypeOptions"] = toJsonValue<QList<QSharedPointer<TypeOptions>>>(m_typeOptions);
+	result["EnablePhotos"] = Jellyfin::Support::toJsonValue<bool>(m_enablePhotos);
+	result["EnableRealtimeMonitor"] = Jellyfin::Support::toJsonValue<bool>(m_enableRealtimeMonitor);
+	result["EnableChapterImageExtraction"] = Jellyfin::Support::toJsonValue<bool>(m_enableChapterImageExtraction);
+	result["ExtractChapterImagesDuringLibraryScan"] = Jellyfin::Support::toJsonValue<bool>(m_extractChapterImagesDuringLibraryScan);
+	result["PathInfos"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaPathInfo>>>(m_pathInfos);
+	result["SaveLocalMetadata"] = Jellyfin::Support::toJsonValue<bool>(m_saveLocalMetadata);
+	result["EnableInternetProviders"] = Jellyfin::Support::toJsonValue<bool>(m_enableInternetProviders);
+	result["EnableAutomaticSeriesGrouping"] = Jellyfin::Support::toJsonValue<bool>(m_enableAutomaticSeriesGrouping);
+	result["EnableEmbeddedTitles"] = Jellyfin::Support::toJsonValue<bool>(m_enableEmbeddedTitles);
+	result["EnableEmbeddedEpisodeInfos"] = Jellyfin::Support::toJsonValue<bool>(m_enableEmbeddedEpisodeInfos);
+	result["AutomaticRefreshIntervalDays"] = Jellyfin::Support::toJsonValue<qint32>(m_automaticRefreshIntervalDays);
+	result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
+	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
+	result["SeasonZeroDisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_seasonZeroDisplayName);
+	result["MetadataSavers"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataSavers);
+	result["DisabledLocalMetadataReaders"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledLocalMetadataReaders);
+	result["LocalMetadataReaderOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_localMetadataReaderOrder);
+	result["DisabledSubtitleFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledSubtitleFetchers);
+	result["SubtitleFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_subtitleFetcherOrder);
+	result["SkipSubtitlesIfEmbeddedSubtitlesPresent"] = Jellyfin::Support::toJsonValue<bool>(m_skipSubtitlesIfEmbeddedSubtitlesPresent);
+	result["SkipSubtitlesIfAudioTrackMatches"] = Jellyfin::Support::toJsonValue<bool>(m_skipSubtitlesIfAudioTrackMatches);
+	result["SubtitleDownloadLanguages"] = Jellyfin::Support::toJsonValue<QStringList>(m_subtitleDownloadLanguages);
+	result["RequirePerfectSubtitleMatch"] = Jellyfin::Support::toJsonValue<bool>(m_requirePerfectSubtitleMatch);
+	result["SaveSubtitlesWithMedia"] = Jellyfin::Support::toJsonValue<bool>(m_saveSubtitlesWithMedia);
+	result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<TypeOptions>>>(m_typeOptions);
 
 	return result;
 }
@@ -226,6 +227,17 @@ void LibraryOptions::setTypeOptions(QList<QSharedPointer<TypeOptions>> newTypeOp
 	m_typeOptions = newTypeOptions;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using LibraryOptions = Jellyfin::DTO::LibraryOptions;
+
+template <>
+LibraryOptions fromJsonValue<LibraryOptions>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LibraryOptions::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

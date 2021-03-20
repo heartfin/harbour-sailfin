@@ -32,76 +32,77 @@
 namespace Jellyfin {
 namespace DTO {
 
-TimerInfoDto::TimerInfoDto(QObject *parent) {}
+TimerInfoDto::TimerInfoDto() {}
 
-TimerInfoDto TimerInfoDto::fromJson(QJsonObject source) {TimerInfoDto instance;
-	instance->setFromJson(source, false);
+TimerInfoDto TimerInfoDto::fromJson(QJsonObject source) {
+	TimerInfoDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void TimerInfoDto::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_serverId = fromJsonValue<QString>(source["ServerId"]);
-	m_externalId = fromJsonValue<QString>(source["ExternalId"]);
-	m_channelId = fromJsonValue<QUuid>(source["ChannelId"]);
-	m_externalChannelId = fromJsonValue<QString>(source["ExternalChannelId"]);
-	m_channelName = fromJsonValue<QString>(source["ChannelName"]);
-	m_channelPrimaryImageTag = fromJsonValue<QString>(source["ChannelPrimaryImageTag"]);
-	m_programId = fromJsonValue<QString>(source["ProgramId"]);
-	m_externalProgramId = fromJsonValue<QString>(source["ExternalProgramId"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_overview = fromJsonValue<QString>(source["Overview"]);
-	m_startDate = fromJsonValue<QDateTime>(source["StartDate"]);
-	m_endDate = fromJsonValue<QDateTime>(source["EndDate"]);
-	m_serviceName = fromJsonValue<QString>(source["ServiceName"]);
-	m_priority = fromJsonValue<qint32>(source["Priority"]);
-	m_prePaddingSeconds = fromJsonValue<qint32>(source["PrePaddingSeconds"]);
-	m_postPaddingSeconds = fromJsonValue<qint32>(source["PostPaddingSeconds"]);
-	m_isPrePaddingRequired = fromJsonValue<bool>(source["IsPrePaddingRequired"]);
-	m_parentBackdropItemId = fromJsonValue<QString>(source["ParentBackdropItemId"]);
-	m_parentBackdropImageTags = fromJsonValue<QStringList>(source["ParentBackdropImageTags"]);
-	m_isPostPaddingRequired = fromJsonValue<bool>(source["IsPostPaddingRequired"]);
-	m_keepUntil = fromJsonValue<KeepUntil>(source["KeepUntil"]);
-	m_status = fromJsonValue<RecordingStatus>(source["Status"]);
-	m_seriesTimerId = fromJsonValue<QString>(source["SeriesTimerId"]);
-	m_externalSeriesTimerId = fromJsonValue<QString>(source["ExternalSeriesTimerId"]);
-	m_runTimeTicks = fromJsonValue<qint64>(source["RunTimeTicks"]);
-	m_programInfo = fromJsonValue<QSharedPointer<BaseItemDto>>(source["ProgramInfo"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_serverId = Jellyfin::Support::fromJsonValue<QString>(source["ServerId"]);
+	m_externalId = Jellyfin::Support::fromJsonValue<QString>(source["ExternalId"]);
+	m_channelId = Jellyfin::Support::fromJsonValue<QUuid>(source["ChannelId"]);
+	m_externalChannelId = Jellyfin::Support::fromJsonValue<QString>(source["ExternalChannelId"]);
+	m_channelName = Jellyfin::Support::fromJsonValue<QString>(source["ChannelName"]);
+	m_channelPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ChannelPrimaryImageTag"]);
+	m_programId = Jellyfin::Support::fromJsonValue<QString>(source["ProgramId"]);
+	m_externalProgramId = Jellyfin::Support::fromJsonValue<QString>(source["ExternalProgramId"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_overview = Jellyfin::Support::fromJsonValue<QString>(source["Overview"]);
+	m_startDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["StartDate"]);
+	m_endDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["EndDate"]);
+	m_serviceName = Jellyfin::Support::fromJsonValue<QString>(source["ServiceName"]);
+	m_priority = Jellyfin::Support::fromJsonValue<qint32>(source["Priority"]);
+	m_prePaddingSeconds = Jellyfin::Support::fromJsonValue<qint32>(source["PrePaddingSeconds"]);
+	m_postPaddingSeconds = Jellyfin::Support::fromJsonValue<qint32>(source["PostPaddingSeconds"]);
+	m_isPrePaddingRequired = Jellyfin::Support::fromJsonValue<bool>(source["IsPrePaddingRequired"]);
+	m_parentBackdropItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentBackdropItemId"]);
+	m_parentBackdropImageTags = Jellyfin::Support::fromJsonValue<QStringList>(source["ParentBackdropImageTags"]);
+	m_isPostPaddingRequired = Jellyfin::Support::fromJsonValue<bool>(source["IsPostPaddingRequired"]);
+	m_keepUntil = Jellyfin::Support::fromJsonValue<KeepUntil>(source["KeepUntil"]);
+	m_status = Jellyfin::Support::fromJsonValue<RecordingStatus>(source["Status"]);
+	m_seriesTimerId = Jellyfin::Support::fromJsonValue<QString>(source["SeriesTimerId"]);
+	m_externalSeriesTimerId = Jellyfin::Support::fromJsonValue<QString>(source["ExternalSeriesTimerId"]);
+	m_runTimeTicks = Jellyfin::Support::fromJsonValue<qint64>(source["RunTimeTicks"]);
+	m_programInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<BaseItemDto>>(source["ProgramInfo"]);
 
 }
 	
 QJsonObject TimerInfoDto::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["ServerId"] = toJsonValue<QString>(m_serverId);
-	result["ExternalId"] = toJsonValue<QString>(m_externalId);
-	result["ChannelId"] = toJsonValue<QUuid>(m_channelId);
-	result["ExternalChannelId"] = toJsonValue<QString>(m_externalChannelId);
-	result["ChannelName"] = toJsonValue<QString>(m_channelName);
-	result["ChannelPrimaryImageTag"] = toJsonValue<QString>(m_channelPrimaryImageTag);
-	result["ProgramId"] = toJsonValue<QString>(m_programId);
-	result["ExternalProgramId"] = toJsonValue<QString>(m_externalProgramId);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Overview"] = toJsonValue<QString>(m_overview);
-	result["StartDate"] = toJsonValue<QDateTime>(m_startDate);
-	result["EndDate"] = toJsonValue<QDateTime>(m_endDate);
-	result["ServiceName"] = toJsonValue<QString>(m_serviceName);
-	result["Priority"] = toJsonValue<qint32>(m_priority);
-	result["PrePaddingSeconds"] = toJsonValue<qint32>(m_prePaddingSeconds);
-	result["PostPaddingSeconds"] = toJsonValue<qint32>(m_postPaddingSeconds);
-	result["IsPrePaddingRequired"] = toJsonValue<bool>(m_isPrePaddingRequired);
-	result["ParentBackdropItemId"] = toJsonValue<QString>(m_parentBackdropItemId);
-	result["ParentBackdropImageTags"] = toJsonValue<QStringList>(m_parentBackdropImageTags);
-	result["IsPostPaddingRequired"] = toJsonValue<bool>(m_isPostPaddingRequired);
-	result["KeepUntil"] = toJsonValue<KeepUntil>(m_keepUntil);
-	result["Status"] = toJsonValue<RecordingStatus>(m_status);
-	result["SeriesTimerId"] = toJsonValue<QString>(m_seriesTimerId);
-	result["ExternalSeriesTimerId"] = toJsonValue<QString>(m_externalSeriesTimerId);
-	result["RunTimeTicks"] = toJsonValue<qint64>(m_runTimeTicks);
-	result["ProgramInfo"] = toJsonValue<QSharedPointer<BaseItemDto>>(m_programInfo);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
+	result["ExternalId"] = Jellyfin::Support::toJsonValue<QString>(m_externalId);
+	result["ChannelId"] = Jellyfin::Support::toJsonValue<QUuid>(m_channelId);
+	result["ExternalChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_externalChannelId);
+	result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
+	result["ChannelPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_channelPrimaryImageTag);
+	result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
+	result["ExternalProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_externalProgramId);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
+	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
+	result["ServiceName"] = Jellyfin::Support::toJsonValue<QString>(m_serviceName);
+	result["Priority"] = Jellyfin::Support::toJsonValue<qint32>(m_priority);
+	result["PrePaddingSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_prePaddingSeconds);
+	result["PostPaddingSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_postPaddingSeconds);
+	result["IsPrePaddingRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isPrePaddingRequired);
+	result["ParentBackdropItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentBackdropItemId);
+	result["ParentBackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_parentBackdropImageTags);
+	result["IsPostPaddingRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isPostPaddingRequired);
+	result["KeepUntil"] = Jellyfin::Support::toJsonValue<KeepUntil>(m_keepUntil);
+	result["Status"] = Jellyfin::Support::toJsonValue<RecordingStatus>(m_status);
+	result["SeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesTimerId);
+	result["ExternalSeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_externalSeriesTimerId);
+	result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_runTimeTicks);
+	result["ProgramInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_programInfo);
 
 	return result;
 }
@@ -247,6 +248,17 @@ void TimerInfoDto::setProgramInfo(QSharedPointer<BaseItemDto> newProgramInfo) {
 	m_programInfo = newProgramInfo;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using TimerInfoDto = Jellyfin::DTO::TimerInfoDto;
+
+template <>
+TimerInfoDto fromJsonValue<TimerInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TimerInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

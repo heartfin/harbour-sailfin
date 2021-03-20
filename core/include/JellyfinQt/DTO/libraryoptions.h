@@ -191,18 +191,6 @@ protected:
 	QList<QSharedPointer<TypeOptions>> m_typeOptions;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using LibraryOptions = Jellyfin::DTO::LibraryOptions;
-
-template <>
-LibraryOptions fromJsonValue<LibraryOptions>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return LibraryOptions::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

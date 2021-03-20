@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-StartupUserDto::StartupUserDto(QObject *parent) {}
+StartupUserDto::StartupUserDto() {}
 
-StartupUserDto StartupUserDto::fromJson(QJsonObject source) {StartupUserDto instance;
-	instance->setFromJson(source, false);
+StartupUserDto StartupUserDto::fromJson(QJsonObject source) {
+	StartupUserDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void StartupUserDto::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_password = fromJsonValue<QString>(source["Password"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_password = Jellyfin::Support::fromJsonValue<QString>(source["Password"]);
 
 }
 	
 QJsonObject StartupUserDto::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Password"] = toJsonValue<QString>(m_password);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void StartupUserDto::setPassword(QString newPassword) {
 	m_password = newPassword;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using StartupUserDto = Jellyfin::DTO::StartupUserDto;
+
+template <>
+StartupUserDto fromJsonValue<StartupUserDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return StartupUserDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

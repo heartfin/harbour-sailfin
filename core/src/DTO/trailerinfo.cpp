@@ -32,40 +32,41 @@
 namespace Jellyfin {
 namespace DTO {
 
-TrailerInfo::TrailerInfo(QObject *parent) {}
+TrailerInfo::TrailerInfo() {}
 
-TrailerInfo TrailerInfo::fromJson(QJsonObject source) {TrailerInfo instance;
-	instance->setFromJson(source, false);
+TrailerInfo TrailerInfo::fromJson(QJsonObject source) {
+	TrailerInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void TrailerInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_metadataLanguage = fromJsonValue<QString>(source["MetadataLanguage"]);
-	m_metadataCountryCode = fromJsonValue<QString>(source["MetadataCountryCode"]);
-	m_providerIds = fromJsonValue<QJsonObject>(source["ProviderIds"]);
-	m_year = fromJsonValue<qint32>(source["Year"]);
-	m_indexNumber = fromJsonValue<qint32>(source["IndexNumber"]);
-	m_parentIndexNumber = fromJsonValue<qint32>(source["ParentIndexNumber"]);
-	m_premiereDate = fromJsonValue<QDateTime>(source["PremiereDate"]);
-	m_isAutomated = fromJsonValue<bool>(source["IsAutomated"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
+	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
+	m_providerIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ProviderIds"]);
+	m_year = Jellyfin::Support::fromJsonValue<qint32>(source["Year"]);
+	m_indexNumber = Jellyfin::Support::fromJsonValue<qint32>(source["IndexNumber"]);
+	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<qint32>(source["ParentIndexNumber"]);
+	m_premiereDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["PremiereDate"]);
+	m_isAutomated = Jellyfin::Support::fromJsonValue<bool>(source["IsAutomated"]);
 
 }
 	
 QJsonObject TrailerInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["MetadataLanguage"] = toJsonValue<QString>(m_metadataLanguage);
-	result["MetadataCountryCode"] = toJsonValue<QString>(m_metadataCountryCode);
-	result["ProviderIds"] = toJsonValue<QJsonObject>(m_providerIds);
-	result["Year"] = toJsonValue<qint32>(m_year);
-	result["IndexNumber"] = toJsonValue<qint32>(m_indexNumber);
-	result["ParentIndexNumber"] = toJsonValue<qint32>(m_parentIndexNumber);
-	result["PremiereDate"] = toJsonValue<QDateTime>(m_premiereDate);
-	result["IsAutomated"] = toJsonValue<bool>(m_isAutomated);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["MetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_metadataLanguage);
+	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
+	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
+	result["Year"] = Jellyfin::Support::toJsonValue<qint32>(m_year);
+	result["IndexNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_indexNumber);
+	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_parentIndexNumber);
+	result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
+	result["IsAutomated"] = Jellyfin::Support::toJsonValue<bool>(m_isAutomated);
 
 	return result;
 }
@@ -121,6 +122,17 @@ void TrailerInfo::setIsAutomated(bool newIsAutomated) {
 	m_isAutomated = newIsAutomated;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using TrailerInfo = Jellyfin::DTO::TrailerInfo;
+
+template <>
+TrailerInfo fromJsonValue<TrailerInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TrailerInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

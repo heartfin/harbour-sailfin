@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-QueryFilters::QueryFilters(QObject *parent) {}
+QueryFilters::QueryFilters() {}
 
-QueryFilters QueryFilters::fromJson(QJsonObject source) {QueryFilters instance;
-	instance->setFromJson(source, false);
+QueryFilters QueryFilters::fromJson(QJsonObject source) {
+	QueryFilters instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void QueryFilters::setFromJson(QJsonObject source) {
-	m_genres = fromJsonValue<QList<QSharedPointer<NameGuidPair>>>(source["Genres"]);
-	m_tags = fromJsonValue<QStringList>(source["Tags"]);
+	m_genres = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameGuidPair>>>(source["Genres"]);
+	m_tags = Jellyfin::Support::fromJsonValue<QStringList>(source["Tags"]);
 
 }
 	
 QJsonObject QueryFilters::toJson() {
 	QJsonObject result;
-	result["Genres"] = toJsonValue<QList<QSharedPointer<NameGuidPair>>>(m_genres);
-	result["Tags"] = toJsonValue<QStringList>(m_tags);
+	result["Genres"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameGuidPair>>>(m_genres);
+	result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void QueryFilters::setTags(QStringList newTags) {
 	m_tags = newTags;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using QueryFilters = Jellyfin::DTO::QueryFilters;
+
+template <>
+QueryFilters fromJsonValue<QueryFilters>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QueryFilters::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

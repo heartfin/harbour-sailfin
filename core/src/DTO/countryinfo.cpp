@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-CountryInfo::CountryInfo(QObject *parent) {}
+CountryInfo::CountryInfo() {}
 
-CountryInfo CountryInfo::fromJson(QJsonObject source) {CountryInfo instance;
-	instance->setFromJson(source, false);
+CountryInfo CountryInfo::fromJson(QJsonObject source) {
+	CountryInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void CountryInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_displayName = fromJsonValue<QString>(source["DisplayName"]);
-	m_twoLetterISORegionName = fromJsonValue<QString>(source["TwoLetterISORegionName"]);
-	m_threeLetterISORegionName = fromJsonValue<QString>(source["ThreeLetterISORegionName"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_displayName = Jellyfin::Support::fromJsonValue<QString>(source["DisplayName"]);
+	m_twoLetterISORegionName = Jellyfin::Support::fromJsonValue<QString>(source["TwoLetterISORegionName"]);
+	m_threeLetterISORegionName = Jellyfin::Support::fromJsonValue<QString>(source["ThreeLetterISORegionName"]);
 
 }
 	
 QJsonObject CountryInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["DisplayName"] = toJsonValue<QString>(m_displayName);
-	result["TwoLetterISORegionName"] = toJsonValue<QString>(m_twoLetterISORegionName);
-	result["ThreeLetterISORegionName"] = toJsonValue<QString>(m_threeLetterISORegionName);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
+	result["TwoLetterISORegionName"] = Jellyfin::Support::toJsonValue<QString>(m_twoLetterISORegionName);
+	result["ThreeLetterISORegionName"] = Jellyfin::Support::toJsonValue<QString>(m_threeLetterISORegionName);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void CountryInfo::setThreeLetterISORegionName(QString newThreeLetterISORegionNam
 	m_threeLetterISORegionName = newThreeLetterISORegionName;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using CountryInfo = Jellyfin::DTO::CountryInfo;
+
+template <>
+CountryInfo fromJsonValue<CountryInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return CountryInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

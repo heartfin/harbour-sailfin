@@ -84,18 +84,6 @@ protected:
 	bool m_includeDisabledProviders;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using BookInfoRemoteSearchQuery = Jellyfin::DTO::BookInfoRemoteSearchQuery;
-
-template <>
-BookInfoRemoteSearchQuery fromJsonValue<BookInfoRemoteSearchQuery>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return BookInfoRemoteSearchQuery::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

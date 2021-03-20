@@ -71,18 +71,6 @@ protected:
 	bool m_defaultEnabled;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using LibraryOptionInfoDto = Jellyfin::DTO::LibraryOptionInfoDto;
-
-template <>
-LibraryOptionInfoDto fromJsonValue<LibraryOptionInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return LibraryOptionInfoDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

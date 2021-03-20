@@ -58,18 +58,6 @@ protected:
 	QUuid m_jellyfinId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using CollectionCreationResult = Jellyfin::DTO::CollectionCreationResult;
-
-template <>
-CollectionCreationResult fromJsonValue<CollectionCreationResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return CollectionCreationResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

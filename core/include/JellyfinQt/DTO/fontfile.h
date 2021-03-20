@@ -90,18 +90,6 @@ protected:
 	QDateTime m_dateModified;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using FontFile = Jellyfin::DTO::FontFile;
-
-template <>
-FontFile fromJsonValue<FontFile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return FontFile::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

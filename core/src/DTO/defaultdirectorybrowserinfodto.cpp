@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-DefaultDirectoryBrowserInfoDto::DefaultDirectoryBrowserInfoDto(QObject *parent) {}
+DefaultDirectoryBrowserInfoDto::DefaultDirectoryBrowserInfoDto() {}
 
-DefaultDirectoryBrowserInfoDto DefaultDirectoryBrowserInfoDto::fromJson(QJsonObject source) {DefaultDirectoryBrowserInfoDto instance;
-	instance->setFromJson(source, false);
+DefaultDirectoryBrowserInfoDto DefaultDirectoryBrowserInfoDto::fromJson(QJsonObject source) {
+	DefaultDirectoryBrowserInfoDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void DefaultDirectoryBrowserInfoDto::setFromJson(QJsonObject source) {
-	m_path = fromJsonValue<QString>(source["Path"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 
 }
 	
 QJsonObject DefaultDirectoryBrowserInfoDto::toJson() {
 	QJsonObject result;
-	result["Path"] = toJsonValue<QString>(m_path);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void DefaultDirectoryBrowserInfoDto::setPath(QString newPath) {
 	m_path = newPath;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using DefaultDirectoryBrowserInfoDto = Jellyfin::DTO::DefaultDirectoryBrowserInfoDto;
+
+template <>
+DefaultDirectoryBrowserInfoDto fromJsonValue<DefaultDirectoryBrowserInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DefaultDirectoryBrowserInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

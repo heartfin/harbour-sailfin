@@ -32,42 +32,43 @@
 namespace Jellyfin {
 namespace DTO {
 
-RemoteSubtitleInfo::RemoteSubtitleInfo(QObject *parent) {}
+RemoteSubtitleInfo::RemoteSubtitleInfo() {}
 
-RemoteSubtitleInfo RemoteSubtitleInfo::fromJson(QJsonObject source) {RemoteSubtitleInfo instance;
-	instance->setFromJson(source, false);
+RemoteSubtitleInfo RemoteSubtitleInfo::fromJson(QJsonObject source) {
+	RemoteSubtitleInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void RemoteSubtitleInfo::setFromJson(QJsonObject source) {
-	m_threeLetterISOLanguageName = fromJsonValue<QString>(source["ThreeLetterISOLanguageName"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_providerName = fromJsonValue<QString>(source["ProviderName"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_format = fromJsonValue<QString>(source["Format"]);
-	m_author = fromJsonValue<QString>(source["Author"]);
-	m_comment = fromJsonValue<QString>(source["Comment"]);
-	m_dateCreated = fromJsonValue<QDateTime>(source["DateCreated"]);
-	m_communityRating = fromJsonValue<float>(source["CommunityRating"]);
-	m_downloadCount = fromJsonValue<qint32>(source["DownloadCount"]);
-	m_isHashMatch = fromJsonValue<bool>(source["IsHashMatch"]);
+	m_threeLetterISOLanguageName = Jellyfin::Support::fromJsonValue<QString>(source["ThreeLetterISOLanguageName"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_providerName = Jellyfin::Support::fromJsonValue<QString>(source["ProviderName"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_format = Jellyfin::Support::fromJsonValue<QString>(source["Format"]);
+	m_author = Jellyfin::Support::fromJsonValue<QString>(source["Author"]);
+	m_comment = Jellyfin::Support::fromJsonValue<QString>(source["Comment"]);
+	m_dateCreated = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateCreated"]);
+	m_communityRating = Jellyfin::Support::fromJsonValue<float>(source["CommunityRating"]);
+	m_downloadCount = Jellyfin::Support::fromJsonValue<qint32>(source["DownloadCount"]);
+	m_isHashMatch = Jellyfin::Support::fromJsonValue<bool>(source["IsHashMatch"]);
 
 }
 	
 QJsonObject RemoteSubtitleInfo::toJson() {
 	QJsonObject result;
-	result["ThreeLetterISOLanguageName"] = toJsonValue<QString>(m_threeLetterISOLanguageName);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["ProviderName"] = toJsonValue<QString>(m_providerName);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Format"] = toJsonValue<QString>(m_format);
-	result["Author"] = toJsonValue<QString>(m_author);
-	result["Comment"] = toJsonValue<QString>(m_comment);
-	result["DateCreated"] = toJsonValue<QDateTime>(m_dateCreated);
-	result["CommunityRating"] = toJsonValue<float>(m_communityRating);
-	result["DownloadCount"] = toJsonValue<qint32>(m_downloadCount);
-	result["IsHashMatch"] = toJsonValue<bool>(m_isHashMatch);
+	result["ThreeLetterISOLanguageName"] = Jellyfin::Support::toJsonValue<QString>(m_threeLetterISOLanguageName);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
+	result["Author"] = Jellyfin::Support::toJsonValue<QString>(m_author);
+	result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
+	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
+	result["CommunityRating"] = Jellyfin::Support::toJsonValue<float>(m_communityRating);
+	result["DownloadCount"] = Jellyfin::Support::toJsonValue<qint32>(m_downloadCount);
+	result["IsHashMatch"] = Jellyfin::Support::toJsonValue<bool>(m_isHashMatch);
 
 	return result;
 }
@@ -128,6 +129,17 @@ void RemoteSubtitleInfo::setIsHashMatch(bool newIsHashMatch) {
 	m_isHashMatch = newIsHashMatch;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using RemoteSubtitleInfo = Jellyfin::DTO::RemoteSubtitleInfo;
+
+template <>
+RemoteSubtitleInfo fromJsonValue<RemoteSubtitleInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RemoteSubtitleInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -25,7 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QMetaEnum>
 #include <QJsonArray>
 #include <QJsonDocument>
-#include <QJsonObject>
+#include <QJsonValue>
 #include <QtQml>
 #include <QQmlParserStatus>
 #include <QVariant>
@@ -33,9 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "apiclient.h"
 #include "jsonhelper.h"
 
-#include "DTO/item.h"
-#include "DTO/user.h"
-#include "DTO/userdata.h"
+#include "DTO/baseitemdto.h"
+#include "DTO/userdto.h"
+#include "DTO/useritemdatadto.h"
 
 namespace Jellyfin {
 
@@ -306,7 +306,7 @@ private:
 /**
  * @brief List of the public users on the server.
  */
-class PublicUserModel : public ApiModel<User> {
+class PublicUserModel : public ApiModel<QJsonValue> {
 public:
     explicit PublicUserModel (QObject *parent = nullptr);
 };
@@ -316,7 +316,7 @@ public:
  *
  * Listens for updates in the library and updates the model accordingly.
  */
-class ItemModel : public ApiModel<Item> {
+class ItemModel : public ApiModel<QJsonValue> {
     Q_OBJECT
 public:
     explicit ItemModel (QString path, bool responseHasRecords, bool replaceUser, QObject *parent = nullptr);

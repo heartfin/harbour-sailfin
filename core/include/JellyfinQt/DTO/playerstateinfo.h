@@ -137,18 +137,6 @@ protected:
 	RepeatMode m_repeatMode;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PlayerStateInfo = Jellyfin::DTO::PlayerStateInfo;
-
-template <>
-PlayerStateInfo fromJsonValue<PlayerStateInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PlayerStateInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

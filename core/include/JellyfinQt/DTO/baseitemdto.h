@@ -1261,18 +1261,6 @@ protected:
 	QSharedPointer<BaseItemDto> m_currentProgram = nullptr;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using BaseItemDto = Jellyfin::DTO::BaseItemDto;
-
-template <>
-BaseItemDto fromJsonValue<BaseItemDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return BaseItemDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

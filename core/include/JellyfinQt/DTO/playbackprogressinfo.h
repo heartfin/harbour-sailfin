@@ -209,18 +209,6 @@ protected:
 	QString m_playlistItemId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PlaybackProgressInfo = Jellyfin::DTO::PlaybackProgressInfo;
-
-template <>
-PlaybackProgressInfo fromJsonValue<PlaybackProgressInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PlaybackProgressInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

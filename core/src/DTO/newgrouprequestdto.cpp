@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-NewGroupRequestDto::NewGroupRequestDto(QObject *parent) {}
+NewGroupRequestDto::NewGroupRequestDto() {}
 
-NewGroupRequestDto NewGroupRequestDto::fromJson(QJsonObject source) {NewGroupRequestDto instance;
-	instance->setFromJson(source, false);
+NewGroupRequestDto NewGroupRequestDto::fromJson(QJsonObject source) {
+	NewGroupRequestDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void NewGroupRequestDto::setFromJson(QJsonObject source) {
-	m_groupName = fromJsonValue<QString>(source["GroupName"]);
+	m_groupName = Jellyfin::Support::fromJsonValue<QString>(source["GroupName"]);
 
 }
 	
 QJsonObject NewGroupRequestDto::toJson() {
 	QJsonObject result;
-	result["GroupName"] = toJsonValue<QString>(m_groupName);
+	result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void NewGroupRequestDto::setGroupName(QString newGroupName) {
 	m_groupName = newGroupName;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using NewGroupRequestDto = Jellyfin::DTO::NewGroupRequestDto;
+
+template <>
+NewGroupRequestDto fromJsonValue<NewGroupRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NewGroupRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

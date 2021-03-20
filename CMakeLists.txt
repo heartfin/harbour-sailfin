@@ -25,3 +25,6 @@ if(PLATFORM_SAILFISHOS)
 elseif(PLATFORM_QTQUICK)
 	add_subdirectory(qtquick)
 endif()
+
+include(FeatureSummary)
+feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

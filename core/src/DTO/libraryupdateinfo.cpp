@@ -32,34 +32,35 @@
 namespace Jellyfin {
 namespace DTO {
 
-LibraryUpdateInfo::LibraryUpdateInfo(QObject *parent) {}
+LibraryUpdateInfo::LibraryUpdateInfo() {}
 
-LibraryUpdateInfo LibraryUpdateInfo::fromJson(QJsonObject source) {LibraryUpdateInfo instance;
-	instance->setFromJson(source, false);
+LibraryUpdateInfo LibraryUpdateInfo::fromJson(QJsonObject source) {
+	LibraryUpdateInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void LibraryUpdateInfo::setFromJson(QJsonObject source) {
-	m_foldersAddedTo = fromJsonValue<QStringList>(source["FoldersAddedTo"]);
-	m_foldersRemovedFrom = fromJsonValue<QStringList>(source["FoldersRemovedFrom"]);
-	m_itemsAdded = fromJsonValue<QStringList>(source["ItemsAdded"]);
-	m_itemsRemoved = fromJsonValue<QStringList>(source["ItemsRemoved"]);
-	m_itemsUpdated = fromJsonValue<QStringList>(source["ItemsUpdated"]);
-	m_collectionFolders = fromJsonValue<QStringList>(source["CollectionFolders"]);
-	m_isEmpty = fromJsonValue<bool>(source["IsEmpty"]);
+	m_foldersAddedTo = Jellyfin::Support::fromJsonValue<QStringList>(source["FoldersAddedTo"]);
+	m_foldersRemovedFrom = Jellyfin::Support::fromJsonValue<QStringList>(source["FoldersRemovedFrom"]);
+	m_itemsAdded = Jellyfin::Support::fromJsonValue<QStringList>(source["ItemsAdded"]);
+	m_itemsRemoved = Jellyfin::Support::fromJsonValue<QStringList>(source["ItemsRemoved"]);
+	m_itemsUpdated = Jellyfin::Support::fromJsonValue<QStringList>(source["ItemsUpdated"]);
+	m_collectionFolders = Jellyfin::Support::fromJsonValue<QStringList>(source["CollectionFolders"]);
+	m_isEmpty = Jellyfin::Support::fromJsonValue<bool>(source["IsEmpty"]);
 
 }
 	
 QJsonObject LibraryUpdateInfo::toJson() {
 	QJsonObject result;
-	result["FoldersAddedTo"] = toJsonValue<QStringList>(m_foldersAddedTo);
-	result["FoldersRemovedFrom"] = toJsonValue<QStringList>(m_foldersRemovedFrom);
-	result["ItemsAdded"] = toJsonValue<QStringList>(m_itemsAdded);
-	result["ItemsRemoved"] = toJsonValue<QStringList>(m_itemsRemoved);
-	result["ItemsUpdated"] = toJsonValue<QStringList>(m_itemsUpdated);
-	result["CollectionFolders"] = toJsonValue<QStringList>(m_collectionFolders);
-	result["IsEmpty"] = toJsonValue<bool>(m_isEmpty);
+	result["FoldersAddedTo"] = Jellyfin::Support::toJsonValue<QStringList>(m_foldersAddedTo);
+	result["FoldersRemovedFrom"] = Jellyfin::Support::toJsonValue<QStringList>(m_foldersRemovedFrom);
+	result["ItemsAdded"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemsAdded);
+	result["ItemsRemoved"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemsRemoved);
+	result["ItemsUpdated"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemsUpdated);
+	result["CollectionFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_collectionFolders);
+	result["IsEmpty"] = Jellyfin::Support::toJsonValue<bool>(m_isEmpty);
 
 	return result;
 }
@@ -100,6 +101,17 @@ void LibraryUpdateInfo::setIsEmpty(bool newIsEmpty) {
 	m_isEmpty = newIsEmpty;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using LibraryUpdateInfo = Jellyfin::DTO::LibraryUpdateInfo;
+
+template <>
+LibraryUpdateInfo fromJsonValue<LibraryUpdateInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LibraryUpdateInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

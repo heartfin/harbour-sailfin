@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-QueryFiltersLegacy::QueryFiltersLegacy(QObject *parent) {}
+QueryFiltersLegacy::QueryFiltersLegacy() {}
 
-QueryFiltersLegacy QueryFiltersLegacy::fromJson(QJsonObject source) {QueryFiltersLegacy instance;
-	instance->setFromJson(source, false);
+QueryFiltersLegacy QueryFiltersLegacy::fromJson(QJsonObject source) {
+	QueryFiltersLegacy instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void QueryFiltersLegacy::setFromJson(QJsonObject source) {
-	m_genres = fromJsonValue<QStringList>(source["Genres"]);
-	m_tags = fromJsonValue<QStringList>(source["Tags"]);
-	m_officialRatings = fromJsonValue<QStringList>(source["OfficialRatings"]);
-	m_years = fromJsonValue<QList<qint32>>(source["Years"]);
+	m_genres = Jellyfin::Support::fromJsonValue<QStringList>(source["Genres"]);
+	m_tags = Jellyfin::Support::fromJsonValue<QStringList>(source["Tags"]);
+	m_officialRatings = Jellyfin::Support::fromJsonValue<QStringList>(source["OfficialRatings"]);
+	m_years = Jellyfin::Support::fromJsonValue<QList<qint32>>(source["Years"]);
 
 }
 	
 QJsonObject QueryFiltersLegacy::toJson() {
 	QJsonObject result;
-	result["Genres"] = toJsonValue<QStringList>(m_genres);
-	result["Tags"] = toJsonValue<QStringList>(m_tags);
-	result["OfficialRatings"] = toJsonValue<QStringList>(m_officialRatings);
-	result["Years"] = toJsonValue<QList<qint32>>(m_years);
+	result["Genres"] = Jellyfin::Support::toJsonValue<QStringList>(m_genres);
+	result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
+	result["OfficialRatings"] = Jellyfin::Support::toJsonValue<QStringList>(m_officialRatings);
+	result["Years"] = Jellyfin::Support::toJsonValue<QList<qint32>>(m_years);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void QueryFiltersLegacy::setYears(QList<qint32> newYears) {
 	m_years = newYears;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using QueryFiltersLegacy = Jellyfin::DTO::QueryFiltersLegacy;
+
+template <>
+QueryFiltersLegacy fromJsonValue<QueryFiltersLegacy>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QueryFiltersLegacy::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

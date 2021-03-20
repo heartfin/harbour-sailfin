@@ -32,32 +32,33 @@
 namespace Jellyfin {
 namespace DTO {
 
-Version::Version(QObject *parent) {}
+Version::Version() {}
 
-Version Version::fromJson(QJsonObject source) {Version instance;
-	instance->setFromJson(source, false);
+Version Version::fromJson(QJsonObject source) {
+	Version instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void Version::setFromJson(QJsonObject source) {
-	m_major = fromJsonValue<qint32>(source["Major"]);
-	m_minor = fromJsonValue<qint32>(source["Minor"]);
-	m_build = fromJsonValue<qint32>(source["Build"]);
-	m_revision = fromJsonValue<qint32>(source["Revision"]);
-	m_majorRevision = fromJsonValue<qint32>(source["MajorRevision"]);
-	m_minorRevision = fromJsonValue<qint32>(source["MinorRevision"]);
+	m_major = Jellyfin::Support::fromJsonValue<qint32>(source["Major"]);
+	m_minor = Jellyfin::Support::fromJsonValue<qint32>(source["Minor"]);
+	m_build = Jellyfin::Support::fromJsonValue<qint32>(source["Build"]);
+	m_revision = Jellyfin::Support::fromJsonValue<qint32>(source["Revision"]);
+	m_majorRevision = Jellyfin::Support::fromJsonValue<qint32>(source["MajorRevision"]);
+	m_minorRevision = Jellyfin::Support::fromJsonValue<qint32>(source["MinorRevision"]);
 
 }
 	
 QJsonObject Version::toJson() {
 	QJsonObject result;
-	result["Major"] = toJsonValue<qint32>(m_major);
-	result["Minor"] = toJsonValue<qint32>(m_minor);
-	result["Build"] = toJsonValue<qint32>(m_build);
-	result["Revision"] = toJsonValue<qint32>(m_revision);
-	result["MajorRevision"] = toJsonValue<qint32>(m_majorRevision);
-	result["MinorRevision"] = toJsonValue<qint32>(m_minorRevision);
+	result["Major"] = Jellyfin::Support::toJsonValue<qint32>(m_major);
+	result["Minor"] = Jellyfin::Support::toJsonValue<qint32>(m_minor);
+	result["Build"] = Jellyfin::Support::toJsonValue<qint32>(m_build);
+	result["Revision"] = Jellyfin::Support::toJsonValue<qint32>(m_revision);
+	result["MajorRevision"] = Jellyfin::Support::toJsonValue<qint32>(m_majorRevision);
+	result["MinorRevision"] = Jellyfin::Support::toJsonValue<qint32>(m_minorRevision);
 
 	return result;
 }
@@ -93,6 +94,17 @@ void Version::setMinorRevision(qint32 newMinorRevision) {
 	m_minorRevision = newMinorRevision;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using Version = Jellyfin::DTO::Version;
+
+template <>
+Version fromJsonValue<Version>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return Version::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

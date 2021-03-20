@@ -78,18 +78,6 @@ protected:
 	QSharedPointer<MediaPathInfo> m_pathInfo = nullptr;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MediaPathDto = Jellyfin::DTO::MediaPathDto;
-
-template <>
-MediaPathDto fromJsonValue<MediaPathDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MediaPathDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

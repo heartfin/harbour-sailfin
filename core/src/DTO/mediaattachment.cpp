@@ -32,34 +32,35 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaAttachment::MediaAttachment(QObject *parent) {}
+MediaAttachment::MediaAttachment() {}
 
-MediaAttachment MediaAttachment::fromJson(QJsonObject source) {MediaAttachment instance;
-	instance->setFromJson(source, false);
+MediaAttachment MediaAttachment::fromJson(QJsonObject source) {
+	MediaAttachment instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MediaAttachment::setFromJson(QJsonObject source) {
-	m_codec = fromJsonValue<QString>(source["Codec"]);
-	m_codecTag = fromJsonValue<QString>(source["CodecTag"]);
-	m_comment = fromJsonValue<QString>(source["Comment"]);
-	m_index = fromJsonValue<qint32>(source["Index"]);
-	m_fileName = fromJsonValue<QString>(source["FileName"]);
-	m_mimeType = fromJsonValue<QString>(source["MimeType"]);
-	m_deliveryUrl = fromJsonValue<QString>(source["DeliveryUrl"]);
+	m_codec = Jellyfin::Support::fromJsonValue<QString>(source["Codec"]);
+	m_codecTag = Jellyfin::Support::fromJsonValue<QString>(source["CodecTag"]);
+	m_comment = Jellyfin::Support::fromJsonValue<QString>(source["Comment"]);
+	m_index = Jellyfin::Support::fromJsonValue<qint32>(source["Index"]);
+	m_fileName = Jellyfin::Support::fromJsonValue<QString>(source["FileName"]);
+	m_mimeType = Jellyfin::Support::fromJsonValue<QString>(source["MimeType"]);
+	m_deliveryUrl = Jellyfin::Support::fromJsonValue<QString>(source["DeliveryUrl"]);
 
 }
 	
 QJsonObject MediaAttachment::toJson() {
 	QJsonObject result;
-	result["Codec"] = toJsonValue<QString>(m_codec);
-	result["CodecTag"] = toJsonValue<QString>(m_codecTag);
-	result["Comment"] = toJsonValue<QString>(m_comment);
-	result["Index"] = toJsonValue<qint32>(m_index);
-	result["FileName"] = toJsonValue<QString>(m_fileName);
-	result["MimeType"] = toJsonValue<QString>(m_mimeType);
-	result["DeliveryUrl"] = toJsonValue<QString>(m_deliveryUrl);
+	result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
+	result["CodecTag"] = Jellyfin::Support::toJsonValue<QString>(m_codecTag);
+	result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
+	result["Index"] = Jellyfin::Support::toJsonValue<qint32>(m_index);
+	result["FileName"] = Jellyfin::Support::toJsonValue<QString>(m_fileName);
+	result["MimeType"] = Jellyfin::Support::toJsonValue<QString>(m_mimeType);
+	result["DeliveryUrl"] = Jellyfin::Support::toJsonValue<QString>(m_deliveryUrl);
 
 	return result;
 }
@@ -100,6 +101,17 @@ void MediaAttachment::setDeliveryUrl(QString newDeliveryUrl) {
 	m_deliveryUrl = newDeliveryUrl;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MediaAttachment = Jellyfin::DTO::MediaAttachment;
+
+template <>
+MediaAttachment fromJsonValue<MediaAttachment>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaAttachment::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

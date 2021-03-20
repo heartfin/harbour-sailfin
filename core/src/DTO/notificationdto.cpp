@@ -32,36 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-NotificationDto::NotificationDto(QObject *parent) {}
+NotificationDto::NotificationDto() {}
 
-NotificationDto NotificationDto::fromJson(QJsonObject source) {NotificationDto instance;
-	instance->setFromJson(source, false);
+NotificationDto NotificationDto::fromJson(QJsonObject source) {
+	NotificationDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void NotificationDto::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_userId = fromJsonValue<QString>(source["UserId"]);
-	m_date = fromJsonValue<QDateTime>(source["Date"]);
-	m_isRead = fromJsonValue<bool>(source["IsRead"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_description = fromJsonValue<QString>(source["Description"]);
-	m_url = fromJsonValue<QString>(source["Url"]);
-	m_level = fromJsonValue<NotificationLevel>(source["Level"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QString>(source["UserId"]);
+	m_date = Jellyfin::Support::fromJsonValue<QDateTime>(source["Date"]);
+	m_isRead = Jellyfin::Support::fromJsonValue<bool>(source["IsRead"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_description = Jellyfin::Support::fromJsonValue<QString>(source["Description"]);
+	m_url = Jellyfin::Support::fromJsonValue<QString>(source["Url"]);
+	m_level = Jellyfin::Support::fromJsonValue<NotificationLevel>(source["Level"]);
 
 }
 	
 QJsonObject NotificationDto::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["UserId"] = toJsonValue<QString>(m_userId);
-	result["Date"] = toJsonValue<QDateTime>(m_date);
-	result["IsRead"] = toJsonValue<bool>(m_isRead);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Description"] = toJsonValue<QString>(m_description);
-	result["Url"] = toJsonValue<QString>(m_url);
-	result["Level"] = toJsonValue<NotificationLevel>(m_level);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
+	result["Date"] = Jellyfin::Support::toJsonValue<QDateTime>(m_date);
+	result["IsRead"] = Jellyfin::Support::toJsonValue<bool>(m_isRead);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
+	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	result["Level"] = Jellyfin::Support::toJsonValue<NotificationLevel>(m_level);
 
 	return result;
 }
@@ -107,6 +108,17 @@ void NotificationDto::setLevel(NotificationLevel newLevel) {
 	m_level = newLevel;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using NotificationDto = Jellyfin::DTO::NotificationDto;
+
+template <>
+NotificationDto fromJsonValue<NotificationDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NotificationDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

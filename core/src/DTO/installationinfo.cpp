@@ -32,32 +32,33 @@
 namespace Jellyfin {
 namespace DTO {
 
-InstallationInfo::InstallationInfo(QObject *parent) {}
+InstallationInfo::InstallationInfo() {}
 
-InstallationInfo InstallationInfo::fromJson(QJsonObject source) {InstallationInfo instance;
-	instance->setFromJson(source, false);
+InstallationInfo InstallationInfo::fromJson(QJsonObject source) {
+	InstallationInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void InstallationInfo::setFromJson(QJsonObject source) {
-	m_guid = fromJsonValue<QUuid>(source["Guid"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_version = fromJsonValue<QSharedPointer<Version>>(source["Version"]);
-	m_changelog = fromJsonValue<QString>(source["Changelog"]);
-	m_sourceUrl = fromJsonValue<QString>(source["SourceUrl"]);
-	m_checksum = fromJsonValue<QString>(source["Checksum"]);
+	m_guid = Jellyfin::Support::fromJsonValue<QUuid>(source["Guid"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_version = Jellyfin::Support::fromJsonValue<QSharedPointer<Version>>(source["Version"]);
+	m_changelog = Jellyfin::Support::fromJsonValue<QString>(source["Changelog"]);
+	m_sourceUrl = Jellyfin::Support::fromJsonValue<QString>(source["SourceUrl"]);
+	m_checksum = Jellyfin::Support::fromJsonValue<QString>(source["Checksum"]);
 
 }
 	
 QJsonObject InstallationInfo::toJson() {
 	QJsonObject result;
-	result["Guid"] = toJsonValue<QUuid>(m_guid);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Version"] = toJsonValue<QSharedPointer<Version>>(m_version);
-	result["Changelog"] = toJsonValue<QString>(m_changelog);
-	result["SourceUrl"] = toJsonValue<QString>(m_sourceUrl);
-	result["Checksum"] = toJsonValue<QString>(m_checksum);
+	result["Guid"] = Jellyfin::Support::toJsonValue<QUuid>(m_guid);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);
+	result["Changelog"] = Jellyfin::Support::toJsonValue<QString>(m_changelog);
+	result["SourceUrl"] = Jellyfin::Support::toJsonValue<QString>(m_sourceUrl);
+	result["Checksum"] = Jellyfin::Support::toJsonValue<QString>(m_checksum);
 
 	return result;
 }
@@ -93,6 +94,17 @@ void InstallationInfo::setChecksum(QString newChecksum) {
 	m_checksum = newChecksum;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using InstallationInfo = Jellyfin::DTO::InstallationInfo;
+
+template <>
+InstallationInfo fromJsonValue<InstallationInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return InstallationInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

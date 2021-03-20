@@ -54,28 +54,6 @@ private:
 
 typedef RatingTypeClass::Value RatingType;
 
-} // NS DTO
-
-namespace Support {
-
-using RatingType = Jellyfin::DTO::RatingType;
-using RatingTypeClass = Jellyfin::DTO::RatingTypeClass;
-
-template <>
-RatingType fromJsonValue<RatingType>(const QJsonValue &source) {
-	if (!source.isString()) return RatingTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Score")) {
-		return RatingTypeClass::Score;
-	}
-	if (str == QStringLiteral("Likes")) {
-		return RatingTypeClass::Likes;
-	}
-	
-	return RatingTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -120,18 +120,6 @@ protected:
 	QStringList m_tuners;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using LiveTvServiceInfo = Jellyfin::DTO::LiveTvServiceInfo;
-
-template <>
-LiveTvServiceInfo fromJsonValue<LiveTvServiceInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return LiveTvServiceInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

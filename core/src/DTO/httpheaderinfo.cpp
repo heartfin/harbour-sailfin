@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-HttpHeaderInfo::HttpHeaderInfo(QObject *parent) {}
+HttpHeaderInfo::HttpHeaderInfo() {}
 
-HttpHeaderInfo HttpHeaderInfo::fromJson(QJsonObject source) {HttpHeaderInfo instance;
-	instance->setFromJson(source, false);
+HttpHeaderInfo HttpHeaderInfo::fromJson(QJsonObject source) {
+	HttpHeaderInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void HttpHeaderInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_value = fromJsonValue<QString>(source["Value"]);
-	m_match = fromJsonValue<HeaderMatchType>(source["Match"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_value = Jellyfin::Support::fromJsonValue<QString>(source["Value"]);
+	m_match = Jellyfin::Support::fromJsonValue<HeaderMatchType>(source["Match"]);
 
 }
 	
 QJsonObject HttpHeaderInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Value"] = toJsonValue<QString>(m_value);
-	result["Match"] = toJsonValue<HeaderMatchType>(m_match);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
+	result["Match"] = Jellyfin::Support::toJsonValue<HeaderMatchType>(m_match);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void HttpHeaderInfo::setMatch(HeaderMatchType newMatch) {
 	m_match = newMatch;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using HttpHeaderInfo = Jellyfin::DTO::HttpHeaderInfo;
+
+template <>
+HttpHeaderInfo fromJsonValue<HttpHeaderInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return HttpHeaderInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

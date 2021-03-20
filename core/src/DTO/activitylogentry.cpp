@@ -32,40 +32,41 @@
 namespace Jellyfin {
 namespace DTO {
 
-ActivityLogEntry::ActivityLogEntry(QObject *parent) {}
+ActivityLogEntry::ActivityLogEntry() {}
 
-ActivityLogEntry ActivityLogEntry::fromJson(QJsonObject source) {ActivityLogEntry instance;
-	instance->setFromJson(source, false);
+ActivityLogEntry ActivityLogEntry::fromJson(QJsonObject source) {
+	ActivityLogEntry instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ActivityLogEntry::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<qint64>(source["Id"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_overview = fromJsonValue<QString>(source["Overview"]);
-	m_shortOverview = fromJsonValue<QString>(source["ShortOverview"]);
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_itemId = fromJsonValue<QString>(source["ItemId"]);
-	m_date = fromJsonValue<QDateTime>(source["Date"]);
-	m_userId = fromJsonValue<QUuid>(source["UserId"]);
-	m_userPrimaryImageTag = fromJsonValue<QString>(source["UserPrimaryImageTag"]);
-	m_severity = fromJsonValue<LogLevel>(source["Severity"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<qint64>(source["Id"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_overview = Jellyfin::Support::fromJsonValue<QString>(source["Overview"]);
+	m_shortOverview = Jellyfin::Support::fromJsonValue<QString>(source["ShortOverview"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_itemId = Jellyfin::Support::fromJsonValue<QString>(source["ItemId"]);
+	m_date = Jellyfin::Support::fromJsonValue<QDateTime>(source["Date"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QUuid>(source["UserId"]);
+	m_userPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["UserPrimaryImageTag"]);
+	m_severity = Jellyfin::Support::fromJsonValue<LogLevel>(source["Severity"]);
 
 }
 	
 QJsonObject ActivityLogEntry::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<qint64>(m_jellyfinId);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Overview"] = toJsonValue<QString>(m_overview);
-	result["ShortOverview"] = toJsonValue<QString>(m_shortOverview);
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["ItemId"] = toJsonValue<QString>(m_itemId);
-	result["Date"] = toJsonValue<QDateTime>(m_date);
-	result["UserId"] = toJsonValue<QUuid>(m_userId);
-	result["UserPrimaryImageTag"] = toJsonValue<QString>(m_userPrimaryImageTag);
-	result["Severity"] = toJsonValue<LogLevel>(m_severity);
+	result["Id"] = Jellyfin::Support::toJsonValue<qint64>(m_jellyfinId);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	result["ShortOverview"] = Jellyfin::Support::toJsonValue<QString>(m_shortOverview);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
+	result["Date"] = Jellyfin::Support::toJsonValue<QDateTime>(m_date);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_userId);
+	result["UserPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_userPrimaryImageTag);
+	result["Severity"] = Jellyfin::Support::toJsonValue<LogLevel>(m_severity);
 
 	return result;
 }
@@ -121,6 +122,17 @@ void ActivityLogEntry::setSeverity(LogLevel newSeverity) {
 	m_severity = newSeverity;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ActivityLogEntry = Jellyfin::DTO::ActivityLogEntry;
+
+template <>
+ActivityLogEntry fromJsonValue<ActivityLogEntry>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ActivityLogEntry::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

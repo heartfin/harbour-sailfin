@@ -278,18 +278,6 @@ protected:
 	qint32 m_defaultSubtitleStreamIndex;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MediaSourceInfo = Jellyfin::DTO::MediaSourceInfo;
-
-template <>
-MediaSourceInfo fromJsonValue<MediaSourceInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MediaSourceInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -55,31 +55,6 @@ private:
 
 typedef CodecTypeClass::Value CodecType;
 
-} // NS DTO
-
-namespace Support {
-
-using CodecType = Jellyfin::DTO::CodecType;
-using CodecTypeClass = Jellyfin::DTO::CodecTypeClass;
-
-template <>
-CodecType fromJsonValue<CodecType>(const QJsonValue &source) {
-	if (!source.isString()) return CodecTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Video")) {
-		return CodecTypeClass::Video;
-	}
-	if (str == QStringLiteral("VideoAudio")) {
-		return CodecTypeClass::VideoAudio;
-	}
-	if (str == QStringLiteral("Audio")) {
-		return CodecTypeClass::Audio;
-	}
-	
-	return CodecTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

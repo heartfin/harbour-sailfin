@@ -34,5 +34,33 @@ namespace DTO {
 
 SubtitleDeliveryMethodClass::SubtitleDeliveryMethodClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using SubtitleDeliveryMethod = Jellyfin::DTO::SubtitleDeliveryMethod;
+
+template <>
+SubtitleDeliveryMethod fromJsonValue<SubtitleDeliveryMethod>(const QJsonValue &source) {
+	if (!source.isString()) return SubtitleDeliveryMethod::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Encode")) {
+		return SubtitleDeliveryMethod::Encode;
+	}
+	if (str == QStringLiteral("Embed")) {
+		return SubtitleDeliveryMethod::Embed;
+	}
+	if (str == QStringLiteral("External")) {
+		return SubtitleDeliveryMethod::External;
+	}
+	if (str == QStringLiteral("Hls")) {
+		return SubtitleDeliveryMethod::Hls;
+	}
+	
+	return SubtitleDeliveryMethod::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

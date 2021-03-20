@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QtQml>
 
 // #include "DTO/dto.h"
-#include "DTO/item.h"
+#include "model/item.h"
 #include "DTO/mediastream.h"
 #include "DTO/nameguidpair.h"
 #include "DTO/userdto.h"

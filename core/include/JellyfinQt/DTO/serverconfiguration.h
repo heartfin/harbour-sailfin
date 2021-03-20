@@ -745,18 +745,6 @@ protected:
 	bool m_disablePluginImages;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ServerConfiguration = Jellyfin::DTO::ServerConfiguration;
-
-template <>
-ServerConfiguration fromJsonValue<ServerConfiguration>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ServerConfiguration::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

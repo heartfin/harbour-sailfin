@@ -32,34 +32,35 @@
 namespace Jellyfin {
 namespace DTO {
 
-MetadataOptions::MetadataOptions(QObject *parent) {}
+MetadataOptions::MetadataOptions() {}
 
-MetadataOptions MetadataOptions::fromJson(QJsonObject source) {MetadataOptions instance;
-	instance->setFromJson(source, false);
+MetadataOptions MetadataOptions::fromJson(QJsonObject source) {
+	MetadataOptions instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MetadataOptions::setFromJson(QJsonObject source) {
-	m_itemType = fromJsonValue<QString>(source["ItemType"]);
-	m_disabledMetadataSavers = fromJsonValue<QStringList>(source["DisabledMetadataSavers"]);
-	m_localMetadataReaderOrder = fromJsonValue<QStringList>(source["LocalMetadataReaderOrder"]);
-	m_disabledMetadataFetchers = fromJsonValue<QStringList>(source["DisabledMetadataFetchers"]);
-	m_metadataFetcherOrder = fromJsonValue<QStringList>(source["MetadataFetcherOrder"]);
-	m_disabledImageFetchers = fromJsonValue<QStringList>(source["DisabledImageFetchers"]);
-	m_imageFetcherOrder = fromJsonValue<QStringList>(source["ImageFetcherOrder"]);
+	m_itemType = Jellyfin::Support::fromJsonValue<QString>(source["ItemType"]);
+	m_disabledMetadataSavers = Jellyfin::Support::fromJsonValue<QStringList>(source["DisabledMetadataSavers"]);
+	m_localMetadataReaderOrder = Jellyfin::Support::fromJsonValue<QStringList>(source["LocalMetadataReaderOrder"]);
+	m_disabledMetadataFetchers = Jellyfin::Support::fromJsonValue<QStringList>(source["DisabledMetadataFetchers"]);
+	m_metadataFetcherOrder = Jellyfin::Support::fromJsonValue<QStringList>(source["MetadataFetcherOrder"]);
+	m_disabledImageFetchers = Jellyfin::Support::fromJsonValue<QStringList>(source["DisabledImageFetchers"]);
+	m_imageFetcherOrder = Jellyfin::Support::fromJsonValue<QStringList>(source["ImageFetcherOrder"]);
 
 }
 	
 QJsonObject MetadataOptions::toJson() {
 	QJsonObject result;
-	result["ItemType"] = toJsonValue<QString>(m_itemType);
-	result["DisabledMetadataSavers"] = toJsonValue<QStringList>(m_disabledMetadataSavers);
-	result["LocalMetadataReaderOrder"] = toJsonValue<QStringList>(m_localMetadataReaderOrder);
-	result["DisabledMetadataFetchers"] = toJsonValue<QStringList>(m_disabledMetadataFetchers);
-	result["MetadataFetcherOrder"] = toJsonValue<QStringList>(m_metadataFetcherOrder);
-	result["DisabledImageFetchers"] = toJsonValue<QStringList>(m_disabledImageFetchers);
-	result["ImageFetcherOrder"] = toJsonValue<QStringList>(m_imageFetcherOrder);
+	result["ItemType"] = Jellyfin::Support::toJsonValue<QString>(m_itemType);
+	result["DisabledMetadataSavers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledMetadataSavers);
+	result["LocalMetadataReaderOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_localMetadataReaderOrder);
+	result["DisabledMetadataFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledMetadataFetchers);
+	result["MetadataFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetcherOrder);
+	result["DisabledImageFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledImageFetchers);
+	result["ImageFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetcherOrder);
 
 	return result;
 }
@@ -100,6 +101,17 @@ void MetadataOptions::setImageFetcherOrder(QStringList newImageFetcherOrder) {
 	m_imageFetcherOrder = newImageFetcherOrder;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MetadataOptions = Jellyfin::DTO::MetadataOptions;
+
+template <>
+MetadataOptions fromJsonValue<MetadataOptions>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MetadataOptions::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

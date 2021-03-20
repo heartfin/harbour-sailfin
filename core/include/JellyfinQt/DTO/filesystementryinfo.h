@@ -77,18 +77,6 @@ protected:
 	FileSystemEntryType m_type;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using FileSystemEntryInfo = Jellyfin::DTO::FileSystemEntryInfo;
-
-template <>
-FileSystemEntryInfo fromJsonValue<FileSystemEntryInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return FileSystemEntryInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

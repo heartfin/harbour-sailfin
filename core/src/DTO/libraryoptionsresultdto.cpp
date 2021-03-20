@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-LibraryOptionsResultDto::LibraryOptionsResultDto(QObject *parent) {}
+LibraryOptionsResultDto::LibraryOptionsResultDto() {}
 
-LibraryOptionsResultDto LibraryOptionsResultDto::fromJson(QJsonObject source) {LibraryOptionsResultDto instance;
-	instance->setFromJson(source, false);
+LibraryOptionsResultDto LibraryOptionsResultDto::fromJson(QJsonObject source) {
+	LibraryOptionsResultDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void LibraryOptionsResultDto::setFromJson(QJsonObject source) {
-	m_metadataSavers = fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["MetadataSavers"]);
-	m_metadataReaders = fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["MetadataReaders"]);
-	m_subtitleFetchers = fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["SubtitleFetchers"]);
-	m_typeOptions = fromJsonValue<QList<QSharedPointer<LibraryTypeOptionsDto>>>(source["TypeOptions"]);
+	m_metadataSavers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["MetadataSavers"]);
+	m_metadataReaders = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["MetadataReaders"]);
+	m_subtitleFetchers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(source["SubtitleFetchers"]);
+	m_typeOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<LibraryTypeOptionsDto>>>(source["TypeOptions"]);
 
 }
 	
 QJsonObject LibraryOptionsResultDto::toJson() {
 	QJsonObject result;
-	result["MetadataSavers"] = toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_metadataSavers);
-	result["MetadataReaders"] = toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_metadataReaders);
-	result["SubtitleFetchers"] = toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_subtitleFetchers);
-	result["TypeOptions"] = toJsonValue<QList<QSharedPointer<LibraryTypeOptionsDto>>>(m_typeOptions);
+	result["MetadataSavers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_metadataSavers);
+	result["MetadataReaders"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_metadataReaders);
+	result["SubtitleFetchers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<LibraryOptionInfoDto>>>(m_subtitleFetchers);
+	result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<LibraryTypeOptionsDto>>>(m_typeOptions);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void LibraryOptionsResultDto::setTypeOptions(QList<QSharedPointer<LibraryTypeOpt
 	m_typeOptions = newTypeOptions;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using LibraryOptionsResultDto = Jellyfin::DTO::LibraryOptionsResultDto;
+
+template <>
+LibraryOptionsResultDto fromJsonValue<LibraryOptionsResultDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LibraryOptionsResultDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -61,49 +61,6 @@ private:
 
 typedef UnratedItemClass::Value UnratedItem;
 
-} // NS DTO
-
-namespace Support {
-
-using UnratedItem = Jellyfin::DTO::UnratedItem;
-using UnratedItemClass = Jellyfin::DTO::UnratedItemClass;
-
-template <>
-UnratedItem fromJsonValue<UnratedItem>(const QJsonValue &source) {
-	if (!source.isString()) return UnratedItemClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Movie")) {
-		return UnratedItemClass::Movie;
-	}
-	if (str == QStringLiteral("Trailer")) {
-		return UnratedItemClass::Trailer;
-	}
-	if (str == QStringLiteral("Series")) {
-		return UnratedItemClass::Series;
-	}
-	if (str == QStringLiteral("Music")) {
-		return UnratedItemClass::Music;
-	}
-	if (str == QStringLiteral("Book")) {
-		return UnratedItemClass::Book;
-	}
-	if (str == QStringLiteral("LiveTvChannel")) {
-		return UnratedItemClass::LiveTvChannel;
-	}
-	if (str == QStringLiteral("LiveTvProgram")) {
-		return UnratedItemClass::LiveTvProgram;
-	}
-	if (str == QStringLiteral("ChannelContent")) {
-		return UnratedItemClass::ChannelContent;
-	}
-	if (str == QStringLiteral("Other")) {
-		return UnratedItemClass::Other;
-	}
-	
-	return UnratedItemClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

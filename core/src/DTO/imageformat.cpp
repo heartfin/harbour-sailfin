@@ -34,5 +34,36 @@ namespace DTO {
 
 ImageFormatClass::ImageFormatClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ImageFormat = Jellyfin::DTO::ImageFormat;
+
+template <>
+ImageFormat fromJsonValue<ImageFormat>(const QJsonValue &source) {
+	if (!source.isString()) return ImageFormat::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Bmp")) {
+		return ImageFormat::Bmp;
+	}
+	if (str == QStringLiteral("Gif")) {
+		return ImageFormat::Gif;
+	}
+	if (str == QStringLiteral("Jpg")) {
+		return ImageFormat::Jpg;
+	}
+	if (str == QStringLiteral("Png")) {
+		return ImageFormat::Png;
+	}
+	if (str == QStringLiteral("Webp")) {
+		return ImageFormat::Webp;
+	}
+	
+	return ImageFormat::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

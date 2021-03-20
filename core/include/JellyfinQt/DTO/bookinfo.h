@@ -133,18 +133,6 @@ protected:
 	QString m_seriesName;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using BookInfo = Jellyfin::DTO::BookInfo;
-
-template <>
-BookInfo fromJsonValue<BookInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return BookInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

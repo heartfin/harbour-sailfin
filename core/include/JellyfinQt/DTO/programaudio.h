@@ -58,40 +58,6 @@ private:
 
 typedef ProgramAudioClass::Value ProgramAudio;
 
-} // NS DTO
-
-namespace Support {
-
-using ProgramAudio = Jellyfin::DTO::ProgramAudio;
-using ProgramAudioClass = Jellyfin::DTO::ProgramAudioClass;
-
-template <>
-ProgramAudio fromJsonValue<ProgramAudio>(const QJsonValue &source) {
-	if (!source.isString()) return ProgramAudioClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Mono")) {
-		return ProgramAudioClass::Mono;
-	}
-	if (str == QStringLiteral("Stereo")) {
-		return ProgramAudioClass::Stereo;
-	}
-	if (str == QStringLiteral("Dolby")) {
-		return ProgramAudioClass::Dolby;
-	}
-	if (str == QStringLiteral("DolbyDigital")) {
-		return ProgramAudioClass::DolbyDigital;
-	}
-	if (str == QStringLiteral("Thx")) {
-		return ProgramAudioClass::Thx;
-	}
-	if (str == QStringLiteral("Atmos")) {
-		return ProgramAudioClass::Atmos;
-	}
-	
-	return ProgramAudioClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

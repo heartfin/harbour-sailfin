@@ -71,18 +71,6 @@ protected:
 	qint32 m_value;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ParentalRating = Jellyfin::DTO::ParentalRating;
-
-template <>
-ParentalRating fromJsonValue<ParentalRating>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ParentalRating::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

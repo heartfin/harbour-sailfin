@@ -59,43 +59,6 @@ private:
 
 typedef DayOfWeekClass::Value DayOfWeek;
 
-} // NS DTO
-
-namespace Support {
-
-using DayOfWeek = Jellyfin::DTO::DayOfWeek;
-using DayOfWeekClass = Jellyfin::DTO::DayOfWeekClass;
-
-template <>
-DayOfWeek fromJsonValue<DayOfWeek>(const QJsonValue &source) {
-	if (!source.isString()) return DayOfWeekClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Sunday")) {
-		return DayOfWeekClass::Sunday;
-	}
-	if (str == QStringLiteral("Monday")) {
-		return DayOfWeekClass::Monday;
-	}
-	if (str == QStringLiteral("Tuesday")) {
-		return DayOfWeekClass::Tuesday;
-	}
-	if (str == QStringLiteral("Wednesday")) {
-		return DayOfWeekClass::Wednesday;
-	}
-	if (str == QStringLiteral("Thursday")) {
-		return DayOfWeekClass::Thursday;
-	}
-	if (str == QStringLiteral("Friday")) {
-		return DayOfWeekClass::Friday;
-	}
-	if (str == QStringLiteral("Saturday")) {
-		return DayOfWeekClass::Saturday;
-	}
-	
-	return DayOfWeekClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

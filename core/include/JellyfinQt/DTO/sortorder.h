@@ -54,28 +54,6 @@ private:
 
 typedef SortOrderClass::Value SortOrder;
 
-} // NS DTO
-
-namespace Support {
-
-using SortOrder = Jellyfin::DTO::SortOrder;
-using SortOrderClass = Jellyfin::DTO::SortOrderClass;
-
-template <>
-SortOrder fromJsonValue<SortOrder>(const QJsonValue &source) {
-	if (!source.isString()) return SortOrderClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Ascending")) {
-		return SortOrderClass::Ascending;
-	}
-	if (str == QStringLiteral("Descending")) {
-		return SortOrderClass::Descending;
-	}
-	
-	return SortOrderClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

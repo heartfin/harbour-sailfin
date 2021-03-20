@@ -62,18 +62,6 @@ protected:
 	QString m_enteredUsername;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ForgotPasswordDto = Jellyfin::DTO::ForgotPasswordDto;
-
-template <>
-ForgotPasswordDto fromJsonValue<ForgotPasswordDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ForgotPasswordDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

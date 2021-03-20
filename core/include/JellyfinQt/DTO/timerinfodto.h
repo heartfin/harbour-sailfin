@@ -293,18 +293,6 @@ protected:
 	QSharedPointer<BaseItemDto> m_programInfo = nullptr;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TimerInfoDto = Jellyfin::DTO::TimerInfoDto;
-
-template <>
-TimerInfoDto fromJsonValue<TimerInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TimerInfoDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,40 +32,41 @@
 namespace Jellyfin {
 namespace DTO {
 
-TaskInfo::TaskInfo(QObject *parent) {}
+TaskInfo::TaskInfo() {}
 
-TaskInfo TaskInfo::fromJson(QJsonObject source) {TaskInfo instance;
-	instance->setFromJson(source, false);
+TaskInfo TaskInfo::fromJson(QJsonObject source) {
+	TaskInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void TaskInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_state = fromJsonValue<TaskState>(source["State"]);
-	m_currentProgressPercentage = fromJsonValue<double>(source["CurrentProgressPercentage"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_lastExecutionResult = fromJsonValue<QSharedPointer<TaskResult>>(source["LastExecutionResult"]);
-	m_triggers = fromJsonValue<QList<QSharedPointer<TaskTriggerInfo>>>(source["Triggers"]);
-	m_description = fromJsonValue<QString>(source["Description"]);
-	m_category = fromJsonValue<QString>(source["Category"]);
-	m_isHidden = fromJsonValue<bool>(source["IsHidden"]);
-	m_key = fromJsonValue<QString>(source["Key"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_state = Jellyfin::Support::fromJsonValue<TaskState>(source["State"]);
+	m_currentProgressPercentage = Jellyfin::Support::fromJsonValue<double>(source["CurrentProgressPercentage"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_lastExecutionResult = Jellyfin::Support::fromJsonValue<QSharedPointer<TaskResult>>(source["LastExecutionResult"]);
+	m_triggers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<TaskTriggerInfo>>>(source["Triggers"]);
+	m_description = Jellyfin::Support::fromJsonValue<QString>(source["Description"]);
+	m_category = Jellyfin::Support::fromJsonValue<QString>(source["Category"]);
+	m_isHidden = Jellyfin::Support::fromJsonValue<bool>(source["IsHidden"]);
+	m_key = Jellyfin::Support::fromJsonValue<QString>(source["Key"]);
 
 }
 	
 QJsonObject TaskInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["State"] = toJsonValue<TaskState>(m_state);
-	result["CurrentProgressPercentage"] = toJsonValue<double>(m_currentProgressPercentage);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["LastExecutionResult"] = toJsonValue<QSharedPointer<TaskResult>>(m_lastExecutionResult);
-	result["Triggers"] = toJsonValue<QList<QSharedPointer<TaskTriggerInfo>>>(m_triggers);
-	result["Description"] = toJsonValue<QString>(m_description);
-	result["Category"] = toJsonValue<QString>(m_category);
-	result["IsHidden"] = toJsonValue<bool>(m_isHidden);
-	result["Key"] = toJsonValue<QString>(m_key);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["State"] = Jellyfin::Support::toJsonValue<TaskState>(m_state);
+	result["CurrentProgressPercentage"] = Jellyfin::Support::toJsonValue<double>(m_currentProgressPercentage);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["LastExecutionResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<TaskResult>>(m_lastExecutionResult);
+	result["Triggers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<TaskTriggerInfo>>>(m_triggers);
+	result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
+	result["Category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
+	result["IsHidden"] = Jellyfin::Support::toJsonValue<bool>(m_isHidden);
+	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
 
 	return result;
 }
@@ -121,6 +122,17 @@ void TaskInfo::setKey(QString newKey) {
 	m_key = newKey;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using TaskInfo = Jellyfin::DTO::TaskInfo;
+
+template <>
+TaskInfo fromJsonValue<TaskInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TaskInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

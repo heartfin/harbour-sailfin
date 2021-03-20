@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-LiveStreamResponse::LiveStreamResponse(QObject *parent) {}
+LiveStreamResponse::LiveStreamResponse() {}
 
-LiveStreamResponse LiveStreamResponse::fromJson(QJsonObject source) {LiveStreamResponse instance;
-	instance->setFromJson(source, false);
+LiveStreamResponse LiveStreamResponse::fromJson(QJsonObject source) {
+	LiveStreamResponse instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void LiveStreamResponse::setFromJson(QJsonObject source) {
-	m_mediaSource = fromJsonValue<QSharedPointer<MediaSourceInfo>>(source["MediaSource"]);
+	m_mediaSource = Jellyfin::Support::fromJsonValue<QSharedPointer<MediaSourceInfo>>(source["MediaSource"]);
 
 }
 	
 QJsonObject LiveStreamResponse::toJson() {
 	QJsonObject result;
-	result["MediaSource"] = toJsonValue<QSharedPointer<MediaSourceInfo>>(m_mediaSource);
+	result["MediaSource"] = Jellyfin::Support::toJsonValue<QSharedPointer<MediaSourceInfo>>(m_mediaSource);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void LiveStreamResponse::setMediaSource(QSharedPointer<MediaSourceInfo> newMedia
 	m_mediaSource = newMediaSource;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using LiveStreamResponse = Jellyfin::DTO::LiveStreamResponse;
+
+template <>
+LiveStreamResponse fromJsonValue<LiveStreamResponse>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LiveStreamResponse::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

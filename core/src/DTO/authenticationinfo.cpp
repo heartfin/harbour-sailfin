@@ -32,44 +32,45 @@
 namespace Jellyfin {
 namespace DTO {
 
-AuthenticationInfo::AuthenticationInfo(QObject *parent) {}
+AuthenticationInfo::AuthenticationInfo() {}
 
-AuthenticationInfo AuthenticationInfo::fromJson(QJsonObject source) {AuthenticationInfo instance;
-	instance->setFromJson(source, false);
+AuthenticationInfo AuthenticationInfo::fromJson(QJsonObject source) {
+	AuthenticationInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void AuthenticationInfo::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<qint64>(source["Id"]);
-	m_accessToken = fromJsonValue<QString>(source["AccessToken"]);
-	m_deviceId = fromJsonValue<QString>(source["DeviceId"]);
-	m_appName = fromJsonValue<QString>(source["AppName"]);
-	m_appVersion = fromJsonValue<QString>(source["AppVersion"]);
-	m_deviceName = fromJsonValue<QString>(source["DeviceName"]);
-	m_userId = fromJsonValue<QUuid>(source["UserId"]);
-	m_isActive = fromJsonValue<bool>(source["IsActive"]);
-	m_dateCreated = fromJsonValue<QDateTime>(source["DateCreated"]);
-	m_dateRevoked = fromJsonValue<QDateTime>(source["DateRevoked"]);
-	m_dateLastActivity = fromJsonValue<QDateTime>(source["DateLastActivity"]);
-	m_userName = fromJsonValue<QString>(source["UserName"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<qint64>(source["Id"]);
+	m_accessToken = Jellyfin::Support::fromJsonValue<QString>(source["AccessToken"]);
+	m_deviceId = Jellyfin::Support::fromJsonValue<QString>(source["DeviceId"]);
+	m_appName = Jellyfin::Support::fromJsonValue<QString>(source["AppName"]);
+	m_appVersion = Jellyfin::Support::fromJsonValue<QString>(source["AppVersion"]);
+	m_deviceName = Jellyfin::Support::fromJsonValue<QString>(source["DeviceName"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QUuid>(source["UserId"]);
+	m_isActive = Jellyfin::Support::fromJsonValue<bool>(source["IsActive"]);
+	m_dateCreated = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateCreated"]);
+	m_dateRevoked = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateRevoked"]);
+	m_dateLastActivity = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateLastActivity"]);
+	m_userName = Jellyfin::Support::fromJsonValue<QString>(source["UserName"]);
 
 }
 	
 QJsonObject AuthenticationInfo::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<qint64>(m_jellyfinId);
-	result["AccessToken"] = toJsonValue<QString>(m_accessToken);
-	result["DeviceId"] = toJsonValue<QString>(m_deviceId);
-	result["AppName"] = toJsonValue<QString>(m_appName);
-	result["AppVersion"] = toJsonValue<QString>(m_appVersion);
-	result["DeviceName"] = toJsonValue<QString>(m_deviceName);
-	result["UserId"] = toJsonValue<QUuid>(m_userId);
-	result["IsActive"] = toJsonValue<bool>(m_isActive);
-	result["DateCreated"] = toJsonValue<QDateTime>(m_dateCreated);
-	result["DateRevoked"] = toJsonValue<QDateTime>(m_dateRevoked);
-	result["DateLastActivity"] = toJsonValue<QDateTime>(m_dateLastActivity);
-	result["UserName"] = toJsonValue<QString>(m_userName);
+	result["Id"] = Jellyfin::Support::toJsonValue<qint64>(m_jellyfinId);
+	result["AccessToken"] = Jellyfin::Support::toJsonValue<QString>(m_accessToken);
+	result["DeviceId"] = Jellyfin::Support::toJsonValue<QString>(m_deviceId);
+	result["AppName"] = Jellyfin::Support::toJsonValue<QString>(m_appName);
+	result["AppVersion"] = Jellyfin::Support::toJsonValue<QString>(m_appVersion);
+	result["DeviceName"] = Jellyfin::Support::toJsonValue<QString>(m_deviceName);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_userId);
+	result["IsActive"] = Jellyfin::Support::toJsonValue<bool>(m_isActive);
+	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
+	result["DateRevoked"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateRevoked);
+	result["DateLastActivity"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastActivity);
+	result["UserName"] = Jellyfin::Support::toJsonValue<QString>(m_userName);
 
 	return result;
 }
@@ -135,6 +136,17 @@ void AuthenticationInfo::setUserName(QString newUserName) {
 	m_userName = newUserName;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using AuthenticationInfo = Jellyfin::DTO::AuthenticationInfo;
+
+template <>
+AuthenticationInfo fromJsonValue<AuthenticationInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return AuthenticationInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

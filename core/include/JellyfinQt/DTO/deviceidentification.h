@@ -138,18 +138,6 @@ protected:
 	QList<QSharedPointer<HttpHeaderInfo>> m_headers;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using DeviceIdentification = Jellyfin::DTO::DeviceIdentification;
-
-template <>
-DeviceIdentification fromJsonValue<DeviceIdentification>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return DeviceIdentification::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

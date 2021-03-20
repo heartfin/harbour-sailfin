@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-NameValuePair::NameValuePair(QObject *parent) {}
+NameValuePair::NameValuePair() {}
 
-NameValuePair NameValuePair::fromJson(QJsonObject source) {NameValuePair instance;
-	instance->setFromJson(source, false);
+NameValuePair NameValuePair::fromJson(QJsonObject source) {
+	NameValuePair instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void NameValuePair::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_value = fromJsonValue<QString>(source["Value"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_value = Jellyfin::Support::fromJsonValue<QString>(source["Value"]);
 
 }
 	
 QJsonObject NameValuePair::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Value"] = toJsonValue<QString>(m_value);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void NameValuePair::setValue(QString newValue) {
 	m_value = newValue;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using NameValuePair = Jellyfin::DTO::NameValuePair;
+
+template <>
+NameValuePair fromJsonValue<NameValuePair>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return NameValuePair::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

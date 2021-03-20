@@ -32,40 +32,41 @@
 namespace Jellyfin {
 namespace DTO {
 
-ClientCapabilities::ClientCapabilities(QObject *parent) {}
+ClientCapabilities::ClientCapabilities() {}
 
-ClientCapabilities ClientCapabilities::fromJson(QJsonObject source) {ClientCapabilities instance;
-	instance->setFromJson(source, false);
+ClientCapabilities ClientCapabilities::fromJson(QJsonObject source) {
+	ClientCapabilities instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ClientCapabilities::setFromJson(QJsonObject source) {
-	m_playableMediaTypes = fromJsonValue<QStringList>(source["PlayableMediaTypes"]);
-	m_supportedCommands = fromJsonValue<QList<GeneralCommandType>>(source["SupportedCommands"]);
-	m_supportsMediaControl = fromJsonValue<bool>(source["SupportsMediaControl"]);
-	m_supportsContentUploading = fromJsonValue<bool>(source["SupportsContentUploading"]);
-	m_messageCallbackUrl = fromJsonValue<QString>(source["MessageCallbackUrl"]);
-	m_supportsPersistentIdentifier = fromJsonValue<bool>(source["SupportsPersistentIdentifier"]);
-	m_supportsSync = fromJsonValue<bool>(source["SupportsSync"]);
-	m_deviceProfile = fromJsonValue<QSharedPointer<DeviceProfile>>(source["DeviceProfile"]);
-	m_appStoreUrl = fromJsonValue<QString>(source["AppStoreUrl"]);
-	m_iconUrl = fromJsonValue<QString>(source["IconUrl"]);
+	m_playableMediaTypes = Jellyfin::Support::fromJsonValue<QStringList>(source["PlayableMediaTypes"]);
+	m_supportedCommands = Jellyfin::Support::fromJsonValue<QList<GeneralCommandType>>(source["SupportedCommands"]);
+	m_supportsMediaControl = Jellyfin::Support::fromJsonValue<bool>(source["SupportsMediaControl"]);
+	m_supportsContentUploading = Jellyfin::Support::fromJsonValue<bool>(source["SupportsContentUploading"]);
+	m_messageCallbackUrl = Jellyfin::Support::fromJsonValue<QString>(source["MessageCallbackUrl"]);
+	m_supportsPersistentIdentifier = Jellyfin::Support::fromJsonValue<bool>(source["SupportsPersistentIdentifier"]);
+	m_supportsSync = Jellyfin::Support::fromJsonValue<bool>(source["SupportsSync"]);
+	m_deviceProfile = Jellyfin::Support::fromJsonValue<QSharedPointer<DeviceProfile>>(source["DeviceProfile"]);
+	m_appStoreUrl = Jellyfin::Support::fromJsonValue<QString>(source["AppStoreUrl"]);
+	m_iconUrl = Jellyfin::Support::fromJsonValue<QString>(source["IconUrl"]);
 
 }
 	
 QJsonObject ClientCapabilities::toJson() {
 	QJsonObject result;
-	result["PlayableMediaTypes"] = toJsonValue<QStringList>(m_playableMediaTypes);
-	result["SupportedCommands"] = toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
-	result["SupportsMediaControl"] = toJsonValue<bool>(m_supportsMediaControl);
-	result["SupportsContentUploading"] = toJsonValue<bool>(m_supportsContentUploading);
-	result["MessageCallbackUrl"] = toJsonValue<QString>(m_messageCallbackUrl);
-	result["SupportsPersistentIdentifier"] = toJsonValue<bool>(m_supportsPersistentIdentifier);
-	result["SupportsSync"] = toJsonValue<bool>(m_supportsSync);
-	result["DeviceProfile"] = toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);
-	result["AppStoreUrl"] = toJsonValue<QString>(m_appStoreUrl);
-	result["IconUrl"] = toJsonValue<QString>(m_iconUrl);
+	result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QStringList>(m_playableMediaTypes);
+	result["SupportedCommands"] = Jellyfin::Support::toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
+	result["SupportsMediaControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsMediaControl);
+	result["SupportsContentUploading"] = Jellyfin::Support::toJsonValue<bool>(m_supportsContentUploading);
+	result["MessageCallbackUrl"] = Jellyfin::Support::toJsonValue<QString>(m_messageCallbackUrl);
+	result["SupportsPersistentIdentifier"] = Jellyfin::Support::toJsonValue<bool>(m_supportsPersistentIdentifier);
+	result["SupportsSync"] = Jellyfin::Support::toJsonValue<bool>(m_supportsSync);
+	result["DeviceProfile"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);
+	result["AppStoreUrl"] = Jellyfin::Support::toJsonValue<QString>(m_appStoreUrl);
+	result["IconUrl"] = Jellyfin::Support::toJsonValue<QString>(m_iconUrl);
 
 	return result;
 }
@@ -121,6 +122,17 @@ void ClientCapabilities::setIconUrl(QString newIconUrl) {
 	m_iconUrl = newIconUrl;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ClientCapabilities = Jellyfin::DTO::ClientCapabilities;
+
+template <>
+ClientCapabilities fromJsonValue<ClientCapabilities>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ClientCapabilities::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

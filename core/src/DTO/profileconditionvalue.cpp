@@ -34,5 +34,90 @@ namespace DTO {
 
 ProfileConditionValueClass::ProfileConditionValueClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ProfileConditionValue = Jellyfin::DTO::ProfileConditionValue;
+
+template <>
+ProfileConditionValue fromJsonValue<ProfileConditionValue>(const QJsonValue &source) {
+	if (!source.isString()) return ProfileConditionValue::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("AudioChannels")) {
+		return ProfileConditionValue::AudioChannels;
+	}
+	if (str == QStringLiteral("AudioBitrate")) {
+		return ProfileConditionValue::AudioBitrate;
+	}
+	if (str == QStringLiteral("AudioProfile")) {
+		return ProfileConditionValue::AudioProfile;
+	}
+	if (str == QStringLiteral("Width")) {
+		return ProfileConditionValue::Width;
+	}
+	if (str == QStringLiteral("Height")) {
+		return ProfileConditionValue::Height;
+	}
+	if (str == QStringLiteral("Has64BitOffsets")) {
+		return ProfileConditionValue::Has64BitOffsets;
+	}
+	if (str == QStringLiteral("PacketLength")) {
+		return ProfileConditionValue::PacketLength;
+	}
+	if (str == QStringLiteral("VideoBitDepth")) {
+		return ProfileConditionValue::VideoBitDepth;
+	}
+	if (str == QStringLiteral("VideoBitrate")) {
+		return ProfileConditionValue::VideoBitrate;
+	}
+	if (str == QStringLiteral("VideoFramerate")) {
+		return ProfileConditionValue::VideoFramerate;
+	}
+	if (str == QStringLiteral("VideoLevel")) {
+		return ProfileConditionValue::VideoLevel;
+	}
+	if (str == QStringLiteral("VideoProfile")) {
+		return ProfileConditionValue::VideoProfile;
+	}
+	if (str == QStringLiteral("VideoTimestamp")) {
+		return ProfileConditionValue::VideoTimestamp;
+	}
+	if (str == QStringLiteral("IsAnamorphic")) {
+		return ProfileConditionValue::IsAnamorphic;
+	}
+	if (str == QStringLiteral("RefFrames")) {
+		return ProfileConditionValue::RefFrames;
+	}
+	if (str == QStringLiteral("NumAudioStreams")) {
+		return ProfileConditionValue::NumAudioStreams;
+	}
+	if (str == QStringLiteral("NumVideoStreams")) {
+		return ProfileConditionValue::NumVideoStreams;
+	}
+	if (str == QStringLiteral("IsSecondaryAudio")) {
+		return ProfileConditionValue::IsSecondaryAudio;
+	}
+	if (str == QStringLiteral("VideoCodecTag")) {
+		return ProfileConditionValue::VideoCodecTag;
+	}
+	if (str == QStringLiteral("IsAvc")) {
+		return ProfileConditionValue::IsAvc;
+	}
+	if (str == QStringLiteral("IsInterlaced")) {
+		return ProfileConditionValue::IsInterlaced;
+	}
+	if (str == QStringLiteral("AudioSampleRate")) {
+		return ProfileConditionValue::AudioSampleRate;
+	}
+	if (str == QStringLiteral("AudioBitDepth")) {
+		return ProfileConditionValue::AudioBitDepth;
+	}
+	
+	return ProfileConditionValue::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

@@ -160,18 +160,6 @@ protected:
 	qint32 m_itemCount;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ItemCounts = Jellyfin::DTO::ItemCounts;
-
-template <>
-ItemCounts fromJsonValue<ItemCounts>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ItemCounts::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

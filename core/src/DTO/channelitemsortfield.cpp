@@ -34,5 +34,42 @@ namespace DTO {
 
 ChannelItemSortFieldClass::ChannelItemSortFieldClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelItemSortField = Jellyfin::DTO::ChannelItemSortField;
+
+template <>
+ChannelItemSortField fromJsonValue<ChannelItemSortField>(const QJsonValue &source) {
+	if (!source.isString()) return ChannelItemSortField::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Name")) {
+		return ChannelItemSortField::Name;
+	}
+	if (str == QStringLiteral("CommunityRating")) {
+		return ChannelItemSortField::CommunityRating;
+	}
+	if (str == QStringLiteral("PremiereDate")) {
+		return ChannelItemSortField::PremiereDate;
+	}
+	if (str == QStringLiteral("DateCreated")) {
+		return ChannelItemSortField::DateCreated;
+	}
+	if (str == QStringLiteral("Runtime")) {
+		return ChannelItemSortField::Runtime;
+	}
+	if (str == QStringLiteral("PlayCount")) {
+		return ChannelItemSortField::PlayCount;
+	}
+	if (str == QStringLiteral("CommunityPlayCount")) {
+		return ChannelItemSortField::CommunityPlayCount;
+	}
+	
+	return ChannelItemSortField::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

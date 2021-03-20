@@ -32,44 +32,45 @@
 namespace Jellyfin {
 namespace DTO {
 
-ItemCounts::ItemCounts(QObject *parent) {}
+ItemCounts::ItemCounts() {}
 
-ItemCounts ItemCounts::fromJson(QJsonObject source) {ItemCounts instance;
-	instance->setFromJson(source, false);
+ItemCounts ItemCounts::fromJson(QJsonObject source) {
+	ItemCounts instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ItemCounts::setFromJson(QJsonObject source) {
-	m_movieCount = fromJsonValue<qint32>(source["MovieCount"]);
-	m_seriesCount = fromJsonValue<qint32>(source["SeriesCount"]);
-	m_episodeCount = fromJsonValue<qint32>(source["EpisodeCount"]);
-	m_artistCount = fromJsonValue<qint32>(source["ArtistCount"]);
-	m_programCount = fromJsonValue<qint32>(source["ProgramCount"]);
-	m_trailerCount = fromJsonValue<qint32>(source["TrailerCount"]);
-	m_songCount = fromJsonValue<qint32>(source["SongCount"]);
-	m_albumCount = fromJsonValue<qint32>(source["AlbumCount"]);
-	m_musicVideoCount = fromJsonValue<qint32>(source["MusicVideoCount"]);
-	m_boxSetCount = fromJsonValue<qint32>(source["BoxSetCount"]);
-	m_bookCount = fromJsonValue<qint32>(source["BookCount"]);
-	m_itemCount = fromJsonValue<qint32>(source["ItemCount"]);
+	m_movieCount = Jellyfin::Support::fromJsonValue<qint32>(source["MovieCount"]);
+	m_seriesCount = Jellyfin::Support::fromJsonValue<qint32>(source["SeriesCount"]);
+	m_episodeCount = Jellyfin::Support::fromJsonValue<qint32>(source["EpisodeCount"]);
+	m_artistCount = Jellyfin::Support::fromJsonValue<qint32>(source["ArtistCount"]);
+	m_programCount = Jellyfin::Support::fromJsonValue<qint32>(source["ProgramCount"]);
+	m_trailerCount = Jellyfin::Support::fromJsonValue<qint32>(source["TrailerCount"]);
+	m_songCount = Jellyfin::Support::fromJsonValue<qint32>(source["SongCount"]);
+	m_albumCount = Jellyfin::Support::fromJsonValue<qint32>(source["AlbumCount"]);
+	m_musicVideoCount = Jellyfin::Support::fromJsonValue<qint32>(source["MusicVideoCount"]);
+	m_boxSetCount = Jellyfin::Support::fromJsonValue<qint32>(source["BoxSetCount"]);
+	m_bookCount = Jellyfin::Support::fromJsonValue<qint32>(source["BookCount"]);
+	m_itemCount = Jellyfin::Support::fromJsonValue<qint32>(source["ItemCount"]);
 
 }
 	
 QJsonObject ItemCounts::toJson() {
 	QJsonObject result;
-	result["MovieCount"] = toJsonValue<qint32>(m_movieCount);
-	result["SeriesCount"] = toJsonValue<qint32>(m_seriesCount);
-	result["EpisodeCount"] = toJsonValue<qint32>(m_episodeCount);
-	result["ArtistCount"] = toJsonValue<qint32>(m_artistCount);
-	result["ProgramCount"] = toJsonValue<qint32>(m_programCount);
-	result["TrailerCount"] = toJsonValue<qint32>(m_trailerCount);
-	result["SongCount"] = toJsonValue<qint32>(m_songCount);
-	result["AlbumCount"] = toJsonValue<qint32>(m_albumCount);
-	result["MusicVideoCount"] = toJsonValue<qint32>(m_musicVideoCount);
-	result["BoxSetCount"] = toJsonValue<qint32>(m_boxSetCount);
-	result["BookCount"] = toJsonValue<qint32>(m_bookCount);
-	result["ItemCount"] = toJsonValue<qint32>(m_itemCount);
+	result["MovieCount"] = Jellyfin::Support::toJsonValue<qint32>(m_movieCount);
+	result["SeriesCount"] = Jellyfin::Support::toJsonValue<qint32>(m_seriesCount);
+	result["EpisodeCount"] = Jellyfin::Support::toJsonValue<qint32>(m_episodeCount);
+	result["ArtistCount"] = Jellyfin::Support::toJsonValue<qint32>(m_artistCount);
+	result["ProgramCount"] = Jellyfin::Support::toJsonValue<qint32>(m_programCount);
+	result["TrailerCount"] = Jellyfin::Support::toJsonValue<qint32>(m_trailerCount);
+	result["SongCount"] = Jellyfin::Support::toJsonValue<qint32>(m_songCount);
+	result["AlbumCount"] = Jellyfin::Support::toJsonValue<qint32>(m_albumCount);
+	result["MusicVideoCount"] = Jellyfin::Support::toJsonValue<qint32>(m_musicVideoCount);
+	result["BoxSetCount"] = Jellyfin::Support::toJsonValue<qint32>(m_boxSetCount);
+	result["BookCount"] = Jellyfin::Support::toJsonValue<qint32>(m_bookCount);
+	result["ItemCount"] = Jellyfin::Support::toJsonValue<qint32>(m_itemCount);
 
 	return result;
 }
@@ -135,6 +136,17 @@ void ItemCounts::setItemCount(qint32 newItemCount) {
 	m_itemCount = newItemCount;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ItemCounts = Jellyfin::DTO::ItemCounts;
+
+template <>
+ItemCounts fromJsonValue<ItemCounts>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ItemCounts::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

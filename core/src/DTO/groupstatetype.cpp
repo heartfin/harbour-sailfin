@@ -34,5 +34,33 @@ namespace DTO {
 
 GroupStateTypeClass::GroupStateTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using GroupStateType = Jellyfin::DTO::GroupStateType;
+
+template <>
+GroupStateType fromJsonValue<GroupStateType>(const QJsonValue &source) {
+	if (!source.isString()) return GroupStateType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Idle")) {
+		return GroupStateType::Idle;
+	}
+	if (str == QStringLiteral("Waiting")) {
+		return GroupStateType::Waiting;
+	}
+	if (str == QStringLiteral("Paused")) {
+		return GroupStateType::Paused;
+	}
+	if (str == QStringLiteral("Playing")) {
+		return GroupStateType::Playing;
+	}
+	
+	return GroupStateType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaPathDto::MediaPathDto(QObject *parent) {}
+MediaPathDto::MediaPathDto() {}
 
-MediaPathDto MediaPathDto::fromJson(QJsonObject source) {MediaPathDto instance;
-	instance->setFromJson(source, false);
+MediaPathDto MediaPathDto::fromJson(QJsonObject source) {
+	MediaPathDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MediaPathDto::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_pathInfo = fromJsonValue<QSharedPointer<MediaPathInfo>>(source["PathInfo"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_pathInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<MediaPathInfo>>(source["PathInfo"]);
 
 }
 	
 QJsonObject MediaPathDto::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["PathInfo"] = toJsonValue<QSharedPointer<MediaPathInfo>>(m_pathInfo);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["PathInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<MediaPathInfo>>(m_pathInfo);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void MediaPathDto::setPathInfo(QSharedPointer<MediaPathInfo> newPathInfo) {
 	m_pathInfo = newPathInfo;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MediaPathDto = Jellyfin::DTO::MediaPathDto;
+
+template <>
+MediaPathDto fromJsonValue<MediaPathDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaPathDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

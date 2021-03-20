@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-IgnoreWaitRequestDto::IgnoreWaitRequestDto(QObject *parent) {}
+IgnoreWaitRequestDto::IgnoreWaitRequestDto() {}
 
-IgnoreWaitRequestDto IgnoreWaitRequestDto::fromJson(QJsonObject source) {IgnoreWaitRequestDto instance;
-	instance->setFromJson(source, false);
+IgnoreWaitRequestDto IgnoreWaitRequestDto::fromJson(QJsonObject source) {
+	IgnoreWaitRequestDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void IgnoreWaitRequestDto::setFromJson(QJsonObject source) {
-	m_ignoreWait = fromJsonValue<bool>(source["IgnoreWait"]);
+	m_ignoreWait = Jellyfin::Support::fromJsonValue<bool>(source["IgnoreWait"]);
 
 }
 	
 QJsonObject IgnoreWaitRequestDto::toJson() {
 	QJsonObject result;
-	result["IgnoreWait"] = toJsonValue<bool>(m_ignoreWait);
+	result["IgnoreWait"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreWait);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void IgnoreWaitRequestDto::setIgnoreWait(bool newIgnoreWait) {
 	m_ignoreWait = newIgnoreWait;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using IgnoreWaitRequestDto = Jellyfin::DTO::IgnoreWaitRequestDto;
+
+template <>
+IgnoreWaitRequestDto fromJsonValue<IgnoreWaitRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return IgnoreWaitRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

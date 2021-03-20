@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-ChannelMappingOptionsDto::ChannelMappingOptionsDto(QObject *parent) {}
+ChannelMappingOptionsDto::ChannelMappingOptionsDto() {}
 
-ChannelMappingOptionsDto ChannelMappingOptionsDto::fromJson(QJsonObject source) {ChannelMappingOptionsDto instance;
-	instance->setFromJson(source, false);
+ChannelMappingOptionsDto ChannelMappingOptionsDto::fromJson(QJsonObject source) {
+	ChannelMappingOptionsDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ChannelMappingOptionsDto::setFromJson(QJsonObject source) {
-	m_tunerChannels = fromJsonValue<QList<QSharedPointer<TunerChannelMapping>>>(source["TunerChannels"]);
-	m_providerChannels = fromJsonValue<QList<QSharedPointer<NameIdPair>>>(source["ProviderChannels"]);
-	m_mappings = fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["Mappings"]);
-	m_providerName = fromJsonValue<QString>(source["ProviderName"]);
+	m_tunerChannels = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<TunerChannelMapping>>>(source["TunerChannels"]);
+	m_providerChannels = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameIdPair>>>(source["ProviderChannels"]);
+	m_mappings = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["Mappings"]);
+	m_providerName = Jellyfin::Support::fromJsonValue<QString>(source["ProviderName"]);
 
 }
 	
 QJsonObject ChannelMappingOptionsDto::toJson() {
 	QJsonObject result;
-	result["TunerChannels"] = toJsonValue<QList<QSharedPointer<TunerChannelMapping>>>(m_tunerChannels);
-	result["ProviderChannels"] = toJsonValue<QList<QSharedPointer<NameIdPair>>>(m_providerChannels);
-	result["Mappings"] = toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_mappings);
-	result["ProviderName"] = toJsonValue<QString>(m_providerName);
+	result["TunerChannels"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<TunerChannelMapping>>>(m_tunerChannels);
+	result["ProviderChannels"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameIdPair>>>(m_providerChannels);
+	result["Mappings"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_mappings);
+	result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void ChannelMappingOptionsDto::setProviderName(QString newProviderName) {
 	m_providerName = newProviderName;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ChannelMappingOptionsDto = Jellyfin::DTO::ChannelMappingOptionsDto;
+
+template <>
+ChannelMappingOptionsDto fromJsonValue<ChannelMappingOptionsDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ChannelMappingOptionsDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

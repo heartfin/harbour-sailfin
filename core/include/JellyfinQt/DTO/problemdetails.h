@@ -78,18 +78,6 @@ protected:
 	QString m_instance;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ProblemDetails = Jellyfin::DTO::ProblemDetails;
-
-template <>
-ProblemDetails fromJsonValue<ProblemDetails>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ProblemDetails::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

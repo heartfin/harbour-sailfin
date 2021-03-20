@@ -34,5 +34,27 @@ namespace DTO {
 
 PlayAccessClass::PlayAccessClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using PlayAccess = Jellyfin::DTO::PlayAccess;
+
+template <>
+PlayAccess fromJsonValue<PlayAccess>(const QJsonValue &source) {
+	if (!source.isString()) return PlayAccess::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Full")) {
+		return PlayAccess::Full;
+	}
+	if (str == QStringLiteral("None")) {
+		return PlayAccess::None;
+	}
+	
+	return PlayAccess::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

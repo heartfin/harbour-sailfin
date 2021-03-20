@@ -62,18 +62,6 @@ protected:
 	QUuid m_playlistItemId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PreviousItemRequestDto = Jellyfin::DTO::PreviousItemRequestDto;
-
-template <>
-PreviousItemRequestDto fromJsonValue<PreviousItemRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PreviousItemRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

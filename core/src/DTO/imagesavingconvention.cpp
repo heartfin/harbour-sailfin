@@ -34,5 +34,27 @@ namespace DTO {
 
 ImageSavingConventionClass::ImageSavingConventionClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ImageSavingConvention = Jellyfin::DTO::ImageSavingConvention;
+
+template <>
+ImageSavingConvention fromJsonValue<ImageSavingConvention>(const QJsonValue &source) {
+	if (!source.isString()) return ImageSavingConvention::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Legacy")) {
+		return ImageSavingConvention::Legacy;
+	}
+	if (str == QStringLiteral("Compatible")) {
+		return ImageSavingConvention::Compatible;
+	}
+	
+	return ImageSavingConvention::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

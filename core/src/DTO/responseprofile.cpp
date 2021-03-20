@@ -32,34 +32,35 @@
 namespace Jellyfin {
 namespace DTO {
 
-ResponseProfile::ResponseProfile(QObject *parent) {}
+ResponseProfile::ResponseProfile() {}
 
-ResponseProfile ResponseProfile::fromJson(QJsonObject source) {ResponseProfile instance;
-	instance->setFromJson(source, false);
+ResponseProfile ResponseProfile::fromJson(QJsonObject source) {
+	ResponseProfile instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ResponseProfile::setFromJson(QJsonObject source) {
-	m_container = fromJsonValue<QString>(source["Container"]);
-	m_audioCodec = fromJsonValue<QString>(source["AudioCodec"]);
-	m_videoCodec = fromJsonValue<QString>(source["VideoCodec"]);
-	m_type = fromJsonValue<DlnaProfileType>(source["Type"]);
-	m_orgPn = fromJsonValue<QString>(source["OrgPn"]);
-	m_mimeType = fromJsonValue<QString>(source["MimeType"]);
-	m_conditions = fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
+	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
+	m_audioCodec = Jellyfin::Support::fromJsonValue<QString>(source["AudioCodec"]);
+	m_videoCodec = Jellyfin::Support::fromJsonValue<QString>(source["VideoCodec"]);
+	m_type = Jellyfin::Support::fromJsonValue<DlnaProfileType>(source["Type"]);
+	m_orgPn = Jellyfin::Support::fromJsonValue<QString>(source["OrgPn"]);
+	m_mimeType = Jellyfin::Support::fromJsonValue<QString>(source["MimeType"]);
+	m_conditions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
 
 }
 	
 QJsonObject ResponseProfile::toJson() {
 	QJsonObject result;
-	result["Container"] = toJsonValue<QString>(m_container);
-	result["AudioCodec"] = toJsonValue<QString>(m_audioCodec);
-	result["VideoCodec"] = toJsonValue<QString>(m_videoCodec);
-	result["Type"] = toJsonValue<DlnaProfileType>(m_type);
-	result["OrgPn"] = toJsonValue<QString>(m_orgPn);
-	result["MimeType"] = toJsonValue<QString>(m_mimeType);
-	result["Conditions"] = toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
+	result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
+	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
+	result["OrgPn"] = Jellyfin::Support::toJsonValue<QString>(m_orgPn);
+	result["MimeType"] = Jellyfin::Support::toJsonValue<QString>(m_mimeType);
+	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
 
 	return result;
 }
@@ -100,6 +101,17 @@ void ResponseProfile::setConditions(QList<QSharedPointer<ProfileCondition>> newC
 	m_conditions = newConditions;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ResponseProfile = Jellyfin::DTO::ResponseProfile;
+
+template <>
+ResponseProfile fromJsonValue<ResponseProfile>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ResponseProfile::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,104 +32,105 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaSourceInfo::MediaSourceInfo(QObject *parent) {}
+MediaSourceInfo::MediaSourceInfo() {}
 
-MediaSourceInfo MediaSourceInfo::fromJson(QJsonObject source) {MediaSourceInfo instance;
-	instance->setFromJson(source, false);
+MediaSourceInfo MediaSourceInfo::fromJson(QJsonObject source) {
+	MediaSourceInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MediaSourceInfo::setFromJson(QJsonObject source) {
-	m_protocol = fromJsonValue<MediaProtocol>(source["Protocol"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_encoderPath = fromJsonValue<QString>(source["EncoderPath"]);
-	m_encoderProtocol = fromJsonValue<MediaProtocol>(source["EncoderProtocol"]);
-	m_type = fromJsonValue<MediaSourceType>(source["Type"]);
-	m_container = fromJsonValue<QString>(source["Container"]);
-	m_size = fromJsonValue<qint64>(source["Size"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_isRemote = fromJsonValue<bool>(source["IsRemote"]);
-	m_eTag = fromJsonValue<QString>(source["ETag"]);
-	m_runTimeTicks = fromJsonValue<qint64>(source["RunTimeTicks"]);
-	m_readAtNativeFramerate = fromJsonValue<bool>(source["ReadAtNativeFramerate"]);
-	m_ignoreDts = fromJsonValue<bool>(source["IgnoreDts"]);
-	m_ignoreIndex = fromJsonValue<bool>(source["IgnoreIndex"]);
-	m_genPtsInput = fromJsonValue<bool>(source["GenPtsInput"]);
-	m_supportsTranscoding = fromJsonValue<bool>(source["SupportsTranscoding"]);
-	m_supportsDirectStream = fromJsonValue<bool>(source["SupportsDirectStream"]);
-	m_supportsDirectPlay = fromJsonValue<bool>(source["SupportsDirectPlay"]);
-	m_isInfiniteStream = fromJsonValue<bool>(source["IsInfiniteStream"]);
-	m_requiresOpening = fromJsonValue<bool>(source["RequiresOpening"]);
-	m_openToken = fromJsonValue<QString>(source["OpenToken"]);
-	m_requiresClosing = fromJsonValue<bool>(source["RequiresClosing"]);
-	m_liveStreamId = fromJsonValue<QString>(source["LiveStreamId"]);
-	m_bufferMs = fromJsonValue<qint32>(source["BufferMs"]);
-	m_requiresLooping = fromJsonValue<bool>(source["RequiresLooping"]);
-	m_supportsProbing = fromJsonValue<bool>(source["SupportsProbing"]);
-	m_videoType = fromJsonValue<VideoType>(source["VideoType"]);
-	m_isoType = fromJsonValue<IsoType>(source["IsoType"]);
-	m_video3DFormat = fromJsonValue<Video3DFormat>(source["Video3DFormat"]);
-	m_mediaStreams = fromJsonValue<QList<QSharedPointer<MediaStream>>>(source["MediaStreams"]);
-	m_mediaAttachments = fromJsonValue<QList<QSharedPointer<MediaAttachment>>>(source["MediaAttachments"]);
-	m_formats = fromJsonValue<QStringList>(source["Formats"]);
-	m_bitrate = fromJsonValue<qint32>(source["Bitrate"]);
-	m_timestamp = fromJsonValue<TransportStreamTimestamp>(source["Timestamp"]);
-	m_requiredHttpHeaders = fromJsonValue<QJsonObject>(source["RequiredHttpHeaders"]);
-	m_transcodingUrl = fromJsonValue<QString>(source["TranscodingUrl"]);
-	m_transcodingSubProtocol = fromJsonValue<QString>(source["TranscodingSubProtocol"]);
-	m_transcodingContainer = fromJsonValue<QString>(source["TranscodingContainer"]);
-	m_analyzeDurationMs = fromJsonValue<qint32>(source["AnalyzeDurationMs"]);
-	m_defaultAudioStreamIndex = fromJsonValue<qint32>(source["DefaultAudioStreamIndex"]);
-	m_defaultSubtitleStreamIndex = fromJsonValue<qint32>(source["DefaultSubtitleStreamIndex"]);
+	m_protocol = Jellyfin::Support::fromJsonValue<MediaProtocol>(source["Protocol"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_encoderPath = Jellyfin::Support::fromJsonValue<QString>(source["EncoderPath"]);
+	m_encoderProtocol = Jellyfin::Support::fromJsonValue<MediaProtocol>(source["EncoderProtocol"]);
+	m_type = Jellyfin::Support::fromJsonValue<MediaSourceType>(source["Type"]);
+	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
+	m_size = Jellyfin::Support::fromJsonValue<qint64>(source["Size"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_isRemote = Jellyfin::Support::fromJsonValue<bool>(source["IsRemote"]);
+	m_eTag = Jellyfin::Support::fromJsonValue<QString>(source["ETag"]);
+	m_runTimeTicks = Jellyfin::Support::fromJsonValue<qint64>(source["RunTimeTicks"]);
+	m_readAtNativeFramerate = Jellyfin::Support::fromJsonValue<bool>(source["ReadAtNativeFramerate"]);
+	m_ignoreDts = Jellyfin::Support::fromJsonValue<bool>(source["IgnoreDts"]);
+	m_ignoreIndex = Jellyfin::Support::fromJsonValue<bool>(source["IgnoreIndex"]);
+	m_genPtsInput = Jellyfin::Support::fromJsonValue<bool>(source["GenPtsInput"]);
+	m_supportsTranscoding = Jellyfin::Support::fromJsonValue<bool>(source["SupportsTranscoding"]);
+	m_supportsDirectStream = Jellyfin::Support::fromJsonValue<bool>(source["SupportsDirectStream"]);
+	m_supportsDirectPlay = Jellyfin::Support::fromJsonValue<bool>(source["SupportsDirectPlay"]);
+	m_isInfiniteStream = Jellyfin::Support::fromJsonValue<bool>(source["IsInfiniteStream"]);
+	m_requiresOpening = Jellyfin::Support::fromJsonValue<bool>(source["RequiresOpening"]);
+	m_openToken = Jellyfin::Support::fromJsonValue<QString>(source["OpenToken"]);
+	m_requiresClosing = Jellyfin::Support::fromJsonValue<bool>(source["RequiresClosing"]);
+	m_liveStreamId = Jellyfin::Support::fromJsonValue<QString>(source["LiveStreamId"]);
+	m_bufferMs = Jellyfin::Support::fromJsonValue<qint32>(source["BufferMs"]);
+	m_requiresLooping = Jellyfin::Support::fromJsonValue<bool>(source["RequiresLooping"]);
+	m_supportsProbing = Jellyfin::Support::fromJsonValue<bool>(source["SupportsProbing"]);
+	m_videoType = Jellyfin::Support::fromJsonValue<VideoType>(source["VideoType"]);
+	m_isoType = Jellyfin::Support::fromJsonValue<IsoType>(source["IsoType"]);
+	m_video3DFormat = Jellyfin::Support::fromJsonValue<Video3DFormat>(source["Video3DFormat"]);
+	m_mediaStreams = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaStream>>>(source["MediaStreams"]);
+	m_mediaAttachments = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaAttachment>>>(source["MediaAttachments"]);
+	m_formats = Jellyfin::Support::fromJsonValue<QStringList>(source["Formats"]);
+	m_bitrate = Jellyfin::Support::fromJsonValue<qint32>(source["Bitrate"]);
+	m_timestamp = Jellyfin::Support::fromJsonValue<TransportStreamTimestamp>(source["Timestamp"]);
+	m_requiredHttpHeaders = Jellyfin::Support::fromJsonValue<QJsonObject>(source["RequiredHttpHeaders"]);
+	m_transcodingUrl = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingUrl"]);
+	m_transcodingSubProtocol = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingSubProtocol"]);
+	m_transcodingContainer = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingContainer"]);
+	m_analyzeDurationMs = Jellyfin::Support::fromJsonValue<qint32>(source["AnalyzeDurationMs"]);
+	m_defaultAudioStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["DefaultAudioStreamIndex"]);
+	m_defaultSubtitleStreamIndex = Jellyfin::Support::fromJsonValue<qint32>(source["DefaultSubtitleStreamIndex"]);
 
 }
 	
 QJsonObject MediaSourceInfo::toJson() {
 	QJsonObject result;
-	result["Protocol"] = toJsonValue<MediaProtocol>(m_protocol);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["EncoderPath"] = toJsonValue<QString>(m_encoderPath);
-	result["EncoderProtocol"] = toJsonValue<MediaProtocol>(m_encoderProtocol);
-	result["Type"] = toJsonValue<MediaSourceType>(m_type);
-	result["Container"] = toJsonValue<QString>(m_container);
-	result["Size"] = toJsonValue<qint64>(m_size);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["IsRemote"] = toJsonValue<bool>(m_isRemote);
-	result["ETag"] = toJsonValue<QString>(m_eTag);
-	result["RunTimeTicks"] = toJsonValue<qint64>(m_runTimeTicks);
-	result["ReadAtNativeFramerate"] = toJsonValue<bool>(m_readAtNativeFramerate);
-	result["IgnoreDts"] = toJsonValue<bool>(m_ignoreDts);
-	result["IgnoreIndex"] = toJsonValue<bool>(m_ignoreIndex);
-	result["GenPtsInput"] = toJsonValue<bool>(m_genPtsInput);
-	result["SupportsTranscoding"] = toJsonValue<bool>(m_supportsTranscoding);
-	result["SupportsDirectStream"] = toJsonValue<bool>(m_supportsDirectStream);
-	result["SupportsDirectPlay"] = toJsonValue<bool>(m_supportsDirectPlay);
-	result["IsInfiniteStream"] = toJsonValue<bool>(m_isInfiniteStream);
-	result["RequiresOpening"] = toJsonValue<bool>(m_requiresOpening);
-	result["OpenToken"] = toJsonValue<QString>(m_openToken);
-	result["RequiresClosing"] = toJsonValue<bool>(m_requiresClosing);
-	result["LiveStreamId"] = toJsonValue<QString>(m_liveStreamId);
-	result["BufferMs"] = toJsonValue<qint32>(m_bufferMs);
-	result["RequiresLooping"] = toJsonValue<bool>(m_requiresLooping);
-	result["SupportsProbing"] = toJsonValue<bool>(m_supportsProbing);
-	result["VideoType"] = toJsonValue<VideoType>(m_videoType);
-	result["IsoType"] = toJsonValue<IsoType>(m_isoType);
-	result["Video3DFormat"] = toJsonValue<Video3DFormat>(m_video3DFormat);
-	result["MediaStreams"] = toJsonValue<QList<QSharedPointer<MediaStream>>>(m_mediaStreams);
-	result["MediaAttachments"] = toJsonValue<QList<QSharedPointer<MediaAttachment>>>(m_mediaAttachments);
-	result["Formats"] = toJsonValue<QStringList>(m_formats);
-	result["Bitrate"] = toJsonValue<qint32>(m_bitrate);
-	result["Timestamp"] = toJsonValue<TransportStreamTimestamp>(m_timestamp);
-	result["RequiredHttpHeaders"] = toJsonValue<QJsonObject>(m_requiredHttpHeaders);
-	result["TranscodingUrl"] = toJsonValue<QString>(m_transcodingUrl);
-	result["TranscodingSubProtocol"] = toJsonValue<QString>(m_transcodingSubProtocol);
-	result["TranscodingContainer"] = toJsonValue<QString>(m_transcodingContainer);
-	result["AnalyzeDurationMs"] = toJsonValue<qint32>(m_analyzeDurationMs);
-	result["DefaultAudioStreamIndex"] = toJsonValue<qint32>(m_defaultAudioStreamIndex);
-	result["DefaultSubtitleStreamIndex"] = toJsonValue<qint32>(m_defaultSubtitleStreamIndex);
+	result["Protocol"] = Jellyfin::Support::toJsonValue<MediaProtocol>(m_protocol);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["EncoderPath"] = Jellyfin::Support::toJsonValue<QString>(m_encoderPath);
+	result["EncoderProtocol"] = Jellyfin::Support::toJsonValue<MediaProtocol>(m_encoderProtocol);
+	result["Type"] = Jellyfin::Support::toJsonValue<MediaSourceType>(m_type);
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["IsRemote"] = Jellyfin::Support::toJsonValue<bool>(m_isRemote);
+	result["ETag"] = Jellyfin::Support::toJsonValue<QString>(m_eTag);
+	result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_runTimeTicks);
+	result["ReadAtNativeFramerate"] = Jellyfin::Support::toJsonValue<bool>(m_readAtNativeFramerate);
+	result["IgnoreDts"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreDts);
+	result["IgnoreIndex"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreIndex);
+	result["GenPtsInput"] = Jellyfin::Support::toJsonValue<bool>(m_genPtsInput);
+	result["SupportsTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_supportsTranscoding);
+	result["SupportsDirectStream"] = Jellyfin::Support::toJsonValue<bool>(m_supportsDirectStream);
+	result["SupportsDirectPlay"] = Jellyfin::Support::toJsonValue<bool>(m_supportsDirectPlay);
+	result["IsInfiniteStream"] = Jellyfin::Support::toJsonValue<bool>(m_isInfiniteStream);
+	result["RequiresOpening"] = Jellyfin::Support::toJsonValue<bool>(m_requiresOpening);
+	result["OpenToken"] = Jellyfin::Support::toJsonValue<QString>(m_openToken);
+	result["RequiresClosing"] = Jellyfin::Support::toJsonValue<bool>(m_requiresClosing);
+	result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
+	result["BufferMs"] = Jellyfin::Support::toJsonValue<qint32>(m_bufferMs);
+	result["RequiresLooping"] = Jellyfin::Support::toJsonValue<bool>(m_requiresLooping);
+	result["SupportsProbing"] = Jellyfin::Support::toJsonValue<bool>(m_supportsProbing);
+	result["VideoType"] = Jellyfin::Support::toJsonValue<VideoType>(m_videoType);
+	result["IsoType"] = Jellyfin::Support::toJsonValue<IsoType>(m_isoType);
+	result["Video3DFormat"] = Jellyfin::Support::toJsonValue<Video3DFormat>(m_video3DFormat);
+	result["MediaStreams"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaStream>>>(m_mediaStreams);
+	result["MediaAttachments"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaAttachment>>>(m_mediaAttachments);
+	result["Formats"] = Jellyfin::Support::toJsonValue<QStringList>(m_formats);
+	result["Bitrate"] = Jellyfin::Support::toJsonValue<qint32>(m_bitrate);
+	result["Timestamp"] = Jellyfin::Support::toJsonValue<TransportStreamTimestamp>(m_timestamp);
+	result["RequiredHttpHeaders"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_requiredHttpHeaders);
+	result["TranscodingUrl"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingUrl);
+	result["TranscodingSubProtocol"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingSubProtocol);
+	result["TranscodingContainer"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingContainer);
+	result["AnalyzeDurationMs"] = Jellyfin::Support::toJsonValue<qint32>(m_analyzeDurationMs);
+	result["DefaultAudioStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_defaultAudioStreamIndex);
+	result["DefaultSubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_defaultSubtitleStreamIndex);
 
 	return result;
 }
@@ -345,6 +346,17 @@ void MediaSourceInfo::setDefaultSubtitleStreamIndex(qint32 newDefaultSubtitleStr
 	m_defaultSubtitleStreamIndex = newDefaultSubtitleStreamIndex;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MediaSourceInfo = Jellyfin::DTO::MediaSourceInfo;
+
+template <>
+MediaSourceInfo fromJsonValue<MediaSourceInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaSourceInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

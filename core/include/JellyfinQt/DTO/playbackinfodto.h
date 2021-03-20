@@ -187,18 +187,6 @@ protected:
 	bool m_autoOpenLiveStream;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PlaybackInfoDto = Jellyfin::DTO::PlaybackInfoDto;
-
-template <>
-PlaybackInfoDto fromJsonValue<PlaybackInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PlaybackInfoDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

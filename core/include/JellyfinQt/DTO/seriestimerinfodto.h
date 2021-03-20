@@ -351,18 +351,6 @@ protected:
 	QString m_parentPrimaryImageTag;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SeriesTimerInfoDto = Jellyfin::DTO::SeriesTimerInfoDto;
-
-template <>
-SeriesTimerInfoDto fromJsonValue<SeriesTimerInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SeriesTimerInfoDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -277,18 +277,6 @@ protected:
 	Architecture m_systemArchitecture;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SystemInfo = Jellyfin::DTO::SystemInfo;
-
-template <>
-SystemInfo fromJsonValue<SystemInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SystemInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

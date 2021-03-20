@@ -56,34 +56,6 @@ private:
 
 typedef KeepUntilClass::Value KeepUntil;
 
-} // NS DTO
-
-namespace Support {
-
-using KeepUntil = Jellyfin::DTO::KeepUntil;
-using KeepUntilClass = Jellyfin::DTO::KeepUntilClass;
-
-template <>
-KeepUntil fromJsonValue<KeepUntil>(const QJsonValue &source) {
-	if (!source.isString()) return KeepUntilClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("UntilDeleted")) {
-		return KeepUntilClass::UntilDeleted;
-	}
-	if (str == QStringLiteral("UntilSpaceNeeded")) {
-		return KeepUntilClass::UntilSpaceNeeded;
-	}
-	if (str == QStringLiteral("UntilWatched")) {
-		return KeepUntilClass::UntilWatched;
-	}
-	if (str == QStringLiteral("UntilDate")) {
-		return KeepUntilClass::UntilDate;
-	}
-	
-	return KeepUntilClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

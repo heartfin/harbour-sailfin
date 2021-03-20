@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-PingRequestDto::PingRequestDto(QObject *parent) {}
+PingRequestDto::PingRequestDto() {}
 
-PingRequestDto PingRequestDto::fromJson(QJsonObject source) {PingRequestDto instance;
-	instance->setFromJson(source, false);
+PingRequestDto PingRequestDto::fromJson(QJsonObject source) {
+	PingRequestDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PingRequestDto::setFromJson(QJsonObject source) {
-	m_ping = fromJsonValue<qint64>(source["Ping"]);
+	m_ping = Jellyfin::Support::fromJsonValue<qint64>(source["Ping"]);
 
 }
 	
 QJsonObject PingRequestDto::toJson() {
 	QJsonObject result;
-	result["Ping"] = toJsonValue<qint64>(m_ping);
+	result["Ping"] = Jellyfin::Support::toJsonValue<qint64>(m_ping);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void PingRequestDto::setPing(qint64 newPing) {
 	m_ping = newPing;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PingRequestDto = Jellyfin::DTO::PingRequestDto;
+
+template <>
+PingRequestDto fromJsonValue<PingRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PingRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

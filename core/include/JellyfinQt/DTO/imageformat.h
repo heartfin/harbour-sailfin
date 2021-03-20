@@ -57,37 +57,6 @@ private:
 
 typedef ImageFormatClass::Value ImageFormat;
 
-} // NS DTO
-
-namespace Support {
-
-using ImageFormat = Jellyfin::DTO::ImageFormat;
-using ImageFormatClass = Jellyfin::DTO::ImageFormatClass;
-
-template <>
-ImageFormat fromJsonValue<ImageFormat>(const QJsonValue &source) {
-	if (!source.isString()) return ImageFormatClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Bmp")) {
-		return ImageFormatClass::Bmp;
-	}
-	if (str == QStringLiteral("Gif")) {
-		return ImageFormatClass::Gif;
-	}
-	if (str == QStringLiteral("Jpg")) {
-		return ImageFormatClass::Jpg;
-	}
-	if (str == QStringLiteral("Png")) {
-		return ImageFormatClass::Png;
-	}
-	if (str == QStringLiteral("Webp")) {
-		return ImageFormatClass::Webp;
-	}
-	
-	return ImageFormatClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

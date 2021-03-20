@@ -67,18 +67,6 @@ protected:
 	NotificationLevel m_maxUnreadNotificationLevel;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using NotificationsSummaryDto = Jellyfin::DTO::NotificationsSummaryDto;
-
-template <>
-NotificationsSummaryDto fromJsonValue<NotificationsSummaryDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return NotificationsSummaryDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

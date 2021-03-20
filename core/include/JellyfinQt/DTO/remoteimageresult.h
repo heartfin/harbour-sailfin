@@ -83,18 +83,6 @@ protected:
 	QStringList m_providers;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using RemoteImageResult = Jellyfin::DTO::RemoteImageResult;
-
-template <>
-RemoteImageResult fromJsonValue<RemoteImageResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return RemoteImageResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

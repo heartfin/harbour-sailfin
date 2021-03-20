@@ -80,18 +80,6 @@ protected:
 	QString m_preferredMetadataLanguage;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using StartupConfigurationDto = Jellyfin::DTO::StartupConfigurationDto;
-
-template <>
-StartupConfigurationDto fromJsonValue<StartupConfigurationDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return StartupConfigurationDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

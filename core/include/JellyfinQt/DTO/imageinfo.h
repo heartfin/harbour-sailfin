@@ -122,18 +122,6 @@ protected:
 	qint64 m_size;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ImageInfo = Jellyfin::DTO::ImageInfo;
-
-template <>
-ImageInfo fromJsonValue<ImageInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ImageInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

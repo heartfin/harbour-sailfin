@@ -137,18 +137,6 @@ protected:
 	QList<QSharedPointer<SongInfo>> m_songInfos;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ArtistInfo = Jellyfin::DTO::ArtistInfo;
-
-template <>
-ArtistInfo fromJsonValue<ArtistInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ArtistInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

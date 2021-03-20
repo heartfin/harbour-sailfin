@@ -116,18 +116,6 @@ protected:
 	QList<TranscodeReason> m_transcodeReasons;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TranscodingInfo = Jellyfin::DTO::TranscodingInfo;
-
-template <>
-TranscodingInfo fromJsonValue<TranscodingInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TranscodingInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

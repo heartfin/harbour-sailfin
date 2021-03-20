@@ -83,18 +83,6 @@ protected:
 	qint32 m_startIndex;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using DeviceInfoQueryResult = Jellyfin::DTO::DeviceInfoQueryResult;
-
-template <>
-DeviceInfoQueryResult fromJsonValue<DeviceInfoQueryResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return DeviceInfoQueryResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

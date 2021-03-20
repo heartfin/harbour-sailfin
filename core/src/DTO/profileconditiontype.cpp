@@ -34,5 +34,36 @@ namespace DTO {
 
 ProfileConditionTypeClass::ProfileConditionTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using ProfileConditionType = Jellyfin::DTO::ProfileConditionType;
+
+template <>
+ProfileConditionType fromJsonValue<ProfileConditionType>(const QJsonValue &source) {
+	if (!source.isString()) return ProfileConditionType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Equals")) {
+		return ProfileConditionType::Equals;
+	}
+	if (str == QStringLiteral("NotEquals")) {
+		return ProfileConditionType::NotEquals;
+	}
+	if (str == QStringLiteral("LessThanEqual")) {
+		return ProfileConditionType::LessThanEqual;
+	}
+	if (str == QStringLiteral("GreaterThanEqual")) {
+		return ProfileConditionType::GreaterThanEqual;
+	}
+	if (str == QStringLiteral("EqualsAny")) {
+		return ProfileConditionType::EqualsAny;
+	}
+	
+	return ProfileConditionType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

@@ -135,18 +135,6 @@ protected:
 	QStringList m_artists;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MusicVideoInfo = Jellyfin::DTO::MusicVideoInfo;
-
-template <>
-MusicVideoInfo fromJsonValue<MusicVideoInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MusicVideoInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

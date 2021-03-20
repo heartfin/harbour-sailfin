@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-TaskTriggerInfo::TaskTriggerInfo(QObject *parent) {}
+TaskTriggerInfo::TaskTriggerInfo() {}
 
-TaskTriggerInfo TaskTriggerInfo::fromJson(QJsonObject source) {TaskTriggerInfo instance;
-	instance->setFromJson(source, false);
+TaskTriggerInfo TaskTriggerInfo::fromJson(QJsonObject source) {
+	TaskTriggerInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void TaskTriggerInfo::setFromJson(QJsonObject source) {
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_timeOfDayTicks = fromJsonValue<qint64>(source["TimeOfDayTicks"]);
-	m_intervalTicks = fromJsonValue<qint64>(source["IntervalTicks"]);
-	m_dayOfWeek = fromJsonValue<DayOfWeek>(source["DayOfWeek"]);
-	m_maxRuntimeTicks = fromJsonValue<qint64>(source["MaxRuntimeTicks"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_timeOfDayTicks = Jellyfin::Support::fromJsonValue<qint64>(source["TimeOfDayTicks"]);
+	m_intervalTicks = Jellyfin::Support::fromJsonValue<qint64>(source["IntervalTicks"]);
+	m_dayOfWeek = Jellyfin::Support::fromJsonValue<DayOfWeek>(source["DayOfWeek"]);
+	m_maxRuntimeTicks = Jellyfin::Support::fromJsonValue<qint64>(source["MaxRuntimeTicks"]);
 
 }
 	
 QJsonObject TaskTriggerInfo::toJson() {
 	QJsonObject result;
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["TimeOfDayTicks"] = toJsonValue<qint64>(m_timeOfDayTicks);
-	result["IntervalTicks"] = toJsonValue<qint64>(m_intervalTicks);
-	result["DayOfWeek"] = toJsonValue<DayOfWeek>(m_dayOfWeek);
-	result["MaxRuntimeTicks"] = toJsonValue<qint64>(m_maxRuntimeTicks);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["TimeOfDayTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_timeOfDayTicks);
+	result["IntervalTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_intervalTicks);
+	result["DayOfWeek"] = Jellyfin::Support::toJsonValue<DayOfWeek>(m_dayOfWeek);
+	result["MaxRuntimeTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_maxRuntimeTicks);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void TaskTriggerInfo::setMaxRuntimeTicks(qint64 newMaxRuntimeTicks) {
 	m_maxRuntimeTicks = newMaxRuntimeTicks;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using TaskTriggerInfo = Jellyfin::DTO::TaskTriggerInfo;
+
+template <>
+TaskTriggerInfo fromJsonValue<TaskTriggerInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TaskTriggerInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

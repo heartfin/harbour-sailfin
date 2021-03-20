@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "JellyfinQt/apimodel.h"
 
-#include "JellyfinQt/DTO/item.h"
+#include "JellyfinQt/DTO/baseitemdto.h"
 #include "JellyfinQt/DTO/useritemdatadto.h"
 #include "JellyfinQt/DTO/userdto.h"
 
@@ -380,18 +380,18 @@ ItemModel::ItemModel(QString path, bool hasRecordFields, bool replaceUser, QObje
 
 void ItemModel::onUserDataChanged(const QString &itemId, DTO::UserData *userData) {
     int i = 0;
-    for (Item *val: m_array) {
+    /*for (DTO::BaseItemDto *val: m_array) {
         if (val->userData() != nullptr && val->jellyfinId() == itemId) {
             QModelIndex cell = this->index(i);
             // val->userData()->onUpdated(userData);
             this->dataChanged(cell, cell);
         }
         i++;
-    }
+    }*/
 }
 
 void ItemModel::addQueryParameters(QUrlQuery &query) {
-    ApiModel<Item>::addQueryParameters(query);
+    ApiModel<QJsonValue>::addQueryParameters(query);
     if (!m_parentId.isEmpty()) {
         query.addQueryItem("ParentId", m_parentId);
     }

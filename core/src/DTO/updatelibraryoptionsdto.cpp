@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-UpdateLibraryOptionsDto::UpdateLibraryOptionsDto(QObject *parent) {}
+UpdateLibraryOptionsDto::UpdateLibraryOptionsDto() {}
 
-UpdateLibraryOptionsDto UpdateLibraryOptionsDto::fromJson(QJsonObject source) {UpdateLibraryOptionsDto instance;
-	instance->setFromJson(source, false);
+UpdateLibraryOptionsDto UpdateLibraryOptionsDto::fromJson(QJsonObject source) {
+	UpdateLibraryOptionsDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void UpdateLibraryOptionsDto::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
-	m_libraryOptions = fromJsonValue<QSharedPointer<LibraryOptions>>(source["LibraryOptions"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QUuid>(source["Id"]);
+	m_libraryOptions = Jellyfin::Support::fromJsonValue<QSharedPointer<LibraryOptions>>(source["LibraryOptions"]);
 
 }
 	
 QJsonObject UpdateLibraryOptionsDto::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
-	result["LibraryOptions"] = toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
+	result["Id"] = Jellyfin::Support::toJsonValue<QUuid>(m_jellyfinId);
+	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void UpdateLibraryOptionsDto::setLibraryOptions(QSharedPointer<LibraryOptions> n
 	m_libraryOptions = newLibraryOptions;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using UpdateLibraryOptionsDto = Jellyfin::DTO::UpdateLibraryOptionsDto;
+
+template <>
+UpdateLibraryOptionsDto fromJsonValue<UpdateLibraryOptionsDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UpdateLibraryOptionsDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

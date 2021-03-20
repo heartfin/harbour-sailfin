@@ -128,18 +128,6 @@ protected:
 	bool m_isAutomated;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MovieInfo = Jellyfin::DTO::MovieInfo;
-
-template <>
-MovieInfo fromJsonValue<MovieInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MovieInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

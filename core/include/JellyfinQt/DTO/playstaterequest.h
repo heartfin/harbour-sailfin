@@ -73,18 +73,6 @@ protected:
 	QString m_controllingUserId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PlaystateRequest = Jellyfin::DTO::PlaystateRequest;
-
-template <>
-PlaystateRequest fromJsonValue<PlaystateRequest>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PlaystateRequest::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

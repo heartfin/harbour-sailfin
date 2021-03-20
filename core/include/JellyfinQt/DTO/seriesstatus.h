@@ -54,28 +54,6 @@ private:
 
 typedef SeriesStatusClass::Value SeriesStatus;
 
-} // NS DTO
-
-namespace Support {
-
-using SeriesStatus = Jellyfin::DTO::SeriesStatus;
-using SeriesStatusClass = Jellyfin::DTO::SeriesStatusClass;
-
-template <>
-SeriesStatus fromJsonValue<SeriesStatus>(const QJsonValue &source) {
-	if (!source.isString()) return SeriesStatusClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Continuing")) {
-		return SeriesStatusClass::Continuing;
-	}
-	if (str == QStringLiteral("Ended")) {
-		return SeriesStatusClass::Ended;
-	}
-	
-	return SeriesStatusClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

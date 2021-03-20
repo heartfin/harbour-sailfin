@@ -275,18 +275,6 @@ protected:
 	SyncPlayUserAccessType m_syncPlayAccess;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using UserPolicy = Jellyfin::DTO::UserPolicy;
-
-template <>
-UserPolicy fromJsonValue<UserPolicy>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return UserPolicy::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

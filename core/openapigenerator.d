@@ -72,9 +72,9 @@ string[string] compatAliases;
 string[string] memberAliases;
 
 static this() {
-	compatAliases["BaseItemDto"] = "Item";
+	/*compatAliases["BaseItemDto"] = "Item";
 	compatAliases["UserDto"] = "User";
-	compatAliases["UserItemDataDto"] = "UserData";
+	compatAliases["UserItemDataDto"] = "UserData";*/
 	
 	memberAliases["id"] = "jellyfinId";
 }
@@ -199,7 +199,7 @@ void generateFileForSchema(ref string name, ref const Node scheme, Node allSchem
 		writeHeaderPostamble(headerFile, CPP_NAMESPACE_DTO, name);
 		
 		writeImplementationPreamble(implementationFile, CPP_NAMESPACE_DTO, name);
-		writeEnumImplementation(implementationFile, name);
+		writeEnumImplementation(implementationFile, name, values[]);
 		writeImplementationPostamble(implementationFile, CPP_NAMESPACE_DTO, name);
 	}
 	if (scheme["type"].as!string == "object" && "properties" in scheme) {
@@ -415,9 +415,16 @@ void writeEnumHeader(File output, string name, string[] values, string doc = "")
 	output.writeln(render!(import("enum_header.hbs"), Controller)(controller));
 }
 
-void writeEnumImplementation(File output, string name) {
-	string className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
-	output.writefln("%sClass::%sClass() {}", name, name);
+void writeEnumImplementation(File output, string name, string[] values) {
+	class Controller {
+		string className;
+		string[] values;
+		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
+	}
+	Controller controller = new Controller();
+	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
+	controller.values = values;
+	output.writeln(render!(import("enum_implementation.hbs"), Controller)(controller));
 }
 
 // Common

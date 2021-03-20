@@ -32,76 +32,77 @@
 namespace Jellyfin {
 namespace DTO {
 
-SessionInfo::SessionInfo(QObject *parent) {}
+SessionInfo::SessionInfo() {}
 
-SessionInfo SessionInfo::fromJson(QJsonObject source) {SessionInfo instance;
-	instance->setFromJson(source, false);
+SessionInfo SessionInfo::fromJson(QJsonObject source) {
+	SessionInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SessionInfo::setFromJson(QJsonObject source) {
-	m_playState = fromJsonValue<QSharedPointer<PlayerStateInfo>>(source["PlayState"]);
-	m_additionalUsers = fromJsonValue<QList<QSharedPointer<SessionUserInfo>>>(source["AdditionalUsers"]);
-	m_capabilities = fromJsonValue<QSharedPointer<ClientCapabilities>>(source["Capabilities"]);
-	m_remoteEndPoint = fromJsonValue<QString>(source["RemoteEndPoint"]);
-	m_playableMediaTypes = fromJsonValue<QStringList>(source["PlayableMediaTypes"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_userId = fromJsonValue<QUuid>(source["UserId"]);
-	m_userName = fromJsonValue<QString>(source["UserName"]);
-	m_client = fromJsonValue<QString>(source["Client"]);
-	m_lastActivityDate = fromJsonValue<QDateTime>(source["LastActivityDate"]);
-	m_lastPlaybackCheckIn = fromJsonValue<QDateTime>(source["LastPlaybackCheckIn"]);
-	m_deviceName = fromJsonValue<QString>(source["DeviceName"]);
-	m_deviceType = fromJsonValue<QString>(source["DeviceType"]);
-	m_nowPlayingItem = fromJsonValue<QSharedPointer<BaseItemDto>>(source["NowPlayingItem"]);
-	m_fullNowPlayingItem = fromJsonValue<QSharedPointer<BaseItem>>(source["FullNowPlayingItem"]);
-	m_nowViewingItem = fromJsonValue<QSharedPointer<BaseItemDto>>(source["NowViewingItem"]);
-	m_deviceId = fromJsonValue<QString>(source["DeviceId"]);
-	m_applicationVersion = fromJsonValue<QString>(source["ApplicationVersion"]);
-	m_transcodingInfo = fromJsonValue<QSharedPointer<TranscodingInfo>>(source["TranscodingInfo"]);
-	m_isActive = fromJsonValue<bool>(source["IsActive"]);
-	m_supportsMediaControl = fromJsonValue<bool>(source["SupportsMediaControl"]);
-	m_supportsRemoteControl = fromJsonValue<bool>(source["SupportsRemoteControl"]);
-	m_nowPlayingQueue = fromJsonValue<QList<QSharedPointer<QueueItem>>>(source["NowPlayingQueue"]);
-	m_hasCustomDeviceName = fromJsonValue<bool>(source["HasCustomDeviceName"]);
-	m_playlistItemId = fromJsonValue<QString>(source["PlaylistItemId"]);
-	m_serverId = fromJsonValue<QString>(source["ServerId"]);
-	m_userPrimaryImageTag = fromJsonValue<QString>(source["UserPrimaryImageTag"]);
-	m_supportedCommands = fromJsonValue<QList<GeneralCommandType>>(source["SupportedCommands"]);
+	m_playState = Jellyfin::Support::fromJsonValue<QSharedPointer<PlayerStateInfo>>(source["PlayState"]);
+	m_additionalUsers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SessionUserInfo>>>(source["AdditionalUsers"]);
+	m_capabilities = Jellyfin::Support::fromJsonValue<QSharedPointer<ClientCapabilities>>(source["Capabilities"]);
+	m_remoteEndPoint = Jellyfin::Support::fromJsonValue<QString>(source["RemoteEndPoint"]);
+	m_playableMediaTypes = Jellyfin::Support::fromJsonValue<QStringList>(source["PlayableMediaTypes"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_userId = Jellyfin::Support::fromJsonValue<QUuid>(source["UserId"]);
+	m_userName = Jellyfin::Support::fromJsonValue<QString>(source["UserName"]);
+	m_client = Jellyfin::Support::fromJsonValue<QString>(source["Client"]);
+	m_lastActivityDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["LastActivityDate"]);
+	m_lastPlaybackCheckIn = Jellyfin::Support::fromJsonValue<QDateTime>(source["LastPlaybackCheckIn"]);
+	m_deviceName = Jellyfin::Support::fromJsonValue<QString>(source["DeviceName"]);
+	m_deviceType = Jellyfin::Support::fromJsonValue<QString>(source["DeviceType"]);
+	m_nowPlayingItem = Jellyfin::Support::fromJsonValue<QSharedPointer<BaseItemDto>>(source["NowPlayingItem"]);
+	m_fullNowPlayingItem = Jellyfin::Support::fromJsonValue<QSharedPointer<BaseItem>>(source["FullNowPlayingItem"]);
+	m_nowViewingItem = Jellyfin::Support::fromJsonValue<QSharedPointer<BaseItemDto>>(source["NowViewingItem"]);
+	m_deviceId = Jellyfin::Support::fromJsonValue<QString>(source["DeviceId"]);
+	m_applicationVersion = Jellyfin::Support::fromJsonValue<QString>(source["ApplicationVersion"]);
+	m_transcodingInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<TranscodingInfo>>(source["TranscodingInfo"]);
+	m_isActive = Jellyfin::Support::fromJsonValue<bool>(source["IsActive"]);
+	m_supportsMediaControl = Jellyfin::Support::fromJsonValue<bool>(source["SupportsMediaControl"]);
+	m_supportsRemoteControl = Jellyfin::Support::fromJsonValue<bool>(source["SupportsRemoteControl"]);
+	m_nowPlayingQueue = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<QueueItem>>>(source["NowPlayingQueue"]);
+	m_hasCustomDeviceName = Jellyfin::Support::fromJsonValue<bool>(source["HasCustomDeviceName"]);
+	m_playlistItemId = Jellyfin::Support::fromJsonValue<QString>(source["PlaylistItemId"]);
+	m_serverId = Jellyfin::Support::fromJsonValue<QString>(source["ServerId"]);
+	m_userPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["UserPrimaryImageTag"]);
+	m_supportedCommands = Jellyfin::Support::fromJsonValue<QList<GeneralCommandType>>(source["SupportedCommands"]);
 
 }
 	
 QJsonObject SessionInfo::toJson() {
 	QJsonObject result;
-	result["PlayState"] = toJsonValue<QSharedPointer<PlayerStateInfo>>(m_playState);
-	result["AdditionalUsers"] = toJsonValue<QList<QSharedPointer<SessionUserInfo>>>(m_additionalUsers);
-	result["Capabilities"] = toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);
-	result["RemoteEndPoint"] = toJsonValue<QString>(m_remoteEndPoint);
-	result["PlayableMediaTypes"] = toJsonValue<QStringList>(m_playableMediaTypes);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["UserId"] = toJsonValue<QUuid>(m_userId);
-	result["UserName"] = toJsonValue<QString>(m_userName);
-	result["Client"] = toJsonValue<QString>(m_client);
-	result["LastActivityDate"] = toJsonValue<QDateTime>(m_lastActivityDate);
-	result["LastPlaybackCheckIn"] = toJsonValue<QDateTime>(m_lastPlaybackCheckIn);
-	result["DeviceName"] = toJsonValue<QString>(m_deviceName);
-	result["DeviceType"] = toJsonValue<QString>(m_deviceType);
-	result["NowPlayingItem"] = toJsonValue<QSharedPointer<BaseItemDto>>(m_nowPlayingItem);
-	result["FullNowPlayingItem"] = toJsonValue<QSharedPointer<BaseItem>>(m_fullNowPlayingItem);
-	result["NowViewingItem"] = toJsonValue<QSharedPointer<BaseItemDto>>(m_nowViewingItem);
-	result["DeviceId"] = toJsonValue<QString>(m_deviceId);
-	result["ApplicationVersion"] = toJsonValue<QString>(m_applicationVersion);
-	result["TranscodingInfo"] = toJsonValue<QSharedPointer<TranscodingInfo>>(m_transcodingInfo);
-	result["IsActive"] = toJsonValue<bool>(m_isActive);
-	result["SupportsMediaControl"] = toJsonValue<bool>(m_supportsMediaControl);
-	result["SupportsRemoteControl"] = toJsonValue<bool>(m_supportsRemoteControl);
-	result["NowPlayingQueue"] = toJsonValue<QList<QSharedPointer<QueueItem>>>(m_nowPlayingQueue);
-	result["HasCustomDeviceName"] = toJsonValue<bool>(m_hasCustomDeviceName);
-	result["PlaylistItemId"] = toJsonValue<QString>(m_playlistItemId);
-	result["ServerId"] = toJsonValue<QString>(m_serverId);
-	result["UserPrimaryImageTag"] = toJsonValue<QString>(m_userPrimaryImageTag);
-	result["SupportedCommands"] = toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
+	result["PlayState"] = Jellyfin::Support::toJsonValue<QSharedPointer<PlayerStateInfo>>(m_playState);
+	result["AdditionalUsers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SessionUserInfo>>>(m_additionalUsers);
+	result["Capabilities"] = Jellyfin::Support::toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);
+	result["RemoteEndPoint"] = Jellyfin::Support::toJsonValue<QString>(m_remoteEndPoint);
+	result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QStringList>(m_playableMediaTypes);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["UserId"] = Jellyfin::Support::toJsonValue<QUuid>(m_userId);
+	result["UserName"] = Jellyfin::Support::toJsonValue<QString>(m_userName);
+	result["Client"] = Jellyfin::Support::toJsonValue<QString>(m_client);
+	result["LastActivityDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastActivityDate);
+	result["LastPlaybackCheckIn"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastPlaybackCheckIn);
+	result["DeviceName"] = Jellyfin::Support::toJsonValue<QString>(m_deviceName);
+	result["DeviceType"] = Jellyfin::Support::toJsonValue<QString>(m_deviceType);
+	result["NowPlayingItem"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_nowPlayingItem);
+	result["FullNowPlayingItem"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItem>>(m_fullNowPlayingItem);
+	result["NowViewingItem"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_nowViewingItem);
+	result["DeviceId"] = Jellyfin::Support::toJsonValue<QString>(m_deviceId);
+	result["ApplicationVersion"] = Jellyfin::Support::toJsonValue<QString>(m_applicationVersion);
+	result["TranscodingInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<TranscodingInfo>>(m_transcodingInfo);
+	result["IsActive"] = Jellyfin::Support::toJsonValue<bool>(m_isActive);
+	result["SupportsMediaControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsMediaControl);
+	result["SupportsRemoteControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsRemoteControl);
+	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<QueueItem>>>(m_nowPlayingQueue);
+	result["HasCustomDeviceName"] = Jellyfin::Support::toJsonValue<bool>(m_hasCustomDeviceName);
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
+	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
+	result["UserPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_userPrimaryImageTag);
+	result["SupportedCommands"] = Jellyfin::Support::toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
 
 	return result;
 }
@@ -247,6 +248,17 @@ void SessionInfo::setSupportedCommands(QList<GeneralCommandType> newSupportedCom
 	m_supportedCommands = newSupportedCommands;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SessionInfo = Jellyfin::DTO::SessionInfo;
+
+template <>
+SessionInfo fromJsonValue<SessionInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SessionInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

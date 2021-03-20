@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-QueueRequestDto::QueueRequestDto(QObject *parent) {}
+QueueRequestDto::QueueRequestDto() {}
 
-QueueRequestDto QueueRequestDto::fromJson(QJsonObject source) {QueueRequestDto instance;
-	instance->setFromJson(source, false);
+QueueRequestDto QueueRequestDto::fromJson(QJsonObject source) {
+	QueueRequestDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void QueueRequestDto::setFromJson(QJsonObject source) {
-	m_itemIds = fromJsonValue<QList<QUuid>>(source["ItemIds"]);
-	m_mode = fromJsonValue<GroupQueueMode>(source["Mode"]);
+	m_itemIds = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["ItemIds"]);
+	m_mode = Jellyfin::Support::fromJsonValue<GroupQueueMode>(source["Mode"]);
 
 }
 	
 QJsonObject QueueRequestDto::toJson() {
 	QJsonObject result;
-	result["ItemIds"] = toJsonValue<QList<QUuid>>(m_itemIds);
-	result["Mode"] = toJsonValue<GroupQueueMode>(m_mode);
+	result["ItemIds"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_itemIds);
+	result["Mode"] = Jellyfin::Support::toJsonValue<GroupQueueMode>(m_mode);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void QueueRequestDto::setMode(GroupQueueMode newMode) {
 	m_mode = newMode;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using QueueRequestDto = Jellyfin::DTO::QueueRequestDto;
+
+template <>
+QueueRequestDto fromJsonValue<QueueRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QueueRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

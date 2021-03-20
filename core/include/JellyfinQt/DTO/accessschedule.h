@@ -95,18 +95,6 @@ protected:
 	double m_endHour;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using AccessSchedule = Jellyfin::DTO::AccessSchedule;
-
-template <>
-AccessSchedule fromJsonValue<AccessSchedule>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return AccessSchedule::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

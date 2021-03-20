@@ -34,5 +34,33 @@ namespace DTO {
 
 FileSystemEntryTypeClass::FileSystemEntryTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using FileSystemEntryType = Jellyfin::DTO::FileSystemEntryType;
+
+template <>
+FileSystemEntryType fromJsonValue<FileSystemEntryType>(const QJsonValue &source) {
+	if (!source.isString()) return FileSystemEntryType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("File")) {
+		return FileSystemEntryType::File;
+	}
+	if (str == QStringLiteral("Directory")) {
+		return FileSystemEntryType::Directory;
+	}
+	if (str == QStringLiteral("NetworkComputer")) {
+		return FileSystemEntryType::NetworkComputer;
+	}
+	if (str == QStringLiteral("NetworkShare")) {
+		return FileSystemEntryType::NetworkShare;
+	}
+	
+	return FileSystemEntryType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

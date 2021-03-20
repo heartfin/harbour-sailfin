@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceInfoQueryResult::DeviceInfoQueryResult(QObject *parent) {}
+DeviceInfoQueryResult::DeviceInfoQueryResult() {}
 
-DeviceInfoQueryResult DeviceInfoQueryResult::fromJson(QJsonObject source) {DeviceInfoQueryResult instance;
-	instance->setFromJson(source, false);
+DeviceInfoQueryResult DeviceInfoQueryResult::fromJson(QJsonObject source) {
+	DeviceInfoQueryResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void DeviceInfoQueryResult::setFromJson(QJsonObject source) {
-	m_items = fromJsonValue<QList<QSharedPointer<DeviceInfo>>>(source["Items"]);
-	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
-	m_startIndex = fromJsonValue<qint32>(source["StartIndex"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<DeviceInfo>>>(source["Items"]);
+	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
 }
 	
 QJsonObject DeviceInfoQueryResult::toJson() {
 	QJsonObject result;
-	result["Items"] = toJsonValue<QList<QSharedPointer<DeviceInfo>>>(m_items);
-	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
-	result["StartIndex"] = toJsonValue<qint32>(m_startIndex);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<DeviceInfo>>>(m_items);
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
+	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void DeviceInfoQueryResult::setStartIndex(qint32 newStartIndex) {
 	m_startIndex = newStartIndex;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using DeviceInfoQueryResult = Jellyfin::DTO::DeviceInfoQueryResult;
+
+template <>
+DeviceInfoQueryResult fromJsonValue<DeviceInfoQueryResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceInfoQueryResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

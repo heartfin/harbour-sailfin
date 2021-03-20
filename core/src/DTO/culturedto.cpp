@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-CultureDto::CultureDto(QObject *parent) {}
+CultureDto::CultureDto() {}
 
-CultureDto CultureDto::fromJson(QJsonObject source) {CultureDto instance;
-	instance->setFromJson(source, false);
+CultureDto CultureDto::fromJson(QJsonObject source) {
+	CultureDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void CultureDto::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_displayName = fromJsonValue<QString>(source["DisplayName"]);
-	m_twoLetterISOLanguageName = fromJsonValue<QString>(source["TwoLetterISOLanguageName"]);
-	m_threeLetterISOLanguageName = fromJsonValue<QString>(source["ThreeLetterISOLanguageName"]);
-	m_threeLetterISOLanguageNames = fromJsonValue<QStringList>(source["ThreeLetterISOLanguageNames"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_displayName = Jellyfin::Support::fromJsonValue<QString>(source["DisplayName"]);
+	m_twoLetterISOLanguageName = Jellyfin::Support::fromJsonValue<QString>(source["TwoLetterISOLanguageName"]);
+	m_threeLetterISOLanguageName = Jellyfin::Support::fromJsonValue<QString>(source["ThreeLetterISOLanguageName"]);
+	m_threeLetterISOLanguageNames = Jellyfin::Support::fromJsonValue<QStringList>(source["ThreeLetterISOLanguageNames"]);
 
 }
 	
 QJsonObject CultureDto::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["DisplayName"] = toJsonValue<QString>(m_displayName);
-	result["TwoLetterISOLanguageName"] = toJsonValue<QString>(m_twoLetterISOLanguageName);
-	result["ThreeLetterISOLanguageName"] = toJsonValue<QString>(m_threeLetterISOLanguageName);
-	result["ThreeLetterISOLanguageNames"] = toJsonValue<QStringList>(m_threeLetterISOLanguageNames);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
+	result["TwoLetterISOLanguageName"] = Jellyfin::Support::toJsonValue<QString>(m_twoLetterISOLanguageName);
+	result["ThreeLetterISOLanguageName"] = Jellyfin::Support::toJsonValue<QString>(m_threeLetterISOLanguageName);
+	result["ThreeLetterISOLanguageNames"] = Jellyfin::Support::toJsonValue<QStringList>(m_threeLetterISOLanguageNames);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void CultureDto::setThreeLetterISOLanguageNames(QStringList newThreeLetterISOLan
 	m_threeLetterISOLanguageNames = newThreeLetterISOLanguageNames;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using CultureDto = Jellyfin::DTO::CultureDto;
+
+template <>
+CultureDto fromJsonValue<CultureDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return CultureDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

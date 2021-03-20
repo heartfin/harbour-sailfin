@@ -58,18 +58,6 @@ protected:
 	GroupRepeatMode m_mode;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using SetRepeatModeRequestDto = Jellyfin::DTO::SetRepeatModeRequestDto;
-
-template <>
-SetRepeatModeRequestDto fromJsonValue<SetRepeatModeRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return SetRepeatModeRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

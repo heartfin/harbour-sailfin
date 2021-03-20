@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-LibraryOptionInfoDto::LibraryOptionInfoDto(QObject *parent) {}
+LibraryOptionInfoDto::LibraryOptionInfoDto() {}
 
-LibraryOptionInfoDto LibraryOptionInfoDto::fromJson(QJsonObject source) {LibraryOptionInfoDto instance;
-	instance->setFromJson(source, false);
+LibraryOptionInfoDto LibraryOptionInfoDto::fromJson(QJsonObject source) {
+	LibraryOptionInfoDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void LibraryOptionInfoDto::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_defaultEnabled = fromJsonValue<bool>(source["DefaultEnabled"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_defaultEnabled = Jellyfin::Support::fromJsonValue<bool>(source["DefaultEnabled"]);
 
 }
 	
 QJsonObject LibraryOptionInfoDto::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["DefaultEnabled"] = toJsonValue<bool>(m_defaultEnabled);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["DefaultEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_defaultEnabled);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void LibraryOptionInfoDto::setDefaultEnabled(bool newDefaultEnabled) {
 	m_defaultEnabled = newDefaultEnabled;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using LibraryOptionInfoDto = Jellyfin::DTO::LibraryOptionInfoDto;
+
+template <>
+LibraryOptionInfoDto fromJsonValue<LibraryOptionInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return LibraryOptionInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

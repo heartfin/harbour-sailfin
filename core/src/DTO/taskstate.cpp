@@ -34,5 +34,30 @@ namespace DTO {
 
 TaskStateClass::TaskStateClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using TaskState = Jellyfin::DTO::TaskState;
+
+template <>
+TaskState fromJsonValue<TaskState>(const QJsonValue &source) {
+	if (!source.isString()) return TaskState::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Idle")) {
+		return TaskState::Idle;
+	}
+	if (str == QStringLiteral("Cancelling")) {
+		return TaskState::Cancelling;
+	}
+	if (str == QStringLiteral("Running")) {
+		return TaskState::Running;
+	}
+	
+	return TaskState::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

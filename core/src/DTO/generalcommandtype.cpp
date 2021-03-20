@@ -34,5 +34,144 @@ namespace DTO {
 
 GeneralCommandTypeClass::GeneralCommandTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using GeneralCommandType = Jellyfin::DTO::GeneralCommandType;
+
+template <>
+GeneralCommandType fromJsonValue<GeneralCommandType>(const QJsonValue &source) {
+	if (!source.isString()) return GeneralCommandType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("MoveUp")) {
+		return GeneralCommandType::MoveUp;
+	}
+	if (str == QStringLiteral("MoveDown")) {
+		return GeneralCommandType::MoveDown;
+	}
+	if (str == QStringLiteral("MoveLeft")) {
+		return GeneralCommandType::MoveLeft;
+	}
+	if (str == QStringLiteral("MoveRight")) {
+		return GeneralCommandType::MoveRight;
+	}
+	if (str == QStringLiteral("PageUp")) {
+		return GeneralCommandType::PageUp;
+	}
+	if (str == QStringLiteral("PageDown")) {
+		return GeneralCommandType::PageDown;
+	}
+	if (str == QStringLiteral("PreviousLetter")) {
+		return GeneralCommandType::PreviousLetter;
+	}
+	if (str == QStringLiteral("NextLetter")) {
+		return GeneralCommandType::NextLetter;
+	}
+	if (str == QStringLiteral("ToggleOsd")) {
+		return GeneralCommandType::ToggleOsd;
+	}
+	if (str == QStringLiteral("ToggleContextMenu")) {
+		return GeneralCommandType::ToggleContextMenu;
+	}
+	if (str == QStringLiteral("Select")) {
+		return GeneralCommandType::Select;
+	}
+	if (str == QStringLiteral("Back")) {
+		return GeneralCommandType::Back;
+	}
+	if (str == QStringLiteral("TakeScreenshot")) {
+		return GeneralCommandType::TakeScreenshot;
+	}
+	if (str == QStringLiteral("SendKey")) {
+		return GeneralCommandType::SendKey;
+	}
+	if (str == QStringLiteral("SendString")) {
+		return GeneralCommandType::SendString;
+	}
+	if (str == QStringLiteral("GoHome")) {
+		return GeneralCommandType::GoHome;
+	}
+	if (str == QStringLiteral("GoToSettings")) {
+		return GeneralCommandType::GoToSettings;
+	}
+	if (str == QStringLiteral("VolumeUp")) {
+		return GeneralCommandType::VolumeUp;
+	}
+	if (str == QStringLiteral("VolumeDown")) {
+		return GeneralCommandType::VolumeDown;
+	}
+	if (str == QStringLiteral("Mute")) {
+		return GeneralCommandType::Mute;
+	}
+	if (str == QStringLiteral("Unmute")) {
+		return GeneralCommandType::Unmute;
+	}
+	if (str == QStringLiteral("ToggleMute")) {
+		return GeneralCommandType::ToggleMute;
+	}
+	if (str == QStringLiteral("SetVolume")) {
+		return GeneralCommandType::SetVolume;
+	}
+	if (str == QStringLiteral("SetAudioStreamIndex")) {
+		return GeneralCommandType::SetAudioStreamIndex;
+	}
+	if (str == QStringLiteral("SetSubtitleStreamIndex")) {
+		return GeneralCommandType::SetSubtitleStreamIndex;
+	}
+	if (str == QStringLiteral("ToggleFullscreen")) {
+		return GeneralCommandType::ToggleFullscreen;
+	}
+	if (str == QStringLiteral("DisplayContent")) {
+		return GeneralCommandType::DisplayContent;
+	}
+	if (str == QStringLiteral("GoToSearch")) {
+		return GeneralCommandType::GoToSearch;
+	}
+	if (str == QStringLiteral("DisplayMessage")) {
+		return GeneralCommandType::DisplayMessage;
+	}
+	if (str == QStringLiteral("SetRepeatMode")) {
+		return GeneralCommandType::SetRepeatMode;
+	}
+	if (str == QStringLiteral("ChannelUp")) {
+		return GeneralCommandType::ChannelUp;
+	}
+	if (str == QStringLiteral("ChannelDown")) {
+		return GeneralCommandType::ChannelDown;
+	}
+	if (str == QStringLiteral("Guide")) {
+		return GeneralCommandType::Guide;
+	}
+	if (str == QStringLiteral("ToggleStats")) {
+		return GeneralCommandType::ToggleStats;
+	}
+	if (str == QStringLiteral("PlayMediaSource")) {
+		return GeneralCommandType::PlayMediaSource;
+	}
+	if (str == QStringLiteral("PlayTrailers")) {
+		return GeneralCommandType::PlayTrailers;
+	}
+	if (str == QStringLiteral("SetShuffleQueue")) {
+		return GeneralCommandType::SetShuffleQueue;
+	}
+	if (str == QStringLiteral("PlayState")) {
+		return GeneralCommandType::PlayState;
+	}
+	if (str == QStringLiteral("PlayNext")) {
+		return GeneralCommandType::PlayNext;
+	}
+	if (str == QStringLiteral("ToggleOsdMenu")) {
+		return GeneralCommandType::ToggleOsdMenu;
+	}
+	if (str == QStringLiteral("Play")) {
+		return GeneralCommandType::Play;
+	}
+	
+	return GeneralCommandType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

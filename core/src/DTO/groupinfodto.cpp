@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-GroupInfoDto::GroupInfoDto(QObject *parent) {}
+GroupInfoDto::GroupInfoDto() {}
 
-GroupInfoDto GroupInfoDto::fromJson(QJsonObject source) {GroupInfoDto instance;
-	instance->setFromJson(source, false);
+GroupInfoDto GroupInfoDto::fromJson(QJsonObject source) {
+	GroupInfoDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void GroupInfoDto::setFromJson(QJsonObject source) {
-	m_groupId = fromJsonValue<QUuid>(source["GroupId"]);
-	m_groupName = fromJsonValue<QString>(source["GroupName"]);
-	m_state = fromJsonValue<GroupStateType>(source["State"]);
-	m_participants = fromJsonValue<QStringList>(source["Participants"]);
-	m_lastUpdatedAt = fromJsonValue<QDateTime>(source["LastUpdatedAt"]);
+	m_groupId = Jellyfin::Support::fromJsonValue<QUuid>(source["GroupId"]);
+	m_groupName = Jellyfin::Support::fromJsonValue<QString>(source["GroupName"]);
+	m_state = Jellyfin::Support::fromJsonValue<GroupStateType>(source["State"]);
+	m_participants = Jellyfin::Support::fromJsonValue<QStringList>(source["Participants"]);
+	m_lastUpdatedAt = Jellyfin::Support::fromJsonValue<QDateTime>(source["LastUpdatedAt"]);
 
 }
 	
 QJsonObject GroupInfoDto::toJson() {
 	QJsonObject result;
-	result["GroupId"] = toJsonValue<QUuid>(m_groupId);
-	result["GroupName"] = toJsonValue<QString>(m_groupName);
-	result["State"] = toJsonValue<GroupStateType>(m_state);
-	result["Participants"] = toJsonValue<QStringList>(m_participants);
-	result["LastUpdatedAt"] = toJsonValue<QDateTime>(m_lastUpdatedAt);
+	result["GroupId"] = Jellyfin::Support::toJsonValue<QUuid>(m_groupId);
+	result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);
+	result["State"] = Jellyfin::Support::toJsonValue<GroupStateType>(m_state);
+	result["Participants"] = Jellyfin::Support::toJsonValue<QStringList>(m_participants);
+	result["LastUpdatedAt"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastUpdatedAt);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void GroupInfoDto::setLastUpdatedAt(QDateTime newLastUpdatedAt) {
 	m_lastUpdatedAt = newLastUpdatedAt;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using GroupInfoDto = Jellyfin::DTO::GroupInfoDto;
+
+template <>
+GroupInfoDto fromJsonValue<GroupInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return GroupInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

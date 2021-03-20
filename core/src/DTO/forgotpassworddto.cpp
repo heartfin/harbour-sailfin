@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-ForgotPasswordDto::ForgotPasswordDto(QObject *parent) {}
+ForgotPasswordDto::ForgotPasswordDto() {}
 
-ForgotPasswordDto ForgotPasswordDto::fromJson(QJsonObject source) {ForgotPasswordDto instance;
-	instance->setFromJson(source, false);
+ForgotPasswordDto ForgotPasswordDto::fromJson(QJsonObject source) {
+	ForgotPasswordDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ForgotPasswordDto::setFromJson(QJsonObject source) {
-	m_enteredUsername = fromJsonValue<QString>(source["EnteredUsername"]);
+	m_enteredUsername = Jellyfin::Support::fromJsonValue<QString>(source["EnteredUsername"]);
 
 }
 	
 QJsonObject ForgotPasswordDto::toJson() {
 	QJsonObject result;
-	result["EnteredUsername"] = toJsonValue<QString>(m_enteredUsername);
+	result["EnteredUsername"] = Jellyfin::Support::toJsonValue<QString>(m_enteredUsername);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void ForgotPasswordDto::setEnteredUsername(QString newEnteredUsername) {
 	m_enteredUsername = newEnteredUsername;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ForgotPasswordDto = Jellyfin::DTO::ForgotPasswordDto;
+
+template <>
+ForgotPasswordDto fromJsonValue<ForgotPasswordDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ForgotPasswordDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

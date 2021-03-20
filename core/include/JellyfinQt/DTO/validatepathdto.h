@@ -80,18 +80,6 @@ protected:
 	bool m_isFile;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ValidatePathDto = Jellyfin::DTO::ValidatePathDto;
-
-template <>
-ValidatePathDto fromJsonValue<ValidatePathDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ValidatePathDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

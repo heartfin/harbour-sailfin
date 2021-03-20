@@ -54,28 +54,6 @@ private:
 
 typedef ChannelTypeClass::Value ChannelType;
 
-} // NS DTO
-
-namespace Support {
-
-using ChannelType = Jellyfin::DTO::ChannelType;
-using ChannelTypeClass = Jellyfin::DTO::ChannelTypeClass;
-
-template <>
-ChannelType fromJsonValue<ChannelType>(const QJsonValue &source) {
-	if (!source.isString()) return ChannelTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("TV")) {
-		return ChannelTypeClass::TV;
-	}
-	if (str == QStringLiteral("Radio")) {
-		return ChannelTypeClass::Radio;
-	}
-	
-	return ChannelTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

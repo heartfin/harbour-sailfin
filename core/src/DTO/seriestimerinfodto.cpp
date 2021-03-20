@@ -32,90 +32,91 @@
 namespace Jellyfin {
 namespace DTO {
 
-SeriesTimerInfoDto::SeriesTimerInfoDto(QObject *parent) {}
+SeriesTimerInfoDto::SeriesTimerInfoDto() {}
 
-SeriesTimerInfoDto SeriesTimerInfoDto::fromJson(QJsonObject source) {SeriesTimerInfoDto instance;
-	instance->setFromJson(source, false);
+SeriesTimerInfoDto SeriesTimerInfoDto::fromJson(QJsonObject source) {
+	SeriesTimerInfoDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void SeriesTimerInfoDto::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_serverId = fromJsonValue<QString>(source["ServerId"]);
-	m_externalId = fromJsonValue<QString>(source["ExternalId"]);
-	m_channelId = fromJsonValue<QUuid>(source["ChannelId"]);
-	m_externalChannelId = fromJsonValue<QString>(source["ExternalChannelId"]);
-	m_channelName = fromJsonValue<QString>(source["ChannelName"]);
-	m_channelPrimaryImageTag = fromJsonValue<QString>(source["ChannelPrimaryImageTag"]);
-	m_programId = fromJsonValue<QString>(source["ProgramId"]);
-	m_externalProgramId = fromJsonValue<QString>(source["ExternalProgramId"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_overview = fromJsonValue<QString>(source["Overview"]);
-	m_startDate = fromJsonValue<QDateTime>(source["StartDate"]);
-	m_endDate = fromJsonValue<QDateTime>(source["EndDate"]);
-	m_serviceName = fromJsonValue<QString>(source["ServiceName"]);
-	m_priority = fromJsonValue<qint32>(source["Priority"]);
-	m_prePaddingSeconds = fromJsonValue<qint32>(source["PrePaddingSeconds"]);
-	m_postPaddingSeconds = fromJsonValue<qint32>(source["PostPaddingSeconds"]);
-	m_isPrePaddingRequired = fromJsonValue<bool>(source["IsPrePaddingRequired"]);
-	m_parentBackdropItemId = fromJsonValue<QString>(source["ParentBackdropItemId"]);
-	m_parentBackdropImageTags = fromJsonValue<QStringList>(source["ParentBackdropImageTags"]);
-	m_isPostPaddingRequired = fromJsonValue<bool>(source["IsPostPaddingRequired"]);
-	m_keepUntil = fromJsonValue<KeepUntil>(source["KeepUntil"]);
-	m_recordAnyTime = fromJsonValue<bool>(source["RecordAnyTime"]);
-	m_skipEpisodesInLibrary = fromJsonValue<bool>(source["SkipEpisodesInLibrary"]);
-	m_recordAnyChannel = fromJsonValue<bool>(source["RecordAnyChannel"]);
-	m_keepUpTo = fromJsonValue<qint32>(source["KeepUpTo"]);
-	m_recordNewOnly = fromJsonValue<bool>(source["RecordNewOnly"]);
-	m_days = fromJsonValue<QList<DayOfWeek>>(source["Days"]);
-	m_dayPattern = fromJsonValue<DayPattern>(source["DayPattern"]);
-	m_imageTags = fromJsonValue<QJsonObject>(source["ImageTags"]);
-	m_parentThumbItemId = fromJsonValue<QString>(source["ParentThumbItemId"]);
-	m_parentThumbImageTag = fromJsonValue<QString>(source["ParentThumbImageTag"]);
-	m_parentPrimaryImageItemId = fromJsonValue<QString>(source["ParentPrimaryImageItemId"]);
-	m_parentPrimaryImageTag = fromJsonValue<QString>(source["ParentPrimaryImageTag"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_serverId = Jellyfin::Support::fromJsonValue<QString>(source["ServerId"]);
+	m_externalId = Jellyfin::Support::fromJsonValue<QString>(source["ExternalId"]);
+	m_channelId = Jellyfin::Support::fromJsonValue<QUuid>(source["ChannelId"]);
+	m_externalChannelId = Jellyfin::Support::fromJsonValue<QString>(source["ExternalChannelId"]);
+	m_channelName = Jellyfin::Support::fromJsonValue<QString>(source["ChannelName"]);
+	m_channelPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ChannelPrimaryImageTag"]);
+	m_programId = Jellyfin::Support::fromJsonValue<QString>(source["ProgramId"]);
+	m_externalProgramId = Jellyfin::Support::fromJsonValue<QString>(source["ExternalProgramId"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_overview = Jellyfin::Support::fromJsonValue<QString>(source["Overview"]);
+	m_startDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["StartDate"]);
+	m_endDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["EndDate"]);
+	m_serviceName = Jellyfin::Support::fromJsonValue<QString>(source["ServiceName"]);
+	m_priority = Jellyfin::Support::fromJsonValue<qint32>(source["Priority"]);
+	m_prePaddingSeconds = Jellyfin::Support::fromJsonValue<qint32>(source["PrePaddingSeconds"]);
+	m_postPaddingSeconds = Jellyfin::Support::fromJsonValue<qint32>(source["PostPaddingSeconds"]);
+	m_isPrePaddingRequired = Jellyfin::Support::fromJsonValue<bool>(source["IsPrePaddingRequired"]);
+	m_parentBackdropItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentBackdropItemId"]);
+	m_parentBackdropImageTags = Jellyfin::Support::fromJsonValue<QStringList>(source["ParentBackdropImageTags"]);
+	m_isPostPaddingRequired = Jellyfin::Support::fromJsonValue<bool>(source["IsPostPaddingRequired"]);
+	m_keepUntil = Jellyfin::Support::fromJsonValue<KeepUntil>(source["KeepUntil"]);
+	m_recordAnyTime = Jellyfin::Support::fromJsonValue<bool>(source["RecordAnyTime"]);
+	m_skipEpisodesInLibrary = Jellyfin::Support::fromJsonValue<bool>(source["SkipEpisodesInLibrary"]);
+	m_recordAnyChannel = Jellyfin::Support::fromJsonValue<bool>(source["RecordAnyChannel"]);
+	m_keepUpTo = Jellyfin::Support::fromJsonValue<qint32>(source["KeepUpTo"]);
+	m_recordNewOnly = Jellyfin::Support::fromJsonValue<bool>(source["RecordNewOnly"]);
+	m_days = Jellyfin::Support::fromJsonValue<QList<DayOfWeek>>(source["Days"]);
+	m_dayPattern = Jellyfin::Support::fromJsonValue<DayPattern>(source["DayPattern"]);
+	m_imageTags = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ImageTags"]);
+	m_parentThumbItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentThumbItemId"]);
+	m_parentThumbImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ParentThumbImageTag"]);
+	m_parentPrimaryImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentPrimaryImageItemId"]);
+	m_parentPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ParentPrimaryImageTag"]);
 
 }
 	
 QJsonObject SeriesTimerInfoDto::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["ServerId"] = toJsonValue<QString>(m_serverId);
-	result["ExternalId"] = toJsonValue<QString>(m_externalId);
-	result["ChannelId"] = toJsonValue<QUuid>(m_channelId);
-	result["ExternalChannelId"] = toJsonValue<QString>(m_externalChannelId);
-	result["ChannelName"] = toJsonValue<QString>(m_channelName);
-	result["ChannelPrimaryImageTag"] = toJsonValue<QString>(m_channelPrimaryImageTag);
-	result["ProgramId"] = toJsonValue<QString>(m_programId);
-	result["ExternalProgramId"] = toJsonValue<QString>(m_externalProgramId);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Overview"] = toJsonValue<QString>(m_overview);
-	result["StartDate"] = toJsonValue<QDateTime>(m_startDate);
-	result["EndDate"] = toJsonValue<QDateTime>(m_endDate);
-	result["ServiceName"] = toJsonValue<QString>(m_serviceName);
-	result["Priority"] = toJsonValue<qint32>(m_priority);
-	result["PrePaddingSeconds"] = toJsonValue<qint32>(m_prePaddingSeconds);
-	result["PostPaddingSeconds"] = toJsonValue<qint32>(m_postPaddingSeconds);
-	result["IsPrePaddingRequired"] = toJsonValue<bool>(m_isPrePaddingRequired);
-	result["ParentBackdropItemId"] = toJsonValue<QString>(m_parentBackdropItemId);
-	result["ParentBackdropImageTags"] = toJsonValue<QStringList>(m_parentBackdropImageTags);
-	result["IsPostPaddingRequired"] = toJsonValue<bool>(m_isPostPaddingRequired);
-	result["KeepUntil"] = toJsonValue<KeepUntil>(m_keepUntil);
-	result["RecordAnyTime"] = toJsonValue<bool>(m_recordAnyTime);
-	result["SkipEpisodesInLibrary"] = toJsonValue<bool>(m_skipEpisodesInLibrary);
-	result["RecordAnyChannel"] = toJsonValue<bool>(m_recordAnyChannel);
-	result["KeepUpTo"] = toJsonValue<qint32>(m_keepUpTo);
-	result["RecordNewOnly"] = toJsonValue<bool>(m_recordNewOnly);
-	result["Days"] = toJsonValue<QList<DayOfWeek>>(m_days);
-	result["DayPattern"] = toJsonValue<DayPattern>(m_dayPattern);
-	result["ImageTags"] = toJsonValue<QJsonObject>(m_imageTags);
-	result["ParentThumbItemId"] = toJsonValue<QString>(m_parentThumbItemId);
-	result["ParentThumbImageTag"] = toJsonValue<QString>(m_parentThumbImageTag);
-	result["ParentPrimaryImageItemId"] = toJsonValue<QString>(m_parentPrimaryImageItemId);
-	result["ParentPrimaryImageTag"] = toJsonValue<QString>(m_parentPrimaryImageTag);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
+	result["ExternalId"] = Jellyfin::Support::toJsonValue<QString>(m_externalId);
+	result["ChannelId"] = Jellyfin::Support::toJsonValue<QUuid>(m_channelId);
+	result["ExternalChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_externalChannelId);
+	result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
+	result["ChannelPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_channelPrimaryImageTag);
+	result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
+	result["ExternalProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_externalProgramId);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
+	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
+	result["ServiceName"] = Jellyfin::Support::toJsonValue<QString>(m_serviceName);
+	result["Priority"] = Jellyfin::Support::toJsonValue<qint32>(m_priority);
+	result["PrePaddingSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_prePaddingSeconds);
+	result["PostPaddingSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_postPaddingSeconds);
+	result["IsPrePaddingRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isPrePaddingRequired);
+	result["ParentBackdropItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentBackdropItemId);
+	result["ParentBackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_parentBackdropImageTags);
+	result["IsPostPaddingRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isPostPaddingRequired);
+	result["KeepUntil"] = Jellyfin::Support::toJsonValue<KeepUntil>(m_keepUntil);
+	result["RecordAnyTime"] = Jellyfin::Support::toJsonValue<bool>(m_recordAnyTime);
+	result["SkipEpisodesInLibrary"] = Jellyfin::Support::toJsonValue<bool>(m_skipEpisodesInLibrary);
+	result["RecordAnyChannel"] = Jellyfin::Support::toJsonValue<bool>(m_recordAnyChannel);
+	result["KeepUpTo"] = Jellyfin::Support::toJsonValue<qint32>(m_keepUpTo);
+	result["RecordNewOnly"] = Jellyfin::Support::toJsonValue<bool>(m_recordNewOnly);
+	result["Days"] = Jellyfin::Support::toJsonValue<QList<DayOfWeek>>(m_days);
+	result["DayPattern"] = Jellyfin::Support::toJsonValue<DayPattern>(m_dayPattern);
+	result["ImageTags"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageTags);
+	result["ParentThumbItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbItemId);
+	result["ParentThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbImageTag);
+	result["ParentPrimaryImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentPrimaryImageItemId);
+	result["ParentPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentPrimaryImageTag);
 
 	return result;
 }
@@ -296,6 +297,17 @@ void SeriesTimerInfoDto::setParentPrimaryImageTag(QString newParentPrimaryImageT
 	m_parentPrimaryImageTag = newParentPrimaryImageTag;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using SeriesTimerInfoDto = Jellyfin::DTO::SeriesTimerInfoDto;
+
+template <>
+SeriesTimerInfoDto fromJsonValue<SeriesTimerInfoDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return SeriesTimerInfoDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

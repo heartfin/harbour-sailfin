@@ -141,18 +141,6 @@ protected:
 	QString m_key;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using TaskInfo = Jellyfin::DTO::TaskInfo;
-
-template <>
-TaskInfo fromJsonValue<TaskInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return TaskInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

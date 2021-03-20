@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-RemoteImageResult::RemoteImageResult(QObject *parent) {}
+RemoteImageResult::RemoteImageResult() {}
 
-RemoteImageResult RemoteImageResult::fromJson(QJsonObject source) {RemoteImageResult instance;
-	instance->setFromJson(source, false);
+RemoteImageResult RemoteImageResult::fromJson(QJsonObject source) {
+	RemoteImageResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void RemoteImageResult::setFromJson(QJsonObject source) {
-	m_images = fromJsonValue<QList<QSharedPointer<RemoteImageInfo>>>(source["Images"]);
-	m_totalRecordCount = fromJsonValue<qint32>(source["TotalRecordCount"]);
-	m_providers = fromJsonValue<QStringList>(source["Providers"]);
+	m_images = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<RemoteImageInfo>>>(source["Images"]);
+	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
+	m_providers = Jellyfin::Support::fromJsonValue<QStringList>(source["Providers"]);
 
 }
 	
 QJsonObject RemoteImageResult::toJson() {
 	QJsonObject result;
-	result["Images"] = toJsonValue<QList<QSharedPointer<RemoteImageInfo>>>(m_images);
-	result["TotalRecordCount"] = toJsonValue<qint32>(m_totalRecordCount);
-	result["Providers"] = toJsonValue<QStringList>(m_providers);
+	result["Images"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<RemoteImageInfo>>>(m_images);
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
+	result["Providers"] = Jellyfin::Support::toJsonValue<QStringList>(m_providers);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void RemoteImageResult::setProviders(QStringList newProviders) {
 	m_providers = newProviders;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using RemoteImageResult = Jellyfin::DTO::RemoteImageResult;
+
+template <>
+RemoteImageResult fromJsonValue<RemoteImageResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return RemoteImageResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

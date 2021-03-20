@@ -34,5 +34,30 @@ namespace DTO {
 
 SyncPlayUserAccessTypeClass::SyncPlayUserAccessTypeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using SyncPlayUserAccessType = Jellyfin::DTO::SyncPlayUserAccessType;
+
+template <>
+SyncPlayUserAccessType fromJsonValue<SyncPlayUserAccessType>(const QJsonValue &source) {
+	if (!source.isString()) return SyncPlayUserAccessType::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("CreateAndJoinGroups")) {
+		return SyncPlayUserAccessType::CreateAndJoinGroups;
+	}
+	if (str == QStringLiteral("JoinGroups")) {
+		return SyncPlayUserAccessType::JoinGroups;
+	}
+	if (str == QStringLiteral("None")) {
+		return SyncPlayUserAccessType::None;
+	}
+	
+	return SyncPlayUserAccessType::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

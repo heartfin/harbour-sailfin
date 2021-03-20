@@ -71,18 +71,6 @@ protected:
 	QDateTime m_responseTransmissionTime;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using UtcTimeResponse = Jellyfin::DTO::UtcTimeResponse;
-
-template <>
-UtcTimeResponse fromJsonValue<UtcTimeResponse>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return UtcTimeResponse::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -54,28 +54,6 @@ private:
 
 typedef ImageSavingConventionClass::Value ImageSavingConvention;
 
-} // NS DTO
-
-namespace Support {
-
-using ImageSavingConvention = Jellyfin::DTO::ImageSavingConvention;
-using ImageSavingConventionClass = Jellyfin::DTO::ImageSavingConventionClass;
-
-template <>
-ImageSavingConvention fromJsonValue<ImageSavingConvention>(const QJsonValue &source) {
-	if (!source.isString()) return ImageSavingConventionClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Legacy")) {
-		return ImageSavingConventionClass::Legacy;
-	}
-	if (str == QStringLiteral("Compatible")) {
-		return ImageSavingConventionClass::Compatible;
-	}
-	
-	return ImageSavingConventionClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

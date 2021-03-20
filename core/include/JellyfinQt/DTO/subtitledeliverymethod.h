@@ -56,34 +56,6 @@ private:
 
 typedef SubtitleDeliveryMethodClass::Value SubtitleDeliveryMethod;
 
-} // NS DTO
-
-namespace Support {
-
-using SubtitleDeliveryMethod = Jellyfin::DTO::SubtitleDeliveryMethod;
-using SubtitleDeliveryMethodClass = Jellyfin::DTO::SubtitleDeliveryMethodClass;
-
-template <>
-SubtitleDeliveryMethod fromJsonValue<SubtitleDeliveryMethod>(const QJsonValue &source) {
-	if (!source.isString()) return SubtitleDeliveryMethodClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Encode")) {
-		return SubtitleDeliveryMethodClass::Encode;
-	}
-	if (str == QStringLiteral("Embed")) {
-		return SubtitleDeliveryMethodClass::Embed;
-	}
-	if (str == QStringLiteral("External")) {
-		return SubtitleDeliveryMethodClass::External;
-	}
-	if (str == QStringLiteral("Hls")) {
-		return SubtitleDeliveryMethodClass::Hls;
-	}
-	
-	return SubtitleDeliveryMethodClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

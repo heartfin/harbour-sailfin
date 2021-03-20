@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-ObjectGroupUpdate::ObjectGroupUpdate(QObject *parent) {}
+ObjectGroupUpdate::ObjectGroupUpdate() {}
 
-ObjectGroupUpdate ObjectGroupUpdate::fromJson(QJsonObject source) {ObjectGroupUpdate instance;
-	instance->setFromJson(source, false);
+ObjectGroupUpdate ObjectGroupUpdate::fromJson(QJsonObject source) {
+	ObjectGroupUpdate instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ObjectGroupUpdate::setFromJson(QJsonObject source) {
-	m_groupId = fromJsonValue<QUuid>(source["GroupId"]);
-	m_type = fromJsonValue<GroupUpdateType>(source["Type"]);
-	m_data = fromJsonValue<QVariant>(source["Data"]);
+	m_groupId = Jellyfin::Support::fromJsonValue<QUuid>(source["GroupId"]);
+	m_type = Jellyfin::Support::fromJsonValue<GroupUpdateType>(source["Type"]);
+	m_data = Jellyfin::Support::fromJsonValue<QVariant>(source["Data"]);
 
 }
 	
 QJsonObject ObjectGroupUpdate::toJson() {
 	QJsonObject result;
-	result["GroupId"] = toJsonValue<QUuid>(m_groupId);
-	result["Type"] = toJsonValue<GroupUpdateType>(m_type);
-	result["Data"] = toJsonValue<QVariant>(m_data);
+	result["GroupId"] = Jellyfin::Support::toJsonValue<QUuid>(m_groupId);
+	result["Type"] = Jellyfin::Support::toJsonValue<GroupUpdateType>(m_type);
+	result["Data"] = Jellyfin::Support::toJsonValue<QVariant>(m_data);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void ObjectGroupUpdate::setData(QVariant newData) {
 	m_data = newData;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ObjectGroupUpdate = Jellyfin::DTO::ObjectGroupUpdate;
+
+template <>
+ObjectGroupUpdate fromJsonValue<ObjectGroupUpdate>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ObjectGroupUpdate::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

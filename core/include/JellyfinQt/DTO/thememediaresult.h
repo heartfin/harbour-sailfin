@@ -93,18 +93,6 @@ protected:
 	QUuid m_ownerId;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ThemeMediaResult = Jellyfin::DTO::ThemeMediaResult;
-
-template <>
-ThemeMediaResult fromJsonValue<ThemeMediaResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ThemeMediaResult::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

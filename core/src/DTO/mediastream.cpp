@@ -32,114 +32,115 @@
 namespace Jellyfin {
 namespace DTO {
 
-MediaStream::MediaStream(QObject *parent) {}
+MediaStream::MediaStream() {}
 
-MediaStream MediaStream::fromJson(QJsonObject source) {MediaStream instance;
-	instance->setFromJson(source, false);
+MediaStream MediaStream::fromJson(QJsonObject source) {
+	MediaStream instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MediaStream::setFromJson(QJsonObject source) {
-	m_codec = fromJsonValue<QString>(source["Codec"]);
-	m_codecTag = fromJsonValue<QString>(source["CodecTag"]);
-	m_language = fromJsonValue<QString>(source["Language"]);
-	m_colorRange = fromJsonValue<QString>(source["ColorRange"]);
-	m_colorSpace = fromJsonValue<QString>(source["ColorSpace"]);
-	m_colorTransfer = fromJsonValue<QString>(source["ColorTransfer"]);
-	m_colorPrimaries = fromJsonValue<QString>(source["ColorPrimaries"]);
-	m_comment = fromJsonValue<QString>(source["Comment"]);
-	m_timeBase = fromJsonValue<QString>(source["TimeBase"]);
-	m_codecTimeBase = fromJsonValue<QString>(source["CodecTimeBase"]);
-	m_title = fromJsonValue<QString>(source["Title"]);
-	m_videoRange = fromJsonValue<QString>(source["VideoRange"]);
-	m_localizedUndefined = fromJsonValue<QString>(source["localizedUndefined"]);
-	m_localizedDefault = fromJsonValue<QString>(source["localizedDefault"]);
-	m_localizedForced = fromJsonValue<QString>(source["localizedForced"]);
-	m_displayTitle = fromJsonValue<QString>(source["DisplayTitle"]);
-	m_nalLengthSize = fromJsonValue<QString>(source["NalLengthSize"]);
-	m_isInterlaced = fromJsonValue<bool>(source["IsInterlaced"]);
-	m_isAVC = fromJsonValue<bool>(source["IsAVC"]);
-	m_channelLayout = fromJsonValue<QString>(source["ChannelLayout"]);
-	m_bitRate = fromJsonValue<qint32>(source["BitRate"]);
-	m_bitDepth = fromJsonValue<qint32>(source["BitDepth"]);
-	m_refFrames = fromJsonValue<qint32>(source["RefFrames"]);
-	m_packetLength = fromJsonValue<qint32>(source["PacketLength"]);
-	m_channels = fromJsonValue<qint32>(source["Channels"]);
-	m_sampleRate = fromJsonValue<qint32>(source["SampleRate"]);
-	m_isDefault = fromJsonValue<bool>(source["IsDefault"]);
-	m_isForced = fromJsonValue<bool>(source["IsForced"]);
-	m_height = fromJsonValue<qint32>(source["Height"]);
-	m_width = fromJsonValue<qint32>(source["Width"]);
-	m_averageFrameRate = fromJsonValue<float>(source["AverageFrameRate"]);
-	m_realFrameRate = fromJsonValue<float>(source["RealFrameRate"]);
-	m_profile = fromJsonValue<QString>(source["Profile"]);
-	m_type = fromJsonValue<MediaStreamType>(source["Type"]);
-	m_aspectRatio = fromJsonValue<QString>(source["AspectRatio"]);
-	m_index = fromJsonValue<qint32>(source["Index"]);
-	m_score = fromJsonValue<qint32>(source["Score"]);
-	m_isExternal = fromJsonValue<bool>(source["IsExternal"]);
-	m_deliveryMethod = fromJsonValue<SubtitleDeliveryMethod>(source["DeliveryMethod"]);
-	m_deliveryUrl = fromJsonValue<QString>(source["DeliveryUrl"]);
-	m_isExternalUrl = fromJsonValue<bool>(source["IsExternalUrl"]);
-	m_isTextSubtitleStream = fromJsonValue<bool>(source["IsTextSubtitleStream"]);
-	m_supportsExternalStream = fromJsonValue<bool>(source["SupportsExternalStream"]);
-	m_path = fromJsonValue<QString>(source["Path"]);
-	m_pixelFormat = fromJsonValue<QString>(source["PixelFormat"]);
-	m_level = fromJsonValue<double>(source["Level"]);
-	m_isAnamorphic = fromJsonValue<bool>(source["IsAnamorphic"]);
+	m_codec = Jellyfin::Support::fromJsonValue<QString>(source["Codec"]);
+	m_codecTag = Jellyfin::Support::fromJsonValue<QString>(source["CodecTag"]);
+	m_language = Jellyfin::Support::fromJsonValue<QString>(source["Language"]);
+	m_colorRange = Jellyfin::Support::fromJsonValue<QString>(source["ColorRange"]);
+	m_colorSpace = Jellyfin::Support::fromJsonValue<QString>(source["ColorSpace"]);
+	m_colorTransfer = Jellyfin::Support::fromJsonValue<QString>(source["ColorTransfer"]);
+	m_colorPrimaries = Jellyfin::Support::fromJsonValue<QString>(source["ColorPrimaries"]);
+	m_comment = Jellyfin::Support::fromJsonValue<QString>(source["Comment"]);
+	m_timeBase = Jellyfin::Support::fromJsonValue<QString>(source["TimeBase"]);
+	m_codecTimeBase = Jellyfin::Support::fromJsonValue<QString>(source["CodecTimeBase"]);
+	m_title = Jellyfin::Support::fromJsonValue<QString>(source["Title"]);
+	m_videoRange = Jellyfin::Support::fromJsonValue<QString>(source["VideoRange"]);
+	m_localizedUndefined = Jellyfin::Support::fromJsonValue<QString>(source["localizedUndefined"]);
+	m_localizedDefault = Jellyfin::Support::fromJsonValue<QString>(source["localizedDefault"]);
+	m_localizedForced = Jellyfin::Support::fromJsonValue<QString>(source["localizedForced"]);
+	m_displayTitle = Jellyfin::Support::fromJsonValue<QString>(source["DisplayTitle"]);
+	m_nalLengthSize = Jellyfin::Support::fromJsonValue<QString>(source["NalLengthSize"]);
+	m_isInterlaced = Jellyfin::Support::fromJsonValue<bool>(source["IsInterlaced"]);
+	m_isAVC = Jellyfin::Support::fromJsonValue<bool>(source["IsAVC"]);
+	m_channelLayout = Jellyfin::Support::fromJsonValue<QString>(source["ChannelLayout"]);
+	m_bitRate = Jellyfin::Support::fromJsonValue<qint32>(source["BitRate"]);
+	m_bitDepth = Jellyfin::Support::fromJsonValue<qint32>(source["BitDepth"]);
+	m_refFrames = Jellyfin::Support::fromJsonValue<qint32>(source["RefFrames"]);
+	m_packetLength = Jellyfin::Support::fromJsonValue<qint32>(source["PacketLength"]);
+	m_channels = Jellyfin::Support::fromJsonValue<qint32>(source["Channels"]);
+	m_sampleRate = Jellyfin::Support::fromJsonValue<qint32>(source["SampleRate"]);
+	m_isDefault = Jellyfin::Support::fromJsonValue<bool>(source["IsDefault"]);
+	m_isForced = Jellyfin::Support::fromJsonValue<bool>(source["IsForced"]);
+	m_height = Jellyfin::Support::fromJsonValue<qint32>(source["Height"]);
+	m_width = Jellyfin::Support::fromJsonValue<qint32>(source["Width"]);
+	m_averageFrameRate = Jellyfin::Support::fromJsonValue<float>(source["AverageFrameRate"]);
+	m_realFrameRate = Jellyfin::Support::fromJsonValue<float>(source["RealFrameRate"]);
+	m_profile = Jellyfin::Support::fromJsonValue<QString>(source["Profile"]);
+	m_type = Jellyfin::Support::fromJsonValue<MediaStreamType>(source["Type"]);
+	m_aspectRatio = Jellyfin::Support::fromJsonValue<QString>(source["AspectRatio"]);
+	m_index = Jellyfin::Support::fromJsonValue<qint32>(source["Index"]);
+	m_score = Jellyfin::Support::fromJsonValue<qint32>(source["Score"]);
+	m_isExternal = Jellyfin::Support::fromJsonValue<bool>(source["IsExternal"]);
+	m_deliveryMethod = Jellyfin::Support::fromJsonValue<SubtitleDeliveryMethod>(source["DeliveryMethod"]);
+	m_deliveryUrl = Jellyfin::Support::fromJsonValue<QString>(source["DeliveryUrl"]);
+	m_isExternalUrl = Jellyfin::Support::fromJsonValue<bool>(source["IsExternalUrl"]);
+	m_isTextSubtitleStream = Jellyfin::Support::fromJsonValue<bool>(source["IsTextSubtitleStream"]);
+	m_supportsExternalStream = Jellyfin::Support::fromJsonValue<bool>(source["SupportsExternalStream"]);
+	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
+	m_pixelFormat = Jellyfin::Support::fromJsonValue<QString>(source["PixelFormat"]);
+	m_level = Jellyfin::Support::fromJsonValue<double>(source["Level"]);
+	m_isAnamorphic = Jellyfin::Support::fromJsonValue<bool>(source["IsAnamorphic"]);
 
 }
 	
 QJsonObject MediaStream::toJson() {
 	QJsonObject result;
-	result["Codec"] = toJsonValue<QString>(m_codec);
-	result["CodecTag"] = toJsonValue<QString>(m_codecTag);
-	result["Language"] = toJsonValue<QString>(m_language);
-	result["ColorRange"] = toJsonValue<QString>(m_colorRange);
-	result["ColorSpace"] = toJsonValue<QString>(m_colorSpace);
-	result["ColorTransfer"] = toJsonValue<QString>(m_colorTransfer);
-	result["ColorPrimaries"] = toJsonValue<QString>(m_colorPrimaries);
-	result["Comment"] = toJsonValue<QString>(m_comment);
-	result["TimeBase"] = toJsonValue<QString>(m_timeBase);
-	result["CodecTimeBase"] = toJsonValue<QString>(m_codecTimeBase);
-	result["Title"] = toJsonValue<QString>(m_title);
-	result["VideoRange"] = toJsonValue<QString>(m_videoRange);
-	result["localizedUndefined"] = toJsonValue<QString>(m_localizedUndefined);
-	result["localizedDefault"] = toJsonValue<QString>(m_localizedDefault);
-	result["localizedForced"] = toJsonValue<QString>(m_localizedForced);
-	result["DisplayTitle"] = toJsonValue<QString>(m_displayTitle);
-	result["NalLengthSize"] = toJsonValue<QString>(m_nalLengthSize);
-	result["IsInterlaced"] = toJsonValue<bool>(m_isInterlaced);
-	result["IsAVC"] = toJsonValue<bool>(m_isAVC);
-	result["ChannelLayout"] = toJsonValue<QString>(m_channelLayout);
-	result["BitRate"] = toJsonValue<qint32>(m_bitRate);
-	result["BitDepth"] = toJsonValue<qint32>(m_bitDepth);
-	result["RefFrames"] = toJsonValue<qint32>(m_refFrames);
-	result["PacketLength"] = toJsonValue<qint32>(m_packetLength);
-	result["Channels"] = toJsonValue<qint32>(m_channels);
-	result["SampleRate"] = toJsonValue<qint32>(m_sampleRate);
-	result["IsDefault"] = toJsonValue<bool>(m_isDefault);
-	result["IsForced"] = toJsonValue<bool>(m_isForced);
-	result["Height"] = toJsonValue<qint32>(m_height);
-	result["Width"] = toJsonValue<qint32>(m_width);
-	result["AverageFrameRate"] = toJsonValue<float>(m_averageFrameRate);
-	result["RealFrameRate"] = toJsonValue<float>(m_realFrameRate);
-	result["Profile"] = toJsonValue<QString>(m_profile);
-	result["Type"] = toJsonValue<MediaStreamType>(m_type);
-	result["AspectRatio"] = toJsonValue<QString>(m_aspectRatio);
-	result["Index"] = toJsonValue<qint32>(m_index);
-	result["Score"] = toJsonValue<qint32>(m_score);
-	result["IsExternal"] = toJsonValue<bool>(m_isExternal);
-	result["DeliveryMethod"] = toJsonValue<SubtitleDeliveryMethod>(m_deliveryMethod);
-	result["DeliveryUrl"] = toJsonValue<QString>(m_deliveryUrl);
-	result["IsExternalUrl"] = toJsonValue<bool>(m_isExternalUrl);
-	result["IsTextSubtitleStream"] = toJsonValue<bool>(m_isTextSubtitleStream);
-	result["SupportsExternalStream"] = toJsonValue<bool>(m_supportsExternalStream);
-	result["Path"] = toJsonValue<QString>(m_path);
-	result["PixelFormat"] = toJsonValue<QString>(m_pixelFormat);
-	result["Level"] = toJsonValue<double>(m_level);
-	result["IsAnamorphic"] = toJsonValue<bool>(m_isAnamorphic);
+	result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
+	result["CodecTag"] = Jellyfin::Support::toJsonValue<QString>(m_codecTag);
+	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
+	result["ColorRange"] = Jellyfin::Support::toJsonValue<QString>(m_colorRange);
+	result["ColorSpace"] = Jellyfin::Support::toJsonValue<QString>(m_colorSpace);
+	result["ColorTransfer"] = Jellyfin::Support::toJsonValue<QString>(m_colorTransfer);
+	result["ColorPrimaries"] = Jellyfin::Support::toJsonValue<QString>(m_colorPrimaries);
+	result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
+	result["TimeBase"] = Jellyfin::Support::toJsonValue<QString>(m_timeBase);
+	result["CodecTimeBase"] = Jellyfin::Support::toJsonValue<QString>(m_codecTimeBase);
+	result["Title"] = Jellyfin::Support::toJsonValue<QString>(m_title);
+	result["VideoRange"] = Jellyfin::Support::toJsonValue<QString>(m_videoRange);
+	result["localizedUndefined"] = Jellyfin::Support::toJsonValue<QString>(m_localizedUndefined);
+	result["localizedDefault"] = Jellyfin::Support::toJsonValue<QString>(m_localizedDefault);
+	result["localizedForced"] = Jellyfin::Support::toJsonValue<QString>(m_localizedForced);
+	result["DisplayTitle"] = Jellyfin::Support::toJsonValue<QString>(m_displayTitle);
+	result["NalLengthSize"] = Jellyfin::Support::toJsonValue<QString>(m_nalLengthSize);
+	result["IsInterlaced"] = Jellyfin::Support::toJsonValue<bool>(m_isInterlaced);
+	result["IsAVC"] = Jellyfin::Support::toJsonValue<bool>(m_isAVC);
+	result["ChannelLayout"] = Jellyfin::Support::toJsonValue<QString>(m_channelLayout);
+	result["BitRate"] = Jellyfin::Support::toJsonValue<qint32>(m_bitRate);
+	result["BitDepth"] = Jellyfin::Support::toJsonValue<qint32>(m_bitDepth);
+	result["RefFrames"] = Jellyfin::Support::toJsonValue<qint32>(m_refFrames);
+	result["PacketLength"] = Jellyfin::Support::toJsonValue<qint32>(m_packetLength);
+	result["Channels"] = Jellyfin::Support::toJsonValue<qint32>(m_channels);
+	result["SampleRate"] = Jellyfin::Support::toJsonValue<qint32>(m_sampleRate);
+	result["IsDefault"] = Jellyfin::Support::toJsonValue<bool>(m_isDefault);
+	result["IsForced"] = Jellyfin::Support::toJsonValue<bool>(m_isForced);
+	result["Height"] = Jellyfin::Support::toJsonValue<qint32>(m_height);
+	result["Width"] = Jellyfin::Support::toJsonValue<qint32>(m_width);
+	result["AverageFrameRate"] = Jellyfin::Support::toJsonValue<float>(m_averageFrameRate);
+	result["RealFrameRate"] = Jellyfin::Support::toJsonValue<float>(m_realFrameRate);
+	result["Profile"] = Jellyfin::Support::toJsonValue<QString>(m_profile);
+	result["Type"] = Jellyfin::Support::toJsonValue<MediaStreamType>(m_type);
+	result["AspectRatio"] = Jellyfin::Support::toJsonValue<QString>(m_aspectRatio);
+	result["Index"] = Jellyfin::Support::toJsonValue<qint32>(m_index);
+	result["Score"] = Jellyfin::Support::toJsonValue<qint32>(m_score);
+	result["IsExternal"] = Jellyfin::Support::toJsonValue<bool>(m_isExternal);
+	result["DeliveryMethod"] = Jellyfin::Support::toJsonValue<SubtitleDeliveryMethod>(m_deliveryMethod);
+	result["DeliveryUrl"] = Jellyfin::Support::toJsonValue<QString>(m_deliveryUrl);
+	result["IsExternalUrl"] = Jellyfin::Support::toJsonValue<bool>(m_isExternalUrl);
+	result["IsTextSubtitleStream"] = Jellyfin::Support::toJsonValue<bool>(m_isTextSubtitleStream);
+	result["SupportsExternalStream"] = Jellyfin::Support::toJsonValue<bool>(m_supportsExternalStream);
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	result["PixelFormat"] = Jellyfin::Support::toJsonValue<QString>(m_pixelFormat);
+	result["Level"] = Jellyfin::Support::toJsonValue<double>(m_level);
+	result["IsAnamorphic"] = Jellyfin::Support::toJsonValue<bool>(m_isAnamorphic);
 
 	return result;
 }
@@ -380,6 +381,17 @@ void MediaStream::setIsAnamorphic(bool newIsAnamorphic) {
 	m_isAnamorphic = newIsAnamorphic;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MediaStream = Jellyfin::DTO::MediaStream;
+
+template <>
+MediaStream fromJsonValue<MediaStream>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MediaStream::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

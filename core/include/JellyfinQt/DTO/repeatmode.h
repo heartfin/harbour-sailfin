@@ -55,31 +55,6 @@ private:
 
 typedef RepeatModeClass::Value RepeatMode;
 
-} // NS DTO
-
-namespace Support {
-
-using RepeatMode = Jellyfin::DTO::RepeatMode;
-using RepeatModeClass = Jellyfin::DTO::RepeatModeClass;
-
-template <>
-RepeatMode fromJsonValue<RepeatMode>(const QJsonValue &source) {
-	if (!source.isString()) return RepeatModeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("RepeatNone")) {
-		return RepeatModeClass::RepeatNone;
-	}
-	if (str == QStringLiteral("RepeatAll")) {
-		return RepeatModeClass::RepeatAll;
-	}
-	if (str == QStringLiteral("RepeatOne")) {
-		return RepeatModeClass::RepeatOne;
-	}
-	
-	return RepeatModeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

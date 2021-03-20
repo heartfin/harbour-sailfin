@@ -59,43 +59,6 @@ private:
 
 typedef PluginStatusClass::Value PluginStatus;
 
-} // NS DTO
-
-namespace Support {
-
-using PluginStatus = Jellyfin::DTO::PluginStatus;
-using PluginStatusClass = Jellyfin::DTO::PluginStatusClass;
-
-template <>
-PluginStatus fromJsonValue<PluginStatus>(const QJsonValue &source) {
-	if (!source.isString()) return PluginStatusClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Active")) {
-		return PluginStatusClass::Active;
-	}
-	if (str == QStringLiteral("Restart")) {
-		return PluginStatusClass::Restart;
-	}
-	if (str == QStringLiteral("Deleted")) {
-		return PluginStatusClass::Deleted;
-	}
-	if (str == QStringLiteral("Superceded")) {
-		return PluginStatusClass::Superceded;
-	}
-	if (str == QStringLiteral("Malfunctioned")) {
-		return PluginStatusClass::Malfunctioned;
-	}
-	if (str == QStringLiteral("NotSupported")) {
-		return PluginStatusClass::NotSupported;
-	}
-	if (str == QStringLiteral("Disabled")) {
-		return PluginStatusClass::Disabled;
-	}
-	
-	return PluginStatusClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

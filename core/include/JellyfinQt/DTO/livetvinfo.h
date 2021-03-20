@@ -83,18 +83,6 @@ protected:
 	QStringList m_enabledUsers;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using LiveTvInfo = Jellyfin::DTO::LiveTvInfo;
-
-template <>
-LiveTvInfo fromJsonValue<LiveTvInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return LiveTvInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

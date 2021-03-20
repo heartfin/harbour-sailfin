@@ -75,18 +75,6 @@ protected:
 	bool m_isRequired;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ProfileCondition = Jellyfin::DTO::ProfileCondition;
-
-template <>
-ProfileCondition fromJsonValue<ProfileCondition>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ProfileCondition::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

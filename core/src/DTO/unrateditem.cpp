@@ -34,5 +34,48 @@ namespace DTO {
 
 UnratedItemClass::UnratedItemClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using UnratedItem = Jellyfin::DTO::UnratedItem;
+
+template <>
+UnratedItem fromJsonValue<UnratedItem>(const QJsonValue &source) {
+	if (!source.isString()) return UnratedItem::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Movie")) {
+		return UnratedItem::Movie;
+	}
+	if (str == QStringLiteral("Trailer")) {
+		return UnratedItem::Trailer;
+	}
+	if (str == QStringLiteral("Series")) {
+		return UnratedItem::Series;
+	}
+	if (str == QStringLiteral("Music")) {
+		return UnratedItem::Music;
+	}
+	if (str == QStringLiteral("Book")) {
+		return UnratedItem::Book;
+	}
+	if (str == QStringLiteral("LiveTvChannel")) {
+		return UnratedItem::LiveTvChannel;
+	}
+	if (str == QStringLiteral("LiveTvProgram")) {
+		return UnratedItem::LiveTvProgram;
+	}
+	if (str == QStringLiteral("ChannelContent")) {
+		return UnratedItem::ChannelContent;
+	}
+	if (str == QStringLiteral("Other")) {
+		return UnratedItem::Other;
+	}
+	
+	return UnratedItem::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

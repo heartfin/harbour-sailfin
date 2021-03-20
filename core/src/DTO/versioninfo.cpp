@@ -32,38 +32,39 @@
 namespace Jellyfin {
 namespace DTO {
 
-VersionInfo::VersionInfo(QObject *parent) {}
+VersionInfo::VersionInfo() {}
 
-VersionInfo VersionInfo::fromJson(QJsonObject source) {VersionInfo instance;
-	instance->setFromJson(source, false);
+VersionInfo VersionInfo::fromJson(QJsonObject source) {
+	VersionInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void VersionInfo::setFromJson(QJsonObject source) {
-	m_version = fromJsonValue<QString>(source["version"]);
-	m_versionNumber = fromJsonValue<QSharedPointer<Version>>(source["VersionNumber"]);
-	m_changelog = fromJsonValue<QString>(source["changelog"]);
-	m_targetAbi = fromJsonValue<QString>(source["targetAbi"]);
-	m_sourceUrl = fromJsonValue<QString>(source["sourceUrl"]);
-	m_checksum = fromJsonValue<QString>(source["checksum"]);
-	m_timestamp = fromJsonValue<QString>(source["timestamp"]);
-	m_repositoryName = fromJsonValue<QString>(source["repositoryName"]);
-	m_repositoryUrl = fromJsonValue<QString>(source["repositoryUrl"]);
+	m_version = Jellyfin::Support::fromJsonValue<QString>(source["version"]);
+	m_versionNumber = Jellyfin::Support::fromJsonValue<QSharedPointer<Version>>(source["VersionNumber"]);
+	m_changelog = Jellyfin::Support::fromJsonValue<QString>(source["changelog"]);
+	m_targetAbi = Jellyfin::Support::fromJsonValue<QString>(source["targetAbi"]);
+	m_sourceUrl = Jellyfin::Support::fromJsonValue<QString>(source["sourceUrl"]);
+	m_checksum = Jellyfin::Support::fromJsonValue<QString>(source["checksum"]);
+	m_timestamp = Jellyfin::Support::fromJsonValue<QString>(source["timestamp"]);
+	m_repositoryName = Jellyfin::Support::fromJsonValue<QString>(source["repositoryName"]);
+	m_repositoryUrl = Jellyfin::Support::fromJsonValue<QString>(source["repositoryUrl"]);
 
 }
 	
 QJsonObject VersionInfo::toJson() {
 	QJsonObject result;
-	result["version"] = toJsonValue<QString>(m_version);
-	result["VersionNumber"] = toJsonValue<QSharedPointer<Version>>(m_versionNumber);
-	result["changelog"] = toJsonValue<QString>(m_changelog);
-	result["targetAbi"] = toJsonValue<QString>(m_targetAbi);
-	result["sourceUrl"] = toJsonValue<QString>(m_sourceUrl);
-	result["checksum"] = toJsonValue<QString>(m_checksum);
-	result["timestamp"] = toJsonValue<QString>(m_timestamp);
-	result["repositoryName"] = toJsonValue<QString>(m_repositoryName);
-	result["repositoryUrl"] = toJsonValue<QString>(m_repositoryUrl);
+	result["version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	result["VersionNumber"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_versionNumber);
+	result["changelog"] = Jellyfin::Support::toJsonValue<QString>(m_changelog);
+	result["targetAbi"] = Jellyfin::Support::toJsonValue<QString>(m_targetAbi);
+	result["sourceUrl"] = Jellyfin::Support::toJsonValue<QString>(m_sourceUrl);
+	result["checksum"] = Jellyfin::Support::toJsonValue<QString>(m_checksum);
+	result["timestamp"] = Jellyfin::Support::toJsonValue<QString>(m_timestamp);
+	result["repositoryName"] = Jellyfin::Support::toJsonValue<QString>(m_repositoryName);
+	result["repositoryUrl"] = Jellyfin::Support::toJsonValue<QString>(m_repositoryUrl);
 
 	return result;
 }
@@ -114,6 +115,17 @@ void VersionInfo::setRepositoryUrl(QString newRepositoryUrl) {
 	m_repositoryUrl = newRepositoryUrl;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using VersionInfo = Jellyfin::DTO::VersionInfo;
+
+template <>
+VersionInfo fromJsonValue<VersionInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return VersionInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

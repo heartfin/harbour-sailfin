@@ -32,30 +32,31 @@
 namespace Jellyfin {
 namespace DTO {
 
-ProblemDetails::ProblemDetails(QObject *parent) {}
+ProblemDetails::ProblemDetails() {}
 
-ProblemDetails ProblemDetails::fromJson(QJsonObject source) {ProblemDetails instance;
-	instance->setFromJson(source, false);
+ProblemDetails ProblemDetails::fromJson(QJsonObject source) {
+	ProblemDetails instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ProblemDetails::setFromJson(QJsonObject source) {
-	m_type = fromJsonValue<QString>(source["type"]);
-	m_title = fromJsonValue<QString>(source["title"]);
-	m_status = fromJsonValue<qint32>(source["status"]);
-	m_detail = fromJsonValue<QString>(source["detail"]);
-	m_instance = fromJsonValue<QString>(source["instance"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["type"]);
+	m_title = Jellyfin::Support::fromJsonValue<QString>(source["title"]);
+	m_status = Jellyfin::Support::fromJsonValue<qint32>(source["status"]);
+	m_detail = Jellyfin::Support::fromJsonValue<QString>(source["detail"]);
+	m_instance = Jellyfin::Support::fromJsonValue<QString>(source["instance"]);
 
 }
 	
 QJsonObject ProblemDetails::toJson() {
 	QJsonObject result;
-	result["type"] = toJsonValue<QString>(m_type);
-	result["title"] = toJsonValue<QString>(m_title);
-	result["status"] = toJsonValue<qint32>(m_status);
-	result["detail"] = toJsonValue<QString>(m_detail);
-	result["instance"] = toJsonValue<QString>(m_instance);
+	result["type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["title"] = Jellyfin::Support::toJsonValue<QString>(m_title);
+	result["status"] = Jellyfin::Support::toJsonValue<qint32>(m_status);
+	result["detail"] = Jellyfin::Support::toJsonValue<QString>(m_detail);
+	result["instance"] = Jellyfin::Support::toJsonValue<QString>(m_instance);
 
 	return result;
 }
@@ -86,6 +87,17 @@ void ProblemDetails::setInstance(QString newInstance) {
 	m_instance = newInstance;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ProblemDetails = Jellyfin::DTO::ProblemDetails;
+
+template <>
+ProblemDetails fromJsonValue<ProblemDetails>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ProblemDetails::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

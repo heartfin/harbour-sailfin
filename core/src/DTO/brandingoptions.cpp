@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-BrandingOptions::BrandingOptions(QObject *parent) {}
+BrandingOptions::BrandingOptions() {}
 
-BrandingOptions BrandingOptions::fromJson(QJsonObject source) {BrandingOptions instance;
-	instance->setFromJson(source, false);
+BrandingOptions BrandingOptions::fromJson(QJsonObject source) {
+	BrandingOptions instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void BrandingOptions::setFromJson(QJsonObject source) {
-	m_loginDisclaimer = fromJsonValue<QString>(source["LoginDisclaimer"]);
-	m_customCss = fromJsonValue<QString>(source["CustomCss"]);
+	m_loginDisclaimer = Jellyfin::Support::fromJsonValue<QString>(source["LoginDisclaimer"]);
+	m_customCss = Jellyfin::Support::fromJsonValue<QString>(source["CustomCss"]);
 
 }
 	
 QJsonObject BrandingOptions::toJson() {
 	QJsonObject result;
-	result["LoginDisclaimer"] = toJsonValue<QString>(m_loginDisclaimer);
-	result["CustomCss"] = toJsonValue<QString>(m_customCss);
+	result["LoginDisclaimer"] = Jellyfin::Support::toJsonValue<QString>(m_loginDisclaimer);
+	result["CustomCss"] = Jellyfin::Support::toJsonValue<QString>(m_customCss);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void BrandingOptions::setCustomCss(QString newCustomCss) {
 	m_customCss = newCustomCss;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using BrandingOptions = Jellyfin::DTO::BrandingOptions;
+
+template <>
+BrandingOptions fromJsonValue<BrandingOptions>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return BrandingOptions::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

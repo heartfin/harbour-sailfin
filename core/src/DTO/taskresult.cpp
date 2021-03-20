@@ -32,36 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-TaskResult::TaskResult(QObject *parent) {}
+TaskResult::TaskResult() {}
 
-TaskResult TaskResult::fromJson(QJsonObject source) {TaskResult instance;
-	instance->setFromJson(source, false);
+TaskResult TaskResult::fromJson(QJsonObject source) {
+	TaskResult instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void TaskResult::setFromJson(QJsonObject source) {
-	m_startTimeUtc = fromJsonValue<QDateTime>(source["StartTimeUtc"]);
-	m_endTimeUtc = fromJsonValue<QDateTime>(source["EndTimeUtc"]);
-	m_status = fromJsonValue<TaskCompletionStatus>(source["Status"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_key = fromJsonValue<QString>(source["Key"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_errorMessage = fromJsonValue<QString>(source["ErrorMessage"]);
-	m_longErrorMessage = fromJsonValue<QString>(source["LongErrorMessage"]);
+	m_startTimeUtc = Jellyfin::Support::fromJsonValue<QDateTime>(source["StartTimeUtc"]);
+	m_endTimeUtc = Jellyfin::Support::fromJsonValue<QDateTime>(source["EndTimeUtc"]);
+	m_status = Jellyfin::Support::fromJsonValue<TaskCompletionStatus>(source["Status"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_key = Jellyfin::Support::fromJsonValue<QString>(source["Key"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_errorMessage = Jellyfin::Support::fromJsonValue<QString>(source["ErrorMessage"]);
+	m_longErrorMessage = Jellyfin::Support::fromJsonValue<QString>(source["LongErrorMessage"]);
 
 }
 	
 QJsonObject TaskResult::toJson() {
 	QJsonObject result;
-	result["StartTimeUtc"] = toJsonValue<QDateTime>(m_startTimeUtc);
-	result["EndTimeUtc"] = toJsonValue<QDateTime>(m_endTimeUtc);
-	result["Status"] = toJsonValue<TaskCompletionStatus>(m_status);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Key"] = toJsonValue<QString>(m_key);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["ErrorMessage"] = toJsonValue<QString>(m_errorMessage);
-	result["LongErrorMessage"] = toJsonValue<QString>(m_longErrorMessage);
+	result["StartTimeUtc"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startTimeUtc);
+	result["EndTimeUtc"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endTimeUtc);
+	result["Status"] = Jellyfin::Support::toJsonValue<TaskCompletionStatus>(m_status);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["ErrorMessage"] = Jellyfin::Support::toJsonValue<QString>(m_errorMessage);
+	result["LongErrorMessage"] = Jellyfin::Support::toJsonValue<QString>(m_longErrorMessage);
 
 	return result;
 }
@@ -107,6 +108,17 @@ void TaskResult::setLongErrorMessage(QString newLongErrorMessage) {
 	m_longErrorMessage = newLongErrorMessage;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using TaskResult = Jellyfin::DTO::TaskResult;
+
+template <>
+TaskResult fromJsonValue<TaskResult>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return TaskResult::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

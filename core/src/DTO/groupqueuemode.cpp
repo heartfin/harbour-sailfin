@@ -34,5 +34,27 @@ namespace DTO {
 
 GroupQueueModeClass::GroupQueueModeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using GroupQueueMode = Jellyfin::DTO::GroupQueueMode;
+
+template <>
+GroupQueueMode fromJsonValue<GroupQueueMode>(const QJsonValue &source) {
+	if (!source.isString()) return GroupQueueMode::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("Queue")) {
+		return GroupQueueMode::Queue;
+	}
+	if (str == QStringLiteral("QueueNext")) {
+		return GroupQueueMode::QueueNext;
+	}
+	
+	return GroupQueueMode::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

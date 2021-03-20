@@ -32,28 +32,29 @@
 namespace Jellyfin {
 namespace DTO {
 
-ProfileCondition::ProfileCondition(QObject *parent) {}
+ProfileCondition::ProfileCondition() {}
 
-ProfileCondition ProfileCondition::fromJson(QJsonObject source) {ProfileCondition instance;
-	instance->setFromJson(source, false);
+ProfileCondition ProfileCondition::fromJson(QJsonObject source) {
+	ProfileCondition instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ProfileCondition::setFromJson(QJsonObject source) {
-	m_condition = fromJsonValue<ProfileConditionType>(source["Condition"]);
-	m_property = fromJsonValue<ProfileConditionValue>(source["Property"]);
-	m_value = fromJsonValue<QString>(source["Value"]);
-	m_isRequired = fromJsonValue<bool>(source["IsRequired"]);
+	m_condition = Jellyfin::Support::fromJsonValue<ProfileConditionType>(source["Condition"]);
+	m_property = Jellyfin::Support::fromJsonValue<ProfileConditionValue>(source["Property"]);
+	m_value = Jellyfin::Support::fromJsonValue<QString>(source["Value"]);
+	m_isRequired = Jellyfin::Support::fromJsonValue<bool>(source["IsRequired"]);
 
 }
 	
 QJsonObject ProfileCondition::toJson() {
 	QJsonObject result;
-	result["Condition"] = toJsonValue<ProfileConditionType>(m_condition);
-	result["Property"] = toJsonValue<ProfileConditionValue>(m_property);
-	result["Value"] = toJsonValue<QString>(m_value);
-	result["IsRequired"] = toJsonValue<bool>(m_isRequired);
+	result["Condition"] = Jellyfin::Support::toJsonValue<ProfileConditionType>(m_condition);
+	result["Property"] = Jellyfin::Support::toJsonValue<ProfileConditionValue>(m_property);
+	result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
+	result["IsRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isRequired);
 
 	return result;
 }
@@ -79,6 +80,17 @@ void ProfileCondition::setIsRequired(bool newIsRequired) {
 	m_isRequired = newIsRequired;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ProfileCondition = Jellyfin::DTO::ProfileCondition;
+
+template <>
+ProfileCondition fromJsonValue<ProfileCondition>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ProfileCondition::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

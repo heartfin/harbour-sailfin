@@ -55,31 +55,6 @@ private:
 
 typedef NotificationLevelClass::Value NotificationLevel;
 
-} // NS DTO
-
-namespace Support {
-
-using NotificationLevel = Jellyfin::DTO::NotificationLevel;
-using NotificationLevelClass = Jellyfin::DTO::NotificationLevelClass;
-
-template <>
-NotificationLevel fromJsonValue<NotificationLevel>(const QJsonValue &source) {
-	if (!source.isString()) return NotificationLevelClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Normal")) {
-		return NotificationLevelClass::Normal;
-	}
-	if (str == QStringLiteral("Warning")) {
-		return NotificationLevelClass::Warning;
-	}
-	if (str == QStringLiteral("Error")) {
-		return NotificationLevelClass::Error;
-	}
-	
-	return NotificationLevelClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

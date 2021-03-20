@@ -34,5 +34,33 @@ namespace DTO {
 
 MetadataRefreshModeClass::MetadataRefreshModeClass() {}
 
+
+} // NS DTO
+
+namespace Support {
+
+using MetadataRefreshMode = Jellyfin::DTO::MetadataRefreshMode;
+
+template <>
+MetadataRefreshMode fromJsonValue<MetadataRefreshMode>(const QJsonValue &source) {
+	if (!source.isString()) return MetadataRefreshMode::EnumNotSet;
+
+	QString str = source.toString();
+	if (str == QStringLiteral("None")) {
+		return MetadataRefreshMode::None;
+	}
+	if (str == QStringLiteral("ValidationOnly")) {
+		return MetadataRefreshMode::ValidationOnly;
+	}
+	if (str == QStringLiteral("Default")) {
+		return MetadataRefreshMode::Default;
+	}
+	if (str == QStringLiteral("FullRefresh")) {
+		return MetadataRefreshMode::FullRefresh;
+	}
+	
+	return MetadataRefreshMode::EnumNotSet;
+}
+
 } // NS Jellyfin
 } // NS DTO

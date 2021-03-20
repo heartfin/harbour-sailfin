@@ -143,18 +143,6 @@ protected:
 	bool m_enableNextEpisodeAutoPlay;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using UserConfiguration = Jellyfin::DTO::UserConfiguration;
-
-template <>
-UserConfiguration fromJsonValue<UserConfiguration>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return UserConfiguration::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

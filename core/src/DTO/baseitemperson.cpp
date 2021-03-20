@@ -32,32 +32,33 @@
 namespace Jellyfin {
 namespace DTO {
 
-BaseItemPerson::BaseItemPerson(QObject *parent) {}
+BaseItemPerson::BaseItemPerson() {}
 
-BaseItemPerson BaseItemPerson::fromJson(QJsonObject source) {BaseItemPerson instance;
-	instance->setFromJson(source, false);
+BaseItemPerson BaseItemPerson::fromJson(QJsonObject source) {
+	BaseItemPerson instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void BaseItemPerson::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_role = fromJsonValue<QString>(source["Role"]);
-	m_type = fromJsonValue<QString>(source["Type"]);
-	m_primaryImageTag = fromJsonValue<QString>(source["PrimaryImageTag"]);
-	m_imageBlurHashes = fromJsonValue<QJsonObject>(source["ImageBlurHashes"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_role = Jellyfin::Support::fromJsonValue<QString>(source["Role"]);
+	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_primaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["PrimaryImageTag"]);
+	m_imageBlurHashes = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ImageBlurHashes"]);
 
 }
 	
 QJsonObject BaseItemPerson::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["Role"] = toJsonValue<QString>(m_role);
-	result["Type"] = toJsonValue<QString>(m_type);
-	result["PrimaryImageTag"] = toJsonValue<QString>(m_primaryImageTag);
-	result["ImageBlurHashes"] = toJsonValue<QJsonObject>(m_imageBlurHashes);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["Role"] = Jellyfin::Support::toJsonValue<QString>(m_role);
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
+	result["ImageBlurHashes"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageBlurHashes);
 
 	return result;
 }
@@ -93,6 +94,17 @@ void BaseItemPerson::setImageBlurHashes(QJsonObject newImageBlurHashes) {
 	m_imageBlurHashes = newImageBlurHashes;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using BaseItemPerson = Jellyfin::DTO::BaseItemPerson;
+
+template <>
+BaseItemPerson fromJsonValue<BaseItemPerson>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return BaseItemPerson::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

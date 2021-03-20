@@ -32,22 +32,23 @@
 namespace Jellyfin {
 namespace DTO {
 
-JoinGroupRequestDto::JoinGroupRequestDto(QObject *parent) {}
+JoinGroupRequestDto::JoinGroupRequestDto() {}
 
-JoinGroupRequestDto JoinGroupRequestDto::fromJson(QJsonObject source) {JoinGroupRequestDto instance;
-	instance->setFromJson(source, false);
+JoinGroupRequestDto JoinGroupRequestDto::fromJson(QJsonObject source) {
+	JoinGroupRequestDto instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void JoinGroupRequestDto::setFromJson(QJsonObject source) {
-	m_groupId = fromJsonValue<QUuid>(source["GroupId"]);
+	m_groupId = Jellyfin::Support::fromJsonValue<QUuid>(source["GroupId"]);
 
 }
 	
 QJsonObject JoinGroupRequestDto::toJson() {
 	QJsonObject result;
-	result["GroupId"] = toJsonValue<QUuid>(m_groupId);
+	result["GroupId"] = Jellyfin::Support::toJsonValue<QUuid>(m_groupId);
 
 	return result;
 }
@@ -58,6 +59,17 @@ void JoinGroupRequestDto::setGroupId(QUuid newGroupId) {
 	m_groupId = newGroupId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using JoinGroupRequestDto = Jellyfin::DTO::JoinGroupRequestDto;
+
+template <>
+JoinGroupRequestDto fromJsonValue<JoinGroupRequestDto>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return JoinGroupRequestDto::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

@@ -32,36 +32,37 @@
 namespace Jellyfin {
 namespace DTO {
 
-PluginInfo::PluginInfo(QObject *parent) {}
+PluginInfo::PluginInfo() {}
 
-PluginInfo PluginInfo::fromJson(QJsonObject source) {PluginInfo instance;
-	instance->setFromJson(source, false);
+PluginInfo PluginInfo::fromJson(QJsonObject source) {
+	PluginInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PluginInfo::setFromJson(QJsonObject source) {
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_version = fromJsonValue<QSharedPointer<Version>>(source["Version"]);
-	m_configurationFileName = fromJsonValue<QString>(source["ConfigurationFileName"]);
-	m_description = fromJsonValue<QString>(source["Description"]);
-	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
-	m_canUninstall = fromJsonValue<bool>(source["CanUninstall"]);
-	m_hasImage = fromJsonValue<bool>(source["HasImage"]);
-	m_status = fromJsonValue<PluginStatus>(source["Status"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_version = Jellyfin::Support::fromJsonValue<QSharedPointer<Version>>(source["Version"]);
+	m_configurationFileName = Jellyfin::Support::fromJsonValue<QString>(source["ConfigurationFileName"]);
+	m_description = Jellyfin::Support::fromJsonValue<QString>(source["Description"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QUuid>(source["Id"]);
+	m_canUninstall = Jellyfin::Support::fromJsonValue<bool>(source["CanUninstall"]);
+	m_hasImage = Jellyfin::Support::fromJsonValue<bool>(source["HasImage"]);
+	m_status = Jellyfin::Support::fromJsonValue<PluginStatus>(source["Status"]);
 
 }
 	
 QJsonObject PluginInfo::toJson() {
 	QJsonObject result;
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Version"] = toJsonValue<QSharedPointer<Version>>(m_version);
-	result["ConfigurationFileName"] = toJsonValue<QString>(m_configurationFileName);
-	result["Description"] = toJsonValue<QString>(m_description);
-	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
-	result["CanUninstall"] = toJsonValue<bool>(m_canUninstall);
-	result["HasImage"] = toJsonValue<bool>(m_hasImage);
-	result["Status"] = toJsonValue<PluginStatus>(m_status);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);
+	result["ConfigurationFileName"] = Jellyfin::Support::toJsonValue<QString>(m_configurationFileName);
+	result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
+	result["Id"] = Jellyfin::Support::toJsonValue<QUuid>(m_jellyfinId);
+	result["CanUninstall"] = Jellyfin::Support::toJsonValue<bool>(m_canUninstall);
+	result["HasImage"] = Jellyfin::Support::toJsonValue<bool>(m_hasImage);
+	result["Status"] = Jellyfin::Support::toJsonValue<PluginStatus>(m_status);
 
 	return result;
 }
@@ -107,6 +108,17 @@ void PluginInfo::setStatus(PluginStatus newStatus) {
 	m_status = newStatus;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PluginInfo = Jellyfin::DTO::PluginInfo;
+
+template <>
+PluginInfo fromJsonValue<PluginInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PluginInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

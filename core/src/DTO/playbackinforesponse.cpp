@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-PlaybackInfoResponse::PlaybackInfoResponse(QObject *parent) {}
+PlaybackInfoResponse::PlaybackInfoResponse() {}
 
-PlaybackInfoResponse PlaybackInfoResponse::fromJson(QJsonObject source) {PlaybackInfoResponse instance;
-	instance->setFromJson(source, false);
+PlaybackInfoResponse PlaybackInfoResponse::fromJson(QJsonObject source) {
+	PlaybackInfoResponse instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void PlaybackInfoResponse::setFromJson(QJsonObject source) {
-	m_mediaSources = fromJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(source["MediaSources"]);
-	m_playSessionId = fromJsonValue<QString>(source["PlaySessionId"]);
-	m_errorCode = fromJsonValue<PlaybackErrorCode>(source["ErrorCode"]);
+	m_mediaSources = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(source["MediaSources"]);
+	m_playSessionId = Jellyfin::Support::fromJsonValue<QString>(source["PlaySessionId"]);
+	m_errorCode = Jellyfin::Support::fromJsonValue<PlaybackErrorCode>(source["ErrorCode"]);
 
 }
 	
 QJsonObject PlaybackInfoResponse::toJson() {
 	QJsonObject result;
-	result["MediaSources"] = toJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(m_mediaSources);
-	result["PlaySessionId"] = toJsonValue<QString>(m_playSessionId);
-	result["ErrorCode"] = toJsonValue<PlaybackErrorCode>(m_errorCode);
+	result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(m_mediaSources);
+	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
+	result["ErrorCode"] = Jellyfin::Support::toJsonValue<PlaybackErrorCode>(m_errorCode);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void PlaybackInfoResponse::setErrorCode(PlaybackErrorCode newErrorCode) {
 	m_errorCode = newErrorCode;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using PlaybackInfoResponse = Jellyfin::DTO::PlaybackInfoResponse;
+
+template <>
+PlaybackInfoResponse fromJsonValue<PlaybackInfoResponse>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return PlaybackInfoResponse::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

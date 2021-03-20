@@ -118,18 +118,6 @@ protected:
 	bool m_supportsExternalTransfer;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using BaseItem = Jellyfin::DTO::BaseItem;
-
-template <>
-BaseItem fromJsonValue<BaseItem>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return BaseItem::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -32,98 +32,99 @@
 namespace Jellyfin {
 namespace DTO {
 
-UserPolicy::UserPolicy(QObject *parent) {}
+UserPolicy::UserPolicy() {}
 
-UserPolicy UserPolicy::fromJson(QJsonObject source) {UserPolicy instance;
-	instance->setFromJson(source, false);
+UserPolicy UserPolicy::fromJson(QJsonObject source) {
+	UserPolicy instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void UserPolicy::setFromJson(QJsonObject source) {
-	m_isAdministrator = fromJsonValue<bool>(source["IsAdministrator"]);
-	m_isHidden = fromJsonValue<bool>(source["IsHidden"]);
-	m_isDisabled = fromJsonValue<bool>(source["IsDisabled"]);
-	m_maxParentalRating = fromJsonValue<qint32>(source["MaxParentalRating"]);
-	m_blockedTags = fromJsonValue<QStringList>(source["BlockedTags"]);
-	m_enableUserPreferenceAccess = fromJsonValue<bool>(source["EnableUserPreferenceAccess"]);
-	m_accessSchedules = fromJsonValue<QList<QSharedPointer<AccessSchedule>>>(source["AccessSchedules"]);
-	m_blockUnratedItems = fromJsonValue<QList<UnratedItem>>(source["BlockUnratedItems"]);
-	m_enableRemoteControlOfOtherUsers = fromJsonValue<bool>(source["EnableRemoteControlOfOtherUsers"]);
-	m_enableSharedDeviceControl = fromJsonValue<bool>(source["EnableSharedDeviceControl"]);
-	m_enableRemoteAccess = fromJsonValue<bool>(source["EnableRemoteAccess"]);
-	m_enableLiveTvManagement = fromJsonValue<bool>(source["EnableLiveTvManagement"]);
-	m_enableLiveTvAccess = fromJsonValue<bool>(source["EnableLiveTvAccess"]);
-	m_enableMediaPlayback = fromJsonValue<bool>(source["EnableMediaPlayback"]);
-	m_enableAudioPlaybackTranscoding = fromJsonValue<bool>(source["EnableAudioPlaybackTranscoding"]);
-	m_enableVideoPlaybackTranscoding = fromJsonValue<bool>(source["EnableVideoPlaybackTranscoding"]);
-	m_enablePlaybackRemuxing = fromJsonValue<bool>(source["EnablePlaybackRemuxing"]);
-	m_forceRemoteSourceTranscoding = fromJsonValue<bool>(source["ForceRemoteSourceTranscoding"]);
-	m_enableContentDeletion = fromJsonValue<bool>(source["EnableContentDeletion"]);
-	m_enableContentDeletionFromFolders = fromJsonValue<QStringList>(source["EnableContentDeletionFromFolders"]);
-	m_enableContentDownloading = fromJsonValue<bool>(source["EnableContentDownloading"]);
-	m_enableSyncTranscoding = fromJsonValue<bool>(source["EnableSyncTranscoding"]);
-	m_enableMediaConversion = fromJsonValue<bool>(source["EnableMediaConversion"]);
-	m_enabledDevices = fromJsonValue<QStringList>(source["EnabledDevices"]);
-	m_enableAllDevices = fromJsonValue<bool>(source["EnableAllDevices"]);
-	m_enabledChannels = fromJsonValue<QList<QUuid>>(source["EnabledChannels"]);
-	m_enableAllChannels = fromJsonValue<bool>(source["EnableAllChannels"]);
-	m_enabledFolders = fromJsonValue<QList<QUuid>>(source["EnabledFolders"]);
-	m_enableAllFolders = fromJsonValue<bool>(source["EnableAllFolders"]);
-	m_invalidLoginAttemptCount = fromJsonValue<qint32>(source["InvalidLoginAttemptCount"]);
-	m_loginAttemptsBeforeLockout = fromJsonValue<qint32>(source["LoginAttemptsBeforeLockout"]);
-	m_maxActiveSessions = fromJsonValue<qint32>(source["MaxActiveSessions"]);
-	m_enablePublicSharing = fromJsonValue<bool>(source["EnablePublicSharing"]);
-	m_blockedMediaFolders = fromJsonValue<QList<QUuid>>(source["BlockedMediaFolders"]);
-	m_blockedChannels = fromJsonValue<QList<QUuid>>(source["BlockedChannels"]);
-	m_remoteClientBitrateLimit = fromJsonValue<qint32>(source["RemoteClientBitrateLimit"]);
-	m_authenticationProviderId = fromJsonValue<QString>(source["AuthenticationProviderId"]);
-	m_passwordResetProviderId = fromJsonValue<QString>(source["PasswordResetProviderId"]);
-	m_syncPlayAccess = fromJsonValue<SyncPlayUserAccessType>(source["SyncPlayAccess"]);
+	m_isAdministrator = Jellyfin::Support::fromJsonValue<bool>(source["IsAdministrator"]);
+	m_isHidden = Jellyfin::Support::fromJsonValue<bool>(source["IsHidden"]);
+	m_isDisabled = Jellyfin::Support::fromJsonValue<bool>(source["IsDisabled"]);
+	m_maxParentalRating = Jellyfin::Support::fromJsonValue<qint32>(source["MaxParentalRating"]);
+	m_blockedTags = Jellyfin::Support::fromJsonValue<QStringList>(source["BlockedTags"]);
+	m_enableUserPreferenceAccess = Jellyfin::Support::fromJsonValue<bool>(source["EnableUserPreferenceAccess"]);
+	m_accessSchedules = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<AccessSchedule>>>(source["AccessSchedules"]);
+	m_blockUnratedItems = Jellyfin::Support::fromJsonValue<QList<UnratedItem>>(source["BlockUnratedItems"]);
+	m_enableRemoteControlOfOtherUsers = Jellyfin::Support::fromJsonValue<bool>(source["EnableRemoteControlOfOtherUsers"]);
+	m_enableSharedDeviceControl = Jellyfin::Support::fromJsonValue<bool>(source["EnableSharedDeviceControl"]);
+	m_enableRemoteAccess = Jellyfin::Support::fromJsonValue<bool>(source["EnableRemoteAccess"]);
+	m_enableLiveTvManagement = Jellyfin::Support::fromJsonValue<bool>(source["EnableLiveTvManagement"]);
+	m_enableLiveTvAccess = Jellyfin::Support::fromJsonValue<bool>(source["EnableLiveTvAccess"]);
+	m_enableMediaPlayback = Jellyfin::Support::fromJsonValue<bool>(source["EnableMediaPlayback"]);
+	m_enableAudioPlaybackTranscoding = Jellyfin::Support::fromJsonValue<bool>(source["EnableAudioPlaybackTranscoding"]);
+	m_enableVideoPlaybackTranscoding = Jellyfin::Support::fromJsonValue<bool>(source["EnableVideoPlaybackTranscoding"]);
+	m_enablePlaybackRemuxing = Jellyfin::Support::fromJsonValue<bool>(source["EnablePlaybackRemuxing"]);
+	m_forceRemoteSourceTranscoding = Jellyfin::Support::fromJsonValue<bool>(source["ForceRemoteSourceTranscoding"]);
+	m_enableContentDeletion = Jellyfin::Support::fromJsonValue<bool>(source["EnableContentDeletion"]);
+	m_enableContentDeletionFromFolders = Jellyfin::Support::fromJsonValue<QStringList>(source["EnableContentDeletionFromFolders"]);
+	m_enableContentDownloading = Jellyfin::Support::fromJsonValue<bool>(source["EnableContentDownloading"]);
+	m_enableSyncTranscoding = Jellyfin::Support::fromJsonValue<bool>(source["EnableSyncTranscoding"]);
+	m_enableMediaConversion = Jellyfin::Support::fromJsonValue<bool>(source["EnableMediaConversion"]);
+	m_enabledDevices = Jellyfin::Support::fromJsonValue<QStringList>(source["EnabledDevices"]);
+	m_enableAllDevices = Jellyfin::Support::fromJsonValue<bool>(source["EnableAllDevices"]);
+	m_enabledChannels = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["EnabledChannels"]);
+	m_enableAllChannels = Jellyfin::Support::fromJsonValue<bool>(source["EnableAllChannels"]);
+	m_enabledFolders = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["EnabledFolders"]);
+	m_enableAllFolders = Jellyfin::Support::fromJsonValue<bool>(source["EnableAllFolders"]);
+	m_invalidLoginAttemptCount = Jellyfin::Support::fromJsonValue<qint32>(source["InvalidLoginAttemptCount"]);
+	m_loginAttemptsBeforeLockout = Jellyfin::Support::fromJsonValue<qint32>(source["LoginAttemptsBeforeLockout"]);
+	m_maxActiveSessions = Jellyfin::Support::fromJsonValue<qint32>(source["MaxActiveSessions"]);
+	m_enablePublicSharing = Jellyfin::Support::fromJsonValue<bool>(source["EnablePublicSharing"]);
+	m_blockedMediaFolders = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["BlockedMediaFolders"]);
+	m_blockedChannels = Jellyfin::Support::fromJsonValue<QList<QUuid>>(source["BlockedChannels"]);
+	m_remoteClientBitrateLimit = Jellyfin::Support::fromJsonValue<qint32>(source["RemoteClientBitrateLimit"]);
+	m_authenticationProviderId = Jellyfin::Support::fromJsonValue<QString>(source["AuthenticationProviderId"]);
+	m_passwordResetProviderId = Jellyfin::Support::fromJsonValue<QString>(source["PasswordResetProviderId"]);
+	m_syncPlayAccess = Jellyfin::Support::fromJsonValue<SyncPlayUserAccessType>(source["SyncPlayAccess"]);
 
 }
 	
 QJsonObject UserPolicy::toJson() {
 	QJsonObject result;
-	result["IsAdministrator"] = toJsonValue<bool>(m_isAdministrator);
-	result["IsHidden"] = toJsonValue<bool>(m_isHidden);
-	result["IsDisabled"] = toJsonValue<bool>(m_isDisabled);
-	result["MaxParentalRating"] = toJsonValue<qint32>(m_maxParentalRating);
-	result["BlockedTags"] = toJsonValue<QStringList>(m_blockedTags);
-	result["EnableUserPreferenceAccess"] = toJsonValue<bool>(m_enableUserPreferenceAccess);
-	result["AccessSchedules"] = toJsonValue<QList<QSharedPointer<AccessSchedule>>>(m_accessSchedules);
-	result["BlockUnratedItems"] = toJsonValue<QList<UnratedItem>>(m_blockUnratedItems);
-	result["EnableRemoteControlOfOtherUsers"] = toJsonValue<bool>(m_enableRemoteControlOfOtherUsers);
-	result["EnableSharedDeviceControl"] = toJsonValue<bool>(m_enableSharedDeviceControl);
-	result["EnableRemoteAccess"] = toJsonValue<bool>(m_enableRemoteAccess);
-	result["EnableLiveTvManagement"] = toJsonValue<bool>(m_enableLiveTvManagement);
-	result["EnableLiveTvAccess"] = toJsonValue<bool>(m_enableLiveTvAccess);
-	result["EnableMediaPlayback"] = toJsonValue<bool>(m_enableMediaPlayback);
-	result["EnableAudioPlaybackTranscoding"] = toJsonValue<bool>(m_enableAudioPlaybackTranscoding);
-	result["EnableVideoPlaybackTranscoding"] = toJsonValue<bool>(m_enableVideoPlaybackTranscoding);
-	result["EnablePlaybackRemuxing"] = toJsonValue<bool>(m_enablePlaybackRemuxing);
-	result["ForceRemoteSourceTranscoding"] = toJsonValue<bool>(m_forceRemoteSourceTranscoding);
-	result["EnableContentDeletion"] = toJsonValue<bool>(m_enableContentDeletion);
-	result["EnableContentDeletionFromFolders"] = toJsonValue<QStringList>(m_enableContentDeletionFromFolders);
-	result["EnableContentDownloading"] = toJsonValue<bool>(m_enableContentDownloading);
-	result["EnableSyncTranscoding"] = toJsonValue<bool>(m_enableSyncTranscoding);
-	result["EnableMediaConversion"] = toJsonValue<bool>(m_enableMediaConversion);
-	result["EnabledDevices"] = toJsonValue<QStringList>(m_enabledDevices);
-	result["EnableAllDevices"] = toJsonValue<bool>(m_enableAllDevices);
-	result["EnabledChannels"] = toJsonValue<QList<QUuid>>(m_enabledChannels);
-	result["EnableAllChannels"] = toJsonValue<bool>(m_enableAllChannels);
-	result["EnabledFolders"] = toJsonValue<QList<QUuid>>(m_enabledFolders);
-	result["EnableAllFolders"] = toJsonValue<bool>(m_enableAllFolders);
-	result["InvalidLoginAttemptCount"] = toJsonValue<qint32>(m_invalidLoginAttemptCount);
-	result["LoginAttemptsBeforeLockout"] = toJsonValue<qint32>(m_loginAttemptsBeforeLockout);
-	result["MaxActiveSessions"] = toJsonValue<qint32>(m_maxActiveSessions);
-	result["EnablePublicSharing"] = toJsonValue<bool>(m_enablePublicSharing);
-	result["BlockedMediaFolders"] = toJsonValue<QList<QUuid>>(m_blockedMediaFolders);
-	result["BlockedChannels"] = toJsonValue<QList<QUuid>>(m_blockedChannels);
-	result["RemoteClientBitrateLimit"] = toJsonValue<qint32>(m_remoteClientBitrateLimit);
-	result["AuthenticationProviderId"] = toJsonValue<QString>(m_authenticationProviderId);
-	result["PasswordResetProviderId"] = toJsonValue<QString>(m_passwordResetProviderId);
-	result["SyncPlayAccess"] = toJsonValue<SyncPlayUserAccessType>(m_syncPlayAccess);
+	result["IsAdministrator"] = Jellyfin::Support::toJsonValue<bool>(m_isAdministrator);
+	result["IsHidden"] = Jellyfin::Support::toJsonValue<bool>(m_isHidden);
+	result["IsDisabled"] = Jellyfin::Support::toJsonValue<bool>(m_isDisabled);
+	result["MaxParentalRating"] = Jellyfin::Support::toJsonValue<qint32>(m_maxParentalRating);
+	result["BlockedTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_blockedTags);
+	result["EnableUserPreferenceAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableUserPreferenceAccess);
+	result["AccessSchedules"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<AccessSchedule>>>(m_accessSchedules);
+	result["BlockUnratedItems"] = Jellyfin::Support::toJsonValue<QList<UnratedItem>>(m_blockUnratedItems);
+	result["EnableRemoteControlOfOtherUsers"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteControlOfOtherUsers);
+	result["EnableSharedDeviceControl"] = Jellyfin::Support::toJsonValue<bool>(m_enableSharedDeviceControl);
+	result["EnableRemoteAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteAccess);
+	result["EnableLiveTvManagement"] = Jellyfin::Support::toJsonValue<bool>(m_enableLiveTvManagement);
+	result["EnableLiveTvAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableLiveTvAccess);
+	result["EnableMediaPlayback"] = Jellyfin::Support::toJsonValue<bool>(m_enableMediaPlayback);
+	result["EnableAudioPlaybackTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_enableAudioPlaybackTranscoding);
+	result["EnableVideoPlaybackTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_enableVideoPlaybackTranscoding);
+	result["EnablePlaybackRemuxing"] = Jellyfin::Support::toJsonValue<bool>(m_enablePlaybackRemuxing);
+	result["ForceRemoteSourceTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_forceRemoteSourceTranscoding);
+	result["EnableContentDeletion"] = Jellyfin::Support::toJsonValue<bool>(m_enableContentDeletion);
+	result["EnableContentDeletionFromFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_enableContentDeletionFromFolders);
+	result["EnableContentDownloading"] = Jellyfin::Support::toJsonValue<bool>(m_enableContentDownloading);
+	result["EnableSyncTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_enableSyncTranscoding);
+	result["EnableMediaConversion"] = Jellyfin::Support::toJsonValue<bool>(m_enableMediaConversion);
+	result["EnabledDevices"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledDevices);
+	result["EnableAllDevices"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllDevices);
+	result["EnabledChannels"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_enabledChannels);
+	result["EnableAllChannels"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllChannels);
+	result["EnabledFolders"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_enabledFolders);
+	result["EnableAllFolders"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllFolders);
+	result["InvalidLoginAttemptCount"] = Jellyfin::Support::toJsonValue<qint32>(m_invalidLoginAttemptCount);
+	result["LoginAttemptsBeforeLockout"] = Jellyfin::Support::toJsonValue<qint32>(m_loginAttemptsBeforeLockout);
+	result["MaxActiveSessions"] = Jellyfin::Support::toJsonValue<qint32>(m_maxActiveSessions);
+	result["EnablePublicSharing"] = Jellyfin::Support::toJsonValue<bool>(m_enablePublicSharing);
+	result["BlockedMediaFolders"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_blockedMediaFolders);
+	result["BlockedChannels"] = Jellyfin::Support::toJsonValue<QList<QUuid>>(m_blockedChannels);
+	result["RemoteClientBitrateLimit"] = Jellyfin::Support::toJsonValue<qint32>(m_remoteClientBitrateLimit);
+	result["AuthenticationProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_authenticationProviderId);
+	result["PasswordResetProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_passwordResetProviderId);
+	result["SyncPlayAccess"] = Jellyfin::Support::toJsonValue<SyncPlayUserAccessType>(m_syncPlayAccess);
 
 	return result;
 }
@@ -324,6 +325,17 @@ void UserPolicy::setSyncPlayAccess(SyncPlayUserAccessType newSyncPlayAccess) {
 	m_syncPlayAccess = newSyncPlayAccess;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using UserPolicy = Jellyfin::DTO::UserPolicy;
+
+template <>
+UserPolicy fromJsonValue<UserPolicy>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return UserPolicy::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

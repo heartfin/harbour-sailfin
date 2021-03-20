@@ -110,18 +110,6 @@ protected:
 	bool m_isEmpty;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using LibraryUpdateInfo = Jellyfin::DTO::LibraryUpdateInfo;
-
-template <>
-LibraryUpdateInfo fromJsonValue<LibraryUpdateInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return LibraryUpdateInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

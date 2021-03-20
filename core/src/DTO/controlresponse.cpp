@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-ControlResponse::ControlResponse(QObject *parent) {}
+ControlResponse::ControlResponse() {}
 
-ControlResponse ControlResponse::fromJson(QJsonObject source) {ControlResponse instance;
-	instance->setFromJson(source, false);
+ControlResponse ControlResponse::fromJson(QJsonObject source) {
+	ControlResponse instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void ControlResponse::setFromJson(QJsonObject source) {
-	m_headers = fromJsonValue<QJsonObject>(source["Headers"]);
-	m_xml = fromJsonValue<QString>(source["Xml"]);
-	m_isSuccessful = fromJsonValue<bool>(source["IsSuccessful"]);
+	m_headers = Jellyfin::Support::fromJsonValue<QJsonObject>(source["Headers"]);
+	m_xml = Jellyfin::Support::fromJsonValue<QString>(source["Xml"]);
+	m_isSuccessful = Jellyfin::Support::fromJsonValue<bool>(source["IsSuccessful"]);
 
 }
 	
 QJsonObject ControlResponse::toJson() {
 	QJsonObject result;
-	result["Headers"] = toJsonValue<QJsonObject>(m_headers);
-	result["Xml"] = toJsonValue<QString>(m_xml);
-	result["IsSuccessful"] = toJsonValue<bool>(m_isSuccessful);
+	result["Headers"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_headers);
+	result["Xml"] = Jellyfin::Support::toJsonValue<QString>(m_xml);
+	result["IsSuccessful"] = Jellyfin::Support::toJsonValue<bool>(m_isSuccessful);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void ControlResponse::setIsSuccessful(bool newIsSuccessful) {
 	m_isSuccessful = newIsSuccessful;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using ControlResponse = Jellyfin::DTO::ControlResponse;
+
+template <>
+ControlResponse fromJsonValue<ControlResponse>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return ControlResponse::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

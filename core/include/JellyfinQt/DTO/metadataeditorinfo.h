@@ -91,18 +91,6 @@ protected:
 	QList<QSharedPointer<NameValuePair>> m_contentTypeOptions;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using MetadataEditorInfo = Jellyfin::DTO::MetadataEditorInfo;
-
-template <>
-MetadataEditorInfo fromJsonValue<MetadataEditorInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return MetadataEditorInfo::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

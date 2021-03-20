@@ -64,18 +64,6 @@ protected:
 	QList<QUuid> m_playlistItemIds;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using RemoveFromPlaylistRequestDto = Jellyfin::DTO::RemoveFromPlaylistRequestDto;
-
-template <>
-RemoveFromPlaylistRequestDto fromJsonValue<RemoveFromPlaylistRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return RemoveFromPlaylistRequestDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -173,18 +173,6 @@ protected:
 	QString m_client;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using DisplayPreferencesDto = Jellyfin::DTO::DisplayPreferencesDto;
-
-template <>
-DisplayPreferencesDto fromJsonValue<DisplayPreferencesDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return DisplayPreferencesDto::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

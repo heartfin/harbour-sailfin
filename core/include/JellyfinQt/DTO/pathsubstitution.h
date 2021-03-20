@@ -71,18 +71,6 @@ protected:
 	QString m_to;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using PathSubstitution = Jellyfin::DTO::PathSubstitution;
-
-template <>
-PathSubstitution fromJsonValue<PathSubstitution>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return PathSubstitution::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

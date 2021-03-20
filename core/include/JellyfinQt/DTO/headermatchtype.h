@@ -55,31 +55,6 @@ private:
 
 typedef HeaderMatchTypeClass::Value HeaderMatchType;
 
-} // NS DTO
-
-namespace Support {
-
-using HeaderMatchType = Jellyfin::DTO::HeaderMatchType;
-using HeaderMatchTypeClass = Jellyfin::DTO::HeaderMatchTypeClass;
-
-template <>
-HeaderMatchType fromJsonValue<HeaderMatchType>(const QJsonValue &source) {
-	if (!source.isString()) return HeaderMatchTypeClass::EnumNotSet;
-
-	QString str = source.toString();
-	if (str == QStringLiteral("Equals")) {
-		return HeaderMatchTypeClass::Equals;
-	}
-	if (str == QStringLiteral("Regex")) {
-		return HeaderMatchTypeClass::Regex;
-	}
-	if (str == QStringLiteral("Substring")) {
-		return HeaderMatchTypeClass::Substring;
-	}
-	
-	return HeaderMatchTypeClass::EnumNotSet;
-}
-
 } // NS Jellyfin
 } // NS DTO
 

@@ -71,18 +71,6 @@ protected:
 	QString m_url;
 };
 
-} // NS DTO
-
-namespace Support {
-
-using ExternalUrl = Jellyfin::DTO::ExternalUrl;
-
-template <>
-ExternalUrl fromJsonValue<ExternalUrl>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
-	return ExternalUrl::fromJson(source.toObject());
-}
-
 } // NS Jellyfin
 } // NS DTO
 

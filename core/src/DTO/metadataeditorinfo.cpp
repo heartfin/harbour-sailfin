@@ -32,32 +32,33 @@
 namespace Jellyfin {
 namespace DTO {
 
-MetadataEditorInfo::MetadataEditorInfo(QObject *parent) {}
+MetadataEditorInfo::MetadataEditorInfo() {}
 
-MetadataEditorInfo MetadataEditorInfo::fromJson(QJsonObject source) {MetadataEditorInfo instance;
-	instance->setFromJson(source, false);
+MetadataEditorInfo MetadataEditorInfo::fromJson(QJsonObject source) {
+	MetadataEditorInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void MetadataEditorInfo::setFromJson(QJsonObject source) {
-	m_parentalRatingOptions = fromJsonValue<QList<QSharedPointer<ParentalRating>>>(source["ParentalRatingOptions"]);
-	m_countries = fromJsonValue<QList<QSharedPointer<CountryInfo>>>(source["Countries"]);
-	m_cultures = fromJsonValue<QList<QSharedPointer<CultureDto>>>(source["Cultures"]);
-	m_externalIdInfos = fromJsonValue<QList<QSharedPointer<ExternalIdInfo>>>(source["ExternalIdInfos"]);
-	m_contentType = fromJsonValue<QString>(source["ContentType"]);
-	m_contentTypeOptions = fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["ContentTypeOptions"]);
+	m_parentalRatingOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ParentalRating>>>(source["ParentalRatingOptions"]);
+	m_countries = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<CountryInfo>>>(source["Countries"]);
+	m_cultures = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<CultureDto>>>(source["Cultures"]);
+	m_externalIdInfos = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ExternalIdInfo>>>(source["ExternalIdInfos"]);
+	m_contentType = Jellyfin::Support::fromJsonValue<QString>(source["ContentType"]);
+	m_contentTypeOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["ContentTypeOptions"]);
 
 }
 	
 QJsonObject MetadataEditorInfo::toJson() {
 	QJsonObject result;
-	result["ParentalRatingOptions"] = toJsonValue<QList<QSharedPointer<ParentalRating>>>(m_parentalRatingOptions);
-	result["Countries"] = toJsonValue<QList<QSharedPointer<CountryInfo>>>(m_countries);
-	result["Cultures"] = toJsonValue<QList<QSharedPointer<CultureDto>>>(m_cultures);
-	result["ExternalIdInfos"] = toJsonValue<QList<QSharedPointer<ExternalIdInfo>>>(m_externalIdInfos);
-	result["ContentType"] = toJsonValue<QString>(m_contentType);
-	result["ContentTypeOptions"] = toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_contentTypeOptions);
+	result["ParentalRatingOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ParentalRating>>>(m_parentalRatingOptions);
+	result["Countries"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<CountryInfo>>>(m_countries);
+	result["Cultures"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<CultureDto>>>(m_cultures);
+	result["ExternalIdInfos"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ExternalIdInfo>>>(m_externalIdInfos);
+	result["ContentType"] = Jellyfin::Support::toJsonValue<QString>(m_contentType);
+	result["ContentTypeOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_contentTypeOptions);
 
 	return result;
 }
@@ -93,6 +94,17 @@ void MetadataEditorInfo::setContentTypeOptions(QList<QSharedPointer<NameValuePai
 	m_contentTypeOptions = newContentTypeOptions;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using MetadataEditorInfo = Jellyfin::DTO::MetadataEditorInfo;
+
+template <>
+MetadataEditorInfo fromJsonValue<MetadataEditorInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return MetadataEditorInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

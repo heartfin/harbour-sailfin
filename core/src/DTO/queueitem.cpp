@@ -32,24 +32,25 @@
 namespace Jellyfin {
 namespace DTO {
 
-QueueItem::QueueItem(QObject *parent) {}
+QueueItem::QueueItem() {}
 
-QueueItem QueueItem::fromJson(QJsonObject source) {QueueItem instance;
-	instance->setFromJson(source, false);
+QueueItem QueueItem::fromJson(QJsonObject source) {
+	QueueItem instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void QueueItem::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QUuid>(source["Id"]);
-	m_playlistItemId = fromJsonValue<QString>(source["PlaylistItemId"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QUuid>(source["Id"]);
+	m_playlistItemId = Jellyfin::Support::fromJsonValue<QString>(source["PlaylistItemId"]);
 
 }
 	
 QJsonObject QueueItem::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QUuid>(m_jellyfinId);
-	result["PlaylistItemId"] = toJsonValue<QString>(m_playlistItemId);
+	result["Id"] = Jellyfin::Support::toJsonValue<QUuid>(m_jellyfinId);
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
 
 	return result;
 }
@@ -65,6 +66,17 @@ void QueueItem::setPlaylistItemId(QString newPlaylistItemId) {
 	m_playlistItemId = newPlaylistItemId;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using QueueItem = Jellyfin::DTO::QueueItem;
+
+template <>
+QueueItem fromJsonValue<QueueItem>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return QueueItem::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

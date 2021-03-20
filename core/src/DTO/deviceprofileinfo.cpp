@@ -32,26 +32,27 @@
 namespace Jellyfin {
 namespace DTO {
 
-DeviceProfileInfo::DeviceProfileInfo(QObject *parent) {}
+DeviceProfileInfo::DeviceProfileInfo() {}
 
-DeviceProfileInfo DeviceProfileInfo::fromJson(QJsonObject source) {DeviceProfileInfo instance;
-	instance->setFromJson(source, false);
+DeviceProfileInfo DeviceProfileInfo::fromJson(QJsonObject source) {
+	DeviceProfileInfo instance;
+	instance.setFromJson(source);
 	return instance;
 }
 
 
 void DeviceProfileInfo::setFromJson(QJsonObject source) {
-	m_jellyfinId = fromJsonValue<QString>(source["Id"]);
-	m_name = fromJsonValue<QString>(source["Name"]);
-	m_type = fromJsonValue<DeviceProfileType>(source["Type"]);
+	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
+	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_type = Jellyfin::Support::fromJsonValue<DeviceProfileType>(source["Type"]);
 
 }
 	
 QJsonObject DeviceProfileInfo::toJson() {
 	QJsonObject result;
-	result["Id"] = toJsonValue<QString>(m_jellyfinId);
-	result["Name"] = toJsonValue<QString>(m_name);
-	result["Type"] = toJsonValue<DeviceProfileType>(m_type);
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	result["Type"] = Jellyfin::Support::toJsonValue<DeviceProfileType>(m_type);
 
 	return result;
 }
@@ -72,6 +73,17 @@ void DeviceProfileInfo::setType(DeviceProfileType newType) {
 	m_type = newType;
 }
 
+} // NS DTO
+
+namespace Support {
+
+using DeviceProfileInfo = Jellyfin::DTO::DeviceProfileInfo;
+
+template <>
+DeviceProfileInfo fromJsonValue<DeviceProfileInfo>(const QJsonValue &source) {
+	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+	return DeviceProfileInfo::fromJson(source.toObject());
+}
 
 } // NS Jellyfin
 } // NS DTO

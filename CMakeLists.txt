@@ -5,6 +5,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_AUTOMOC ON)
 cmake_policy(SET CMP0048 NEW)
 set(CMAKE_CXX_STANDARD 17)
+include(ExternalProjectBackCompat)
+include(TargetLinkSys)
+
 
 # Options
 option(PLATFORM_SAILFISHOS "Build SailfishOS version of application" OFF)

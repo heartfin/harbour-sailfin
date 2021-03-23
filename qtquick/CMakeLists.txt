@@ -4,11 +4,12 @@ set(sailfin_SOURCES
 
 qt5_add_resources(sailfin_RESOURCES qml.qrc)
 add_executable(sailfin ${sailfin_SOURCES} ${sailfin_RESOURCES})
-target_link_libraries(sailfin PUBLIC Qt5::Gui Qt5::Qml Qt5::Quick jellyfin-qt)
+target_link_libraries(sailfin PRIVATE Qt5::Gui Qt5::Qml Qt5::Quick JellyfinQt)
 
 install(TARGETS sailfin
     RUNTIME DESTINATION bin
 )
+
 
 install(DIRECTORY translations
     DESTINATION share/harbour-sailfin

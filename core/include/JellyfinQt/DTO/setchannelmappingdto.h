@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class SetChannelMappingDto {
-public:
-	explicit SetChannelMappingDto();
+public:SetChannelMappingDto();SetChannelMappingDto(const SetChannelMappingDto &other);
+	
 	static SetChannelMappingDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

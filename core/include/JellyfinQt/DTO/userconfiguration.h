@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class UserConfiguration {
-public:
-	explicit UserConfiguration();
+public:UserConfiguration();UserConfiguration(const UserConfiguration &other);
+	
 	static UserConfiguration fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class LocalizationOption {
-public:
-	explicit LocalizationOption();
+public:LocalizationOption();LocalizationOption(const LocalizationOption &other);
+	
 	static LocalizationOption fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

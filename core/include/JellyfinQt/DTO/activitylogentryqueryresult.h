@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class ActivityLogEntryQueryResult {
-public:
-	explicit ActivityLogEntryQueryResult();
+public:ActivityLogEntryQueryResult();ActivityLogEntryQueryResult(const ActivityLogEntryQueryResult &other);
+	
 	static ActivityLogEntryQueryResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

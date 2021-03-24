@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class DisplayPreferencesDto {
-public:
-	explicit DisplayPreferencesDto();
+public:DisplayPreferencesDto();DisplayPreferencesDto(const DisplayPreferencesDto &other);
+	
 	static DisplayPreferencesDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

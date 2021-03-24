@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class CultureDto {
-public:
-	explicit CultureDto();
+public:CultureDto();CultureDto(const CultureDto &other);
+	
 	static CultureDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

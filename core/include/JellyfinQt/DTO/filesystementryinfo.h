@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class FileSystemEntryInfo {
-public:
-	explicit FileSystemEntryInfo();
+public:FileSystemEntryInfo();FileSystemEntryInfo(const FileSystemEntryInfo &other);
+	
 	static FileSystemEntryInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

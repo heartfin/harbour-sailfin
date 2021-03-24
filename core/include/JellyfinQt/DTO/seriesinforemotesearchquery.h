@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class SeriesInfoRemoteSearchQuery {
-public:
-	explicit SeriesInfoRemoteSearchQuery();
+public:SeriesInfoRemoteSearchQuery();SeriesInfoRemoteSearchQuery(const SeriesInfoRemoteSearchQuery &other);
+	
 	static SeriesInfoRemoteSearchQuery fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

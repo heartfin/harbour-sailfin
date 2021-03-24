@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class SetRepeatModeRequestDto {
-public:
-	explicit SetRepeatModeRequestDto();
+public:SetRepeatModeRequestDto();SetRepeatModeRequestDto(const SetRepeatModeRequestDto &other);
+	
 	static SetRepeatModeRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

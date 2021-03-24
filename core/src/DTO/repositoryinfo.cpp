@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 RepositoryInfo::RepositoryInfo() {}
+RepositoryInfo::RepositoryInfo(const RepositoryInfo &other) :
+	m_name(other.m_name),
+	m_url(other.m_url),
+	m_enabled(other.m_enabled){}
 
 RepositoryInfo RepositoryInfo::fromJson(QJsonObject source) {
 	RepositoryInfo instance;

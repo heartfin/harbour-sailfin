@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class MediaPathInfo {
-public:
-	explicit MediaPathInfo();
+public:MediaPathInfo();MediaPathInfo(const MediaPathInfo &other);
+	
 	static MediaPathInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

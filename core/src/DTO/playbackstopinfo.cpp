@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaybackStopInfo::PlaybackStopInfo() {}
+PlaybackStopInfo::PlaybackStopInfo(const PlaybackStopInfo &other) :
+	m_item(other.m_item),
+	m_itemId(other.m_itemId),
+	m_sessionId(other.m_sessionId),
+	m_mediaSourceId(other.m_mediaSourceId),
+	m_positionTicks(other.m_positionTicks),
+	m_liveStreamId(other.m_liveStreamId),
+	m_playSessionId(other.m_playSessionId),
+	m_failed(other.m_failed),
+	m_nextMediaType(other.m_nextMediaType),
+	m_playlistItemId(other.m_playlistItemId),
+	m_nowPlayingQueue(other.m_nowPlayingQueue){}
 
 PlaybackStopInfo PlaybackStopInfo::fromJson(QJsonObject source) {
 	PlaybackStopInfo instance;

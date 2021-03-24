@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class LiveTvServiceInfo {
-public:
-	explicit LiveTvServiceInfo();
+public:LiveTvServiceInfo();LiveTvServiceInfo(const LiveTvServiceInfo &other);
+	
 	static LiveTvServiceInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

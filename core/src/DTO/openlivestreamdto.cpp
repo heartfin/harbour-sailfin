@@ -33,6 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 OpenLiveStreamDto::OpenLiveStreamDto() {}
+OpenLiveStreamDto::OpenLiveStreamDto(const OpenLiveStreamDto &other) :
+	m_openToken(other.m_openToken),
+	m_userId(other.m_userId),
+	m_playSessionId(other.m_playSessionId),
+	m_maxStreamingBitrate(other.m_maxStreamingBitrate),
+	m_startTimeTicks(other.m_startTimeTicks),
+	m_audioStreamIndex(other.m_audioStreamIndex),
+	m_subtitleStreamIndex(other.m_subtitleStreamIndex),
+	m_maxAudioChannels(other.m_maxAudioChannels),
+	m_itemId(other.m_itemId),
+	m_enableDirectPlay(other.m_enableDirectPlay),
+	m_enableDirectStream(other.m_enableDirectStream),
+	m_deviceProfile(other.m_deviceProfile),
+	m_directPlayProtocols(other.m_directPlayProtocols){}
 
 OpenLiveStreamDto OpenLiveStreamDto::fromJson(QJsonObject source) {
 	OpenLiveStreamDto instance;

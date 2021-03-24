@@ -48,8 +48,8 @@ namespace DTO {
 
 
 class OpenLiveStreamDto {
-public:
-	explicit OpenLiveStreamDto();
+public:OpenLiveStreamDto();OpenLiveStreamDto(const OpenLiveStreamDto &other);
+	
 	static OpenLiveStreamDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

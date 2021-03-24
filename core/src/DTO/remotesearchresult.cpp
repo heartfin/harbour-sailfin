@@ -33,6 +33,19 @@ namespace Jellyfin {
 namespace DTO {
 
 RemoteSearchResult::RemoteSearchResult() {}
+RemoteSearchResult::RemoteSearchResult(const RemoteSearchResult &other) :
+	m_name(other.m_name),
+	m_providerIds(other.m_providerIds),
+	m_productionYear(other.m_productionYear),
+	m_indexNumber(other.m_indexNumber),
+	m_indexNumberEnd(other.m_indexNumberEnd),
+	m_parentIndexNumber(other.m_parentIndexNumber),
+	m_premiereDate(other.m_premiereDate),
+	m_imageUrl(other.m_imageUrl),
+	m_searchProviderName(other.m_searchProviderName),
+	m_overview(other.m_overview),
+	m_albumArtist(other.m_albumArtist),
+	m_artists(other.m_artists){}
 
 RemoteSearchResult RemoteSearchResult::fromJson(QJsonObject source) {
 	RemoteSearchResult instance;

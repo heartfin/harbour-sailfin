@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaystateRequest::PlaystateRequest() {}
+PlaystateRequest::PlaystateRequest(const PlaystateRequest &other) :
+	m_command(other.m_command),
+	m_seekPositionTicks(other.m_seekPositionTicks),
+	m_controllingUserId(other.m_controllingUserId){}
 
 PlaystateRequest PlaystateRequest::fromJson(QJsonObject source) {
 	PlaystateRequest instance;

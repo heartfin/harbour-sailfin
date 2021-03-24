@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 QueryFiltersLegacy::QueryFiltersLegacy() {}
+QueryFiltersLegacy::QueryFiltersLegacy(const QueryFiltersLegacy &other) :
+	m_genres(other.m_genres),
+	m_tags(other.m_tags),
+	m_officialRatings(other.m_officialRatings),
+	m_years(other.m_years){}
 
 QueryFiltersLegacy QueryFiltersLegacy::fromJson(QJsonObject source) {
 	QueryFiltersLegacy instance;

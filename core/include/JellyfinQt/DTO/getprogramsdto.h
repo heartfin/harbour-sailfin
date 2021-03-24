@@ -48,8 +48,8 @@ namespace DTO {
 
 
 class GetProgramsDto {
-public:
-	explicit GetProgramsDto();
+public:GetProgramsDto();GetProgramsDto(const GetProgramsDto &other);
+	
 	static GetProgramsDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

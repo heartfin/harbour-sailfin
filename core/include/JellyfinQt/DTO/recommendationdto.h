@@ -48,8 +48,8 @@ namespace DTO {
 
 
 class RecommendationDto {
-public:
-	explicit RecommendationDto();
+public:RecommendationDto();RecommendationDto(const RecommendationDto &other);
+	
 	static RecommendationDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

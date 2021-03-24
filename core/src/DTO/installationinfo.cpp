@@ -33,6 +33,13 @@ namespace Jellyfin {
 namespace DTO {
 
 InstallationInfo::InstallationInfo() {}
+InstallationInfo::InstallationInfo(const InstallationInfo &other) :
+	m_guid(other.m_guid),
+	m_name(other.m_name),
+	m_version(other.m_version),
+	m_changelog(other.m_changelog),
+	m_sourceUrl(other.m_sourceUrl),
+	m_checksum(other.m_checksum){}
 
 InstallationInfo InstallationInfo::fromJson(QJsonObject source) {
 	InstallationInfo instance;

@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 DeviceInfoQueryResult::DeviceInfoQueryResult() {}
+DeviceInfoQueryResult::DeviceInfoQueryResult(const DeviceInfoQueryResult &other) :
+	m_items(other.m_items),
+	m_totalRecordCount(other.m_totalRecordCount),
+	m_startIndex(other.m_startIndex){}
 
 DeviceInfoQueryResult DeviceInfoQueryResult::fromJson(QJsonObject source) {
 	DeviceInfoQueryResult instance;

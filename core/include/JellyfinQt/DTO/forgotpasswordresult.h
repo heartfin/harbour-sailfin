@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class ForgotPasswordResult {
-public:
-	explicit ForgotPasswordResult();
+public:ForgotPasswordResult();ForgotPasswordResult(const ForgotPasswordResult &other);
+	
 	static ForgotPasswordResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

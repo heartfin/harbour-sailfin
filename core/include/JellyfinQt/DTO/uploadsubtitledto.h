@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class UploadSubtitleDto {
-public:
-	explicit UploadSubtitleDto();
+public:UploadSubtitleDto();UploadSubtitleDto(const UploadSubtitleDto &other);
+	
 	static UploadSubtitleDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

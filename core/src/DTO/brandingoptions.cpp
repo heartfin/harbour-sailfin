@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 BrandingOptions::BrandingOptions() {}
+BrandingOptions::BrandingOptions(const BrandingOptions &other) :
+	m_loginDisclaimer(other.m_loginDisclaimer),
+	m_customCss(other.m_customCss){}
 
 BrandingOptions BrandingOptions::fromJson(QJsonObject source) {
 	BrandingOptions instance;

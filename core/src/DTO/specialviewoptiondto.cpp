@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 SpecialViewOptionDto::SpecialViewOptionDto() {}
+SpecialViewOptionDto::SpecialViewOptionDto(const SpecialViewOptionDto &other) :
+	m_name(other.m_name),
+	m_jellyfinId(other.m_jellyfinId){}
 
 SpecialViewOptionDto SpecialViewOptionDto::fromJson(QJsonObject source) {
 	SpecialViewOptionDto instance;

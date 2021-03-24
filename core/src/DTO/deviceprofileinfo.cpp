@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 DeviceProfileInfo::DeviceProfileInfo() {}
+DeviceProfileInfo::DeviceProfileInfo(const DeviceProfileInfo &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_name(other.m_name),
+	m_type(other.m_type){}
 
 DeviceProfileInfo DeviceProfileInfo::fromJson(QJsonObject source) {
 	DeviceProfileInfo instance;

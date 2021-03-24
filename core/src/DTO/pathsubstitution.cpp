@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 PathSubstitution::PathSubstitution() {}
+PathSubstitution::PathSubstitution(const PathSubstitution &other) :
+	m_from(other.m_from),
+	m_to(other.m_to){}
 
 PathSubstitution PathSubstitution::fromJson(QJsonObject source) {
 	PathSubstitution instance;

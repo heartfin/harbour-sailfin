@@ -50,8 +50,8 @@ namespace DTO {
 
 
 class PlaybackProgressInfo {
-public:
-	explicit PlaybackProgressInfo();
+public:PlaybackProgressInfo();PlaybackProgressInfo(const PlaybackProgressInfo &other);
+	
 	static PlaybackProgressInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

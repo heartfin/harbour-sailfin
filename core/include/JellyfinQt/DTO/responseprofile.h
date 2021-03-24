@@ -47,8 +47,8 @@ namespace DTO {
 
 
 class ResponseProfile {
-public:
-	explicit ResponseProfile();
+public:ResponseProfile();ResponseProfile(const ResponseProfile &other);
+	
 	static ResponseProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class PluginSecurityInfo {
-public:
-	explicit PluginSecurityInfo();
+public:PluginSecurityInfo();PluginSecurityInfo(const PluginSecurityInfo &other);
+	
 	static PluginSecurityInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

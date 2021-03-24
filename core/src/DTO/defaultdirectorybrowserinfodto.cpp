@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 DefaultDirectoryBrowserInfoDto::DefaultDirectoryBrowserInfoDto() {}
+DefaultDirectoryBrowserInfoDto::DefaultDirectoryBrowserInfoDto(const DefaultDirectoryBrowserInfoDto &other) :
+	m_path(other.m_path){}
 
 DefaultDirectoryBrowserInfoDto DefaultDirectoryBrowserInfoDto::fromJson(QJsonObject source) {
 	DefaultDirectoryBrowserInfoDto instance;

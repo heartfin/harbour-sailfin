@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 AuthenticateUserByName::AuthenticateUserByName() {}
+AuthenticateUserByName::AuthenticateUserByName(const AuthenticateUserByName &other) :
+	m_username(other.m_username),
+	m_pw(other.m_pw),
+	m_password(other.m_password){}
 
 AuthenticateUserByName AuthenticateUserByName::fromJson(QJsonObject source) {
 	AuthenticateUserByName instance;

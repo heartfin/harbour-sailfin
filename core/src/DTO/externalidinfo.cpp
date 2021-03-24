@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 ExternalIdInfo::ExternalIdInfo() {}
+ExternalIdInfo::ExternalIdInfo(const ExternalIdInfo &other) :
+	m_name(other.m_name),
+	m_key(other.m_key),
+	m_type(other.m_type),
+	m_urlFormatString(other.m_urlFormatString){}
 
 ExternalIdInfo ExternalIdInfo::fromJson(QJsonObject source) {
 	ExternalIdInfo instance;

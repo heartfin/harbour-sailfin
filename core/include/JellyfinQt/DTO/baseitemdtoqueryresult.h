@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class BaseItemDtoQueryResult {
-public:
-	explicit BaseItemDtoQueryResult();
+public:BaseItemDtoQueryResult();BaseItemDtoQueryResult(const BaseItemDtoQueryResult &other);
+	
 	static BaseItemDtoQueryResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

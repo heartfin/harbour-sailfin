@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 RecommendationDto::RecommendationDto() {}
+RecommendationDto::RecommendationDto(const RecommendationDto &other) :
+	m_items(other.m_items),
+	m_recommendationType(other.m_recommendationType),
+	m_baselineItemName(other.m_baselineItemName),
+	m_categoryId(other.m_categoryId){}
 
 RecommendationDto RecommendationDto::fromJson(QJsonObject source) {
 	RecommendationDto instance;

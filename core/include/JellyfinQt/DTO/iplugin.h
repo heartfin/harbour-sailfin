@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class IPlugin {
-public:
-	explicit IPlugin();
+public:IPlugin();IPlugin(const IPlugin &other);
+	
 	static IPlugin fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

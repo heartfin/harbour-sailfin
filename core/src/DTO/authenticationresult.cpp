@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 AuthenticationResult::AuthenticationResult() {}
+AuthenticationResult::AuthenticationResult(const AuthenticationResult &other) :
+	m_user(other.m_user),
+	m_sessionInfo(other.m_sessionInfo),
+	m_accessToken(other.m_accessToken),
+	m_serverId(other.m_serverId){}
 
 AuthenticationResult AuthenticationResult::fromJson(QJsonObject source) {
 	AuthenticationResult instance;

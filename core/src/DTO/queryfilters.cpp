@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 QueryFilters::QueryFilters() {}
+QueryFilters::QueryFilters(const QueryFilters &other) :
+	m_genres(other.m_genres),
+	m_tags(other.m_tags){}
 
 QueryFilters QueryFilters::fromJson(QJsonObject source) {
 	QueryFilters instance;

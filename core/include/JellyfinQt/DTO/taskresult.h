@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class TaskResult {
-public:
-	explicit TaskResult();
+public:TaskResult();TaskResult(const TaskResult &other);
+	
 	static TaskResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

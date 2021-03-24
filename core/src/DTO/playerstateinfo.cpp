@@ -33,6 +33,17 @@ namespace Jellyfin {
 namespace DTO {
 
 PlayerStateInfo::PlayerStateInfo() {}
+PlayerStateInfo::PlayerStateInfo(const PlayerStateInfo &other) :
+	m_positionTicks(other.m_positionTicks),
+	m_canSeek(other.m_canSeek),
+	m_isPaused(other.m_isPaused),
+	m_isMuted(other.m_isMuted),
+	m_volumeLevel(other.m_volumeLevel),
+	m_audioStreamIndex(other.m_audioStreamIndex),
+	m_subtitleStreamIndex(other.m_subtitleStreamIndex),
+	m_mediaSourceId(other.m_mediaSourceId),
+	m_playMethod(other.m_playMethod),
+	m_repeatMode(other.m_repeatMode){}
 
 PlayerStateInfo PlayerStateInfo::fromJson(QJsonObject source) {
 	PlayerStateInfo instance;

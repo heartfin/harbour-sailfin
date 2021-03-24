@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class UpdateLibraryOptionsDto {
-public:
-	explicit UpdateLibraryOptionsDto();
+public:UpdateLibraryOptionsDto();UpdateLibraryOptionsDto(const UpdateLibraryOptionsDto &other);
+	
 	static UpdateLibraryOptionsDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class WakeOnLanInfo {
-public:
-	explicit WakeOnLanInfo();
+public:WakeOnLanInfo();WakeOnLanInfo(const WakeOnLanInfo &other);
+	
 	static WakeOnLanInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

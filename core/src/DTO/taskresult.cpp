@@ -33,6 +33,15 @@ namespace Jellyfin {
 namespace DTO {
 
 TaskResult::TaskResult() {}
+TaskResult::TaskResult(const TaskResult &other) :
+	m_startTimeUtc(other.m_startTimeUtc),
+	m_endTimeUtc(other.m_endTimeUtc),
+	m_status(other.m_status),
+	m_name(other.m_name),
+	m_key(other.m_key),
+	m_jellyfinId(other.m_jellyfinId),
+	m_errorMessage(other.m_errorMessage),
+	m_longErrorMessage(other.m_longErrorMessage){}
 
 TaskResult TaskResult::fromJson(QJsonObject source) {
 	TaskResult instance;

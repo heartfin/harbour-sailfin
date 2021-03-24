@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 ChannelMappingOptionsDto::ChannelMappingOptionsDto() {}
+ChannelMappingOptionsDto::ChannelMappingOptionsDto(const ChannelMappingOptionsDto &other) :
+	m_tunerChannels(other.m_tunerChannels),
+	m_providerChannels(other.m_providerChannels),
+	m_mappings(other.m_mappings),
+	m_providerName(other.m_providerName){}
 
 ChannelMappingOptionsDto ChannelMappingOptionsDto::fromJson(QJsonObject source) {
 	ChannelMappingOptionsDto instance;

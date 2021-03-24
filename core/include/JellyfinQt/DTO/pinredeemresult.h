@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class PinRedeemResult {
-public:
-	explicit PinRedeemResult();
+public:PinRedeemResult();PinRedeemResult(const PinRedeemResult &other);
+	
 	static PinRedeemResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class DeviceInfoQueryResult {
-public:
-	explicit DeviceInfoQueryResult();
+public:DeviceInfoQueryResult();DeviceInfoQueryResult(const DeviceInfoQueryResult &other);
+	
 	static DeviceInfoQueryResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

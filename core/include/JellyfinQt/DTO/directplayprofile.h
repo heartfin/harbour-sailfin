@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class DirectPlayProfile {
-public:
-	explicit DirectPlayProfile();
+public:DirectPlayProfile();DirectPlayProfile(const DirectPlayProfile &other);
+	
 	static DirectPlayProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

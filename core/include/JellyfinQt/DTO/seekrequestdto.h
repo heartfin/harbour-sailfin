@@ -41,8 +41,8 @@ namespace DTO {
 
 
 class SeekRequestDto {
-public:
-	explicit SeekRequestDto();
+public:SeekRequestDto();SeekRequestDto(const SeekRequestDto &other);
+	
 	static SeekRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

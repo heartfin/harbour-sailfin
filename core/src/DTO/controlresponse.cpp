@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 ControlResponse::ControlResponse() {}
+ControlResponse::ControlResponse(const ControlResponse &other) :
+	m_headers(other.m_headers),
+	m_xml(other.m_xml),
+	m_isSuccessful(other.m_isSuccessful){}
 
 ControlResponse ControlResponse::fromJson(QJsonObject source) {
 	ControlResponse instance;

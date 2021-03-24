@@ -1,6 +1,29 @@
 {{className}}::{{className}}() {}
 
 
+{{className}}::{{className}}(const {{className}} &other) :
+
+
+{{#each properties as |property|}}
+	{{property.memberName}}(other.{{property.memberName}})
+	{{#if property.isLast}}
+{}
+	{{else}}
+,
+	{{/if}}
+
+{{/each}}
+
+
+void {{className}}::replaceData({{className}} &other) {
+
+{{#each properties as |property|}}
+	{{property.memberName}} = other.{{property.memberName}};
+
+{{/each}}
+}
+
+
 {{className}} {{className}}::fromJson(QJsonObject source) {
 	
 	{{className}} instance;
@@ -39,13 +62,17 @@ void {{className}}::set{{property.writeName}}({{property.typeNameWithQualifiers}
 }
 
 {{#if property.isNullable}}
-bool {{className}}::is{{property.writeName}}Null() const {
+bool {{className}}::{{property.name}}Null() const {
 	return {{property.nullableCheck}};
 }
 
-void {{className}}::setNull() {
-	{{property.nullableSetter}};
+void {{className}}::set{{property.writeName}}Null() {
+	
+	{{property.memberName}}{{property.nullableSetter}};
+
 }
+{{/if}}
+
 {{/each}}
 
 } // NS DTO

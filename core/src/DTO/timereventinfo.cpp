@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 TimerEventInfo::TimerEventInfo() {}
+TimerEventInfo::TimerEventInfo(const TimerEventInfo &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_programId(other.m_programId){}
 
 TimerEventInfo TimerEventInfo::fromJson(QJsonObject source) {
 	TimerEventInfo instance;

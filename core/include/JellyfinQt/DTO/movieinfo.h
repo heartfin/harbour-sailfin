@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class MovieInfo {
-public:
-	explicit MovieInfo();
+public:MovieInfo();MovieInfo(const MovieInfo &other);
+	
 	static MovieInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

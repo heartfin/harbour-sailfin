@@ -46,8 +46,8 @@ namespace DTO {
 
 
 class VirtualFolderInfo {
-public:
-	explicit VirtualFolderInfo();
+public:VirtualFolderInfo();VirtualFolderInfo(const VirtualFolderInfo &other);
+	
 	static VirtualFolderInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

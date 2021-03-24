@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 QueueRequestDto::QueueRequestDto() {}
+QueueRequestDto::QueueRequestDto(const QueueRequestDto &other) :
+	m_itemIds(other.m_itemIds),
+	m_mode(other.m_mode){}
 
 QueueRequestDto QueueRequestDto::fromJson(QJsonObject source) {
 	QueueRequestDto instance;

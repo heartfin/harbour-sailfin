@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 ForgotPasswordDto::ForgotPasswordDto() {}
+ForgotPasswordDto::ForgotPasswordDto(const ForgotPasswordDto &other) :
+	m_enteredUsername(other.m_enteredUsername){}
 
 ForgotPasswordDto ForgotPasswordDto::fromJson(QJsonObject source) {
 	ForgotPasswordDto instance;

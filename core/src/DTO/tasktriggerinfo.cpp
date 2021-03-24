@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 TaskTriggerInfo::TaskTriggerInfo() {}
+TaskTriggerInfo::TaskTriggerInfo(const TaskTriggerInfo &other) :
+	m_type(other.m_type),
+	m_timeOfDayTicks(other.m_timeOfDayTicks),
+	m_intervalTicks(other.m_intervalTicks),
+	m_dayOfWeek(other.m_dayOfWeek),
+	m_maxRuntimeTicks(other.m_maxRuntimeTicks){}
 
 TaskTriggerInfo TaskTriggerInfo::fromJson(QJsonObject source) {
 	TaskTriggerInfo instance;

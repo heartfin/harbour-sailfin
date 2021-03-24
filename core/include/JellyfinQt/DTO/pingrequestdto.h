@@ -41,8 +41,8 @@ namespace DTO {
 
 
 class PingRequestDto {
-public:
-	explicit PingRequestDto();
+public:PingRequestDto();PingRequestDto(const PingRequestDto &other);
+	
 	static PingRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

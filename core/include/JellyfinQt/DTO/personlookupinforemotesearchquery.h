@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class PersonLookupInfoRemoteSearchQuery {
-public:
-	explicit PersonLookupInfoRemoteSearchQuery();
+public:PersonLookupInfoRemoteSearchQuery();PersonLookupInfoRemoteSearchQuery(const PersonLookupInfoRemoteSearchQuery &other);
+	
 	static PersonLookupInfoRemoteSearchQuery fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 ImageProviderInfo::ImageProviderInfo() {}
+ImageProviderInfo::ImageProviderInfo(const ImageProviderInfo &other) :
+	m_name(other.m_name),
+	m_supportedImages(other.m_supportedImages){}
 
 ImageProviderInfo ImageProviderInfo::fromJson(QJsonObject source) {
 	ImageProviderInfo instance;

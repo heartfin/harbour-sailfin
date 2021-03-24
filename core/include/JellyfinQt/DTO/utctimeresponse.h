@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class UtcTimeResponse {
-public:
-	explicit UtcTimeResponse();
+public:UtcTimeResponse();UtcTimeResponse(const UtcTimeResponse &other);
+	
 	static UtcTimeResponse fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class UserItemDataDto {
-public:
-	explicit UserItemDataDto();
+public:UserItemDataDto();UserItemDataDto(const UserItemDataDto &other);
+	
 	static UserItemDataDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

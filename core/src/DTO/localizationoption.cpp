@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 LocalizationOption::LocalizationOption() {}
+LocalizationOption::LocalizationOption(const LocalizationOption &other) :
+	m_name(other.m_name),
+	m_value(other.m_value){}
 
 LocalizationOption LocalizationOption::fromJson(QJsonObject source) {
 	LocalizationOption instance;

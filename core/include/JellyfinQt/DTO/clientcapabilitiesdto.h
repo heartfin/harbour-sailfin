@@ -47,8 +47,8 @@ namespace DTO {
 
 
 class ClientCapabilitiesDto {
-public:
-	explicit ClientCapabilitiesDto();
+public:ClientCapabilitiesDto();ClientCapabilitiesDto(const ClientCapabilitiesDto &other);
+	
 	static ClientCapabilitiesDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

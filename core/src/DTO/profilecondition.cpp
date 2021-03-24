@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 ProfileCondition::ProfileCondition() {}
+ProfileCondition::ProfileCondition(const ProfileCondition &other) :
+	m_condition(other.m_condition),
+	m_property(other.m_property),
+	m_value(other.m_value),
+	m_isRequired(other.m_isRequired){}
 
 ProfileCondition ProfileCondition::fromJson(QJsonObject source) {
 	ProfileCondition instance;

@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 MetadataOptions::MetadataOptions() {}
+MetadataOptions::MetadataOptions(const MetadataOptions &other) :
+	m_itemType(other.m_itemType),
+	m_disabledMetadataSavers(other.m_disabledMetadataSavers),
+	m_localMetadataReaderOrder(other.m_localMetadataReaderOrder),
+	m_disabledMetadataFetchers(other.m_disabledMetadataFetchers),
+	m_metadataFetcherOrder(other.m_metadataFetcherOrder),
+	m_disabledImageFetchers(other.m_disabledImageFetchers),
+	m_imageFetcherOrder(other.m_imageFetcherOrder){}
 
 MetadataOptions MetadataOptions::fromJson(QJsonObject source) {
 	MetadataOptions instance;

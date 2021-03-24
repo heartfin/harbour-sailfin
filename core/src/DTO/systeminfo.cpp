@@ -33,6 +33,33 @@ namespace Jellyfin {
 namespace DTO {
 
 SystemInfo::SystemInfo() {}
+SystemInfo::SystemInfo(const SystemInfo &other) :
+	m_localAddress(other.m_localAddress),
+	m_serverName(other.m_serverName),
+	m_version(other.m_version),
+	m_productName(other.m_productName),
+	m_operatingSystem(other.m_operatingSystem),
+	m_jellyfinId(other.m_jellyfinId),
+	m_startupWizardCompleted(other.m_startupWizardCompleted),
+	m_operatingSystemDisplayName(other.m_operatingSystemDisplayName),
+	m_packageName(other.m_packageName),
+	m_hasPendingRestart(other.m_hasPendingRestart),
+	m_isShuttingDown(other.m_isShuttingDown),
+	m_supportsLibraryMonitor(other.m_supportsLibraryMonitor),
+	m_webSocketPortNumber(other.m_webSocketPortNumber),
+	m_completedInstallations(other.m_completedInstallations),
+	m_canSelfRestart(other.m_canSelfRestart),
+	m_canLaunchWebBrowser(other.m_canLaunchWebBrowser),
+	m_programDataPath(other.m_programDataPath),
+	m_webPath(other.m_webPath),
+	m_itemsByNamePath(other.m_itemsByNamePath),
+	m_cachePath(other.m_cachePath),
+	m_logPath(other.m_logPath),
+	m_internalMetadataPath(other.m_internalMetadataPath),
+	m_transcodingTempPath(other.m_transcodingTempPath),
+	m_hasUpdateAvailable(other.m_hasUpdateAvailable),
+	m_encoderLocation(other.m_encoderLocation),
+	m_systemArchitecture(other.m_systemArchitecture){}
 
 SystemInfo SystemInfo::fromJson(QJsonObject source) {
 	SystemInfo instance;

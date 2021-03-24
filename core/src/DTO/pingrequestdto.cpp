@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 PingRequestDto::PingRequestDto() {}
+PingRequestDto::PingRequestDto(const PingRequestDto &other) :
+	m_ping(other.m_ping){}
 
 PingRequestDto PingRequestDto::fromJson(QJsonObject source) {
 	PingRequestDto instance;

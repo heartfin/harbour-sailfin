@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 CreatePlaylistDto::CreatePlaylistDto() {}
+CreatePlaylistDto::CreatePlaylistDto(const CreatePlaylistDto &other) :
+	m_name(other.m_name),
+	m_ids(other.m_ids),
+	m_userId(other.m_userId),
+	m_mediaType(other.m_mediaType){}
 
 CreatePlaylistDto CreatePlaylistDto::fromJson(QJsonObject source) {
 	CreatePlaylistDto instance;

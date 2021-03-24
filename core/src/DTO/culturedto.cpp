@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 CultureDto::CultureDto() {}
+CultureDto::CultureDto(const CultureDto &other) :
+	m_name(other.m_name),
+	m_displayName(other.m_displayName),
+	m_twoLetterISOLanguageName(other.m_twoLetterISOLanguageName),
+	m_threeLetterISOLanguageName(other.m_threeLetterISOLanguageName),
+	m_threeLetterISOLanguageNames(other.m_threeLetterISOLanguageNames){}
 
 CultureDto CultureDto::fromJson(QJsonObject source) {
 	CultureDto instance;

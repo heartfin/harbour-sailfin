@@ -48,8 +48,8 @@ namespace DTO {
 
 
 class PlaybackStopInfo {
-public:
-	explicit PlaybackStopInfo();
+public:PlaybackStopInfo();PlaybackStopInfo(const PlaybackStopInfo &other);
+	
 	static PlaybackStopInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

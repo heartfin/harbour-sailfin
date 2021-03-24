@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class CreateUserByName {
-public:
-	explicit CreateUserByName();
+public:CreateUserByName();CreateUserByName(const CreateUserByName &other);
+	
 	static CreateUserByName fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

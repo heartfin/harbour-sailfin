@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 ParentalRating::ParentalRating() {}
+ParentalRating::ParentalRating(const ParentalRating &other) :
+	m_name(other.m_name),
+	m_value(other.m_value){}
 
 ParentalRating ParentalRating::fromJson(QJsonObject source) {
 	ParentalRating instance;

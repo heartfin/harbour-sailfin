@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class MediaAttachment {
-public:
-	explicit MediaAttachment();
+public:MediaAttachment();MediaAttachment(const MediaAttachment &other);
+	
 	static MediaAttachment fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

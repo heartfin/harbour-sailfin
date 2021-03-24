@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 DeviceOptions::DeviceOptions() {}
+DeviceOptions::DeviceOptions(const DeviceOptions &other) :
+	m_customName(other.m_customName){}
 
 DeviceOptions DeviceOptions::fromJson(QJsonObject source) {
 	DeviceOptions instance;

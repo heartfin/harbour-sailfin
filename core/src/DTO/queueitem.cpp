@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 QueueItem::QueueItem() {}
+QueueItem::QueueItem(const QueueItem &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_playlistItemId(other.m_playlistItemId){}
 
 QueueItem QueueItem::fromJson(QJsonObject source) {
 	QueueItem instance;

@@ -41,8 +41,8 @@ namespace DTO {
 
 
 class Version {
-public:
-	explicit Version();
+public:Version();Version(const Version &other);
+	
 	static Version fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

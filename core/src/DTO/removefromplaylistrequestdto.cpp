@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 RemoveFromPlaylistRequestDto::RemoveFromPlaylistRequestDto() {}
+RemoveFromPlaylistRequestDto::RemoveFromPlaylistRequestDto(const RemoveFromPlaylistRequestDto &other) :
+	m_playlistItemIds(other.m_playlistItemIds){}
 
 RemoveFromPlaylistRequestDto RemoveFromPlaylistRequestDto::fromJson(QJsonObject source) {
 	RemoveFromPlaylistRequestDto instance;

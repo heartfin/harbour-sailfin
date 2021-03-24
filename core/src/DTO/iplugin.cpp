@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 IPlugin::IPlugin() {}
+IPlugin::IPlugin(const IPlugin &other) :
+	m_name(other.m_name),
+	m_description(other.m_description),
+	m_jellyfinId(other.m_jellyfinId),
+	m_version(other.m_version),
+	m_assemblyFilePath(other.m_assemblyFilePath),
+	m_canUninstall(other.m_canUninstall),
+	m_dataFolderPath(other.m_dataFolderPath){}
 
 IPlugin IPlugin::fromJson(QJsonObject source) {
 	IPlugin instance;

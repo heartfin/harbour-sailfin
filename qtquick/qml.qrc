@@ -16,5 +16,7 @@
         <file>qml/pages/setup/LoginPage.qml</file>
         <file>qml/pages/MainPage.qml</file>
         <file>qml/pages/DetailPage.qml</file>
+        <file>qml/ApiClient.qml</file>
+        <file>qml/qmldir</file>
     </qresource>
 </RCC>

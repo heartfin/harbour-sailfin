@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class NotificationDto {
-public:
-	explicit NotificationDto();
+public:NotificationDto();NotificationDto(const NotificationDto &other);
+	
 	static NotificationDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

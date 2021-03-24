@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class NameGuidPair {
-public:
-	explicit NameGuidPair();
+public:NameGuidPair();NameGuidPair(const NameGuidPair &other);
+	
 	static NameGuidPair fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

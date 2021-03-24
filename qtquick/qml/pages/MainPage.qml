@@ -2,7 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.12
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../components"
 import "../.."
@@ -18,7 +18,7 @@ Page {
         }
     }
 
-    UserViewModel {
+    J.UserViewModel {
         id: mediaLibraryModel
         apiClient: ApiClient
     }
@@ -33,7 +33,7 @@ Page {
                 model: mediaLibraryModel
                 Column {
                     width: parent.width
-                    UserItemLatestModel {
+                    J.UserItemLatestModel {
                         id: userItemModel
                         apiClient: ApiClient
                         parentId: model.id

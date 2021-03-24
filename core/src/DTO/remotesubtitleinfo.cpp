@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 RemoteSubtitleInfo::RemoteSubtitleInfo() {}
+RemoteSubtitleInfo::RemoteSubtitleInfo(const RemoteSubtitleInfo &other) :
+	m_threeLetterISOLanguageName(other.m_threeLetterISOLanguageName),
+	m_jellyfinId(other.m_jellyfinId),
+	m_providerName(other.m_providerName),
+	m_name(other.m_name),
+	m_format(other.m_format),
+	m_author(other.m_author),
+	m_comment(other.m_comment),
+	m_dateCreated(other.m_dateCreated),
+	m_communityRating(other.m_communityRating),
+	m_downloadCount(other.m_downloadCount),
+	m_isHashMatch(other.m_isHashMatch){}
 
 RemoteSubtitleInfo RemoteSubtitleInfo::fromJson(QJsonObject source) {
 	RemoteSubtitleInfo instance;

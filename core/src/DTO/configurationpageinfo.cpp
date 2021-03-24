@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 ConfigurationPageInfo::ConfigurationPageInfo() {}
+ConfigurationPageInfo::ConfigurationPageInfo(const ConfigurationPageInfo &other) :
+	m_name(other.m_name),
+	m_enableInMainMenu(other.m_enableInMainMenu),
+	m_menuSection(other.m_menuSection),
+	m_menuIcon(other.m_menuIcon),
+	m_displayName(other.m_displayName),
+	m_configurationPageType(other.m_configurationPageType),
+	m_pluginId(other.m_pluginId){}
 
 ConfigurationPageInfo ConfigurationPageInfo::fromJson(QJsonObject source) {
 	ConfigurationPageInfo instance;

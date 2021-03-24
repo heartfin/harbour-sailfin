@@ -48,8 +48,8 @@ namespace DTO {
 
 
 class LibraryTypeOptionsDto {
-public:
-	explicit LibraryTypeOptionsDto();
+public:LibraryTypeOptionsDto();LibraryTypeOptionsDto(const LibraryTypeOptionsDto &other);
+	
 	static LibraryTypeOptionsDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

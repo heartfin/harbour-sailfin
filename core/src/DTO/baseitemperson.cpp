@@ -33,6 +33,13 @@ namespace Jellyfin {
 namespace DTO {
 
 BaseItemPerson::BaseItemPerson() {}
+BaseItemPerson::BaseItemPerson(const BaseItemPerson &other) :
+	m_name(other.m_name),
+	m_jellyfinId(other.m_jellyfinId),
+	m_role(other.m_role),
+	m_type(other.m_type),
+	m_primaryImageTag(other.m_primaryImageTag),
+	m_imageBlurHashes(other.m_imageBlurHashes){}
 
 BaseItemPerson BaseItemPerson::fromJson(QJsonObject source) {
 	BaseItemPerson instance;

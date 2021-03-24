@@ -33,6 +33,17 @@ namespace Jellyfin {
 namespace DTO {
 
 ActivityLogEntry::ActivityLogEntry() {}
+ActivityLogEntry::ActivityLogEntry(const ActivityLogEntry &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_name(other.m_name),
+	m_overview(other.m_overview),
+	m_shortOverview(other.m_shortOverview),
+	m_type(other.m_type),
+	m_itemId(other.m_itemId),
+	m_date(other.m_date),
+	m_userId(other.m_userId),
+	m_userPrimaryImageTag(other.m_userPrimaryImageTag),
+	m_severity(other.m_severity){}
 
 ActivityLogEntry ActivityLogEntry::fromJson(QJsonObject source) {
 	ActivityLogEntry instance;

@@ -47,8 +47,8 @@ namespace DTO {
 
 
 class ArtistInfo {
-public:
-	explicit ArtistInfo();
+public:ArtistInfo();ArtistInfo(const ArtistInfo &other);
+	
 	static ArtistInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

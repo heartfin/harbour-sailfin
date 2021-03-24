@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class NewGroupRequestDto {
-public:
-	explicit NewGroupRequestDto();
+public:NewGroupRequestDto();NewGroupRequestDto(const NewGroupRequestDto &other);
+	
 	static NewGroupRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

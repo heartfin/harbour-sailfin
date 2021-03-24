@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 UserItemDataDto::UserItemDataDto() {}
+UserItemDataDto::UserItemDataDto(const UserItemDataDto &other) :
+	m_rating(other.m_rating),
+	m_playedPercentage(other.m_playedPercentage),
+	m_unplayedItemCount(other.m_unplayedItemCount),
+	m_playbackPositionTicks(other.m_playbackPositionTicks),
+	m_playCount(other.m_playCount),
+	m_isFavorite(other.m_isFavorite),
+	m_likes(other.m_likes),
+	m_lastPlayedDate(other.m_lastPlayedDate),
+	m_played(other.m_played),
+	m_key(other.m_key),
+	m_itemId(other.m_itemId){}
 
 UserItemDataDto UserItemDataDto::fromJson(QJsonObject source) {
 	UserItemDataDto instance;

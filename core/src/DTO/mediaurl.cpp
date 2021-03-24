@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaUrl::MediaUrl() {}
+MediaUrl::MediaUrl(const MediaUrl &other) :
+	m_url(other.m_url),
+	m_name(other.m_name){}
 
 MediaUrl MediaUrl::fromJson(QJsonObject source) {
 	MediaUrl instance;

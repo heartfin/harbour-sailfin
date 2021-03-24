@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 BaseItem::BaseItem() {}
+BaseItem::BaseItem(const BaseItem &other) :
+	m_size(other.m_size),
+	m_container(other.m_container),
+	m_dateLastSaved(other.m_dateLastSaved),
+	m_remoteTrailers(other.m_remoteTrailers),
+	m_isHD(other.m_isHD),
+	m_isShortcut(other.m_isShortcut),
+	m_shortcutPath(other.m_shortcutPath),
+	m_width(other.m_width),
+	m_height(other.m_height),
+	m_extraIds(other.m_extraIds),
+	m_supportsExternalTransfer(other.m_supportsExternalTransfer){}
 
 BaseItem BaseItem::fromJson(QJsonObject source) {
 	BaseItem instance;

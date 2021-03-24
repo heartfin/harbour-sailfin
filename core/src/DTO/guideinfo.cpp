@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 GuideInfo::GuideInfo() {}
+GuideInfo::GuideInfo(const GuideInfo &other) :
+	m_startDate(other.m_startDate),
+	m_endDate(other.m_endDate){}
 
 GuideInfo GuideInfo::fromJson(QJsonObject source) {
 	GuideInfo instance;

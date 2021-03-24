@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 PluginSecurityInfo::PluginSecurityInfo() {}
+PluginSecurityInfo::PluginSecurityInfo(const PluginSecurityInfo &other) :
+	m_supporterKey(other.m_supporterKey),
+	m_isMbSupporter(other.m_isMbSupporter){}
 
 PluginSecurityInfo PluginSecurityInfo::fromJson(QJsonObject source) {
 	PluginSecurityInfo instance;

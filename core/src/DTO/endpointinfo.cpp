@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 EndPointInfo::EndPointInfo() {}
+EndPointInfo::EndPointInfo(const EndPointInfo &other) :
+	m_isLocal(other.m_isLocal),
+	m_isInNetwork(other.m_isInNetwork){}
 
 EndPointInfo EndPointInfo::fromJson(QJsonObject source) {
 	EndPointInfo instance;

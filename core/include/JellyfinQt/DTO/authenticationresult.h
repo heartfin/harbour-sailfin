@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class AuthenticationResult {
-public:
-	explicit AuthenticationResult();
+public:AuthenticationResult();AuthenticationResult(const AuthenticationResult &other);
+	
 	static AuthenticationResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

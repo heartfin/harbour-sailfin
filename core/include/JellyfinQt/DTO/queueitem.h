@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class QueueItem {
-public:
-	explicit QueueItem();
+public:QueueItem();QueueItem(const QueueItem &other);
+	
 	static QueueItem fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 SessionUserInfo::SessionUserInfo() {}
+SessionUserInfo::SessionUserInfo(const SessionUserInfo &other) :
+	m_userId(other.m_userId),
+	m_userName(other.m_userName){}
 
 SessionUserInfo SessionUserInfo::fromJson(QJsonObject source) {
 	SessionUserInfo instance;

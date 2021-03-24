@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 ResponseProfile::ResponseProfile() {}
+ResponseProfile::ResponseProfile(const ResponseProfile &other) :
+	m_container(other.m_container),
+	m_audioCodec(other.m_audioCodec),
+	m_videoCodec(other.m_videoCodec),
+	m_type(other.m_type),
+	m_orgPn(other.m_orgPn),
+	m_mimeType(other.m_mimeType),
+	m_conditions(other.m_conditions){}
 
 ResponseProfile ResponseProfile::fromJson(QJsonObject source) {
 	ResponseProfile instance;

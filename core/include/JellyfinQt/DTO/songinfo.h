@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class SongInfo {
-public:
-	explicit SongInfo();
+public:SongInfo();SongInfo(const SongInfo &other);
+	
 	static SongInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

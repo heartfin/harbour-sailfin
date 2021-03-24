@@ -33,6 +33,17 @@ namespace Jellyfin {
 namespace DTO {
 
 MovieInfo::MovieInfo() {}
+MovieInfo::MovieInfo(const MovieInfo &other) :
+	m_name(other.m_name),
+	m_path(other.m_path),
+	m_metadataLanguage(other.m_metadataLanguage),
+	m_metadataCountryCode(other.m_metadataCountryCode),
+	m_providerIds(other.m_providerIds),
+	m_year(other.m_year),
+	m_indexNumber(other.m_indexNumber),
+	m_parentIndexNumber(other.m_parentIndexNumber),
+	m_premiereDate(other.m_premiereDate),
+	m_isAutomated(other.m_isAutomated){}
 
 MovieInfo MovieInfo::fromJson(QJsonObject source) {
 	MovieInfo instance;

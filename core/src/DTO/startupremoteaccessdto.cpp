@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 StartupRemoteAccessDto::StartupRemoteAccessDto() {}
+StartupRemoteAccessDto::StartupRemoteAccessDto(const StartupRemoteAccessDto &other) :
+	m_enableRemoteAccess(other.m_enableRemoteAccess),
+	m_enableAutomaticPortMapping(other.m_enableAutomaticPortMapping){}
 
 StartupRemoteAccessDto StartupRemoteAccessDto::fromJson(QJsonObject source) {
 	StartupRemoteAccessDto instance;

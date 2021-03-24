@@ -46,8 +46,8 @@ namespace DTO {
 
 
 class PackageInfo {
-public:
-	explicit PackageInfo();
+public:PackageInfo();PackageInfo(const PackageInfo &other);
+	
 	static PackageInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

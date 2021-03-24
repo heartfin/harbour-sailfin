@@ -33,6 +33,25 @@ namespace Jellyfin {
 namespace DTO {
 
 ListingsProviderInfo::ListingsProviderInfo() {}
+ListingsProviderInfo::ListingsProviderInfo(const ListingsProviderInfo &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_type(other.m_type),
+	m_username(other.m_username),
+	m_password(other.m_password),
+	m_listingsId(other.m_listingsId),
+	m_zipCode(other.m_zipCode),
+	m_country(other.m_country),
+	m_path(other.m_path),
+	m_enabledTuners(other.m_enabledTuners),
+	m_enableAllTuners(other.m_enableAllTuners),
+	m_newsCategories(other.m_newsCategories),
+	m_sportsCategories(other.m_sportsCategories),
+	m_kidsCategories(other.m_kidsCategories),
+	m_movieCategories(other.m_movieCategories),
+	m_channelMappings(other.m_channelMappings),
+	m_moviePrefix(other.m_moviePrefix),
+	m_preferredLanguage(other.m_preferredLanguage),
+	m_userAgent(other.m_userAgent){}
 
 ListingsProviderInfo ListingsProviderInfo::fromJson(QJsonObject source) {
 	ListingsProviderInfo instance;

@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaybackInfoResponse::PlaybackInfoResponse() {}
+PlaybackInfoResponse::PlaybackInfoResponse(const PlaybackInfoResponse &other) :
+	m_mediaSources(other.m_mediaSources),
+	m_playSessionId(other.m_playSessionId),
+	m_errorCode(other.m_errorCode){}
 
 PlaybackInfoResponse PlaybackInfoResponse::fromJson(QJsonObject source) {
 	PlaybackInfoResponse instance;

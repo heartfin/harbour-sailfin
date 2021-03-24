@@ -49,8 +49,8 @@ namespace DTO {
 
 
 class UserPolicy {
-public:
-	explicit UserPolicy();
+public:UserPolicy();UserPolicy(const UserPolicy &other);
+	
 	static UserPolicy fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

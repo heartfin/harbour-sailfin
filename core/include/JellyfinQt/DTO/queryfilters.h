@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class QueryFilters {
-public:
-	explicit QueryFilters();
+public:QueryFilters();QueryFilters(const QueryFilters &other);
+	
 	static QueryFilters fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

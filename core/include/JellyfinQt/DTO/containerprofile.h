@@ -47,8 +47,8 @@ namespace DTO {
 
 
 class ContainerProfile {
-public:
-	explicit ContainerProfile();
+public:ContainerProfile();ContainerProfile(const ContainerProfile &other);
+	
 	static ContainerProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class SendCommand {
-public:
-	explicit SendCommand();
+public:SendCommand();SendCommand(const SendCommand &other);
+	
 	static SendCommand fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

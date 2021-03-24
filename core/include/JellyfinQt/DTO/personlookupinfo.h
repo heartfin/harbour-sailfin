@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class PersonLookupInfo {
-public:
-	explicit PersonLookupInfo();
+public:PersonLookupInfo();PersonLookupInfo(const PersonLookupInfo &other);
+	
 	static PersonLookupInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

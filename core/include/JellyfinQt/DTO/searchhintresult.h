@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class SearchHintResult {
-public:
-	explicit SearchHintResult();
+public:SearchHintResult();SearchHintResult(const SearchHintResult &other);
+	
 	static SearchHintResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

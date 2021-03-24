@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class FontFile {
-public:
-	explicit FontFile();
+public:FontFile();FontFile(const FontFile &other);
+	
 	static FontFile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

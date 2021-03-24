@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class ObjectGroupUpdate {
-public:
-	explicit ObjectGroupUpdate();
+public:ObjectGroupUpdate();ObjectGroupUpdate(const ObjectGroupUpdate &other);
+	
 	static ObjectGroupUpdate fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

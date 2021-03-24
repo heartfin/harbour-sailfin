@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class BoxSetInfo {
-public:
-	explicit BoxSetInfo();
+public:BoxSetInfo();BoxSetInfo(const BoxSetInfo &other);
+	
 	static BoxSetInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

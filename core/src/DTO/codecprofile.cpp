@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 CodecProfile::CodecProfile() {}
+CodecProfile::CodecProfile(const CodecProfile &other) :
+	m_type(other.m_type),
+	m_conditions(other.m_conditions),
+	m_applyConditions(other.m_applyConditions),
+	m_codec(other.m_codec),
+	m_container(other.m_container){}
 
 CodecProfile CodecProfile::fromJson(QJsonObject source) {
 	CodecProfile instance;

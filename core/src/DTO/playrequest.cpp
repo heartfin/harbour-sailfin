@@ -33,6 +33,15 @@ namespace Jellyfin {
 namespace DTO {
 
 PlayRequest::PlayRequest() {}
+PlayRequest::PlayRequest(const PlayRequest &other) :
+	m_itemIds(other.m_itemIds),
+	m_startPositionTicks(other.m_startPositionTicks),
+	m_playCommand(other.m_playCommand),
+	m_controllingUserId(other.m_controllingUserId),
+	m_subtitleStreamIndex(other.m_subtitleStreamIndex),
+	m_audioStreamIndex(other.m_audioStreamIndex),
+	m_mediaSourceId(other.m_mediaSourceId),
+	m_startIndex(other.m_startIndex){}
 
 PlayRequest PlayRequest::fromJson(QJsonObject source) {
 	PlayRequest instance;

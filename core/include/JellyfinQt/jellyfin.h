@@ -23,16 +23,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 // #include "DTO/dto.h"
 #include "model/item.h"
-#include "DTO/mediastream.h"
-#include "DTO/nameguidpair.h"
-#include "DTO/userdto.h"
-#include "DTO/useritemdatadto.h"
+#include "dto/mediastream.h"
+#include "dto/nameguidpair.h"
+#include "dto/userdto.h"
+#include "dto/useritemdatadto.h"
 
 #include "apiclient.h"
 #include "apimodel.h"
 #include "serverdiscoverymodel.h"
-#include "playbackmanager.h"
-#include "remotedata.h"
+#include "viewmodel/item.h"
+#include "viewmodel/loader.h"
+#include "viewmodel/playbackmanager.h"
 
 namespace Jellyfin {
 

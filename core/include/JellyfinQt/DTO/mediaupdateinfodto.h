@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class MediaUpdateInfoDto {
-public:
-	explicit MediaUpdateInfoDto();
+public:MediaUpdateInfoDto();MediaUpdateInfoDto(const MediaUpdateInfoDto &other);
+	
 	static MediaUpdateInfoDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 SetPlaylistItemRequestDto::SetPlaylistItemRequestDto() {}
+SetPlaylistItemRequestDto::SetPlaylistItemRequestDto(const SetPlaylistItemRequestDto &other) :
+	m_playlistItemId(other.m_playlistItemId){}
 
 SetPlaylistItemRequestDto SetPlaylistItemRequestDto::fromJson(QJsonObject source) {
 	SetPlaylistItemRequestDto instance;

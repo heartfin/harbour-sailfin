@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class VersionInfo {
-public:
-	explicit VersionInfo();
+public:VersionInfo();VersionInfo(const VersionInfo &other);
+	
 	static VersionInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

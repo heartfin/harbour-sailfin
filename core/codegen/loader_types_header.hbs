@@ -1,0 +1,55 @@
+using namespace {{dtoNamespace}};
+
+{{#each endpoints as |e|}}
+class {{e.name}} {
+public:
+
+	{{#each e.parameters as |param|}}
+	/**
+	 * @brief {{param.description}}
+	
+	 */
+	
+	{{param.type.typeNameWithQualifiers}} {{param.type.name}}() const;
+	void set{{param.type.writeName}}({{param.type.typeNameWithQualifiers}} new{{param.type.writeName}}) const;
+
+
+	{{/each}}
+
+private:
+	// Required path parameters
+
+	{{#each e.requiredPathParameters as |param|}}
+	{{param.type.typeNameWithQualifiers}} {{param.type.memberName}};
+
+	{{/each}}
+	
+	// Required query parameters
+
+	{{#each e.requiredQueryParameters as |param|}}
+	{{param.type.typeNameWithQualifiers}} {{param.type.memberName}};
+
+	{{/each}}
+	
+	// Optional path parameters
+
+	{{#each e.optionalPathParameters as |param|}}
+	{{param.type.typeNameWithQualifiers}} {{param.type.memberName}};
+
+	{{/each}}
+
+	// Optional query parameters
+
+	{{#each e.optionalQueryParameters as |param|}}
+{{#if param.type.defaultInitializer.length > 0}}
+	{{param.type.typeNameWithQualifiers}} {{param.type.memberName}} = {{param.type.defaultInitializer}};
+{{else}}
+	{{param.type.typeNameWithQualifiers}} {{param.type.memberName}};
+{{/if}}
+
+{{/each}}
+
+};
+
+
+{{/each}}

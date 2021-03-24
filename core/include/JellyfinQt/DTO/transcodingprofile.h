@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class TranscodingProfile {
-public:
-	explicit TranscodingProfile();
+public:TranscodingProfile();TranscodingProfile(const TranscodingProfile &other);
+	
 	static TranscodingProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

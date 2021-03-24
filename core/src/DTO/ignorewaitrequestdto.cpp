@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 IgnoreWaitRequestDto::IgnoreWaitRequestDto() {}
+IgnoreWaitRequestDto::IgnoreWaitRequestDto(const IgnoreWaitRequestDto &other) :
+	m_ignoreWait(other.m_ignoreWait){}
 
 IgnoreWaitRequestDto IgnoreWaitRequestDto::fromJson(QJsonObject source) {
 	IgnoreWaitRequestDto instance;

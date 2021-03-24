@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaPathInfo::MediaPathInfo() {}
+MediaPathInfo::MediaPathInfo(const MediaPathInfo &other) :
+	m_path(other.m_path),
+	m_networkPath(other.m_networkPath){}
 
 MediaPathInfo MediaPathInfo::fromJson(QJsonObject source) {
 	MediaPathInfo instance;

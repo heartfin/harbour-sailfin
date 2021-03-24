@@ -33,6 +33,15 @@ namespace Jellyfin {
 namespace DTO {
 
 PackageInfo::PackageInfo() {}
+PackageInfo::PackageInfo(const PackageInfo &other) :
+	m_name(other.m_name),
+	m_description(other.m_description),
+	m_overview(other.m_overview),
+	m_owner(other.m_owner),
+	m_category(other.m_category),
+	m_guid(other.m_guid),
+	m_versions(other.m_versions),
+	m_imageUrl(other.m_imageUrl){}
 
 PackageInfo PackageInfo::fromJson(QJsonObject source) {
 	PackageInfo instance;

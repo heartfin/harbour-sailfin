@@ -53,8 +53,8 @@ namespace DTO {
 
 
 class MediaSourceInfo {
-public:
-	explicit MediaSourceInfo();
+public:MediaSourceInfo();MediaSourceInfo(const MediaSourceInfo &other);
+	
 	static MediaSourceInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 ImageOption::ImageOption() {}
+ImageOption::ImageOption(const ImageOption &other) :
+	m_type(other.m_type),
+	m_limit(other.m_limit),
+	m_minWidth(other.m_minWidth){}
 
 ImageOption ImageOption::fromJson(QJsonObject source) {
 	ImageOption instance;

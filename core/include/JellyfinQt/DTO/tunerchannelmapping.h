@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class TunerChannelMapping {
-public:
-	explicit TunerChannelMapping();
+public:TunerChannelMapping();TunerChannelMapping(const TunerChannelMapping &other);
+	
 	static TunerChannelMapping fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

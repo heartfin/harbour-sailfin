@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 XmlAttribute::XmlAttribute() {}
+XmlAttribute::XmlAttribute(const XmlAttribute &other) :
+	m_name(other.m_name),
+	m_value(other.m_value){}
 
 XmlAttribute XmlAttribute::fromJson(QJsonObject source) {
 	XmlAttribute instance;

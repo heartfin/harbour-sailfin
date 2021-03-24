@@ -33,6 +33,13 @@ namespace Jellyfin {
 namespace DTO {
 
 Version::Version() {}
+Version::Version(const Version &other) :
+	m_major(other.m_major),
+	m_minor(other.m_minor),
+	m_build(other.m_build),
+	m_revision(other.m_revision),
+	m_majorRevision(other.m_majorRevision),
+	m_minorRevision(other.m_minorRevision){}
 
 Version Version::fromJson(QJsonObject source) {
 	Version instance;

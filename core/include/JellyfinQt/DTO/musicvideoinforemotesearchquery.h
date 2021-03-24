@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class MusicVideoInfoRemoteSearchQuery {
-public:
-	explicit MusicVideoInfoRemoteSearchQuery();
+public:MusicVideoInfoRemoteSearchQuery();MusicVideoInfoRemoteSearchQuery(const MusicVideoInfoRemoteSearchQuery &other);
+	
 	static MusicVideoInfoRemoteSearchQuery fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

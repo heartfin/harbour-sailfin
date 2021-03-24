@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 LogFile::LogFile() {}
+LogFile::LogFile(const LogFile &other) :
+	m_dateCreated(other.m_dateCreated),
+	m_dateModified(other.m_dateModified),
+	m_size(other.m_size),
+	m_name(other.m_name){}
 
 LogFile LogFile::fromJson(QJsonObject source) {
 	LogFile instance;

@@ -33,6 +33,35 @@ namespace Jellyfin {
 namespace DTO {
 
 SessionInfo::SessionInfo() {}
+SessionInfo::SessionInfo(const SessionInfo &other) :
+	m_playState(other.m_playState),
+	m_additionalUsers(other.m_additionalUsers),
+	m_capabilities(other.m_capabilities),
+	m_remoteEndPoint(other.m_remoteEndPoint),
+	m_playableMediaTypes(other.m_playableMediaTypes),
+	m_jellyfinId(other.m_jellyfinId),
+	m_userId(other.m_userId),
+	m_userName(other.m_userName),
+	m_client(other.m_client),
+	m_lastActivityDate(other.m_lastActivityDate),
+	m_lastPlaybackCheckIn(other.m_lastPlaybackCheckIn),
+	m_deviceName(other.m_deviceName),
+	m_deviceType(other.m_deviceType),
+	m_nowPlayingItem(other.m_nowPlayingItem),
+	m_fullNowPlayingItem(other.m_fullNowPlayingItem),
+	m_nowViewingItem(other.m_nowViewingItem),
+	m_deviceId(other.m_deviceId),
+	m_applicationVersion(other.m_applicationVersion),
+	m_transcodingInfo(other.m_transcodingInfo),
+	m_isActive(other.m_isActive),
+	m_supportsMediaControl(other.m_supportsMediaControl),
+	m_supportsRemoteControl(other.m_supportsRemoteControl),
+	m_nowPlayingQueue(other.m_nowPlayingQueue),
+	m_hasCustomDeviceName(other.m_hasCustomDeviceName),
+	m_playlistItemId(other.m_playlistItemId),
+	m_serverId(other.m_serverId),
+	m_userPrimaryImageTag(other.m_userPrimaryImageTag),
+	m_supportedCommands(other.m_supportedCommands){}
 
 SessionInfo SessionInfo::fromJson(QJsonObject source) {
 	SessionInfo instance;

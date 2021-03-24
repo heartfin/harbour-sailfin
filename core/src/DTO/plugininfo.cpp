@@ -33,6 +33,15 @@ namespace Jellyfin {
 namespace DTO {
 
 PluginInfo::PluginInfo() {}
+PluginInfo::PluginInfo(const PluginInfo &other) :
+	m_name(other.m_name),
+	m_version(other.m_version),
+	m_configurationFileName(other.m_configurationFileName),
+	m_description(other.m_description),
+	m_jellyfinId(other.m_jellyfinId),
+	m_canUninstall(other.m_canUninstall),
+	m_hasImage(other.m_hasImage),
+	m_status(other.m_status){}
 
 PluginInfo PluginInfo::fromJson(QJsonObject source) {
 	PluginInfo instance;

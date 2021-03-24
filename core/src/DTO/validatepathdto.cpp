@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 ValidatePathDto::ValidatePathDto() {}
+ValidatePathDto::ValidatePathDto(const ValidatePathDto &other) :
+	m_validateWritable(other.m_validateWritable),
+	m_path(other.m_path),
+	m_isFile(other.m_isFile){}
 
 ValidatePathDto ValidatePathDto::fromJson(QJsonObject source) {
 	ValidatePathDto instance;

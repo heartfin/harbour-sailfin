@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class ChapterInfo {
-public:
-	explicit ChapterInfo();
+public:ChapterInfo();ChapterInfo(const ChapterInfo &other);
+	
 	static ChapterInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

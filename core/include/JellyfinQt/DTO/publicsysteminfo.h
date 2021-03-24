@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class PublicSystemInfo {
-public:
-	explicit PublicSystemInfo();
+public:PublicSystemInfo();PublicSystemInfo(const PublicSystemInfo &other);
+	
 	static PublicSystemInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

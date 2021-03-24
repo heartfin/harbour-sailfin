@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class MediaEncoderPathDto {
-public:
-	explicit MediaEncoderPathDto();
+public:MediaEncoderPathDto();MediaEncoderPathDto(const MediaEncoderPathDto &other);
+	
 	static MediaEncoderPathDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

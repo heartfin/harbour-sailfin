@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 HttpHeaderInfo::HttpHeaderInfo() {}
+HttpHeaderInfo::HttpHeaderInfo(const HttpHeaderInfo &other) :
+	m_name(other.m_name),
+	m_value(other.m_value),
+	m_match(other.m_match){}
 
 HttpHeaderInfo HttpHeaderInfo::fromJson(QJsonObject source) {
 	HttpHeaderInfo instance;

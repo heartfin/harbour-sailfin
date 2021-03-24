@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class QueueRequestDto {
-public:
-	explicit QueueRequestDto();
+public:QueueRequestDto();QueueRequestDto(const QueueRequestDto &other);
+	
 	static QueueRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

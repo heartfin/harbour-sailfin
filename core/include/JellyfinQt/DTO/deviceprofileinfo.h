@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class DeviceProfileInfo {
-public:
-	explicit DeviceProfileInfo();
+public:DeviceProfileInfo();DeviceProfileInfo(const DeviceProfileInfo &other);
+	
 	static DeviceProfileInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

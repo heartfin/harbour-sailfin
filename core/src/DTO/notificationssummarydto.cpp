@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 NotificationsSummaryDto::NotificationsSummaryDto() {}
+NotificationsSummaryDto::NotificationsSummaryDto(const NotificationsSummaryDto &other) :
+	m_unreadCount(other.m_unreadCount),
+	m_maxUnreadNotificationLevel(other.m_maxUnreadNotificationLevel){}
 
 NotificationsSummaryDto NotificationsSummaryDto::fromJson(QJsonObject source) {
 	NotificationsSummaryDto instance;

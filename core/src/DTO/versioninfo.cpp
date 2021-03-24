@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 VersionInfo::VersionInfo() {}
+VersionInfo::VersionInfo(const VersionInfo &other) :
+	m_version(other.m_version),
+	m_versionNumber(other.m_versionNumber),
+	m_changelog(other.m_changelog),
+	m_targetAbi(other.m_targetAbi),
+	m_sourceUrl(other.m_sourceUrl),
+	m_checksum(other.m_checksum),
+	m_timestamp(other.m_timestamp),
+	m_repositoryName(other.m_repositoryName),
+	m_repositoryUrl(other.m_repositoryUrl){}
 
 VersionInfo VersionInfo::fromJson(QJsonObject source) {
 	VersionInfo instance;

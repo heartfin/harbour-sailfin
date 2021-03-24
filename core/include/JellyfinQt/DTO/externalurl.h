@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class ExternalUrl {
-public:
-	explicit ExternalUrl();
+public:ExternalUrl();ExternalUrl(const ExternalUrl &other);
+	
 	static ExternalUrl fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

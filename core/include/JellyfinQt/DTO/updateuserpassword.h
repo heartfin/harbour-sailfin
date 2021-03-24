@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class UpdateUserPassword {
-public:
-	explicit UpdateUserPassword();
+public:UpdateUserPassword();UpdateUserPassword(const UpdateUserPassword &other);
+	
 	static UpdateUserPassword fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

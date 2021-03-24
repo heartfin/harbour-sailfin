@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class TimerEventInfo {
-public:
-	explicit TimerEventInfo();
+public:TimerEventInfo();TimerEventInfo(const TimerEventInfo &other);
+	
 	static TimerEventInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

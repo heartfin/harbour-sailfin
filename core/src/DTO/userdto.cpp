@@ -33,6 +33,21 @@ namespace Jellyfin {
 namespace DTO {
 
 UserDto::UserDto() {}
+UserDto::UserDto(const UserDto &other) :
+	m_name(other.m_name),
+	m_serverId(other.m_serverId),
+	m_serverName(other.m_serverName),
+	m_jellyfinId(other.m_jellyfinId),
+	m_primaryImageTag(other.m_primaryImageTag),
+	m_hasPassword(other.m_hasPassword),
+	m_hasConfiguredPassword(other.m_hasConfiguredPassword),
+	m_hasConfiguredEasyPassword(other.m_hasConfiguredEasyPassword),
+	m_enableAutoLogin(other.m_enableAutoLogin),
+	m_lastLoginDate(other.m_lastLoginDate),
+	m_lastActivityDate(other.m_lastActivityDate),
+	m_configuration(other.m_configuration),
+	m_policy(other.m_policy),
+	m_primaryImageAspectRatio(other.m_primaryImageAspectRatio){}
 
 UserDto UserDto::fromJson(QJsonObject source) {
 	UserDto instance;

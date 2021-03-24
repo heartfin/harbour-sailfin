@@ -33,6 +33,13 @@ namespace Jellyfin {
 namespace DTO {
 
 SendCommand::SendCommand() {}
+SendCommand::SendCommand(const SendCommand &other) :
+	m_groupId(other.m_groupId),
+	m_playlistItemId(other.m_playlistItemId),
+	m_when(other.m_when),
+	m_positionTicks(other.m_positionTicks),
+	m_command(other.m_command),
+	m_emittedAt(other.m_emittedAt){}
 
 SendCommand SendCommand::fromJson(QJsonObject source) {
 	SendCommand instance;

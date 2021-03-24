@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryOptionsResultDto::LibraryOptionsResultDto() {}
+LibraryOptionsResultDto::LibraryOptionsResultDto(const LibraryOptionsResultDto &other) :
+	m_metadataSavers(other.m_metadataSavers),
+	m_metadataReaders(other.m_metadataReaders),
+	m_subtitleFetchers(other.m_subtitleFetchers),
+	m_typeOptions(other.m_typeOptions){}
 
 LibraryOptionsResultDto LibraryOptionsResultDto::fromJson(QJsonObject source) {
 	LibraryOptionsResultDto instance;

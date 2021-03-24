@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 UpdateUserPassword::UpdateUserPassword() {}
+UpdateUserPassword::UpdateUserPassword(const UpdateUserPassword &other) :
+	m_currentPassword(other.m_currentPassword),
+	m_currentPw(other.m_currentPw),
+	m_newPw(other.m_newPw),
+	m_resetPassword(other.m_resetPassword){}
 
 UpdateUserPassword UpdateUserPassword::fromJson(QJsonObject source) {
 	UpdateUserPassword instance;

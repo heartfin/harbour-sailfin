@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class ImageOption {
-public:
-	explicit ImageOption();
+public:ImageOption();ImageOption(const ImageOption &other);
+	
 	static ImageOption fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class SeriesInfo {
-public:
-	explicit SeriesInfo();
+public:SeriesInfo();SeriesInfo(const SeriesInfo &other);
+	
 	static SeriesInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

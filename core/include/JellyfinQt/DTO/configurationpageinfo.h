@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class ConfigurationPageInfo {
-public:
-	explicit ConfigurationPageInfo();
+public:ConfigurationPageInfo();ConfigurationPageInfo(const ConfigurationPageInfo &other);
+	
 	static ConfigurationPageInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

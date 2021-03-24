@@ -48,8 +48,8 @@ namespace DTO {
 
 
 class ChannelMappingOptionsDto {
-public:
-	explicit ChannelMappingOptionsDto();
+public:ChannelMappingOptionsDto();ChannelMappingOptionsDto(const ChannelMappingOptionsDto &other);
+	
 	static ChannelMappingOptionsDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

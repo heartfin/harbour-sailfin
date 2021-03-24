@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class AccessSchedule {
-public:
-	explicit AccessSchedule();
+public:AccessSchedule();AccessSchedule(const AccessSchedule &other);
+	
 	static AccessSchedule fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

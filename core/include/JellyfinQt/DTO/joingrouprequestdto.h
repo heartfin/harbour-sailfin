@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class JoinGroupRequestDto {
-public:
-	explicit JoinGroupRequestDto();
+public:JoinGroupRequestDto();JoinGroupRequestDto(const JoinGroupRequestDto &other);
+	
 	static JoinGroupRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

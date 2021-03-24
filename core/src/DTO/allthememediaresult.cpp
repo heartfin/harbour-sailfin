@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 AllThemeMediaResult::AllThemeMediaResult() {}
+AllThemeMediaResult::AllThemeMediaResult(const AllThemeMediaResult &other) :
+	m_themeVideosResult(other.m_themeVideosResult),
+	m_themeSongsResult(other.m_themeSongsResult),
+	m_soundtrackSongsResult(other.m_soundtrackSongsResult){}
 
 AllThemeMediaResult AllThemeMediaResult::fromJson(QJsonObject source) {
 	AllThemeMediaResult instance;

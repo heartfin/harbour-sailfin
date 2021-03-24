@@ -51,8 +51,8 @@ namespace DTO {
 
 
 class ServerConfiguration {
-public:
-	explicit ServerConfiguration();
+public:ServerConfiguration();ServerConfiguration(const ServerConfiguration &other);
+	
 	static ServerConfiguration fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

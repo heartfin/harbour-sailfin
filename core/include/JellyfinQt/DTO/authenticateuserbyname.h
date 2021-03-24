@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class AuthenticateUserByName {
-public:
-	explicit AuthenticateUserByName();
+public:AuthenticateUserByName();AuthenticateUserByName(const AuthenticateUserByName &other);
+	
 	static AuthenticateUserByName fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

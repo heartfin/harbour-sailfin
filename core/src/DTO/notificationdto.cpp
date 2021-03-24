@@ -33,6 +33,15 @@ namespace Jellyfin {
 namespace DTO {
 
 NotificationDto::NotificationDto() {}
+NotificationDto::NotificationDto(const NotificationDto &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_userId(other.m_userId),
+	m_date(other.m_date),
+	m_isRead(other.m_isRead),
+	m_name(other.m_name),
+	m_description(other.m_description),
+	m_url(other.m_url),
+	m_level(other.m_level){}
 
 NotificationDto NotificationDto::fromJson(QJsonObject source) {
 	NotificationDto instance;

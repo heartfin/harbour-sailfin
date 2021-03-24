@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 StartupConfigurationDto::StartupConfigurationDto() {}
+StartupConfigurationDto::StartupConfigurationDto(const StartupConfigurationDto &other) :
+	m_uICulture(other.m_uICulture),
+	m_metadataCountryCode(other.m_metadataCountryCode),
+	m_preferredMetadataLanguage(other.m_preferredMetadataLanguage){}
 
 StartupConfigurationDto StartupConfigurationDto::fromJson(QJsonObject source) {
 	StartupConfigurationDto instance;

@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class BrandingOptions {
-public:
-	explicit BrandingOptions();
+public:BrandingOptions();BrandingOptions(const BrandingOptions &other);
+	
 	static BrandingOptions fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

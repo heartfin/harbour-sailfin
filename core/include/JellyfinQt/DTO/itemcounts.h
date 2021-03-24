@@ -41,8 +41,8 @@ namespace DTO {
 
 
 class ItemCounts {
-public:
-	explicit ItemCounts();
+public:ItemCounts();ItemCounts(const ItemCounts &other);
+	
 	static ItemCounts fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 SearchHintResult::SearchHintResult() {}
+SearchHintResult::SearchHintResult(const SearchHintResult &other) :
+	m_searchHints(other.m_searchHints),
+	m_totalRecordCount(other.m_totalRecordCount){}
 
 SearchHintResult SearchHintResult::fromJson(QJsonObject source) {
 	SearchHintResult instance;

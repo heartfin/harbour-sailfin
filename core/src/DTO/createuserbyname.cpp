@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 CreateUserByName::CreateUserByName() {}
+CreateUserByName::CreateUserByName(const CreateUserByName &other) :
+	m_name(other.m_name),
+	m_password(other.m_password){}
 
 CreateUserByName CreateUserByName::fromJson(QJsonObject source) {
 	CreateUserByName instance;

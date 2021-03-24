@@ -33,6 +33,27 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaybackStartInfo::PlaybackStartInfo() {}
+PlaybackStartInfo::PlaybackStartInfo(const PlaybackStartInfo &other) :
+	m_canSeek(other.m_canSeek),
+	m_item(other.m_item),
+	m_itemId(other.m_itemId),
+	m_sessionId(other.m_sessionId),
+	m_mediaSourceId(other.m_mediaSourceId),
+	m_audioStreamIndex(other.m_audioStreamIndex),
+	m_subtitleStreamIndex(other.m_subtitleStreamIndex),
+	m_isPaused(other.m_isPaused),
+	m_isMuted(other.m_isMuted),
+	m_positionTicks(other.m_positionTicks),
+	m_playbackStartTimeTicks(other.m_playbackStartTimeTicks),
+	m_volumeLevel(other.m_volumeLevel),
+	m_brightness(other.m_brightness),
+	m_aspectRatio(other.m_aspectRatio),
+	m_playMethod(other.m_playMethod),
+	m_liveStreamId(other.m_liveStreamId),
+	m_playSessionId(other.m_playSessionId),
+	m_repeatMode(other.m_repeatMode),
+	m_nowPlayingQueue(other.m_nowPlayingQueue),
+	m_playlistItemId(other.m_playlistItemId){}
 
 PlaybackStartInfo PlaybackStartInfo::fromJson(QJsonObject source) {
 	PlaybackStartInfo instance;

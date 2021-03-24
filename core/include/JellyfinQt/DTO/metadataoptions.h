@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class MetadataOptions {
-public:
-	explicit MetadataOptions();
+public:MetadataOptions();MetadataOptions(const MetadataOptions &other);
+	
 	static MetadataOptions fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

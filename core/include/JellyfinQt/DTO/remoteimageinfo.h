@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class RemoteImageInfo {
-public:
-	explicit RemoteImageInfo();
+public:RemoteImageInfo();RemoteImageInfo(const RemoteImageInfo &other);
+	
 	static RemoteImageInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

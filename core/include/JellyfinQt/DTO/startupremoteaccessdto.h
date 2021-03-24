@@ -41,8 +41,8 @@ namespace DTO {
 
 
 class StartupRemoteAccessDto {
-public:
-	explicit StartupRemoteAccessDto();
+public:StartupRemoteAccessDto();StartupRemoteAccessDto(const StartupRemoteAccessDto &other);
+	
 	static StartupRemoteAccessDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

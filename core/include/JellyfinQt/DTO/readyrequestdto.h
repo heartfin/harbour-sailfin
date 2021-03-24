@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class ReadyRequestDto {
-public:
-	explicit ReadyRequestDto();
+public:ReadyRequestDto();ReadyRequestDto(const ReadyRequestDto &other);
+	
 	static ReadyRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

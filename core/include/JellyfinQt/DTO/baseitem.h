@@ -48,8 +48,8 @@ namespace DTO {
 
 
 class BaseItem {
-public:
-	explicit BaseItem();
+public:BaseItem();BaseItem(const BaseItem &other);
+	
 	static BaseItem fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

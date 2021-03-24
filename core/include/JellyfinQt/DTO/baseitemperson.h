@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class BaseItemPerson {
-public:
-	explicit BaseItemPerson();
+public:BaseItemPerson();BaseItemPerson(const BaseItemPerson &other);
+	
 	static BaseItemPerson fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

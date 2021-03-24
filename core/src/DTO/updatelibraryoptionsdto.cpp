@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 UpdateLibraryOptionsDto::UpdateLibraryOptionsDto() {}
+UpdateLibraryOptionsDto::UpdateLibraryOptionsDto(const UpdateLibraryOptionsDto &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_libraryOptions(other.m_libraryOptions){}
 
 UpdateLibraryOptionsDto UpdateLibraryOptionsDto::fromJson(QJsonObject source) {
 	UpdateLibraryOptionsDto instance;

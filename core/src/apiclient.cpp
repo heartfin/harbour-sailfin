@@ -23,9 +23,12 @@ namespace Jellyfin {
 
 ApiClient::ApiClient(QObject *parent)
     : QObject(parent),
-      m_webSocket(new WebSocket(this)) {
-    m_deviceName = QHostInfo::localHostName();
-    m_deviceId = QUuid::createUuid().toString(); // TODO: make this not random?
+      m_webSocket(new WebSocket(this)),
+      m_eventbus(new EventBus(this)),
+      m_deviceName(QHostInfo::localHostName()) {
+
+    m_deviceId = Support::uuidToString(retrieveDeviceId());
+
     m_credManager = CredentialsManager::newInstance(this);
 
     generateDeviceProfile();
@@ -133,7 +136,11 @@ void ApiClient::setupConnection() {
     // Note that this is done without calling JellyfinApiClient::get since that automatically includes the base_url,
     // which is something we want to avoid here.
     QNetworkRequest req = QNetworkRequest(m_baseUrl);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
+    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
+#else
     req.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+#endif
     QNetworkReply *rep = m_naManager.get(req);
     connect(rep, &QNetworkReply::finished, this, [rep, this](){
         int status = statusCode(rep);
@@ -226,7 +233,8 @@ void ApiClient::deleteSession() {
 
 void ApiClient::postCapabilities() {
     QJsonObject capabilities;
-    capabilities["SupportsPersistentIdentifier"] = false; // Technically untrue, but not implemented yet.
+    capabilities["SupportedCommands"] = Support::toJsonValue(m_supportedCommands);
+    capabilities["SupportsPersistentIdentifier"] = true;
     capabilities["SupportsMediaControl"] = false;
     capabilities["SupportsSync"] = false;
     capabilities["SupportsContentUploading"] = false;
@@ -262,11 +270,12 @@ void ApiClient::defaultNetworkErrorHandler(QNetworkReply::NetworkError error) {
     QNetworkReply *rep = dynamic_cast<QNetworkReply *>(signalSender);
     if (rep != nullptr && statusCode(rep) == 401) {
         this->setAuthenticated(false);
+        emit this->setupRequired();
         emit this->authenticationError(ApiError::INVALID_PASSWORD);
+        rep->deleteLater();
     } else {
         emit this->networkError(error);
     }
-    rep->deleteLater();
 }
 
 void ApiClient::onUserDataChanged(const QString &itemId, UserData *userData) {
@@ -278,4 +287,45 @@ void ApiClient::setAuthenticated(bool authenticated) {
     if (authenticated) m_webSocket->open();
     emit authenticatedChanged(authenticated);
 }
+
+QUuid ApiClient::retrieveDeviceId() {
+    // This should probably not block the main thread, but on the other side,
+    // the file is not too big.
+    QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+    QDir folder(path);
+    static QString fileName = QStringLiteral("deviceid");
+    if (!path.isEmpty() && !folder.exists(fileName)) {
+            folder.mkpath(".");
+            QFile uuidFile(folder.absoluteFilePath(fileName));
+            if (uuidFile.open(QIODevice::WriteOnly)) {
+                QUuid uuid =  QUuid::createUuid();
+                uuidFile.write(uuid.toByteArray());
+                uuidFile.close();
+                return uuid;
+            } else {
+                qDebug() << "Could not persist device id";
+                return QUuid::createUuid();
+            }
+    } else {
+        QFile uuidFile(folder.absoluteFilePath(fileName));
+        if (uuidFile.open(QIODevice::ReadOnly)) {
+            QUuid uuid(uuidFile.readAll());
+            uuidFile.close();
+            if (uuid.isNull()) {
+                qDebug() << "UUID file contains junk. Recreating";
+                uuidFile.remove();
+                uuidFile.open(QIODevice::WriteOnly);
+                uuid = QUuid::createUuid();
+                uuidFile.write(uuid.toByteArray());
+                uuidFile.close();
+            }
+            return uuid;
+        } else {
+            qDebug() << "Could not open device id file. Generating a random one.";
+            return QUuid::createUuid();
+        }
+    }
+}
+
 }

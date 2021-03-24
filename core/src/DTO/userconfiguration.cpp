@@ -33,6 +33,22 @@ namespace Jellyfin {
 namespace DTO {
 
 UserConfiguration::UserConfiguration() {}
+UserConfiguration::UserConfiguration(const UserConfiguration &other) :
+	m_audioLanguagePreference(other.m_audioLanguagePreference),
+	m_playDefaultAudioTrack(other.m_playDefaultAudioTrack),
+	m_subtitleLanguagePreference(other.m_subtitleLanguagePreference),
+	m_displayMissingEpisodes(other.m_displayMissingEpisodes),
+	m_groupedFolders(other.m_groupedFolders),
+	m_subtitleMode(other.m_subtitleMode),
+	m_displayCollectionsView(other.m_displayCollectionsView),
+	m_enableLocalPassword(other.m_enableLocalPassword),
+	m_orderedViews(other.m_orderedViews),
+	m_latestItemsExcludes(other.m_latestItemsExcludes),
+	m_myMediaExcludes(other.m_myMediaExcludes),
+	m_hidePlayedInLatest(other.m_hidePlayedInLatest),
+	m_rememberAudioSelections(other.m_rememberAudioSelections),
+	m_rememberSubtitleSelections(other.m_rememberSubtitleSelections),
+	m_enableNextEpisodeAutoPlay(other.m_enableNextEpisodeAutoPlay){}
 
 UserConfiguration UserConfiguration::fromJson(QJsonObject source) {
 	UserConfiguration instance;

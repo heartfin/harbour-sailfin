@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class QueryFiltersLegacy {
-public:
-	explicit QueryFiltersLegacy();
+public:QueryFiltersLegacy();QueryFiltersLegacy(const QueryFiltersLegacy &other);
+	
 	static QueryFiltersLegacy fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

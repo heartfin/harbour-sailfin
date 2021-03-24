@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class SeriesTimerInfoDtoQueryResult {
-public:
-	explicit SeriesTimerInfoDtoQueryResult();
+public:SeriesTimerInfoDtoQueryResult();SeriesTimerInfoDtoQueryResult(const SeriesTimerInfoDtoQueryResult &other);
+	
 	static SeriesTimerInfoDtoQueryResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

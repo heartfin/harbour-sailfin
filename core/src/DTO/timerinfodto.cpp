@@ -33,6 +33,35 @@ namespace Jellyfin {
 namespace DTO {
 
 TimerInfoDto::TimerInfoDto() {}
+TimerInfoDto::TimerInfoDto(const TimerInfoDto &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_type(other.m_type),
+	m_serverId(other.m_serverId),
+	m_externalId(other.m_externalId),
+	m_channelId(other.m_channelId),
+	m_externalChannelId(other.m_externalChannelId),
+	m_channelName(other.m_channelName),
+	m_channelPrimaryImageTag(other.m_channelPrimaryImageTag),
+	m_programId(other.m_programId),
+	m_externalProgramId(other.m_externalProgramId),
+	m_name(other.m_name),
+	m_overview(other.m_overview),
+	m_startDate(other.m_startDate),
+	m_endDate(other.m_endDate),
+	m_serviceName(other.m_serviceName),
+	m_priority(other.m_priority),
+	m_prePaddingSeconds(other.m_prePaddingSeconds),
+	m_postPaddingSeconds(other.m_postPaddingSeconds),
+	m_isPrePaddingRequired(other.m_isPrePaddingRequired),
+	m_parentBackdropItemId(other.m_parentBackdropItemId),
+	m_parentBackdropImageTags(other.m_parentBackdropImageTags),
+	m_isPostPaddingRequired(other.m_isPostPaddingRequired),
+	m_keepUntil(other.m_keepUntil),
+	m_status(other.m_status),
+	m_seriesTimerId(other.m_seriesTimerId),
+	m_externalSeriesTimerId(other.m_externalSeriesTimerId),
+	m_runTimeTicks(other.m_runTimeTicks),
+	m_programInfo(other.m_programInfo){}
 
 TimerInfoDto TimerInfoDto::fromJson(QJsonObject source) {
 	TimerInfoDto instance;

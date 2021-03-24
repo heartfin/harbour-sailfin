@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class GuideInfo {
-public:
-	explicit GuideInfo();
+public:GuideInfo();GuideInfo(const GuideInfo &other);
+	
 	static GuideInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

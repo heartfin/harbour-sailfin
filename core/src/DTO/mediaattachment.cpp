@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaAttachment::MediaAttachment() {}
+MediaAttachment::MediaAttachment(const MediaAttachment &other) :
+	m_codec(other.m_codec),
+	m_codecTag(other.m_codecTag),
+	m_comment(other.m_comment),
+	m_index(other.m_index),
+	m_fileName(other.m_fileName),
+	m_mimeType(other.m_mimeType),
+	m_deliveryUrl(other.m_deliveryUrl){}
 
 MediaAttachment MediaAttachment::fromJson(QJsonObject source) {
 	MediaAttachment instance;

@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 NextItemRequestDto::NextItemRequestDto() {}
+NextItemRequestDto::NextItemRequestDto(const NextItemRequestDto &other) :
+	m_playlistItemId(other.m_playlistItemId){}
 
 NextItemRequestDto NextItemRequestDto::fromJson(QJsonObject source) {
 	NextItemRequestDto instance;

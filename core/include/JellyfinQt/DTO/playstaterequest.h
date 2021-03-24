@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class PlaystateRequest {
-public:
-	explicit PlaystateRequest();
+public:PlaystateRequest();PlaystateRequest(const PlaystateRequest &other);
+	
 	static PlaystateRequest fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

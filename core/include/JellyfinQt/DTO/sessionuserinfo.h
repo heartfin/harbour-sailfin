@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class SessionUserInfo {
-public:
-	explicit SessionUserInfo();
+public:SessionUserInfo();SessionUserInfo(const SessionUserInfo &other);
+	
 	static SessionUserInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

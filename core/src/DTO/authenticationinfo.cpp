@@ -33,6 +33,19 @@ namespace Jellyfin {
 namespace DTO {
 
 AuthenticationInfo::AuthenticationInfo() {}
+AuthenticationInfo::AuthenticationInfo(const AuthenticationInfo &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_accessToken(other.m_accessToken),
+	m_deviceId(other.m_deviceId),
+	m_appName(other.m_appName),
+	m_appVersion(other.m_appVersion),
+	m_deviceName(other.m_deviceName),
+	m_userId(other.m_userId),
+	m_isActive(other.m_isActive),
+	m_dateCreated(other.m_dateCreated),
+	m_dateRevoked(other.m_dateRevoked),
+	m_dateLastActivity(other.m_dateLastActivity),
+	m_userName(other.m_userName){}
 
 AuthenticationInfo AuthenticationInfo::fromJson(QJsonObject source) {
 	AuthenticationInfo instance;

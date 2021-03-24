@@ -33,6 +33,22 @@ namespace Jellyfin {
 namespace DTO {
 
 TranscodingProfile::TranscodingProfile() {}
+TranscodingProfile::TranscodingProfile(const TranscodingProfile &other) :
+	m_container(other.m_container),
+	m_type(other.m_type),
+	m_videoCodec(other.m_videoCodec),
+	m_audioCodec(other.m_audioCodec),
+	m_protocol(other.m_protocol),
+	m_estimateContentLength(other.m_estimateContentLength),
+	m_enableMpegtsM2TsMode(other.m_enableMpegtsM2TsMode),
+	m_transcodeSeekInfo(other.m_transcodeSeekInfo),
+	m_copyTimestamps(other.m_copyTimestamps),
+	m_context(other.m_context),
+	m_enableSubtitlesInManifest(other.m_enableSubtitlesInManifest),
+	m_maxAudioChannels(other.m_maxAudioChannels),
+	m_minSegments(other.m_minSegments),
+	m_segmentLength(other.m_segmentLength),
+	m_breakOnNonKeyFrames(other.m_breakOnNonKeyFrames){}
 
 TranscodingProfile TranscodingProfile::fromJson(QJsonObject source) {
 	TranscodingProfile instance;

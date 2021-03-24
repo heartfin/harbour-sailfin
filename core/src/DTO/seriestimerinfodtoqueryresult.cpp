@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 SeriesTimerInfoDtoQueryResult::SeriesTimerInfoDtoQueryResult() {}
+SeriesTimerInfoDtoQueryResult::SeriesTimerInfoDtoQueryResult(const SeriesTimerInfoDtoQueryResult &other) :
+	m_items(other.m_items),
+	m_totalRecordCount(other.m_totalRecordCount),
+	m_startIndex(other.m_startIndex){}
 
 SeriesTimerInfoDtoQueryResult SeriesTimerInfoDtoQueryResult::fromJson(QJsonObject source) {
 	SeriesTimerInfoDtoQueryResult instance;

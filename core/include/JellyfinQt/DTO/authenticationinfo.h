@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class AuthenticationInfo {
-public:
-	explicit AuthenticationInfo();
+public:AuthenticationInfo();AuthenticationInfo(const AuthenticationInfo &other);
+	
 	static AuthenticationInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

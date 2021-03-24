@@ -46,8 +46,8 @@ namespace DTO {
 
 
 class DeviceIdentification {
-public:
-	explicit DeviceIdentification();
+public:DeviceIdentification();DeviceIdentification(const DeviceIdentification &other);
+	
 	static DeviceIdentification fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

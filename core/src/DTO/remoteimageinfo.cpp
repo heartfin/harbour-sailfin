@@ -33,6 +33,17 @@ namespace Jellyfin {
 namespace DTO {
 
 RemoteImageInfo::RemoteImageInfo() {}
+RemoteImageInfo::RemoteImageInfo(const RemoteImageInfo &other) :
+	m_providerName(other.m_providerName),
+	m_url(other.m_url),
+	m_thumbnailUrl(other.m_thumbnailUrl),
+	m_height(other.m_height),
+	m_width(other.m_width),
+	m_communityRating(other.m_communityRating),
+	m_voteCount(other.m_voteCount),
+	m_language(other.m_language),
+	m_type(other.m_type),
+	m_ratingType(other.m_ratingType){}
 
 RemoteImageInfo RemoteImageInfo::fromJson(QJsonObject source) {
 	RemoteImageInfo instance;

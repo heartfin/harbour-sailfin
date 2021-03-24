@@ -47,8 +47,8 @@ namespace DTO {
 
 
 class UserDto {
-public:
-	explicit UserDto();
+public:UserDto();UserDto(const UserDto &other);
+	
 	static UserDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ChapterInfo::ChapterInfo() {}
+ChapterInfo::ChapterInfo(const ChapterInfo &other) :
+	m_startPositionTicks(other.m_startPositionTicks),
+	m_name(other.m_name),
+	m_imagePath(other.m_imagePath),
+	m_imageDateModified(other.m_imageDateModified),
+	m_imageTag(other.m_imageTag){}
 
 ChapterInfo ChapterInfo::fromJson(QJsonObject source) {
 	ChapterInfo instance;

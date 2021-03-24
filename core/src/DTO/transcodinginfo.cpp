@@ -33,6 +33,19 @@ namespace Jellyfin {
 namespace DTO {
 
 TranscodingInfo::TranscodingInfo() {}
+TranscodingInfo::TranscodingInfo(const TranscodingInfo &other) :
+	m_audioCodec(other.m_audioCodec),
+	m_videoCodec(other.m_videoCodec),
+	m_container(other.m_container),
+	m_isVideoDirect(other.m_isVideoDirect),
+	m_isAudioDirect(other.m_isAudioDirect),
+	m_bitrate(other.m_bitrate),
+	m_framerate(other.m_framerate),
+	m_completionPercentage(other.m_completionPercentage),
+	m_width(other.m_width),
+	m_height(other.m_height),
+	m_audioChannels(other.m_audioChannels),
+	m_transcodeReasons(other.m_transcodeReasons){}
 
 TranscodingInfo TranscodingInfo::fromJson(QJsonObject source) {
 	TranscodingInfo instance;

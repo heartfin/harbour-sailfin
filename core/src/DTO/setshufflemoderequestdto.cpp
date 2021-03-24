@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 SetShuffleModeRequestDto::SetShuffleModeRequestDto() {}
+SetShuffleModeRequestDto::SetShuffleModeRequestDto(const SetShuffleModeRequestDto &other) :
+	m_mode(other.m_mode){}
 
 SetShuffleModeRequestDto SetShuffleModeRequestDto::fromJson(QJsonObject source) {
 	SetShuffleModeRequestDto instance;

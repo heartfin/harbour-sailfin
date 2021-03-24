@@ -49,8 +49,8 @@ namespace DTO {
 
 
 class SeriesTimerInfoDto {
-public:
-	explicit SeriesTimerInfoDto();
+public:SeriesTimerInfoDto();SeriesTimerInfoDto(const SeriesTimerInfoDto &other);
+	
 	static SeriesTimerInfoDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

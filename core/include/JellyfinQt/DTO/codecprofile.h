@@ -47,8 +47,8 @@ namespace DTO {
 
 
 class CodecProfile {
-public:
-	explicit CodecProfile();
+public:CodecProfile();CodecProfile(const CodecProfile &other);
+	
 	static CodecProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

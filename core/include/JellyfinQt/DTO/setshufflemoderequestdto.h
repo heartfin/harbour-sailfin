@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class SetShuffleModeRequestDto {
-public:
-	explicit SetShuffleModeRequestDto();
+public:SetShuffleModeRequestDto();SetShuffleModeRequestDto(const SetShuffleModeRequestDto &other);
+	
 	static SetShuffleModeRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -47,8 +47,8 @@ namespace DTO {
 
 
 class ChannelFeatures {
-public:
-	explicit ChannelFeatures();
+public:ChannelFeatures();ChannelFeatures(const ChannelFeatures &other);
+	
 	static ChannelFeatures fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

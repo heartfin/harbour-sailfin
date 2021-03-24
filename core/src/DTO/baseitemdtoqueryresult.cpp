@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 BaseItemDtoQueryResult::BaseItemDtoQueryResult() {}
+BaseItemDtoQueryResult::BaseItemDtoQueryResult(const BaseItemDtoQueryResult &other) :
+	m_items(other.m_items),
+	m_totalRecordCount(other.m_totalRecordCount),
+	m_startIndex(other.m_startIndex){}
 
 BaseItemDtoQueryResult BaseItemDtoQueryResult::fromJson(QJsonObject source) {
 	BaseItemDtoQueryResult instance;

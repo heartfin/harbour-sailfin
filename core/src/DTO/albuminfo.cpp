@@ -33,6 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 AlbumInfo::AlbumInfo() {}
+AlbumInfo::AlbumInfo(const AlbumInfo &other) :
+	m_name(other.m_name),
+	m_path(other.m_path),
+	m_metadataLanguage(other.m_metadataLanguage),
+	m_metadataCountryCode(other.m_metadataCountryCode),
+	m_providerIds(other.m_providerIds),
+	m_year(other.m_year),
+	m_indexNumber(other.m_indexNumber),
+	m_parentIndexNumber(other.m_parentIndexNumber),
+	m_premiereDate(other.m_premiereDate),
+	m_isAutomated(other.m_isAutomated),
+	m_albumArtists(other.m_albumArtists),
+	m_artistProviderIds(other.m_artistProviderIds),
+	m_songInfos(other.m_songInfos){}
 
 AlbumInfo AlbumInfo::fromJson(QJsonObject source) {
 	AlbumInfo instance;

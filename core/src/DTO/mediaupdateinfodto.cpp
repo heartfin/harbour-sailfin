@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaUpdateInfoDto::MediaUpdateInfoDto() {}
+MediaUpdateInfoDto::MediaUpdateInfoDto(const MediaUpdateInfoDto &other) :
+	m_path(other.m_path),
+	m_updateType(other.m_updateType){}
 
 MediaUpdateInfoDto MediaUpdateInfoDto::fromJson(QJsonObject source) {
 	MediaUpdateInfoDto instance;

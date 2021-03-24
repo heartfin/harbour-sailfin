@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class TimerInfoDtoQueryResult {
-public:
-	explicit TimerInfoDtoQueryResult();
+public:TimerInfoDtoQueryResult();TimerInfoDtoQueryResult(const TimerInfoDtoQueryResult &other);
+	
 	static TimerInfoDtoQueryResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

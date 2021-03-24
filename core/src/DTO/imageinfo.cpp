@@ -33,6 +33,15 @@ namespace Jellyfin {
 namespace DTO {
 
 ImageInfo::ImageInfo() {}
+ImageInfo::ImageInfo(const ImageInfo &other) :
+	m_imageType(other.m_imageType),
+	m_imageIndex(other.m_imageIndex),
+	m_imageTag(other.m_imageTag),
+	m_path(other.m_path),
+	m_blurHash(other.m_blurHash),
+	m_height(other.m_height),
+	m_width(other.m_width),
+	m_size(other.m_size){}
 
 ImageInfo ImageInfo::fromJson(QJsonObject source) {
 	ImageInfo instance;

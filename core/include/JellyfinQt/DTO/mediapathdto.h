@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class MediaPathDto {
-public:
-	explicit MediaPathDto();
+public:MediaPathDto();MediaPathDto(const MediaPathDto &other);
+	
 	static MediaPathDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

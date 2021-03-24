@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class PathSubstitution {
-public:
-	explicit PathSubstitution();
+public:PathSubstitution();PathSubstitution(const PathSubstitution &other);
+	
 	static PathSubstitution fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

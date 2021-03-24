@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class TrailerInfo {
-public:
-	explicit TrailerInfo();
+public:TrailerInfo();TrailerInfo(const TrailerInfo &other);
+	
 	static TrailerInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -41,8 +41,8 @@ namespace DTO {
 
 
 class EndPointInfo {
-public:
-	explicit EndPointInfo();
+public:EndPointInfo();EndPointInfo(const EndPointInfo &other);
+	
 	static EndPointInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

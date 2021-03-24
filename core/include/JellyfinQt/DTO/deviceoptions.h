@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class DeviceOptions {
-public:
-	explicit DeviceOptions();
+public:DeviceOptions();DeviceOptions(const DeviceOptions &other);
+	
 	static DeviceOptions fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

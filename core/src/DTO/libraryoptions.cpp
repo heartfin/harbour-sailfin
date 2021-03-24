@@ -33,6 +33,32 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryOptions::LibraryOptions() {}
+LibraryOptions::LibraryOptions(const LibraryOptions &other) :
+	m_enablePhotos(other.m_enablePhotos),
+	m_enableRealtimeMonitor(other.m_enableRealtimeMonitor),
+	m_enableChapterImageExtraction(other.m_enableChapterImageExtraction),
+	m_extractChapterImagesDuringLibraryScan(other.m_extractChapterImagesDuringLibraryScan),
+	m_pathInfos(other.m_pathInfos),
+	m_saveLocalMetadata(other.m_saveLocalMetadata),
+	m_enableInternetProviders(other.m_enableInternetProviders),
+	m_enableAutomaticSeriesGrouping(other.m_enableAutomaticSeriesGrouping),
+	m_enableEmbeddedTitles(other.m_enableEmbeddedTitles),
+	m_enableEmbeddedEpisodeInfos(other.m_enableEmbeddedEpisodeInfos),
+	m_automaticRefreshIntervalDays(other.m_automaticRefreshIntervalDays),
+	m_preferredMetadataLanguage(other.m_preferredMetadataLanguage),
+	m_metadataCountryCode(other.m_metadataCountryCode),
+	m_seasonZeroDisplayName(other.m_seasonZeroDisplayName),
+	m_metadataSavers(other.m_metadataSavers),
+	m_disabledLocalMetadataReaders(other.m_disabledLocalMetadataReaders),
+	m_localMetadataReaderOrder(other.m_localMetadataReaderOrder),
+	m_disabledSubtitleFetchers(other.m_disabledSubtitleFetchers),
+	m_subtitleFetcherOrder(other.m_subtitleFetcherOrder),
+	m_skipSubtitlesIfEmbeddedSubtitlesPresent(other.m_skipSubtitlesIfEmbeddedSubtitlesPresent),
+	m_skipSubtitlesIfAudioTrackMatches(other.m_skipSubtitlesIfAudioTrackMatches),
+	m_subtitleDownloadLanguages(other.m_subtitleDownloadLanguages),
+	m_requirePerfectSubtitleMatch(other.m_requirePerfectSubtitleMatch),
+	m_saveSubtitlesWithMedia(other.m_saveSubtitlesWithMedia),
+	m_typeOptions(other.m_typeOptions){}
 
 LibraryOptions LibraryOptions::fromJson(QJsonObject source) {
 	LibraryOptions instance;

@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 WakeOnLanInfo::WakeOnLanInfo() {}
+WakeOnLanInfo::WakeOnLanInfo(const WakeOnLanInfo &other) :
+	m_macAddress(other.m_macAddress),
+	m_port(other.m_port){}
 
 WakeOnLanInfo WakeOnLanInfo::fromJson(QJsonObject source) {
 	WakeOnLanInfo instance;

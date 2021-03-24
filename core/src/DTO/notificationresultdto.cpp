@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 NotificationResultDto::NotificationResultDto() {}
+NotificationResultDto::NotificationResultDto(const NotificationResultDto &other) :
+	m_notifications(other.m_notifications),
+	m_totalRecordCount(other.m_totalRecordCount){}
 
 NotificationResultDto NotificationResultDto::fromJson(QJsonObject source) {
 	NotificationResultDto instance;

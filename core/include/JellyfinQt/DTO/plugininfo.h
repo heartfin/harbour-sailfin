@@ -46,8 +46,8 @@ namespace DTO {
 
 
 class PluginInfo {
-public:
-	explicit PluginInfo();
+public:PluginInfo();PluginInfo(const PluginInfo &other);
+	
 	static PluginInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

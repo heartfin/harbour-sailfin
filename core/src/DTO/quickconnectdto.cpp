@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 QuickConnectDto::QuickConnectDto() {}
+QuickConnectDto::QuickConnectDto(const QuickConnectDto &other) :
+	m_token(other.m_token){}
 
 QuickConnectDto QuickConnectDto::fromJson(QJsonObject source) {
 	QuickConnectDto instance;

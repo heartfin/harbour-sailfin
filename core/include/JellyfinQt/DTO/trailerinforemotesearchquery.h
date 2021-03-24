@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class TrailerInfoRemoteSearchQuery {
-public:
-	explicit TrailerInfoRemoteSearchQuery();
+public:TrailerInfoRemoteSearchQuery();TrailerInfoRemoteSearchQuery(const TrailerInfoRemoteSearchQuery &other);
+	
 	static TrailerInfoRemoteSearchQuery fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

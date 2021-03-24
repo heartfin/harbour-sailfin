@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class NextItemRequestDto {
-public:
-	explicit NextItemRequestDto();
+public:NextItemRequestDto();NextItemRequestDto(const NextItemRequestDto &other);
+	
 	static NextItemRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

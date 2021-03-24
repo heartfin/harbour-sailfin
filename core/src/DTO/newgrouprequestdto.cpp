@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 NewGroupRequestDto::NewGroupRequestDto() {}
+NewGroupRequestDto::NewGroupRequestDto(const NewGroupRequestDto &other) :
+	m_groupName(other.m_groupName){}
 
 NewGroupRequestDto NewGroupRequestDto::fromJson(QJsonObject source) {
 	NewGroupRequestDto instance;

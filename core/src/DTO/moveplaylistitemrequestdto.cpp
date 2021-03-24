@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 MovePlaylistItemRequestDto::MovePlaylistItemRequestDto() {}
+MovePlaylistItemRequestDto::MovePlaylistItemRequestDto(const MovePlaylistItemRequestDto &other) :
+	m_playlistItemId(other.m_playlistItemId),
+	m_newIndex(other.m_newIndex){}
 
 MovePlaylistItemRequestDto MovePlaylistItemRequestDto::fromJson(QJsonObject source) {
 	MovePlaylistItemRequestDto instance;

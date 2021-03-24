@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class QuickConnectResult {
-public:
-	explicit QuickConnectResult();
+public:QuickConnectResult();QuickConnectResult(const QuickConnectResult &other);
+	
 	static QuickConnectResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

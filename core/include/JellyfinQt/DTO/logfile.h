@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class LogFile {
-public:
-	explicit LogFile();
+public:LogFile();LogFile(const LogFile &other);
+	
 	static LogFile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

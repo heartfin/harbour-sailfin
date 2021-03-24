@@ -33,6 +33,36 @@ namespace Jellyfin {
 namespace DTO {
 
 SearchHint::SearchHint() {}
+SearchHint::SearchHint(const SearchHint &other) :
+	m_itemId(other.m_itemId),
+	m_jellyfinId(other.m_jellyfinId),
+	m_name(other.m_name),
+	m_matchedTerm(other.m_matchedTerm),
+	m_indexNumber(other.m_indexNumber),
+	m_productionYear(other.m_productionYear),
+	m_parentIndexNumber(other.m_parentIndexNumber),
+	m_primaryImageTag(other.m_primaryImageTag),
+	m_thumbImageTag(other.m_thumbImageTag),
+	m_thumbImageItemId(other.m_thumbImageItemId),
+	m_backdropImageTag(other.m_backdropImageTag),
+	m_backdropImageItemId(other.m_backdropImageItemId),
+	m_type(other.m_type),
+	m_isFolder(other.m_isFolder),
+	m_runTimeTicks(other.m_runTimeTicks),
+	m_mediaType(other.m_mediaType),
+	m_startDate(other.m_startDate),
+	m_endDate(other.m_endDate),
+	m_series(other.m_series),
+	m_status(other.m_status),
+	m_album(other.m_album),
+	m_albumId(other.m_albumId),
+	m_albumArtist(other.m_albumArtist),
+	m_artists(other.m_artists),
+	m_songCount(other.m_songCount),
+	m_episodeCount(other.m_episodeCount),
+	m_channelId(other.m_channelId),
+	m_channelName(other.m_channelName),
+	m_primaryImageAspectRatio(other.m_primaryImageAspectRatio){}
 
 SearchHint SearchHint::fromJson(QJsonObject source) {
 	SearchHint instance;

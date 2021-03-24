@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class RemoteSubtitleInfo {
-public:
-	explicit RemoteSubtitleInfo();
+public:RemoteSubtitleInfo();RemoteSubtitleInfo(const RemoteSubtitleInfo &other);
+	
 	static RemoteSubtitleInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

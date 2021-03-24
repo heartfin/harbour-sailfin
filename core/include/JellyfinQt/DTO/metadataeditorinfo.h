@@ -50,8 +50,8 @@ namespace DTO {
 
 
 class MetadataEditorInfo {
-public:
-	explicit MetadataEditorInfo();
+public:MetadataEditorInfo();MetadataEditorInfo(const MetadataEditorInfo &other);
+	
 	static MetadataEditorInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

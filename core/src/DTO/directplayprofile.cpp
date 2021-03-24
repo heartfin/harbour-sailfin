@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 DirectPlayProfile::DirectPlayProfile() {}
+DirectPlayProfile::DirectPlayProfile(const DirectPlayProfile &other) :
+	m_container(other.m_container),
+	m_audioCodec(other.m_audioCodec),
+	m_videoCodec(other.m_videoCodec),
+	m_type(other.m_type){}
 
 DirectPlayProfile DirectPlayProfile::fromJson(QJsonObject source) {
 	DirectPlayProfile instance;

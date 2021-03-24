@@ -33,6 +33,22 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaybackInfoDto::PlaybackInfoDto() {}
+PlaybackInfoDto::PlaybackInfoDto(const PlaybackInfoDto &other) :
+	m_userId(other.m_userId),
+	m_maxStreamingBitrate(other.m_maxStreamingBitrate),
+	m_startTimeTicks(other.m_startTimeTicks),
+	m_audioStreamIndex(other.m_audioStreamIndex),
+	m_subtitleStreamIndex(other.m_subtitleStreamIndex),
+	m_maxAudioChannels(other.m_maxAudioChannels),
+	m_mediaSourceId(other.m_mediaSourceId),
+	m_liveStreamId(other.m_liveStreamId),
+	m_deviceProfile(other.m_deviceProfile),
+	m_enableDirectPlay(other.m_enableDirectPlay),
+	m_enableDirectStream(other.m_enableDirectStream),
+	m_enableTranscoding(other.m_enableTranscoding),
+	m_allowVideoStreamCopy(other.m_allowVideoStreamCopy),
+	m_allowAudioStreamCopy(other.m_allowAudioStreamCopy),
+	m_autoOpenLiveStream(other.m_autoOpenLiveStream){}
 
 PlaybackInfoDto PlaybackInfoDto::fromJson(QJsonObject source) {
 	PlaybackInfoDto instance;

@@ -46,8 +46,8 @@ namespace DTO {
 
 
 class ListingsProviderInfo {
-public:
-	explicit ListingsProviderInfo();
+public:ListingsProviderInfo();ListingsProviderInfo(const ListingsProviderInfo &other);
+	
 	static ListingsProviderInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -50,8 +50,8 @@ namespace DTO {
 
 
 class PlaybackStartInfo {
-public:
-	explicit PlaybackStartInfo();
+public:PlaybackStartInfo();PlaybackStartInfo(const PlaybackStartInfo &other);
+	
 	static PlaybackStartInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

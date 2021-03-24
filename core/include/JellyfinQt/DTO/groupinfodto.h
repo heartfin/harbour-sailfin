@@ -47,8 +47,8 @@ namespace DTO {
 
 
 class GroupInfoDto {
-public:
-	explicit GroupInfoDto();
+public:GroupInfoDto();GroupInfoDto(const GroupInfoDto &other);
+	
 	static GroupInfoDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

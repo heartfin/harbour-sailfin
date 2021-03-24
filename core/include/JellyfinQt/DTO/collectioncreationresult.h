@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class CollectionCreationResult {
-public:
-	explicit CollectionCreationResult();
+public:CollectionCreationResult();CollectionCreationResult(const CollectionCreationResult &other);
+	
 	static CollectionCreationResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

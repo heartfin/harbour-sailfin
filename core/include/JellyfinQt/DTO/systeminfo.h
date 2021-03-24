@@ -48,8 +48,8 @@ namespace DTO {
 
 
 class SystemInfo {
-public:
-	explicit SystemInfo();
+public:SystemInfo();SystemInfo(const SystemInfo &other);
+	
 	static SystemInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

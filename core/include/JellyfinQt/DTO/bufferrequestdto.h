@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class BufferRequestDto {
-public:
-	explicit BufferRequestDto();
+public:BufferRequestDto();BufferRequestDto(const BufferRequestDto &other);
+	
 	static BufferRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

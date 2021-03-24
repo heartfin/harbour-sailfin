@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 RemoteImageResult::RemoteImageResult() {}
+RemoteImageResult::RemoteImageResult(const RemoteImageResult &other) :
+	m_images(other.m_images),
+	m_totalRecordCount(other.m_totalRecordCount),
+	m_providers(other.m_providers){}
 
 RemoteImageResult RemoteImageResult::fromJson(QJsonObject source) {
 	RemoteImageResult instance;

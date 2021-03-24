@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 AddVirtualFolderDto::AddVirtualFolderDto() {}
+AddVirtualFolderDto::AddVirtualFolderDto(const AddVirtualFolderDto &other) :
+	m_libraryOptions(other.m_libraryOptions){}
 
 AddVirtualFolderDto AddVirtualFolderDto::fromJson(QJsonObject source) {
 	AddVirtualFolderDto instance;

@@ -1,0 +1,7 @@
+pragma Singleton
+import QtQuick 2.12
+import nl.netsoj.chris.Jellyfin 1.0 as J
+
+J.ApiClient {
+    supportedCommands: [J.GeneralCommandType.Play]
+}

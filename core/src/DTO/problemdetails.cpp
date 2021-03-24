@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ProblemDetails::ProblemDetails() {}
+ProblemDetails::ProblemDetails(const ProblemDetails &other) :
+	m_type(other.m_type),
+	m_title(other.m_title),
+	m_status(other.m_status),
+	m_detail(other.m_detail),
+	m_instance(other.m_instance){}
 
 ProblemDetails ProblemDetails::fromJson(QJsonObject source) {
 	ProblemDetails instance;

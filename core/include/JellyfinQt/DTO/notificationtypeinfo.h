@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class NotificationTypeInfo {
-public:
-	explicit NotificationTypeInfo();
+public:NotificationTypeInfo();NotificationTypeInfo(const NotificationTypeInfo &other);
+	
 	static NotificationTypeInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

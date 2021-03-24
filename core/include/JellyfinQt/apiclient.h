@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <QHostInfo>
 #include <QObject>
+#include <QQmlListProperty>
 #include <QString>
 #include <QSysInfo>
 #include <QtQml>
@@ -36,8 +37,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QNetworkReply>
 #include <QUrlQuery>
 
+#include "dto/generalcommandtype.h"
+#include "support/jsonconv.h"
 #include "credentialmanager.h"
 #include "deviceprofile.h"
+#include "eventbus.h"
 #include "websocket.h"
 
 namespace Jellyfin {
@@ -88,7 +92,9 @@ public:
     Q_PROPERTY(QString userId READ userId NOTIFY userIdChanged)
     Q_PROPERTY(QJsonObject deviceProfile READ deviceProfile NOTIFY deviceProfileChanged)
     Q_PROPERTY(QString version READ version)
-    Q_PROPERTY(WebSocket *websocket READ websocket NOTIFY websocketChanged)
+    Q_PROPERTY(EventBus *eventbus READ eventbus FINAL)
+    Q_PROPERTY(WebSocket *websocket READ websocket FINAL)
+    Q_PROPERTY(QList<DTO::GeneralCommandType> supportedCommands READ supportedCommands WRITE setSupportedCommands NOTIFY supportedCommandsChanged)
 
     /*QNetworkReply *handleRequest(QString path, QStringList sort, Pagination *pagination,
                                  QVariantMap filters, QStringList fields, QStringList expand, QString id);*/
@@ -104,7 +110,6 @@ public:
 
     QNetworkReply *get(const QString &path, const QUrlQuery &params = QUrlQuery());
     QNetworkReply *post(const QString &path, const QJsonDocument &data = QJsonDocument(), const QUrlQuery &params = QUrlQuery());
-    void getPublicUsers();
 
     enum ApiError {
         JSON_ERROR,
@@ -113,11 +118,30 @@ public:
         INVALID_PASSWORD
     };
 
-    QString &baseUrl() { return this->m_baseUrl; }
-    QString &userId() { return m_userId; }
+    const QString &baseUrl() const { return this->m_baseUrl; }
+    const QString &userId() const { return m_userId; }
+    const QString &deviceId() const { return m_deviceId; }
+    /**
+     * @brief QML applications can set this type to indicate which commands they support.
+     *
+     * These commands can be sent by other Jellyfin clients to instruct this Jellyfin client to play a
+     * certain item, control playback and so on.
+     *
+     * This property must be set before restoreSavedSession() is called and not be changed afterwards.
+     * The list support commands will be sent to the Jellyfin server. QML applications should listen to
+     * the events emitted by the eventBus and act accordingly.
+     */
+    QList<GeneralCommandType> supportedCommands() const { return m_supportedCommands; }
+    void setSupportedCommands(QList<GeneralCommandType> newSupportedCommands) { m_supportedCommands = newSupportedCommands; }
     QJsonObject &deviceProfile() { return m_deviceProfile; }
     QJsonObject &playbackDeviceProfile() { return m_playbackDeviceProfile; }
+    /**
+     * @brief Retrieves the authentication token. Null QString if not authenticated.
+     * @note This is not the full authentication header, just the token.
+     */
+    QString &token() { return m_token; }
     QString version() const;
+    EventBus *eventbus() const { return m_eventbus; }
     WebSocket *websocket() const { return m_webSocket; }
 
     /**
@@ -128,8 +152,12 @@ public:
      * funky casts.
      */
     void setDefaultErrorHandler(QNetworkReply *rep) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        connect(rep, &QNetworkReply::errorOccurred, this, &ApiClient::defaultNetworkErrorHandler);
+#else
         connect(rep, static_cast<void (QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error),
                 this, &ApiClient::defaultNetworkErrorHandler);
+#endif
     }
 signals:
     /*
@@ -155,7 +183,8 @@ signals:
     void userIdChanged(QString userId);
 
     void deviceProfileChanged();
-    void websocketChanged(WebSocket *newWebsocket);
+
+    void supportedCommandsChanged();
 
     /**
      * @brief onUserDataChanged Emitted when the user data of an item is changed on the server.
@@ -224,7 +253,6 @@ protected:
      */
     void generateDeviceProfile();
 
-    QString &token() { return m_token; }
 
 private:
     QNetworkAccessManager m_naManager;
@@ -232,6 +260,7 @@ private:
      * State information
      */
     WebSocket *m_webSocket;
+    EventBus *m_eventbus;
     CredentialsManager * m_credManager;
     QString m_token;
     QString m_deviceName;
@@ -239,6 +268,7 @@ private:
     QString m_userId = "";
     QJsonObject m_deviceProfile;
     QJsonObject m_playbackDeviceProfile;
+    QList<GeneralCommandType> m_supportedCommands;
 
     bool m_authenticated = false;
     /**
@@ -262,11 +292,17 @@ private:
      */
 
     /**
+     * @brief Retreives the device ID or generates a random one.
+     */
+    QUuid retrieveDeviceId();
+
+    /**
      * @brief Returns the statusCode of a QNetworkReply
      * @param The reply to obtain the statusCode of
      * @return The statuscode of the reply
      *
-     * Seriously, Qt, why is your method to obtain the status code of a request so horrendous?
+     * Seriously, Qt, why is your method to obtain the status code of a request so tedious?
+     * It could've just been a rep->statusCode();
      */
     static inline int statusCode(QNetworkReply *rep) {
         return rep->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();

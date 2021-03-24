@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class ArtistInfoRemoteSearchQuery {
-public:
-	explicit ArtistInfoRemoteSearchQuery();
+public:ArtistInfoRemoteSearchQuery();ArtistInfoRemoteSearchQuery(const ArtistInfoRemoteSearchQuery &other);
+	
 	static ArtistInfoRemoteSearchQuery fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

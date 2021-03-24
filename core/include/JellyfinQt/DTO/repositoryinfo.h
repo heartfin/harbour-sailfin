@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class RepositoryInfo {
-public:
-	explicit RepositoryInfo();
+public:RepositoryInfo();RepositoryInfo(const RepositoryInfo &other);
+	
 	static RepositoryInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 LiveStreamResponse::LiveStreamResponse() {}
+LiveStreamResponse::LiveStreamResponse(const LiveStreamResponse &other) :
+	m_mediaSource(other.m_mediaSource){}
 
 LiveStreamResponse LiveStreamResponse::fromJson(QJsonObject source) {
 	LiveStreamResponse instance;

@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class BoxSetInfoRemoteSearchQuery {
-public:
-	explicit BoxSetInfoRemoteSearchQuery();
+public:BoxSetInfoRemoteSearchQuery();BoxSetInfoRemoteSearchQuery(const BoxSetInfoRemoteSearchQuery &other);
+	
 	static BoxSetInfoRemoteSearchQuery fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

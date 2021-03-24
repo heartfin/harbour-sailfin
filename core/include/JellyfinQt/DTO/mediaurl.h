@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class MediaUrl {
-public:
-	explicit MediaUrl();
+public:MediaUrl();MediaUrl(const MediaUrl &other);
+	
 	static MediaUrl fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

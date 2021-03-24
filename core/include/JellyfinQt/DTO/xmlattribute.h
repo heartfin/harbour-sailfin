@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class XmlAttribute {
-public:
-	explicit XmlAttribute();
+public:XmlAttribute();XmlAttribute(const XmlAttribute &other);
+	
 	static XmlAttribute fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

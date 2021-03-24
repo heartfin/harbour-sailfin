@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 FontFile::FontFile() {}
+FontFile::FontFile(const FontFile &other) :
+	m_name(other.m_name),
+	m_size(other.m_size),
+	m_dateCreated(other.m_dateCreated),
+	m_dateModified(other.m_dateModified){}
 
 FontFile FontFile::fromJson(QJsonObject source) {
 	FontFile instance;

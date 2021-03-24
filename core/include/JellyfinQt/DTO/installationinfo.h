@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class InstallationInfo {
-public:
-	explicit InstallationInfo();
+public:InstallationInfo();InstallationInfo(const InstallationInfo &other);
+	
 	static InstallationInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

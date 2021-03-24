@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class LiveStreamResponse {
-public:
-	explicit LiveStreamResponse();
+public:LiveStreamResponse();LiveStreamResponse(const LiveStreamResponse &other);
+	
 	static LiveStreamResponse fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class SetPlaylistItemRequestDto {
-public:
-	explicit SetPlaylistItemRequestDto();
+public:SetPlaylistItemRequestDto();SetPlaylistItemRequestDto(const SetPlaylistItemRequestDto &other);
+	
 	static SetPlaylistItemRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

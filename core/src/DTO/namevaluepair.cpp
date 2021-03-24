@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 NameValuePair::NameValuePair() {}
+NameValuePair::NameValuePair(const NameValuePair &other) :
+	m_name(other.m_name),
+	m_value(other.m_value){}
 
 NameValuePair NameValuePair::fromJson(QJsonObject source) {
 	NameValuePair instance;

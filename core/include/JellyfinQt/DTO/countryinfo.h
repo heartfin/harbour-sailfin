@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class CountryInfo {
-public:
-	explicit CountryInfo();
+public:CountryInfo();CountryInfo(const CountryInfo &other);
+	
 	static CountryInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

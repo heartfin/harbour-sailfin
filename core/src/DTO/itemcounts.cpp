@@ -33,6 +33,19 @@ namespace Jellyfin {
 namespace DTO {
 
 ItemCounts::ItemCounts() {}
+ItemCounts::ItemCounts(const ItemCounts &other) :
+	m_movieCount(other.m_movieCount),
+	m_seriesCount(other.m_seriesCount),
+	m_episodeCount(other.m_episodeCount),
+	m_artistCount(other.m_artistCount),
+	m_programCount(other.m_programCount),
+	m_trailerCount(other.m_trailerCount),
+	m_songCount(other.m_songCount),
+	m_albumCount(other.m_albumCount),
+	m_musicVideoCount(other.m_musicVideoCount),
+	m_boxSetCount(other.m_boxSetCount),
+	m_bookCount(other.m_bookCount),
+	m_itemCount(other.m_itemCount){}
 
 ItemCounts ItemCounts::fromJson(QJsonObject source) {
 	ItemCounts instance;

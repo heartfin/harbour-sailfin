@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class ExternalIdInfo {
-public:
-	explicit ExternalIdInfo();
+public:ExternalIdInfo();ExternalIdInfo(const ExternalIdInfo &other);
+	
 	static ExternalIdInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

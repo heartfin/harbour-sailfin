@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class ProblemDetails {
-public:
-	explicit ProblemDetails();
+public:ProblemDetails();ProblemDetails(const ProblemDetails &other);
+	
 	static ProblemDetails fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 ExternalUrl::ExternalUrl() {}
+ExternalUrl::ExternalUrl(const ExternalUrl &other) :
+	m_name(other.m_name),
+	m_url(other.m_url){}
 
 ExternalUrl ExternalUrl::fromJson(QJsonObject source) {
 	ExternalUrl instance;

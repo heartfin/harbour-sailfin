@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class TunerHostInfo {
-public:
-	explicit TunerHostInfo();
+public:TunerHostInfo();TunerHostInfo(const TunerHostInfo &other);
+	
 	static TunerHostInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

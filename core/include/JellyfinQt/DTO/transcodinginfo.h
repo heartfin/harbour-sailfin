@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class TranscodingInfo {
-public:
-	explicit TranscodingInfo();
+public:TranscodingInfo();TranscodingInfo(const TranscodingInfo &other);
+	
 	static TranscodingInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

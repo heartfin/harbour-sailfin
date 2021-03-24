@@ -33,6 +33,19 @@ namespace Jellyfin {
 namespace DTO {
 
 ChannelFeatures::ChannelFeatures() {}
+ChannelFeatures::ChannelFeatures(const ChannelFeatures &other) :
+	m_name(other.m_name),
+	m_jellyfinId(other.m_jellyfinId),
+	m_canSearch(other.m_canSearch),
+	m_mediaTypes(other.m_mediaTypes),
+	m_contentTypes(other.m_contentTypes),
+	m_maxPageSize(other.m_maxPageSize),
+	m_autoRefreshLevels(other.m_autoRefreshLevels),
+	m_defaultSortFields(other.m_defaultSortFields),
+	m_supportsSortOrderToggle(other.m_supportsSortOrderToggle),
+	m_supportsLatestMedia(other.m_supportsLatestMedia),
+	m_canFilter(other.m_canFilter),
+	m_supportsContentDownloading(other.m_supportsContentDownloading){}
 
 ChannelFeatures ChannelFeatures::fromJson(QJsonObject source) {
 	ChannelFeatures instance;

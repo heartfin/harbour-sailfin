@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class ValidatePathDto {
-public:
-	explicit ValidatePathDto();
+public:ValidatePathDto();ValidatePathDto(const ValidatePathDto &other);
+	
 	static ValidatePathDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

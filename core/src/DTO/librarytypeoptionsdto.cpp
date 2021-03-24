@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryTypeOptionsDto::LibraryTypeOptionsDto() {}
+LibraryTypeOptionsDto::LibraryTypeOptionsDto(const LibraryTypeOptionsDto &other) :
+	m_type(other.m_type),
+	m_metadataFetchers(other.m_metadataFetchers),
+	m_imageFetchers(other.m_imageFetchers),
+	m_supportedImageTypes(other.m_supportedImageTypes),
+	m_defaultImageOptions(other.m_defaultImageOptions){}
 
 LibraryTypeOptionsDto LibraryTypeOptionsDto::fromJson(QJsonObject source) {
 	LibraryTypeOptionsDto instance;

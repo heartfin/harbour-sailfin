@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 BufferRequestDto::BufferRequestDto() {}
+BufferRequestDto::BufferRequestDto(const BufferRequestDto &other) :
+	m_when(other.m_when),
+	m_positionTicks(other.m_positionTicks),
+	m_isPlaying(other.m_isPlaying),
+	m_playlistItemId(other.m_playlistItemId){}
 
 BufferRequestDto BufferRequestDto::fromJson(QJsonObject source) {
 	BufferRequestDto instance;

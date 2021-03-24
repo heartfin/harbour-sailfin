@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class StartupUserDto {
-public:
-	explicit StartupUserDto();
+public:StartupUserDto();StartupUserDto(const StartupUserDto &other);
+	
 	static StartupUserDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

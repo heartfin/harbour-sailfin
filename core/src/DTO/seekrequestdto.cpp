@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 SeekRequestDto::SeekRequestDto() {}
+SeekRequestDto::SeekRequestDto(const SeekRequestDto &other) :
+	m_positionTicks(other.m_positionTicks){}
 
 SeekRequestDto SeekRequestDto::fromJson(QJsonObject source) {
 	SeekRequestDto instance;

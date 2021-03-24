@@ -33,6 +33,21 @@ namespace Jellyfin {
 namespace DTO {
 
 DisplayPreferencesDto::DisplayPreferencesDto() {}
+DisplayPreferencesDto::DisplayPreferencesDto(const DisplayPreferencesDto &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_viewType(other.m_viewType),
+	m_sortBy(other.m_sortBy),
+	m_indexBy(other.m_indexBy),
+	m_rememberIndexing(other.m_rememberIndexing),
+	m_primaryImageHeight(other.m_primaryImageHeight),
+	m_primaryImageWidth(other.m_primaryImageWidth),
+	m_customPrefs(other.m_customPrefs),
+	m_scrollDirection(other.m_scrollDirection),
+	m_showBackdrop(other.m_showBackdrop),
+	m_rememberSorting(other.m_rememberSorting),
+	m_sortOrder(other.m_sortOrder),
+	m_showSidebar(other.m_showSidebar),
+	m_client(other.m_client){}
 
 DisplayPreferencesDto DisplayPreferencesDto::fromJson(QJsonObject source) {
 	DisplayPreferencesDto instance;

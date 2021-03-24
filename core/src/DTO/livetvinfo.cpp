@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 LiveTvInfo::LiveTvInfo() {}
+LiveTvInfo::LiveTvInfo(const LiveTvInfo &other) :
+	m_services(other.m_services),
+	m_isEnabled(other.m_isEnabled),
+	m_enabledUsers(other.m_enabledUsers){}
 
 LiveTvInfo LiveTvInfo::fromJson(QJsonObject source) {
 	LiveTvInfo instance;

@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class MediaStream {
-public:
-	explicit MediaStream();
+public:MediaStream();MediaStream(const MediaStream &other);
+	
 	static MediaStream fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

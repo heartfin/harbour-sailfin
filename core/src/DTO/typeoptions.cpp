@@ -33,6 +33,13 @@ namespace Jellyfin {
 namespace DTO {
 
 TypeOptions::TypeOptions() {}
+TypeOptions::TypeOptions(const TypeOptions &other) :
+	m_type(other.m_type),
+	m_metadataFetchers(other.m_metadataFetchers),
+	m_metadataFetcherOrder(other.m_metadataFetcherOrder),
+	m_imageFetchers(other.m_imageFetchers),
+	m_imageFetcherOrder(other.m_imageFetcherOrder),
+	m_imageOptions(other.m_imageOptions){}
 
 TypeOptions TypeOptions::fromJson(QJsonObject source) {
 	TypeOptions instance;

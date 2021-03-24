@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class ParentalRating {
-public:
-	explicit ParentalRating();
+public:ParentalRating();ParentalRating(const ParentalRating &other);
+	
 	static ParentalRating fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

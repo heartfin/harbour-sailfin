@@ -33,6 +33,15 @@ namespace Jellyfin {
 namespace DTO {
 
 VirtualFolderInfo::VirtualFolderInfo() {}
+VirtualFolderInfo::VirtualFolderInfo(const VirtualFolderInfo &other) :
+	m_name(other.m_name),
+	m_locations(other.m_locations),
+	m_collectionType(other.m_collectionType),
+	m_libraryOptions(other.m_libraryOptions),
+	m_itemId(other.m_itemId),
+	m_primaryImageItemId(other.m_primaryImageItemId),
+	m_refreshProgress(other.m_refreshProgress),
+	m_refreshStatus(other.m_refreshStatus){}
 
 VirtualFolderInfo VirtualFolderInfo::fromJson(QJsonObject source) {
 	VirtualFolderInfo instance;

@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class AlbumInfoRemoteSearchQuery {
-public:
-	explicit AlbumInfoRemoteSearchQuery();
+public:AlbumInfoRemoteSearchQuery();AlbumInfoRemoteSearchQuery(const AlbumInfoRemoteSearchQuery &other);
+	
 	static AlbumInfoRemoteSearchQuery fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

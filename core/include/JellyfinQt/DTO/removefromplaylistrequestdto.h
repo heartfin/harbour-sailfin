@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class RemoveFromPlaylistRequestDto {
-public:
-	explicit RemoveFromPlaylistRequestDto();
+public:RemoveFromPlaylistRequestDto();RemoveFromPlaylistRequestDto(const RemoveFromPlaylistRequestDto &other);
+	
 	static RemoveFromPlaylistRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

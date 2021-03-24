@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 DeviceIdentification::DeviceIdentification() {}
+DeviceIdentification::DeviceIdentification(const DeviceIdentification &other) :
+	m_friendlyName(other.m_friendlyName),
+	m_modelNumber(other.m_modelNumber),
+	m_serialNumber(other.m_serialNumber),
+	m_modelName(other.m_modelName),
+	m_modelDescription(other.m_modelDescription),
+	m_modelUrl(other.m_modelUrl),
+	m_manufacturer(other.m_manufacturer),
+	m_manufacturerUrl(other.m_manufacturerUrl),
+	m_headers(other.m_headers){}
 
 DeviceIdentification DeviceIdentification::fromJson(QJsonObject source) {
 	DeviceIdentification instance;

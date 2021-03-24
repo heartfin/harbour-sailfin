@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class LibraryUpdateInfo {
-public:
-	explicit LibraryUpdateInfo();
+public:LibraryUpdateInfo();LibraryUpdateInfo(const LibraryUpdateInfo &other);
+	
 	static LibraryUpdateInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

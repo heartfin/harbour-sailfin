@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 TrailerInfoRemoteSearchQuery::TrailerInfoRemoteSearchQuery() {}
+TrailerInfoRemoteSearchQuery::TrailerInfoRemoteSearchQuery(const TrailerInfoRemoteSearchQuery &other) :
+	m_searchInfo(other.m_searchInfo),
+	m_itemId(other.m_itemId),
+	m_searchProviderName(other.m_searchProviderName),
+	m_includeDisabledProviders(other.m_includeDisabledProviders){}
 
 TrailerInfoRemoteSearchQuery TrailerInfoRemoteSearchQuery::fromJson(QJsonObject source) {
 	TrailerInfoRemoteSearchQuery instance;

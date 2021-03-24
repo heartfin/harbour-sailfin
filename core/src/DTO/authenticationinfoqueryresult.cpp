@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 AuthenticationInfoQueryResult::AuthenticationInfoQueryResult() {}
+AuthenticationInfoQueryResult::AuthenticationInfoQueryResult(const AuthenticationInfoQueryResult &other) :
+	m_items(other.m_items),
+	m_totalRecordCount(other.m_totalRecordCount),
+	m_startIndex(other.m_startIndex){}
 
 AuthenticationInfoQueryResult AuthenticationInfoQueryResult::fromJson(QJsonObject source) {
 	AuthenticationInfoQueryResult instance;

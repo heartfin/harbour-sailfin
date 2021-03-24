@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class AddVirtualFolderDto {
-public:
-	explicit AddVirtualFolderDto();
+public:AddVirtualFolderDto();AddVirtualFolderDto(const AddVirtualFolderDto &other);
+	
 	static AddVirtualFolderDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

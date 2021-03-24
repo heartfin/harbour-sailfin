@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class HttpHeaderInfo {
-public:
-	explicit HttpHeaderInfo();
+public:HttpHeaderInfo();HttpHeaderInfo(const HttpHeaderInfo &other);
+	
 	static HttpHeaderInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

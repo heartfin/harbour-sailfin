@@ -33,6 +33,8 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaylistCreationResult::PlaylistCreationResult() {}
+PlaylistCreationResult::PlaylistCreationResult(const PlaylistCreationResult &other) :
+	m_jellyfinId(other.m_jellyfinId){}
 
 PlaylistCreationResult PlaylistCreationResult::fromJson(QJsonObject source) {
 	PlaylistCreationResult instance;

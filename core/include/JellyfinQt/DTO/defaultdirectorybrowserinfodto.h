@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class DefaultDirectoryBrowserInfoDto {
-public:
-	explicit DefaultDirectoryBrowserInfoDto();
+public:DefaultDirectoryBrowserInfoDto();DefaultDirectoryBrowserInfoDto(const DefaultDirectoryBrowserInfoDto &other);
+	
 	static DefaultDirectoryBrowserInfoDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

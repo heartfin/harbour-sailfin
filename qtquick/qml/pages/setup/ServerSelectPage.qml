@@ -1,10 +1,11 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../../components"
 import "../../.."
+import "../.."
 
 Page {
     property string selectedServerName
@@ -52,7 +53,7 @@ Page {
         }
     }
 
-    ServerDiscoveryModel {
+    J.ServerDiscoveryModel {
         id: discoveryModel
     }
 

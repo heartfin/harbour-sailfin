@@ -46,8 +46,8 @@ namespace DTO {
 
 
 class RemoteSearchResult {
-public:
-	explicit RemoteSearchResult();
+public:RemoteSearchResult();RemoteSearchResult(const RemoteSearchResult &other);
+	
 	static RemoteSearchResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

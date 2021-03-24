@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class ImageInfo {
-public:
-	explicit ImageInfo();
+public:ImageInfo();ImageInfo(const ImageInfo &other);
+	
 	static ImageInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

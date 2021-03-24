@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 CountryInfo::CountryInfo() {}
+CountryInfo::CountryInfo(const CountryInfo &other) :
+	m_name(other.m_name),
+	m_displayName(other.m_displayName),
+	m_twoLetterISORegionName(other.m_twoLetterISORegionName),
+	m_threeLetterISORegionName(other.m_threeLetterISORegionName){}
 
 CountryInfo CountryInfo::fromJson(QJsonObject source) {
 	CountryInfo instance;

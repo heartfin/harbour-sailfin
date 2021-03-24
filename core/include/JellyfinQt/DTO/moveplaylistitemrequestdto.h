@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class MovePlaylistItemRequestDto {
-public:
-	explicit MovePlaylistItemRequestDto();
+public:MovePlaylistItemRequestDto();MovePlaylistItemRequestDto(const MovePlaylistItemRequestDto &other);
+	
 	static MovePlaylistItemRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

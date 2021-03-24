@@ -33,6 +33,17 @@ namespace Jellyfin {
 namespace DTO {
 
 ClientCapabilities::ClientCapabilities() {}
+ClientCapabilities::ClientCapabilities(const ClientCapabilities &other) :
+	m_playableMediaTypes(other.m_playableMediaTypes),
+	m_supportedCommands(other.m_supportedCommands),
+	m_supportsMediaControl(other.m_supportsMediaControl),
+	m_supportsContentUploading(other.m_supportsContentUploading),
+	m_messageCallbackUrl(other.m_messageCallbackUrl),
+	m_supportsPersistentIdentifier(other.m_supportsPersistentIdentifier),
+	m_supportsSync(other.m_supportsSync),
+	m_deviceProfile(other.m_deviceProfile),
+	m_appStoreUrl(other.m_appStoreUrl),
+	m_iconUrl(other.m_iconUrl){}
 
 ClientCapabilities ClientCapabilities::fromJson(QJsonObject source) {
 	ClientCapabilities instance;

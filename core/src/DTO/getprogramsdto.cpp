@@ -33,6 +33,34 @@ namespace Jellyfin {
 namespace DTO {
 
 GetProgramsDto::GetProgramsDto() {}
+GetProgramsDto::GetProgramsDto(const GetProgramsDto &other) :
+	m_channelIds(other.m_channelIds),
+	m_userId(other.m_userId),
+	m_minStartDate(other.m_minStartDate),
+	m_hasAired(other.m_hasAired),
+	m_isAiring(other.m_isAiring),
+	m_maxStartDate(other.m_maxStartDate),
+	m_minEndDate(other.m_minEndDate),
+	m_maxEndDate(other.m_maxEndDate),
+	m_isMovie(other.m_isMovie),
+	m_isSeries(other.m_isSeries),
+	m_isNews(other.m_isNews),
+	m_isKids(other.m_isKids),
+	m_isSports(other.m_isSports),
+	m_startIndex(other.m_startIndex),
+	m_limit(other.m_limit),
+	m_sortBy(other.m_sortBy),
+	m_sortOrder(other.m_sortOrder),
+	m_genres(other.m_genres),
+	m_genreIds(other.m_genreIds),
+	m_enableImages(other.m_enableImages),
+	m_enableTotalRecordCount(other.m_enableTotalRecordCount),
+	m_imageTypeLimit(other.m_imageTypeLimit),
+	m_enableImageTypes(other.m_enableImageTypes),
+	m_enableUserData(other.m_enableUserData),
+	m_seriesTimerId(other.m_seriesTimerId),
+	m_librarySeriesId(other.m_librarySeriesId),
+	m_fields(other.m_fields){}
 
 GetProgramsDto GetProgramsDto::fromJson(QJsonObject source) {
 	GetProgramsDto instance;

@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class BookInfo {
-public:
-	explicit BookInfo();
+public:BookInfo();BookInfo(const BookInfo &other);
+	
 	static BookInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

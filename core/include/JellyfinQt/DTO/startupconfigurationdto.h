@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class StartupConfigurationDto {
-public:
-	explicit StartupConfigurationDto();
+public:StartupConfigurationDto();StartupConfigurationDto(const StartupConfigurationDto &other);
+	
 	static StartupConfigurationDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

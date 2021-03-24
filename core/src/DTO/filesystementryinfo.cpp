@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 FileSystemEntryInfo::FileSystemEntryInfo() {}
+FileSystemEntryInfo::FileSystemEntryInfo(const FileSystemEntryInfo &other) :
+	m_name(other.m_name),
+	m_path(other.m_path),
+	m_type(other.m_type){}
 
 FileSystemEntryInfo FileSystemEntryInfo::fromJson(QJsonObject source) {
 	FileSystemEntryInfo instance;

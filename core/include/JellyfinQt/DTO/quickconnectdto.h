@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class QuickConnectDto {
-public:
-	explicit QuickConnectDto();
+public:QuickConnectDto();QuickConnectDto(const QuickConnectDto &other);
+	
 	static QuickConnectDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

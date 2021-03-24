@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 StartupUserDto::StartupUserDto() {}
+StartupUserDto::StartupUserDto(const StartupUserDto &other) :
+	m_name(other.m_name),
+	m_password(other.m_password){}
 
 StartupUserDto StartupUserDto::fromJson(QJsonObject source) {
 	StartupUserDto instance;

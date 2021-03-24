@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class PlaybackInfoDto {
-public:
-	explicit PlaybackInfoDto();
+public:PlaybackInfoDto();PlaybackInfoDto(const PlaybackInfoDto &other);
+	
 	static PlaybackInfoDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

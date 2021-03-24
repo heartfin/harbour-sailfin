@@ -33,6 +33,46 @@ namespace Jellyfin {
 namespace DTO {
 
 UserPolicy::UserPolicy() {}
+UserPolicy::UserPolicy(const UserPolicy &other) :
+	m_isAdministrator(other.m_isAdministrator),
+	m_isHidden(other.m_isHidden),
+	m_isDisabled(other.m_isDisabled),
+	m_maxParentalRating(other.m_maxParentalRating),
+	m_blockedTags(other.m_blockedTags),
+	m_enableUserPreferenceAccess(other.m_enableUserPreferenceAccess),
+	m_accessSchedules(other.m_accessSchedules),
+	m_blockUnratedItems(other.m_blockUnratedItems),
+	m_enableRemoteControlOfOtherUsers(other.m_enableRemoteControlOfOtherUsers),
+	m_enableSharedDeviceControl(other.m_enableSharedDeviceControl),
+	m_enableRemoteAccess(other.m_enableRemoteAccess),
+	m_enableLiveTvManagement(other.m_enableLiveTvManagement),
+	m_enableLiveTvAccess(other.m_enableLiveTvAccess),
+	m_enableMediaPlayback(other.m_enableMediaPlayback),
+	m_enableAudioPlaybackTranscoding(other.m_enableAudioPlaybackTranscoding),
+	m_enableVideoPlaybackTranscoding(other.m_enableVideoPlaybackTranscoding),
+	m_enablePlaybackRemuxing(other.m_enablePlaybackRemuxing),
+	m_forceRemoteSourceTranscoding(other.m_forceRemoteSourceTranscoding),
+	m_enableContentDeletion(other.m_enableContentDeletion),
+	m_enableContentDeletionFromFolders(other.m_enableContentDeletionFromFolders),
+	m_enableContentDownloading(other.m_enableContentDownloading),
+	m_enableSyncTranscoding(other.m_enableSyncTranscoding),
+	m_enableMediaConversion(other.m_enableMediaConversion),
+	m_enabledDevices(other.m_enabledDevices),
+	m_enableAllDevices(other.m_enableAllDevices),
+	m_enabledChannels(other.m_enabledChannels),
+	m_enableAllChannels(other.m_enableAllChannels),
+	m_enabledFolders(other.m_enabledFolders),
+	m_enableAllFolders(other.m_enableAllFolders),
+	m_invalidLoginAttemptCount(other.m_invalidLoginAttemptCount),
+	m_loginAttemptsBeforeLockout(other.m_loginAttemptsBeforeLockout),
+	m_maxActiveSessions(other.m_maxActiveSessions),
+	m_enablePublicSharing(other.m_enablePublicSharing),
+	m_blockedMediaFolders(other.m_blockedMediaFolders),
+	m_blockedChannels(other.m_blockedChannels),
+	m_remoteClientBitrateLimit(other.m_remoteClientBitrateLimit),
+	m_authenticationProviderId(other.m_authenticationProviderId),
+	m_passwordResetProviderId(other.m_passwordResetProviderId),
+	m_syncPlayAccess(other.m_syncPlayAccess){}
 
 UserPolicy UserPolicy::fromJson(QJsonObject source) {
 	UserPolicy instance;

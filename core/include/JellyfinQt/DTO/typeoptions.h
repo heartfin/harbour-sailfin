@@ -46,8 +46,8 @@ namespace DTO {
 
 
 class TypeOptions {
-public:
-	explicit TypeOptions();
+public:TypeOptions();TypeOptions(const TypeOptions &other);
+	
 	static TypeOptions fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

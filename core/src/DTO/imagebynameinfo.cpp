@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ImageByNameInfo::ImageByNameInfo() {}
+ImageByNameInfo::ImageByNameInfo(const ImageByNameInfo &other) :
+	m_name(other.m_name),
+	m_theme(other.m_theme),
+	m_context(other.m_context),
+	m_fileLength(other.m_fileLength),
+	m_format(other.m_format){}
 
 ImageByNameInfo ImageByNameInfo::fromJson(QJsonObject source) {
 	ImageByNameInfo instance;

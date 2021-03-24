@@ -41,8 +41,8 @@ namespace DTO {
 
 
 class IgnoreWaitRequestDto {
-public:
-	explicit IgnoreWaitRequestDto();
+public:IgnoreWaitRequestDto();IgnoreWaitRequestDto(const IgnoreWaitRequestDto &other);
+	
 	static IgnoreWaitRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class SpecialViewOptionDto {
-public:
-	explicit SpecialViewOptionDto();
+public:SpecialViewOptionDto();SpecialViewOptionDto(const SpecialViewOptionDto &other);
+	
 	static SpecialViewOptionDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

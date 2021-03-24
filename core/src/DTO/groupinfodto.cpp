@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 GroupInfoDto::GroupInfoDto() {}
+GroupInfoDto::GroupInfoDto(const GroupInfoDto &other) :
+	m_groupId(other.m_groupId),
+	m_groupName(other.m_groupName),
+	m_state(other.m_state),
+	m_participants(other.m_participants),
+	m_lastUpdatedAt(other.m_lastUpdatedAt){}
 
 GroupInfoDto GroupInfoDto::fromJson(QJsonObject source) {
 	GroupInfoDto instance;

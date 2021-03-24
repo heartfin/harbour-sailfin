@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class PlayerStateInfo {
-public:
-	explicit PlayerStateInfo();
+public:PlayerStateInfo();PlayerStateInfo(const PlayerStateInfo &other);
+	
 	static PlayerStateInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

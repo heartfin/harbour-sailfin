@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 TunerHostInfo::TunerHostInfo() {}
+TunerHostInfo::TunerHostInfo(const TunerHostInfo &other) :
+	m_jellyfinId(other.m_jellyfinId),
+	m_url(other.m_url),
+	m_type(other.m_type),
+	m_deviceId(other.m_deviceId),
+	m_friendlyName(other.m_friendlyName),
+	m_importFavoritesOnly(other.m_importFavoritesOnly),
+	m_allowHWTranscoding(other.m_allowHWTranscoding),
+	m_enableStreamLooping(other.m_enableStreamLooping),
+	m_source(other.m_source),
+	m_tunerCount(other.m_tunerCount),
+	m_userAgent(other.m_userAgent){}
 
 TunerHostInfo TunerHostInfo::fromJson(QJsonObject source) {
 	TunerHostInfo instance;

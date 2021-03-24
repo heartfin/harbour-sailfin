@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class PlaylistCreationResult {
-public:
-	explicit PlaylistCreationResult();
+public:PlaylistCreationResult();PlaylistCreationResult(const PlaylistCreationResult &other);
+	
 	static PlaylistCreationResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

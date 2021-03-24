@@ -7,7 +7,16 @@ class {{className}};
 
 class {{className}} {
 public:
-	explicit {{className}}();
+	
+	{{className}}();
+	
+	{{className}}(const {{className}} &other);
+	
+	/**
+	 * Replaces the data being hold by this class with that of the other.
+	 */
+	void replaceData({{className}} &other);
+	
 	static {{className}} fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();
@@ -34,9 +43,11 @@ public:
 	void set{{p.writeName}}({{p.typeNameWithQualifiers}} new{{p.writeName}});
 
 {{#if p.isNullable}}
-	bool is{{p.writeName}}Null() const;
+	bool {{p.name}}Null() const;
 	void set{{p.writeName}}Null();
+
 {{/if}}
+
 {{/each}}
 
 protected:

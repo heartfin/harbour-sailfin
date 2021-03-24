@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryUpdateInfo::LibraryUpdateInfo() {}
+LibraryUpdateInfo::LibraryUpdateInfo(const LibraryUpdateInfo &other) :
+	m_foldersAddedTo(other.m_foldersAddedTo),
+	m_foldersRemovedFrom(other.m_foldersRemovedFrom),
+	m_itemsAdded(other.m_itemsAdded),
+	m_itemsRemoved(other.m_itemsRemoved),
+	m_itemsUpdated(other.m_itemsUpdated),
+	m_collectionFolders(other.m_collectionFolders),
+	m_isEmpty(other.m_isEmpty){}
 
 LibraryUpdateInfo LibraryUpdateInfo::fromJson(QJsonObject source) {
 	LibraryUpdateInfo instance;

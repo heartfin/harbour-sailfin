@@ -1,0 +1,17 @@
+{{#if endpoint.hasSuccessResponse}}
+{{#if endpoint.description.length > 0}}
+/**
+ * @brief {{endpoint.description}}
+
+ */
+{{/if}}
+
+class {{className}} : public {{supportNamespace}}::HttpLoader<{{dtoNamespace}}::{{endpoint.resultType}}, {{endpoint.parameterType}}> {
+public:
+	explicit {{className}}(ApiClient *apiClient);
+
+protected:
+	QString url(const {{endpoint.parameterType}}& parameters) const override;
+	QUrlQuery query(const {{endpoint.parameterType}}& parameters) const override;
+};
+{{/if}}

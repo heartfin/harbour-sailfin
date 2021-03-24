@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class RemoteImageResult {
-public:
-	explicit RemoteImageResult();
+public:RemoteImageResult();RemoteImageResult(const RemoteImageResult &other);
+	
 	static RemoteImageResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

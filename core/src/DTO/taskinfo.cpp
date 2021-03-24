@@ -33,6 +33,17 @@ namespace Jellyfin {
 namespace DTO {
 
 TaskInfo::TaskInfo() {}
+TaskInfo::TaskInfo(const TaskInfo &other) :
+	m_name(other.m_name),
+	m_state(other.m_state),
+	m_currentProgressPercentage(other.m_currentProgressPercentage),
+	m_jellyfinId(other.m_jellyfinId),
+	m_lastExecutionResult(other.m_lastExecutionResult),
+	m_triggers(other.m_triggers),
+	m_description(other.m_description),
+	m_category(other.m_category),
+	m_isHidden(other.m_isHidden),
+	m_key(other.m_key){}
 
 TaskInfo TaskInfo::fromJson(QJsonObject source) {
 	TaskInfo instance;

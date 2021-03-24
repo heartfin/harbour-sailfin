@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryOptionInfoDto::LibraryOptionInfoDto() {}
+LibraryOptionInfoDto::LibraryOptionInfoDto(const LibraryOptionInfoDto &other) :
+	m_name(other.m_name),
+	m_defaultEnabled(other.m_defaultEnabled){}
 
 LibraryOptionInfoDto LibraryOptionInfoDto::fromJson(QJsonObject source) {
 	LibraryOptionInfoDto instance;

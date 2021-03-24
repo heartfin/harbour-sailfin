@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 ForgotPasswordResult::ForgotPasswordResult() {}
+ForgotPasswordResult::ForgotPasswordResult(const ForgotPasswordResult &other) :
+	m_action(other.m_action),
+	m_pinFile(other.m_pinFile),
+	m_pinExpirationDate(other.m_pinExpirationDate){}
 
 ForgotPasswordResult ForgotPasswordResult::fromJson(QJsonObject source) {
 	ForgotPasswordResult instance;

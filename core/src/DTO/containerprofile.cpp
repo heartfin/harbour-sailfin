@@ -33,6 +33,10 @@ namespace Jellyfin {
 namespace DTO {
 
 ContainerProfile::ContainerProfile() {}
+ContainerProfile::ContainerProfile(const ContainerProfile &other) :
+	m_type(other.m_type),
+	m_conditions(other.m_conditions),
+	m_container(other.m_container){}
 
 ContainerProfile ContainerProfile::fromJson(QJsonObject source) {
 	ContainerProfile instance;

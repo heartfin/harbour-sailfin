@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaEncoderPathDto::MediaEncoderPathDto() {}
+MediaEncoderPathDto::MediaEncoderPathDto(const MediaEncoderPathDto &other) :
+	m_path(other.m_path),
+	m_pathType(other.m_pathType){}
 
 MediaEncoderPathDto MediaEncoderPathDto::fromJson(QJsonObject source) {
 	MediaEncoderPathDto instance;

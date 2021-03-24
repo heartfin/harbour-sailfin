@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 NotificationTypeInfo::NotificationTypeInfo() {}
+NotificationTypeInfo::NotificationTypeInfo(const NotificationTypeInfo &other) :
+	m_type(other.m_type),
+	m_name(other.m_name),
+	m_enabled(other.m_enabled),
+	m_category(other.m_category),
+	m_isBasedOnUserEvent(other.m_isBasedOnUserEvent){}
 
 NotificationTypeInfo NotificationTypeInfo::fromJson(QJsonObject source) {
 	NotificationTypeInfo instance;

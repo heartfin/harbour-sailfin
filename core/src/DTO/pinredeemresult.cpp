@@ -33,6 +33,9 @@ namespace Jellyfin {
 namespace DTO {
 
 PinRedeemResult::PinRedeemResult() {}
+PinRedeemResult::PinRedeemResult(const PinRedeemResult &other) :
+	m_success(other.m_success),
+	m_usersReset(other.m_usersReset){}
 
 PinRedeemResult PinRedeemResult::fromJson(QJsonObject source) {
 	PinRedeemResult instance;

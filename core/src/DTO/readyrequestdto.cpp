@@ -33,6 +33,11 @@ namespace Jellyfin {
 namespace DTO {
 
 ReadyRequestDto::ReadyRequestDto() {}
+ReadyRequestDto::ReadyRequestDto(const ReadyRequestDto &other) :
+	m_when(other.m_when),
+	m_positionTicks(other.m_positionTicks),
+	m_isPlaying(other.m_isPlaying),
+	m_playlistItemId(other.m_playlistItemId){}
 
 ReadyRequestDto ReadyRequestDto::fromJson(QJsonObject source) {
 	ReadyRequestDto instance;

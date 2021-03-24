@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class TaskTriggerInfo {
-public:
-	explicit TaskTriggerInfo();
+public:TaskTriggerInfo();TaskTriggerInfo(const TaskTriggerInfo &other);
+	
 	static TaskTriggerInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

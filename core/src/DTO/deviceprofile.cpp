@@ -33,6 +33,46 @@ namespace Jellyfin {
 namespace DTO {
 
 DeviceProfile::DeviceProfile() {}
+DeviceProfile::DeviceProfile(const DeviceProfile &other) :
+	m_name(other.m_name),
+	m_jellyfinId(other.m_jellyfinId),
+	m_identification(other.m_identification),
+	m_friendlyName(other.m_friendlyName),
+	m_manufacturer(other.m_manufacturer),
+	m_manufacturerUrl(other.m_manufacturerUrl),
+	m_modelName(other.m_modelName),
+	m_modelDescription(other.m_modelDescription),
+	m_modelNumber(other.m_modelNumber),
+	m_modelUrl(other.m_modelUrl),
+	m_serialNumber(other.m_serialNumber),
+	m_enableAlbumArtInDidl(other.m_enableAlbumArtInDidl),
+	m_enableSingleAlbumArtLimit(other.m_enableSingleAlbumArtLimit),
+	m_enableSingleSubtitleLimit(other.m_enableSingleSubtitleLimit),
+	m_supportedMediaTypes(other.m_supportedMediaTypes),
+	m_userId(other.m_userId),
+	m_albumArtPn(other.m_albumArtPn),
+	m_maxAlbumArtWidth(other.m_maxAlbumArtWidth),
+	m_maxAlbumArtHeight(other.m_maxAlbumArtHeight),
+	m_maxIconWidth(other.m_maxIconWidth),
+	m_maxIconHeight(other.m_maxIconHeight),
+	m_maxStreamingBitrate(other.m_maxStreamingBitrate),
+	m_maxStaticBitrate(other.m_maxStaticBitrate),
+	m_musicStreamingTranscodingBitrate(other.m_musicStreamingTranscodingBitrate),
+	m_maxStaticMusicBitrate(other.m_maxStaticMusicBitrate),
+	m_sonyAggregationFlags(other.m_sonyAggregationFlags),
+	m_protocolInfo(other.m_protocolInfo),
+	m_timelineOffsetSeconds(other.m_timelineOffsetSeconds),
+	m_requiresPlainVideoItems(other.m_requiresPlainVideoItems),
+	m_requiresPlainFolders(other.m_requiresPlainFolders),
+	m_enableMSMediaReceiverRegistrar(other.m_enableMSMediaReceiverRegistrar),
+	m_ignoreTranscodeByteRangeRequests(other.m_ignoreTranscodeByteRangeRequests),
+	m_xmlRootAttributes(other.m_xmlRootAttributes),
+	m_directPlayProfiles(other.m_directPlayProfiles),
+	m_transcodingProfiles(other.m_transcodingProfiles),
+	m_containerProfiles(other.m_containerProfiles),
+	m_codecProfiles(other.m_codecProfiles),
+	m_responseProfiles(other.m_responseProfiles),
+	m_subtitleProfiles(other.m_subtitleProfiles){}
 
 DeviceProfile DeviceProfile::fromJson(QJsonObject source) {
 	DeviceProfile instance;

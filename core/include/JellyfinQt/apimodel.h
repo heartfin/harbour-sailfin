@@ -33,9 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "apiclient.h"
 #include "jsonhelper.h"
 
-#include "DTO/baseitemdto.h"
-#include "DTO/userdto.h"
-#include "DTO/useritemdatadto.h"
+#include "dto/baseitemdto.h"
+#include "dto/userdto.h"
+#include "dto/useritemdatadto.h"
 
 namespace Jellyfin {
 

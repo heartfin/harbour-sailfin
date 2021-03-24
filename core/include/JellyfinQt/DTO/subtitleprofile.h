@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class SubtitleProfile {
-public:
-	explicit SubtitleProfile();
+public:SubtitleProfile();SubtitleProfile(const SubtitleProfile &other);
+	
 	static SubtitleProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -48,8 +48,8 @@ namespace DTO {
 
 
 class TaskInfo {
-public:
-	explicit TaskInfo();
+public:TaskInfo();TaskInfo(const TaskInfo &other);
+	
 	static TaskInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

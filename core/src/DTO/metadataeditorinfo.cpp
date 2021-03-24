@@ -33,6 +33,13 @@ namespace Jellyfin {
 namespace DTO {
 
 MetadataEditorInfo::MetadataEditorInfo() {}
+MetadataEditorInfo::MetadataEditorInfo(const MetadataEditorInfo &other) :
+	m_parentalRatingOptions(other.m_parentalRatingOptions),
+	m_countries(other.m_countries),
+	m_cultures(other.m_cultures),
+	m_externalIdInfos(other.m_externalIdInfos),
+	m_contentType(other.m_contentType),
+	m_contentTypeOptions(other.m_contentTypeOptions){}
 
 MetadataEditorInfo MetadataEditorInfo::fromJson(QJsonObject source) {
 	MetadataEditorInfo instance;

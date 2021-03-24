@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 SubtitleProfile::SubtitleProfile() {}
+SubtitleProfile::SubtitleProfile(const SubtitleProfile &other) :
+	m_format(other.m_format),
+	m_method(other.m_method),
+	m_didlMode(other.m_didlMode),
+	m_language(other.m_language),
+	m_container(other.m_container){}
 
 SubtitleProfile SubtitleProfile::fromJson(QJsonObject source) {
 	SubtitleProfile instance;

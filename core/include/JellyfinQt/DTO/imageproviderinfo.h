@@ -45,8 +45,8 @@ namespace DTO {
 
 
 class ImageProviderInfo {
-public:
-	explicit ImageProviderInfo();
+public:ImageProviderInfo();ImageProviderInfo(const ImageProviderInfo &other);
+	
 	static ImageProviderInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

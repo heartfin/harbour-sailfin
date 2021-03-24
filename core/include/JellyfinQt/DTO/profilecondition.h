@@ -44,8 +44,8 @@ namespace DTO {
 
 
 class ProfileCondition {
-public:
-	explicit ProfileCondition();
+public:ProfileCondition();ProfileCondition(const ProfileCondition &other);
+	
 	static ProfileCondition fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 PublicSystemInfo::PublicSystemInfo() {}
+PublicSystemInfo::PublicSystemInfo(const PublicSystemInfo &other) :
+	m_localAddress(other.m_localAddress),
+	m_serverName(other.m_serverName),
+	m_version(other.m_version),
+	m_productName(other.m_productName),
+	m_operatingSystem(other.m_operatingSystem),
+	m_jellyfinId(other.m_jellyfinId),
+	m_startupWizardCompleted(other.m_startupWizardCompleted){}
 
 PublicSystemInfo PublicSystemInfo::fromJson(QJsonObject source) {
 	PublicSystemInfo instance;

@@ -42,8 +42,8 @@ namespace DTO {
 
 
 class ControlResponse {
-public:
-	explicit ControlResponse();
+public:ControlResponse();ControlResponse(const ControlResponse &other);
+	
 	static ControlResponse fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

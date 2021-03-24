@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class GeneralCommand {
-public:
-	explicit GeneralCommand();
+public:GeneralCommand();GeneralCommand(const GeneralCommand &other);
+	
 	static GeneralCommand fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

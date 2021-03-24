@@ -43,8 +43,8 @@ namespace DTO {
 
 
 class AllThemeMediaResult {
-public:
-	explicit AllThemeMediaResult();
+public:AllThemeMediaResult();AllThemeMediaResult(const AllThemeMediaResult &other);
+	
 	static AllThemeMediaResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
 	QJsonObject toJson();

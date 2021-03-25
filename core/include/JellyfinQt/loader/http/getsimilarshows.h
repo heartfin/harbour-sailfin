@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetSimilarShows : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarShowsParams> {
 public:
-	explicit GetSimilarShows(ApiClient *apiClient);
+	explicit GetSimilarShows(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetSimilarShowsParams& parameters) const override;
+	QString path(const GetSimilarShowsParams& parameters) const override;
 	QUrlQuery query(const GetSimilarShowsParams& parameters) const override;
 };
 

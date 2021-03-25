@@ -8,10 +8,10 @@
 
 class {{className}} : public {{supportNamespace}}::HttpLoader<{{dtoNamespace}}::{{endpoint.resultType}}, {{endpoint.parameterType}}> {
 public:
-	explicit {{className}}(ApiClient *apiClient);
+	explicit {{className}}(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const {{endpoint.parameterType}}& parameters) const override;
+	QString path(const {{endpoint.parameterType}}& parameters) const override;
 	QUrlQuery query(const {{endpoint.parameterType}}& parameters) const override;
 };
 {{/if}}

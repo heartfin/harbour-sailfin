@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/activitylogentryqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetLogEntries : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ActivityLogEntryQueryResult, GetLogEntriesParams> {
 public:
-	explicit GetLogEntries(ApiClient *apiClient);
+	explicit GetLogEntries(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetLogEntriesParams& parameters) const override;
+	QString path(const GetLogEntriesParams& parameters) const override;
 	QUrlQuery query(const GetLogEntriesParams& parameters) const override;
 };
 

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/brandingoptions.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetBrandingOptions : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BrandingOptions, GetBrandingOptionsParams> {
 public:
-	explicit GetBrandingOptions(ApiClient *apiClient);
+	explicit GetBrandingOptions(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetBrandingOptionsParams& parameters) const override;
+	QString path(const GetBrandingOptionsParams& parameters) const override;
 	QUrlQuery query(const GetBrandingOptionsParams& parameters) const override;
 };
 

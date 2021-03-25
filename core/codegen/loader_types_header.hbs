@@ -5,14 +5,23 @@ class {{e.name}} {
 public:
 
 	{{#each e.parameters as |param|}}
+
 	/**
 	 * @brief {{param.description}}
 	
 	 */
-	
-	{{param.type.typeNameWithQualifiers}} {{param.type.name}}() const;
-	void set{{param.type.writeName}}({{param.type.typeNameWithQualifiers}} new{{param.type.writeName}}) const;
 
+	{{#if param.required}}
+	const {{param.type.typeNameWithQualifiers}} &{{param.type.name}}() const;
+	void set{{param.type.writeName}}({{param.type.typeNameWithQualifiers}} new{{param.type.writeName}});
+
+	{{else}}
+	const {{param.type.typeName}} &{{param.type.name}}() const;
+	void set{{param.type.writeName}}({{param.type.typeName}} new{{param.type.writeName}});
+	bool {{param.type.name}}Null() const;
+	void set{{param.type.writeName}}Null();
+	
+	{{/if}}
 
 	{{/each}}
 
@@ -27,13 +36,6 @@ private:
 	// Required query parameters
 
 	{{#each e.requiredQueryParameters as |param|}}
-	{{param.type.typeNameWithQualifiers}} {{param.type.memberName}};
-
-	{{/each}}
-	
-	// Optional path parameters
-
-	{{#each e.optionalPathParameters as |param|}}
 	{{param.type.typeNameWithQualifiers}} {{param.type.memberName}};
 
 	{{/each}}

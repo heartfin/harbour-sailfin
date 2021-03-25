@@ -45,7 +45,7 @@ public:
      * @param other The item to compare to
      * @return True if they represent the same item, false otherwise.
      */
-    bool sameAs(const Item &other);
+    bool sameAs(const DTO::BaseItemDto &other);
 
     void setApiClient(ApiClient *apiClient);
 private:
@@ -53,10 +53,6 @@ private:
     QList<QMetaObject::Connection> m_apiClientConnections;
 
     void onUserDataUpdated(const QString &itemId, const DTO::UserItemDataDto &userData);
-};
-
-class ItemLoader {
-
 };
 
 }

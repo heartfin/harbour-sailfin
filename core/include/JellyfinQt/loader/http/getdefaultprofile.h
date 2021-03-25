@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/deviceprofile.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetDefaultProfile : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceProfile, GetDefaultProfileParams> {
 public:
-	explicit GetDefaultProfile(ApiClient *apiClient);
+	explicit GetDefaultProfile(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetDefaultProfileParams& parameters) const override;
+	QString path(const GetDefaultProfileParams& parameters) const override;
 	QUrlQuery query(const GetDefaultProfileParams& parameters) const override;
 };
 

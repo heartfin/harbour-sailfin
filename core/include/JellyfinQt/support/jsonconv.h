@@ -80,7 +80,16 @@ QJsonValue toJsonValue(const QList<T> &source) {
     return result;
 }
 
+/**
+ * Templates for string conversion.
+ */
+template <typename T>
+QString toString(const T &source) {
+    return toJsonValue(source).toString();
 }
-}
+
+
+} // NS Support
+} // NS Jellyfin
 
 #endif // JSONCONV_H

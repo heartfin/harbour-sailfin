@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/livetvinfo.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetLiveTvInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::LiveTvInfo, GetLiveTvInfoParams> {
 public:
-	explicit GetLiveTvInfo(ApiClient *apiClient);
+	explicit GetLiveTvInfo(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetLiveTvInfoParams& parameters) const override;
+	QString path(const GetLiveTvInfoParams& parameters) const override;
 	QUrlQuery query(const GetLiveTvInfoParams& parameters) const override;
 };
 

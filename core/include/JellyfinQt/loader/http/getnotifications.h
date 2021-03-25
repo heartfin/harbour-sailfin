@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/notificationresultdto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetNotifications : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::NotificationResultDto, GetNotificationsParams> {
 public:
-	explicit GetNotifications(ApiClient *apiClient);
+	explicit GetNotifications(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetNotificationsParams& parameters) const override;
+	QString path(const GetNotificationsParams& parameters) const override;
 	QUrlQuery query(const GetNotificationsParams& parameters) const override;
 };
 

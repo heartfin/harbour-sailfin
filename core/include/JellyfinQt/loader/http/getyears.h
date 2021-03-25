@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetYears : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetYearsParams> {
 public:
-	explicit GetYears(ApiClient *apiClient);
+	explicit GetYears(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetYearsParams& parameters) const override;
+	QString path(const GetYearsParams& parameters) const override;
 	QUrlQuery query(const GetYearsParams& parameters) const override;
 };
 

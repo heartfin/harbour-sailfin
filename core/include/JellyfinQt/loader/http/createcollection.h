@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/collectioncreationresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class CreateCollection : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::CollectionCreationResult, CreateCollectionParams> {
 public:
-	explicit CreateCollection(ApiClient *apiClient);
+	explicit CreateCollection(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const CreateCollectionParams& parameters) const override;
+	QString path(const CreateCollectionParams& parameters) const override;
 	QUrlQuery query(const CreateCollectionParams& parameters) const override;
 };
 

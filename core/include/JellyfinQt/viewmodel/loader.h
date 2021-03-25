@@ -61,9 +61,12 @@ public:
     Q_PROPERTY(Status status READ status NOTIFY statusChanged STORED false)
     Q_PROPERTY(QString errorString READ errorString NOTIFY errorStringChanged STORED false)
     Q_PROPERTY(bool autoReload MEMBER m_autoReload NOTIFY autoReloadChanged)
+    Q_PROPERTY(QObject *data READ data NOTIFY dataChanged STORED false)
 
     Status status() const { return m_status; }
     QString errorString() const { return m_errorString; }
+
+    virtual QObject *data() const { return nullptr; }
 
     void setApiClient(ApiClient *newApiClient);
     void setExtraFields(const QStringList &extraFields);
@@ -72,7 +75,7 @@ signals:
     void apiClientChanged(ApiClient *newApiClient);
     void errorStringChanged(QString newErrorString);
     void autoReloadChanged(bool newAutoReload);
-    void viewModelChanged();
+    void dataChanged();
 
     /**
      * @brief Convenience signal for status == RemoteData.Ready.
@@ -139,19 +142,19 @@ template <class T, class R, class P>
 class Loader : public LoaderBase {
     using RFutureWatcher = QFutureWatcher<std::optional<R>>;
 public:
-    Loader(QObject *parent = nullptr)
-        : LoaderBase(parent),
-          m_futureWatcher(new RFutureWatcher) {
-        m_dataViewModel = new T(this);
-        connect(m_futureWatcher, &RFutureWatcher::finished, this, &Loader<T, R, P>::updateData());
-    }
-    Loader(ApiClient *apiClient, QObject *parent = nullptr)
+    Loader(Support::Loader<R, P> loaderImpl, QObject *parent = nullptr)
+        : Loader(nullptr, loaderImpl, parent) {}
+
+    Loader(ApiClient *apiClient, Support::Loader<R, P> loaderImpl, QObject *parent = nullptr)
         : LoaderBase(apiClient, parent),
+          m_loader(loaderImpl),
           m_futureWatcher(new QFutureWatcher<std::optional<R>>) {
         m_dataViewModel = new T(this);
+        connect(m_futureWatcher, &RFutureWatcher::finished, this, &Loader<T, R, P>::updateData);
     }
 
     T *dataViewModel() const { return m_dataViewModel; }
+    QObject *data() const { return m_dataViewModel; }
 
     void reload() override {
         setStatus(Loading);
@@ -186,14 +189,16 @@ private:
      * @brief Updates the data when finished.
      */
     void updateData() {
-        std::optional<R> newData = m_futureWatcher->result();
-        if (newData.has_value()) {
-            if (newData.sameAs(*m_dataViewModel->data())) {
+        std::optional<R> newDataOpt = m_futureWatcher->result();
+        if (newDataOpt.has_value()) {
+            R newData = newDataOpt.value();
+            if (m_dataViewModel->data()->sameAs(newData)) {
                 // Replace the data the model holds
-                m_dataViewModel->data()->replaceData(*newData);
+                m_dataViewModel->data()->replaceData(newData);
             } else {
                 // Replace the model
-                m_dataViewModel->setData(QSharedPointer<T>::create(*newData, m_apiClient));
+                using PointerType = typename decltype(m_dataViewModel->data())::Type;
+                m_dataViewModel = new T(QSharedPointer<PointerType>::create(newData), this);
             }
             setStatus(Ready);
             emitDataChanged();

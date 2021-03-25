@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/authenticationresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class AuthenticateWithQuickConnect : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationResult, AuthenticateWithQuickConnectParams> {
 public:
-	explicit AuthenticateWithQuickConnect(ApiClient *apiClient);
+	explicit AuthenticateWithQuickConnect(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const AuthenticateWithQuickConnectParams& parameters) const override;
+	QString path(const AuthenticateWithQuickConnectParams& parameters) const override;
 	QUrlQuery query(const AuthenticateWithQuickConnectParams& parameters) const override;
 };
 

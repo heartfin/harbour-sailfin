@@ -122,5 +122,31 @@ QJsonValue toJsonValue(const QUuid &source) {
     return uuidToString(source);
 }
 
+// String types
+template <>
+QString toString(const QUuid &source) {
+    return uuidToString(source);
+}
+
+template <>
+QString toString(const qint32 &source) {
+    return QString::number(source);
+}
+
+template <>
+QString toString(const qint64 &source) {
+    return QString::number(source);
+}
+
+template <>
+QString toString(const bool &source) {
+    return source ? QStringLiteral("true") : QStringLiteral("false");
+}
+
+template <>
+QString toString(const QString &source) {
+    return source;
+}
+
 } // NS Support
 } // NS Jellyfin

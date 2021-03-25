@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetAdditionalPart : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetAdditionalPartParams> {
 public:
-	explicit GetAdditionalPart(ApiClient *apiClient);
+	explicit GetAdditionalPart(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetAdditionalPartParams& parameters) const override;
+	QString path(const GetAdditionalPartParams& parameters) const override;
 	QUrlQuery query(const GetAdditionalPartParams& parameters) const override;
 };
 

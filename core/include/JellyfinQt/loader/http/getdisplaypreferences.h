@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/displaypreferencesdto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetDisplayPreferences : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DisplayPreferencesDto, GetDisplayPreferencesParams> {
 public:
-	explicit GetDisplayPreferences(ApiClient *apiClient);
+	explicit GetDisplayPreferences(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetDisplayPreferencesParams& parameters) const override;
+	QString path(const GetDisplayPreferencesParams& parameters) const override;
 	QUrlQuery query(const GetDisplayPreferencesParams& parameters) const override;
 };
 

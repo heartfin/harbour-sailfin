@@ -40,6 +40,7 @@
 #include "namedguidpair.h"
 #include "userdata.h"*/
 
+#include "../loader/http/getitem.h"
 #include "../loader/requesttypes.h"
 #include "../model/item.h"
 #include "loader.h"
@@ -51,7 +52,8 @@ namespace ViewModel {
 class Item : public QObject {
     Q_OBJECT
 public:
-    Q_INVOKABLE explicit Item(QSharedPointer<Model::Item> data = QSharedPointer<Model::Item>(),
+    explicit Item(QObject *parent = nullptr);
+    explicit Item(QSharedPointer<Model::Item> data = QSharedPointer<Model::Item>(),
                               QObject *parent = nullptr);
 
     // Please keep the order of the properties the same as in the file linked above.
@@ -185,10 +187,24 @@ protected:
     QSharedPointer<Model::Item> m_data;
 };
 
-class ItemLoader : Loader<Item, DTO::BaseItemDto, Jellyfin::Loader::GetItemsByUserIdParams> {
+class ItemLoader : public Loader<ViewModel::Item, DTO::BaseItemDto, Jellyfin::Loader::GetItemParams> {
     Q_OBJECT
+    using BaseClass = Loader<ViewModel::Item, DTO::BaseItemDto, Jellyfin::Loader::GetItemParams>;
 public:
     explicit ItemLoader(QObject *parent = nullptr);
+    Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
+
+    QString itemId() const { return m_parameters.itemId(); }
+    void setItemId(QString newItemId) { m_parameters.setItemId(newItemId); }
+    virtual bool canReload() const override;
+
+signals:
+    void itemIdChanged(const QString &newItemId) const;
+
+private slots:
+    void onApiClientChanged(ApiClient *newApiClient);
+private:
+    void setUserId(const QString &newUserId);
 };
 
 } // NS ViewModel

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/useritemdatadto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class DeleteUserItemRating : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, DeleteUserItemRatingParams> {
 public:
-	explicit DeleteUserItemRating(ApiClient *apiClient);
+	explicit DeleteUserItemRating(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const DeleteUserItemRatingParams& parameters) const override;
+	QString path(const DeleteUserItemRatingParams& parameters) const override;
 	QUrlQuery query(const DeleteUserItemRatingParams& parameters) const override;
 };
 

@@ -76,7 +76,7 @@ public:
      * if the network is not available.
      * @return True if this loader is available, false otherwise.
      */
-    virtual bool isAvailable() const;
+    virtual bool isAvailable() const { return false; };
 protected:
     Jellyfin::ApiClient *m_apiClient;
 };
@@ -121,7 +121,7 @@ public:
         : Loader<R, P> (apiClient) {}
 
     virtual std::optional<R> load(const P &parameters) const override {
-        QNetworkReply *reply = this->m_apiClient->get(url(parameters), query(parameters));
+        QNetworkReply *reply = this->m_apiClient->get(path(parameters), query(parameters));
         QByteArray array;
         while (!reply->atEnd()) {
             if (!reply->waitForReadyRead(HTTP_TIMEOUT)) {
@@ -144,9 +144,22 @@ public:
         }
         return fromJsonValue<R>(QJsonValue(document.object()));
     }
+
+    bool isAvailable() const override {
+        if (this->m_apiClient == nullptr) {
+            return false;
+        }
+        return this->m_apiClient->online();
+    }
 protected:
-    virtual QString url(const P &parameters) const;
-    virtual QUrlQuery query(const P &parameters) const;
+    /**
+     * @brief Subclasses should override this method to return the path to this endpoint,
+     *        with all path parameters inserted.
+     * @param parameters The parameters for this request.
+     * @return The path for this endpoint
+     */
+    virtual QString path(const P &parameters) const = 0;
+    virtual QUrlQuery query(const P &parameters) const = 0;
 };
 
 } // NS Support

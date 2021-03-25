@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/useritemdatadto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class MarkPlayedItem : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, MarkPlayedItemParams> {
 public:
-	explicit MarkPlayedItem(ApiClient *apiClient);
+	explicit MarkPlayedItem(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const MarkPlayedItemParams& parameters) const override;
+	QString path(const MarkPlayedItemParams& parameters) const override;
 	QUrlQuery query(const MarkPlayedItemParams& parameters) const override;
 };
 

@@ -22,7 +22,10 @@ namespace Jellyfin {
 void registerTypes(const char *uri) {
     qmlRegisterType<ApiClient>(uri, 1, 0, "ApiClient");
     qmlRegisterType<ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
-    qmlRegisterType<ViewModel::Item>(uri, 1, 0, "Item");
+
+    qmlRegisterUncreatableType<ViewModel::Item>(uri, 1, 0, "Item", "Acquire one via ItemLoader or exposed properties");
+    qmlRegisterType<ViewModel::ItemLoader>(uri, 1, 0, "ItemLoader");
+
     qmlRegisterType<ViewModel::PlaybackManager>(uri, 1, 0, "PlaybackManager");
     qmlRegisterUncreatableType<DTO::GeneralCommandTypeClass>(uri, 1, 0, "GeneralCommandType", "Is an enum");
 

@@ -134,7 +134,6 @@ protected:
     QString m_path;
     bool m_hasRecordResponse;
     bool m_addUserId;
-    bool padding; bool padding2;
 
     // Query/record controlling properties
     int m_limit = -1;

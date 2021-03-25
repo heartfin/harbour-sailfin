@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/userdto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetUserById : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, GetUserByIdParams> {
 public:
-	explicit GetUserById(ApiClient *apiClient);
+	explicit GetUserById(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetUserByIdParams& parameters) const override;
+	QString path(const GetUserByIdParams& parameters) const override;
 	QUrlQuery query(const GetUserByIdParams& parameters) const override;
 };
 

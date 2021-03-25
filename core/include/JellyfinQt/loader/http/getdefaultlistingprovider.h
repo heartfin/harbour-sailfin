@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/listingsproviderinfo.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetDefaultListingProvider : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ListingsProviderInfo, GetDefaultListingProviderParams> {
 public:
-	explicit GetDefaultListingProvider(ApiClient *apiClient);
+	explicit GetDefaultListingProvider(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetDefaultListingProviderParams& parameters) const override;
+	QString path(const GetDefaultListingProviderParams& parameters) const override;
 	QUrlQuery query(const GetDefaultListingProviderParams& parameters) const override;
 };
 

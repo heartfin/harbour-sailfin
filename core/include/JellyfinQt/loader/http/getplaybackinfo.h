@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/playbackinforesponse.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetPlaybackInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaybackInfoResponse, GetPlaybackInfoParams> {
 public:
-	explicit GetPlaybackInfo(ApiClient *apiClient);
+	explicit GetPlaybackInfo(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetPlaybackInfoParams& parameters) const override;
+	QString path(const GetPlaybackInfoParams& parameters) const override;
 	QUrlQuery query(const GetPlaybackInfoParams& parameters) const override;
 };
 

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/quickconnectstate.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetStatus : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectState, GetStatusParams> {
 public:
-	explicit GetStatus(ApiClient *apiClient);
+	explicit GetStatus(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetStatusParams& parameters) const override;
+	QString path(const GetStatusParams& parameters) const override;
 	QUrlQuery query(const GetStatusParams& parameters) const override;
 };
 

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/livestreamresponse.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class OpenLiveStream : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::LiveStreamResponse, OpenLiveStreamParams> {
 public:
-	explicit OpenLiveStream(ApiClient *apiClient);
+	explicit OpenLiveStream(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const OpenLiveStreamParams& parameters) const override;
+	QString path(const OpenLiveStreamParams& parameters) const override;
 	QUrlQuery query(const OpenLiveStreamParams& parameters) const override;
 };
 

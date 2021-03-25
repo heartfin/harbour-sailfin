@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/pinredeemresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class ForgotPasswordPin : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PinRedeemResult, ForgotPasswordPinParams> {
 public:
-	explicit ForgotPasswordPin(ApiClient *apiClient);
+	explicit ForgotPasswordPin(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const ForgotPasswordPinParams& parameters) const override;
+	QString path(const ForgotPasswordPinParams& parameters) const override;
 	QUrlQuery query(const ForgotPasswordPinParams& parameters) const override;
 };
 

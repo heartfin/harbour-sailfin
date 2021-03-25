@@ -30,8 +30,9 @@ EOL";
 import std.algorithm;
 import std.array;
 import std.conv;
-import std.file : mkdirRecurse;
 import std.exception;
+import std.file : mkdirRecurse;
+import std.functional;
 import std.path : buildPath, dirSeparator;
 import std.parallelism : parallel;
 import std.range;
@@ -41,6 +42,41 @@ import std.uni;
 
 import dyaml;
 import handlebars.tpl;
+
+/* 
+ * Dear future (potential) employers, hereby I swear I will not brew up such unmaintainable code
+ * if you would hire me and treat me well.
+ */
+ 
+/*
+ * What should I use?
+ * I cannot use GTAD.
+ * I cannot use GTAD, because it does not support OpenAPI 3.
+ *
+ * What should I use?
+ * I cannot use openapi-generator.
+ * I cannot use openapi-generator, because it generates too much.
+ *
+ * …
+ *
+ * I was in doubt about writing my own script.
+ * Since it sounds easy and fun to do.
+ * I was in doubt about writing my own script.
+ * Since using DLANG fills me with joy.
+ *
+ * |: I was even in two minds
+ * But I took no risk
+ * I've been thinking about writing my own script. :| [2×]
+ *
+ * My own script?
+ * My own script?
+ * My— own— script~?
+ *
+ * |: Is there life on Pluto?
+ * Are we able to dance on the moon?
+ * Is there some space between the stars I where I'm able to go to? :| [2×]
+ *
+ */
 
 static this() {
 	COPYRIGHT ~= q"EOS
@@ -169,10 +205,13 @@ void realMain(string[] args) {
 		}
 	}
 	string typesHeaderPath = buildPath(outputDirectory, "include", INCLUDE_PREFIX, LOADER_FOLDER, "requesttypes.h");
+	string typesImplementationPath = buildPath(outputDirectory, "src", SRC_PREFIX, LOADER_FOLDER, "requesttypes.cpp");
 	File typesHeader = File(typesHeaderPath, "w+");
-	implementationFiles ~= [typesHeaderPath];
+	File typesImplementation = File(typesImplementationPath, "w+");
+	headerFiles ~= [typesHeaderPath];
+	implementationFiles ~= [typesImplementationPath];
 	
-	writeRequestTypesFile(typesHeader, endpoints[]);
+	writeRequestTypesFile(typesHeader, typesImplementation, endpoints[].sort!((a, b) => a.name < b.name));
 	
 	writeCMakeFile(headerFiles[], implementationFiles[]);
 }
@@ -205,7 +244,15 @@ void writeCMakeFile(string[] headerFiles, string[] implementationFiles) {
 	output.writeln(")");
 }
 
-void writeRequestTypesFile(R)(File headerFile, R endpoints) if(is(ElementType!R : Endpoint)) {
+/**
+ * Writes the file with all the types that are just used for making requests to the API endpoint
+ *
+ * Params:
+ *     headerFile = The file to write the header to
+ *     implementationFile = The file to write the implememntation to
+ *     endpoints = A list of endpoints to extract request type information from.
+ */
+void writeRequestTypesFile(R)(File headerFile, File implementationFile, R endpoints) if(is(ElementType!R : Endpoint)) {
 	
 	string[] collectImports(R range, bool function(MetaTypeInfo) predicate) {
 		return endpoints
@@ -242,7 +289,7 @@ void writeRequestTypesFile(R)(File headerFile, R endpoints) if(is(ElementType!R 
 		return params
 				.filter!pred
 				.array
-				.sort!((a, b) => a.name > b.name)
+				.sort!((a, b) => a.name < b.name)
 				.array
 				.array;
 	}
@@ -253,12 +300,11 @@ void writeRequestTypesFile(R)(File headerFile, R endpoints) if(is(ElementType!R 
 		.map!(e => buildPath(MODEL_FOLDER, e.applyCasePolicy(CasePolicy.PASCAL, CasePolicy.LOWER) ~ ".h"))
 		.array;
 	
-	headerFile.writeHeaderPreamble(CPP_NAMESPACE_LOADER, "RequestTypes", systemImports, userImports);
+	
 	
 	struct EndpointController {
 		string name;
 		RequestParameter[] requiredPathParameters = [];
-		RequestParameter[] optionalPathParameters = [];
 		RequestParameter[] requiredQueryParameters = [];
 		RequestParameter[] optionalQueryParameters = [];
 		RequestParameter[] requiredParameters = [];
@@ -278,22 +324,25 @@ void writeRequestTypesFile(R)(File headerFile, R endpoints) if(is(ElementType!R 
 		endpointController.name = endpoint.parameterType;
 		endpointController.requiredPathParameters = 
 				getParameters(endpoint.parameters, (e => e.required && e.location == ParameterLocation.PATH));
-		endpointController.optionalPathParameters =
-				getParameters(endpoint.parameters, (e => !e.required && e.location == ParameterLocation.PATH));
 		endpointController.requiredQueryParameters =
 				getParameters(endpoint.parameters, (e => e.required && e.location == ParameterLocation.QUERY));
 		endpointController.optionalQueryParameters =
 				getParameters(endpoint.parameters, (e => !e.required && e.location == ParameterLocation.QUERY));
 		with (endpointController) {
-			parameters = requiredPathParameters ~ requiredQueryParameters ~ optionalPathParameters ~ optionalQueryParameters;
+			parameters = requiredPathParameters ~ requiredQueryParameters ~ optionalQueryParameters;
 			
 			requiredParameters = requiredPathParameters ~ requiredQueryParameters;
-			optionalParameters = optionalPathParameters ~ optionalQueryParameters;
+			optionalParameters = optionalQueryParameters;
 		}
 		controller.endpoints ~= [endpointController];
 	}
+	headerFile.writeHeaderPreamble(CPP_NAMESPACE_LOADER, "RequestTypes", systemImports, userImports);
 	headerFile.writeln(render!(import("loader_types_header.hbs"), Controller)(controller));
 	headerFile.writeHeaderPostamble(CPP_NAMESPACE_LOADER, "RequestTypes");
+	
+	implementationFile.writeImplementationPreamble(CPP_NAMESPACE_LOADER, LOADER_FOLDER, "RequestTypes");
+	implementationFile.writeln(render!(import("loader_types_implementation.hbs"), Controller)(controller));
+	implementationFile.writeImplementationPostamble(CPP_NAMESPACE_LOADER, "RequestTypes");
 }
 
 /**
@@ -314,11 +363,18 @@ void generateFileForEndpoint(ref const string path, ref const string operation, 
 	string name = endpointNode["operationId"].as!string;
 	
 	Endpoint endpoint = new Endpoint();
+	endpoint.name = name;
 	endpoint.parameterType = name ~ "Params";
 	endpoint.description = endpointNode.getOr!string("summary", "");
+	endpoint.path = path;
 	
 	string[] systemImports = ["optional"];
-	string[] userImports = [buildPath(SUPPORT_FOLDER, "loader.h"), "apiclient.h", buildPath(LOADER_FOLDER, "requesttypes.h")];
+	string[] userImports = [
+			buildPath(SUPPORT_FOLDER, "jsonconv.h"),
+			buildPath(SUPPORT_FOLDER, "loader.h"), 
+			buildPath(LOADER_FOLDER, "requesttypes.h"),
+			"apiclient.h"
+	];
 	
 	// Find the most likely result response.
 	foreach(string code, const Node response; endpointNode["responses"]) {
@@ -348,13 +404,23 @@ void generateFileForEndpoint(ref const string path, ref const string operation, 
 			param.name = yamlParameter["name"].as!string;
 			param.required = yamlParameter.getOr!bool("required", false);
 			param.description = yamlParameter.getOr!string("description", "");
+			
 			param.type = getType(param.name, yamlParameter["schema"], allSchemas);
+			if (!param.type.isNullable && !param.required && !param.type.hasDefaultValue) {
+				param.type.isNullable = true;
+			}
 			switch(yamlParameter["in"].as!string.toLower) {
 			case "path":
 				param.location = ParameterLocation.PATH;
+				endpoint.requiredPathParameters ~= [param];
 				break;
 			case "query":
 				param.location = ParameterLocation.QUERY;
+				if (param.required) {
+					endpoint.requiredQueryParameters ~= [param];
+				} else {
+					endpoint.optionalQueryParameters ~= [param];
+				}
 				break;
 			default:
 				assert(false);
@@ -374,20 +440,36 @@ void generateFileForEndpoint(ref const string path, ref const string operation, 
 		string responseType = "void";
 		string parameterType = "void";
 		Endpoint endpoint;
+		
+		string pathStringInterpolation() {
+			string result = "QStringLiteral(\"" ~ endpoint.path ~ "\")";
+			foreach(p; endpoint.parameters.filter!(p => p.location == ParameterLocation.PATH)) {
+				result = result.replace("{" ~ p.name ~ "}", "\") + Support::toString(params." ~ p.type.name ~ "()) + QStringLiteral(\"");
+			}
+			result = result.replace(`+ QStringLiteral("")`, "");
+			return result;
+		}
 	}
 	Controller controller = new Controller();
 	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
 	controller.endpoint = endpoint;
-	//controller.properties = properties;
 	
 	writeHeaderPreamble(headerFile, CPP_NAMESPACE_LOADER_HTTP, name, systemImports, userImports);
 	headerFile.writeln(render!(import("loader_header.hbs"), Controller)(controller));
 	writeHeaderPostamble(headerFile, CPP_NAMESPACE_LOADER_HTTP, name);
+	
+	writeImplementationPreamble(implementationFile, CPP_NAMESPACE_LOADER_HTTP, HTTP_LOADER_FOLDER, name);
+	implementationFile.writeln(render!(import("loader_implementation.hbs"), Controller)(controller));
+	writeImplementationPostamble(implementationFile, CPP_NAMESPACE_LOADER_HTTP, name);
 }
 
+/**
+ * Generates a file containing a class generated based on the given JSON Schema.
+ */
 void generateFileForSchema(ref const string name, ref const Node scheme, Node allSchemas, 
 		ref scope File headerFile, ref scope File implementationFile) {
 	
+	// Check if this JSON "thing" is an enum
 	if ("enum" in scheme) {
 		string[3] imports = ["QJsonValue", "QObject", "QString"];
 		string[1] userImports = [buildPath(SUPPORT_FOLDER, "jsonconv.h")];
@@ -400,10 +482,12 @@ void generateFileForSchema(ref const string name, ref const Node scheme, Node al
 		writeEnumHeader(headerFile, name, values[]);
 		writeHeaderPostamble(headerFile, CPP_NAMESPACE_DTO, name);
 		
-		writeImplementationPreamble(implementationFile, CPP_NAMESPACE_DTO, name);
+		writeImplementationPreamble(implementationFile, CPP_NAMESPACE_DTO, MODEL_FOLDER, name);
 		writeEnumImplementation(implementationFile, name, values[]);
 		writeImplementationPostamble(implementationFile, CPP_NAMESPACE_DTO, name);
 	}
+	
+	// Check if this is an object
 	if (scheme["type"].as!string == "object" && "properties" in scheme) {
 		// Determine all imports
 		Appender!(string[]) systemImports, userImports;
@@ -452,8 +536,17 @@ void generateFileForSchema(ref const string name, ref const Node scheme, Node al
 		writeObjectHeader(headerFile, name, usedTypes, sortedForwardDeclarations);
 		writeHeaderPostamble(headerFile, CPP_NAMESPACE_DTO, name);
 		
-		writeImplementationPreamble(implementationFile, CPP_NAMESPACE_DTO, name);
+		writeImplementationPreamble(implementationFile, CPP_NAMESPACE_DTO, MODEL_FOLDER, name);
 		writeObjectImplementation(implementationFile, name, usedTypes);
+		writeImplementationPostamble(implementationFile, CPP_NAMESPACE_DTO, name);
+	} else if (scheme["type"] == "object") {
+		// Write implementation files
+		writeHeaderPreamble(headerFile, CPP_NAMESPACE_DTO, name, ["QJsonObject"]);
+		headerFile.writefln("using %s = QJsonObject;", name);
+		writeHeaderPostamble(headerFile, CPP_NAMESPACE_DTO, name);
+		
+		writeImplementationPreamble(implementationFile, CPP_NAMESPACE_DTO, MODEL_FOLDER, name);
+		headerFile.writeln("// No implementation needed");
 		writeImplementationPostamble(implementationFile, CPP_NAMESPACE_DTO, name);
 	}
 }
@@ -461,32 +554,54 @@ void generateFileForSchema(ref const string name, ref const Node scheme, Node al
 // Object
 
 // We need to recurse (sometimes)
-MetaTypeInfo getType(ref string name, const ref Node node, const ref Node allSchemas) {
+/**
+ * Create a MetaTypeInfo object based on a JSON schema
+ *
+ * In the future, this implementation should use some form of configuration file
+ * which contains data about the built-in types, since hard-coding doesn't seem like a
+ * good idea.
+ *
+ * Params:
+ *     name = The name of this object
+ *     node = The node containing the JSON Schema of this object
+ *     allSchemas = The node containing the a map of names to JSON Schemas, which the node
+ *                  parameter could refrence.
+ */
+MetaTypeInfo getType(ref const string name, const ref Node node, const ref Node allSchemas) {
 	MetaTypeInfo info = new MetaTypeInfo();
 	info.originalName = name;
 	info.name = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_MEMBER_CASING);
+	info.defaultValue = node.getOr!string("default", "");
+	
 	if ("description" in node) {
 		info.description = node["description"].as!string;
 	}
 	
 	// Special case for QML
 	info.name = memberAliases.get(info.name.toLower(), info.name);
-	info.isNullable = node.getOr("nullable", false);
 	
+	// Check if this schema is a reference to another schema
 	if ("$ref" in node) {
 		string type = node["$ref"].as!string()["#/components/schemas/".length..$];
-		if (type in allSchemas&& "type" in allSchemas[type] 
-				&& allSchemas[type]["type"].as!string == "object") {
-			info.needsPointer = true;
-			info.isTypeNullable = true;
-			info.typeNullableCheck = ".isNull()";
-			info.typeNullableSetter = ".clear()";
-		}
-
 		info.needsLocalImport = true;
-		info.typeName = type; 
+		info.typeName = type;
+		if (type in allSchemas) {
+			if ("type" in allSchemas[type] 
+				&& allSchemas[type]["type"].as!string == "object") {
+				info.needsPointer = true;
+				info.isTypeNullable = true;
+				info.typeNullableCheck = ".isNull()";
+				info.typeNullableSetter = ".clear()";
+			} else if ("enum" in allSchemas[type]) {
+				info.isTypeNullable = true;
+				info.typeNullableCheck = "== " ~ info.typeName ~ "::EnumNotSet";
+				info.typeNullableSetter = "= " ~ info.typeName ~ "::EnumNotSet";
+			}
+		}
 		return info;
 	}
+	
+	// No type information specified. As a fallback, use a QVariant.
 	if (!("type" in node)) {
 		info.typeName = "QVariant";
 		info.isTypeNullable = true;
@@ -495,6 +610,8 @@ MetaTypeInfo getType(ref string name, const ref Node node, const ref Node allSch
 		info.typeNullableSetter = ".clear()";
 		return info;
 	}
+	
+	info.isNullable = node.getOr!bool("nullable", false);
 	switch(node["type"].as!string) {
 	case "boolean":
 		info.typeName = "bool";
@@ -521,7 +638,7 @@ MetaTypeInfo getType(ref string name, const ref Node node, const ref Node allSch
 			}
 		}
 		info.isTypeNullable = true;
-		info.typeName= "QString";
+		info.typeName = "QString";
 		info.needsSystemImport = true;
 		info.typeNullableCheck = ".isNull()";
 		info.typeNullableSetter = ".clear()";
@@ -669,9 +786,9 @@ void writeHeaderPostamble(File output, immutable string[] fileNamespace, string 
 	output.writefln("#endif // %s", guardName(fileNamespace, className));
 }
 
-void writeImplementationPreamble(File output, immutable string[] fileNamespace, string className, string[] imports = []) {
+void writeImplementationPreamble(File output, immutable string[] fileNamespace, string folder, string className, string[] imports = []) {
 	output.writeln(COPYRIGHT);
-	output.writefln("#include <%s>", buildPath(INCLUDE_PREFIX, MODEL_FOLDER, className.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h"));
+	output.writefln("#include <%s>", buildPath(INCLUDE_PREFIX, folder, className.applyCasePolicy(OPENAPI_CASING, CasePolicy.LOWER) ~ ".h"));
 	output.writeln();
 	
 	foreach(file; imports) {
@@ -786,6 +903,11 @@ public:
 	
 	/// For use in templating
 	bool isLast = false;
+	string defaultValue = "";
+	
+	bool hasDefaultValue() {
+		return defaultValue.length > 0;
+	}
 	
 	string writeName() {
 		return name.applyCasePolicy(CPP_CLASS_MEMBER_CASING, CasePolicy.PASCAL);
@@ -807,17 +929,17 @@ public:
 	}
 	
 	bool needsOptional() {
-		return isNullable && !isTypeNullable;
+		return (isNullable || hasDefaultValue) && !isTypeNullable;
 	}
 	
 	string typeNullableCheck;
 	string nullableCheck() {
-		if (typeNullableCheck.length > 0) {
-			return memberName  ~ typeNullableCheck;
-		}
 		if (needsOptional) {
 			return "!" ~ memberName ~ ".has_value()";
+		} else if (typeNullableCheck.length > 0) {
+			return memberName  ~ typeNullableCheck;
 		}
+		
 		return "Q_ASSERT(false)";
 	}
 	
@@ -840,22 +962,42 @@ public:
 	}
 }
 
+/**
+ * Represents an API endpoint.
+ */
 class Endpoint {
 	bool resultIsReference = false;
 	bool hasSuccessResponse = false;
+	string name;
+	
+	/// The type of the 
 	string resultType;
+	
+	/// The name of the structure containing the parameters for this endpoint.
 	string parameterType = "void";
 	
+	/// HTTP path for this endpoint.
+	string path;
+	
+	/// Description/documentation for this endpoint
 	string description;
 	
+	/// HTTP method for this endpoint
 	string method;
 	
+	/// List of all parameters for this request
 	RequestParameter[] parameters = [];
+	
+	RequestParameter[] requiredPathParameters;
+	RequestParameter[] requiredQueryParameters;
+	RequestParameter[] optionalQueryParameters;
 }
 
 enum ParameterLocation {
 	PATH,
-	QUERY
+	QUERY,
+	COOKIE,
+	HEADER
 }
 
 class RequestParameter {
@@ -924,6 +1066,7 @@ T getOr(T)(const ref Node node, string key, T or) {
 			return or;
 		}
 	} else {
+		//stdout.writefln("Could not find %s", key); 
 		return or;
 	}
 }

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetCriticReviews : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetCriticReviewsParams> {
 public:
-	explicit GetCriticReviews(ApiClient *apiClient);
+	explicit GetCriticReviews(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetCriticReviewsParams& parameters) const override;
+	QString path(const GetCriticReviewsParams& parameters) const override;
 	QUrlQuery query(const GetCriticReviewsParams& parameters) const override;
 };
 

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/useritemdatadto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class UnmarkFavoriteItem : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, UnmarkFavoriteItemParams> {
 public:
-	explicit UnmarkFavoriteItem(ApiClient *apiClient);
+	explicit UnmarkFavoriteItem(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const UnmarkFavoriteItemParams& parameters) const override;
+	QString path(const UnmarkFavoriteItemParams& parameters) const override;
 	QUrlQuery query(const UnmarkFavoriteItemParams& parameters) const override;
 };
 

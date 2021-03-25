@@ -95,6 +95,13 @@ public:
     Q_PROPERTY(EventBus *eventbus READ eventbus FINAL)
     Q_PROPERTY(WebSocket *websocket READ websocket FINAL)
     Q_PROPERTY(QList<DTO::GeneralCommandType> supportedCommands READ supportedCommands WRITE setSupportedCommands NOTIFY supportedCommandsChanged)
+    /**
+     * Wether this ApiClient operates in "online mode".
+     *
+     * When operating in offline mode, this client will not make network requests and only use a local cache, making
+     * certain features unavailable.
+     */
+    Q_PROPERTY(bool online READ online NOTIFY onlineChanged)
 
     /*QNetworkReply *handleRequest(QString path, QStringList sort, Pagination *pagination,
                                  QVariantMap filters, QStringList fields, QStringList expand, QString id);*/
@@ -143,6 +150,7 @@ public:
     QString version() const;
     EventBus *eventbus() const { return m_eventbus; }
     WebSocket *websocket() const { return m_webSocket; }
+    bool online() const { return m_online; }
 
     /**
      * @brief Sets the error handler of a reply to this classes default error handler
@@ -185,6 +193,7 @@ signals:
     void deviceProfileChanged();
 
     void supportedCommandsChanged();
+    void onlineChanged();
 
     /**
      * @brief onUserDataChanged Emitted when the user data of an item is changed on the server.
@@ -268,6 +277,7 @@ private:
     QString m_userId = "";
     QJsonObject m_deviceProfile;
     QJsonObject m_playbackDeviceProfile;
+    bool m_online = true;
     QList<GeneralCommandType> m_supportedCommands;
 
     bool m_authenticated = false;

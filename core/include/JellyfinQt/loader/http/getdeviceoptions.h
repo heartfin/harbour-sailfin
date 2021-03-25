@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/deviceoptions.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetDeviceOptions : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceOptions, GetDeviceOptionsParams> {
 public:
-	explicit GetDeviceOptions(ApiClient *apiClient);
+	explicit GetDeviceOptions(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetDeviceOptionsParams& parameters) const override;
+	QString path(const GetDeviceOptionsParams& parameters) const override;
 	QUrlQuery query(const GetDeviceOptionsParams& parameters) const override;
 };
 

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/basepluginconfiguration.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetPluginConfiguration : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BasePluginConfiguration, GetPluginConfigurationParams> {
 public:
-	explicit GetPluginConfiguration(ApiClient *apiClient);
+	explicit GetPluginConfiguration(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetPluginConfigurationParams& parameters) const override;
+	QString path(const GetPluginConfigurationParams& parameters) const override;
 	QUrlQuery query(const GetPluginConfigurationParams& parameters) const override;
 };
 

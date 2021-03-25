@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/remoteimageresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetRemoteImages : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::RemoteImageResult, GetRemoteImagesParams> {
 public:
-	explicit GetRemoteImages(ApiClient *apiClient);
+	explicit GetRemoteImages(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetRemoteImagesParams& parameters) const override;
+	QString path(const GetRemoteImagesParams& parameters) const override;
 	QUrlQuery query(const GetRemoteImagesParams& parameters) const override;
 };
 

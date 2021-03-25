@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/metadataoptions.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetDefaultMetadataOptions : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::MetadataOptions, GetDefaultMetadataOptionsParams> {
 public:
-	explicit GetDefaultMetadataOptions(ApiClient *apiClient);
+	explicit GetDefaultMetadataOptions(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetDefaultMetadataOptionsParams& parameters) const override;
+	QString path(const GetDefaultMetadataOptionsParams& parameters) const override;
 	QUrlQuery query(const GetDefaultMetadataOptionsParams& parameters) const override;
 };
 

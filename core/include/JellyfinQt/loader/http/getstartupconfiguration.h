@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/startupconfigurationdto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetStartupConfiguration : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupConfigurationDto, GetStartupConfigurationParams> {
 public:
-	explicit GetStartupConfiguration(ApiClient *apiClient);
+	explicit GetStartupConfiguration(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetStartupConfigurationParams& parameters) const override;
+	QString path(const GetStartupConfigurationParams& parameters) const override;
 	QUrlQuery query(const GetStartupConfigurationParams& parameters) const override;
 };
 

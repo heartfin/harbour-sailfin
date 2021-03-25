@@ -45,7 +45,7 @@ void LoaderBase::setApiClient(ApiClient *newApiClient) {
 }
 
 void LoaderBase::emitDataChanged() {
-    emit viewModelChanged();
+    emit dataChanged();
 }
 
 void registerRemoteTypes(const char *uri) {

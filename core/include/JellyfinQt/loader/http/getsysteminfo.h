@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/systeminfo.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetSystemInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::SystemInfo, GetSystemInfoParams> {
 public:
-	explicit GetSystemInfo(ApiClient *apiClient);
+	explicit GetSystemInfo(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetSystemInfoParams& parameters) const override;
+	QString path(const GetSystemInfoParams& parameters) const override;
 	QUrlQuery query(const GetSystemInfoParams& parameters) const override;
 };
 

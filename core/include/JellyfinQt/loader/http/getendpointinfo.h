@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/endpointinfo.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetEndpointInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::EndPointInfo, GetEndpointInfoParams> {
 public:
-	explicit GetEndpointInfo(ApiClient *apiClient);
+	explicit GetEndpointInfo(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetEndpointInfoParams& parameters) const override;
+	QString path(const GetEndpointInfoParams& parameters) const override;
 	QUrlQuery query(const GetEndpointInfoParams& parameters) const override;
 };
 

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetRootFolder : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetRootFolderParams> {
 public:
-	explicit GetRootFolder(ApiClient *apiClient);
+	explicit GetRootFolder(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetRootFolderParams& parameters) const override;
+	QString path(const GetRootFolderParams& parameters) const override;
 	QUrlQuery query(const GetRootFolderParams& parameters) const override;
 };
 

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/thememediaresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetThemeVideos : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ThemeMediaResult, GetThemeVideosParams> {
 public:
-	explicit GetThemeVideos(ApiClient *apiClient);
+	explicit GetThemeVideos(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetThemeVideosParams& parameters) const override;
+	QString path(const GetThemeVideosParams& parameters) const override;
 	QUrlQuery query(const GetThemeVideosParams& parameters) const override;
 };
 

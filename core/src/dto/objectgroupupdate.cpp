@@ -87,14 +87,7 @@ QVariant ObjectGroupUpdate::data() const { return m_data; }
 void ObjectGroupUpdate::setData(QVariant newData) {
 	m_data = newData;
 }
-bool ObjectGroupUpdate::dataNull() const {
-	return m_data.isNull();
-}
 
-void ObjectGroupUpdate::setDataNull() {
-	m_data.clear();
-
-}
 
 } // NS DTO
 

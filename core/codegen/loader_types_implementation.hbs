@@ -1,0 +1,57 @@
+using namespace {{dtoNamespace}};
+
+{{#each endpoints as |e|}}
+
+// {{e.name}}
+
+{{#each e.parameters as |param|}}
+
+{{#if param.required}}
+const {{param.type.typeNameWithQualifiers}} &{{e.name}}::{{param.type.name}}() const {
+	return {{param.type.memberName}};
+}
+
+void {{e.name}}::set{{param.type.writeName}}({{param.type.typeNameWithQualifiers}} new{{param.type.writeName}}) {
+	
+	{{param.type.memberName}} = new{{param.type.writeName}};
+}
+
+{{else}}
+const {{param.type.typeName}} &{{e.name}}::{{param.type.name}}() const {
+
+	{{#if param.type.needsOptional}}
+	return {{param.type.memberName}}.value();
+
+	{{else}}
+	return {{param.type.memberName}};
+
+	{{/if}}
+}
+
+void {{e.name}}::set{{param.type.writeName}}({{param.type.typeName}} new{{param.type.writeName}})  {
+	
+	{{param.type.memberName}} = new{{param.type.writeName}};
+}
+
+bool {{e.name}}::{{param.type.name}}Null() const {
+	// Nullable: {{param.type.isNullable}}
+
+	// Type Nullable: {{param.type.isTypeNullable}}
+
+	
+
+	return {{param.type.nullableCheck}};
+}
+
+void {{e.name}}::set{{param.type.writeName}}Null() {
+	
+	{{param.type.memberName}}{{param.type.nullableSetter}};
+}
+
+{{/if}}
+
+{{/each}}
+
+
+
+{{/each}}

@@ -40,7 +40,7 @@ Item::~Item() {
     }
 }
 
-bool Item::sameAs(const Item &other) {
+bool Item::sameAs(const DTO::BaseItemDto &other) {
     return jellyfinId() == other.jellyfinId();
 }
 

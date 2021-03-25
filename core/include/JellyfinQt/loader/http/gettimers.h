@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/timerinfodtoqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetTimers : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TimerInfoDtoQueryResult, GetTimersParams> {
 public:
-	explicit GetTimers(ApiClient *apiClient);
+	explicit GetTimers(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetTimersParams& parameters) const override;
+	QString path(const GetTimersParams& parameters) const override;
 	QUrlQuery query(const GetTimersParams& parameters) const override;
 };
 

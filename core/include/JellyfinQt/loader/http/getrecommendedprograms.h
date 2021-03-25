@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetRecommendedPrograms : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecommendedProgramsParams> {
 public:
-	explicit GetRecommendedPrograms(ApiClient *apiClient);
+	explicit GetRecommendedPrograms(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetRecommendedProgramsParams& parameters) const override;
+	QString path(const GetRecommendedProgramsParams& parameters) const override;
 	QUrlQuery query(const GetRecommendedProgramsParams& parameters) const override;
 };
 

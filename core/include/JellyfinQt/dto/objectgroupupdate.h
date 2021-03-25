@@ -80,8 +80,6 @@ public:
 	* @brief Gets the update data.
 	*/
 	void setData(QVariant newData);
-	bool dataNull() const;
-	void setDataNull();
 
 
 protected:

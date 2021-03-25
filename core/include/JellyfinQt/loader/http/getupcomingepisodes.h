@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetUpcomingEpisodes : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetUpcomingEpisodesParams> {
 public:
-	explicit GetUpcomingEpisodes(ApiClient *apiClient);
+	explicit GetUpcomingEpisodes(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetUpcomingEpisodesParams& parameters) const override;
+	QString path(const GetUpcomingEpisodesParams& parameters) const override;
 	QUrlQuery query(const GetUpcomingEpisodesParams& parameters) const override;
 };
 

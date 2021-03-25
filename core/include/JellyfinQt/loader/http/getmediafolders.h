@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetMediaFolders : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetMediaFoldersParams> {
 public:
-	explicit GetMediaFolders(ApiClient *apiClient);
+	explicit GetMediaFolders(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetMediaFoldersParams& parameters) const override;
+	QString path(const GetMediaFoldersParams& parameters) const override;
 	QUrlQuery query(const GetMediaFoldersParams& parameters) const override;
 };
 

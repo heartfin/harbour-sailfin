@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/utctimeresponse.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetUtcTime : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UtcTimeResponse, GetUtcTimeParams> {
 public:
-	explicit GetUtcTime(ApiClient *apiClient);
+	explicit GetUtcTime(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetUtcTimeParams& parameters) const override;
+	QString path(const GetUtcTimeParams& parameters) const override;
 	QUrlQuery query(const GetUtcTimeParams& parameters) const override;
 };
 

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/defaultdirectorybrowserinfodto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetDefaultDirectoryBrowser : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DefaultDirectoryBrowserInfoDto, GetDefaultDirectoryBrowserParams> {
 public:
-	explicit GetDefaultDirectoryBrowser(ApiClient *apiClient);
+	explicit GetDefaultDirectoryBrowser(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetDefaultDirectoryBrowserParams& parameters) const override;
+	QString path(const GetDefaultDirectoryBrowserParams& parameters) const override;
 	QUrlQuery query(const GetDefaultDirectoryBrowserParams& parameters) const override;
 };
 

@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetInstantMixFromArtists : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetInstantMixFromArtistsParams> {
 public:
-	explicit GetInstantMixFromArtists(ApiClient *apiClient);
+	explicit GetInstantMixFromArtists(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetInstantMixFromArtistsParams& parameters) const override;
+	QString path(const GetInstantMixFromArtistsParams& parameters) const override;
 	QUrlQuery query(const GetInstantMixFromArtistsParams& parameters) const override;
 };
 

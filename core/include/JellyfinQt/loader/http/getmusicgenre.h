@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetMusicGenre : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetMusicGenreParams> {
 public:
-	explicit GetMusicGenre(ApiClient *apiClient);
+	explicit GetMusicGenre(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetMusicGenreParams& parameters) const override;
+	QString path(const GetMusicGenreParams& parameters) const override;
 	QUrlQuery query(const GetMusicGenreParams& parameters) const override;
 };
 

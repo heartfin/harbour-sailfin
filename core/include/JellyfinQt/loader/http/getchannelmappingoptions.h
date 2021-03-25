@@ -32,9 +32,10 @@
 
 #include <optional>
 
+#include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/loader/requesttypes.h"
+#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/channelmappingoptionsdto.h"
 
 namespace Jellyfin {
@@ -46,10 +47,10 @@ namespace HTTP {
  */
 class GetChannelMappingOptions : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ChannelMappingOptionsDto, GetChannelMappingOptionsParams> {
 public:
-	explicit GetChannelMappingOptions(ApiClient *apiClient);
+	explicit GetChannelMappingOptions(ApiClient *apiClient = nullptr);
 
 protected:
-	QString url(const GetChannelMappingOptionsParams& parameters) const override;
+	QString path(const GetChannelMappingOptionsParams& parameters) const override;
 	QUrlQuery query(const GetChannelMappingOptionsParams& parameters) const override;
 };
 

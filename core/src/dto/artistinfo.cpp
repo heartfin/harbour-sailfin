@@ -81,7 +81,7 @@ void ArtistInfo::setFromJson(QJsonObject source) {
 	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ParentIndexNumber"]);
 	m_premiereDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["PremiereDate"]);
 	m_isAutomated = Jellyfin::Support::fromJsonValue<bool>(source["IsAutomated"]);
-	m_songInfos = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SongInfo>>>(source["SongInfos"]);
+	m_songInfos = Jellyfin::Support::fromJsonValue<QList<SongInfo>>(source["SongInfos"]);
 
 }
 	
@@ -97,7 +97,7 @@ QJsonObject ArtistInfo::toJson() {
 	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
 	result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
 	result["IsAutomated"] = Jellyfin::Support::toJsonValue<bool>(m_isAutomated);
-	result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SongInfo>>>(m_songInfos);
+	result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<SongInfo>>(m_songInfos);
 
 	return result;
 }
@@ -225,9 +225,9 @@ void ArtistInfo::setIsAutomated(bool newIsAutomated) {
 	m_isAutomated = newIsAutomated;
 }
 
-QList<QSharedPointer<SongInfo>> ArtistInfo::songInfos() const { return m_songInfos; }
+QList<SongInfo> ArtistInfo::songInfos() const { return m_songInfos; }
 
-void ArtistInfo::setSongInfos(QList<QSharedPointer<SongInfo>> newSongInfos) {
+void ArtistInfo::setSongInfos(QList<SongInfo> newSongInfos) {
 	m_songInfos = newSongInfos;
 }
 bool ArtistInfo::songInfosNull() const {

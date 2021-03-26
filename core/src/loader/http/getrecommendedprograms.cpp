@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetRecommendedPrograms::GetRecommendedPrograms(ApiClient *apiClient)
+GetRecommendedProgramsLoader::GetRecommendedProgramsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecommendedProgramsParams>(apiClient) {}
 
-QString GetRecommendedPrograms::path(const GetRecommendedProgramsParams &params) const {
+QString GetRecommendedProgramsLoader::path(const GetRecommendedProgramsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/LiveTv/Programs/Recommended");
 }
 
-QUrlQuery GetRecommendedPrograms::query(const GetRecommendedProgramsParams &params) const {
+QUrlQuery GetRecommendedProgramsLoader::query(const GetRecommendedProgramsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

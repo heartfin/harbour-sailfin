@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets information about the request endpoint.
  */
-class GetEndpointInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::EndPointInfo, GetEndpointInfoParams> {
+class GetEndpointInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::EndPointInfo, GetEndpointInfoParams> {
 public:
-	explicit GetEndpointInfo(ApiClient *apiClient = nullptr);
+	explicit GetEndpointInfoLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetEndpointInfoParams& parameters) const override;

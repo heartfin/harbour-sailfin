@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetInstantMixFromMusicGenre::GetInstantMixFromMusicGenre(ApiClient *apiClient)
+GetInstantMixFromMusicGenreLoader::GetInstantMixFromMusicGenreLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetInstantMixFromMusicGenreParams>(apiClient) {}
 
-QString GetInstantMixFromMusicGenre::path(const GetInstantMixFromMusicGenreParams &params) const {
+QString GetInstantMixFromMusicGenreLoader::path(const GetInstantMixFromMusicGenreParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/MusicGenres/") + Support::toString(params.name()) + QStringLiteral("/InstantMix");
 }
 
-QUrlQuery GetInstantMixFromMusicGenre::query(const GetInstantMixFromMusicGenreParams &params) const {
+QUrlQuery GetInstantMixFromMusicGenreLoader::query(const GetInstantMixFromMusicGenreParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

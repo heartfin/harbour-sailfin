@@ -60,8 +60,8 @@ CodecProfile CodecProfile::fromJson(QJsonObject source) {
 
 void CodecProfile::setFromJson(QJsonObject source) {
 	m_type = Jellyfin::Support::fromJsonValue<CodecType>(source["Type"]);
-	m_conditions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
-	m_applyConditions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["ApplyConditions"]);
+	m_conditions = Jellyfin::Support::fromJsonValue<QList<ProfileCondition>>(source["Conditions"]);
+	m_applyConditions = Jellyfin::Support::fromJsonValue<QList<ProfileCondition>>(source["ApplyConditions"]);
 	m_codec = Jellyfin::Support::fromJsonValue<QString>(source["Codec"]);
 	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
 
@@ -70,8 +70,8 @@ void CodecProfile::setFromJson(QJsonObject source) {
 QJsonObject CodecProfile::toJson() {
 	QJsonObject result;
 	result["Type"] = Jellyfin::Support::toJsonValue<CodecType>(m_type);
-	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
-	result["ApplyConditions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_applyConditions);
+	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
+	result["ApplyConditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_applyConditions);
 	result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
 	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
 
@@ -84,9 +84,9 @@ void CodecProfile::setType(CodecType newType) {
 	m_type = newType;
 }
 
-QList<QSharedPointer<ProfileCondition>> CodecProfile::conditions() const { return m_conditions; }
+QList<ProfileCondition> CodecProfile::conditions() const { return m_conditions; }
 
-void CodecProfile::setConditions(QList<QSharedPointer<ProfileCondition>> newConditions) {
+void CodecProfile::setConditions(QList<ProfileCondition> newConditions) {
 	m_conditions = newConditions;
 }
 bool CodecProfile::conditionsNull() const {
@@ -97,9 +97,9 @@ void CodecProfile::setConditionsNull() {
 	m_conditions.clear();
 
 }
-QList<QSharedPointer<ProfileCondition>> CodecProfile::applyConditions() const { return m_applyConditions; }
+QList<ProfileCondition> CodecProfile::applyConditions() const { return m_applyConditions; }
 
-void CodecProfile::setApplyConditions(QList<QSharedPointer<ProfileCondition>> newApplyConditions) {
+void CodecProfile::setApplyConditions(QList<ProfileCondition> newApplyConditions) {
 	m_applyConditions = newApplyConditions;
 }
 bool CodecProfile::applyConditionsNull() const {

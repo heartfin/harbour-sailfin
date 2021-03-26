@@ -103,7 +103,7 @@ void LibraryOptions::setFromJson(QJsonObject source) {
 	m_enableRealtimeMonitor = Jellyfin::Support::fromJsonValue<bool>(source["EnableRealtimeMonitor"]);
 	m_enableChapterImageExtraction = Jellyfin::Support::fromJsonValue<bool>(source["EnableChapterImageExtraction"]);
 	m_extractChapterImagesDuringLibraryScan = Jellyfin::Support::fromJsonValue<bool>(source["ExtractChapterImagesDuringLibraryScan"]);
-	m_pathInfos = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaPathInfo>>>(source["PathInfos"]);
+	m_pathInfos = Jellyfin::Support::fromJsonValue<QList<MediaPathInfo>>(source["PathInfos"]);
 	m_saveLocalMetadata = Jellyfin::Support::fromJsonValue<bool>(source["SaveLocalMetadata"]);
 	m_enableInternetProviders = Jellyfin::Support::fromJsonValue<bool>(source["EnableInternetProviders"]);
 	m_enableAutomaticSeriesGrouping = Jellyfin::Support::fromJsonValue<bool>(source["EnableAutomaticSeriesGrouping"]);
@@ -123,7 +123,7 @@ void LibraryOptions::setFromJson(QJsonObject source) {
 	m_subtitleDownloadLanguages = Jellyfin::Support::fromJsonValue<QStringList>(source["SubtitleDownloadLanguages"]);
 	m_requirePerfectSubtitleMatch = Jellyfin::Support::fromJsonValue<bool>(source["RequirePerfectSubtitleMatch"]);
 	m_saveSubtitlesWithMedia = Jellyfin::Support::fromJsonValue<bool>(source["SaveSubtitlesWithMedia"]);
-	m_typeOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<TypeOptions>>>(source["TypeOptions"]);
+	m_typeOptions = Jellyfin::Support::fromJsonValue<QList<TypeOptions>>(source["TypeOptions"]);
 
 }
 	
@@ -133,7 +133,7 @@ QJsonObject LibraryOptions::toJson() {
 	result["EnableRealtimeMonitor"] = Jellyfin::Support::toJsonValue<bool>(m_enableRealtimeMonitor);
 	result["EnableChapterImageExtraction"] = Jellyfin::Support::toJsonValue<bool>(m_enableChapterImageExtraction);
 	result["ExtractChapterImagesDuringLibraryScan"] = Jellyfin::Support::toJsonValue<bool>(m_extractChapterImagesDuringLibraryScan);
-	result["PathInfos"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaPathInfo>>>(m_pathInfos);
+	result["PathInfos"] = Jellyfin::Support::toJsonValue<QList<MediaPathInfo>>(m_pathInfos);
 	result["SaveLocalMetadata"] = Jellyfin::Support::toJsonValue<bool>(m_saveLocalMetadata);
 	result["EnableInternetProviders"] = Jellyfin::Support::toJsonValue<bool>(m_enableInternetProviders);
 	result["EnableAutomaticSeriesGrouping"] = Jellyfin::Support::toJsonValue<bool>(m_enableAutomaticSeriesGrouping);
@@ -153,7 +153,7 @@ QJsonObject LibraryOptions::toJson() {
 	result["SubtitleDownloadLanguages"] = Jellyfin::Support::toJsonValue<QStringList>(m_subtitleDownloadLanguages);
 	result["RequirePerfectSubtitleMatch"] = Jellyfin::Support::toJsonValue<bool>(m_requirePerfectSubtitleMatch);
 	result["SaveSubtitlesWithMedia"] = Jellyfin::Support::toJsonValue<bool>(m_saveSubtitlesWithMedia);
-	result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<TypeOptions>>>(m_typeOptions);
+	result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<TypeOptions>>(m_typeOptions);
 
 	return result;
 }
@@ -182,9 +182,9 @@ void LibraryOptions::setExtractChapterImagesDuringLibraryScan(bool newExtractCha
 	m_extractChapterImagesDuringLibraryScan = newExtractChapterImagesDuringLibraryScan;
 }
 
-QList<QSharedPointer<MediaPathInfo>> LibraryOptions::pathInfos() const { return m_pathInfos; }
+QList<MediaPathInfo> LibraryOptions::pathInfos() const { return m_pathInfos; }
 
-void LibraryOptions::setPathInfos(QList<QSharedPointer<MediaPathInfo>> newPathInfos) {
+void LibraryOptions::setPathInfos(QList<MediaPathInfo> newPathInfos) {
 	m_pathInfos = newPathInfos;
 }
 bool LibraryOptions::pathInfosNull() const {
@@ -372,9 +372,9 @@ void LibraryOptions::setSaveSubtitlesWithMedia(bool newSaveSubtitlesWithMedia) {
 	m_saveSubtitlesWithMedia = newSaveSubtitlesWithMedia;
 }
 
-QList<QSharedPointer<TypeOptions>> LibraryOptions::typeOptions() const { return m_typeOptions; }
+QList<TypeOptions> LibraryOptions::typeOptions() const { return m_typeOptions; }
 
-void LibraryOptions::setTypeOptions(QList<QSharedPointer<TypeOptions>> newTypeOptions) {
+void LibraryOptions::setTypeOptions(QList<TypeOptions> newTypeOptions) {
 	m_typeOptions = newTypeOptions;
 }
 bool LibraryOptions::typeOptionsNull() const {

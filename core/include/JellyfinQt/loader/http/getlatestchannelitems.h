@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets latest channel items.
  */
-class GetLatestChannelItems : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetLatestChannelItemsParams> {
+class GetLatestChannelItemsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetLatestChannelItemsParams> {
 public:
-	explicit GetLatestChannelItems(ApiClient *apiClient = nullptr);
+	explicit GetLatestChannelItemsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetLatestChannelItemsParams& parameters) const override;

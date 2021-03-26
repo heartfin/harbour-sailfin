@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetDisplayPreferences::GetDisplayPreferences(ApiClient *apiClient)
+GetDisplayPreferencesLoader::GetDisplayPreferencesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::DisplayPreferencesDto, GetDisplayPreferencesParams>(apiClient) {}
 
-QString GetDisplayPreferences::path(const GetDisplayPreferencesParams &params) const {
+QString GetDisplayPreferencesLoader::path(const GetDisplayPreferencesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/DisplayPreferences/") + Support::toString(params.displayPreferencesId()) ;
 }
 
-QUrlQuery GetDisplayPreferences::query(const GetDisplayPreferencesParams &params) const {
+QUrlQuery GetDisplayPreferencesLoader::query(const GetDisplayPreferencesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

@@ -57,7 +57,7 @@ ThemeMediaResult ThemeMediaResult::fromJson(QJsonObject source) {
 
 
 void ThemeMediaResult::setFromJson(QJsonObject source) {
-	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<BaseItemDto>>(source["Items"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 	m_ownerId = Jellyfin::Support::fromJsonValue<QString>(source["OwnerId"]);
@@ -66,7 +66,7 @@ void ThemeMediaResult::setFromJson(QJsonObject source) {
 	
 QJsonObject ThemeMediaResult::toJson() {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 	result["OwnerId"] = Jellyfin::Support::toJsonValue<QString>(m_ownerId);
@@ -74,9 +74,9 @@ QJsonObject ThemeMediaResult::toJson() {
 	return result;
 }
 
-QList<QSharedPointer<BaseItemDto>> ThemeMediaResult::items() const { return m_items; }
+QList<BaseItemDto> ThemeMediaResult::items() const { return m_items; }
 
-void ThemeMediaResult::setItems(QList<QSharedPointer<BaseItemDto>> newItems) {
+void ThemeMediaResult::setItems(QList<BaseItemDto> newItems) {
 	m_items = newItems;
 }
 bool ThemeMediaResult::itemsNull() const {

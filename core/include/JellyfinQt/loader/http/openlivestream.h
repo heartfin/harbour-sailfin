@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Opens a media source.
  */
-class OpenLiveStream : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::LiveStreamResponse, OpenLiveStreamParams> {
+class OpenLiveStreamLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::LiveStreamResponse, OpenLiveStreamParams> {
 public:
-	explicit OpenLiveStream(ApiClient *apiClient = nullptr);
+	explicit OpenLiveStreamLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const OpenLiveStreamParams& parameters) const override;

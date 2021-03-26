@@ -53,22 +53,22 @@ NotificationResultDto NotificationResultDto::fromJson(QJsonObject source) {
 
 
 void NotificationResultDto::setFromJson(QJsonObject source) {
-	m_notifications = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NotificationDto>>>(source["Notifications"]);
+	m_notifications = Jellyfin::Support::fromJsonValue<QList<NotificationDto>>(source["Notifications"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 
 }
 	
 QJsonObject NotificationResultDto::toJson() {
 	QJsonObject result;
-	result["Notifications"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NotificationDto>>>(m_notifications);
+	result["Notifications"] = Jellyfin::Support::toJsonValue<QList<NotificationDto>>(m_notifications);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 
 	return result;
 }
 
-QList<QSharedPointer<NotificationDto>> NotificationResultDto::notifications() const { return m_notifications; }
+QList<NotificationDto> NotificationResultDto::notifications() const { return m_notifications; }
 
-void NotificationResultDto::setNotifications(QList<QSharedPointer<NotificationDto>> newNotifications) {
+void NotificationResultDto::setNotifications(QList<NotificationDto> newNotifications) {
 	m_notifications = newNotifications;
 }
 bool NotificationResultDto::notificationsNull() const {

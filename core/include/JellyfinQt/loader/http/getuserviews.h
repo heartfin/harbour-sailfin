@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get user views.
  */
-class GetUserViews : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetUserViewsParams> {
+class GetUserViewsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetUserViewsParams> {
 public:
-	explicit GetUserViews(ApiClient *apiClient = nullptr);
+	explicit GetUserViewsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetUserViewsParams& parameters) const override;

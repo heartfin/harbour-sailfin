@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets available live tv channels.
  */
-class GetLiveTvChannels : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetLiveTvChannelsParams> {
+class GetLiveTvChannelsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetLiveTvChannelsParams> {
 public:
-	explicit GetLiveTvChannels(ApiClient *apiClient = nullptr);
+	explicit GetLiveTvChannelsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetLiveTvChannelsParams& parameters) const override;

@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetCurrentUser::GetCurrentUser(ApiClient *apiClient)
+GetCurrentUserLoader::GetCurrentUserLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, GetCurrentUserParams>(apiClient) {}
 
-QString GetCurrentUser::path(const GetCurrentUserParams &params) const {
+QString GetCurrentUserLoader::path(const GetCurrentUserParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Users/Me");
 }
 
-QUrlQuery GetCurrentUser::query(const GetCurrentUserParams &params) const {
+QUrlQuery GetCurrentUserLoader::query(const GetCurrentUserParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

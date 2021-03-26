@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Redeems a forgot password pin.
  */
-class ForgotPasswordPin : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PinRedeemResult, ForgotPasswordPinParams> {
+class ForgotPasswordPinLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PinRedeemResult, ForgotPasswordPinParams> {
 public:
-	explicit ForgotPasswordPin(ApiClient *apiClient = nullptr);
+	explicit ForgotPasswordPinLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const ForgotPasswordPinParams& parameters) const override;

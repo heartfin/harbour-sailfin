@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets additional parts for a video.
  */
-class GetAdditionalPart : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetAdditionalPartParams> {
+class GetAdditionalPartLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetAdditionalPartParams> {
 public:
-	explicit GetAdditionalPart(ApiClient *apiClient = nullptr);
+	explicit GetAdditionalPartLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetAdditionalPartParams& parameters) const override;

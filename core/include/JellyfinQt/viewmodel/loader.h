@@ -23,6 +23,8 @@
 
 #include <QFuture>
 #include <QFutureWatcher>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QtConcurrent/QtConcurrent>
 
 #include "../support/loader.h"
@@ -178,9 +180,12 @@ private:
      * @return empty optional if an error occured, otherwise the result.
      */
     std::optional<R> invokeLoader(P parameters) {
+        QMutexLocker(&this->m_mutex);
+        this->m_loader.setApiClient(m_apiClient);
         try {
             return this->m_loader.load(parameters);
-        }  catch (Support::LoadException e) {
+        }  catch (Support::LoadException &e) {
+            qWarning() << "Exception while loading an item: " << e.what();
             this->setErrorString(QString(e.what()));
             return std::nullopt;
         }
@@ -206,6 +211,7 @@ private:
             setStatus(Error);
         }
     }
+    QMutex m_mutex;
 };
 
 void registerRemoteTypes(const char *uri);

@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetPlaylistItems::GetPlaylistItems(ApiClient *apiClient)
+GetPlaylistItemsLoader::GetPlaylistItemsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetPlaylistItemsParams>(apiClient) {}
 
-QString GetPlaylistItems::path(const GetPlaylistItemsParams &params) const {
+QString GetPlaylistItemsLoader::path(const GetPlaylistItemsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Playlists/") + Support::toString(params.playlistId()) + QStringLiteral("/Items");
 }
 
-QUrlQuery GetPlaylistItems::query(const GetPlaylistItemsParams &params) const {
+QUrlQuery GetPlaylistItemsLoader::query(const GetPlaylistItemsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

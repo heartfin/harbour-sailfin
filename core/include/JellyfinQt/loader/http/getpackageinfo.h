@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a package by name or assembly GUID.
  */
-class GetPackageInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PackageInfo, GetPackageInfoParams> {
+class GetPackageInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PackageInfo, GetPackageInfoParams> {
 public:
-	explicit GetPackageInfo(ApiClient *apiClient = nullptr);
+	explicit GetPackageInfoLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetPackageInfoParams& parameters) const override;

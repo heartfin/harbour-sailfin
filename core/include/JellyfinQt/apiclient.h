@@ -94,7 +94,7 @@ public:
     Q_PROPERTY(QString version READ version)
     Q_PROPERTY(EventBus *eventbus READ eventbus FINAL)
     Q_PROPERTY(WebSocket *websocket READ websocket FINAL)
-    Q_PROPERTY(QList<DTO::GeneralCommandType> supportedCommands READ supportedCommands WRITE setSupportedCommands NOTIFY supportedCommandsChanged)
+    Q_PROPERTY(QVariantList supportedCommands READ supportedCommands WRITE setSupportedCommands NOTIFY supportedCommandsChanged)
     /**
      * Wether this ApiClient operates in "online mode".
      *
@@ -138,8 +138,8 @@ public:
      * The list support commands will be sent to the Jellyfin server. QML applications should listen to
      * the events emitted by the eventBus and act accordingly.
      */
-    QList<GeneralCommandType> supportedCommands() const { return m_supportedCommands; }
-    void setSupportedCommands(QList<GeneralCommandType> newSupportedCommands) { m_supportedCommands = newSupportedCommands; }
+    QVariantList supportedCommands() const { return m_supportedCommands; }
+    void setSupportedCommands(QVariantList newSupportedCommands) { m_supportedCommands = newSupportedCommands; emit supportedCommandsChanged(); }
     QJsonObject &deviceProfile() { return m_deviceProfile; }
     QJsonObject &playbackDeviceProfile() { return m_playbackDeviceProfile; }
     /**
@@ -278,7 +278,7 @@ private:
     QJsonObject m_deviceProfile;
     QJsonObject m_playbackDeviceProfile;
     bool m_online = true;
-    QList<GeneralCommandType> m_supportedCommands;
+    QVariantList m_supportedCommands;
 
     bool m_authenticated = false;
     /**

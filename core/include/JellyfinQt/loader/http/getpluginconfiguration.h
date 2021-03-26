@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets plugin configuration.
  */
-class GetPluginConfiguration : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BasePluginConfiguration, GetPluginConfigurationParams> {
+class GetPluginConfigurationLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BasePluginConfiguration, GetPluginConfigurationParams> {
 public:
-	explicit GetPluginConfiguration(ApiClient *apiClient = nullptr);
+	explicit GetPluginConfigurationLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetPluginConfigurationParams& parameters) const override;

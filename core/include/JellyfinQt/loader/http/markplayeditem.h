@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Marks an item as played for user.
  */
-class MarkPlayedItem : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, MarkPlayedItemParams> {
+class MarkPlayedItemLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, MarkPlayedItemParams> {
 public:
-	explicit MarkPlayedItem(ApiClient *apiClient = nullptr);
+	explicit MarkPlayedItemLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const MarkPlayedItemParams& parameters) const override;

@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -131,11 +130,11 @@ This is used to identify the proper item for automatic updates.
 	/**
 	 * @brief Gets or sets the versions.
 	 */
-	QList<QSharedPointer<VersionInfo>> versions() const;
+	QList<VersionInfo> versions() const;
 	/**
 	* @brief Gets or sets the versions.
 	*/
-	void setVersions(QList<QSharedPointer<VersionInfo>> newVersions);
+	void setVersions(QList<VersionInfo> newVersions);
 	bool versionsNull() const;
 	void setVersionsNull();
 
@@ -158,7 +157,7 @@ protected:
 	QString m_owner;
 	QString m_category;
 	QString m_guid;
-	QList<QSharedPointer<VersionInfo>> m_versions;
+	QList<VersionInfo> m_versions;
 	QString m_imageUrl;
 };
 

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a default MetadataOptions object.
  */
-class GetDefaultMetadataOptions : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::MetadataOptions, GetDefaultMetadataOptionsParams> {
+class GetDefaultMetadataOptionsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::MetadataOptions, GetDefaultMetadataOptionsParams> {
 public:
-	explicit GetDefaultMetadataOptions(ApiClient *apiClient = nullptr);
+	explicit GetDefaultMetadataOptionsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetDefaultMetadataOptionsParams& parameters) const override;

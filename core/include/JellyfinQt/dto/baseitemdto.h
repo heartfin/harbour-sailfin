@@ -285,22 +285,22 @@ public:
 	/**
 	 * @brief Gets or sets the external urls.
 	 */
-	QList<QSharedPointer<ExternalUrl>> externalUrls() const;
+	QList<ExternalUrl> externalUrls() const;
 	/**
 	* @brief Gets or sets the external urls.
 	*/
-	void setExternalUrls(QList<QSharedPointer<ExternalUrl>> newExternalUrls);
+	void setExternalUrls(QList<ExternalUrl> newExternalUrls);
 	bool externalUrlsNull() const;
 	void setExternalUrlsNull();
 
 	/**
 	 * @brief Gets or sets the media versions.
 	 */
-	QList<QSharedPointer<MediaSourceInfo>> mediaSources() const;
+	QList<MediaSourceInfo> mediaSources() const;
 	/**
 	* @brief Gets or sets the media versions.
 	*/
-	void setMediaSources(QList<QSharedPointer<MediaSourceInfo>> newMediaSources);
+	void setMediaSources(QList<MediaSourceInfo> newMediaSources);
 	bool mediaSourcesNull() const;
 	void setMediaSourcesNull();
 
@@ -538,11 +538,11 @@ public:
 	/**
 	 * @brief Gets or sets the trailer urls.
 	 */
-	QList<QSharedPointer<MediaUrl>> remoteTrailers() const;
+	QList<MediaUrl> remoteTrailers() const;
 	/**
 	* @brief Gets or sets the trailer urls.
 	*/
-	void setRemoteTrailers(QList<QSharedPointer<MediaUrl>> newRemoteTrailers);
+	void setRemoteTrailers(QList<MediaUrl> newRemoteTrailers);
 	bool remoteTrailersNull() const;
 	void setRemoteTrailersNull();
 
@@ -604,29 +604,29 @@ public:
 	/**
 	 * @brief Gets or sets the people.
 	 */
-	QList<QSharedPointer<BaseItemPerson>> people() const;
+	QList<BaseItemPerson> people() const;
 	/**
 	* @brief Gets or sets the people.
 	*/
-	void setPeople(QList<QSharedPointer<BaseItemPerson>> newPeople);
+	void setPeople(QList<BaseItemPerson> newPeople);
 	bool peopleNull() const;
 	void setPeopleNull();
 
 	/**
 	 * @brief Gets or sets the studios.
 	 */
-	QList<QSharedPointer<NameGuidPair>> studios() const;
+	QList<NameGuidPair> studios() const;
 	/**
 	* @brief Gets or sets the studios.
 	*/
-	void setStudios(QList<QSharedPointer<NameGuidPair>> newStudios);
+	void setStudios(QList<NameGuidPair> newStudios);
 	bool studiosNull() const;
 	void setStudiosNull();
 
 
-	QList<QSharedPointer<NameGuidPair>> genreItems() const;
+	QList<NameGuidPair> genreItems() const;
 
-	void setGenreItems(QList<QSharedPointer<NameGuidPair>> newGenreItems);
+	void setGenreItems(QList<NameGuidPair> newGenreItems);
 	bool genreItemsNull() const;
 	void setGenreItemsNull();
 
@@ -825,11 +825,11 @@ public:
 	/**
 	 * @brief Gets or sets the artist items.
 	 */
-	QList<QSharedPointer<NameGuidPair>> artistItems() const;
+	QList<NameGuidPair> artistItems() const;
 	/**
 	* @brief Gets or sets the artist items.
 	*/
-	void setArtistItems(QList<QSharedPointer<NameGuidPair>> newArtistItems);
+	void setArtistItems(QList<NameGuidPair> newArtistItems);
 	bool artistItemsNull() const;
 	void setArtistItemsNull();
 
@@ -913,11 +913,11 @@ public:
 	/**
 	 * @brief Gets or sets the album artists.
 	 */
-	QList<QSharedPointer<NameGuidPair>> albumArtists() const;
+	QList<NameGuidPair> albumArtists() const;
 	/**
 	* @brief Gets or sets the album artists.
 	*/
-	void setAlbumArtists(QList<QSharedPointer<NameGuidPair>> newAlbumArtists);
+	void setAlbumArtists(QList<NameGuidPair> newAlbumArtists);
 	bool albumArtistsNull() const;
 	void setAlbumArtistsNull();
 
@@ -935,11 +935,11 @@ public:
 	/**
 	 * @brief Gets or sets the media streams.
 	 */
-	QList<QSharedPointer<MediaStream>> mediaStreams() const;
+	QList<MediaStream> mediaStreams() const;
 	/**
 	* @brief Gets or sets the media streams.
 	*/
-	void setMediaStreams(QList<QSharedPointer<MediaStream>> newMediaStreams);
+	void setMediaStreams(QList<MediaStream> newMediaStreams);
 	bool mediaStreamsNull() const;
 	void setMediaStreamsNull();
 
@@ -1114,11 +1114,11 @@ Maps image type to dictionary mapping image tag to blurhash value.
 	/**
 	 * @brief Gets or sets the chapters.
 	 */
-	QList<QSharedPointer<ChapterInfo>> chapters() const;
+	QList<ChapterInfo> chapters() const;
 	/**
 	* @brief Gets or sets the chapters.
 	*/
-	void setChapters(QList<QSharedPointer<ChapterInfo>> newChapters);
+	void setChapters(QList<ChapterInfo> newChapters);
 	bool chaptersNull() const;
 	void setChaptersNull();
 
@@ -1569,8 +1569,8 @@ protected:
 	QString m_forcedSortName;
 	Video3DFormat m_video3DFormat;
 	QDateTime m_premiereDate;
-	QList<QSharedPointer<ExternalUrl>> m_externalUrls;
-	QList<QSharedPointer<MediaSourceInfo>> m_mediaSources;
+	QList<ExternalUrl> m_externalUrls;
+	QList<MediaSourceInfo> m_mediaSources;
 	std::optional<float> m_criticRating = std::nullopt;
 	QStringList m_productionLocations;
 	QString m_path;
@@ -1594,15 +1594,15 @@ protected:
 	std::optional<qint32> m_indexNumber = std::nullopt;
 	std::optional<qint32> m_indexNumberEnd = std::nullopt;
 	std::optional<qint32> m_parentIndexNumber = std::nullopt;
-	QList<QSharedPointer<MediaUrl>> m_remoteTrailers;
+	QList<MediaUrl> m_remoteTrailers;
 	std::optional<QJsonObject> m_providerIds = std::nullopt;
 	std::optional<bool> m_isHD = std::nullopt;
 	std::optional<bool> m_isFolder = std::nullopt;
 	QString m_parentId;
 	QString m_type;
-	QList<QSharedPointer<BaseItemPerson>> m_people;
-	QList<QSharedPointer<NameGuidPair>> m_studios;
-	QList<QSharedPointer<NameGuidPair>> m_genreItems;
+	QList<BaseItemPerson> m_people;
+	QList<NameGuidPair> m_studios;
+	QList<NameGuidPair> m_genreItems;
 	QString m_parentLogoItemId;
 	QString m_parentBackdropItemId;
 	QStringList m_parentBackdropImageTags;
@@ -1621,7 +1621,7 @@ protected:
 	QStringList m_tags;
 	std::optional<double> m_primaryImageAspectRatio = std::nullopt;
 	QStringList m_artists;
-	QList<QSharedPointer<NameGuidPair>> m_artistItems;
+	QList<NameGuidPair> m_artistItems;
 	QString m_album;
 	QString m_collectionType;
 	QString m_displayOrder;
@@ -1629,9 +1629,9 @@ protected:
 	QString m_albumPrimaryImageTag;
 	QString m_seriesPrimaryImageTag;
 	QString m_albumArtist;
-	QList<QSharedPointer<NameGuidPair>> m_albumArtists;
+	QList<NameGuidPair> m_albumArtists;
 	QString m_seasonName;
-	QList<QSharedPointer<MediaStream>> m_mediaStreams;
+	QList<MediaStream> m_mediaStreams;
 	VideoType m_videoType;
 	std::optional<qint32> m_partCount = std::nullopt;
 	std::optional<qint32> m_mediaSourceCount = std::nullopt;
@@ -1648,7 +1648,7 @@ protected:
 	QString m_parentThumbImageTag;
 	QString m_parentPrimaryImageItemId;
 	QString m_parentPrimaryImageTag;
-	QList<QSharedPointer<ChapterInfo>> m_chapters;
+	QList<ChapterInfo> m_chapters;
 	LocationType m_locationType;
 	IsoType m_isoType;
 	QString m_mediaType;

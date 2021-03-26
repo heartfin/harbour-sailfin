@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetGuideInfo::GetGuideInfo(ApiClient *apiClient)
+GetGuideInfoLoader::GetGuideInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::GuideInfo, GetGuideInfoParams>(apiClient) {}
 
-QString GetGuideInfo::path(const GetGuideInfoParams &params) const {
+QString GetGuideInfoLoader::path(const GetGuideInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/LiveTv/GuideInfo");
 }
 
-QUrlQuery GetGuideInfo::query(const GetGuideInfoParams &params) const {
+QUrlQuery GetGuideInfoLoader::query(const GetGuideInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

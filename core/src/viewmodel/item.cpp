@@ -36,7 +36,7 @@ void Item::setData(QSharedPointer<Model::Item> newData) {
 // ItemLoader
 
 ItemLoader::ItemLoader(QObject *parent)
-    : BaseClass(Jellyfin::Loader::HTTP::GetItem(), parent) {
+    : BaseClass(Jellyfin::Loader::HTTP::GetItemLoader(), parent) {
 }
 
 void ItemLoader::onApiClientChanged(ApiClient *newApiClient) {

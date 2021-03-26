@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetPluginConfiguration::GetPluginConfiguration(ApiClient *apiClient)
+GetPluginConfigurationLoader::GetPluginConfigurationLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BasePluginConfiguration, GetPluginConfigurationParams>(apiClient) {}
 
-QString GetPluginConfiguration::path(const GetPluginConfigurationParams &params) const {
+QString GetPluginConfigurationLoader::path(const GetPluginConfigurationParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Plugins/") + Support::toString(params.pluginId()) + QStringLiteral("/Configuration");
 }
 
-QUrlQuery GetPluginConfiguration::query(const GetPluginConfigurationParams &params) const {
+QUrlQuery GetPluginConfigurationLoader::query(const GetPluginConfigurationParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

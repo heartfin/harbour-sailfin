@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetBrandingOptions::GetBrandingOptions(ApiClient *apiClient)
+GetBrandingOptionsLoader::GetBrandingOptionsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BrandingOptions, GetBrandingOptionsParams>(apiClient) {}
 
-QString GetBrandingOptions::path(const GetBrandingOptionsParams &params) const {
+QString GetBrandingOptionsLoader::path(const GetBrandingOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Branding/Configuration");
 }
 
-QUrlQuery GetBrandingOptions::query(const GetBrandingOptionsParams &params) const {
+QUrlQuery GetBrandingOptionsLoader::query(const GetBrandingOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Updates a user's rating for an item.
  */
-class UpdateUserItemRating : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, UpdateUserItemRatingParams> {
+class UpdateUserItemRatingLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, UpdateUserItemRatingParams> {
 public:
-	explicit UpdateUserItemRating(ApiClient *apiClient = nullptr);
+	explicit UpdateUserItemRatingLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const UpdateUserItemRatingParams& parameters) const override;

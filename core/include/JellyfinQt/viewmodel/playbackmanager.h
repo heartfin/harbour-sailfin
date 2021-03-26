@@ -38,6 +38,7 @@
 #include "../viewmodel/item.h"
 
 #include "../apiclient.h"
+#include "itemmodel.h"
 
 
 namespace Jellyfin {

@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetLogEntries::GetLogEntries(ApiClient *apiClient)
+GetLogEntriesLoader::GetLogEntriesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ActivityLogEntryQueryResult, GetLogEntriesParams>(apiClient) {}
 
-QString GetLogEntries::path(const GetLogEntriesParams &params) const {
+QString GetLogEntriesLoader::path(const GetLogEntriesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/System/ActivityLog/Entries");
 }
 
-QUrlQuery GetLogEntries::query(const GetLogEntriesParams &params) const {
+QUrlQuery GetLogEntriesLoader::query(const GetLogEntriesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

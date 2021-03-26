@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -113,9 +112,9 @@ public:
 	void setEnableUserPreferenceAccess(bool newEnableUserPreferenceAccess);
 
 
-	QList<QSharedPointer<AccessSchedule>> accessSchedules() const;
+	QList<AccessSchedule> accessSchedules() const;
 
-	void setAccessSchedules(QList<QSharedPointer<AccessSchedule>> newAccessSchedules);
+	void setAccessSchedules(QList<AccessSchedule> newAccessSchedules);
 	bool accessSchedulesNull() const;
 	void setAccessSchedulesNull();
 
@@ -309,7 +308,7 @@ protected:
 	std::optional<qint32> m_maxParentalRating = std::nullopt;
 	QStringList m_blockedTags;
 	bool m_enableUserPreferenceAccess;
-	QList<QSharedPointer<AccessSchedule>> m_accessSchedules;
+	QList<AccessSchedule> m_accessSchedules;
 	QList<UnratedItem> m_blockUnratedItems;
 	bool m_enableRemoteControlOfOtherUsers;
 	bool m_enableSharedDeviceControl;

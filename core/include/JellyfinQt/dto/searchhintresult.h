@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QStringList>
 #include <optional>
 
@@ -62,11 +61,11 @@ public:
 	/**
 	 * @brief Gets or sets the search hints.
 	 */
-	QList<QSharedPointer<SearchHint>> searchHints() const;
+	QList<SearchHint> searchHints() const;
 	/**
 	* @brief Gets or sets the search hints.
 	*/
-	void setSearchHints(QList<QSharedPointer<SearchHint>> newSearchHints);
+	void setSearchHints(QList<SearchHint> newSearchHints);
 	bool searchHintsNull() const;
 	void setSearchHintsNull();
 
@@ -81,7 +80,7 @@ public:
 
 
 protected:
-	QList<QSharedPointer<SearchHint>> m_searchHints;
+	QList<SearchHint> m_searchHints;
 	qint32 m_totalRecordCount;
 };
 

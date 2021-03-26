@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-AddTunerHost::AddTunerHost(ApiClient *apiClient)
+AddTunerHostLoader::AddTunerHostLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::TunerHostInfo, AddTunerHostParams>(apiClient) {}
 
-QString AddTunerHost::path(const AddTunerHostParams &params) const {
+QString AddTunerHostLoader::path(const AddTunerHostParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/LiveTv/TunerHosts");
 }
 
-QUrlQuery AddTunerHost::query(const AddTunerHostParams &params) const {
+QUrlQuery AddTunerHostLoader::query(const AddTunerHostParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

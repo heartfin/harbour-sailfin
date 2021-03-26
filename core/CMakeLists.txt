@@ -9,6 +9,7 @@ set(JellyfinQt_SOURCES
         src/support/jsonconv.cpp
         src/support/loader.cpp
         src/viewmodel/item.cpp
+        src/viewmodel/itemmodel.cpp
         src/viewmodel/loader.cpp
         src/viewmodel/playbackmanager.cpp
         src/apiclient.cpp
@@ -28,7 +29,9 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/support/jsonconv.h
         include/JellyfinQt/support/loader.h
         include/JellyfinQt/viewmodel/item.h
+        include/JellyfinQt/viewmodel/itemmodel.h
         include/JellyfinQt/viewmodel/loader.h
+        include/JellyfinQt/viewmodel/propertyhelper.h
         include/JellyfinQt/viewmodel/playbackmanager.h
         include/JellyfinQt/apiclient.h
         include/JellyfinQt/apimodel.h

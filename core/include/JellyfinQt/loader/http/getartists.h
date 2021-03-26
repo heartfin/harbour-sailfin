@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets all artists from a given item, folder, or the entire library.
  */
-class GetArtists : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetArtistsParams> {
+class GetArtistsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetArtistsParams> {
 public:
-	explicit GetArtists(ApiClient *apiClient = nullptr);
+	explicit GetArtistsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetArtistsParams& parameters) const override;

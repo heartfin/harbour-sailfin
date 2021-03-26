@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Adds a tuner host.
  */
-class AddTunerHost : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TunerHostInfo, AddTunerHostParams> {
+class AddTunerHostLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TunerHostInfo, AddTunerHostParams> {
 public:
-	explicit AddTunerHost(ApiClient *apiClient = nullptr);
+	explicit AddTunerHostLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const AddTunerHostParams& parameters) const override;

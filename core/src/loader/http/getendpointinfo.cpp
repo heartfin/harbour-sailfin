@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetEndpointInfo::GetEndpointInfo(ApiClient *apiClient)
+GetEndpointInfoLoader::GetEndpointInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::EndPointInfo, GetEndpointInfoParams>(apiClient) {}
 
-QString GetEndpointInfo::path(const GetEndpointInfoParams &params) const {
+QString GetEndpointInfoLoader::path(const GetEndpointInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/System/Endpoint");
 }
 
-QUrlQuery GetEndpointInfo::query(const GetEndpointInfoParams &params) const {
+QUrlQuery GetEndpointInfoLoader::query(const GetEndpointInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

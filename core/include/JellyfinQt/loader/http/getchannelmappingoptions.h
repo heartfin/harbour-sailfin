@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get channel mapping options.
  */
-class GetChannelMappingOptions : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ChannelMappingOptionsDto, GetChannelMappingOptionsParams> {
+class GetChannelMappingOptionsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ChannelMappingOptionsDto, GetChannelMappingOptionsParams> {
 public:
-	explicit GetChannelMappingOptions(ApiClient *apiClient = nullptr);
+	explicit GetChannelMappingOptionsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetChannelMappingOptionsParams& parameters) const override;

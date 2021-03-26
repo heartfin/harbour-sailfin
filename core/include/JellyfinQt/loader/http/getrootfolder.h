@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the root folder from a user's library.
  */
-class GetRootFolder : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetRootFolderParams> {
+class GetRootFolderLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetRootFolderParams> {
 public:
-	explicit GetRootFolder(ApiClient *apiClient = nullptr);
+	explicit GetRootFolderLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetRootFolderParams& parameters) const override;

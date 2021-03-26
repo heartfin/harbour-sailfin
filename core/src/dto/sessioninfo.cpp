@@ -106,7 +106,7 @@ SessionInfo SessionInfo::fromJson(QJsonObject source) {
 
 void SessionInfo::setFromJson(QJsonObject source) {
 	m_playState = Jellyfin::Support::fromJsonValue<QSharedPointer<PlayerStateInfo>>(source["PlayState"]);
-	m_additionalUsers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SessionUserInfo>>>(source["AdditionalUsers"]);
+	m_additionalUsers = Jellyfin::Support::fromJsonValue<QList<SessionUserInfo>>(source["AdditionalUsers"]);
 	m_capabilities = Jellyfin::Support::fromJsonValue<QSharedPointer<ClientCapabilities>>(source["Capabilities"]);
 	m_remoteEndPoint = Jellyfin::Support::fromJsonValue<QString>(source["RemoteEndPoint"]);
 	m_playableMediaTypes = Jellyfin::Support::fromJsonValue<QStringList>(source["PlayableMediaTypes"]);
@@ -127,7 +127,7 @@ void SessionInfo::setFromJson(QJsonObject source) {
 	m_isActive = Jellyfin::Support::fromJsonValue<bool>(source["IsActive"]);
 	m_supportsMediaControl = Jellyfin::Support::fromJsonValue<bool>(source["SupportsMediaControl"]);
 	m_supportsRemoteControl = Jellyfin::Support::fromJsonValue<bool>(source["SupportsRemoteControl"]);
-	m_nowPlayingQueue = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<QueueItem>>>(source["NowPlayingQueue"]);
+	m_nowPlayingQueue = Jellyfin::Support::fromJsonValue<QList<QueueItem>>(source["NowPlayingQueue"]);
 	m_hasCustomDeviceName = Jellyfin::Support::fromJsonValue<bool>(source["HasCustomDeviceName"]);
 	m_playlistItemId = Jellyfin::Support::fromJsonValue<QString>(source["PlaylistItemId"]);
 	m_serverId = Jellyfin::Support::fromJsonValue<QString>(source["ServerId"]);
@@ -139,7 +139,7 @@ void SessionInfo::setFromJson(QJsonObject source) {
 QJsonObject SessionInfo::toJson() {
 	QJsonObject result;
 	result["PlayState"] = Jellyfin::Support::toJsonValue<QSharedPointer<PlayerStateInfo>>(m_playState);
-	result["AdditionalUsers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SessionUserInfo>>>(m_additionalUsers);
+	result["AdditionalUsers"] = Jellyfin::Support::toJsonValue<QList<SessionUserInfo>>(m_additionalUsers);
 	result["Capabilities"] = Jellyfin::Support::toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);
 	result["RemoteEndPoint"] = Jellyfin::Support::toJsonValue<QString>(m_remoteEndPoint);
 	result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QStringList>(m_playableMediaTypes);
@@ -160,7 +160,7 @@ QJsonObject SessionInfo::toJson() {
 	result["IsActive"] = Jellyfin::Support::toJsonValue<bool>(m_isActive);
 	result["SupportsMediaControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsMediaControl);
 	result["SupportsRemoteControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsRemoteControl);
-	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<QueueItem>>>(m_nowPlayingQueue);
+	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QueueItem>>(m_nowPlayingQueue);
 	result["HasCustomDeviceName"] = Jellyfin::Support::toJsonValue<bool>(m_hasCustomDeviceName);
 	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
 	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
@@ -176,9 +176,9 @@ void SessionInfo::setPlayState(QSharedPointer<PlayerStateInfo> newPlayState) {
 	m_playState = newPlayState;
 }
 
-QList<QSharedPointer<SessionUserInfo>> SessionInfo::additionalUsers() const { return m_additionalUsers; }
+QList<SessionUserInfo> SessionInfo::additionalUsers() const { return m_additionalUsers; }
 
-void SessionInfo::setAdditionalUsers(QList<QSharedPointer<SessionUserInfo>> newAdditionalUsers) {
+void SessionInfo::setAdditionalUsers(QList<SessionUserInfo> newAdditionalUsers) {
 	m_additionalUsers = newAdditionalUsers;
 }
 bool SessionInfo::additionalUsersNull() const {
@@ -372,9 +372,9 @@ void SessionInfo::setSupportsRemoteControl(bool newSupportsRemoteControl) {
 	m_supportsRemoteControl = newSupportsRemoteControl;
 }
 
-QList<QSharedPointer<QueueItem>> SessionInfo::nowPlayingQueue() const { return m_nowPlayingQueue; }
+QList<QueueItem> SessionInfo::nowPlayingQueue() const { return m_nowPlayingQueue; }
 
-void SessionInfo::setNowPlayingQueue(QList<QSharedPointer<QueueItem>> newNowPlayingQueue) {
+void SessionInfo::setNowPlayingQueue(QList<QueueItem> newNowPlayingQueue) {
 	m_nowPlayingQueue = newNowPlayingQueue;
 }
 bool SessionInfo::nowPlayingQueueNull() const {

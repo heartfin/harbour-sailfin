@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Creates a new playlist.
  */
-class CreatePlaylist : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaylistCreationResult, CreatePlaylistParams> {
+class CreatePlaylistLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaylistCreationResult, CreatePlaylistParams> {
 public:
-	explicit CreatePlaylist(ApiClient *apiClient = nullptr);
+	explicit CreatePlaylistLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const CreatePlaylistParams& parameters) const override;

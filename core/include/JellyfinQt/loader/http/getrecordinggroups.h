@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets live tv recording groups.
  */
-class GetRecordingGroups : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecordingGroupsParams> {
+class GetRecordingGroupsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecordingGroupsParams> {
 public:
-	explicit GetRecordingGroups(ApiClient *apiClient = nullptr);
+	explicit GetRecordingGroupsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetRecordingGroupsParams& parameters) const override;

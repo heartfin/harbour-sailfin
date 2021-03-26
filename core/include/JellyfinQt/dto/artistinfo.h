@@ -34,7 +34,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -154,9 +153,9 @@ public:
 	void setIsAutomated(bool newIsAutomated);
 
 
-	QList<QSharedPointer<SongInfo>> songInfos() const;
+	QList<SongInfo> songInfos() const;
 
-	void setSongInfos(QList<QSharedPointer<SongInfo>> newSongInfos);
+	void setSongInfos(QList<SongInfo> newSongInfos);
 	bool songInfosNull() const;
 	void setSongInfosNull();
 
@@ -172,7 +171,7 @@ protected:
 	std::optional<qint32> m_parentIndexNumber = std::nullopt;
 	QDateTime m_premiereDate;
 	bool m_isAutomated;
-	QList<QSharedPointer<SongInfo>> m_songInfos;
+	QList<SongInfo> m_songInfos;
 };
 
 } // NS DTO

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets all genres from a given item, folder, or the entire library.
  */
-class GetGenres : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetGenresParams> {
+class GetGenresLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetGenresParams> {
 public:
-	explicit GetGenres(ApiClient *apiClient = nullptr);
+	explicit GetGenresLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetGenresParams& parameters) const override;

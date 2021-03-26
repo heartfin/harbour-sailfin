@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QStringList>
 #include <optional>
 
@@ -62,11 +61,11 @@ public:
 	/**
 	 * @brief Gets or sets the current page of notifications.
 	 */
-	QList<QSharedPointer<NotificationDto>> notifications() const;
+	QList<NotificationDto> notifications() const;
 	/**
 	* @brief Gets or sets the current page of notifications.
 	*/
-	void setNotifications(QList<QSharedPointer<NotificationDto>> newNotifications);
+	void setNotifications(QList<NotificationDto> newNotifications);
 	bool notificationsNull() const;
 	void setNotificationsNull();
 
@@ -81,7 +80,7 @@ public:
 
 
 protected:
-	QList<QSharedPointer<NotificationDto>> m_notifications;
+	QList<NotificationDto> m_notifications;
 	qint32 m_totalRecordCount;
 };
 

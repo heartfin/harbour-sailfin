@@ -55,7 +55,7 @@ RemoteImageResult RemoteImageResult::fromJson(QJsonObject source) {
 
 
 void RemoteImageResult::setFromJson(QJsonObject source) {
-	m_images = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<RemoteImageInfo>>>(source["Images"]);
+	m_images = Jellyfin::Support::fromJsonValue<QList<RemoteImageInfo>>(source["Images"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 	m_providers = Jellyfin::Support::fromJsonValue<QStringList>(source["Providers"]);
 
@@ -63,16 +63,16 @@ void RemoteImageResult::setFromJson(QJsonObject source) {
 	
 QJsonObject RemoteImageResult::toJson() {
 	QJsonObject result;
-	result["Images"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<RemoteImageInfo>>>(m_images);
+	result["Images"] = Jellyfin::Support::toJsonValue<QList<RemoteImageInfo>>(m_images);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 	result["Providers"] = Jellyfin::Support::toJsonValue<QStringList>(m_providers);
 
 	return result;
 }
 
-QList<QSharedPointer<RemoteImageInfo>> RemoteImageResult::images() const { return m_images; }
+QList<RemoteImageInfo> RemoteImageResult::images() const { return m_images; }
 
-void RemoteImageResult::setImages(QList<QSharedPointer<RemoteImageInfo>> newImages) {
+void RemoteImageResult::setImages(QList<RemoteImageInfo> newImages) {
 	m_images = newImages;
 }
 bool RemoteImageResult::imagesNull() const {

@@ -55,7 +55,7 @@ AuthenticationInfoQueryResult AuthenticationInfoQueryResult::fromJson(QJsonObjec
 
 
 void AuthenticationInfoQueryResult::setFromJson(QJsonObject source) {
-	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<AuthenticationInfo>>>(source["Items"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<AuthenticationInfo>>(source["Items"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
@@ -63,16 +63,16 @@ void AuthenticationInfoQueryResult::setFromJson(QJsonObject source) {
 	
 QJsonObject AuthenticationInfoQueryResult::toJson() {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<AuthenticationInfo>>>(m_items);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<AuthenticationInfo>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
 
-QList<QSharedPointer<AuthenticationInfo>> AuthenticationInfoQueryResult::items() const { return m_items; }
+QList<AuthenticationInfo> AuthenticationInfoQueryResult::items() const { return m_items; }
 
-void AuthenticationInfoQueryResult::setItems(QList<QSharedPointer<AuthenticationInfo>> newItems) {
+void AuthenticationInfoQueryResult::setItems(QList<AuthenticationInfo> newItems) {
 	m_items = newItems;
 }
 bool AuthenticationInfoQueryResult::itemsNull() const {

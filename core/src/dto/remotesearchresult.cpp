@@ -84,7 +84,7 @@ void RemoteSearchResult::setFromJson(QJsonObject source) {
 	m_searchProviderName = Jellyfin::Support::fromJsonValue<QString>(source["SearchProviderName"]);
 	m_overview = Jellyfin::Support::fromJsonValue<QString>(source["Overview"]);
 	m_albumArtist = Jellyfin::Support::fromJsonValue<QSharedPointer<RemoteSearchResult>>(source["AlbumArtist"]);
-	m_artists = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<RemoteSearchResult>>>(source["Artists"]);
+	m_artists = Jellyfin::Support::fromJsonValue<QList<RemoteSearchResult>>(source["Artists"]);
 
 }
 	
@@ -101,7 +101,7 @@ QJsonObject RemoteSearchResult::toJson() {
 	result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
 	result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
 	result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QSharedPointer<RemoteSearchResult>>(m_albumArtist);
-	result["Artists"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<RemoteSearchResult>>>(m_artists);
+	result["Artists"] = Jellyfin::Support::toJsonValue<QList<RemoteSearchResult>>(m_artists);
 
 	return result;
 }
@@ -242,9 +242,9 @@ void RemoteSearchResult::setAlbumArtist(QSharedPointer<RemoteSearchResult> newAl
 	m_albumArtist = newAlbumArtist;
 }
 
-QList<QSharedPointer<RemoteSearchResult>> RemoteSearchResult::artists() const { return m_artists; }
+QList<RemoteSearchResult> RemoteSearchResult::artists() const { return m_artists; }
 
-void RemoteSearchResult::setArtists(QList<QSharedPointer<RemoteSearchResult>> newArtists) {
+void RemoteSearchResult::setArtists(QList<RemoteSearchResult> newArtists) {
 	m_artists = newArtists;
 }
 bool RemoteSearchResult::artistsNull() const {

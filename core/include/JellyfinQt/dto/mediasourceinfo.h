@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -244,16 +243,16 @@ public:
 	void setVideo3DFormat(Video3DFormat newVideo3DFormat);
 
 
-	QList<QSharedPointer<MediaStream>> mediaStreams() const;
+	QList<MediaStream> mediaStreams() const;
 
-	void setMediaStreams(QList<QSharedPointer<MediaStream>> newMediaStreams);
+	void setMediaStreams(QList<MediaStream> newMediaStreams);
 	bool mediaStreamsNull() const;
 	void setMediaStreamsNull();
 
 
-	QList<QSharedPointer<MediaAttachment>> mediaAttachments() const;
+	QList<MediaAttachment> mediaAttachments() const;
 
-	void setMediaAttachments(QList<QSharedPointer<MediaAttachment>> newMediaAttachments);
+	void setMediaAttachments(QList<MediaAttachment> newMediaAttachments);
 	bool mediaAttachmentsNull() const;
 	void setMediaAttachmentsNull();
 
@@ -357,8 +356,8 @@ protected:
 	VideoType m_videoType;
 	IsoType m_isoType;
 	Video3DFormat m_video3DFormat;
-	QList<QSharedPointer<MediaStream>> m_mediaStreams;
-	QList<QSharedPointer<MediaAttachment>> m_mediaAttachments;
+	QList<MediaStream> m_mediaStreams;
+	QList<MediaAttachment> m_mediaAttachments;
 	QStringList m_formats;
 	std::optional<qint32> m_bitrate = std::nullopt;
 	TransportStreamTimestamp m_timestamp;

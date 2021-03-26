@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get channel items.
  */
-class GetChannelItems : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetChannelItemsParams> {
+class GetChannelItemsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetChannelItemsParams> {
 public:
-	explicit GetChannelItems(ApiClient *apiClient = nullptr);
+	explicit GetChannelItemsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetChannelItemsParams& parameters) const override;

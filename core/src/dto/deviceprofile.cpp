@@ -159,13 +159,13 @@ void DeviceProfile::setFromJson(QJsonObject source) {
 	m_requiresPlainFolders = Jellyfin::Support::fromJsonValue<bool>(source["RequiresPlainFolders"]);
 	m_enableMSMediaReceiverRegistrar = Jellyfin::Support::fromJsonValue<bool>(source["EnableMSMediaReceiverRegistrar"]);
 	m_ignoreTranscodeByteRangeRequests = Jellyfin::Support::fromJsonValue<bool>(source["IgnoreTranscodeByteRangeRequests"]);
-	m_xmlRootAttributes = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<XmlAttribute>>>(source["XmlRootAttributes"]);
-	m_directPlayProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<DirectPlayProfile>>>(source["DirectPlayProfiles"]);
-	m_transcodingProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<TranscodingProfile>>>(source["TranscodingProfiles"]);
-	m_containerProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ContainerProfile>>>(source["ContainerProfiles"]);
-	m_codecProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<CodecProfile>>>(source["CodecProfiles"]);
-	m_responseProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ResponseProfile>>>(source["ResponseProfiles"]);
-	m_subtitleProfiles = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SubtitleProfile>>>(source["SubtitleProfiles"]);
+	m_xmlRootAttributes = Jellyfin::Support::fromJsonValue<QList<XmlAttribute>>(source["XmlRootAttributes"]);
+	m_directPlayProfiles = Jellyfin::Support::fromJsonValue<QList<DirectPlayProfile>>(source["DirectPlayProfiles"]);
+	m_transcodingProfiles = Jellyfin::Support::fromJsonValue<QList<TranscodingProfile>>(source["TranscodingProfiles"]);
+	m_containerProfiles = Jellyfin::Support::fromJsonValue<QList<ContainerProfile>>(source["ContainerProfiles"]);
+	m_codecProfiles = Jellyfin::Support::fromJsonValue<QList<CodecProfile>>(source["CodecProfiles"]);
+	m_responseProfiles = Jellyfin::Support::fromJsonValue<QList<ResponseProfile>>(source["ResponseProfiles"]);
+	m_subtitleProfiles = Jellyfin::Support::fromJsonValue<QList<SubtitleProfile>>(source["SubtitleProfiles"]);
 
 }
 	
@@ -203,13 +203,13 @@ QJsonObject DeviceProfile::toJson() {
 	result["RequiresPlainFolders"] = Jellyfin::Support::toJsonValue<bool>(m_requiresPlainFolders);
 	result["EnableMSMediaReceiverRegistrar"] = Jellyfin::Support::toJsonValue<bool>(m_enableMSMediaReceiverRegistrar);
 	result["IgnoreTranscodeByteRangeRequests"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreTranscodeByteRangeRequests);
-	result["XmlRootAttributes"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<XmlAttribute>>>(m_xmlRootAttributes);
-	result["DirectPlayProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<DirectPlayProfile>>>(m_directPlayProfiles);
-	result["TranscodingProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<TranscodingProfile>>>(m_transcodingProfiles);
-	result["ContainerProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ContainerProfile>>>(m_containerProfiles);
-	result["CodecProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<CodecProfile>>>(m_codecProfiles);
-	result["ResponseProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ResponseProfile>>>(m_responseProfiles);
-	result["SubtitleProfiles"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SubtitleProfile>>>(m_subtitleProfiles);
+	result["XmlRootAttributes"] = Jellyfin::Support::toJsonValue<QList<XmlAttribute>>(m_xmlRootAttributes);
+	result["DirectPlayProfiles"] = Jellyfin::Support::toJsonValue<QList<DirectPlayProfile>>(m_directPlayProfiles);
+	result["TranscodingProfiles"] = Jellyfin::Support::toJsonValue<QList<TranscodingProfile>>(m_transcodingProfiles);
+	result["ContainerProfiles"] = Jellyfin::Support::toJsonValue<QList<ContainerProfile>>(m_containerProfiles);
+	result["CodecProfiles"] = Jellyfin::Support::toJsonValue<QList<CodecProfile>>(m_codecProfiles);
+	result["ResponseProfiles"] = Jellyfin::Support::toJsonValue<QList<ResponseProfile>>(m_responseProfiles);
+	result["SubtitleProfiles"] = Jellyfin::Support::toJsonValue<QList<SubtitleProfile>>(m_subtitleProfiles);
 
 	return result;
 }
@@ -553,9 +553,9 @@ void DeviceProfile::setIgnoreTranscodeByteRangeRequests(bool newIgnoreTranscodeB
 	m_ignoreTranscodeByteRangeRequests = newIgnoreTranscodeByteRangeRequests;
 }
 
-QList<QSharedPointer<XmlAttribute>> DeviceProfile::xmlRootAttributes() const { return m_xmlRootAttributes; }
+QList<XmlAttribute> DeviceProfile::xmlRootAttributes() const { return m_xmlRootAttributes; }
 
-void DeviceProfile::setXmlRootAttributes(QList<QSharedPointer<XmlAttribute>> newXmlRootAttributes) {
+void DeviceProfile::setXmlRootAttributes(QList<XmlAttribute> newXmlRootAttributes) {
 	m_xmlRootAttributes = newXmlRootAttributes;
 }
 bool DeviceProfile::xmlRootAttributesNull() const {
@@ -566,9 +566,9 @@ void DeviceProfile::setXmlRootAttributesNull() {
 	m_xmlRootAttributes.clear();
 
 }
-QList<QSharedPointer<DirectPlayProfile>> DeviceProfile::directPlayProfiles() const { return m_directPlayProfiles; }
+QList<DirectPlayProfile> DeviceProfile::directPlayProfiles() const { return m_directPlayProfiles; }
 
-void DeviceProfile::setDirectPlayProfiles(QList<QSharedPointer<DirectPlayProfile>> newDirectPlayProfiles) {
+void DeviceProfile::setDirectPlayProfiles(QList<DirectPlayProfile> newDirectPlayProfiles) {
 	m_directPlayProfiles = newDirectPlayProfiles;
 }
 bool DeviceProfile::directPlayProfilesNull() const {
@@ -579,9 +579,9 @@ void DeviceProfile::setDirectPlayProfilesNull() {
 	m_directPlayProfiles.clear();
 
 }
-QList<QSharedPointer<TranscodingProfile>> DeviceProfile::transcodingProfiles() const { return m_transcodingProfiles; }
+QList<TranscodingProfile> DeviceProfile::transcodingProfiles() const { return m_transcodingProfiles; }
 
-void DeviceProfile::setTranscodingProfiles(QList<QSharedPointer<TranscodingProfile>> newTranscodingProfiles) {
+void DeviceProfile::setTranscodingProfiles(QList<TranscodingProfile> newTranscodingProfiles) {
 	m_transcodingProfiles = newTranscodingProfiles;
 }
 bool DeviceProfile::transcodingProfilesNull() const {
@@ -592,9 +592,9 @@ void DeviceProfile::setTranscodingProfilesNull() {
 	m_transcodingProfiles.clear();
 
 }
-QList<QSharedPointer<ContainerProfile>> DeviceProfile::containerProfiles() const { return m_containerProfiles; }
+QList<ContainerProfile> DeviceProfile::containerProfiles() const { return m_containerProfiles; }
 
-void DeviceProfile::setContainerProfiles(QList<QSharedPointer<ContainerProfile>> newContainerProfiles) {
+void DeviceProfile::setContainerProfiles(QList<ContainerProfile> newContainerProfiles) {
 	m_containerProfiles = newContainerProfiles;
 }
 bool DeviceProfile::containerProfilesNull() const {
@@ -605,9 +605,9 @@ void DeviceProfile::setContainerProfilesNull() {
 	m_containerProfiles.clear();
 
 }
-QList<QSharedPointer<CodecProfile>> DeviceProfile::codecProfiles() const { return m_codecProfiles; }
+QList<CodecProfile> DeviceProfile::codecProfiles() const { return m_codecProfiles; }
 
-void DeviceProfile::setCodecProfiles(QList<QSharedPointer<CodecProfile>> newCodecProfiles) {
+void DeviceProfile::setCodecProfiles(QList<CodecProfile> newCodecProfiles) {
 	m_codecProfiles = newCodecProfiles;
 }
 bool DeviceProfile::codecProfilesNull() const {
@@ -618,9 +618,9 @@ void DeviceProfile::setCodecProfilesNull() {
 	m_codecProfiles.clear();
 
 }
-QList<QSharedPointer<ResponseProfile>> DeviceProfile::responseProfiles() const { return m_responseProfiles; }
+QList<ResponseProfile> DeviceProfile::responseProfiles() const { return m_responseProfiles; }
 
-void DeviceProfile::setResponseProfiles(QList<QSharedPointer<ResponseProfile>> newResponseProfiles) {
+void DeviceProfile::setResponseProfiles(QList<ResponseProfile> newResponseProfiles) {
 	m_responseProfiles = newResponseProfiles;
 }
 bool DeviceProfile::responseProfilesNull() const {
@@ -631,9 +631,9 @@ void DeviceProfile::setResponseProfilesNull() {
 	m_responseProfiles.clear();
 
 }
-QList<QSharedPointer<SubtitleProfile>> DeviceProfile::subtitleProfiles() const { return m_subtitleProfiles; }
+QList<SubtitleProfile> DeviceProfile::subtitleProfiles() const { return m_subtitleProfiles; }
 
-void DeviceProfile::setSubtitleProfiles(QList<QSharedPointer<SubtitleProfile>> newSubtitleProfiles) {
+void DeviceProfile::setSubtitleProfiles(QList<SubtitleProfile> newSubtitleProfiles) {
 	m_subtitleProfiles = newSubtitleProfiles;
 }
 bool DeviceProfile::subtitleProfilesNull() const {

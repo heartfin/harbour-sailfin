@@ -702,7 +702,8 @@ set(openapi_HEADERS
 	./include/JellyfinQt/loader/http/headvideostream.h
 	./include/JellyfinQt/loader/http/mergeversions.h
 	./include/JellyfinQt/loader/http/getyears.h
-	./include/JellyfinQt/loader/http/getyear.h)
+	./include/JellyfinQt/loader/http/getyear.h
+	./include/JellyfinQt/loader/requesttypes.h)
 
 set(openapi_SOURCES
 	./src/dto/loglevel.cpp
@@ -1377,4 +1378,4 @@ set(openapi_SOURCES
 	./src/loader/http/mergeversions.cpp
 	./src/loader/http/getyears.cpp
 	./src/loader/http/getyear.cpp
-	./include/JellyfinQt/loader/requesttypes.h)
+	./src/loader/requesttypes.cpp)

@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetStudio::GetStudio(ApiClient *apiClient)
+GetStudioLoader::GetStudioLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetStudioParams>(apiClient) {}
 
-QString GetStudio::path(const GetStudioParams &params) const {
+QString GetStudioLoader::path(const GetStudioParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Studios/") + Support::toString(params.name()) ;
 }
 
-QUrlQuery GetStudio::query(const GetStudioParams &params) const {
+QUrlQuery GetStudioLoader::query(const GetStudioParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

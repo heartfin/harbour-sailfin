@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets recommended live tv epgs.
  */
-class GetRecommendedPrograms : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecommendedProgramsParams> {
+class GetRecommendedProgramsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecommendedProgramsParams> {
 public:
-	explicit GetRecommendedPrograms(ApiClient *apiClient = nullptr);
+	explicit GetRecommendedProgramsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetRecommendedProgramsParams& parameters) const override;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a list of upcoming episodes.
  */
-class GetUpcomingEpisodes : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetUpcomingEpisodesParams> {
+class GetUpcomingEpisodesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetUpcomingEpisodesParams> {
 public:
-	explicit GetUpcomingEpisodes(ApiClient *apiClient = nullptr);
+	explicit GetUpcomingEpisodesLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetUpcomingEpisodesParams& parameters) const override;

@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-Initiate::Initiate(ApiClient *apiClient)
+InitiateLoader::InitiateLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectResult, InitiateParams>(apiClient) {}
 
-QString Initiate::path(const InitiateParams &params) const {
+QString InitiateLoader::path(const InitiateParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/QuickConnect/Initiate");
 }
 
-QUrlQuery Initiate::query(const InitiateParams &params) const {
+QUrlQuery InitiateLoader::query(const InitiateParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

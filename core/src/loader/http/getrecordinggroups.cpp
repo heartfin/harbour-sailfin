@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetRecordingGroups::GetRecordingGroups(ApiClient *apiClient)
+GetRecordingGroupsLoader::GetRecordingGroupsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecordingGroupsParams>(apiClient) {}
 
-QString GetRecordingGroups::path(const GetRecordingGroupsParams &params) const {
+QString GetRecordingGroupsLoader::path(const GetRecordingGroupsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/LiveTv/Recordings/Groups");
 }
 
-QUrlQuery GetRecordingGroups::query(const GetRecordingGroupsParams &params) const {
+QUrlQuery GetRecordingGroupsLoader::query(const GetRecordingGroupsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

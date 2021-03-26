@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets similar items.
  */
-class GetSimilarMovies : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarMoviesParams> {
+class GetSimilarMoviesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarMoviesParams> {
 public:
-	explicit GetSimilarMovies(ApiClient *apiClient = nullptr);
+	explicit GetSimilarMoviesLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetSimilarMoviesParams& parameters) const override;

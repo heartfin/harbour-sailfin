@@ -87,7 +87,7 @@ void AlbumInfo::setFromJson(QJsonObject source) {
 	m_isAutomated = Jellyfin::Support::fromJsonValue<bool>(source["IsAutomated"]);
 	m_albumArtists = Jellyfin::Support::fromJsonValue<QStringList>(source["AlbumArtists"]);
 	m_artistProviderIds = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ArtistProviderIds"]);
-	m_songInfos = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SongInfo>>>(source["SongInfos"]);
+	m_songInfos = Jellyfin::Support::fromJsonValue<QList<SongInfo>>(source["SongInfos"]);
 
 }
 	
@@ -105,7 +105,7 @@ QJsonObject AlbumInfo::toJson() {
 	result["IsAutomated"] = Jellyfin::Support::toJsonValue<bool>(m_isAutomated);
 	result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QStringList>(m_albumArtists);
 	result["ArtistProviderIds"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_artistProviderIds);
-	result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SongInfo>>>(m_songInfos);
+	result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<SongInfo>>(m_songInfos);
 
 	return result;
 }
@@ -259,9 +259,9 @@ void AlbumInfo::setArtistProviderIdsNull() {
 	m_artistProviderIds = std::nullopt;
 
 }
-QList<QSharedPointer<SongInfo>> AlbumInfo::songInfos() const { return m_songInfos; }
+QList<SongInfo> AlbumInfo::songInfos() const { return m_songInfos; }
 
-void AlbumInfo::setSongInfos(QList<QSharedPointer<SongInfo>> newSongInfos) {
+void AlbumInfo::setSongInfos(QList<SongInfo> newSongInfos) {
 	m_songInfos = newSongInfos;
 }
 bool AlbumInfo::songInfosNull() const {

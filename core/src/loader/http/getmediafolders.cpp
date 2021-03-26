@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetMediaFolders::GetMediaFolders(ApiClient *apiClient)
+GetMediaFoldersLoader::GetMediaFoldersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetMediaFoldersParams>(apiClient) {}
 
-QString GetMediaFolders::path(const GetMediaFoldersParams &params) const {
+QString GetMediaFoldersLoader::path(const GetMediaFoldersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Library/MediaFolders");
 }
 
-QUrlQuery GetMediaFolders::query(const GetMediaFoldersParams &params) const {
+QUrlQuery GetMediaFoldersLoader::query(const GetMediaFoldersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

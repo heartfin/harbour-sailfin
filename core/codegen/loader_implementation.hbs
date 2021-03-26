@@ -1,15 +1,15 @@
 {{#if endpoint.hasSuccessResponse}}
 
-{{className}}::{{className}}(ApiClient *apiClient)
+{{className}}Loader::{{className}}Loader(ApiClient *apiClient)
 	: {{supportNamespace}}::HttpLoader<{{dtoNamespace}}::{{endpoint.resultType}}, {{endpoint.parameterType}}>(apiClient) {}
 
-QString {{className}}::path(const {{endpoint.parameterType}} &params) const {
+QString {{className}}Loader::path(const {{endpoint.parameterType}} &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return {{pathStringInterpolation "params"}};
 }
 
-QUrlQuery {{className}}::query(const {{endpoint.parameterType}} &params) const {
+QUrlQuery {{className}}Loader::query(const {{endpoint.parameterType}} &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

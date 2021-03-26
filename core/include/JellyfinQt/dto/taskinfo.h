@@ -108,11 +108,11 @@ public:
 	/**
 	 * @brief Gets or sets the triggers.
 	 */
-	QList<QSharedPointer<TaskTriggerInfo>> triggers() const;
+	QList<TaskTriggerInfo> triggers() const;
 	/**
 	* @brief Gets or sets the triggers.
 	*/
-	void setTriggers(QList<QSharedPointer<TaskTriggerInfo>> newTriggers);
+	void setTriggers(QList<TaskTriggerInfo> newTriggers);
 	bool triggersNull() const;
 	void setTriggersNull();
 
@@ -165,7 +165,7 @@ protected:
 	std::optional<double> m_currentProgressPercentage = std::nullopt;
 	QString m_jellyfinId;
 	QSharedPointer<TaskResult> m_lastExecutionResult = nullptr;
-	QList<QSharedPointer<TaskTriggerInfo>> m_triggers;
+	QList<TaskTriggerInfo> m_triggers;
 	QString m_description;
 	QString m_category;
 	bool m_isHidden;

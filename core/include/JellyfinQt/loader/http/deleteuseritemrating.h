@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Deletes a user's saved personal rating for an item.
  */
-class DeleteUserItemRating : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, DeleteUserItemRatingParams> {
+class DeleteUserItemRatingLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, DeleteUserItemRatingParams> {
 public:
-	explicit DeleteUserItemRating(ApiClient *apiClient = nullptr);
+	explicit DeleteUserItemRatingLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const DeleteUserItemRatingParams& parameters) const override;

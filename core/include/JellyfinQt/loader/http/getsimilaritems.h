@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets similar items.
  */
-class GetSimilarItems : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarItemsParams> {
+class GetSimilarItemsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarItemsParams> {
 public:
-	explicit GetSimilarItems(ApiClient *apiClient = nullptr);
+	explicit GetSimilarItemsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetSimilarItemsParams& parameters) const override;

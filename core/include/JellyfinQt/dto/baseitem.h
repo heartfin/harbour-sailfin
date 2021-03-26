@@ -34,7 +34,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -83,11 +82,11 @@ public:
 	/**
 	 * @brief Gets or sets the remote trailers.
 	 */
-	QList<QSharedPointer<MediaUrl>> remoteTrailers() const;
+	QList<MediaUrl> remoteTrailers() const;
 	/**
 	* @brief Gets or sets the remote trailers.
 	*/
-	void setRemoteTrailers(QList<QSharedPointer<MediaUrl>> newRemoteTrailers);
+	void setRemoteTrailers(QList<MediaUrl> newRemoteTrailers);
 	bool remoteTrailersNull() const;
 	void setRemoteTrailersNull();
 
@@ -135,7 +134,7 @@ protected:
 	std::optional<qint64> m_size = std::nullopt;
 	QString m_container;
 	QDateTime m_dateLastSaved;
-	QList<QSharedPointer<MediaUrl>> m_remoteTrailers;
+	QList<MediaUrl> m_remoteTrailers;
 	bool m_isHD;
 	bool m_isShortcut;
 	QString m_shortcutPath;

@@ -55,7 +55,7 @@ SeriesTimerInfoDtoQueryResult SeriesTimerInfoDtoQueryResult::fromJson(QJsonObjec
 
 
 void SeriesTimerInfoDtoQueryResult::setFromJson(QJsonObject source) {
-	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SeriesTimerInfoDto>>>(source["Items"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<SeriesTimerInfoDto>>(source["Items"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
@@ -63,16 +63,16 @@ void SeriesTimerInfoDtoQueryResult::setFromJson(QJsonObject source) {
 	
 QJsonObject SeriesTimerInfoDtoQueryResult::toJson() {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SeriesTimerInfoDto>>>(m_items);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<SeriesTimerInfoDto>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
 
-QList<QSharedPointer<SeriesTimerInfoDto>> SeriesTimerInfoDtoQueryResult::items() const { return m_items; }
+QList<SeriesTimerInfoDto> SeriesTimerInfoDtoQueryResult::items() const { return m_items; }
 
-void SeriesTimerInfoDtoQueryResult::setItems(QList<QSharedPointer<SeriesTimerInfoDto>> newItems) {
+void SeriesTimerInfoDtoQueryResult::setItems(QList<SeriesTimerInfoDto> newItems) {
 	m_items = newItems;
 }
 bool SeriesTimerInfoDtoQueryResult::itemsNull() const {

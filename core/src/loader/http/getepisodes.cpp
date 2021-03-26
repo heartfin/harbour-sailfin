@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetEpisodes::GetEpisodes(ApiClient *apiClient)
+GetEpisodesLoader::GetEpisodesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetEpisodesParams>(apiClient) {}
 
-QString GetEpisodes::path(const GetEpisodesParams &params) const {
+QString GetEpisodesLoader::path(const GetEpisodesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Shows/") + Support::toString(params.seriesId()) + QStringLiteral("/Episodes");
 }
 
-QUrlQuery GetEpisodes::query(const GetEpisodesParams &params) const {
+QUrlQuery GetEpisodesLoader::query(const GetEpisodesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

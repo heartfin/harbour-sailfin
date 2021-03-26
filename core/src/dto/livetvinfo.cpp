@@ -55,7 +55,7 @@ LiveTvInfo LiveTvInfo::fromJson(QJsonObject source) {
 
 
 void LiveTvInfo::setFromJson(QJsonObject source) {
-	m_services = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<LiveTvServiceInfo>>>(source["Services"]);
+	m_services = Jellyfin::Support::fromJsonValue<QList<LiveTvServiceInfo>>(source["Services"]);
 	m_isEnabled = Jellyfin::Support::fromJsonValue<bool>(source["IsEnabled"]);
 	m_enabledUsers = Jellyfin::Support::fromJsonValue<QStringList>(source["EnabledUsers"]);
 
@@ -63,16 +63,16 @@ void LiveTvInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject LiveTvInfo::toJson() {
 	QJsonObject result;
-	result["Services"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<LiveTvServiceInfo>>>(m_services);
+	result["Services"] = Jellyfin::Support::toJsonValue<QList<LiveTvServiceInfo>>(m_services);
 	result["IsEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_isEnabled);
 	result["EnabledUsers"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledUsers);
 
 	return result;
 }
 
-QList<QSharedPointer<LiveTvServiceInfo>> LiveTvInfo::services() const { return m_services; }
+QList<LiveTvServiceInfo> LiveTvInfo::services() const { return m_services; }
 
-void LiveTvInfo::setServices(QList<QSharedPointer<LiveTvServiceInfo>> newServices) {
+void LiveTvInfo::setServices(QList<LiveTvServiceInfo> newServices) {
 	m_services = newServices;
 }
 bool LiveTvInfo::servicesNull() const {

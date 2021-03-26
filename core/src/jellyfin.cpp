@@ -24,7 +24,12 @@ void registerTypes(const char *uri) {
     qmlRegisterType<ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
 
     qmlRegisterUncreatableType<ViewModel::Item>(uri, 1, 0, "Item", "Acquire one via ItemLoader or exposed properties");
+    qmlRegisterUncreatableType<BaseApiModel>(uri, 1, 0, "BaseApiModel", "Please use one of its subclasses");
+    qmlRegisterUncreatableType<BaseModelLoader>(uri, 1, 0, "BaseModelLoader", "Please use one of its subclasses");
+    qmlRegisterUncreatableType<ModelStatusClass>(uri, 1, 0, "ModelStatus", "Is an enum");
     qmlRegisterType<ViewModel::ItemLoader>(uri, 1, 0, "ItemLoader");
+    qmlRegisterType<ViewModel::ItemModel>(uri, 1, 0, "ItemModel");
+    qmlRegisterType<ViewModel::UserViewsLoader>(uri, 1, 0, "UsersViewLoader");
 
     qmlRegisterType<ViewModel::PlaybackManager>(uri, 1, 0, "PlaybackManager");
     qmlRegisterUncreatableType<DTO::GeneralCommandTypeClass>(uri, 1, 0, "GeneralCommandType", "Is an enum");

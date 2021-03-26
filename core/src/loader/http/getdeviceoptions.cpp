@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetDeviceOptions::GetDeviceOptions(ApiClient *apiClient)
+GetDeviceOptionsLoader::GetDeviceOptionsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceOptions, GetDeviceOptionsParams>(apiClient) {}
 
-QString GetDeviceOptions::path(const GetDeviceOptionsParams &params) const {
+QString GetDeviceOptionsLoader::path(const GetDeviceOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Devices/Options");
 }
 
-QUrlQuery GetDeviceOptions::query(const GetDeviceOptionsParams &params) const {
+QUrlQuery GetDeviceOptionsLoader::query(const GetDeviceOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

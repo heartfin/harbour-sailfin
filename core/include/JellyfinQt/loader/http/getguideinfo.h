@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get guid info.
  */
-class GetGuideInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::GuideInfo, GetGuideInfoParams> {
+class GetGuideInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::GuideInfo, GetGuideInfoParams> {
 public:
-	explicit GetGuideInfo(ApiClient *apiClient = nullptr);
+	explicit GetGuideInfoLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetGuideInfoParams& parameters) const override;

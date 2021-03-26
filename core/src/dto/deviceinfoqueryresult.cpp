@@ -55,7 +55,7 @@ DeviceInfoQueryResult DeviceInfoQueryResult::fromJson(QJsonObject source) {
 
 
 void DeviceInfoQueryResult::setFromJson(QJsonObject source) {
-	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<DeviceInfo>>>(source["Items"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<DeviceInfo>>(source["Items"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
@@ -63,16 +63,16 @@ void DeviceInfoQueryResult::setFromJson(QJsonObject source) {
 	
 QJsonObject DeviceInfoQueryResult::toJson() {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<DeviceInfo>>>(m_items);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<DeviceInfo>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
 
-QList<QSharedPointer<DeviceInfo>> DeviceInfoQueryResult::items() const { return m_items; }
+QList<DeviceInfo> DeviceInfoQueryResult::items() const { return m_items; }
 
-void DeviceInfoQueryResult::setItems(QList<QSharedPointer<DeviceInfo>> newItems) {
+void DeviceInfoQueryResult::setItems(QList<DeviceInfo> newItems) {
 	m_items = newItems;
 }
 bool DeviceInfoQueryResult::itemsNull() const {

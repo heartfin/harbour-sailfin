@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets all studios from a given item, folder, or the entire library.
  */
-class GetStudios : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetStudiosParams> {
+class GetStudiosLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetStudiosParams> {
 public:
-	explicit GetStudios(ApiClient *apiClient = nullptr);
+	explicit GetStudiosLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetStudiosParams& parameters) const override;

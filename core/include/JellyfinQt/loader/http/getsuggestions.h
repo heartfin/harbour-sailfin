@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets suggestions.
  */
-class GetSuggestions : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSuggestionsParams> {
+class GetSuggestionsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSuggestionsParams> {
 public:
-	explicit GetSuggestions(ApiClient *apiClient = nullptr);
+	explicit GetSuggestionsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetSuggestionsParams& parameters) const override;

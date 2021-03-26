@@ -148,9 +148,9 @@ public:
 	void setAlbumArtist(QSharedPointer<RemoteSearchResult> newAlbumArtist);
 
 
-	QList<QSharedPointer<RemoteSearchResult>> artists() const;
+	QList<RemoteSearchResult> artists() const;
 
-	void setArtists(QList<QSharedPointer<RemoteSearchResult>> newArtists);
+	void setArtists(QList<RemoteSearchResult> newArtists);
 	bool artistsNull() const;
 	void setArtistsNull();
 
@@ -167,7 +167,7 @@ protected:
 	QString m_searchProviderName;
 	QString m_overview;
 	QSharedPointer<RemoteSearchResult> m_albumArtist = nullptr;
-	QList<QSharedPointer<RemoteSearchResult>> m_artists;
+	QList<RemoteSearchResult> m_artists;
 };
 
 } // NS DTO

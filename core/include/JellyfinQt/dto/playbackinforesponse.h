@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -64,11 +63,11 @@ public:
 	/**
 	 * @brief Gets or sets the media sources.
 	 */
-	QList<QSharedPointer<MediaSourceInfo>> mediaSources() const;
+	QList<MediaSourceInfo> mediaSources() const;
 	/**
 	* @brief Gets or sets the media sources.
 	*/
-	void setMediaSources(QList<QSharedPointer<MediaSourceInfo>> newMediaSources);
+	void setMediaSources(QList<MediaSourceInfo> newMediaSources);
 	bool mediaSourcesNull() const;
 	void setMediaSourcesNull();
 
@@ -90,7 +89,7 @@ public:
 
 
 protected:
-	QList<QSharedPointer<MediaSourceInfo>> m_mediaSources;
+	QList<MediaSourceInfo> m_mediaSources;
 	QString m_playSessionId;
 	PlaybackErrorCode m_errorCode;
 };

@@ -46,7 +46,6 @@
 #include "loader.h"
 
 namespace Jellyfin {
-
 namespace ViewModel {
 
 class Item : public QObject {

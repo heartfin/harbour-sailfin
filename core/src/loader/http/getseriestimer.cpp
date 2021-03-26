@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetSeriesTimer::GetSeriesTimer(ApiClient *apiClient)
+GetSeriesTimerLoader::GetSeriesTimerLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::SeriesTimerInfoDto, GetSeriesTimerParams>(apiClient) {}
 
-QString GetSeriesTimer::path(const GetSeriesTimerParams &params) const {
+QString GetSeriesTimerLoader::path(const GetSeriesTimerParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/LiveTv/SeriesTimers/") + Support::toString(params.timerId()) ;
 }
 
-QUrlQuery GetSeriesTimer::query(const GetSeriesTimerParams &params) const {
+QUrlQuery GetSeriesTimerLoader::query(const GetSeriesTimerParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

@@ -107,7 +107,7 @@ void PlaybackStartInfo::setFromJson(QJsonObject source) {
 	m_liveStreamId = Jellyfin::Support::fromJsonValue<QString>(source["LiveStreamId"]);
 	m_playSessionId = Jellyfin::Support::fromJsonValue<QString>(source["PlaySessionId"]);
 	m_repeatMode = Jellyfin::Support::fromJsonValue<RepeatMode>(source["RepeatMode"]);
-	m_nowPlayingQueue = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<QueueItem>>>(source["NowPlayingQueue"]);
+	m_nowPlayingQueue = Jellyfin::Support::fromJsonValue<QList<QueueItem>>(source["NowPlayingQueue"]);
 	m_playlistItemId = Jellyfin::Support::fromJsonValue<QString>(source["PlaylistItemId"]);
 
 }
@@ -132,7 +132,7 @@ QJsonObject PlaybackStartInfo::toJson() {
 	result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
 	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
 	result["RepeatMode"] = Jellyfin::Support::toJsonValue<RepeatMode>(m_repeatMode);
-	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<QueueItem>>>(m_nowPlayingQueue);
+	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QueueItem>>(m_nowPlayingQueue);
 	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
 
 	return result;
@@ -323,9 +323,9 @@ void PlaybackStartInfo::setRepeatMode(RepeatMode newRepeatMode) {
 	m_repeatMode = newRepeatMode;
 }
 
-QList<QSharedPointer<QueueItem>> PlaybackStartInfo::nowPlayingQueue() const { return m_nowPlayingQueue; }
+QList<QueueItem> PlaybackStartInfo::nowPlayingQueue() const { return m_nowPlayingQueue; }
 
-void PlaybackStartInfo::setNowPlayingQueue(QList<QSharedPointer<QueueItem>> newNowPlayingQueue) {
+void PlaybackStartInfo::setNowPlayingQueue(QList<QueueItem> newNowPlayingQueue) {
 	m_nowPlayingQueue = newNowPlayingQueue;
 }
 bool PlaybackStartInfo::nowPlayingQueueNull() const {

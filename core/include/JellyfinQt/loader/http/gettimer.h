@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a timer.
  */
-class GetTimer : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TimerInfoDto, GetTimerParams> {
+class GetTimerLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TimerInfoDto, GetTimerParams> {
 public:
-	explicit GetTimer(ApiClient *apiClient = nullptr);
+	explicit GetTimerLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetTimerParams& parameters) const override;

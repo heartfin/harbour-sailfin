@@ -71,7 +71,7 @@ void PackageInfo::setFromJson(QJsonObject source) {
 	m_owner = Jellyfin::Support::fromJsonValue<QString>(source["owner"]);
 	m_category = Jellyfin::Support::fromJsonValue<QString>(source["category"]);
 	m_guid = Jellyfin::Support::fromJsonValue<QString>(source["guid"]);
-	m_versions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<VersionInfo>>>(source["versions"]);
+	m_versions = Jellyfin::Support::fromJsonValue<QList<VersionInfo>>(source["versions"]);
 	m_imageUrl = Jellyfin::Support::fromJsonValue<QString>(source["imageUrl"]);
 
 }
@@ -84,7 +84,7 @@ QJsonObject PackageInfo::toJson() {
 	result["owner"] = Jellyfin::Support::toJsonValue<QString>(m_owner);
 	result["category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
 	result["guid"] = Jellyfin::Support::toJsonValue<QString>(m_guid);
-	result["versions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<VersionInfo>>>(m_versions);
+	result["versions"] = Jellyfin::Support::toJsonValue<QList<VersionInfo>>(m_versions);
 	result["imageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_imageUrl);
 
 	return result;
@@ -168,9 +168,9 @@ void PackageInfo::setGuidNull() {
 	m_guid.clear();
 
 }
-QList<QSharedPointer<VersionInfo>> PackageInfo::versions() const { return m_versions; }
+QList<VersionInfo> PackageInfo::versions() const { return m_versions; }
 
-void PackageInfo::setVersions(QList<QSharedPointer<VersionInfo>> newVersions) {
+void PackageInfo::setVersions(QList<VersionInfo> newVersions) {
 	m_versions = newVersions;
 }
 bool PackageInfo::versionsNull() const {

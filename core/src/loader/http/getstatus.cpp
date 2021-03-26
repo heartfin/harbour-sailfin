@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetStatus::GetStatus(ApiClient *apiClient)
+GetStatusLoader::GetStatusLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectState, GetStatusParams>(apiClient) {}
 
-QString GetStatus::path(const GetStatusParams &params) const {
+QString GetStatusLoader::path(const GetStatusParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/QuickConnect/Status");
 }
 
-QUrlQuery GetStatus::query(const GetStatusParams &params) const {
+QUrlQuery GetStatusLoader::query(const GetStatusParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

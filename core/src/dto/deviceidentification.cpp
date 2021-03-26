@@ -75,7 +75,7 @@ void DeviceIdentification::setFromJson(QJsonObject source) {
 	m_modelUrl = Jellyfin::Support::fromJsonValue<QString>(source["ModelUrl"]);
 	m_manufacturer = Jellyfin::Support::fromJsonValue<QString>(source["Manufacturer"]);
 	m_manufacturerUrl = Jellyfin::Support::fromJsonValue<QString>(source["ManufacturerUrl"]);
-	m_headers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<HttpHeaderInfo>>>(source["Headers"]);
+	m_headers = Jellyfin::Support::fromJsonValue<QList<HttpHeaderInfo>>(source["Headers"]);
 
 }
 	
@@ -89,7 +89,7 @@ QJsonObject DeviceIdentification::toJson() {
 	result["ModelUrl"] = Jellyfin::Support::toJsonValue<QString>(m_modelUrl);
 	result["Manufacturer"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturer);
 	result["ManufacturerUrl"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturerUrl);
-	result["Headers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<HttpHeaderInfo>>>(m_headers);
+	result["Headers"] = Jellyfin::Support::toJsonValue<QList<HttpHeaderInfo>>(m_headers);
 
 	return result;
 }
@@ -198,9 +198,9 @@ void DeviceIdentification::setManufacturerUrlNull() {
 	m_manufacturerUrl.clear();
 
 }
-QList<QSharedPointer<HttpHeaderInfo>> DeviceIdentification::headers() const { return m_headers; }
+QList<HttpHeaderInfo> DeviceIdentification::headers() const { return m_headers; }
 
-void DeviceIdentification::setHeaders(QList<QSharedPointer<HttpHeaderInfo>> newHeaders) {
+void DeviceIdentification::setHeaders(QList<HttpHeaderInfo> newHeaders) {
 	m_headers = newHeaders;
 }
 bool DeviceIdentification::headersNull() const {

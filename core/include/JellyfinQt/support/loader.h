@@ -41,6 +41,9 @@ public:
     explicit LoadException(const QString &message)
           : m_message(message.toStdString()) {}
     virtual const char *what() const noexcept override;
+
+    virtual QException *clone() const override;
+    virtual void raise() const override;
 private:
     std::string m_message;
 };
@@ -50,6 +53,10 @@ static const int HTTP_TIMEOUT = 30000; // 30 seconds;
 /**
  * Interface describing a way to load items. Used to abstract away
  * the difference between loading from a cache or loading over the network.
+ *
+ * @note: Loaders should NEVER call load() again while load() is running on another
+ * thread or change the apiClient while running. This will result in undefined behaviour.
+ * Please use a Mutex to enforce this.
  *
  * @tparam R the type of data that should be fetched, R for result.
  * @tparam P the type of paramaters given, to determine which resource should
@@ -67,7 +74,7 @@ public:
      */
     virtual std::optional<R> load(const P &parameters) const {
         Q_UNUSED(parameters)
-        throw new LoadException(QStringLiteral("Loader not set"));
+        throw LoadException(QStringLiteral("Loader not set"));
     }
     /**
      * @brief Heuristic to determine if this resource can be loaded via this loaded.
@@ -77,6 +84,8 @@ public:
      * @return True if this loader is available, false otherwise.
      */
     virtual bool isAvailable() const { return false; };
+    void setApiClient(ApiClient *newApiClient) { m_apiClient = newApiClient; }
+    ApiClient *apiClient() const { return m_apiClient; }
 protected:
     Jellyfin::ApiClient *m_apiClient;
 };
@@ -98,7 +107,7 @@ public:
                 try {
                     std::optional<R> res = it->load(parameters);
                     if (res.has_value()) return res;
-                }  catch (LoadException e) {
+                }  catch (LoadException &e) {
                     qDebug() << "Error while loading: " << e.what();
                 }
             }

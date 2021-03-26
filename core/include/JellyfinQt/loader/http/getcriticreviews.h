@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets critic review for an item.
  */
-class GetCriticReviews : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetCriticReviewsParams> {
+class GetCriticReviewsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetCriticReviewsParams> {
 public:
-	explicit GetCriticReviews(ApiClient *apiClient = nullptr);
+	explicit GetCriticReviewsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetCriticReviewsParams& parameters) const override;

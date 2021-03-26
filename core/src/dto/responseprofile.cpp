@@ -69,7 +69,7 @@ void ResponseProfile::setFromJson(QJsonObject source) {
 	m_type = Jellyfin::Support::fromJsonValue<DlnaProfileType>(source["Type"]);
 	m_orgPn = Jellyfin::Support::fromJsonValue<QString>(source["OrgPn"]);
 	m_mimeType = Jellyfin::Support::fromJsonValue<QString>(source["MimeType"]);
-	m_conditions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
+	m_conditions = Jellyfin::Support::fromJsonValue<QList<ProfileCondition>>(source["Conditions"]);
 
 }
 	
@@ -81,7 +81,7 @@ QJsonObject ResponseProfile::toJson() {
 	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
 	result["OrgPn"] = Jellyfin::Support::toJsonValue<QString>(m_orgPn);
 	result["MimeType"] = Jellyfin::Support::toJsonValue<QString>(m_mimeType);
-	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
+	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
 
 	return result;
 }
@@ -157,9 +157,9 @@ void ResponseProfile::setMimeTypeNull() {
 	m_mimeType.clear();
 
 }
-QList<QSharedPointer<ProfileCondition>> ResponseProfile::conditions() const { return m_conditions; }
+QList<ProfileCondition> ResponseProfile::conditions() const { return m_conditions; }
 
-void ResponseProfile::setConditions(QList<QSharedPointer<ProfileCondition>> newConditions) {
+void ResponseProfile::setConditions(QList<ProfileCondition> newConditions) {
 	m_conditions = newConditions;
 }
 bool ResponseProfile::conditionsNull() const {

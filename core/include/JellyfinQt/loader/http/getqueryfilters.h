@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets query filters.
  */
-class GetQueryFilters : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QueryFilters, GetQueryFiltersParams> {
+class GetQueryFiltersLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QueryFilters, GetQueryFiltersParams> {
 public:
-	explicit GetQueryFilters(ApiClient *apiClient = nullptr);
+	explicit GetQueryFiltersLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetQueryFiltersParams& parameters) const override;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets items based on a query.
  */
-class GetResumeItems : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetResumeItemsParams> {
+class GetResumeItemsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetResumeItemsParams> {
 public:
-	explicit GetResumeItems(ApiClient *apiClient = nullptr);
+	explicit GetResumeItemsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetResumeItemsParams& parameters) const override;

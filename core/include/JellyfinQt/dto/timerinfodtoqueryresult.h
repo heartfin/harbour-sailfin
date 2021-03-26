@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QStringList>
 #include <optional>
 
@@ -62,11 +61,11 @@ public:
 	/**
 	 * @brief Gets or sets the items.
 	 */
-	QList<QSharedPointer<TimerInfoDto>> items() const;
+	QList<TimerInfoDto> items() const;
 	/**
 	* @brief Gets or sets the items.
 	*/
-	void setItems(QList<QSharedPointer<TimerInfoDto>> newItems);
+	void setItems(QList<TimerInfoDto> newItems);
 	bool itemsNull() const;
 	void setItemsNull();
 
@@ -90,7 +89,7 @@ public:
 
 
 protected:
-	QList<QSharedPointer<TimerInfoDto>> m_items;
+	QList<TimerInfoDto> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
 };

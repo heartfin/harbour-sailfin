@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -96,9 +95,9 @@ public:
 	void setImageFetcherOrderNull();
 
 
-	QList<QSharedPointer<ImageOption>> imageOptions() const;
+	QList<ImageOption> imageOptions() const;
 
-	void setImageOptions(QList<QSharedPointer<ImageOption>> newImageOptions);
+	void setImageOptions(QList<ImageOption> newImageOptions);
 	bool imageOptionsNull() const;
 	void setImageOptionsNull();
 
@@ -109,7 +108,7 @@ protected:
 	QStringList m_metadataFetcherOrder;
 	QStringList m_imageFetchers;
 	QStringList m_imageFetcherOrder;
-	QList<QSharedPointer<ImageOption>> m_imageOptions;
+	QList<ImageOption> m_imageOptions;
 };
 
 } // NS DTO

@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetTrailers::GetTrailers(ApiClient *apiClient)
+GetTrailersLoader::GetTrailersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetTrailersParams>(apiClient) {}
 
-QString GetTrailers::path(const GetTrailersParams &params) const {
+QString GetTrailersLoader::path(const GetTrailersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Trailers");
 }
 
-QUrlQuery GetTrailers::query(const GetTrailersParams &params) const {
+QUrlQuery GetTrailersLoader::query(const GetTrailersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

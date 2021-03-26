@@ -55,7 +55,7 @@ ActivityLogEntryQueryResult ActivityLogEntryQueryResult::fromJson(QJsonObject so
 
 
 void ActivityLogEntryQueryResult::setFromJson(QJsonObject source) {
-	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ActivityLogEntry>>>(source["Items"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<ActivityLogEntry>>(source["Items"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
@@ -63,16 +63,16 @@ void ActivityLogEntryQueryResult::setFromJson(QJsonObject source) {
 	
 QJsonObject ActivityLogEntryQueryResult::toJson() {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ActivityLogEntry>>>(m_items);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<ActivityLogEntry>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
 
-QList<QSharedPointer<ActivityLogEntry>> ActivityLogEntryQueryResult::items() const { return m_items; }
+QList<ActivityLogEntry> ActivityLogEntryQueryResult::items() const { return m_items; }
 
-void ActivityLogEntryQueryResult::setItems(QList<QSharedPointer<ActivityLogEntry>> newItems) {
+void ActivityLogEntryQueryResult::setItems(QList<ActivityLogEntry> newItems) {
 	m_items = newItems;
 }
 bool ActivityLogEntryQueryResult::itemsNull() const {

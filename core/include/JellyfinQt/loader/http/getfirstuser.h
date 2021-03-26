@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the first user.
  */
-class GetFirstUser : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupUserDto, GetFirstUserParams> {
+class GetFirstUserLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupUserDto, GetFirstUserParams> {
 public:
-	explicit GetFirstUser(ApiClient *apiClient = nullptr);
+	explicit GetFirstUserLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetFirstUserParams& parameters) const override;

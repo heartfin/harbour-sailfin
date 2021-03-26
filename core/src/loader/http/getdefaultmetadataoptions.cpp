@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetDefaultMetadataOptions::GetDefaultMetadataOptions(ApiClient *apiClient)
+GetDefaultMetadataOptionsLoader::GetDefaultMetadataOptionsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::MetadataOptions, GetDefaultMetadataOptionsParams>(apiClient) {}
 
-QString GetDefaultMetadataOptions::path(const GetDefaultMetadataOptionsParams &params) const {
+QString GetDefaultMetadataOptionsLoader::path(const GetDefaultMetadataOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/System/Configuration/MetadataOptions/Default");
 }
 
-QUrlQuery GetDefaultMetadataOptions::query(const GetDefaultMetadataOptionsParams &params) const {
+QUrlQuery GetDefaultMetadataOptionsLoader::query(const GetDefaultMetadataOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

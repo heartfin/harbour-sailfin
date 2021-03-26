@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets similar items.
  */
-class GetSimilarArtists : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarArtistsParams> {
+class GetSimilarArtistsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarArtistsParams> {
 public:
-	explicit GetSimilarArtists(ApiClient *apiClient = nullptr);
+	explicit GetSimilarArtistsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetSimilarArtistsParams& parameters) const override;

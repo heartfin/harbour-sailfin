@@ -295,7 +295,7 @@ void writeRequestTypesFile(R)(File headerFile, File implementationFile, R endpoi
 	}
 	
 	string[] systemImports = collectImports(endpoints, e => e.needsSystemImport) 
-		~ ["QList", "optional"];
+		~ ["QList", "QStringList", "optional"];
 	string[] userImports = collectImports(endpoints, e => e.needsLocalImport)
 		.map!(e => buildPath(MODEL_FOLDER, e.applyCasePolicy(CasePolicy.PASCAL, CasePolicy.LOWER) ~ ".h"))
 		.array;
@@ -667,6 +667,7 @@ MetaTypeInfo getType(ref const string name, const ref Node node, const ref Node 
 	case "array":
 		string containedTypeName = "arrayItem";
 		MetaTypeInfo containedType = getType(containedTypeName, node["items"], allSchemas);
+		containedType.needsPointer = false;
 		info.needsLocalImport = containedType.needsLocalImport;
 		info.needsSystemImport = true;
 		info.isContainer = true;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets live tv series timers.
  */
-class GetSeriesTimers : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::SeriesTimerInfoDtoQueryResult, GetSeriesTimersParams> {
+class GetSeriesTimersLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::SeriesTimerInfoDtoQueryResult, GetSeriesTimersParams> {
 public:
-	explicit GetSeriesTimers(ApiClient *apiClient = nullptr);
+	explicit GetSeriesTimersLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetSeriesTimersParams& parameters) const override;

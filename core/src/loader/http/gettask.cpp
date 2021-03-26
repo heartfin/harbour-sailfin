@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetTask::GetTask(ApiClient *apiClient)
+GetTaskLoader::GetTaskLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::TaskInfo, GetTaskParams>(apiClient) {}
 
-QString GetTask::path(const GetTaskParams &params) const {
+QString GetTaskLoader::path(const GetTaskParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/ScheduledTasks/") + Support::toString(params.taskId()) ;
 }
 
-QUrlQuery GetTask::query(const GetTaskParams &params) const {
+QUrlQuery GetTaskLoader::query(const GetTaskParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

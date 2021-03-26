@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get Display Preferences.
  */
-class GetDisplayPreferences : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DisplayPreferencesDto, GetDisplayPreferencesParams> {
+class GetDisplayPreferencesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DisplayPreferencesDto, GetDisplayPreferencesParams> {
 public:
-	explicit GetDisplayPreferences(ApiClient *apiClient = nullptr);
+	explicit GetDisplayPreferencesLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetDisplayPreferencesParams& parameters) const override;

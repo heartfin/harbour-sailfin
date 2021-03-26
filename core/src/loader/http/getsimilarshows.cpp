@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetSimilarShows::GetSimilarShows(ApiClient *apiClient)
+GetSimilarShowsLoader::GetSimilarShowsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarShowsParams>(apiClient) {}
 
-QString GetSimilarShows::path(const GetSimilarShowsParams &params) const {
+QString GetSimilarShowsLoader::path(const GetSimilarShowsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Shows/") + Support::toString(params.itemId()) + QStringLiteral("/Similar");
 }
 
-QUrlQuery GetSimilarShows::query(const GetSimilarShowsParams &params) const {
+QUrlQuery GetSimilarShowsLoader::query(const GetSimilarShowsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the user based on auth token.
  */
-class GetCurrentUser : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, GetCurrentUserParams> {
+class GetCurrentUserLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, GetCurrentUserParams> {
 public:
-	explicit GetCurrentUser(ApiClient *apiClient = nullptr);
+	explicit GetCurrentUserLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetCurrentUserParams& parameters) const override;

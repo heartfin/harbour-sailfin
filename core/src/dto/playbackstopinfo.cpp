@@ -81,7 +81,7 @@ void PlaybackStopInfo::setFromJson(QJsonObject source) {
 	m_failed = Jellyfin::Support::fromJsonValue<bool>(source["Failed"]);
 	m_nextMediaType = Jellyfin::Support::fromJsonValue<QString>(source["NextMediaType"]);
 	m_playlistItemId = Jellyfin::Support::fromJsonValue<QString>(source["PlaylistItemId"]);
-	m_nowPlayingQueue = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<QueueItem>>>(source["NowPlayingQueue"]);
+	m_nowPlayingQueue = Jellyfin::Support::fromJsonValue<QList<QueueItem>>(source["NowPlayingQueue"]);
 
 }
 	
@@ -97,7 +97,7 @@ QJsonObject PlaybackStopInfo::toJson() {
 	result["Failed"] = Jellyfin::Support::toJsonValue<bool>(m_failed);
 	result["NextMediaType"] = Jellyfin::Support::toJsonValue<QString>(m_nextMediaType);
 	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<QueueItem>>>(m_nowPlayingQueue);
+	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QueueItem>>(m_nowPlayingQueue);
 
 	return result;
 }
@@ -211,9 +211,9 @@ void PlaybackStopInfo::setPlaylistItemIdNull() {
 	m_playlistItemId.clear();
 
 }
-QList<QSharedPointer<QueueItem>> PlaybackStopInfo::nowPlayingQueue() const { return m_nowPlayingQueue; }
+QList<QueueItem> PlaybackStopInfo::nowPlayingQueue() const { return m_nowPlayingQueue; }
 
-void PlaybackStopInfo::setNowPlayingQueue(QList<QSharedPointer<QueueItem>> newNowPlayingQueue) {
+void PlaybackStopInfo::setNowPlayingQueue(QList<QueueItem> newNowPlayingQueue) {
 	m_nowPlayingQueue = newNowPlayingQueue;
 }
 bool PlaybackStopInfo::nowPlayingQueueNull() const {

@@ -154,9 +154,9 @@ public:
 	void setPlaylistItemIdNull();
 
 
-	QList<QSharedPointer<QueueItem>> nowPlayingQueue() const;
+	QList<QueueItem> nowPlayingQueue() const;
 
-	void setNowPlayingQueue(QList<QSharedPointer<QueueItem>> newNowPlayingQueue);
+	void setNowPlayingQueue(QList<QueueItem> newNowPlayingQueue);
 	bool nowPlayingQueueNull() const;
 	void setNowPlayingQueueNull();
 
@@ -172,7 +172,7 @@ protected:
 	bool m_failed;
 	QString m_nextMediaType;
 	QString m_playlistItemId;
-	QList<QSharedPointer<QueueItem>> m_nowPlayingQueue;
+	QList<QueueItem> m_nowPlayingQueue;
 };
 
 } // NS DTO

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the initial startup wizard configuration.
  */
-class GetStartupConfiguration : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupConfigurationDto, GetStartupConfigurationParams> {
+class GetStartupConfigurationLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupConfigurationDto, GetStartupConfigurationParams> {
 public:
-	explicit GetStartupConfiguration(ApiClient *apiClient = nullptr);
+	explicit GetStartupConfigurationLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetStartupConfigurationParams& parameters) const override;

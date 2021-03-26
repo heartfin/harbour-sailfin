@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets default listings provider info.
  */
-class GetDefaultListingProvider : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ListingsProviderInfo, GetDefaultListingProviderParams> {
+class GetDefaultListingProviderLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ListingsProviderInfo, GetDefaultListingProviderParams> {
 public:
-	explicit GetDefaultListingProvider(ApiClient *apiClient = nullptr);
+	explicit GetDefaultListingProviderLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetDefaultListingProviderParams& parameters) const override;

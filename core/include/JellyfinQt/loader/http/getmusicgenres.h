@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets all music genres from a given item, folder, or the entire library.
  */
-class GetMusicGenres : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetMusicGenresParams> {
+class GetMusicGenresLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetMusicGenresParams> {
 public:
-	explicit GetMusicGenres(ApiClient *apiClient = nullptr);
+	explicit GetMusicGenresLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetMusicGenresParams& parameters) const override;

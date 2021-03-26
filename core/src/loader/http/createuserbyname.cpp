@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-CreateUserByName::CreateUserByName(ApiClient *apiClient)
+CreateUserByNameLoader::CreateUserByNameLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, CreateUserByNameParams>(apiClient) {}
 
-QString CreateUserByName::path(const CreateUserByNameParams &params) const {
+QString CreateUserByNameLoader::path(const CreateUserByNameParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Users/New");
 }
 
-QUrlQuery CreateUserByName::query(const CreateUserByNameParams &params) const {
+QUrlQuery CreateUserByNameLoader::query(const CreateUserByNameParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

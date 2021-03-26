@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets items based on a query.
  */
-class GetItemsByUserId : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetItemsByUserIdParams> {
+class GetItemsByUserIdLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetItemsByUserIdParams> {
 public:
-	explicit GetItemsByUserId(ApiClient *apiClient = nullptr);
+	explicit GetItemsByUserIdLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetItemsByUserIdParams& parameters) const override;

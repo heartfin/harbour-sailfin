@@ -61,30 +61,30 @@ MetadataEditorInfo MetadataEditorInfo::fromJson(QJsonObject source) {
 
 
 void MetadataEditorInfo::setFromJson(QJsonObject source) {
-	m_parentalRatingOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ParentalRating>>>(source["ParentalRatingOptions"]);
-	m_countries = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<CountryInfo>>>(source["Countries"]);
-	m_cultures = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<CultureDto>>>(source["Cultures"]);
-	m_externalIdInfos = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ExternalIdInfo>>>(source["ExternalIdInfos"]);
+	m_parentalRatingOptions = Jellyfin::Support::fromJsonValue<QList<ParentalRating>>(source["ParentalRatingOptions"]);
+	m_countries = Jellyfin::Support::fromJsonValue<QList<CountryInfo>>(source["Countries"]);
+	m_cultures = Jellyfin::Support::fromJsonValue<QList<CultureDto>>(source["Cultures"]);
+	m_externalIdInfos = Jellyfin::Support::fromJsonValue<QList<ExternalIdInfo>>(source["ExternalIdInfos"]);
 	m_contentType = Jellyfin::Support::fromJsonValue<QString>(source["ContentType"]);
-	m_contentTypeOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["ContentTypeOptions"]);
+	m_contentTypeOptions = Jellyfin::Support::fromJsonValue<QList<NameValuePair>>(source["ContentTypeOptions"]);
 
 }
 	
 QJsonObject MetadataEditorInfo::toJson() {
 	QJsonObject result;
-	result["ParentalRatingOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ParentalRating>>>(m_parentalRatingOptions);
-	result["Countries"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<CountryInfo>>>(m_countries);
-	result["Cultures"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<CultureDto>>>(m_cultures);
-	result["ExternalIdInfos"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ExternalIdInfo>>>(m_externalIdInfos);
+	result["ParentalRatingOptions"] = Jellyfin::Support::toJsonValue<QList<ParentalRating>>(m_parentalRatingOptions);
+	result["Countries"] = Jellyfin::Support::toJsonValue<QList<CountryInfo>>(m_countries);
+	result["Cultures"] = Jellyfin::Support::toJsonValue<QList<CultureDto>>(m_cultures);
+	result["ExternalIdInfos"] = Jellyfin::Support::toJsonValue<QList<ExternalIdInfo>>(m_externalIdInfos);
 	result["ContentType"] = Jellyfin::Support::toJsonValue<QString>(m_contentType);
-	result["ContentTypeOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_contentTypeOptions);
+	result["ContentTypeOptions"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_contentTypeOptions);
 
 	return result;
 }
 
-QList<QSharedPointer<ParentalRating>> MetadataEditorInfo::parentalRatingOptions() const { return m_parentalRatingOptions; }
+QList<ParentalRating> MetadataEditorInfo::parentalRatingOptions() const { return m_parentalRatingOptions; }
 
-void MetadataEditorInfo::setParentalRatingOptions(QList<QSharedPointer<ParentalRating>> newParentalRatingOptions) {
+void MetadataEditorInfo::setParentalRatingOptions(QList<ParentalRating> newParentalRatingOptions) {
 	m_parentalRatingOptions = newParentalRatingOptions;
 }
 bool MetadataEditorInfo::parentalRatingOptionsNull() const {
@@ -95,9 +95,9 @@ void MetadataEditorInfo::setParentalRatingOptionsNull() {
 	m_parentalRatingOptions.clear();
 
 }
-QList<QSharedPointer<CountryInfo>> MetadataEditorInfo::countries() const { return m_countries; }
+QList<CountryInfo> MetadataEditorInfo::countries() const { return m_countries; }
 
-void MetadataEditorInfo::setCountries(QList<QSharedPointer<CountryInfo>> newCountries) {
+void MetadataEditorInfo::setCountries(QList<CountryInfo> newCountries) {
 	m_countries = newCountries;
 }
 bool MetadataEditorInfo::countriesNull() const {
@@ -108,9 +108,9 @@ void MetadataEditorInfo::setCountriesNull() {
 	m_countries.clear();
 
 }
-QList<QSharedPointer<CultureDto>> MetadataEditorInfo::cultures() const { return m_cultures; }
+QList<CultureDto> MetadataEditorInfo::cultures() const { return m_cultures; }
 
-void MetadataEditorInfo::setCultures(QList<QSharedPointer<CultureDto>> newCultures) {
+void MetadataEditorInfo::setCultures(QList<CultureDto> newCultures) {
 	m_cultures = newCultures;
 }
 bool MetadataEditorInfo::culturesNull() const {
@@ -121,9 +121,9 @@ void MetadataEditorInfo::setCulturesNull() {
 	m_cultures.clear();
 
 }
-QList<QSharedPointer<ExternalIdInfo>> MetadataEditorInfo::externalIdInfos() const { return m_externalIdInfos; }
+QList<ExternalIdInfo> MetadataEditorInfo::externalIdInfos() const { return m_externalIdInfos; }
 
-void MetadataEditorInfo::setExternalIdInfos(QList<QSharedPointer<ExternalIdInfo>> newExternalIdInfos) {
+void MetadataEditorInfo::setExternalIdInfos(QList<ExternalIdInfo> newExternalIdInfos) {
 	m_externalIdInfos = newExternalIdInfos;
 }
 bool MetadataEditorInfo::externalIdInfosNull() const {
@@ -147,9 +147,9 @@ void MetadataEditorInfo::setContentTypeNull() {
 	m_contentType.clear();
 
 }
-QList<QSharedPointer<NameValuePair>> MetadataEditorInfo::contentTypeOptions() const { return m_contentTypeOptions; }
+QList<NameValuePair> MetadataEditorInfo::contentTypeOptions() const { return m_contentTypeOptions; }
 
-void MetadataEditorInfo::setContentTypeOptions(QList<QSharedPointer<NameValuePair>> newContentTypeOptions) {
+void MetadataEditorInfo::setContentTypeOptions(QList<NameValuePair> newContentTypeOptions) {
 	m_contentTypeOptions = newContentTypeOptions;
 }
 bool MetadataEditorInfo::contentTypeOptionsNull() const {

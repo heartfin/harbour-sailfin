@@ -74,9 +74,9 @@ public:
 	void setPlayState(QSharedPointer<PlayerStateInfo> newPlayState);
 
 
-	QList<QSharedPointer<SessionUserInfo>> additionalUsers() const;
+	QList<SessionUserInfo> additionalUsers() const;
 
-	void setAdditionalUsers(QList<QSharedPointer<SessionUserInfo>> newAdditionalUsers);
+	void setAdditionalUsers(QList<SessionUserInfo> newAdditionalUsers);
 	bool additionalUsersNull() const;
 	void setAdditionalUsersNull();
 
@@ -251,9 +251,9 @@ public:
 	void setSupportsRemoteControl(bool newSupportsRemoteControl);
 
 
-	QList<QSharedPointer<QueueItem>> nowPlayingQueue() const;
+	QList<QueueItem> nowPlayingQueue() const;
 
-	void setNowPlayingQueue(QList<QSharedPointer<QueueItem>> newNowPlayingQueue);
+	void setNowPlayingQueue(QList<QueueItem> newNowPlayingQueue);
 	bool nowPlayingQueueNull() const;
 	void setNowPlayingQueueNull();
 
@@ -297,7 +297,7 @@ public:
 
 protected:
 	QSharedPointer<PlayerStateInfo> m_playState = nullptr;
-	QList<QSharedPointer<SessionUserInfo>> m_additionalUsers;
+	QList<SessionUserInfo> m_additionalUsers;
 	QSharedPointer<ClientCapabilities> m_capabilities = nullptr;
 	QString m_remoteEndPoint;
 	QStringList m_playableMediaTypes;
@@ -318,7 +318,7 @@ protected:
 	bool m_isActive;
 	bool m_supportsMediaControl;
 	bool m_supportsRemoteControl;
-	QList<QSharedPointer<QueueItem>> m_nowPlayingQueue;
+	QList<QueueItem> m_nowPlayingQueue;
 	bool m_hasCustomDeviceName;
 	QString m_playlistItemId;
 	QString m_serverId;

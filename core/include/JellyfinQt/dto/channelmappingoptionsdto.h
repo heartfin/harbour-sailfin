@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -65,33 +64,33 @@ public:
 	/**
 	 * @brief Gets or sets list of tuner channels.
 	 */
-	QList<QSharedPointer<TunerChannelMapping>> tunerChannels() const;
+	QList<TunerChannelMapping> tunerChannels() const;
 	/**
 	* @brief Gets or sets list of tuner channels.
 	*/
-	void setTunerChannels(QList<QSharedPointer<TunerChannelMapping>> newTunerChannels);
+	void setTunerChannels(QList<TunerChannelMapping> newTunerChannels);
 	bool tunerChannelsNull() const;
 	void setTunerChannelsNull();
 
 	/**
 	 * @brief Gets or sets list of provider channels.
 	 */
-	QList<QSharedPointer<NameIdPair>> providerChannels() const;
+	QList<NameIdPair> providerChannels() const;
 	/**
 	* @brief Gets or sets list of provider channels.
 	*/
-	void setProviderChannels(QList<QSharedPointer<NameIdPair>> newProviderChannels);
+	void setProviderChannels(QList<NameIdPair> newProviderChannels);
 	bool providerChannelsNull() const;
 	void setProviderChannelsNull();
 
 	/**
 	 * @brief Gets or sets list of mappings.
 	 */
-	QList<QSharedPointer<NameValuePair>> mappings() const;
+	QList<NameValuePair> mappings() const;
 	/**
 	* @brief Gets or sets list of mappings.
 	*/
-	void setMappings(QList<QSharedPointer<NameValuePair>> newMappings);
+	void setMappings(QList<NameValuePair> newMappings);
 	bool mappingsNull() const;
 	void setMappingsNull();
 
@@ -108,9 +107,9 @@ public:
 
 
 protected:
-	QList<QSharedPointer<TunerChannelMapping>> m_tunerChannels;
-	QList<QSharedPointer<NameIdPair>> m_providerChannels;
-	QList<QSharedPointer<NameValuePair>> m_mappings;
+	QList<TunerChannelMapping> m_tunerChannels;
+	QList<NameIdPair> m_providerChannels;
+	QList<NameValuePair> m_mappings;
 	QString m_providerName;
 };
 

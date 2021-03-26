@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetArtistByName::GetArtistByName(ApiClient *apiClient)
+GetArtistByNameLoader::GetArtistByNameLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetArtistByNameParams>(apiClient) {}
 
-QString GetArtistByName::path(const GetArtistByNameParams &params) const {
+QString GetArtistByNameLoader::path(const GetArtistByNameParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Artists/") + Support::toString(params.name()) ;
 }
 
-QUrlQuery GetArtistByName::query(const GetArtistByNameParams &params) const {
+QUrlQuery GetArtistByNameLoader::query(const GetArtistByNameParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

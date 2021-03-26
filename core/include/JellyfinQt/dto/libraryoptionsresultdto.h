@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QStringList>
 #include <optional>
 
@@ -63,53 +62,53 @@ public:
 	/**
 	 * @brief Gets or sets the metadata savers.
 	 */
-	QList<QSharedPointer<LibraryOptionInfoDto>> metadataSavers() const;
+	QList<LibraryOptionInfoDto> metadataSavers() const;
 	/**
 	* @brief Gets or sets the metadata savers.
 	*/
-	void setMetadataSavers(QList<QSharedPointer<LibraryOptionInfoDto>> newMetadataSavers);
+	void setMetadataSavers(QList<LibraryOptionInfoDto> newMetadataSavers);
 	bool metadataSaversNull() const;
 	void setMetadataSaversNull();
 
 	/**
 	 * @brief Gets or sets the metadata readers.
 	 */
-	QList<QSharedPointer<LibraryOptionInfoDto>> metadataReaders() const;
+	QList<LibraryOptionInfoDto> metadataReaders() const;
 	/**
 	* @brief Gets or sets the metadata readers.
 	*/
-	void setMetadataReaders(QList<QSharedPointer<LibraryOptionInfoDto>> newMetadataReaders);
+	void setMetadataReaders(QList<LibraryOptionInfoDto> newMetadataReaders);
 	bool metadataReadersNull() const;
 	void setMetadataReadersNull();
 
 	/**
 	 * @brief Gets or sets the subtitle fetchers.
 	 */
-	QList<QSharedPointer<LibraryOptionInfoDto>> subtitleFetchers() const;
+	QList<LibraryOptionInfoDto> subtitleFetchers() const;
 	/**
 	* @brief Gets or sets the subtitle fetchers.
 	*/
-	void setSubtitleFetchers(QList<QSharedPointer<LibraryOptionInfoDto>> newSubtitleFetchers);
+	void setSubtitleFetchers(QList<LibraryOptionInfoDto> newSubtitleFetchers);
 	bool subtitleFetchersNull() const;
 	void setSubtitleFetchersNull();
 
 	/**
 	 * @brief Gets or sets the type options.
 	 */
-	QList<QSharedPointer<LibraryTypeOptionsDto>> typeOptions() const;
+	QList<LibraryTypeOptionsDto> typeOptions() const;
 	/**
 	* @brief Gets or sets the type options.
 	*/
-	void setTypeOptions(QList<QSharedPointer<LibraryTypeOptionsDto>> newTypeOptions);
+	void setTypeOptions(QList<LibraryTypeOptionsDto> newTypeOptions);
 	bool typeOptionsNull() const;
 	void setTypeOptionsNull();
 
 
 protected:
-	QList<QSharedPointer<LibraryOptionInfoDto>> m_metadataSavers;
-	QList<QSharedPointer<LibraryOptionInfoDto>> m_metadataReaders;
-	QList<QSharedPointer<LibraryOptionInfoDto>> m_subtitleFetchers;
-	QList<QSharedPointer<LibraryTypeOptionsDto>> m_typeOptions;
+	QList<LibraryOptionInfoDto> m_metadataSavers;
+	QList<LibraryOptionInfoDto> m_metadataReaders;
+	QList<LibraryOptionInfoDto> m_subtitleFetchers;
+	QList<LibraryTypeOptionsDto> m_typeOptions;
 };
 
 } // NS DTO

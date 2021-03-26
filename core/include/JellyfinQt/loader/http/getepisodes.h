@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets episodes for a tv season.
  */
-class GetEpisodes : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetEpisodesParams> {
+class GetEpisodesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetEpisodesParams> {
 public:
-	explicit GetEpisodes(ApiClient *apiClient = nullptr);
+	explicit GetEpisodesLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetEpisodesParams& parameters) const override;

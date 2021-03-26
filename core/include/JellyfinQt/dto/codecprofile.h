@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -67,16 +66,16 @@ public:
 	void setType(CodecType newType);
 
 
-	QList<QSharedPointer<ProfileCondition>> conditions() const;
+	QList<ProfileCondition> conditions() const;
 
-	void setConditions(QList<QSharedPointer<ProfileCondition>> newConditions);
+	void setConditions(QList<ProfileCondition> newConditions);
 	bool conditionsNull() const;
 	void setConditionsNull();
 
 
-	QList<QSharedPointer<ProfileCondition>> applyConditions() const;
+	QList<ProfileCondition> applyConditions() const;
 
-	void setApplyConditions(QList<QSharedPointer<ProfileCondition>> newApplyConditions);
+	void setApplyConditions(QList<ProfileCondition> newApplyConditions);
 	bool applyConditionsNull() const;
 	void setApplyConditionsNull();
 
@@ -97,8 +96,8 @@ public:
 
 protected:
 	CodecType m_type;
-	QList<QSharedPointer<ProfileCondition>> m_conditions;
-	QList<QSharedPointer<ProfileCondition>> m_applyConditions;
+	QList<ProfileCondition> m_conditions;
+	QList<ProfileCondition> m_applyConditions;
 	QString m_codec;
 	QString m_container;
 };

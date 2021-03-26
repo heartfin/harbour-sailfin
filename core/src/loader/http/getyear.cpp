@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetYear::GetYear(ApiClient *apiClient)
+GetYearLoader::GetYearLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetYearParams>(apiClient) {}
 
-QString GetYear::path(const GetYearParams &params) const {
+QString GetYearLoader::path(const GetYearParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Years/") + Support::toString(params.year()) ;
 }
 
-QUrlQuery GetYear::query(const GetYearParams &params) const {
+QUrlQuery GetYearLoader::query(const GetYearParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

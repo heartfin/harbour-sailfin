@@ -66,7 +66,7 @@ void TypeOptions::setFromJson(QJsonObject source) {
 	m_metadataFetcherOrder = Jellyfin::Support::fromJsonValue<QStringList>(source["MetadataFetcherOrder"]);
 	m_imageFetchers = Jellyfin::Support::fromJsonValue<QStringList>(source["ImageFetchers"]);
 	m_imageFetcherOrder = Jellyfin::Support::fromJsonValue<QStringList>(source["ImageFetcherOrder"]);
-	m_imageOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ImageOption>>>(source["ImageOptions"]);
+	m_imageOptions = Jellyfin::Support::fromJsonValue<QList<ImageOption>>(source["ImageOptions"]);
 
 }
 	
@@ -77,7 +77,7 @@ QJsonObject TypeOptions::toJson() {
 	result["MetadataFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetcherOrder);
 	result["ImageFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetchers);
 	result["ImageFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetcherOrder);
-	result["ImageOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ImageOption>>>(m_imageOptions);
+	result["ImageOptions"] = Jellyfin::Support::toJsonValue<QList<ImageOption>>(m_imageOptions);
 
 	return result;
 }
@@ -147,9 +147,9 @@ void TypeOptions::setImageFetcherOrderNull() {
 	m_imageFetcherOrder.clear();
 
 }
-QList<QSharedPointer<ImageOption>> TypeOptions::imageOptions() const { return m_imageOptions; }
+QList<ImageOption> TypeOptions::imageOptions() const { return m_imageOptions; }
 
-void TypeOptions::setImageOptions(QList<QSharedPointer<ImageOption>> newImageOptions) {
+void TypeOptions::setImageOptions(QList<ImageOption> newImageOptions) {
 	m_imageOptions = newImageOptions;
 }
 bool TypeOptions::imageOptionsNull() const {

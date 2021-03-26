@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets branding configuration.
  */
-class GetBrandingOptions : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BrandingOptions, GetBrandingOptionsParams> {
+class GetBrandingOptionsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BrandingOptions, GetBrandingOptionsParams> {
 public:
-	explicit GetBrandingOptions(ApiClient *apiClient = nullptr);
+	explicit GetBrandingOptionsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetBrandingOptionsParams& parameters) const override;

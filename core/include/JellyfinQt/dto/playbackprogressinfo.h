@@ -224,9 +224,9 @@ public:
 	void setRepeatMode(RepeatMode newRepeatMode);
 
 
-	QList<QSharedPointer<QueueItem>> nowPlayingQueue() const;
+	QList<QueueItem> nowPlayingQueue() const;
 
-	void setNowPlayingQueue(QList<QSharedPointer<QueueItem>> newNowPlayingQueue);
+	void setNowPlayingQueue(QList<QueueItem> newNowPlayingQueue);
 	bool nowPlayingQueueNull() const;
 	void setNowPlayingQueueNull();
 
@@ -257,7 +257,7 @@ protected:
 	QString m_liveStreamId;
 	QString m_playSessionId;
 	RepeatMode m_repeatMode;
-	QList<QSharedPointer<QueueItem>> m_nowPlayingQueue;
+	QList<QueueItem> m_nowPlayingQueue;
 	QString m_playlistItemId;
 };
 

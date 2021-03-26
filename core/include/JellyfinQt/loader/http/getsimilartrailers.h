@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets similar items.
  */
-class GetSimilarTrailers : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarTrailersParams> {
+class GetSimilarTrailersLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarTrailersParams> {
 public:
-	explicit GetSimilarTrailers(ApiClient *apiClient = nullptr);
+	explicit GetSimilarTrailersLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetSimilarTrailersParams& parameters) const override;

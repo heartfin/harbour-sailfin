@@ -163,8 +163,8 @@ void MediaSourceInfo::setFromJson(QJsonObject source) {
 	m_videoType = Jellyfin::Support::fromJsonValue<VideoType>(source["VideoType"]);
 	m_isoType = Jellyfin::Support::fromJsonValue<IsoType>(source["IsoType"]);
 	m_video3DFormat = Jellyfin::Support::fromJsonValue<Video3DFormat>(source["Video3DFormat"]);
-	m_mediaStreams = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaStream>>>(source["MediaStreams"]);
-	m_mediaAttachments = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaAttachment>>>(source["MediaAttachments"]);
+	m_mediaStreams = Jellyfin::Support::fromJsonValue<QList<MediaStream>>(source["MediaStreams"]);
+	m_mediaAttachments = Jellyfin::Support::fromJsonValue<QList<MediaAttachment>>(source["MediaAttachments"]);
 	m_formats = Jellyfin::Support::fromJsonValue<QStringList>(source["Formats"]);
 	m_bitrate = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Bitrate"]);
 	m_timestamp = Jellyfin::Support::fromJsonValue<TransportStreamTimestamp>(source["Timestamp"]);
@@ -210,8 +210,8 @@ QJsonObject MediaSourceInfo::toJson() {
 	result["VideoType"] = Jellyfin::Support::toJsonValue<VideoType>(m_videoType);
 	result["IsoType"] = Jellyfin::Support::toJsonValue<IsoType>(m_isoType);
 	result["Video3DFormat"] = Jellyfin::Support::toJsonValue<Video3DFormat>(m_video3DFormat);
-	result["MediaStreams"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaStream>>>(m_mediaStreams);
-	result["MediaAttachments"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaAttachment>>>(m_mediaAttachments);
+	result["MediaStreams"] = Jellyfin::Support::toJsonValue<QList<MediaStream>>(m_mediaStreams);
+	result["MediaAttachments"] = Jellyfin::Support::toJsonValue<QList<MediaAttachment>>(m_mediaAttachments);
 	result["Formats"] = Jellyfin::Support::toJsonValue<QStringList>(m_formats);
 	result["Bitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitrate);
 	result["Timestamp"] = Jellyfin::Support::toJsonValue<TransportStreamTimestamp>(m_timestamp);
@@ -483,9 +483,9 @@ void MediaSourceInfo::setVideo3DFormat(Video3DFormat newVideo3DFormat) {
 	m_video3DFormat = newVideo3DFormat;
 }
 
-QList<QSharedPointer<MediaStream>> MediaSourceInfo::mediaStreams() const { return m_mediaStreams; }
+QList<MediaStream> MediaSourceInfo::mediaStreams() const { return m_mediaStreams; }
 
-void MediaSourceInfo::setMediaStreams(QList<QSharedPointer<MediaStream>> newMediaStreams) {
+void MediaSourceInfo::setMediaStreams(QList<MediaStream> newMediaStreams) {
 	m_mediaStreams = newMediaStreams;
 }
 bool MediaSourceInfo::mediaStreamsNull() const {
@@ -496,9 +496,9 @@ void MediaSourceInfo::setMediaStreamsNull() {
 	m_mediaStreams.clear();
 
 }
-QList<QSharedPointer<MediaAttachment>> MediaSourceInfo::mediaAttachments() const { return m_mediaAttachments; }
+QList<MediaAttachment> MediaSourceInfo::mediaAttachments() const { return m_mediaAttachments; }
 
-void MediaSourceInfo::setMediaAttachments(QList<QSharedPointer<MediaAttachment>> newMediaAttachments) {
+void MediaSourceInfo::setMediaAttachments(QList<MediaAttachment> newMediaAttachments) {
 	m_mediaAttachments = newMediaAttachments;
 }
 bool MediaSourceInfo::mediaAttachmentsNull() const {

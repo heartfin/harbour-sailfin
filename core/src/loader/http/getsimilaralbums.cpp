@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetSimilarAlbums::GetSimilarAlbums(ApiClient *apiClient)
+GetSimilarAlbumsLoader::GetSimilarAlbumsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarAlbumsParams>(apiClient) {}
 
-QString GetSimilarAlbums::path(const GetSimilarAlbumsParams &params) const {
+QString GetSimilarAlbumsLoader::path(const GetSimilarAlbumsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Albums/") + Support::toString(params.itemId()) + QStringLiteral("/Similar");
 }
 
-QUrlQuery GetSimilarAlbums::query(const GetSimilarAlbumsParams &params) const {
+QUrlQuery GetSimilarAlbumsLoader::query(const GetSimilarAlbumsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Set channel mappings.
  */
-class SetChannelMapping : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TunerChannelMapping, SetChannelMappingParams> {
+class SetChannelMappingLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TunerChannelMapping, SetChannelMappingParams> {
 public:
-	explicit SetChannelMapping(ApiClient *apiClient = nullptr);
+	explicit SetChannelMappingLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const SetChannelMappingParams& parameters) const override;

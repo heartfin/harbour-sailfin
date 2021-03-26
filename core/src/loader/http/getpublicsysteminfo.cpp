@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetPublicSystemInfo::GetPublicSystemInfo(ApiClient *apiClient)
+GetPublicSystemInfoLoader::GetPublicSystemInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::PublicSystemInfo, GetPublicSystemInfoParams>(apiClient) {}
 
-QString GetPublicSystemInfo::path(const GetPublicSystemInfoParams &params) const {
+QString GetPublicSystemInfoLoader::path(const GetPublicSystemInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/System/Info/Public");
 }
 
-QUrlQuery GetPublicSystemInfo::query(const GetPublicSystemInfoParams &params) const {
+QUrlQuery GetPublicSystemInfoLoader::query(const GetPublicSystemInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

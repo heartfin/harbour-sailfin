@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetThemeVideos::GetThemeVideos(ApiClient *apiClient)
+GetThemeVideosLoader::GetThemeVideosLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ThemeMediaResult, GetThemeVideosParams>(apiClient) {}
 
-QString GetThemeVideos::path(const GetThemeVideosParams &params) const {
+QString GetThemeVideosLoader::path(const GetThemeVideosParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/ThemeVideos");
 }
 
-QUrlQuery GetThemeVideos::query(const GetThemeVideosParams &params) const {
+QUrlQuery GetThemeVideosLoader::query(const GetThemeVideosParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

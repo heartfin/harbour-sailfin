@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetChannelItems::GetChannelItems(ApiClient *apiClient)
+GetChannelItemsLoader::GetChannelItemsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetChannelItemsParams>(apiClient) {}
 
-QString GetChannelItems::path(const GetChannelItemsParams &params) const {
+QString GetChannelItemsLoader::path(const GetChannelItemsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Channels/") + Support::toString(params.channelId()) + QStringLiteral("/Items");
 }
 
-QUrlQuery GetChannelItems::query(const GetChannelItemsParams &params) const {
+QUrlQuery GetChannelItemsLoader::query(const GetChannelItemsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

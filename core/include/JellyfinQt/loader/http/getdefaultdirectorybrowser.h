@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get Default directory browser.
  */
-class GetDefaultDirectoryBrowser : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DefaultDirectoryBrowserInfoDto, GetDefaultDirectoryBrowserParams> {
+class GetDefaultDirectoryBrowserLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DefaultDirectoryBrowserInfoDto, GetDefaultDirectoryBrowserParams> {
 public:
-	explicit GetDefaultDirectoryBrowser(ApiClient *apiClient = nullptr);
+	explicit GetDefaultDirectoryBrowserLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetDefaultDirectoryBrowserParams& parameters) const override;

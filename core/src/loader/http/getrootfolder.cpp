@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetRootFolder::GetRootFolder(ApiClient *apiClient)
+GetRootFolderLoader::GetRootFolderLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetRootFolderParams>(apiClient) {}
 
-QString GetRootFolder::path(const GetRootFolderParams &params) const {
+QString GetRootFolderLoader::path(const GetRootFolderParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/Items/Root");
 }
 
-QUrlQuery GetRootFolder::query(const GetRootFolderParams &params) const {
+QUrlQuery GetRootFolderLoader::query(const GetRootFolderParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

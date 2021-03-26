@@ -33,6 +33,7 @@
 #include <QDateTime>
 #include <QString>
 #include <QList>
+#include <QStringList>
 #include <optional>
 
 #include "JellyfinQt/dto/channeltype.h"

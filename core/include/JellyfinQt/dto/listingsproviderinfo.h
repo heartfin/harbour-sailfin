@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -157,9 +156,9 @@ public:
 	void setMovieCategoriesNull();
 
 
-	QList<QSharedPointer<NameValuePair>> channelMappings() const;
+	QList<NameValuePair> channelMappings() const;
 
-	void setChannelMappings(QList<QSharedPointer<NameValuePair>> newChannelMappings);
+	void setChannelMappings(QList<NameValuePair> newChannelMappings);
 	bool channelMappingsNull() const;
 	void setChannelMappingsNull();
 
@@ -200,7 +199,7 @@ protected:
 	QStringList m_sportsCategories;
 	QStringList m_kidsCategories;
 	QStringList m_movieCategories;
-	QList<QSharedPointer<NameValuePair>> m_channelMappings;
+	QList<NameValuePair> m_channelMappings;
 	QString m_moviePrefix;
 	QString m_preferredLanguage;
 	QString m_userAgent;

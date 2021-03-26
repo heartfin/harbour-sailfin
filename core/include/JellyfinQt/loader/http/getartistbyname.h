@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets an artist by name.
  */
-class GetArtistByName : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetArtistByNameParams> {
+class GetArtistByNameLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetArtistByNameParams> {
 public:
-	explicit GetArtistByName(ApiClient *apiClient = nullptr);
+	explicit GetArtistByNameLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetArtistByNameParams& parameters) const override;

@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "apimodel.h"
 #include "serverdiscoverymodel.h"
 #include "viewmodel/item.h"
+#include "viewmodel/itemmodel.h"
 #include "viewmodel/loader.h"
 #include "viewmodel/playbackmanager.h"
 

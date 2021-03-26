@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Authenticates a user with quick connect.
  */
-class AuthenticateWithQuickConnect : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationResult, AuthenticateWithQuickConnectParams> {
+class AuthenticateWithQuickConnectLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationResult, AuthenticateWithQuickConnectParams> {
 public:
-	explicit AuthenticateWithQuickConnect(ApiClient *apiClient = nullptr);
+	explicit AuthenticateWithQuickConnectLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const AuthenticateWithQuickConnectParams& parameters) const override;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get task by id.
  */
-class GetTask : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TaskInfo, GetTaskParams> {
+class GetTaskLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TaskInfo, GetTaskParams> {
 public:
-	explicit GetTask(ApiClient *apiClient = nullptr);
+	explicit GetTaskLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetTaskParams& parameters) const override;

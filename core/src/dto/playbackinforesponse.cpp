@@ -55,7 +55,7 @@ PlaybackInfoResponse PlaybackInfoResponse::fromJson(QJsonObject source) {
 
 
 void PlaybackInfoResponse::setFromJson(QJsonObject source) {
-	m_mediaSources = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(source["MediaSources"]);
+	m_mediaSources = Jellyfin::Support::fromJsonValue<QList<MediaSourceInfo>>(source["MediaSources"]);
 	m_playSessionId = Jellyfin::Support::fromJsonValue<QString>(source["PlaySessionId"]);
 	m_errorCode = Jellyfin::Support::fromJsonValue<PlaybackErrorCode>(source["ErrorCode"]);
 
@@ -63,16 +63,16 @@ void PlaybackInfoResponse::setFromJson(QJsonObject source) {
 	
 QJsonObject PlaybackInfoResponse::toJson() {
 	QJsonObject result;
-	result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(m_mediaSources);
+	result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<MediaSourceInfo>>(m_mediaSources);
 	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
 	result["ErrorCode"] = Jellyfin::Support::toJsonValue<PlaybackErrorCode>(m_errorCode);
 
 	return result;
 }
 
-QList<QSharedPointer<MediaSourceInfo>> PlaybackInfoResponse::mediaSources() const { return m_mediaSources; }
+QList<MediaSourceInfo> PlaybackInfoResponse::mediaSources() const { return m_mediaSources; }
 
-void PlaybackInfoResponse::setMediaSources(QList<QSharedPointer<MediaSourceInfo>> newMediaSources) {
+void PlaybackInfoResponse::setMediaSources(QList<MediaSourceInfo> newMediaSources) {
 	m_mediaSources = newMediaSources;
 }
 bool PlaybackInfoResponse::mediaSourcesNull() const {

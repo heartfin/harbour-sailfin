@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -65,30 +64,30 @@ public:
 	
 	// Properties
 
-	QList<QSharedPointer<ParentalRating>> parentalRatingOptions() const;
+	QList<ParentalRating> parentalRatingOptions() const;
 
-	void setParentalRatingOptions(QList<QSharedPointer<ParentalRating>> newParentalRatingOptions);
+	void setParentalRatingOptions(QList<ParentalRating> newParentalRatingOptions);
 	bool parentalRatingOptionsNull() const;
 	void setParentalRatingOptionsNull();
 
 
-	QList<QSharedPointer<CountryInfo>> countries() const;
+	QList<CountryInfo> countries() const;
 
-	void setCountries(QList<QSharedPointer<CountryInfo>> newCountries);
+	void setCountries(QList<CountryInfo> newCountries);
 	bool countriesNull() const;
 	void setCountriesNull();
 
 
-	QList<QSharedPointer<CultureDto>> cultures() const;
+	QList<CultureDto> cultures() const;
 
-	void setCultures(QList<QSharedPointer<CultureDto>> newCultures);
+	void setCultures(QList<CultureDto> newCultures);
 	bool culturesNull() const;
 	void setCulturesNull();
 
 
-	QList<QSharedPointer<ExternalIdInfo>> externalIdInfos() const;
+	QList<ExternalIdInfo> externalIdInfos() const;
 
-	void setExternalIdInfos(QList<QSharedPointer<ExternalIdInfo>> newExternalIdInfos);
+	void setExternalIdInfos(QList<ExternalIdInfo> newExternalIdInfos);
 	bool externalIdInfosNull() const;
 	void setExternalIdInfosNull();
 
@@ -100,20 +99,20 @@ public:
 	void setContentTypeNull();
 
 
-	QList<QSharedPointer<NameValuePair>> contentTypeOptions() const;
+	QList<NameValuePair> contentTypeOptions() const;
 
-	void setContentTypeOptions(QList<QSharedPointer<NameValuePair>> newContentTypeOptions);
+	void setContentTypeOptions(QList<NameValuePair> newContentTypeOptions);
 	bool contentTypeOptionsNull() const;
 	void setContentTypeOptionsNull();
 
 
 protected:
-	QList<QSharedPointer<ParentalRating>> m_parentalRatingOptions;
-	QList<QSharedPointer<CountryInfo>> m_countries;
-	QList<QSharedPointer<CultureDto>> m_cultures;
-	QList<QSharedPointer<ExternalIdInfo>> m_externalIdInfos;
+	QList<ParentalRating> m_parentalRatingOptions;
+	QList<CountryInfo> m_countries;
+	QList<CultureDto> m_cultures;
+	QList<ExternalIdInfo> m_externalIdInfos;
 	QString m_contentType;
-	QList<QSharedPointer<NameValuePair>> m_contentTypeOptions;
+	QList<NameValuePair> m_contentTypeOptions;
 };
 
 } // NS DTO

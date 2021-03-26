@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets an item from a user's library.
  */
-class GetItem : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetItemParams> {
+class GetItemLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetItemParams> {
 public:
-	explicit GetItem(ApiClient *apiClient = nullptr);
+	explicit GetItemLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetItemParams& parameters) const override;

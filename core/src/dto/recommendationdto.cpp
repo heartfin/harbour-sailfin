@@ -57,7 +57,7 @@ RecommendationDto RecommendationDto::fromJson(QJsonObject source) {
 
 
 void RecommendationDto::setFromJson(QJsonObject source) {
-	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<BaseItemDto>>(source["Items"]);
 	m_recommendationType = Jellyfin::Support::fromJsonValue<RecommendationType>(source["RecommendationType"]);
 	m_baselineItemName = Jellyfin::Support::fromJsonValue<QString>(source["BaselineItemName"]);
 	m_categoryId = Jellyfin::Support::fromJsonValue<QString>(source["CategoryId"]);
@@ -66,7 +66,7 @@ void RecommendationDto::setFromJson(QJsonObject source) {
 	
 QJsonObject RecommendationDto::toJson() {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
 	result["RecommendationType"] = Jellyfin::Support::toJsonValue<RecommendationType>(m_recommendationType);
 	result["BaselineItemName"] = Jellyfin::Support::toJsonValue<QString>(m_baselineItemName);
 	result["CategoryId"] = Jellyfin::Support::toJsonValue<QString>(m_categoryId);
@@ -74,9 +74,9 @@ QJsonObject RecommendationDto::toJson() {
 	return result;
 }
 
-QList<QSharedPointer<BaseItemDto>> RecommendationDto::items() const { return m_items; }
+QList<BaseItemDto> RecommendationDto::items() const { return m_items; }
 
-void RecommendationDto::setItems(QList<QSharedPointer<BaseItemDto>> newItems) {
+void RecommendationDto::setItems(QList<BaseItemDto> newItems) {
 	m_items = newItems;
 }
 bool RecommendationDto::itemsNull() const {

@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetDefaultProfile::GetDefaultProfile(ApiClient *apiClient)
+GetDefaultProfileLoader::GetDefaultProfileLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceProfile, GetDefaultProfileParams>(apiClient) {}
 
-QString GetDefaultProfile::path(const GetDefaultProfileParams &params) const {
+QString GetDefaultProfileLoader::path(const GetDefaultProfileParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Dlna/Profiles/Default");
 }
 
-QUrlQuery GetDefaultProfile::query(const GetDefaultProfileParams &params) const {
+QUrlQuery GetDefaultProfileLoader::query(const GetDefaultProfileParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

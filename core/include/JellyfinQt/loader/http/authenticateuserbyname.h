@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Authenticates a user by name.
  */
-class AuthenticateUserByName : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationResult, AuthenticateUserByNameParams> {
+class AuthenticateUserByNameLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationResult, AuthenticateUserByNameParams> {
 public:
-	explicit AuthenticateUserByName(ApiClient *apiClient = nullptr);
+	explicit AuthenticateUserByNameLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const AuthenticateUserByNameParams& parameters) const override;

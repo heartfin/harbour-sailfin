@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a studio by name.
  */
-class GetStudio : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetStudioParams> {
+class GetStudioLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetStudioParams> {
 public:
-	explicit GetStudio(ApiClient *apiClient = nullptr);
+	explicit GetStudioLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetStudioParams& parameters) const override;

@@ -74,7 +74,7 @@ void TaskInfo::setFromJson(QJsonObject source) {
 	m_currentProgressPercentage = Jellyfin::Support::fromJsonValue<std::optional<double>>(source["CurrentProgressPercentage"]);
 	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
 	m_lastExecutionResult = Jellyfin::Support::fromJsonValue<QSharedPointer<TaskResult>>(source["LastExecutionResult"]);
-	m_triggers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<TaskTriggerInfo>>>(source["Triggers"]);
+	m_triggers = Jellyfin::Support::fromJsonValue<QList<TaskTriggerInfo>>(source["Triggers"]);
 	m_description = Jellyfin::Support::fromJsonValue<QString>(source["Description"]);
 	m_category = Jellyfin::Support::fromJsonValue<QString>(source["Category"]);
 	m_isHidden = Jellyfin::Support::fromJsonValue<bool>(source["IsHidden"]);
@@ -89,7 +89,7 @@ QJsonObject TaskInfo::toJson() {
 	result["CurrentProgressPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_currentProgressPercentage);
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["LastExecutionResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<TaskResult>>(m_lastExecutionResult);
-	result["Triggers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<TaskTriggerInfo>>>(m_triggers);
+	result["Triggers"] = Jellyfin::Support::toJsonValue<QList<TaskTriggerInfo>>(m_triggers);
 	result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
 	result["Category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
 	result["IsHidden"] = Jellyfin::Support::toJsonValue<bool>(m_isHidden);
@@ -149,9 +149,9 @@ void TaskInfo::setLastExecutionResult(QSharedPointer<TaskResult> newLastExecutio
 	m_lastExecutionResult = newLastExecutionResult;
 }
 
-QList<QSharedPointer<TaskTriggerInfo>> TaskInfo::triggers() const { return m_triggers; }
+QList<TaskTriggerInfo> TaskInfo::triggers() const { return m_triggers; }
 
-void TaskInfo::setTriggers(QList<QSharedPointer<TaskTriggerInfo>> newTriggers) {
+void TaskInfo::setTriggers(QList<TaskTriggerInfo> newTriggers) {
 	m_triggers = newTriggers;
 }
 bool TaskInfo::triggersNull() const {

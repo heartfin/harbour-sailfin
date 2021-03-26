@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetCriticReviews::GetCriticReviews(ApiClient *apiClient)
+GetCriticReviewsLoader::GetCriticReviewsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetCriticReviewsParams>(apiClient) {}
 
-QString GetCriticReviews::path(const GetCriticReviewsParams &params) const {
+QString GetCriticReviewsLoader::path(const GetCriticReviewsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/CriticReviews");
 }
 
-QUrlQuery GetCriticReviews::query(const GetCriticReviewsParams &params) const {
+QUrlQuery GetCriticReviewsLoader::query(const GetCriticReviewsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

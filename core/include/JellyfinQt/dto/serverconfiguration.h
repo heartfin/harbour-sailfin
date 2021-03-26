@@ -560,9 +560,9 @@ Allows potential contributors without visual studio to modify production dashboa
 	void setImageSavingConvention(ImageSavingConvention newImageSavingConvention);
 
 
-	QList<QSharedPointer<MetadataOptions>> metadataOptions() const;
+	QList<MetadataOptions> metadataOptions() const;
 
-	void setMetadataOptions(QList<QSharedPointer<MetadataOptions>> newMetadataOptions);
+	void setMetadataOptions(QList<MetadataOptions> newMetadataOptions);
 	bool metadataOptionsNull() const;
 	void setMetadataOptionsNull();
 
@@ -598,9 +598,9 @@ Allows potential contributors without visual studio to modify production dashboa
 	void setSaveMetadataHidden(bool newSaveMetadataHidden);
 
 
-	QList<QSharedPointer<NameValuePair>> contentTypes() const;
+	QList<NameValuePair> contentTypes() const;
 
-	void setContentTypes(QList<QSharedPointer<NameValuePair>> newContentTypes);
+	void setContentTypes(QList<NameValuePair> newContentTypes);
 	bool contentTypesNull() const;
 	void setContentTypesNull();
 
@@ -654,9 +654,9 @@ Allows potential contributors without visual studio to modify production dashboa
 	void setCodecsUsedNull();
 
 
-	QList<QSharedPointer<RepositoryInfo>> pluginRepositories() const;
+	QList<RepositoryInfo> pluginRepositories() const;
 
-	void setPluginRepositories(QList<QSharedPointer<RepositoryInfo>> newPluginRepositories);
+	void setPluginRepositories(QList<RepositoryInfo> newPluginRepositories);
 	bool pluginRepositoriesNull() const;
 	void setPluginRepositoriesNull();
 
@@ -705,9 +705,9 @@ Allows potential contributors without visual studio to modify production dashboa
 	void setImageExtractionTimeoutMs(qint32 newImageExtractionTimeoutMs);
 
 
-	QList<QSharedPointer<PathSubstitution>> pathSubstitutions() const;
+	QList<PathSubstitution> pathSubstitutions() const;
 
-	void setPathSubstitutions(QList<QSharedPointer<PathSubstitution>> newPathSubstitutions);
+	void setPathSubstitutions(QList<PathSubstitution> newPathSubstitutions);
 	bool pathSubstitutionsNull() const;
 	void setPathSubstitutionsNull();
 
@@ -864,13 +864,13 @@ protected:
 	qint32 m_libraryMonitorDelay;
 	bool m_enableDashboardResponseCaching;
 	ImageSavingConvention m_imageSavingConvention;
-	QList<QSharedPointer<MetadataOptions>> m_metadataOptions;
+	QList<MetadataOptions> m_metadataOptions;
 	bool m_skipDeserializationForBasicTypes;
 	QString m_serverName;
 	QString m_baseUrl;
 	QString m_uICulture;
 	bool m_saveMetadataHidden;
-	QList<QSharedPointer<NameValuePair>> m_contentTypes;
+	QList<NameValuePair> m_contentTypes;
 	qint32 m_remoteClientBitrateLimit;
 	bool m_enableFolderView;
 	bool m_enableGroupingIntoCollections;
@@ -878,14 +878,14 @@ protected:
 	QStringList m_localNetworkSubnets;
 	QStringList m_localNetworkAddresses;
 	QStringList m_codecsUsed;
-	QList<QSharedPointer<RepositoryInfo>> m_pluginRepositories;
+	QList<RepositoryInfo> m_pluginRepositories;
 	bool m_enableExternalContentInSuggestions;
 	bool m_requireHttps;
 	bool m_enableNewOmdbSupport;
 	QStringList m_remoteIPFilter;
 	bool m_isRemoteIPFilterBlacklist;
 	qint32 m_imageExtractionTimeoutMs;
-	QList<QSharedPointer<PathSubstitution>> m_pathSubstitutions;
+	QList<PathSubstitution> m_pathSubstitutions;
 	bool m_enableSimpleArtistDetection;
 	QStringList m_uninstalledPlugins;
 	bool m_enableSlowResponseWarning;

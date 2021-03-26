@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetNextUp::GetNextUp(ApiClient *apiClient)
+GetNextUpLoader::GetNextUpLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetNextUpParams>(apiClient) {}
 
-QString GetNextUp::path(const GetNextUpParams &params) const {
+QString GetNextUpLoader::path(const GetNextUpParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Shows/NextUp");
 }
 
-QUrlQuery GetNextUp::query(const GetNextUpParams &params) const {
+QUrlQuery GetNextUpLoader::query(const GetNextUpParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

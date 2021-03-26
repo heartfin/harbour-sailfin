@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-UnmarkFavoriteItem::UnmarkFavoriteItem(ApiClient *apiClient)
+UnmarkFavoriteItemLoader::UnmarkFavoriteItemLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, UnmarkFavoriteItemParams>(apiClient) {}
 
-QString UnmarkFavoriteItem::path(const UnmarkFavoriteItemParams &params) const {
+QString UnmarkFavoriteItemLoader::path(const UnmarkFavoriteItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/FavoriteItems/") + Support::toString(params.itemId()) ;
 }
 
-QUrlQuery UnmarkFavoriteItem::query(const UnmarkFavoriteItemParams &params) const {
+QUrlQuery UnmarkFavoriteItemLoader::query(const UnmarkFavoriteItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

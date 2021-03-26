@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetFirstUser_2::GetFirstUser_2(ApiClient *apiClient)
+GetFirstUser_2Loader::GetFirstUser_2Loader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupUserDto, GetFirstUser_2Params>(apiClient) {}
 
-QString GetFirstUser_2::path(const GetFirstUser_2Params &params) const {
+QString GetFirstUser_2Loader::path(const GetFirstUser_2Params &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Startup/FirstUser");
 }
 
-QUrlQuery GetFirstUser_2::query(const GetFirstUser_2Params &params) const {
+QUrlQuery GetFirstUser_2Loader::query(const GetFirstUser_2Params &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

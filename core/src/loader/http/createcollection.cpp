@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-CreateCollection::CreateCollection(ApiClient *apiClient)
+CreateCollectionLoader::CreateCollectionLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::CollectionCreationResult, CreateCollectionParams>(apiClient) {}
 
-QString CreateCollection::path(const CreateCollectionParams &params) const {
+QString CreateCollectionLoader::path(const CreateCollectionParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Collections");
 }
 
-QUrlQuery CreateCollection::query(const CreateCollectionParams &params) const {
+QUrlQuery CreateCollectionLoader::query(const CreateCollectionParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

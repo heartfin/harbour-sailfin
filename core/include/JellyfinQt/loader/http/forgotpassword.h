@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Initiates the forgot password process for a local user.
  */
-class ForgotPassword : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ForgotPasswordResult, ForgotPasswordParams> {
+class ForgotPasswordLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ForgotPasswordResult, ForgotPasswordParams> {
 public:
-	explicit ForgotPassword(ApiClient *apiClient = nullptr);
+	explicit ForgotPasswordLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const ForgotPasswordParams& parameters) const override;

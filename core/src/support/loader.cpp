@@ -25,5 +25,13 @@ const char *LoadException::what() const noexcept {
     return m_message.c_str();
 }
 
+QException *LoadException::clone() const {
+    return new LoadException(*this);
+}
+
+void LoadException::raise() const {
+    throw *this;
+}
+
 }
 }

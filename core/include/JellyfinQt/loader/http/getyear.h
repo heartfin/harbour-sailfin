@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a year.
  */
-class GetYear : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetYearParams> {
+class GetYearLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetYearParams> {
 public:
-	explicit GetYear(ApiClient *apiClient = nullptr);
+	explicit GetYearLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetYearParams& parameters) const override;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the default profile.
  */
-class GetDefaultProfile : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceProfile, GetDefaultProfileParams> {
+class GetDefaultProfileLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceProfile, GetDefaultProfileParams> {
 public:
-	explicit GetDefaultProfile(ApiClient *apiClient = nullptr);
+	explicit GetDefaultProfileLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetDefaultProfileParams& parameters) const override;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets recording folders.
  */
-class GetRecordingFolders : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecordingFoldersParams> {
+class GetRecordingFoldersLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecordingFoldersParams> {
 public:
-	explicit GetRecordingFolders(ApiClient *apiClient = nullptr);
+	explicit GetRecordingFoldersLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetRecordingFoldersParams& parameters) const override;

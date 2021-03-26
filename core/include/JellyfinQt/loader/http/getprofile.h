@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a single profile.
  */
-class GetProfile : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceProfile, GetProfileParams> {
+class GetProfileLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceProfile, GetProfileParams> {
 public:
-	explicit GetProfile(ApiClient *apiClient = nullptr);
+	explicit GetProfileLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetProfileParams& parameters) const override;

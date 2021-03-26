@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets all user media folders.
  */
-class GetMediaFolders : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetMediaFoldersParams> {
+class GetMediaFoldersLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetMediaFoldersParams> {
 public:
-	explicit GetMediaFolders(ApiClient *apiClient = nullptr);
+	explicit GetMediaFoldersLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetMediaFoldersParams& parameters) const override;

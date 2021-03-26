@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-OpenLiveStream::OpenLiveStream(ApiClient *apiClient)
+OpenLiveStreamLoader::OpenLiveStreamLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::LiveStreamResponse, OpenLiveStreamParams>(apiClient) {}
 
-QString OpenLiveStream::path(const OpenLiveStreamParams &params) const {
+QString OpenLiveStreamLoader::path(const OpenLiveStreamParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/LiveStreams/Open");
 }
 
-QUrlQuery OpenLiveStream::query(const OpenLiveStreamParams &params) const {
+QUrlQuery OpenLiveStreamLoader::query(const OpenLiveStreamParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

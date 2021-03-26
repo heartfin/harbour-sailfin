@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetChannelMappingOptions::GetChannelMappingOptions(ApiClient *apiClient)
+GetChannelMappingOptionsLoader::GetChannelMappingOptionsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ChannelMappingOptionsDto, GetChannelMappingOptionsParams>(apiClient) {}
 
-QString GetChannelMappingOptions::path(const GetChannelMappingOptionsParams &params) const {
+QString GetChannelMappingOptionsLoader::path(const GetChannelMappingOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/LiveTv/ChannelMappingOptions");
 }
 
-QUrlQuery GetChannelMappingOptions::query(const GetChannelMappingOptionsParams &params) const {
+QUrlQuery GetChannelMappingOptionsLoader::query(const GetChannelMappingOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

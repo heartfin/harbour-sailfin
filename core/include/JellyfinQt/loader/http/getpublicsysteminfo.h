@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets public information about the server.
  */
-class GetPublicSystemInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PublicSystemInfo, GetPublicSystemInfoParams> {
+class GetPublicSystemInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PublicSystemInfo, GetPublicSystemInfoParams> {
 public:
-	explicit GetPublicSystemInfo(ApiClient *apiClient = nullptr);
+	explicit GetPublicSystemInfoLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetPublicSystemInfoParams& parameters) const override;

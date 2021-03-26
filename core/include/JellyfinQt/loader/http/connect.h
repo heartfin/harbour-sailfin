@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Attempts to retrieve authentication information.
  */
-class Connect : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectResult, ConnectParams> {
+class ConnectLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectResult, ConnectParams> {
 public:
-	explicit Connect(ApiClient *apiClient = nullptr);
+	explicit ConnectLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const ConnectParams& parameters) const override;

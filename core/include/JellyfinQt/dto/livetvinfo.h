@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QStringList>
 #include <optional>
 
@@ -62,11 +61,11 @@ public:
 	/**
 	 * @brief Gets or sets the services.
 	 */
-	QList<QSharedPointer<LiveTvServiceInfo>> services() const;
+	QList<LiveTvServiceInfo> services() const;
 	/**
 	* @brief Gets or sets the services.
 	*/
-	void setServices(QList<QSharedPointer<LiveTvServiceInfo>> newServices);
+	void setServices(QList<LiveTvServiceInfo> newServices);
 	bool servicesNull() const;
 	void setServicesNull();
 
@@ -92,7 +91,7 @@ public:
 
 
 protected:
-	QList<QSharedPointer<LiveTvServiceInfo>> m_services;
+	QList<LiveTvServiceInfo> m_services;
 	bool m_isEnabled;
 	QStringList m_enabledUsers;
 };

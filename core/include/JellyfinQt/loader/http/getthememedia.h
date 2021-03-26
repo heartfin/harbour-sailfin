@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get theme songs and videos for an item.
  */
-class GetThemeMedia : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AllThemeMediaResult, GetThemeMediaParams> {
+class GetThemeMediaLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AllThemeMediaResult, GetThemeMediaParams> {
 public:
-	explicit GetThemeMedia(ApiClient *apiClient = nullptr);
+	explicit GetThemeMediaLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetThemeMediaParams& parameters) const override;

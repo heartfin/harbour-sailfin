@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get person by name.
  */
-class GetPerson : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetPersonParams> {
+class GetPersonLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetPersonParams> {
 public:
-	explicit GetPerson(ApiClient *apiClient = nullptr);
+	explicit GetPersonLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetPersonParams& parameters) const override;

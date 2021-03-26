@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetQueryFilters::GetQueryFilters(ApiClient *apiClient)
+GetQueryFiltersLoader::GetQueryFiltersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::QueryFilters, GetQueryFiltersParams>(apiClient) {}
 
-QString GetQueryFilters::path(const GetQueryFiltersParams &params) const {
+QString GetQueryFiltersLoader::path(const GetQueryFiltersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Items/Filters2");
 }
 
-QUrlQuery GetQueryFilters::query(const GetQueryFiltersParams &params) const {
+QUrlQuery GetQueryFiltersLoader::query(const GetQueryFiltersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

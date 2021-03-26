@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Adds a listings provider.
  */
-class AddListingProvider : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ListingsProviderInfo, AddListingProviderParams> {
+class AddListingProviderLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ListingsProviderInfo, AddListingProviderParams> {
 public:
-	explicit AddListingProvider(ApiClient *apiClient = nullptr);
+	explicit AddListingProviderLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const AddListingProviderParams& parameters) const override;

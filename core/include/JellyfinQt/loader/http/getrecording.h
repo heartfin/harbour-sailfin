@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a live tv recording.
  */
-class GetRecording : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetRecordingParams> {
+class GetRecordingLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetRecordingParams> {
 public:
-	explicit GetRecording(ApiClient *apiClient = nullptr);
+	explicit GetRecordingLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetRecordingParams& parameters) const override;

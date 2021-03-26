@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get item counts.
  */
-class GetItemCounts : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ItemCounts, GetItemCountsParams> {
+class GetItemCountsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ItemCounts, GetItemCountsParams> {
 public:
-	explicit GetItemCounts(ApiClient *apiClient = nullptr);
+	explicit GetItemCountsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetItemCountsParams& parameters) const override;

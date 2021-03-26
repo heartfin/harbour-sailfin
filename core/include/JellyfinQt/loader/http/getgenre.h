@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a genre, by name.
  */
-class GetGenre : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetGenreParams> {
+class GetGenreLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetGenreParams> {
 public:
-	explicit GetGenre(ApiClient *apiClient = nullptr);
+	explicit GetGenreLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetGenreParams& parameters) const override;

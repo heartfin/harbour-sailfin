@@ -53,22 +53,22 @@ QueryFilters QueryFilters::fromJson(QJsonObject source) {
 
 
 void QueryFilters::setFromJson(QJsonObject source) {
-	m_genres = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameGuidPair>>>(source["Genres"]);
+	m_genres = Jellyfin::Support::fromJsonValue<QList<NameGuidPair>>(source["Genres"]);
 	m_tags = Jellyfin::Support::fromJsonValue<QStringList>(source["Tags"]);
 
 }
 	
 QJsonObject QueryFilters::toJson() {
 	QJsonObject result;
-	result["Genres"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameGuidPair>>>(m_genres);
+	result["Genres"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_genres);
 	result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
 
 	return result;
 }
 
-QList<QSharedPointer<NameGuidPair>> QueryFilters::genres() const { return m_genres; }
+QList<NameGuidPair> QueryFilters::genres() const { return m_genres; }
 
-void QueryFilters::setGenres(QList<QSharedPointer<NameGuidPair>> newGenres) {
+void QueryFilters::setGenres(QList<NameGuidPair> newGenres) {
 	m_genres = newGenres;
 }
 bool QueryFilters::genresNull() const {

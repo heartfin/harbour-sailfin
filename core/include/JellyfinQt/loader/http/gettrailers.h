@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Finds movies and trailers similar to a given trailer.
  */
-class GetTrailers : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetTrailersParams> {
+class GetTrailersLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetTrailersParams> {
 public:
-	explicit GetTrailers(ApiClient *apiClient = nullptr);
+	explicit GetTrailersLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetTrailersParams& parameters) const override;

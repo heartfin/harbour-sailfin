@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the default values for a new timer.
  */
-class GetDefaultTimer : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::SeriesTimerInfoDto, GetDefaultTimerParams> {
+class GetDefaultTimerLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::SeriesTimerInfoDto, GetDefaultTimerParams> {
 public:
-	explicit GetDefaultTimer(ApiClient *apiClient = nullptr);
+	explicit GetDefaultTimerLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetDefaultTimerParams& parameters) const override;

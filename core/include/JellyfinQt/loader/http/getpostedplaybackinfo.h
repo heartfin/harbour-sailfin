@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets live playback media info for an item.
  */
-class GetPostedPlaybackInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaybackInfoResponse, GetPostedPlaybackInfoParams> {
+class GetPostedPlaybackInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaybackInfoResponse, GetPostedPlaybackInfoParams> {
 public:
-	explicit GetPostedPlaybackInfo(ApiClient *apiClient = nullptr);
+	explicit GetPostedPlaybackInfoLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetPostedPlaybackInfoParams& parameters) const override;

@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a user by Id.
  */
-class GetUserById : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, GetUserByIdParams> {
+class GetUserByIdLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, GetUserByIdParams> {
 public:
-	explicit GetUserById(ApiClient *apiClient = nullptr);
+	explicit GetUserByIdLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetUserByIdParams& parameters) const override;

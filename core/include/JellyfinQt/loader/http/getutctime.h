@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the current UTC time.
  */
-class GetUtcTime : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UtcTimeResponse, GetUtcTimeParams> {
+class GetUtcTimeLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UtcTimeResponse, GetUtcTimeParams> {
 public:
-	explicit GetUtcTime(ApiClient *apiClient = nullptr);
+	explicit GetUtcTimeLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetUtcTimeParams& parameters) const override;

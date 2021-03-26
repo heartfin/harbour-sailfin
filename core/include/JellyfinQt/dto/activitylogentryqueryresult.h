@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QStringList>
 #include <optional>
 
@@ -62,11 +61,11 @@ public:
 	/**
 	 * @brief Gets or sets the items.
 	 */
-	QList<QSharedPointer<ActivityLogEntry>> items() const;
+	QList<ActivityLogEntry> items() const;
 	/**
 	* @brief Gets or sets the items.
 	*/
-	void setItems(QList<QSharedPointer<ActivityLogEntry>> newItems);
+	void setItems(QList<ActivityLogEntry> newItems);
 	bool itemsNull() const;
 	void setItemsNull();
 
@@ -90,7 +89,7 @@ public:
 
 
 protected:
-	QList<QSharedPointer<ActivityLogEntry>> m_items;
+	QList<ActivityLogEntry> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
 };

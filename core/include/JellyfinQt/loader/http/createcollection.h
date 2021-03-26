@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Creates a new collection.
  */
-class CreateCollection : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::CollectionCreationResult, CreateCollectionParams> {
+class CreateCollectionLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::CollectionCreationResult, CreateCollectionParams> {
 public:
-	explicit CreateCollection(ApiClient *apiClient = nullptr);
+	explicit CreateCollectionLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const CreateCollectionParams& parameters) const override;

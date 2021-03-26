@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get info for a device.
  */
-class GetDeviceInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceInfo, GetDeviceInfoParams> {
+class GetDeviceInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceInfo, GetDeviceInfoParams> {
 public:
-	explicit GetDeviceInfo(ApiClient *apiClient = nullptr);
+	explicit GetDeviceInfoLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetDeviceInfoParams& parameters) const override;

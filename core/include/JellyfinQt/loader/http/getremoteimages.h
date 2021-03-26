@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets available remote images for an item.
  */
-class GetRemoteImages : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::RemoteImageResult, GetRemoteImagesParams> {
+class GetRemoteImagesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::RemoteImageResult, GetRemoteImagesParams> {
 public:
-	explicit GetRemoteImages(ApiClient *apiClient = nullptr);
+	explicit GetRemoteImagesLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetRemoteImagesParams& parameters) const override;

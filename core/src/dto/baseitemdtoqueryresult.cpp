@@ -55,7 +55,7 @@ BaseItemDtoQueryResult BaseItemDtoQueryResult::fromJson(QJsonObject source) {
 
 
 void BaseItemDtoQueryResult::setFromJson(QJsonObject source) {
-	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<BaseItemDto>>>(source["Items"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<BaseItemDto>>(source["Items"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
@@ -63,16 +63,16 @@ void BaseItemDtoQueryResult::setFromJson(QJsonObject source) {
 	
 QJsonObject BaseItemDtoQueryResult::toJson() {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<BaseItemDto>>>(m_items);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
 
-QList<QSharedPointer<BaseItemDto>> BaseItemDtoQueryResult::items() const { return m_items; }
+QList<BaseItemDto> BaseItemDtoQueryResult::items() const { return m_items; }
 
-void BaseItemDtoQueryResult::setItems(QList<QSharedPointer<BaseItemDto>> newItems) {
+void BaseItemDtoQueryResult::setItems(QList<BaseItemDto> newItems) {
 	m_items = newItems;
 }
 bool BaseItemDtoQueryResult::itemsNull() const {

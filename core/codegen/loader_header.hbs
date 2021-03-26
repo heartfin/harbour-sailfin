@@ -6,9 +6,9 @@
  */
 {{/if}}
 
-class {{className}} : public {{supportNamespace}}::HttpLoader<{{dtoNamespace}}::{{endpoint.resultType}}, {{endpoint.parameterType}}> {
+class {{className}}Loader : public {{supportNamespace}}::HttpLoader<{{dtoNamespace}}::{{endpoint.resultType}}, {{endpoint.parameterType}}> {
 public:
-	explicit {{className}}(ApiClient *apiClient = nullptr);
+	explicit {{className}}Loader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const {{endpoint.parameterType}}& parameters) const override;

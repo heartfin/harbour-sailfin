@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QStringList>
 #include <optional>
 
@@ -62,11 +61,11 @@ public:
 	/**
 	 * @brief Gets or sets the images.
 	 */
-	QList<QSharedPointer<RemoteImageInfo>> images() const;
+	QList<RemoteImageInfo> images() const;
 	/**
 	* @brief Gets or sets the images.
 	*/
-	void setImages(QList<QSharedPointer<RemoteImageInfo>> newImages);
+	void setImages(QList<RemoteImageInfo> newImages);
 	bool imagesNull() const;
 	void setImagesNull();
 
@@ -92,7 +91,7 @@ public:
 
 
 protected:
-	QList<QSharedPointer<RemoteImageInfo>> m_images;
+	QList<RemoteImageInfo> m_images;
 	qint32 m_totalRecordCount;
 	QStringList m_providers;
 };

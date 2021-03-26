@@ -99,7 +99,7 @@ void ListingsProviderInfo::setFromJson(QJsonObject source) {
 	m_sportsCategories = Jellyfin::Support::fromJsonValue<QStringList>(source["SportsCategories"]);
 	m_kidsCategories = Jellyfin::Support::fromJsonValue<QStringList>(source["KidsCategories"]);
 	m_movieCategories = Jellyfin::Support::fromJsonValue<QStringList>(source["MovieCategories"]);
-	m_channelMappings = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["ChannelMappings"]);
+	m_channelMappings = Jellyfin::Support::fromJsonValue<QList<NameValuePair>>(source["ChannelMappings"]);
 	m_moviePrefix = Jellyfin::Support::fromJsonValue<QString>(source["MoviePrefix"]);
 	m_preferredLanguage = Jellyfin::Support::fromJsonValue<QString>(source["PreferredLanguage"]);
 	m_userAgent = Jellyfin::Support::fromJsonValue<QString>(source["UserAgent"]);
@@ -122,7 +122,7 @@ QJsonObject ListingsProviderInfo::toJson() {
 	result["SportsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_sportsCategories);
 	result["KidsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_kidsCategories);
 	result["MovieCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_movieCategories);
-	result["ChannelMappings"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_channelMappings);
+	result["ChannelMappings"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_channelMappings);
 	result["MoviePrefix"] = Jellyfin::Support::toJsonValue<QString>(m_moviePrefix);
 	result["PreferredLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredLanguage);
 	result["UserAgent"] = Jellyfin::Support::toJsonValue<QString>(m_userAgent);
@@ -305,9 +305,9 @@ void ListingsProviderInfo::setMovieCategoriesNull() {
 	m_movieCategories.clear();
 
 }
-QList<QSharedPointer<NameValuePair>> ListingsProviderInfo::channelMappings() const { return m_channelMappings; }
+QList<NameValuePair> ListingsProviderInfo::channelMappings() const { return m_channelMappings; }
 
-void ListingsProviderInfo::setChannelMappings(QList<QSharedPointer<NameValuePair>> newChannelMappings) {
+void ListingsProviderInfo::setChannelMappings(QList<NameValuePair> newChannelMappings) {
 	m_channelMappings = newChannelMappings;
 }
 bool ListingsProviderInfo::channelMappingsNull() const {

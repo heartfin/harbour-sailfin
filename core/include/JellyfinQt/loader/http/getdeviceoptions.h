@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get options for a device.
  */
-class GetDeviceOptions : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceOptions, GetDeviceOptionsParams> {
+class GetDeviceOptionsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceOptions, GetDeviceOptionsParams> {
 public:
-	explicit GetDeviceOptions(ApiClient *apiClient = nullptr);
+	explicit GetDeviceOptionsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetDeviceOptionsParams& parameters) const override;

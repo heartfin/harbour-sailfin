@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetDefaultListingProvider::GetDefaultListingProvider(ApiClient *apiClient)
+GetDefaultListingProviderLoader::GetDefaultListingProviderLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ListingsProviderInfo, GetDefaultListingProviderParams>(apiClient) {}
 
-QString GetDefaultListingProvider::path(const GetDefaultListingProviderParams &params) const {
+QString GetDefaultListingProviderLoader::path(const GetDefaultListingProviderParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/LiveTv/ListingProviders/Default");
 }
 
-QUrlQuery GetDefaultListingProvider::query(const GetDefaultListingProviderParams &params) const {
+QUrlQuery GetDefaultListingProviderLoader::query(const GetDefaultListingProviderParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

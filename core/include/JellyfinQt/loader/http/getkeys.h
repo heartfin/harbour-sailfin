@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get all keys.
  */
-class GetKeys : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationInfoQueryResult, GetKeysParams> {
+class GetKeysLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationInfoQueryResult, GetKeysParams> {
 public:
-	explicit GetKeys(ApiClient *apiClient = nullptr);
+	explicit GetKeysLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetKeysParams& parameters) const override;

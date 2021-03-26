@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Marks an item as unplayed for user.
  */
-class MarkUnplayedItem : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, MarkUnplayedItemParams> {
+class MarkUnplayedItemLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, MarkUnplayedItemParams> {
 public:
-	explicit MarkUnplayedItem(ApiClient *apiClient = nullptr);
+	explicit MarkUnplayedItemLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const MarkUnplayedItemParams& parameters) const override;

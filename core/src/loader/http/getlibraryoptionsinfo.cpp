@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetLibraryOptionsInfo::GetLibraryOptionsInfo(ApiClient *apiClient)
+GetLibraryOptionsInfoLoader::GetLibraryOptionsInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::LibraryOptionsResultDto, GetLibraryOptionsInfoParams>(apiClient) {}
 
-QString GetLibraryOptionsInfo::path(const GetLibraryOptionsInfoParams &params) const {
+QString GetLibraryOptionsInfoLoader::path(const GetLibraryOptionsInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Libraries/AvailableOptions");
 }
 
-QUrlQuery GetLibraryOptionsInfo::query(const GetLibraryOptionsInfoParams &params) const {
+QUrlQuery GetLibraryOptionsInfoLoader::query(const GetLibraryOptionsInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

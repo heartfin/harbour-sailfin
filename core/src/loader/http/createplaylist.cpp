@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-CreatePlaylist::CreatePlaylist(ApiClient *apiClient)
+CreatePlaylistLoader::CreatePlaylistLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaylistCreationResult, CreatePlaylistParams>(apiClient) {}
 
-QString CreatePlaylist::path(const CreatePlaylistParams &params) const {
+QString CreatePlaylistLoader::path(const CreatePlaylistParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Playlists");
 }
 
-QUrlQuery CreatePlaylist::query(const CreatePlaylistParams &params) const {
+QUrlQuery CreatePlaylistLoader::query(const CreatePlaylistParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

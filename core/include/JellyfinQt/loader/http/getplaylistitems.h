@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the original items of a playlist.
  */
-class GetPlaylistItems : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetPlaylistItemsParams> {
+class GetPlaylistItemsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetPlaylistItemsParams> {
 public:
-	explicit GetPlaylistItems(ApiClient *apiClient = nullptr);
+	explicit GetPlaylistItemsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetPlaylistItemsParams& parameters) const override;

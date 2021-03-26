@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the search hint result.
  */
-class Get : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::SearchHintResult, GetParams> {
+class GetLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::SearchHintResult, GetParams> {
 public:
-	explicit Get(ApiClient *apiClient = nullptr);
+	explicit GetLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetParams& parameters) const override;

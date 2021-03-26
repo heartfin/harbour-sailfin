@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -196,11 +195,11 @@ public:
 	/**
 	 * @brief Gets or sets the completed installations.
 	 */
-	QList<QSharedPointer<InstallationInfo>> completedInstallations() const;
+	QList<InstallationInfo> completedInstallations() const;
 	/**
 	* @brief Gets or sets the completed installations.
 	*/
-	void setCompletedInstallations(QList<QSharedPointer<InstallationInfo>> newCompletedInstallations);
+	void setCompletedInstallations(QList<InstallationInfo> newCompletedInstallations);
 	bool completedInstallationsNull() const;
 	void setCompletedInstallationsNull();
 
@@ -329,7 +328,7 @@ protected:
 	bool m_isShuttingDown;
 	bool m_supportsLibraryMonitor;
 	qint32 m_webSocketPortNumber;
-	QList<QSharedPointer<InstallationInfo>> m_completedInstallations;
+	QList<InstallationInfo> m_completedInstallations;
 	bool m_canSelfRestart;
 	bool m_canLaunchWebBrowser;
 	QString m_programDataPath;

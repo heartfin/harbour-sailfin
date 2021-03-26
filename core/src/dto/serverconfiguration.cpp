@@ -271,13 +271,13 @@ void ServerConfiguration::setFromJson(QJsonObject source) {
 	m_libraryMonitorDelay = Jellyfin::Support::fromJsonValue<qint32>(source["LibraryMonitorDelay"]);
 	m_enableDashboardResponseCaching = Jellyfin::Support::fromJsonValue<bool>(source["EnableDashboardResponseCaching"]);
 	m_imageSavingConvention = Jellyfin::Support::fromJsonValue<ImageSavingConvention>(source["ImageSavingConvention"]);
-	m_metadataOptions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MetadataOptions>>>(source["MetadataOptions"]);
+	m_metadataOptions = Jellyfin::Support::fromJsonValue<QList<MetadataOptions>>(source["MetadataOptions"]);
 	m_skipDeserializationForBasicTypes = Jellyfin::Support::fromJsonValue<bool>(source["SkipDeserializationForBasicTypes"]);
 	m_serverName = Jellyfin::Support::fromJsonValue<QString>(source["ServerName"]);
 	m_baseUrl = Jellyfin::Support::fromJsonValue<QString>(source["BaseUrl"]);
 	m_uICulture = Jellyfin::Support::fromJsonValue<QString>(source["UICulture"]);
 	m_saveMetadataHidden = Jellyfin::Support::fromJsonValue<bool>(source["SaveMetadataHidden"]);
-	m_contentTypes = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameValuePair>>>(source["ContentTypes"]);
+	m_contentTypes = Jellyfin::Support::fromJsonValue<QList<NameValuePair>>(source["ContentTypes"]);
 	m_remoteClientBitrateLimit = Jellyfin::Support::fromJsonValue<qint32>(source["RemoteClientBitrateLimit"]);
 	m_enableFolderView = Jellyfin::Support::fromJsonValue<bool>(source["EnableFolderView"]);
 	m_enableGroupingIntoCollections = Jellyfin::Support::fromJsonValue<bool>(source["EnableGroupingIntoCollections"]);
@@ -285,14 +285,14 @@ void ServerConfiguration::setFromJson(QJsonObject source) {
 	m_localNetworkSubnets = Jellyfin::Support::fromJsonValue<QStringList>(source["LocalNetworkSubnets"]);
 	m_localNetworkAddresses = Jellyfin::Support::fromJsonValue<QStringList>(source["LocalNetworkAddresses"]);
 	m_codecsUsed = Jellyfin::Support::fromJsonValue<QStringList>(source["CodecsUsed"]);
-	m_pluginRepositories = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<RepositoryInfo>>>(source["PluginRepositories"]);
+	m_pluginRepositories = Jellyfin::Support::fromJsonValue<QList<RepositoryInfo>>(source["PluginRepositories"]);
 	m_enableExternalContentInSuggestions = Jellyfin::Support::fromJsonValue<bool>(source["EnableExternalContentInSuggestions"]);
 	m_requireHttps = Jellyfin::Support::fromJsonValue<bool>(source["RequireHttps"]);
 	m_enableNewOmdbSupport = Jellyfin::Support::fromJsonValue<bool>(source["EnableNewOmdbSupport"]);
 	m_remoteIPFilter = Jellyfin::Support::fromJsonValue<QStringList>(source["RemoteIPFilter"]);
 	m_isRemoteIPFilterBlacklist = Jellyfin::Support::fromJsonValue<bool>(source["IsRemoteIPFilterBlacklist"]);
 	m_imageExtractionTimeoutMs = Jellyfin::Support::fromJsonValue<qint32>(source["ImageExtractionTimeoutMs"]);
-	m_pathSubstitutions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<PathSubstitution>>>(source["PathSubstitutions"]);
+	m_pathSubstitutions = Jellyfin::Support::fromJsonValue<QList<PathSubstitution>>(source["PathSubstitutions"]);
 	m_enableSimpleArtistDetection = Jellyfin::Support::fromJsonValue<bool>(source["EnableSimpleArtistDetection"]);
 	m_uninstalledPlugins = Jellyfin::Support::fromJsonValue<QStringList>(source["UninstalledPlugins"]);
 	m_enableSlowResponseWarning = Jellyfin::Support::fromJsonValue<bool>(source["EnableSlowResponseWarning"]);
@@ -361,13 +361,13 @@ QJsonObject ServerConfiguration::toJson() {
 	result["LibraryMonitorDelay"] = Jellyfin::Support::toJsonValue<qint32>(m_libraryMonitorDelay);
 	result["EnableDashboardResponseCaching"] = Jellyfin::Support::toJsonValue<bool>(m_enableDashboardResponseCaching);
 	result["ImageSavingConvention"] = Jellyfin::Support::toJsonValue<ImageSavingConvention>(m_imageSavingConvention);
-	result["MetadataOptions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MetadataOptions>>>(m_metadataOptions);
+	result["MetadataOptions"] = Jellyfin::Support::toJsonValue<QList<MetadataOptions>>(m_metadataOptions);
 	result["SkipDeserializationForBasicTypes"] = Jellyfin::Support::toJsonValue<bool>(m_skipDeserializationForBasicTypes);
 	result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
 	result["BaseUrl"] = Jellyfin::Support::toJsonValue<QString>(m_baseUrl);
 	result["UICulture"] = Jellyfin::Support::toJsonValue<QString>(m_uICulture);
 	result["SaveMetadataHidden"] = Jellyfin::Support::toJsonValue<bool>(m_saveMetadataHidden);
-	result["ContentTypes"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameValuePair>>>(m_contentTypes);
+	result["ContentTypes"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_contentTypes);
 	result["RemoteClientBitrateLimit"] = Jellyfin::Support::toJsonValue<qint32>(m_remoteClientBitrateLimit);
 	result["EnableFolderView"] = Jellyfin::Support::toJsonValue<bool>(m_enableFolderView);
 	result["EnableGroupingIntoCollections"] = Jellyfin::Support::toJsonValue<bool>(m_enableGroupingIntoCollections);
@@ -375,14 +375,14 @@ QJsonObject ServerConfiguration::toJson() {
 	result["LocalNetworkSubnets"] = Jellyfin::Support::toJsonValue<QStringList>(m_localNetworkSubnets);
 	result["LocalNetworkAddresses"] = Jellyfin::Support::toJsonValue<QStringList>(m_localNetworkAddresses);
 	result["CodecsUsed"] = Jellyfin::Support::toJsonValue<QStringList>(m_codecsUsed);
-	result["PluginRepositories"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<RepositoryInfo>>>(m_pluginRepositories);
+	result["PluginRepositories"] = Jellyfin::Support::toJsonValue<QList<RepositoryInfo>>(m_pluginRepositories);
 	result["EnableExternalContentInSuggestions"] = Jellyfin::Support::toJsonValue<bool>(m_enableExternalContentInSuggestions);
 	result["RequireHttps"] = Jellyfin::Support::toJsonValue<bool>(m_requireHttps);
 	result["EnableNewOmdbSupport"] = Jellyfin::Support::toJsonValue<bool>(m_enableNewOmdbSupport);
 	result["RemoteIPFilter"] = Jellyfin::Support::toJsonValue<QStringList>(m_remoteIPFilter);
 	result["IsRemoteIPFilterBlacklist"] = Jellyfin::Support::toJsonValue<bool>(m_isRemoteIPFilterBlacklist);
 	result["ImageExtractionTimeoutMs"] = Jellyfin::Support::toJsonValue<qint32>(m_imageExtractionTimeoutMs);
-	result["PathSubstitutions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<PathSubstitution>>>(m_pathSubstitutions);
+	result["PathSubstitutions"] = Jellyfin::Support::toJsonValue<QList<PathSubstitution>>(m_pathSubstitutions);
 	result["EnableSimpleArtistDetection"] = Jellyfin::Support::toJsonValue<bool>(m_enableSimpleArtistDetection);
 	result["UninstalledPlugins"] = Jellyfin::Support::toJsonValue<QStringList>(m_uninstalledPlugins);
 	result["EnableSlowResponseWarning"] = Jellyfin::Support::toJsonValue<bool>(m_enableSlowResponseWarning);
@@ -822,9 +822,9 @@ void ServerConfiguration::setImageSavingConvention(ImageSavingConvention newImag
 	m_imageSavingConvention = newImageSavingConvention;
 }
 
-QList<QSharedPointer<MetadataOptions>> ServerConfiguration::metadataOptions() const { return m_metadataOptions; }
+QList<MetadataOptions> ServerConfiguration::metadataOptions() const { return m_metadataOptions; }
 
-void ServerConfiguration::setMetadataOptions(QList<QSharedPointer<MetadataOptions>> newMetadataOptions) {
+void ServerConfiguration::setMetadataOptions(QList<MetadataOptions> newMetadataOptions) {
 	m_metadataOptions = newMetadataOptions;
 }
 bool ServerConfiguration::metadataOptionsNull() const {
@@ -886,9 +886,9 @@ void ServerConfiguration::setSaveMetadataHidden(bool newSaveMetadataHidden) {
 	m_saveMetadataHidden = newSaveMetadataHidden;
 }
 
-QList<QSharedPointer<NameValuePair>> ServerConfiguration::contentTypes() const { return m_contentTypes; }
+QList<NameValuePair> ServerConfiguration::contentTypes() const { return m_contentTypes; }
 
-void ServerConfiguration::setContentTypes(QList<QSharedPointer<NameValuePair>> newContentTypes) {
+void ServerConfiguration::setContentTypes(QList<NameValuePair> newContentTypes) {
 	m_contentTypes = newContentTypes;
 }
 bool ServerConfiguration::contentTypesNull() const {
@@ -962,9 +962,9 @@ void ServerConfiguration::setCodecsUsedNull() {
 	m_codecsUsed.clear();
 
 }
-QList<QSharedPointer<RepositoryInfo>> ServerConfiguration::pluginRepositories() const { return m_pluginRepositories; }
+QList<RepositoryInfo> ServerConfiguration::pluginRepositories() const { return m_pluginRepositories; }
 
-void ServerConfiguration::setPluginRepositories(QList<QSharedPointer<RepositoryInfo>> newPluginRepositories) {
+void ServerConfiguration::setPluginRepositories(QList<RepositoryInfo> newPluginRepositories) {
 	m_pluginRepositories = newPluginRepositories;
 }
 bool ServerConfiguration::pluginRepositoriesNull() const {
@@ -1018,9 +1018,9 @@ void ServerConfiguration::setImageExtractionTimeoutMs(qint32 newImageExtractionT
 	m_imageExtractionTimeoutMs = newImageExtractionTimeoutMs;
 }
 
-QList<QSharedPointer<PathSubstitution>> ServerConfiguration::pathSubstitutions() const { return m_pathSubstitutions; }
+QList<PathSubstitution> ServerConfiguration::pathSubstitutions() const { return m_pathSubstitutions; }
 
-void ServerConfiguration::setPathSubstitutions(QList<QSharedPointer<PathSubstitution>> newPathSubstitutions) {
+void ServerConfiguration::setPathSubstitutions(QList<PathSubstitution> newPathSubstitutions) {
 	m_pathSubstitutions = newPathSubstitutions;
 }
 bool ServerConfiguration::pathSubstitutionsNull() const {

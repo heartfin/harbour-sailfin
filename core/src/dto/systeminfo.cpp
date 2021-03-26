@@ -114,7 +114,7 @@ void SystemInfo::setFromJson(QJsonObject source) {
 	m_isShuttingDown = Jellyfin::Support::fromJsonValue<bool>(source["IsShuttingDown"]);
 	m_supportsLibraryMonitor = Jellyfin::Support::fromJsonValue<bool>(source["SupportsLibraryMonitor"]);
 	m_webSocketPortNumber = Jellyfin::Support::fromJsonValue<qint32>(source["WebSocketPortNumber"]);
-	m_completedInstallations = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<InstallationInfo>>>(source["CompletedInstallations"]);
+	m_completedInstallations = Jellyfin::Support::fromJsonValue<QList<InstallationInfo>>(source["CompletedInstallations"]);
 	m_canSelfRestart = Jellyfin::Support::fromJsonValue<bool>(source["CanSelfRestart"]);
 	m_canLaunchWebBrowser = Jellyfin::Support::fromJsonValue<bool>(source["CanLaunchWebBrowser"]);
 	m_programDataPath = Jellyfin::Support::fromJsonValue<QString>(source["ProgramDataPath"]);
@@ -145,7 +145,7 @@ QJsonObject SystemInfo::toJson() {
 	result["IsShuttingDown"] = Jellyfin::Support::toJsonValue<bool>(m_isShuttingDown);
 	result["SupportsLibraryMonitor"] = Jellyfin::Support::toJsonValue<bool>(m_supportsLibraryMonitor);
 	result["WebSocketPortNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_webSocketPortNumber);
-	result["CompletedInstallations"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<InstallationInfo>>>(m_completedInstallations);
+	result["CompletedInstallations"] = Jellyfin::Support::toJsonValue<QList<InstallationInfo>>(m_completedInstallations);
 	result["CanSelfRestart"] = Jellyfin::Support::toJsonValue<bool>(m_canSelfRestart);
 	result["CanLaunchWebBrowser"] = Jellyfin::Support::toJsonValue<bool>(m_canLaunchWebBrowser);
 	result["ProgramDataPath"] = Jellyfin::Support::toJsonValue<QString>(m_programDataPath);
@@ -303,9 +303,9 @@ void SystemInfo::setWebSocketPortNumber(qint32 newWebSocketPortNumber) {
 	m_webSocketPortNumber = newWebSocketPortNumber;
 }
 
-QList<QSharedPointer<InstallationInfo>> SystemInfo::completedInstallations() const { return m_completedInstallations; }
+QList<InstallationInfo> SystemInfo::completedInstallations() const { return m_completedInstallations; }
 
-void SystemInfo::setCompletedInstallations(QList<QSharedPointer<InstallationInfo>> newCompletedInstallations) {
+void SystemInfo::setCompletedInstallations(QList<InstallationInfo> newCompletedInstallations) {
 	m_completedInstallations = newCompletedInstallations;
 }
 bool SystemInfo::completedInstallationsNull() const {

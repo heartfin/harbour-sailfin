@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets activity log entries.
  */
-class GetLogEntries : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ActivityLogEntryQueryResult, GetLogEntriesParams> {
+class GetLogEntriesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ActivityLogEntryQueryResult, GetLogEntriesParams> {
 public:
-	explicit GetLogEntries(ApiClient *apiClient = nullptr);
+	explicit GetLogEntriesLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetLogEntriesParams& parameters) const override;

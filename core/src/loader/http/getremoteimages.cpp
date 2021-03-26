@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetRemoteImages::GetRemoteImages(ApiClient *apiClient)
+GetRemoteImagesLoader::GetRemoteImagesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::RemoteImageResult, GetRemoteImagesParams>(apiClient) {}
 
-QString GetRemoteImages::path(const GetRemoteImagesParams &params) const {
+QString GetRemoteImagesLoader::path(const GetRemoteImagesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/RemoteImages");
 }
 
-QUrlQuery GetRemoteImages::query(const GetRemoteImagesParams &params) const {
+QUrlQuery GetRemoteImagesLoader::query(const GetRemoteImagesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

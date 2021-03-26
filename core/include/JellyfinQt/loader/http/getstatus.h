@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the current quick connect state.
  */
-class GetStatus : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectState, GetStatusParams> {
+class GetStatusLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectState, GetStatusParams> {
 public:
-	explicit GetStatus(ApiClient *apiClient = nullptr);
+	explicit GetStatusLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetStatusParams& parameters) const override;

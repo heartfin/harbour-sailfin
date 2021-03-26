@@ -55,7 +55,7 @@ TimerInfoDtoQueryResult TimerInfoDtoQueryResult::fromJson(QJsonObject source) {
 
 
 void TimerInfoDtoQueryResult::setFromJson(QJsonObject source) {
-	m_items = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<TimerInfoDto>>>(source["Items"]);
+	m_items = Jellyfin::Support::fromJsonValue<QList<TimerInfoDto>>(source["Items"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 	m_startIndex = Jellyfin::Support::fromJsonValue<qint32>(source["StartIndex"]);
 
@@ -63,16 +63,16 @@ void TimerInfoDtoQueryResult::setFromJson(QJsonObject source) {
 	
 QJsonObject TimerInfoDtoQueryResult::toJson() {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<TimerInfoDto>>>(m_items);
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<TimerInfoDto>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
 
 	return result;
 }
 
-QList<QSharedPointer<TimerInfoDto>> TimerInfoDtoQueryResult::items() const { return m_items; }
+QList<TimerInfoDto> TimerInfoDtoQueryResult::items() const { return m_items; }
 
-void TimerInfoDtoQueryResult::setItems(QList<QSharedPointer<TimerInfoDto>> newItems) {
+void TimerInfoDtoQueryResult::setItems(QList<TimerInfoDto> newItems) {
 	m_items = newItems;
 }
 bool TimerInfoDtoQueryResult::itemsNull() const {

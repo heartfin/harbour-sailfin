@@ -6,6 +6,7 @@ import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../components"
 import "../.."
+import ".."
 
 Page {
     property bool _modelsLoaded: false
@@ -18,9 +19,12 @@ Page {
         }
     }
 
-    J.UserViewModel {
+    J.ItemModel {
         id: mediaLibraryModel
-        apiClient: ApiClient
+        loader: J.UsersViewLoader {
+            id: mediaLibraryModelLoader
+            apiClient: ApiClient
+        }
     }
 
     ScrollView {
@@ -33,12 +37,12 @@ Page {
                 model: mediaLibraryModel
                 Column {
                     width: parent.width
-                    J.UserItemLatestModel {
+                    /*J.UserItemLatestModel {
                         id: userItemModel
                         apiClient: ApiClient
                         parentId: model.id
                         limit: 16
-                    }
+                    }*/
                     Label {
                         text: model.name
                     }
@@ -47,7 +51,7 @@ Page {
                         width: parent.width
                         height: SailfinStyle.unit * 20
                         orientation: ListView.Horizontal
-                        model: userItemModel
+                        model: 10 // userItemModel
                         delegate: ItemDelegate {
                             width: 12 * SailfinStyle.unit
                             height: 20 * SailfinStyle.unit
@@ -65,10 +69,10 @@ Page {
                         }
                     }
                     Connections {
-                        target: mediaLibraryModel
-                        onStatusChanged: {
-                            if (mediaLibraryModel.status == UserItemModel.Ready) {
-                                userItemModel.reload()
+                        target: mediaLibraryModelLoader
+                        onReady: {
+                            if (mediaLibraryModelLoader.status === ModelStatus.Ready) {
+                                //userItemModel.reload()
                             }
                         }
                     }

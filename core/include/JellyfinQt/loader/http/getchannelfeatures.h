@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Get channel features.
  */
-class GetChannelFeatures : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ChannelFeatures, GetChannelFeaturesParams> {
+class GetChannelFeaturesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ChannelFeatures, GetChannelFeaturesParams> {
 public:
-	explicit GetChannelFeatures(ApiClient *apiClient = nullptr);
+	explicit GetChannelFeaturesLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetChannelFeaturesParams& parameters) const override;

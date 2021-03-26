@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-UpdateUserItemRating::UpdateUserItemRating(ApiClient *apiClient)
+UpdateUserItemRatingLoader::UpdateUserItemRatingLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, UpdateUserItemRatingParams>(apiClient) {}
 
-QString UpdateUserItemRating::path(const UpdateUserItemRatingParams &params) const {
+QString UpdateUserItemRatingLoader::path(const UpdateUserItemRatingParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/Rating");
 }
 
-QUrlQuery UpdateUserItemRating::query(const UpdateUserItemRatingParams &params) const {
+QUrlQuery UpdateUserItemRatingLoader::query(const UpdateUserItemRatingParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

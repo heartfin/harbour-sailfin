@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Initiate a new quick connect request.
  */
-class Initiate : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectResult, InitiateParams> {
+class InitiateLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectResult, InitiateParams> {
 public:
-	explicit Initiate(ApiClient *apiClient = nullptr);
+	explicit InitiateLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const InitiateParams& parameters) const override;

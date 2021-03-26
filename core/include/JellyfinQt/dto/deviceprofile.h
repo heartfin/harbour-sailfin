@@ -396,77 +396,77 @@ public:
 	/**
 	 * @brief Gets or sets the XmlRootAttributes.
 	 */
-	QList<QSharedPointer<XmlAttribute>> xmlRootAttributes() const;
+	QList<XmlAttribute> xmlRootAttributes() const;
 	/**
 	* @brief Gets or sets the XmlRootAttributes.
 	*/
-	void setXmlRootAttributes(QList<QSharedPointer<XmlAttribute>> newXmlRootAttributes);
+	void setXmlRootAttributes(QList<XmlAttribute> newXmlRootAttributes);
 	bool xmlRootAttributesNull() const;
 	void setXmlRootAttributesNull();
 
 	/**
 	 * @brief Gets or sets the direct play profiles.
 	 */
-	QList<QSharedPointer<DirectPlayProfile>> directPlayProfiles() const;
+	QList<DirectPlayProfile> directPlayProfiles() const;
 	/**
 	* @brief Gets or sets the direct play profiles.
 	*/
-	void setDirectPlayProfiles(QList<QSharedPointer<DirectPlayProfile>> newDirectPlayProfiles);
+	void setDirectPlayProfiles(QList<DirectPlayProfile> newDirectPlayProfiles);
 	bool directPlayProfilesNull() const;
 	void setDirectPlayProfilesNull();
 
 	/**
 	 * @brief Gets or sets the transcoding profiles.
 	 */
-	QList<QSharedPointer<TranscodingProfile>> transcodingProfiles() const;
+	QList<TranscodingProfile> transcodingProfiles() const;
 	/**
 	* @brief Gets or sets the transcoding profiles.
 	*/
-	void setTranscodingProfiles(QList<QSharedPointer<TranscodingProfile>> newTranscodingProfiles);
+	void setTranscodingProfiles(QList<TranscodingProfile> newTranscodingProfiles);
 	bool transcodingProfilesNull() const;
 	void setTranscodingProfilesNull();
 
 	/**
 	 * @brief Gets or sets the ContainerProfiles.
 	 */
-	QList<QSharedPointer<ContainerProfile>> containerProfiles() const;
+	QList<ContainerProfile> containerProfiles() const;
 	/**
 	* @brief Gets or sets the ContainerProfiles.
 	*/
-	void setContainerProfiles(QList<QSharedPointer<ContainerProfile>> newContainerProfiles);
+	void setContainerProfiles(QList<ContainerProfile> newContainerProfiles);
 	bool containerProfilesNull() const;
 	void setContainerProfilesNull();
 
 	/**
 	 * @brief Gets or sets the CodecProfiles.
 	 */
-	QList<QSharedPointer<CodecProfile>> codecProfiles() const;
+	QList<CodecProfile> codecProfiles() const;
 	/**
 	* @brief Gets or sets the CodecProfiles.
 	*/
-	void setCodecProfiles(QList<QSharedPointer<CodecProfile>> newCodecProfiles);
+	void setCodecProfiles(QList<CodecProfile> newCodecProfiles);
 	bool codecProfilesNull() const;
 	void setCodecProfilesNull();
 
 	/**
 	 * @brief Gets or sets the ResponseProfiles.
 	 */
-	QList<QSharedPointer<ResponseProfile>> responseProfiles() const;
+	QList<ResponseProfile> responseProfiles() const;
 	/**
 	* @brief Gets or sets the ResponseProfiles.
 	*/
-	void setResponseProfiles(QList<QSharedPointer<ResponseProfile>> newResponseProfiles);
+	void setResponseProfiles(QList<ResponseProfile> newResponseProfiles);
 	bool responseProfilesNull() const;
 	void setResponseProfilesNull();
 
 	/**
 	 * @brief Gets or sets the SubtitleProfiles.
 	 */
-	QList<QSharedPointer<SubtitleProfile>> subtitleProfiles() const;
+	QList<SubtitleProfile> subtitleProfiles() const;
 	/**
 	* @brief Gets or sets the SubtitleProfiles.
 	*/
-	void setSubtitleProfiles(QList<QSharedPointer<SubtitleProfile>> newSubtitleProfiles);
+	void setSubtitleProfiles(QList<SubtitleProfile> newSubtitleProfiles);
 	bool subtitleProfilesNull() const;
 	void setSubtitleProfilesNull();
 
@@ -504,13 +504,13 @@ protected:
 	bool m_requiresPlainFolders;
 	bool m_enableMSMediaReceiverRegistrar;
 	bool m_ignoreTranscodeByteRangeRequests;
-	QList<QSharedPointer<XmlAttribute>> m_xmlRootAttributes;
-	QList<QSharedPointer<DirectPlayProfile>> m_directPlayProfiles;
-	QList<QSharedPointer<TranscodingProfile>> m_transcodingProfiles;
-	QList<QSharedPointer<ContainerProfile>> m_containerProfiles;
-	QList<QSharedPointer<CodecProfile>> m_codecProfiles;
-	QList<QSharedPointer<ResponseProfile>> m_responseProfiles;
-	QList<QSharedPointer<SubtitleProfile>> m_subtitleProfiles;
+	QList<XmlAttribute> m_xmlRootAttributes;
+	QList<DirectPlayProfile> m_directPlayProfiles;
+	QList<TranscodingProfile> m_transcodingProfiles;
+	QList<ContainerProfile> m_containerProfiles;
+	QList<CodecProfile> m_codecProfiles;
+	QList<ResponseProfile> m_responseProfiles;
+	QList<SubtitleProfile> m_subtitleProfiles;
 };
 
 } // NS DTO

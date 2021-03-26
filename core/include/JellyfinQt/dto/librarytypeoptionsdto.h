@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -76,22 +75,22 @@ public:
 	/**
 	 * @brief Gets or sets the metadata fetchers.
 	 */
-	QList<QSharedPointer<LibraryOptionInfoDto>> metadataFetchers() const;
+	QList<LibraryOptionInfoDto> metadataFetchers() const;
 	/**
 	* @brief Gets or sets the metadata fetchers.
 	*/
-	void setMetadataFetchers(QList<QSharedPointer<LibraryOptionInfoDto>> newMetadataFetchers);
+	void setMetadataFetchers(QList<LibraryOptionInfoDto> newMetadataFetchers);
 	bool metadataFetchersNull() const;
 	void setMetadataFetchersNull();
 
 	/**
 	 * @brief Gets or sets the image fetchers.
 	 */
-	QList<QSharedPointer<LibraryOptionInfoDto>> imageFetchers() const;
+	QList<LibraryOptionInfoDto> imageFetchers() const;
 	/**
 	* @brief Gets or sets the image fetchers.
 	*/
-	void setImageFetchers(QList<QSharedPointer<LibraryOptionInfoDto>> newImageFetchers);
+	void setImageFetchers(QList<LibraryOptionInfoDto> newImageFetchers);
 	bool imageFetchersNull() const;
 	void setImageFetchersNull();
 
@@ -109,21 +108,21 @@ public:
 	/**
 	 * @brief Gets or sets the default image options.
 	 */
-	QList<QSharedPointer<ImageOption>> defaultImageOptions() const;
+	QList<ImageOption> defaultImageOptions() const;
 	/**
 	* @brief Gets or sets the default image options.
 	*/
-	void setDefaultImageOptions(QList<QSharedPointer<ImageOption>> newDefaultImageOptions);
+	void setDefaultImageOptions(QList<ImageOption> newDefaultImageOptions);
 	bool defaultImageOptionsNull() const;
 	void setDefaultImageOptionsNull();
 
 
 protected:
 	QString m_type;
-	QList<QSharedPointer<LibraryOptionInfoDto>> m_metadataFetchers;
-	QList<QSharedPointer<LibraryOptionInfoDto>> m_imageFetchers;
+	QList<LibraryOptionInfoDto> m_metadataFetchers;
+	QList<LibraryOptionInfoDto> m_imageFetchers;
 	QList<ImageType> m_supportedImageTypes;
-	QList<QSharedPointer<ImageOption>> m_defaultImageOptions;
+	QList<ImageOption> m_defaultImageOptions;
 };
 
 } // NS DTO

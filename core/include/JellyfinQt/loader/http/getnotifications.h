@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a user's notifications.
  */
-class GetNotifications : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::NotificationResultDto, GetNotificationsParams> {
+class GetNotificationsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::NotificationResultDto, GetNotificationsParams> {
 public:
-	explicit GetNotifications(ApiClient *apiClient = nullptr);
+	explicit GetNotificationsLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetNotificationsParams& parameters) const override;

@@ -53,22 +53,22 @@ SearchHintResult SearchHintResult::fromJson(QJsonObject source) {
 
 
 void SearchHintResult::setFromJson(QJsonObject source) {
-	m_searchHints = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<SearchHint>>>(source["SearchHints"]);
+	m_searchHints = Jellyfin::Support::fromJsonValue<QList<SearchHint>>(source["SearchHints"]);
 	m_totalRecordCount = Jellyfin::Support::fromJsonValue<qint32>(source["TotalRecordCount"]);
 
 }
 	
 QJsonObject SearchHintResult::toJson() {
 	QJsonObject result;
-	result["SearchHints"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<SearchHint>>>(m_searchHints);
+	result["SearchHints"] = Jellyfin::Support::toJsonValue<QList<SearchHint>>(m_searchHints);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
 
 	return result;
 }
 
-QList<QSharedPointer<SearchHint>> SearchHintResult::searchHints() const { return m_searchHints; }
+QList<SearchHint> SearchHintResult::searchHints() const { return m_searchHints; }
 
-void SearchHintResult::setSearchHints(QList<QSharedPointer<SearchHint>> newSearchHints) {
+void SearchHintResult::setSearchHints(QList<SearchHint> newSearchHints) {
 	m_searchHints = newSearchHints;
 }
 bool SearchHintResult::searchHintsNull() const {

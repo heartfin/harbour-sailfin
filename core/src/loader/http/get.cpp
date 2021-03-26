@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-Get::Get(ApiClient *apiClient)
+GetLoader::GetLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::SearchHintResult, GetParams>(apiClient) {}
 
-QString Get::path(const GetParams &params) const {
+QString GetLoader::path(const GetParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Search/Hints");
 }
 
-QUrlQuery Get::query(const GetParams &params) const {
+QUrlQuery GetLoader::query(const GetParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

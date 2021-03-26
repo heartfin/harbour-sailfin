@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QStringList>
 #include <optional>
 
@@ -60,9 +59,9 @@ public:
 	
 	// Properties
 
-	QList<QSharedPointer<NameGuidPair>> genres() const;
+	QList<NameGuidPair> genres() const;
 
-	void setGenres(QList<QSharedPointer<NameGuidPair>> newGenres);
+	void setGenres(QList<NameGuidPair> newGenres);
 	bool genresNull() const;
 	void setGenresNull();
 
@@ -75,7 +74,7 @@ public:
 
 
 protected:
-	QList<QSharedPointer<NameGuidPair>> m_genres;
+	QList<NameGuidPair> m_genres;
 	QStringList m_tags;
 };
 

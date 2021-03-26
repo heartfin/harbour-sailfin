@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets intros to play before the main media item plays.
  */
-class GetIntros : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetIntrosParams> {
+class GetIntrosLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetIntrosParams> {
 public:
-	explicit GetIntros(ApiClient *apiClient = nullptr);
+	explicit GetIntrosLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetIntrosParams& parameters) const override;

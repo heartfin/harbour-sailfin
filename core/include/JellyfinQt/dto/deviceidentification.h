@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -151,11 +150,11 @@ public:
 	/**
 	 * @brief Gets or sets the headers.
 	 */
-	QList<QSharedPointer<HttpHeaderInfo>> headers() const;
+	QList<HttpHeaderInfo> headers() const;
 	/**
 	* @brief Gets or sets the headers.
 	*/
-	void setHeaders(QList<QSharedPointer<HttpHeaderInfo>> newHeaders);
+	void setHeaders(QList<HttpHeaderInfo> newHeaders);
 	bool headersNull() const;
 	void setHeadersNull();
 
@@ -169,7 +168,7 @@ protected:
 	QString m_modelUrl;
 	QString m_manufacturer;
 	QString m_manufacturerUrl;
-	QList<QSharedPointer<HttpHeaderInfo>> m_headers;
+	QList<HttpHeaderInfo> m_headers;
 };
 
 } // NS DTO

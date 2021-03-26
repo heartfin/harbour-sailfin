@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetKeys::GetKeys(ApiClient *apiClient)
+GetKeysLoader::GetKeysLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationInfoQueryResult, GetKeysParams>(apiClient) {}
 
-QString GetKeys::path(const GetKeysParams &params) const {
+QString GetKeysLoader::path(const GetKeysParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Auth/Keys");
 }
 
-QUrlQuery GetKeys::query(const GetKeysParams &params) const {
+QUrlQuery GetKeysLoader::query(const GetKeysParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

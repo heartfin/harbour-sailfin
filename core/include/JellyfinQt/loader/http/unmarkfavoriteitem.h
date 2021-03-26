@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Unmarks item as a favorite.
  */
-class UnmarkFavoriteItem : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, UnmarkFavoriteItemParams> {
+class UnmarkFavoriteItemLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, UnmarkFavoriteItemParams> {
 public:
-	explicit UnmarkFavoriteItem(ApiClient *apiClient = nullptr);
+	explicit UnmarkFavoriteItemLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const UnmarkFavoriteItemParams& parameters) const override;

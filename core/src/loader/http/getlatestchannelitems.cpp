@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetLatestChannelItems::GetLatestChannelItems(ApiClient *apiClient)
+GetLatestChannelItemsLoader::GetLatestChannelItemsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetLatestChannelItemsParams>(apiClient) {}
 
-QString GetLatestChannelItems::path(const GetLatestChannelItemsParams &params) const {
+QString GetLatestChannelItemsLoader::path(const GetLatestChannelItemsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Channels/Items/Latest");
 }
 
-QUrlQuery GetLatestChannelItems::query(const GetLatestChannelItemsParams &params) const {
+QUrlQuery GetLatestChannelItemsLoader::query(const GetLatestChannelItemsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

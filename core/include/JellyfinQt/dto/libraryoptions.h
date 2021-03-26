@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -82,9 +81,9 @@ public:
 	void setExtractChapterImagesDuringLibraryScan(bool newExtractChapterImagesDuringLibraryScan);
 
 
-	QList<QSharedPointer<MediaPathInfo>> pathInfos() const;
+	QList<MediaPathInfo> pathInfos() const;
 
-	void setPathInfos(QList<QSharedPointer<MediaPathInfo>> newPathInfos);
+	void setPathInfos(QList<MediaPathInfo> newPathInfos);
 	bool pathInfosNull() const;
 	void setPathInfosNull();
 
@@ -210,9 +209,9 @@ public:
 	void setSaveSubtitlesWithMedia(bool newSaveSubtitlesWithMedia);
 
 
-	QList<QSharedPointer<TypeOptions>> typeOptions() const;
+	QList<TypeOptions> typeOptions() const;
 
-	void setTypeOptions(QList<QSharedPointer<TypeOptions>> newTypeOptions);
+	void setTypeOptions(QList<TypeOptions> newTypeOptions);
 	bool typeOptionsNull() const;
 	void setTypeOptionsNull();
 
@@ -222,7 +221,7 @@ protected:
 	bool m_enableRealtimeMonitor;
 	bool m_enableChapterImageExtraction;
 	bool m_extractChapterImagesDuringLibraryScan;
-	QList<QSharedPointer<MediaPathInfo>> m_pathInfos;
+	QList<MediaPathInfo> m_pathInfos;
 	bool m_saveLocalMetadata;
 	bool m_enableInternetProviders;
 	bool m_enableAutomaticSeriesGrouping;
@@ -242,7 +241,7 @@ protected:
 	QStringList m_subtitleDownloadLanguages;
 	bool m_requirePerfectSubtitleMatch;
 	bool m_saveSubtitlesWithMedia;
-	QList<QSharedPointer<TypeOptions>> m_typeOptions;
+	QList<TypeOptions> m_typeOptions;
 };
 
 } // NS DTO

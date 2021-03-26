@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetPlaybackInfo::GetPlaybackInfo(ApiClient *apiClient)
+GetPlaybackInfoLoader::GetPlaybackInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaybackInfoResponse, GetPlaybackInfoParams>(apiClient) {}
 
-QString GetPlaybackInfo::path(const GetPlaybackInfoParams &params) const {
+QString GetPlaybackInfoLoader::path(const GetPlaybackInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/PlaybackInfo");
 }
 
-QUrlQuery GetPlaybackInfo::query(const GetPlaybackInfoParams &params) const {
+QUrlQuery GetPlaybackInfoLoader::query(const GetPlaybackInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

@@ -33,7 +33,6 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
@@ -102,9 +101,9 @@ public:
 	void setMimeTypeNull();
 
 
-	QList<QSharedPointer<ProfileCondition>> conditions() const;
+	QList<ProfileCondition> conditions() const;
 
-	void setConditions(QList<QSharedPointer<ProfileCondition>> newConditions);
+	void setConditions(QList<ProfileCondition> newConditions);
 	bool conditionsNull() const;
 	void setConditionsNull();
 
@@ -116,7 +115,7 @@ protected:
 	DlnaProfileType m_type;
 	QString m_orgPn;
 	QString m_mimeType;
-	QList<QSharedPointer<ProfileCondition>> m_conditions;
+	QList<ProfileCondition> m_conditions;
 };
 
 } // NS DTO

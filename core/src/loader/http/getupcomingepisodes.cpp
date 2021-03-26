@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetUpcomingEpisodes::GetUpcomingEpisodes(ApiClient *apiClient)
+GetUpcomingEpisodesLoader::GetUpcomingEpisodesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetUpcomingEpisodesParams>(apiClient) {}
 
-QString GetUpcomingEpisodes::path(const GetUpcomingEpisodesParams &params) const {
+QString GetUpcomingEpisodesLoader::path(const GetUpcomingEpisodesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Shows/Upcoming");
 }
 
-QUrlQuery GetUpcomingEpisodes::query(const GetUpcomingEpisodesParams &params) const {
+QUrlQuery GetUpcomingEpisodesLoader::query(const GetUpcomingEpisodesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

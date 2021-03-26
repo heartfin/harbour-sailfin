@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetRecordings::GetRecordings(ApiClient *apiClient)
+GetRecordingsLoader::GetRecordingsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecordingsParams>(apiClient) {}
 
-QString GetRecordings::path(const GetRecordingsParams &params) const {
+QString GetRecordingsLoader::path(const GetRecordingsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/LiveTv/Recordings");
 }
 
-QUrlQuery GetRecordings::query(const GetRecordingsParams &params) const {
+QUrlQuery GetRecordingsLoader::query(const GetRecordingsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

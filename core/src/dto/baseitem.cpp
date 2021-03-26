@@ -74,7 +74,7 @@ void BaseItem::setFromJson(QJsonObject source) {
 	m_size = Jellyfin::Support::fromJsonValue<std::optional<qint64>>(source["Size"]);
 	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
 	m_dateLastSaved = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateLastSaved"]);
-	m_remoteTrailers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaUrl>>>(source["RemoteTrailers"]);
+	m_remoteTrailers = Jellyfin::Support::fromJsonValue<QList<MediaUrl>>(source["RemoteTrailers"]);
 	m_isHD = Jellyfin::Support::fromJsonValue<bool>(source["IsHD"]);
 	m_isShortcut = Jellyfin::Support::fromJsonValue<bool>(source["IsShortcut"]);
 	m_shortcutPath = Jellyfin::Support::fromJsonValue<QString>(source["ShortcutPath"]);
@@ -90,7 +90,7 @@ QJsonObject BaseItem::toJson() {
 	result["Size"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_size);
 	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
 	result["DateLastSaved"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastSaved);
-	result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaUrl>>>(m_remoteTrailers);
+	result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<MediaUrl>>(m_remoteTrailers);
 	result["IsHD"] = Jellyfin::Support::toJsonValue<bool>(m_isHD);
 	result["IsShortcut"] = Jellyfin::Support::toJsonValue<bool>(m_isShortcut);
 	result["ShortcutPath"] = Jellyfin::Support::toJsonValue<QString>(m_shortcutPath);
@@ -134,9 +134,9 @@ void BaseItem::setDateLastSaved(QDateTime newDateLastSaved) {
 	m_dateLastSaved = newDateLastSaved;
 }
 
-QList<QSharedPointer<MediaUrl>> BaseItem::remoteTrailers() const { return m_remoteTrailers; }
+QList<MediaUrl> BaseItem::remoteTrailers() const { return m_remoteTrailers; }
 
-void BaseItem::setRemoteTrailers(QList<QSharedPointer<MediaUrl>> newRemoteTrailers) {
+void BaseItem::setRemoteTrailers(QList<MediaUrl> newRemoteTrailers) {
 	m_remoteTrailers = newRemoteTrailers;
 }
 bool BaseItem::remoteTrailersNull() const {

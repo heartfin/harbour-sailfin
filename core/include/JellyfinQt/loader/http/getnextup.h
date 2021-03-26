@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets a list of next up episodes.
  */
-class GetNextUp : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetNextUpParams> {
+class GetNextUpLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetNextUpParams> {
 public:
-	explicit GetNextUp(ApiClient *apiClient = nullptr);
+	explicit GetNextUpLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetNextUpParams& parameters) const override;

@@ -375,8 +375,8 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_forcedSortName = Jellyfin::Support::fromJsonValue<QString>(source["ForcedSortName"]);
 	m_video3DFormat = Jellyfin::Support::fromJsonValue<Video3DFormat>(source["Video3DFormat"]);
 	m_premiereDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["PremiereDate"]);
-	m_externalUrls = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ExternalUrl>>>(source["ExternalUrls"]);
-	m_mediaSources = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(source["MediaSources"]);
+	m_externalUrls = Jellyfin::Support::fromJsonValue<QList<ExternalUrl>>(source["ExternalUrls"]);
+	m_mediaSources = Jellyfin::Support::fromJsonValue<QList<MediaSourceInfo>>(source["MediaSources"]);
 	m_criticRating = Jellyfin::Support::fromJsonValue<std::optional<float>>(source["CriticRating"]);
 	m_productionLocations = Jellyfin::Support::fromJsonValue<QStringList>(source["ProductionLocations"]);
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
@@ -400,15 +400,15 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_indexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["IndexNumber"]);
 	m_indexNumberEnd = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["IndexNumberEnd"]);
 	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ParentIndexNumber"]);
-	m_remoteTrailers = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaUrl>>>(source["RemoteTrailers"]);
+	m_remoteTrailers = Jellyfin::Support::fromJsonValue<QList<MediaUrl>>(source["RemoteTrailers"]);
 	m_providerIds = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ProviderIds"]);
 	m_isHD = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsHD"]);
 	m_isFolder = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsFolder"]);
 	m_parentId = Jellyfin::Support::fromJsonValue<QString>(source["ParentId"]);
 	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
-	m_people = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<BaseItemPerson>>>(source["People"]);
-	m_studios = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameGuidPair>>>(source["Studios"]);
-	m_genreItems = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameGuidPair>>>(source["GenreItems"]);
+	m_people = Jellyfin::Support::fromJsonValue<QList<BaseItemPerson>>(source["People"]);
+	m_studios = Jellyfin::Support::fromJsonValue<QList<NameGuidPair>>(source["Studios"]);
+	m_genreItems = Jellyfin::Support::fromJsonValue<QList<NameGuidPair>>(source["GenreItems"]);
 	m_parentLogoItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentLogoItemId"]);
 	m_parentBackdropItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentBackdropItemId"]);
 	m_parentBackdropImageTags = Jellyfin::Support::fromJsonValue<QStringList>(source["ParentBackdropImageTags"]);
@@ -427,7 +427,7 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_tags = Jellyfin::Support::fromJsonValue<QStringList>(source["Tags"]);
 	m_primaryImageAspectRatio = Jellyfin::Support::fromJsonValue<std::optional<double>>(source["PrimaryImageAspectRatio"]);
 	m_artists = Jellyfin::Support::fromJsonValue<QStringList>(source["Artists"]);
-	m_artistItems = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameGuidPair>>>(source["ArtistItems"]);
+	m_artistItems = Jellyfin::Support::fromJsonValue<QList<NameGuidPair>>(source["ArtistItems"]);
 	m_album = Jellyfin::Support::fromJsonValue<QString>(source["Album"]);
 	m_collectionType = Jellyfin::Support::fromJsonValue<QString>(source["CollectionType"]);
 	m_displayOrder = Jellyfin::Support::fromJsonValue<QString>(source["DisplayOrder"]);
@@ -435,9 +435,9 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_albumPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["AlbumPrimaryImageTag"]);
 	m_seriesPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["SeriesPrimaryImageTag"]);
 	m_albumArtist = Jellyfin::Support::fromJsonValue<QString>(source["AlbumArtist"]);
-	m_albumArtists = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<NameGuidPair>>>(source["AlbumArtists"]);
+	m_albumArtists = Jellyfin::Support::fromJsonValue<QList<NameGuidPair>>(source["AlbumArtists"]);
 	m_seasonName = Jellyfin::Support::fromJsonValue<QString>(source["SeasonName"]);
-	m_mediaStreams = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<MediaStream>>>(source["MediaStreams"]);
+	m_mediaStreams = Jellyfin::Support::fromJsonValue<QList<MediaStream>>(source["MediaStreams"]);
 	m_videoType = Jellyfin::Support::fromJsonValue<VideoType>(source["VideoType"]);
 	m_partCount = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["PartCount"]);
 	m_mediaSourceCount = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["MediaSourceCount"]);
@@ -454,7 +454,7 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_parentThumbImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ParentThumbImageTag"]);
 	m_parentPrimaryImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentPrimaryImageItemId"]);
 	m_parentPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ParentPrimaryImageTag"]);
-	m_chapters = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ChapterInfo>>>(source["Chapters"]);
+	m_chapters = Jellyfin::Support::fromJsonValue<QList<ChapterInfo>>(source["Chapters"]);
 	m_locationType = Jellyfin::Support::fromJsonValue<LocationType>(source["LocationType"]);
 	m_isoType = Jellyfin::Support::fromJsonValue<IsoType>(source["IsoType"]);
 	m_mediaType = Jellyfin::Support::fromJsonValue<QString>(source["MediaType"]);
@@ -531,8 +531,8 @@ QJsonObject BaseItemDto::toJson() {
 	result["ForcedSortName"] = Jellyfin::Support::toJsonValue<QString>(m_forcedSortName);
 	result["Video3DFormat"] = Jellyfin::Support::toJsonValue<Video3DFormat>(m_video3DFormat);
 	result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
-	result["ExternalUrls"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ExternalUrl>>>(m_externalUrls);
-	result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaSourceInfo>>>(m_mediaSources);
+	result["ExternalUrls"] = Jellyfin::Support::toJsonValue<QList<ExternalUrl>>(m_externalUrls);
+	result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<MediaSourceInfo>>(m_mediaSources);
 	result["CriticRating"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_criticRating);
 	result["ProductionLocations"] = Jellyfin::Support::toJsonValue<QStringList>(m_productionLocations);
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
@@ -556,15 +556,15 @@ QJsonObject BaseItemDto::toJson() {
 	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
 	result["IndexNumberEnd"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumberEnd);
 	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
-	result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaUrl>>>(m_remoteTrailers);
+	result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<MediaUrl>>(m_remoteTrailers);
 	result["ProviderIds"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_providerIds);
 	result["IsHD"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isHD);
 	result["IsFolder"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isFolder);
 	result["ParentId"] = Jellyfin::Support::toJsonValue<QString>(m_parentId);
 	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["People"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<BaseItemPerson>>>(m_people);
-	result["Studios"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameGuidPair>>>(m_studios);
-	result["GenreItems"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameGuidPair>>>(m_genreItems);
+	result["People"] = Jellyfin::Support::toJsonValue<QList<BaseItemPerson>>(m_people);
+	result["Studios"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_studios);
+	result["GenreItems"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_genreItems);
 	result["ParentLogoItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentLogoItemId);
 	result["ParentBackdropItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentBackdropItemId);
 	result["ParentBackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_parentBackdropImageTags);
@@ -583,7 +583,7 @@ QJsonObject BaseItemDto::toJson() {
 	result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
 	result["PrimaryImageAspectRatio"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_primaryImageAspectRatio);
 	result["Artists"] = Jellyfin::Support::toJsonValue<QStringList>(m_artists);
-	result["ArtistItems"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameGuidPair>>>(m_artistItems);
+	result["ArtistItems"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_artistItems);
 	result["Album"] = Jellyfin::Support::toJsonValue<QString>(m_album);
 	result["CollectionType"] = Jellyfin::Support::toJsonValue<QString>(m_collectionType);
 	result["DisplayOrder"] = Jellyfin::Support::toJsonValue<QString>(m_displayOrder);
@@ -591,9 +591,9 @@ QJsonObject BaseItemDto::toJson() {
 	result["AlbumPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_albumPrimaryImageTag);
 	result["SeriesPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_seriesPrimaryImageTag);
 	result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtist);
-	result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<NameGuidPair>>>(m_albumArtists);
+	result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_albumArtists);
 	result["SeasonName"] = Jellyfin::Support::toJsonValue<QString>(m_seasonName);
-	result["MediaStreams"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<MediaStream>>>(m_mediaStreams);
+	result["MediaStreams"] = Jellyfin::Support::toJsonValue<QList<MediaStream>>(m_mediaStreams);
 	result["VideoType"] = Jellyfin::Support::toJsonValue<VideoType>(m_videoType);
 	result["PartCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_partCount);
 	result["MediaSourceCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_mediaSourceCount);
@@ -610,7 +610,7 @@ QJsonObject BaseItemDto::toJson() {
 	result["ParentThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbImageTag);
 	result["ParentPrimaryImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentPrimaryImageItemId);
 	result["ParentPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentPrimaryImageTag);
-	result["Chapters"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ChapterInfo>>>(m_chapters);
+	result["Chapters"] = Jellyfin::Support::toJsonValue<QList<ChapterInfo>>(m_chapters);
 	result["LocationType"] = Jellyfin::Support::toJsonValue<LocationType>(m_locationType);
 	result["IsoType"] = Jellyfin::Support::toJsonValue<IsoType>(m_isoType);
 	result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
@@ -960,9 +960,9 @@ void BaseItemDto::setPremiereDateNull() {
 	m_premiereDate= QDateTime();
 
 }
-QList<QSharedPointer<ExternalUrl>> BaseItemDto::externalUrls() const { return m_externalUrls; }
+QList<ExternalUrl> BaseItemDto::externalUrls() const { return m_externalUrls; }
 
-void BaseItemDto::setExternalUrls(QList<QSharedPointer<ExternalUrl>> newExternalUrls) {
+void BaseItemDto::setExternalUrls(QList<ExternalUrl> newExternalUrls) {
 	m_externalUrls = newExternalUrls;
 }
 bool BaseItemDto::externalUrlsNull() const {
@@ -973,9 +973,9 @@ void BaseItemDto::setExternalUrlsNull() {
 	m_externalUrls.clear();
 
 }
-QList<QSharedPointer<MediaSourceInfo>> BaseItemDto::mediaSources() const { return m_mediaSources; }
+QList<MediaSourceInfo> BaseItemDto::mediaSources() const { return m_mediaSources; }
 
-void BaseItemDto::setMediaSources(QList<QSharedPointer<MediaSourceInfo>> newMediaSources) {
+void BaseItemDto::setMediaSources(QList<MediaSourceInfo> newMediaSources) {
 	m_mediaSources = newMediaSources;
 }
 bool BaseItemDto::mediaSourcesNull() const {
@@ -1278,9 +1278,9 @@ void BaseItemDto::setParentIndexNumberNull() {
 	m_parentIndexNumber = std::nullopt;
 
 }
-QList<QSharedPointer<MediaUrl>> BaseItemDto::remoteTrailers() const { return m_remoteTrailers; }
+QList<MediaUrl> BaseItemDto::remoteTrailers() const { return m_remoteTrailers; }
 
-void BaseItemDto::setRemoteTrailers(QList<QSharedPointer<MediaUrl>> newRemoteTrailers) {
+void BaseItemDto::setRemoteTrailers(QList<MediaUrl> newRemoteTrailers) {
 	m_remoteTrailers = newRemoteTrailers;
 }
 bool BaseItemDto::remoteTrailersNull() const {
@@ -1356,9 +1356,9 @@ void BaseItemDto::setTypeNull() {
 	m_type.clear();
 
 }
-QList<QSharedPointer<BaseItemPerson>> BaseItemDto::people() const { return m_people; }
+QList<BaseItemPerson> BaseItemDto::people() const { return m_people; }
 
-void BaseItemDto::setPeople(QList<QSharedPointer<BaseItemPerson>> newPeople) {
+void BaseItemDto::setPeople(QList<BaseItemPerson> newPeople) {
 	m_people = newPeople;
 }
 bool BaseItemDto::peopleNull() const {
@@ -1369,9 +1369,9 @@ void BaseItemDto::setPeopleNull() {
 	m_people.clear();
 
 }
-QList<QSharedPointer<NameGuidPair>> BaseItemDto::studios() const { return m_studios; }
+QList<NameGuidPair> BaseItemDto::studios() const { return m_studios; }
 
-void BaseItemDto::setStudios(QList<QSharedPointer<NameGuidPair>> newStudios) {
+void BaseItemDto::setStudios(QList<NameGuidPair> newStudios) {
 	m_studios = newStudios;
 }
 bool BaseItemDto::studiosNull() const {
@@ -1382,9 +1382,9 @@ void BaseItemDto::setStudiosNull() {
 	m_studios.clear();
 
 }
-QList<QSharedPointer<NameGuidPair>> BaseItemDto::genreItems() const { return m_genreItems; }
+QList<NameGuidPair> BaseItemDto::genreItems() const { return m_genreItems; }
 
-void BaseItemDto::setGenreItems(QList<QSharedPointer<NameGuidPair>> newGenreItems) {
+void BaseItemDto::setGenreItems(QList<NameGuidPair> newGenreItems) {
 	m_genreItems = newGenreItems;
 }
 bool BaseItemDto::genreItemsNull() const {
@@ -1622,9 +1622,9 @@ void BaseItemDto::setArtistsNull() {
 	m_artists.clear();
 
 }
-QList<QSharedPointer<NameGuidPair>> BaseItemDto::artistItems() const { return m_artistItems; }
+QList<NameGuidPair> BaseItemDto::artistItems() const { return m_artistItems; }
 
-void BaseItemDto::setArtistItems(QList<QSharedPointer<NameGuidPair>> newArtistItems) {
+void BaseItemDto::setArtistItems(QList<NameGuidPair> newArtistItems) {
 	m_artistItems = newArtistItems;
 }
 bool BaseItemDto::artistItemsNull() const {
@@ -1726,9 +1726,9 @@ void BaseItemDto::setAlbumArtistNull() {
 	m_albumArtist.clear();
 
 }
-QList<QSharedPointer<NameGuidPair>> BaseItemDto::albumArtists() const { return m_albumArtists; }
+QList<NameGuidPair> BaseItemDto::albumArtists() const { return m_albumArtists; }
 
-void BaseItemDto::setAlbumArtists(QList<QSharedPointer<NameGuidPair>> newAlbumArtists) {
+void BaseItemDto::setAlbumArtists(QList<NameGuidPair> newAlbumArtists) {
 	m_albumArtists = newAlbumArtists;
 }
 bool BaseItemDto::albumArtistsNull() const {
@@ -1752,9 +1752,9 @@ void BaseItemDto::setSeasonNameNull() {
 	m_seasonName.clear();
 
 }
-QList<QSharedPointer<MediaStream>> BaseItemDto::mediaStreams() const { return m_mediaStreams; }
+QList<MediaStream> BaseItemDto::mediaStreams() const { return m_mediaStreams; }
 
-void BaseItemDto::setMediaStreams(QList<QSharedPointer<MediaStream>> newMediaStreams) {
+void BaseItemDto::setMediaStreams(QList<MediaStream> newMediaStreams) {
 	m_mediaStreams = newMediaStreams;
 }
 bool BaseItemDto::mediaStreamsNull() const {
@@ -1966,9 +1966,9 @@ void BaseItemDto::setParentPrimaryImageTagNull() {
 	m_parentPrimaryImageTag.clear();
 
 }
-QList<QSharedPointer<ChapterInfo>> BaseItemDto::chapters() const { return m_chapters; }
+QList<ChapterInfo> BaseItemDto::chapters() const { return m_chapters; }
 
-void BaseItemDto::setChapters(QList<QSharedPointer<ChapterInfo>> newChapters) {
+void BaseItemDto::setChapters(QList<ChapterInfo> newChapters) {
 	m_chapters = newChapters;
 }
 bool BaseItemDto::chaptersNull() const {

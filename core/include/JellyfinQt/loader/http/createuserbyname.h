@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Creates a user.
  */
-class CreateUserByName : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, CreateUserByNameParams> {
+class CreateUserByNameLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, CreateUserByNameParams> {
 public:
-	explicit CreateUserByName(ApiClient *apiClient = nullptr);
+	explicit CreateUserByNameLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const CreateUserByNameParams& parameters) const override;

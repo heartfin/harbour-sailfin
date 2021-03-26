@@ -133,7 +133,7 @@ void UserPolicy::setFromJson(QJsonObject source) {
 	m_maxParentalRating = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["MaxParentalRating"]);
 	m_blockedTags = Jellyfin::Support::fromJsonValue<QStringList>(source["BlockedTags"]);
 	m_enableUserPreferenceAccess = Jellyfin::Support::fromJsonValue<bool>(source["EnableUserPreferenceAccess"]);
-	m_accessSchedules = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<AccessSchedule>>>(source["AccessSchedules"]);
+	m_accessSchedules = Jellyfin::Support::fromJsonValue<QList<AccessSchedule>>(source["AccessSchedules"]);
 	m_blockUnratedItems = Jellyfin::Support::fromJsonValue<QList<UnratedItem>>(source["BlockUnratedItems"]);
 	m_enableRemoteControlOfOtherUsers = Jellyfin::Support::fromJsonValue<bool>(source["EnableRemoteControlOfOtherUsers"]);
 	m_enableSharedDeviceControl = Jellyfin::Support::fromJsonValue<bool>(source["EnableSharedDeviceControl"]);
@@ -177,7 +177,7 @@ QJsonObject UserPolicy::toJson() {
 	result["MaxParentalRating"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxParentalRating);
 	result["BlockedTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_blockedTags);
 	result["EnableUserPreferenceAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableUserPreferenceAccess);
-	result["AccessSchedules"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<AccessSchedule>>>(m_accessSchedules);
+	result["AccessSchedules"] = Jellyfin::Support::toJsonValue<QList<AccessSchedule>>(m_accessSchedules);
 	result["BlockUnratedItems"] = Jellyfin::Support::toJsonValue<QList<UnratedItem>>(m_blockUnratedItems);
 	result["EnableRemoteControlOfOtherUsers"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteControlOfOtherUsers);
 	result["EnableSharedDeviceControl"] = Jellyfin::Support::toJsonValue<bool>(m_enableSharedDeviceControl);
@@ -264,9 +264,9 @@ void UserPolicy::setEnableUserPreferenceAccess(bool newEnableUserPreferenceAcces
 	m_enableUserPreferenceAccess = newEnableUserPreferenceAccess;
 }
 
-QList<QSharedPointer<AccessSchedule>> UserPolicy::accessSchedules() const { return m_accessSchedules; }
+QList<AccessSchedule> UserPolicy::accessSchedules() const { return m_accessSchedules; }
 
-void UserPolicy::setAccessSchedules(QList<QSharedPointer<AccessSchedule>> newAccessSchedules) {
+void UserPolicy::setAccessSchedules(QList<AccessSchedule> newAccessSchedules) {
 	m_accessSchedules = newAccessSchedules;
 }
 bool UserPolicy::accessSchedulesNull() const {

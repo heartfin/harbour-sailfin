@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets legacy query filters.
  */
-class GetQueryFiltersLegacy : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QueryFiltersLegacy, GetQueryFiltersLegacyParams> {
+class GetQueryFiltersLegacyLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QueryFiltersLegacy, GetQueryFiltersLegacyParams> {
 public:
-	explicit GetQueryFiltersLegacy(ApiClient *apiClient = nullptr);
+	explicit GetQueryFiltersLegacyLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetQueryFiltersLegacyParams& parameters) const override;

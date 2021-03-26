@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets the library options info.
  */
-class GetLibraryOptionsInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::LibraryOptionsResultDto, GetLibraryOptionsInfoParams> {
+class GetLibraryOptionsInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::LibraryOptionsResultDto, GetLibraryOptionsInfoParams> {
 public:
-	explicit GetLibraryOptionsInfo(ApiClient *apiClient = nullptr);
+	explicit GetLibraryOptionsInfoLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetLibraryOptionsInfoParams& parameters) const override;

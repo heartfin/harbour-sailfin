@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetSuggestions::GetSuggestions(ApiClient *apiClient)
+GetSuggestionsLoader::GetSuggestionsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSuggestionsParams>(apiClient) {}
 
-QString GetSuggestions::path(const GetSuggestionsParams &params) const {
+QString GetSuggestionsLoader::path(const GetSuggestionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/Suggestions");
 }
 
-QUrlQuery GetSuggestions::query(const GetSuggestionsParams &params) const {
+QUrlQuery GetSuggestionsLoader::query(const GetSuggestionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

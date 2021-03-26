@@ -233,7 +233,14 @@ void ApiClient::deleteSession() {
 
 void ApiClient::postCapabilities() {
     QJsonObject capabilities;
-    capabilities["SupportedCommands"] = Support::toJsonValue(m_supportedCommands);
+    QList<DTO::GeneralCommandType> supportedCommands;
+    supportedCommands.reserve(m_supportedCommands.size());
+    for (int i = 0; i < m_supportedCommands.size(); i++) {
+        if (m_supportedCommands[i].canConvert<DTO::GeneralCommandType>()) {
+            supportedCommands.append(m_supportedCommands[i].value<DTO::GeneralCommandType>());
+        }
+    }
+    capabilities["SupportedCommands"] = Support::toJsonValue(supportedCommands);
     capabilities["SupportsPersistentIdentifier"] = true;
     capabilities["SupportsMediaControl"] = false;
     capabilities["SupportsSync"] = false;

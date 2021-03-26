@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Gets metadata editor info for an item.
  */
-class GetMetadataEditorInfo : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::MetadataEditorInfo, GetMetadataEditorInfoParams> {
+class GetMetadataEditorInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::MetadataEditorInfo, GetMetadataEditorInfoParams> {
 public:
-	explicit GetMetadataEditorInfo(ApiClient *apiClient = nullptr);
+	explicit GetMetadataEditorInfoLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetMetadataEditorInfoParams& parameters) const override;

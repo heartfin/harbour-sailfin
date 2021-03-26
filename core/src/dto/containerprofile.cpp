@@ -56,7 +56,7 @@ ContainerProfile ContainerProfile::fromJson(QJsonObject source) {
 
 void ContainerProfile::setFromJson(QJsonObject source) {
 	m_type = Jellyfin::Support::fromJsonValue<DlnaProfileType>(source["Type"]);
-	m_conditions = Jellyfin::Support::fromJsonValue<QList<QSharedPointer<ProfileCondition>>>(source["Conditions"]);
+	m_conditions = Jellyfin::Support::fromJsonValue<QList<ProfileCondition>>(source["Conditions"]);
 	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
 
 }
@@ -64,7 +64,7 @@ void ContainerProfile::setFromJson(QJsonObject source) {
 QJsonObject ContainerProfile::toJson() {
 	QJsonObject result;
 	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
-	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<QSharedPointer<ProfileCondition>>>(m_conditions);
+	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
 	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
 
 	return result;
@@ -76,9 +76,9 @@ void ContainerProfile::setType(DlnaProfileType newType) {
 	m_type = newType;
 }
 
-QList<QSharedPointer<ProfileCondition>> ContainerProfile::conditions() const { return m_conditions; }
+QList<ProfileCondition> ContainerProfile::conditions() const { return m_conditions; }
 
-void ContainerProfile::setConditions(QList<QSharedPointer<ProfileCondition>> newConditions) {
+void ContainerProfile::setConditions(QList<ProfileCondition> newConditions) {
 	m_conditions = newConditions;
 }
 bool ContainerProfile::conditionsNull() const {

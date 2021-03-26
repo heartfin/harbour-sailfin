@@ -45,9 +45,9 @@ namespace HTTP {
 /**
  * @brief Creates an instant playlist based on a given song.
  */
-class GetInstantMixFromSong : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetInstantMixFromSongParams> {
+class GetInstantMixFromSongLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetInstantMixFromSongParams> {
 public:
-	explicit GetInstantMixFromSong(ApiClient *apiClient = nullptr);
+	explicit GetInstantMixFromSongLoader(ApiClient *apiClient = nullptr);
 
 protected:
 	QString path(const GetInstantMixFromSongParams& parameters) const override;

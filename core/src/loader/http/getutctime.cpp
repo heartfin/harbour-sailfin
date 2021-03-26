@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetUtcTime::GetUtcTime(ApiClient *apiClient)
+GetUtcTimeLoader::GetUtcTimeLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UtcTimeResponse, GetUtcTimeParams>(apiClient) {}
 
-QString GetUtcTime::path(const GetUtcTimeParams &params) const {
+QString GetUtcTimeLoader::path(const GetUtcTimeParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/GetUtcTime");
 }
 
-QUrlQuery GetUtcTime::query(const GetUtcTimeParams &params) const {
+QUrlQuery GetUtcTimeLoader::query(const GetUtcTimeParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

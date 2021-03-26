@@ -34,16 +34,16 @@ namespace Loader {
 namespace HTTP {
 
 
-GetQueryFiltersLegacy::GetQueryFiltersLegacy(ApiClient *apiClient)
+GetQueryFiltersLegacyLoader::GetQueryFiltersLegacyLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::QueryFiltersLegacy, GetQueryFiltersLegacyParams>(apiClient) {}
 
-QString GetQueryFiltersLegacy::path(const GetQueryFiltersLegacyParams &params) const {
+QString GetQueryFiltersLegacyLoader::path(const GetQueryFiltersLegacyParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Items/Filters");
 }
 
-QUrlQuery GetQueryFiltersLegacy::query(const GetQueryFiltersLegacyParams &params) const {
+QUrlQuery GetQueryFiltersLegacyLoader::query(const GetQueryFiltersLegacyParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;

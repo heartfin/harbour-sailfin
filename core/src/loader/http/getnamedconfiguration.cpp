@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetNamedConfigurationLoader::GetNamedConfigurationLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QString, GetNamedConfigurationParams>(apiClient) {}
+
+QString GetNamedConfigurationLoader::path(const GetNamedConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/System/Configuration/") + Support::toString< QString>(params.key()) ;
+}
+
+QUrlQuery GetNamedConfigurationLoader::query(const GetNamedConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetSimilarTrailersLoader::GetSimilarTrailersLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarTrailersParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetSimilarTrailersParams>(apiClient) {}
 
 QString GetSimilarTrailersLoader::path(const GetSimilarTrailersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Trailers/") + Support::toString(params.itemId()) + QStringLiteral("/Similar");
+	return QStringLiteral("/Trailers/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Similar");
 }
 
 QUrlQuery GetSimilarTrailersLoader::query(const GetSimilarTrailersParams &params) const {
@@ -50,16 +51,16 @@ QUrlQuery GetSimilarTrailersLoader::query(const GetSimilarTrailersParams &params
 
 	// Optional parameters
 	if (!params.excludeArtistIdsNull()) {
-		result.addQueryItem("excludeArtistIds", Support::toString(params.excludeArtistIds()));
+		result.addQueryItem("excludeArtistIds", Support::toString<QStringList>(params.excludeArtistIds()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	
 	return result;

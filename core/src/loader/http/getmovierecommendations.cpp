@@ -34,6 +34,41 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetMovieRecommendationsLoader::GetMovieRecommendationsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<RecommendationDto>, GetMovieRecommendationsParams>(apiClient) {}
+
+QString GetMovieRecommendationsLoader::path(const GetMovieRecommendationsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Movies/Recommendations");
+}
+
+QUrlQuery GetMovieRecommendationsLoader::query(const GetMovieRecommendationsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	if (!params.parentIdNull()) {
+		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
+	}
+	if (!params.fieldsNull()) {
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
+	}
+	if (!params.categoryLimitNull()) {
+		result.addQueryItem("categoryLimit", Support::toString<std::optional<qint32>>(params.categoryLimit()));
+	}
+	if (!params.itemLimitNull()) {
+		result.addQueryItem("itemLimit", Support::toString<std::optional<qint32>>(params.itemLimit()));
+	}
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -34,6 +34,33 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetDirectoryContentsLoader::GetDirectoryContentsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<FileSystemEntryInfo>, GetDirectoryContentsParams>(apiClient) {}
+
+QString GetDirectoryContentsLoader::path(const GetDirectoryContentsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Environment/DirectoryContents");
+}
+
+QUrlQuery GetDirectoryContentsLoader::query(const GetDirectoryContentsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("path", Support::toString<QString>(params.path()));
+
+	// Optional parameters
+	if (!params.includeFilesNull()) {
+		result.addQueryItem("includeFiles", Support::toString<std::optional<bool>>(params.includeFiles()));
+	}
+	if (!params.includeDirectoriesNull()) {
+		result.addQueryItem("includeDirectories", Support::toString<std::optional<bool>>(params.includeDirectories()));
+	}
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

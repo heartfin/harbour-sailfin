@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets a list of next up episodes.
  */
-class GetNextUpLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetNextUpParams> {
+
+class GetNextUpLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetNextUpParams> {
 public:
 	explicit GetNextUpLoader(ApiClient *apiClient = nullptr);
 

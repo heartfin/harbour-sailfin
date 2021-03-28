@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ChannelItemSortFieldClass {
@@ -57,7 +61,19 @@ private:
 	explicit ChannelItemSortFieldClass();
 };
 
-typedef ChannelItemSortFieldClass::Value ChannelItemSortField;
+using ChannelItemSortField = ChannelItemSortFieldClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelItemSortField = Jellyfin::DTO::ChannelItemSortField;
+
+template <>
+ChannelItemSortField fromJsonValue(const QJsonValue &source, convertType<ChannelItemSortField>);
+
+template <>
+QJsonValue toJsonValue(const ChannelItemSortField &source, convertType<ChannelItemSortField>);
 
 } // NS DTO
 } // NS Jellyfin

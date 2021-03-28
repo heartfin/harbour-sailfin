@@ -70,7 +70,7 @@ void MetadataEditorInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MetadataEditorInfo::toJson() {
+QJsonObject MetadataEditorInfo::toJson() const {
 	QJsonObject result;
 	result["ParentalRatingOptions"] = Jellyfin::Support::toJsonValue<QList<ParentalRating>>(m_parentalRatingOptions);
 	result["Countries"] = Jellyfin::Support::toJsonValue<QList<CountryInfo>>(m_countries);
@@ -168,9 +168,14 @@ namespace Support {
 using MetadataEditorInfo = Jellyfin::DTO::MetadataEditorInfo;
 
 template <>
-MetadataEditorInfo fromJsonValue<MetadataEditorInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MetadataEditorInfo fromJsonValue(const QJsonValue &source, convertType<MetadataEditorInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MetadataEditorInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MetadataEditorInfo &source, convertType<MetadataEditorInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -42,6 +42,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -57,7 +61,7 @@ public:
 	
 	static PlaybackInfoResponse fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -93,6 +97,18 @@ protected:
 	QString m_playSessionId;
 	PlaybackErrorCode m_errorCode;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlaybackInfoResponse = Jellyfin::DTO::PlaybackInfoResponse;
+
+template <>
+PlaybackInfoResponse fromJsonValue(const QJsonValue &source, convertType<PlaybackInfoResponse>);
+
+template<>
+QJsonValue toJsonValue(const PlaybackInfoResponse &source, convertType<PlaybackInfoResponse>);
 
 } // NS DTO
 } // NS Jellyfin

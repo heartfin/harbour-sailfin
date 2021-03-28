@@ -55,7 +55,7 @@ void SetShuffleModeRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SetShuffleModeRequestDto::toJson() {
+QJsonObject SetShuffleModeRequestDto::toJson() const {
 	QJsonObject result;
 	result["Mode"] = Jellyfin::Support::toJsonValue<GroupShuffleMode>(m_mode);
 
@@ -76,9 +76,14 @@ namespace Support {
 using SetShuffleModeRequestDto = Jellyfin::DTO::SetShuffleModeRequestDto;
 
 template <>
-SetShuffleModeRequestDto fromJsonValue<SetShuffleModeRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SetShuffleModeRequestDto fromJsonValue(const QJsonValue &source, convertType<SetShuffleModeRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SetShuffleModeRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SetShuffleModeRequestDto &source, convertType<SetShuffleModeRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

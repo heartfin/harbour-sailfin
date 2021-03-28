@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static PlayRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -93,6 +97,18 @@ protected:
 	qint32 m_playingItemPosition;
 	qint64 m_startPositionTicks;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlayRequestDto = Jellyfin::DTO::PlayRequestDto;
+
+template <>
+PlayRequestDto fromJsonValue(const QJsonValue &source, convertType<PlayRequestDto>);
+
+template<>
+QJsonValue toJsonValue(const PlayRequestDto &source, convertType<PlayRequestDto>);
 
 } // NS DTO
 } // NS Jellyfin

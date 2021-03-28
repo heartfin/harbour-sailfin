@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/livestreamresponse.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Opens a media source.
  */
-class OpenLiveStreamLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::LiveStreamResponse, OpenLiveStreamParams> {
+
+class OpenLiveStreamLoader : public Jellyfin::Support::HttpLoader<LiveStreamResponse, OpenLiveStreamParams> {
 public:
 	explicit OpenLiveStreamLoader(ApiClient *apiClient = nullptr);
 

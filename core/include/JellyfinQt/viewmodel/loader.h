@@ -159,8 +159,11 @@ public:
     QObject *data() const { return m_dataViewModel; }
 
     void reload() override {
+        if (m_futureWatcher->isRunning()) return;
         setStatus(Loading);
-        QFuture<std::optional<R>> future = QtConcurrent::run(this, &Loader<T, R, P>::invokeLoader, m_parameters);
+        m_loader.setParameters(m_parameters);
+        m_loader.prepareLoad();
+        QFuture<std::optional<R>> future = QtConcurrent::run(this, &Loader<T, R, P>::invokeLoader);
         m_futureWatcher->setFuture(future);
     }
 protected:
@@ -179,11 +182,11 @@ private:
      * @param parameters Parameters to forward to the loader
      * @return empty optional if an error occured, otherwise the result.
      */
-    std::optional<R> invokeLoader(P parameters) {
+    std::optional<R> invokeLoader() {
         QMutexLocker(&this->m_mutex);
         this->m_loader.setApiClient(m_apiClient);
         try {
-            return this->m_loader.load(parameters);
+            return this->m_loader.load();
         }  catch (Support::LoadException &e) {
             qWarning() << "Exception while loading an item: " << e.what();
             this->setErrorString(QString(e.what()));

@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/externalidinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Get the item's external id info.
+ */
+
+class GetExternalIdInfosLoader : public Jellyfin::Support::HttpLoader<QList<ExternalIdInfo>, GetExternalIdInfosParams> {
+public:
+	explicit GetExternalIdInfosLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetExternalIdInfosParams& parameters) const override;
+	QUrlQuery query(const GetExternalIdInfosParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

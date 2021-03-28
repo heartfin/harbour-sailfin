@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetUserViewsLoader::GetUserViewsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetUserViewsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetUserViewsParams>(apiClient) {}
 
 QString GetUserViewsLoader::path(const GetUserViewsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/Views");
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Views");
 }
 
 QUrlQuery GetUserViewsLoader::query(const GetUserViewsParams &params) const {
@@ -50,13 +51,13 @@ QUrlQuery GetUserViewsLoader::query(const GetUserViewsParams &params) const {
 
 	// Optional parameters
 	if (!params.includeExternalContentNull()) {
-		result.addQueryItem("includeExternalContent", Support::toString(params.includeExternalContent()));
+		result.addQueryItem("includeExternalContent", Support::toString<std::optional<bool>>(params.includeExternalContent()));
 	}
 	if (!params.presetViewsNull()) {
-		result.addQueryItem("presetViews", Support::toString(params.presetViews()));
+		result.addQueryItem("presetViews", Support::toString<QStringList>(params.presetViews()));
 	}
 	if (!params.includeHiddenNull()) {
-		result.addQueryItem("includeHidden", Support::toString(params.includeHidden()));
+		result.addQueryItem("includeHidden", Support::toString<std::optional<bool>>(params.includeHidden()));
 	}
 	
 	return result;

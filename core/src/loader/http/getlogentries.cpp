@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetLogEntriesLoader::GetLogEntriesLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ActivityLogEntryQueryResult, GetLogEntriesParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<ActivityLogEntryQueryResult, GetLogEntriesParams>(apiClient) {}
 
 QString GetLogEntriesLoader::path(const GetLogEntriesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,16 +51,16 @@ QUrlQuery GetLogEntriesLoader::query(const GetLogEntriesParams &params) const {
 
 	// Optional parameters
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.minDateNull()) {
-		result.addQueryItem("minDate", Support::toString(params.minDate()));
+		result.addQueryItem("minDate", Support::toString<QDateTime>(params.minDate()));
 	}
 	if (!params.hasUserIdNull()) {
-		result.addQueryItem("hasUserId", Support::toString(params.hasUserId()));
+		result.addQueryItem("hasUserId", Support::toString<std::optional<bool>>(params.hasUserId()));
 	}
 	
 	return result;

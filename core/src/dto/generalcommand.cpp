@@ -57,15 +57,15 @@ GeneralCommand GeneralCommand::fromJson(QJsonObject source) {
 void GeneralCommand::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<GeneralCommandType>(source["Name"]);
 	m_controllingUserId = Jellyfin::Support::fromJsonValue<QString>(source["ControllingUserId"]);
-	m_arguments = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["Arguments"]);
+	m_arguments = Jellyfin::Support::fromJsonValue<QJsonObject>(source["Arguments"]);
 
 }
 	
-QJsonObject GeneralCommand::toJson() {
+QJsonObject GeneralCommand::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<GeneralCommandType>(m_name);
 	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QString>(m_controllingUserId);
-	result["Arguments"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_arguments);
+	result["Arguments"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_arguments);
 
 	return result;
 }
@@ -82,17 +82,17 @@ void GeneralCommand::setControllingUserId(QString newControllingUserId) {
 	m_controllingUserId = newControllingUserId;
 }
 
-std::optional<QJsonObject> GeneralCommand::arguments() const { return m_arguments; }
+QJsonObject GeneralCommand::arguments() const { return m_arguments; }
 
-void GeneralCommand::setArguments(std::optional<QJsonObject> newArguments) {
+void GeneralCommand::setArguments(QJsonObject newArguments) {
 	m_arguments = newArguments;
 }
 bool GeneralCommand::argumentsNull() const {
-	return !m_arguments.has_value();
+	return m_arguments.isEmpty();
 }
 
 void GeneralCommand::setArgumentsNull() {
-	m_arguments = std::nullopt;
+	m_arguments= QJsonObject();
 
 }
 
@@ -103,9 +103,14 @@ namespace Support {
 using GeneralCommand = Jellyfin::DTO::GeneralCommand;
 
 template <>
-GeneralCommand fromJsonValue<GeneralCommand>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+GeneralCommand fromJsonValue(const QJsonValue &source, convertType<GeneralCommand>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return GeneralCommand::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const GeneralCommand &source, convertType<GeneralCommand>) {
+	return source.toJson();
 }
 
 } // NS DTO

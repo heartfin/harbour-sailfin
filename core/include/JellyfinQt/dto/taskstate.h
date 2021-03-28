@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class TaskStateClass {
@@ -53,7 +57,19 @@ private:
 	explicit TaskStateClass();
 };
 
-typedef TaskStateClass::Value TaskState;
+using TaskState = TaskStateClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using TaskState = Jellyfin::DTO::TaskState;
+
+template <>
+TaskState fromJsonValue(const QJsonValue &source, convertType<TaskState>);
+
+template <>
+QJsonValue toJsonValue(const TaskState &source, convertType<TaskState>);
 
 } // NS DTO
 } // NS Jellyfin

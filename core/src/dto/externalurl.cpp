@@ -58,7 +58,7 @@ void ExternalUrl::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ExternalUrl::toJson() {
+QJsonObject ExternalUrl::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
@@ -100,9 +100,14 @@ namespace Support {
 using ExternalUrl = Jellyfin::DTO::ExternalUrl;
 
 template <>
-ExternalUrl fromJsonValue<ExternalUrl>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ExternalUrl fromJsonValue(const QJsonValue &source, convertType<ExternalUrl>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ExternalUrl::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ExternalUrl &source, convertType<ExternalUrl>) {
+	return source.toJson();
 }
 
 } // NS DTO

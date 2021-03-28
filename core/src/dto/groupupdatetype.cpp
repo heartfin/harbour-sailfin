@@ -34,7 +34,6 @@ namespace DTO {
 
 GroupUpdateTypeClass::GroupUpdateTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using GroupUpdateType = Jellyfin::DTO::GroupUpdateType;
 
 template <>
-GroupUpdateType fromJsonValue<GroupUpdateType>(const QJsonValue &source) {
+GroupUpdateType fromJsonValue(const QJsonValue &source, convertType<GroupUpdateType>) {
 	if (!source.isString()) return GroupUpdateType::EnumNotSet;
 
 	QString str = source.toString();
@@ -81,6 +80,38 @@ GroupUpdateType fromJsonValue<GroupUpdateType>(const QJsonValue &source) {
 	}
 	
 	return GroupUpdateType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const GroupUpdateType &source, convertType<GroupUpdateType>) {
+	switch(source) {
+	case GroupUpdateType::UserJoined:
+		return QStringLiteral("UserJoined");
+	case GroupUpdateType::UserLeft:
+		return QStringLiteral("UserLeft");
+	case GroupUpdateType::GroupJoined:
+		return QStringLiteral("GroupJoined");
+	case GroupUpdateType::GroupLeft:
+		return QStringLiteral("GroupLeft");
+	case GroupUpdateType::StateUpdate:
+		return QStringLiteral("StateUpdate");
+	case GroupUpdateType::PlayQueue:
+		return QStringLiteral("PlayQueue");
+	case GroupUpdateType::NotInGroup:
+		return QStringLiteral("NotInGroup");
+	case GroupUpdateType::GroupDoesNotExist:
+		return QStringLiteral("GroupDoesNotExist");
+	case GroupUpdateType::CreateGroupDenied:
+		return QStringLiteral("CreateGroupDenied");
+	case GroupUpdateType::JoinGroupDenied:
+		return QStringLiteral("JoinGroupDenied");
+	case GroupUpdateType::LibraryAccessDenied:
+		return QStringLiteral("LibraryAccessDenied");
+
+	case GroupUpdateType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

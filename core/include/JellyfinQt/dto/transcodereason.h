@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class TranscodeReasonClass {
@@ -73,7 +77,19 @@ private:
 	explicit TranscodeReasonClass();
 };
 
-typedef TranscodeReasonClass::Value TranscodeReason;
+using TranscodeReason = TranscodeReasonClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using TranscodeReason = Jellyfin::DTO::TranscodeReason;
+
+template <>
+TranscodeReason fromJsonValue(const QJsonValue &source, convertType<TranscodeReason>);
+
+template <>
+QJsonValue toJsonValue(const TranscodeReason &source, convertType<TranscodeReason>);
 
 } // NS DTO
 } // NS Jellyfin

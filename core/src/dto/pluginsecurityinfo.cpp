@@ -58,7 +58,7 @@ void PluginSecurityInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PluginSecurityInfo::toJson() {
+QJsonObject PluginSecurityInfo::toJson() const {
 	QJsonObject result;
 	result["SupporterKey"] = Jellyfin::Support::toJsonValue<QString>(m_supporterKey);
 	result["IsMbSupporter"] = Jellyfin::Support::toJsonValue<bool>(m_isMbSupporter);
@@ -93,9 +93,14 @@ namespace Support {
 using PluginSecurityInfo = Jellyfin::DTO::PluginSecurityInfo;
 
 template <>
-PluginSecurityInfo fromJsonValue<PluginSecurityInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PluginSecurityInfo fromJsonValue(const QJsonValue &source, convertType<PluginSecurityInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PluginSecurityInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PluginSecurityInfo &source, convertType<PluginSecurityInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

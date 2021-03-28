@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetRecommendedProgramsLoader::GetRecommendedProgramsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecommendedProgramsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetRecommendedProgramsParams>(apiClient) {}
 
 QString GetRecommendedProgramsLoader::path(const GetRecommendedProgramsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,52 +51,52 @@ QUrlQuery GetRecommendedProgramsLoader::query(const GetRecommendedProgramsParams
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.isAiringNull()) {
-		result.addQueryItem("isAiring", Support::toString(params.isAiring()));
+		result.addQueryItem("isAiring", Support::toString<std::optional<bool>>(params.isAiring()));
 	}
 	if (!params.hasAiredNull()) {
-		result.addQueryItem("hasAired", Support::toString(params.hasAired()));
+		result.addQueryItem("hasAired", Support::toString<std::optional<bool>>(params.hasAired()));
 	}
 	if (!params.isSeriesNull()) {
-		result.addQueryItem("isSeries", Support::toString(params.isSeries()));
+		result.addQueryItem("isSeries", Support::toString<std::optional<bool>>(params.isSeries()));
 	}
 	if (!params.isMovieNull()) {
-		result.addQueryItem("isMovie", Support::toString(params.isMovie()));
+		result.addQueryItem("isMovie", Support::toString<std::optional<bool>>(params.isMovie()));
 	}
 	if (!params.isNewsNull()) {
-		result.addQueryItem("isNews", Support::toString(params.isNews()));
+		result.addQueryItem("isNews", Support::toString<std::optional<bool>>(params.isNews()));
 	}
 	if (!params.isKidsNull()) {
-		result.addQueryItem("isKids", Support::toString(params.isKids()));
+		result.addQueryItem("isKids", Support::toString<std::optional<bool>>(params.isKids()));
 	}
 	if (!params.isSportsNull()) {
-		result.addQueryItem("isSports", Support::toString(params.isSports()));
+		result.addQueryItem("isSports", Support::toString<std::optional<bool>>(params.isSports()));
 	}
 	if (!params.enableImagesNull()) {
-		result.addQueryItem("enableImages", Support::toString(params.enableImages()));
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString(params.imageTypeLimit()));
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
 	}
 	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString(params.enableImageTypes()));
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
 	}
 	if (!params.genreIdsNull()) {
-		result.addQueryItem("genreIds", Support::toString(params.genreIds()));
+		result.addQueryItem("genreIds", Support::toString<QStringList>(params.genreIds()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.enableUserDataNull()) {
-		result.addQueryItem("enableUserData", Support::toString(params.enableUserData()));
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	if (!params.enableTotalRecordCountNull()) {
-		result.addQueryItem("enableTotalRecordCount", Support::toString(params.enableTotalRecordCount()));
+		result.addQueryItem("enableTotalRecordCount", Support::toString<std::optional<bool>>(params.enableTotalRecordCount()));
 	}
 	
 	return result;

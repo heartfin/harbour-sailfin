@@ -48,6 +48,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -63,7 +67,7 @@ public:
 	
 	static MediaSourceInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -276,9 +280,9 @@ public:
 	void setTimestamp(TransportStreamTimestamp newTimestamp);
 
 
-	std::optional<QJsonObject> requiredHttpHeaders() const;
+	QJsonObject requiredHttpHeaders() const;
 
-	void setRequiredHttpHeaders(std::optional<QJsonObject> newRequiredHttpHeaders);
+	void setRequiredHttpHeaders(QJsonObject newRequiredHttpHeaders);
 	bool requiredHttpHeadersNull() const;
 	void setRequiredHttpHeadersNull();
 
@@ -361,7 +365,7 @@ protected:
 	QStringList m_formats;
 	std::optional<qint32> m_bitrate = std::nullopt;
 	TransportStreamTimestamp m_timestamp;
-	std::optional<QJsonObject> m_requiredHttpHeaders = std::nullopt;
+	QJsonObject m_requiredHttpHeaders;
 	QString m_transcodingUrl;
 	QString m_transcodingSubProtocol;
 	QString m_transcodingContainer;
@@ -369,6 +373,18 @@ protected:
 	std::optional<qint32> m_defaultAudioStreamIndex = std::nullopt;
 	std::optional<qint32> m_defaultSubtitleStreamIndex = std::nullopt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaSourceInfo = Jellyfin::DTO::MediaSourceInfo;
+
+template <>
+MediaSourceInfo fromJsonValue(const QJsonValue &source, convertType<MediaSourceInfo>);
+
+template<>
+QJsonValue toJsonValue(const MediaSourceInfo &source, convertType<MediaSourceInfo>);
 
 } // NS DTO
 } // NS Jellyfin

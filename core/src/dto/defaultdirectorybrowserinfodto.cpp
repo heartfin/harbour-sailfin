@@ -55,7 +55,7 @@ void DefaultDirectoryBrowserInfoDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject DefaultDirectoryBrowserInfoDto::toJson() {
+QJsonObject DefaultDirectoryBrowserInfoDto::toJson() const {
 	QJsonObject result;
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
 
@@ -83,9 +83,14 @@ namespace Support {
 using DefaultDirectoryBrowserInfoDto = Jellyfin::DTO::DefaultDirectoryBrowserInfoDto;
 
 template <>
-DefaultDirectoryBrowserInfoDto fromJsonValue<DefaultDirectoryBrowserInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+DefaultDirectoryBrowserInfoDto fromJsonValue(const QJsonValue &source, convertType<DefaultDirectoryBrowserInfoDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return DefaultDirectoryBrowserInfoDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const DefaultDirectoryBrowserInfoDto &source, convertType<DefaultDirectoryBrowserInfoDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

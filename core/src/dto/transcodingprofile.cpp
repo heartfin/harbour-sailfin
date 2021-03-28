@@ -97,7 +97,7 @@ void TranscodingProfile::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TranscodingProfile::toJson() {
+QJsonObject TranscodingProfile::toJson() const {
 	QJsonObject result;
 	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
 	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
@@ -251,9 +251,14 @@ namespace Support {
 using TranscodingProfile = Jellyfin::DTO::TranscodingProfile;
 
 template <>
-TranscodingProfile fromJsonValue<TranscodingProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TranscodingProfile fromJsonValue(const QJsonValue &source, convertType<TranscodingProfile>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TranscodingProfile::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TranscodingProfile &source, convertType<TranscodingProfile>) {
+	return source.toJson();
 }
 
 } // NS DTO

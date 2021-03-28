@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -52,7 +56,7 @@ public:
 	
 	static StartupRemoteAccessDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -78,6 +82,18 @@ protected:
 	bool m_enableRemoteAccess;
 	bool m_enableAutomaticPortMapping;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using StartupRemoteAccessDto = Jellyfin::DTO::StartupRemoteAccessDto;
+
+template <>
+StartupRemoteAccessDto fromJsonValue(const QJsonValue &source, convertType<StartupRemoteAccessDto>);
+
+template<>
+QJsonValue toJsonValue(const StartupRemoteAccessDto &source, convertType<StartupRemoteAccessDto>);
 
 } // NS DTO
 } // NS Jellyfin

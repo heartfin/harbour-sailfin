@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetChannelFeaturesLoader::GetChannelFeaturesLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ChannelFeatures, GetChannelFeaturesParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<ChannelFeatures, GetChannelFeaturesParams>(apiClient) {}
 
 QString GetChannelFeaturesLoader::path(const GetChannelFeaturesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Channels/") + Support::toString(params.channelId()) + QStringLiteral("/Features");
+	return QStringLiteral("/Channels/") + Support::toString< QString>(params.channelId()) + QStringLiteral("/Features");
 }
 
 QUrlQuery GetChannelFeaturesLoader::query(const GetChannelFeaturesParams &params) const {

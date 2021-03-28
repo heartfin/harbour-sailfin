@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static SessionUserInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -81,6 +85,18 @@ protected:
 	QString m_userId;
 	QString m_userName;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SessionUserInfo = Jellyfin::DTO::SessionUserInfo;
+
+template <>
+SessionUserInfo fromJsonValue(const QJsonValue &source, convertType<SessionUserInfo>);
+
+template<>
+QJsonValue toJsonValue(const SessionUserInfo &source, convertType<SessionUserInfo>);
 
 } // NS DTO
 } // NS Jellyfin

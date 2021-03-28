@@ -76,7 +76,7 @@ void LiveTvServiceInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject LiveTvServiceInfo::toJson() {
+QJsonObject LiveTvServiceInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["HomePageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_homePageUrl);
@@ -181,9 +181,14 @@ namespace Support {
 using LiveTvServiceInfo = Jellyfin::DTO::LiveTvServiceInfo;
 
 template <>
-LiveTvServiceInfo fromJsonValue<LiveTvServiceInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+LiveTvServiceInfo fromJsonValue(const QJsonValue &source, convertType<LiveTvServiceInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return LiveTvServiceInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const LiveTvServiceInfo &source, convertType<LiveTvServiceInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

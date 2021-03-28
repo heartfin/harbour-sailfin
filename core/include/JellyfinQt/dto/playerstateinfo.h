@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static PlayerStateInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -163,6 +167,18 @@ protected:
 	PlayMethod m_playMethod;
 	RepeatMode m_repeatMode;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlayerStateInfo = Jellyfin::DTO::PlayerStateInfo;
+
+template <>
+PlayerStateInfo fromJsonValue(const QJsonValue &source, convertType<PlayerStateInfo>);
+
+template<>
+QJsonValue toJsonValue(const PlayerStateInfo &source, convertType<PlayerStateInfo>);
 
 } // NS DTO
 } // NS Jellyfin

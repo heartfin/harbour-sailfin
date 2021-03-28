@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/filesystementryinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets available drives from the server's file system.
+ */
+
+class GetDrivesLoader : public Jellyfin::Support::HttpLoader<QList<FileSystemEntryInfo>, GetDrivesParams> {
+public:
+	explicit GetDrivesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetDrivesParams& parameters) const override;
+	QUrlQuery query(const GetDrivesParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

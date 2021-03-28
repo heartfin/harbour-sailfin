@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetVirtualFoldersLoader::GetVirtualFoldersLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<VirtualFolderInfo>, GetVirtualFoldersParams>(apiClient) {}
+
+QString GetVirtualFoldersLoader::path(const GetVirtualFoldersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Library/VirtualFolders");
+}
+
+QUrlQuery GetVirtualFoldersLoader::query(const GetVirtualFoldersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

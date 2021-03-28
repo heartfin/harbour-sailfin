@@ -58,7 +58,7 @@ void NotificationResultDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject NotificationResultDto::toJson() {
+QJsonObject NotificationResultDto::toJson() const {
 	QJsonObject result;
 	result["Notifications"] = Jellyfin::Support::toJsonValue<QList<NotificationDto>>(m_notifications);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
@@ -93,9 +93,14 @@ namespace Support {
 using NotificationResultDto = Jellyfin::DTO::NotificationResultDto;
 
 template <>
-NotificationResultDto fromJsonValue<NotificationResultDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+NotificationResultDto fromJsonValue(const QJsonValue &source, convertType<NotificationResultDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return NotificationResultDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const NotificationResultDto &source, convertType<NotificationResultDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

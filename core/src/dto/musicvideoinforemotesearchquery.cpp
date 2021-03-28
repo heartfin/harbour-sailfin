@@ -64,7 +64,7 @@ void MusicVideoInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MusicVideoInfoRemoteSearchQuery::toJson() {
+QJsonObject MusicVideoInfoRemoteSearchQuery::toJson() const {
 	QJsonObject result;
 	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<MusicVideoInfo>>(m_searchInfo);
 	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
@@ -113,9 +113,14 @@ namespace Support {
 using MusicVideoInfoRemoteSearchQuery = Jellyfin::DTO::MusicVideoInfoRemoteSearchQuery;
 
 template <>
-MusicVideoInfoRemoteSearchQuery fromJsonValue<MusicVideoInfoRemoteSearchQuery>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MusicVideoInfoRemoteSearchQuery fromJsonValue(const QJsonValue &source, convertType<MusicVideoInfoRemoteSearchQuery>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MusicVideoInfoRemoteSearchQuery::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MusicVideoInfoRemoteSearchQuery &source, convertType<MusicVideoInfoRemoteSearchQuery>) {
+	return source.toJson();
 }
 
 } // NS DTO

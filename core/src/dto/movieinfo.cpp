@@ -73,7 +73,7 @@ void MovieInfo::setFromJson(QJsonObject source) {
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
-	m_providerIds = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ProviderIds"]);
+	m_providerIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ProviderIds"]);
 	m_year = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Year"]);
 	m_indexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["IndexNumber"]);
 	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ParentIndexNumber"]);
@@ -82,13 +82,13 @@ void MovieInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MovieInfo::toJson() {
+QJsonObject MovieInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
 	result["MetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_metadataLanguage);
 	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
-	result["ProviderIds"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_providerIds);
+	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
 	result["Year"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_year);
 	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
 	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
@@ -150,17 +150,17 @@ void MovieInfo::setMetadataCountryCodeNull() {
 	m_metadataCountryCode.clear();
 
 }
-std::optional<QJsonObject> MovieInfo::providerIds() const { return m_providerIds; }
+QJsonObject MovieInfo::providerIds() const { return m_providerIds; }
 
-void MovieInfo::setProviderIds(std::optional<QJsonObject> newProviderIds) {
+void MovieInfo::setProviderIds(QJsonObject newProviderIds) {
 	m_providerIds = newProviderIds;
 }
 bool MovieInfo::providerIdsNull() const {
-	return !m_providerIds.has_value();
+	return m_providerIds.isEmpty();
 }
 
 void MovieInfo::setProviderIdsNull() {
-	m_providerIds = std::nullopt;
+	m_providerIds= QJsonObject();
 
 }
 std::optional<qint32> MovieInfo::year() const { return m_year; }
@@ -229,9 +229,14 @@ namespace Support {
 using MovieInfo = Jellyfin::DTO::MovieInfo;
 
 template <>
-MovieInfo fromJsonValue<MovieInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MovieInfo fromJsonValue(const QJsonValue &source, convertType<MovieInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MovieInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MovieInfo &source, convertType<MovieInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

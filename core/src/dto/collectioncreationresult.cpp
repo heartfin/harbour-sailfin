@@ -55,7 +55,7 @@ void CollectionCreationResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject CollectionCreationResult::toJson() {
+QJsonObject CollectionCreationResult::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 
@@ -76,9 +76,14 @@ namespace Support {
 using CollectionCreationResult = Jellyfin::DTO::CollectionCreationResult;
 
 template <>
-CollectionCreationResult fromJsonValue<CollectionCreationResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+CollectionCreationResult fromJsonValue(const QJsonValue &source, convertType<CollectionCreationResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return CollectionCreationResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const CollectionCreationResult &source, convertType<CollectionCreationResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetRepositoriesLoader::GetRepositoriesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<RepositoryInfo>, GetRepositoriesParams>(apiClient) {}
+
+QString GetRepositoriesLoader::path(const GetRepositoriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Repositories");
+}
+
+QUrlQuery GetRepositoriesLoader::query(const GetRepositoriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

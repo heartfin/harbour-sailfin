@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/startupuserdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets the first user.
  */
-class GetFirstUser_2Loader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupUserDto, GetFirstUser_2Params> {
+
+class GetFirstUser_2Loader : public Jellyfin::Support::HttpLoader<StartupUserDto, GetFirstUser_2Params> {
 public:
 	explicit GetFirstUser_2Loader(ApiClient *apiClient = nullptr);
 

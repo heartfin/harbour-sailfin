@@ -34,7 +34,6 @@ namespace DTO {
 
 DynamicDayOfWeekClass::DynamicDayOfWeekClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using DynamicDayOfWeek = Jellyfin::DTO::DynamicDayOfWeek;
 
 template <>
-DynamicDayOfWeek fromJsonValue<DynamicDayOfWeek>(const QJsonValue &source) {
+DynamicDayOfWeek fromJsonValue(const QJsonValue &source, convertType<DynamicDayOfWeek>) {
 	if (!source.isString()) return DynamicDayOfWeek::EnumNotSet;
 
 	QString str = source.toString();
@@ -78,6 +77,36 @@ DynamicDayOfWeek fromJsonValue<DynamicDayOfWeek>(const QJsonValue &source) {
 	}
 	
 	return DynamicDayOfWeek::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const DynamicDayOfWeek &source, convertType<DynamicDayOfWeek>) {
+	switch(source) {
+	case DynamicDayOfWeek::Sunday:
+		return QStringLiteral("Sunday");
+	case DynamicDayOfWeek::Monday:
+		return QStringLiteral("Monday");
+	case DynamicDayOfWeek::Tuesday:
+		return QStringLiteral("Tuesday");
+	case DynamicDayOfWeek::Wednesday:
+		return QStringLiteral("Wednesday");
+	case DynamicDayOfWeek::Thursday:
+		return QStringLiteral("Thursday");
+	case DynamicDayOfWeek::Friday:
+		return QStringLiteral("Friday");
+	case DynamicDayOfWeek::Saturday:
+		return QStringLiteral("Saturday");
+	case DynamicDayOfWeek::Everyday:
+		return QStringLiteral("Everyday");
+	case DynamicDayOfWeek::Weekday:
+		return QStringLiteral("Weekday");
+	case DynamicDayOfWeek::Weekend:
+		return QStringLiteral("Weekend");
+
+	case DynamicDayOfWeek::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

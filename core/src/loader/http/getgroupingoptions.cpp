@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetGroupingOptionsLoader::GetGroupingOptionsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<SpecialViewOptionDto>, GetGroupingOptionsParams>(apiClient) {}
+
+QString GetGroupingOptionsLoader::path(const GetGroupingOptionsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/GroupingOptions");
+}
+
+QUrlQuery GetGroupingOptionsLoader::query(const GetGroupingOptionsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

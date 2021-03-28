@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/groupinfodto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets all SyncPlay groups.
+ */
+
+class SyncPlayGetGroupsLoader : public Jellyfin::Support::HttpLoader<QList<GroupInfoDto>, SyncPlayGetGroupsParams> {
+public:
+	explicit SyncPlayGetGroupsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const SyncPlayGetGroupsParams& parameters) const override;
+	QUrlQuery query(const SyncPlayGetGroupsParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

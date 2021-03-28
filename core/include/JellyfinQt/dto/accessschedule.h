@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static AccessSchedule fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -106,6 +110,18 @@ protected:
 	double m_startHour;
 	double m_endHour;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using AccessSchedule = Jellyfin::DTO::AccessSchedule;
+
+template <>
+AccessSchedule fromJsonValue(const QJsonValue &source, convertType<AccessSchedule>);
+
+template<>
+QJsonValue toJsonValue(const AccessSchedule &source, convertType<AccessSchedule>);
 
 } // NS DTO
 } // NS Jellyfin

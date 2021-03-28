@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/activitylogentryqueryresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets activity log entries.
  */
-class GetLogEntriesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ActivityLogEntryQueryResult, GetLogEntriesParams> {
+
+class GetLogEntriesLoader : public Jellyfin::Support::HttpLoader<ActivityLogEntryQueryResult, GetLogEntriesParams> {
 public:
 	explicit GetLogEntriesLoader(ApiClient *apiClient = nullptr);
 

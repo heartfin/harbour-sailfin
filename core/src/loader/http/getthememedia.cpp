@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetThemeMediaLoader::GetThemeMediaLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::AllThemeMediaResult, GetThemeMediaParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<AllThemeMediaResult, GetThemeMediaParams>(apiClient) {}
 
 QString GetThemeMediaLoader::path(const GetThemeMediaParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/ThemeMedia");
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/ThemeMedia");
 }
 
 QUrlQuery GetThemeMediaLoader::query(const GetThemeMediaParams &params) const {
@@ -50,10 +51,10 @@ QUrlQuery GetThemeMediaLoader::query(const GetThemeMediaParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.inheritFromParentNull()) {
-		result.addQueryItem("inheritFromParent", Support::toString(params.inheritFromParent()));
+		result.addQueryItem("inheritFromParent", Support::toString<std::optional<bool>>(params.inheritFromParent()));
 	}
 	
 	return result;

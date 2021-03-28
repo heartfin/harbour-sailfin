@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class IsoTypeClass {
@@ -52,7 +56,19 @@ private:
 	explicit IsoTypeClass();
 };
 
-typedef IsoTypeClass::Value IsoType;
+using IsoType = IsoTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using IsoType = Jellyfin::DTO::IsoType;
+
+template <>
+IsoType fromJsonValue(const QJsonValue &source, convertType<IsoType>);
+
+template <>
+QJsonValue toJsonValue(const IsoType &source, convertType<IsoType>);
 
 } // NS DTO
 } // NS Jellyfin

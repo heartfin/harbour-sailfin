@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetLocalTrailersLoader::GetLocalTrailersLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<BaseItemDto>, GetLocalTrailersParams>(apiClient) {}
+
+QString GetLocalTrailersLoader::path(const GetLocalTrailersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/LocalTrailers");
+}
+
+QUrlQuery GetLocalTrailersLoader::query(const GetLocalTrailersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

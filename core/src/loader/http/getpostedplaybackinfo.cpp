@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetPostedPlaybackInfoLoader::GetPostedPlaybackInfoLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaybackInfoResponse, GetPostedPlaybackInfoParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<PlaybackInfoResponse, GetPostedPlaybackInfoParams>(apiClient) {}
 
 QString GetPostedPlaybackInfoLoader::path(const GetPostedPlaybackInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/PlaybackInfo");
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/PlaybackInfo");
 }
 
 QUrlQuery GetPostedPlaybackInfoLoader::query(const GetPostedPlaybackInfoParams &params) const {
@@ -50,46 +51,46 @@ QUrlQuery GetPostedPlaybackInfoLoader::query(const GetPostedPlaybackInfoParams &
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.maxStreamingBitrateNull()) {
-		result.addQueryItem("maxStreamingBitrate", Support::toString(params.maxStreamingBitrate()));
+		result.addQueryItem("maxStreamingBitrate", Support::toString<std::optional<qint32>>(params.maxStreamingBitrate()));
 	}
 	if (!params.startTimeTicksNull()) {
-		result.addQueryItem("startTimeTicks", Support::toString(params.startTimeTicks()));
+		result.addQueryItem("startTimeTicks", Support::toString<std::optional<qint64>>(params.startTimeTicks()));
 	}
 	if (!params.audioStreamIndexNull()) {
-		result.addQueryItem("audioStreamIndex", Support::toString(params.audioStreamIndex()));
+		result.addQueryItem("audioStreamIndex", Support::toString<std::optional<qint32>>(params.audioStreamIndex()));
 	}
 	if (!params.subtitleStreamIndexNull()) {
-		result.addQueryItem("subtitleStreamIndex", Support::toString(params.subtitleStreamIndex()));
+		result.addQueryItem("subtitleStreamIndex", Support::toString<std::optional<qint32>>(params.subtitleStreamIndex()));
 	}
 	if (!params.maxAudioChannelsNull()) {
-		result.addQueryItem("maxAudioChannels", Support::toString(params.maxAudioChannels()));
+		result.addQueryItem("maxAudioChannels", Support::toString<std::optional<qint32>>(params.maxAudioChannels()));
 	}
 	if (!params.mediaSourceIdNull()) {
-		result.addQueryItem("mediaSourceId", Support::toString(params.mediaSourceId()));
+		result.addQueryItem("mediaSourceId", Support::toString<QString>(params.mediaSourceId()));
 	}
 	if (!params.liveStreamIdNull()) {
-		result.addQueryItem("liveStreamId", Support::toString(params.liveStreamId()));
+		result.addQueryItem("liveStreamId", Support::toString<QString>(params.liveStreamId()));
 	}
 	if (!params.autoOpenLiveStreamNull()) {
-		result.addQueryItem("autoOpenLiveStream", Support::toString(params.autoOpenLiveStream()));
+		result.addQueryItem("autoOpenLiveStream", Support::toString<std::optional<bool>>(params.autoOpenLiveStream()));
 	}
 	if (!params.enableDirectPlayNull()) {
-		result.addQueryItem("enableDirectPlay", Support::toString(params.enableDirectPlay()));
+		result.addQueryItem("enableDirectPlay", Support::toString<std::optional<bool>>(params.enableDirectPlay()));
 	}
 	if (!params.enableDirectStreamNull()) {
-		result.addQueryItem("enableDirectStream", Support::toString(params.enableDirectStream()));
+		result.addQueryItem("enableDirectStream", Support::toString<std::optional<bool>>(params.enableDirectStream()));
 	}
 	if (!params.enableTranscodingNull()) {
-		result.addQueryItem("enableTranscoding", Support::toString(params.enableTranscoding()));
+		result.addQueryItem("enableTranscoding", Support::toString<std::optional<bool>>(params.enableTranscoding()));
 	}
 	if (!params.allowVideoStreamCopyNull()) {
-		result.addQueryItem("allowVideoStreamCopy", Support::toString(params.allowVideoStreamCopy()));
+		result.addQueryItem("allowVideoStreamCopy", Support::toString<std::optional<bool>>(params.allowVideoStreamCopy()));
 	}
 	if (!params.allowAudioStreamCopyNull()) {
-		result.addQueryItem("allowAudioStreamCopy", Support::toString(params.allowAudioStreamCopy()));
+		result.addQueryItem("allowAudioStreamCopy", Support::toString<std::optional<bool>>(params.allowAudioStreamCopy()));
 	}
 	
 	return result;

@@ -136,7 +136,7 @@ void SessionInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SessionInfo::toJson() {
+QJsonObject SessionInfo::toJson() const {
 	QJsonObject result;
 	result["PlayState"] = Jellyfin::Support::toJsonValue<QSharedPointer<PlayerStateInfo>>(m_playState);
 	result["AdditionalUsers"] = Jellyfin::Support::toJsonValue<QList<SessionUserInfo>>(m_additionalUsers);
@@ -451,9 +451,14 @@ namespace Support {
 using SessionInfo = Jellyfin::DTO::SessionInfo;
 
 template <>
-SessionInfo fromJsonValue<SessionInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SessionInfo fromJsonValue(const QJsonValue &source, convertType<SessionInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SessionInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SessionInfo &source, convertType<SessionInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

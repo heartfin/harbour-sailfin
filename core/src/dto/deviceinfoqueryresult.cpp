@@ -61,7 +61,7 @@ void DeviceInfoQueryResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject DeviceInfoQueryResult::toJson() {
+QJsonObject DeviceInfoQueryResult::toJson() const {
 	QJsonObject result;
 	result["Items"] = Jellyfin::Support::toJsonValue<QList<DeviceInfo>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
@@ -103,9 +103,14 @@ namespace Support {
 using DeviceInfoQueryResult = Jellyfin::DTO::DeviceInfoQueryResult;
 
 template <>
-DeviceInfoQueryResult fromJsonValue<DeviceInfoQueryResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+DeviceInfoQueryResult fromJsonValue(const QJsonValue &source, convertType<DeviceInfoQueryResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return DeviceInfoQueryResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const DeviceInfoQueryResult &source, convertType<DeviceInfoQueryResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

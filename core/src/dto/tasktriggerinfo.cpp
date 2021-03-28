@@ -67,7 +67,7 @@ void TaskTriggerInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TaskTriggerInfo::toJson() {
+QJsonObject TaskTriggerInfo::toJson() const {
 	QJsonObject result;
 	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
 	result["TimeOfDayTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_timeOfDayTicks);
@@ -144,9 +144,14 @@ namespace Support {
 using TaskTriggerInfo = Jellyfin::DTO::TaskTriggerInfo;
 
 template <>
-TaskTriggerInfo fromJsonValue<TaskTriggerInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TaskTriggerInfo fromJsonValue(const QJsonValue &source, convertType<TaskTriggerInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TaskTriggerInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TaskTriggerInfo &source, convertType<TaskTriggerInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

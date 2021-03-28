@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/playbackinforesponse.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets live playback media info for an item.
  */
-class GetPostedPlaybackInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaybackInfoResponse, GetPostedPlaybackInfoParams> {
+
+class GetPostedPlaybackInfoLoader : public Jellyfin::Support::HttpLoader<PlaybackInfoResponse, GetPostedPlaybackInfoParams> {
 public:
 	explicit GetPostedPlaybackInfoLoader(ApiClient *apiClient = nullptr);
 

@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/authenticationresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Authenticates a user by name.
  */
-class AuthenticateUserByNameLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationResult, AuthenticateUserByNameParams> {
+
+class AuthenticateUserByNameLoader : public Jellyfin::Support::HttpLoader<AuthenticationResult, AuthenticateUserByNameParams> {
 public:
 	explicit AuthenticateUserByNameLoader(ApiClient *apiClient = nullptr);
 

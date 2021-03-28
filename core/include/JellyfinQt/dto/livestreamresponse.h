@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static LiveStreamResponse fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -66,6 +70,18 @@ public:
 protected:
 	QSharedPointer<MediaSourceInfo> m_mediaSource = nullptr;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LiveStreamResponse = Jellyfin::DTO::LiveStreamResponse;
+
+template <>
+LiveStreamResponse fromJsonValue(const QJsonValue &source, convertType<LiveStreamResponse>);
+
+template<>
+QJsonValue toJsonValue(const LiveStreamResponse &source, convertType<LiveStreamResponse>);
 
 } // NS DTO
 } // NS Jellyfin

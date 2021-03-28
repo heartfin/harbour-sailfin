@@ -79,32 +79,32 @@ void AlbumInfo::setFromJson(QJsonObject source) {
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
-	m_providerIds = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ProviderIds"]);
+	m_providerIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ProviderIds"]);
 	m_year = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Year"]);
 	m_indexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["IndexNumber"]);
 	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ParentIndexNumber"]);
 	m_premiereDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["PremiereDate"]);
 	m_isAutomated = Jellyfin::Support::fromJsonValue<bool>(source["IsAutomated"]);
 	m_albumArtists = Jellyfin::Support::fromJsonValue<QStringList>(source["AlbumArtists"]);
-	m_artistProviderIds = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ArtistProviderIds"]);
+	m_artistProviderIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ArtistProviderIds"]);
 	m_songInfos = Jellyfin::Support::fromJsonValue<QList<SongInfo>>(source["SongInfos"]);
 
 }
 	
-QJsonObject AlbumInfo::toJson() {
+QJsonObject AlbumInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
 	result["MetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_metadataLanguage);
 	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
-	result["ProviderIds"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_providerIds);
+	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
 	result["Year"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_year);
 	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
 	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
 	result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
 	result["IsAutomated"] = Jellyfin::Support::toJsonValue<bool>(m_isAutomated);
 	result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QStringList>(m_albumArtists);
-	result["ArtistProviderIds"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_artistProviderIds);
+	result["ArtistProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_artistProviderIds);
 	result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<SongInfo>>(m_songInfos);
 
 	return result;
@@ -162,17 +162,17 @@ void AlbumInfo::setMetadataCountryCodeNull() {
 	m_metadataCountryCode.clear();
 
 }
-std::optional<QJsonObject> AlbumInfo::providerIds() const { return m_providerIds; }
+QJsonObject AlbumInfo::providerIds() const { return m_providerIds; }
 
-void AlbumInfo::setProviderIds(std::optional<QJsonObject> newProviderIds) {
+void AlbumInfo::setProviderIds(QJsonObject newProviderIds) {
 	m_providerIds = newProviderIds;
 }
 bool AlbumInfo::providerIdsNull() const {
-	return !m_providerIds.has_value();
+	return m_providerIds.isEmpty();
 }
 
 void AlbumInfo::setProviderIdsNull() {
-	m_providerIds = std::nullopt;
+	m_providerIds= QJsonObject();
 
 }
 std::optional<qint32> AlbumInfo::year() const { return m_year; }
@@ -246,17 +246,17 @@ void AlbumInfo::setAlbumArtistsNull() {
 	m_albumArtists.clear();
 
 }
-std::optional<QJsonObject> AlbumInfo::artistProviderIds() const { return m_artistProviderIds; }
+QJsonObject AlbumInfo::artistProviderIds() const { return m_artistProviderIds; }
 
-void AlbumInfo::setArtistProviderIds(std::optional<QJsonObject> newArtistProviderIds) {
+void AlbumInfo::setArtistProviderIds(QJsonObject newArtistProviderIds) {
 	m_artistProviderIds = newArtistProviderIds;
 }
 bool AlbumInfo::artistProviderIdsNull() const {
-	return !m_artistProviderIds.has_value();
+	return m_artistProviderIds.isEmpty();
 }
 
 void AlbumInfo::setArtistProviderIdsNull() {
-	m_artistProviderIds = std::nullopt;
+	m_artistProviderIds= QJsonObject();
 
 }
 QList<SongInfo> AlbumInfo::songInfos() const { return m_songInfos; }
@@ -280,9 +280,14 @@ namespace Support {
 using AlbumInfo = Jellyfin::DTO::AlbumInfo;
 
 template <>
-AlbumInfo fromJsonValue<AlbumInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+AlbumInfo fromJsonValue(const QJsonValue &source, convertType<AlbumInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return AlbumInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const AlbumInfo &source, convertType<AlbumInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

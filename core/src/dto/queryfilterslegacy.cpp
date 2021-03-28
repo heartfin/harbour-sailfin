@@ -64,7 +64,7 @@ void QueryFiltersLegacy::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject QueryFiltersLegacy::toJson() {
+QJsonObject QueryFiltersLegacy::toJson() const {
 	QJsonObject result;
 	result["Genres"] = Jellyfin::Support::toJsonValue<QStringList>(m_genres);
 	result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
@@ -134,9 +134,14 @@ namespace Support {
 using QueryFiltersLegacy = Jellyfin::DTO::QueryFiltersLegacy;
 
 template <>
-QueryFiltersLegacy fromJsonValue<QueryFiltersLegacy>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+QueryFiltersLegacy fromJsonValue(const QJsonValue &source, convertType<QueryFiltersLegacy>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return QueryFiltersLegacy::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const QueryFiltersLegacy &source, convertType<QueryFiltersLegacy>) {
+	return source.toJson();
 }
 
 } // NS DTO

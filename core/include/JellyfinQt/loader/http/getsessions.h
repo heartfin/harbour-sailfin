@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/sessioninfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets a list of sessions.
+ */
+
+class GetSessionsLoader : public Jellyfin::Support::HttpLoader<QList<SessionInfo>, GetSessionsParams> {
+public:
+	explicit GetSessionsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetSessionsParams& parameters) const override;
+	QUrlQuery query(const GetSessionsParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

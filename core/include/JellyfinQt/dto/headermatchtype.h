@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class HeaderMatchTypeClass {
@@ -53,7 +57,19 @@ private:
 	explicit HeaderMatchTypeClass();
 };
 
-typedef HeaderMatchTypeClass::Value HeaderMatchType;
+using HeaderMatchType = HeaderMatchTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using HeaderMatchType = Jellyfin::DTO::HeaderMatchType;
+
+template <>
+HeaderMatchType fromJsonValue(const QJsonValue &source, convertType<HeaderMatchType>);
+
+template <>
+QJsonValue toJsonValue(const HeaderMatchType &source, convertType<HeaderMatchType>);
 
 } // NS DTO
 } // NS Jellyfin

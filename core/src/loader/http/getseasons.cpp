@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetSeasonsLoader::GetSeasonsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSeasonsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetSeasonsParams>(apiClient) {}
 
 QString GetSeasonsLoader::path(const GetSeasonsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Shows/") + Support::toString(params.seriesId()) + QStringLiteral("/Seasons");
+	return QStringLiteral("/Shows/") + Support::toString< QString>(params.seriesId()) + QStringLiteral("/Seasons");
 }
 
 QUrlQuery GetSeasonsLoader::query(const GetSeasonsParams &params) const {
@@ -50,31 +51,31 @@ QUrlQuery GetSeasonsLoader::query(const GetSeasonsParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.isSpecialSeasonNull()) {
-		result.addQueryItem("isSpecialSeason", Support::toString(params.isSpecialSeason()));
+		result.addQueryItem("isSpecialSeason", Support::toString<std::optional<bool>>(params.isSpecialSeason()));
 	}
 	if (!params.isMissingNull()) {
-		result.addQueryItem("isMissing", Support::toString(params.isMissing()));
+		result.addQueryItem("isMissing", Support::toString<std::optional<bool>>(params.isMissing()));
 	}
 	if (!params.adjacentToNull()) {
-		result.addQueryItem("adjacentTo", Support::toString(params.adjacentTo()));
+		result.addQueryItem("adjacentTo", Support::toString<QString>(params.adjacentTo()));
 	}
 	if (!params.enableImagesNull()) {
-		result.addQueryItem("enableImages", Support::toString(params.enableImages()));
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString(params.imageTypeLimit()));
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
 	}
 	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString(params.enableImageTypes()));
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
 	}
 	if (!params.enableUserDataNull()) {
-		result.addQueryItem("enableUserData", Support::toString(params.enableUserData()));
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	
 	return result;

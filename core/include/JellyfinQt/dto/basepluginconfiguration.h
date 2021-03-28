@@ -33,6 +33,10 @@
 #include <QJsonObject>
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 using BasePluginConfiguration = QJsonObject;

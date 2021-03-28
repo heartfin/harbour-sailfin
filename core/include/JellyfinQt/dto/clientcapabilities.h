@@ -43,6 +43,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -58,7 +62,7 @@ public:
 	
 	static ClientCapabilities fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -134,6 +138,18 @@ protected:
 	QString m_appStoreUrl;
 	QString m_iconUrl;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ClientCapabilities = Jellyfin::DTO::ClientCapabilities;
+
+template <>
+ClientCapabilities fromJsonValue(const QJsonValue &source, convertType<ClientCapabilities>);
+
+template<>
+QJsonValue toJsonValue(const ClientCapabilities &source, convertType<ClientCapabilities>);
 
 } // NS DTO
 } // NS Jellyfin

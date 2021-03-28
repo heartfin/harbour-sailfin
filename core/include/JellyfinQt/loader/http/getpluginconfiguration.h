@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/basepluginconfiguration.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets plugin configuration.
  */
-class GetPluginConfigurationLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BasePluginConfiguration, GetPluginConfigurationParams> {
+
+class GetPluginConfigurationLoader : public Jellyfin::Support::HttpLoader<BasePluginConfiguration, GetPluginConfigurationParams> {
 public:
 	explicit GetPluginConfigurationLoader(ApiClient *apiClient = nullptr);
 

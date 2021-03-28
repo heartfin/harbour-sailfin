@@ -88,7 +88,7 @@ void ItemCounts::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ItemCounts::toJson() {
+QJsonObject ItemCounts::toJson() const {
 	QJsonObject result;
 	result["MovieCount"] = Jellyfin::Support::toJsonValue<qint32>(m_movieCount);
 	result["SeriesCount"] = Jellyfin::Support::toJsonValue<qint32>(m_seriesCount);
@@ -186,9 +186,14 @@ namespace Support {
 using ItemCounts = Jellyfin::DTO::ItemCounts;
 
 template <>
-ItemCounts fromJsonValue<ItemCounts>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ItemCounts fromJsonValue(const QJsonValue &source, convertType<ItemCounts>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ItemCounts::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ItemCounts &source, convertType<ItemCounts>) {
+	return source.toJson();
 }
 
 } // NS DTO

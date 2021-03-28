@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static QueryFiltersLegacy fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -93,6 +97,18 @@ protected:
 	QStringList m_officialRatings;
 	QList<qint32> m_years;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using QueryFiltersLegacy = Jellyfin::DTO::QueryFiltersLegacy;
+
+template <>
+QueryFiltersLegacy fromJsonValue(const QJsonValue &source, convertType<QueryFiltersLegacy>);
+
+template<>
+QJsonValue toJsonValue(const QueryFiltersLegacy &source, convertType<QueryFiltersLegacy>);
 
 } // NS DTO
 } // NS Jellyfin

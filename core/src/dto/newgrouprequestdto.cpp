@@ -55,7 +55,7 @@ void NewGroupRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject NewGroupRequestDto::toJson() {
+QJsonObject NewGroupRequestDto::toJson() const {
 	QJsonObject result;
 	result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);
 
@@ -83,9 +83,14 @@ namespace Support {
 using NewGroupRequestDto = Jellyfin::DTO::NewGroupRequestDto;
 
 template <>
-NewGroupRequestDto fromJsonValue<NewGroupRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+NewGroupRequestDto fromJsonValue(const QJsonValue &source, convertType<NewGroupRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return NewGroupRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const NewGroupRequestDto &source, convertType<NewGroupRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

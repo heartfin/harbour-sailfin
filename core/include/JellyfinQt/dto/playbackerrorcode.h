@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class PlaybackErrorCodeClass {
@@ -53,7 +57,19 @@ private:
 	explicit PlaybackErrorCodeClass();
 };
 
-typedef PlaybackErrorCodeClass::Value PlaybackErrorCode;
+using PlaybackErrorCode = PlaybackErrorCodeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using PlaybackErrorCode = Jellyfin::DTO::PlaybackErrorCode;
+
+template <>
+PlaybackErrorCode fromJsonValue(const QJsonValue &source, convertType<PlaybackErrorCode>);
+
+template <>
+QJsonValue toJsonValue(const PlaybackErrorCode &source, convertType<PlaybackErrorCode>);
 
 } // NS DTO
 } // NS Jellyfin

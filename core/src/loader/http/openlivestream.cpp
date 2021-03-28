@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 OpenLiveStreamLoader::OpenLiveStreamLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::LiveStreamResponse, OpenLiveStreamParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<LiveStreamResponse, OpenLiveStreamParams>(apiClient) {}
 
 QString OpenLiveStreamLoader::path(const OpenLiveStreamParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,37 +51,37 @@ QUrlQuery OpenLiveStreamLoader::query(const OpenLiveStreamParams &params) const 
 
 	// Optional parameters
 	if (!params.openTokenNull()) {
-		result.addQueryItem("openToken", Support::toString(params.openToken()));
+		result.addQueryItem("openToken", Support::toString<QString>(params.openToken()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.playSessionIdNull()) {
-		result.addQueryItem("playSessionId", Support::toString(params.playSessionId()));
+		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
 	}
 	if (!params.maxStreamingBitrateNull()) {
-		result.addQueryItem("maxStreamingBitrate", Support::toString(params.maxStreamingBitrate()));
+		result.addQueryItem("maxStreamingBitrate", Support::toString<std::optional<qint32>>(params.maxStreamingBitrate()));
 	}
 	if (!params.startTimeTicksNull()) {
-		result.addQueryItem("startTimeTicks", Support::toString(params.startTimeTicks()));
+		result.addQueryItem("startTimeTicks", Support::toString<std::optional<qint64>>(params.startTimeTicks()));
 	}
 	if (!params.audioStreamIndexNull()) {
-		result.addQueryItem("audioStreamIndex", Support::toString(params.audioStreamIndex()));
+		result.addQueryItem("audioStreamIndex", Support::toString<std::optional<qint32>>(params.audioStreamIndex()));
 	}
 	if (!params.subtitleStreamIndexNull()) {
-		result.addQueryItem("subtitleStreamIndex", Support::toString(params.subtitleStreamIndex()));
+		result.addQueryItem("subtitleStreamIndex", Support::toString<std::optional<qint32>>(params.subtitleStreamIndex()));
 	}
 	if (!params.maxAudioChannelsNull()) {
-		result.addQueryItem("maxAudioChannels", Support::toString(params.maxAudioChannels()));
+		result.addQueryItem("maxAudioChannels", Support::toString<std::optional<qint32>>(params.maxAudioChannels()));
 	}
 	if (!params.itemIdNull()) {
-		result.addQueryItem("itemId", Support::toString(params.itemId()));
+		result.addQueryItem("itemId", Support::toString<QString>(params.itemId()));
 	}
 	if (!params.enableDirectPlayNull()) {
-		result.addQueryItem("enableDirectPlay", Support::toString(params.enableDirectPlay()));
+		result.addQueryItem("enableDirectPlay", Support::toString<std::optional<bool>>(params.enableDirectPlay()));
 	}
 	if (!params.enableDirectStreamNull()) {
-		result.addQueryItem("enableDirectStream", Support::toString(params.enableDirectStream()));
+		result.addQueryItem("enableDirectStream", Support::toString<std::optional<bool>>(params.enableDirectStream()));
 	}
 	
 	return result;

@@ -34,7 +34,6 @@ namespace DTO {
 
 ProfileConditionTypeClass::ProfileConditionTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ProfileConditionType = Jellyfin::DTO::ProfileConditionType;
 
 template <>
-ProfileConditionType fromJsonValue<ProfileConditionType>(const QJsonValue &source) {
+ProfileConditionType fromJsonValue(const QJsonValue &source, convertType<ProfileConditionType>) {
 	if (!source.isString()) return ProfileConditionType::EnumNotSet;
 
 	QString str = source.toString();
@@ -63,6 +62,26 @@ ProfileConditionType fromJsonValue<ProfileConditionType>(const QJsonValue &sourc
 	}
 	
 	return ProfileConditionType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ProfileConditionType &source, convertType<ProfileConditionType>) {
+	switch(source) {
+	case ProfileConditionType::Equals:
+		return QStringLiteral("Equals");
+	case ProfileConditionType::NotEquals:
+		return QStringLiteral("NotEquals");
+	case ProfileConditionType::LessThanEqual:
+		return QStringLiteral("LessThanEqual");
+	case ProfileConditionType::GreaterThanEqual:
+		return QStringLiteral("GreaterThanEqual");
+	case ProfileConditionType::EqualsAny:
+		return QStringLiteral("EqualsAny");
+
+	case ProfileConditionType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

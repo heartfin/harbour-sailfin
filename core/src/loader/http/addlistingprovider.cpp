@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 AddListingProviderLoader::AddListingProviderLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ListingsProviderInfo, AddListingProviderParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<ListingsProviderInfo, AddListingProviderParams>(apiClient) {}
 
 QString AddListingProviderLoader::path(const AddListingProviderParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,13 +51,13 @@ QUrlQuery AddListingProviderLoader::query(const AddListingProviderParams &params
 
 	// Optional parameters
 	if (!params.pwNull()) {
-		result.addQueryItem("pw", Support::toString(params.pw()));
+		result.addQueryItem("pw", Support::toString<QString>(params.pw()));
 	}
 	if (!params.validateListingsNull()) {
-		result.addQueryItem("validateListings", Support::toString(params.validateListings()));
+		result.addQueryItem("validateListings", Support::toString<std::optional<bool>>(params.validateListings()));
 	}
 	if (!params.validateLoginNull()) {
-		result.addQueryItem("validateLogin", Support::toString(params.validateLogin()));
+		result.addQueryItem("validateLogin", Support::toString<std::optional<bool>>(params.validateLogin()));
 	}
 	
 	return result;

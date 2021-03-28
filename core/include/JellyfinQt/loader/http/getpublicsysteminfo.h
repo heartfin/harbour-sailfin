@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/publicsysteminfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets public information about the server.
  */
-class GetPublicSystemInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PublicSystemInfo, GetPublicSystemInfoParams> {
+
+class GetPublicSystemInfoLoader : public Jellyfin::Support::HttpLoader<PublicSystemInfo, GetPublicSystemInfoParams> {
 public:
 	explicit GetPublicSystemInfoLoader(ApiClient *apiClient = nullptr);
 

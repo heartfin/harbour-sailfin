@@ -34,7 +34,6 @@ namespace DTO {
 
 ConfigurationPageTypeClass::ConfigurationPageTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ConfigurationPageType = Jellyfin::DTO::ConfigurationPageType;
 
 template <>
-ConfigurationPageType fromJsonValue<ConfigurationPageType>(const QJsonValue &source) {
+ConfigurationPageType fromJsonValue(const QJsonValue &source, convertType<ConfigurationPageType>) {
 	if (!source.isString()) return ConfigurationPageType::EnumNotSet;
 
 	QString str = source.toString();
@@ -54,6 +53,20 @@ ConfigurationPageType fromJsonValue<ConfigurationPageType>(const QJsonValue &sou
 	}
 	
 	return ConfigurationPageType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ConfigurationPageType &source, convertType<ConfigurationPageType>) {
+	switch(source) {
+	case ConfigurationPageType::PluginConfiguration:
+		return QStringLiteral("PluginConfiguration");
+	case ConfigurationPageType::None:
+		return QStringLiteral("None");
+
+	case ConfigurationPageType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

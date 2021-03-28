@@ -307,7 +307,7 @@ void ServerConfiguration::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ServerConfiguration::toJson() {
+QJsonObject ServerConfiguration::toJson() const {
 	QJsonObject result;
 	result["LogFileRetentionDays"] = Jellyfin::Support::toJsonValue<qint32>(m_logFileRetentionDays);
 	result["IsStartupWizardCompleted"] = Jellyfin::Support::toJsonValue<bool>(m_isStartupWizardCompleted);
@@ -1133,9 +1133,14 @@ namespace Support {
 using ServerConfiguration = Jellyfin::DTO::ServerConfiguration;
 
 template <>
-ServerConfiguration fromJsonValue<ServerConfiguration>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ServerConfiguration fromJsonValue(const QJsonValue &source, convertType<ServerConfiguration>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ServerConfiguration::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ServerConfiguration &source, convertType<ServerConfiguration>) {
+	return source.toJson();
 }
 
 } // NS DTO

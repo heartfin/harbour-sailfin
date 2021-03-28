@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class RepeatModeClass {
@@ -53,7 +57,19 @@ private:
 	explicit RepeatModeClass();
 };
 
-typedef RepeatModeClass::Value RepeatMode;
+using RepeatMode = RepeatModeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using RepeatMode = Jellyfin::DTO::RepeatMode;
+
+template <>
+RepeatMode fromJsonValue(const QJsonValue &source, convertType<RepeatMode>);
+
+template <>
+QJsonValue toJsonValue(const RepeatMode &source, convertType<RepeatMode>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetSchedulesDirectCountriesLoader::GetSchedulesDirectCountriesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QString, GetSchedulesDirectCountriesParams>(apiClient) {}
+
+QString GetSchedulesDirectCountriesLoader::path(const GetSchedulesDirectCountriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/ListingProviders/SchedulesDirect/Countries");
+}
+
+QUrlQuery GetSchedulesDirectCountriesLoader::query(const GetSchedulesDirectCountriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

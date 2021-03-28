@@ -34,7 +34,6 @@ namespace DTO {
 
 GroupStateTypeClass::GroupStateTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using GroupStateType = Jellyfin::DTO::GroupStateType;
 
 template <>
-GroupStateType fromJsonValue<GroupStateType>(const QJsonValue &source) {
+GroupStateType fromJsonValue(const QJsonValue &source, convertType<GroupStateType>) {
 	if (!source.isString()) return GroupStateType::EnumNotSet;
 
 	QString str = source.toString();
@@ -60,6 +59,24 @@ GroupStateType fromJsonValue<GroupStateType>(const QJsonValue &source) {
 	}
 	
 	return GroupStateType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const GroupStateType &source, convertType<GroupStateType>) {
+	switch(source) {
+	case GroupStateType::Idle:
+		return QStringLiteral("Idle");
+	case GroupStateType::Waiting:
+		return QStringLiteral("Waiting");
+	case GroupStateType::Paused:
+		return QStringLiteral("Paused");
+	case GroupStateType::Playing:
+		return QStringLiteral("Playing");
+
+	case GroupStateType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

@@ -85,7 +85,7 @@ void BaseItem::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject BaseItem::toJson() {
+QJsonObject BaseItem::toJson() const {
 	QJsonObject result;
 	result["Size"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_size);
 	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
@@ -211,9 +211,14 @@ namespace Support {
 using BaseItem = Jellyfin::DTO::BaseItem;
 
 template <>
-BaseItem fromJsonValue<BaseItem>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+BaseItem fromJsonValue(const QJsonValue &source, convertType<BaseItem>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return BaseItem::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const BaseItem &source, convertType<BaseItem>) {
+	return source.toJson();
 }
 
 } // NS DTO

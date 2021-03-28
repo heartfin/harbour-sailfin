@@ -73,7 +73,7 @@ void MediaAttachment::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MediaAttachment::toJson() {
+QJsonObject MediaAttachment::toJson() const {
 	QJsonObject result;
 	result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
 	result["CodecTag"] = Jellyfin::Support::toJsonValue<QString>(m_codecTag);
@@ -178,9 +178,14 @@ namespace Support {
 using MediaAttachment = Jellyfin::DTO::MediaAttachment;
 
 template <>
-MediaAttachment fromJsonValue<MediaAttachment>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MediaAttachment fromJsonValue(const QJsonValue &source, convertType<MediaAttachment>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MediaAttachment::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MediaAttachment &source, convertType<MediaAttachment>) {
+	return source.toJson();
 }
 
 } // NS DTO

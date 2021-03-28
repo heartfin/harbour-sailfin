@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static ExternalIdInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -102,6 +106,18 @@ protected:
 	ExternalIdMediaType m_type;
 	QString m_urlFormatString;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ExternalIdInfo = Jellyfin::DTO::ExternalIdInfo;
+
+template <>
+ExternalIdInfo fromJsonValue(const QJsonValue &source, convertType<ExternalIdInfo>);
+
+template<>
+QJsonValue toJsonValue(const ExternalIdInfo &source, convertType<ExternalIdInfo>);
 
 } // NS DTO
 } // NS Jellyfin

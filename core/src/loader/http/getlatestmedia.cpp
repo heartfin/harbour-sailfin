@@ -34,6 +34,56 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetLatestMediaLoader::GetLatestMediaLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<BaseItemDto>, GetLatestMediaParams>(apiClient) {}
+
+QString GetLatestMediaLoader::path(const GetLatestMediaParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/Latest");
+}
+
+QUrlQuery GetLatestMediaLoader::query(const GetLatestMediaParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.parentIdNull()) {
+		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
+	}
+	if (!params.fieldsNull()) {
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
+	}
+	if (!params.includeItemTypesNull()) {
+		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+	}
+	if (!params.isPlayedNull()) {
+		result.addQueryItem("isPlayed", Support::toString<std::optional<bool>>(params.isPlayed()));
+	}
+	if (!params.enableImagesNull()) {
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
+	}
+	if (!params.imageTypeLimitNull()) {
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
+	}
+	if (!params.enableImageTypesNull()) {
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
+	}
+	if (!params.enableUserDataNull()) {
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
+	}
+	if (!params.limitNull()) {
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
+	}
+	if (!params.groupItemsNull()) {
+		result.addQueryItem("groupItems", Support::toString<std::optional<bool>>(params.groupItems()));
+	}
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

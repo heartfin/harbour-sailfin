@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/livetvinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets available live tv services.
  */
-class GetLiveTvInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::LiveTvInfo, GetLiveTvInfoParams> {
+
+class GetLiveTvInfoLoader : public Jellyfin::Support::HttpLoader<LiveTvInfo, GetLiveTvInfoParams> {
 public:
 	explicit GetLiveTvInfoLoader(ApiClient *apiClient = nullptr);
 

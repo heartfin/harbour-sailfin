@@ -61,7 +61,7 @@ void RepositoryInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject RepositoryInfo::toJson() {
+QJsonObject RepositoryInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
@@ -110,9 +110,14 @@ namespace Support {
 using RepositoryInfo = Jellyfin::DTO::RepositoryInfo;
 
 template <>
-RepositoryInfo fromJsonValue<RepositoryInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+RepositoryInfo fromJsonValue(const QJsonValue &source, convertType<RepositoryInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return RepositoryInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const RepositoryInfo &source, convertType<RepositoryInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

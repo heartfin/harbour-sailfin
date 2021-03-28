@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static SubtitleProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -98,6 +102,18 @@ protected:
 	QString m_language;
 	QString m_container;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SubtitleProfile = Jellyfin::DTO::SubtitleProfile;
+
+template <>
+SubtitleProfile fromJsonValue(const QJsonValue &source, convertType<SubtitleProfile>);
+
+template<>
+QJsonValue toJsonValue(const SubtitleProfile &source, convertType<SubtitleProfile>);
 
 } // NS DTO
 } // NS Jellyfin

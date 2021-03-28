@@ -64,7 +64,7 @@ void FontFile::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject FontFile::toJson() {
+QJsonObject FontFile::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);
@@ -113,9 +113,14 @@ namespace Support {
 using FontFile = Jellyfin::DTO::FontFile;
 
 template <>
-FontFile fromJsonValue<FontFile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+FontFile fromJsonValue(const QJsonValue &source, convertType<FontFile>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return FontFile::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const FontFile &source, convertType<FontFile>) {
+	return source.toJson();
 }
 
 } // NS DTO

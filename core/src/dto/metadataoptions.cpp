@@ -73,7 +73,7 @@ void MetadataOptions::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MetadataOptions::toJson() {
+QJsonObject MetadataOptions::toJson() const {
 	QJsonObject result;
 	result["ItemType"] = Jellyfin::Support::toJsonValue<QString>(m_itemType);
 	result["DisabledMetadataSavers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledMetadataSavers);
@@ -185,9 +185,14 @@ namespace Support {
 using MetadataOptions = Jellyfin::DTO::MetadataOptions;
 
 template <>
-MetadataOptions fromJsonValue<MetadataOptions>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MetadataOptions fromJsonValue(const QJsonValue &source, convertType<MetadataOptions>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MetadataOptions::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MetadataOptions &source, convertType<MetadataOptions>) {
+	return source.toJson();
 }
 
 } // NS DTO

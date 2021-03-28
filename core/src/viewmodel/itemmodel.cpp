@@ -26,11 +26,18 @@ namespace Jellyfin {
 namespace ViewModel {
 
 UserViewsLoader::UserViewsLoader(QObject *parent)
-    : UserViewsLoaderBase(Loader::HTTP::GetUserViewsLoader(), parent) {}
+    : UserViewsLoaderBase(new Jellyfin::Loader::HTTP::GetUserViewsLoader(), parent) {
+    connect(this, &BaseModelLoader::apiClientChanged, this, &UserViewsLoader::apiClientChanged);
+}
 
 void UserViewsLoader::apiClientChanged(ApiClient *newApiClient) {
     if (m_apiClient != nullptr) disconnect(m_apiClient, &ApiClient::userIdChanged, this, &UserViewsLoader::userIdChanged);
-    if (newApiClient != nullptr) connect(newApiClient, &ApiClient::userIdChanged, this, &UserViewsLoader::userIdChanged);
+    if (newApiClient != nullptr) {
+        connect(newApiClient, &ApiClient::userIdChanged, this, &UserViewsLoader::userIdChanged);
+        if (!newApiClient->userId().isNull()) {
+            m_parameters.setUserId(newApiClient->userId());
+        }
+    }
 }
 
 void UserViewsLoader::userIdChanged(const QString &newUserId) {
@@ -45,6 +52,10 @@ void UserItemsLoader::apiClientChanged(ApiClient *newApiClient) {
 void UserItemsLoader::userIdChanged(const QString &newUserId) {
     m_parameters.setUserId(newUserId);
     autoReloadIfNeeded();
+}
+
+bool UserItemsLoader::canReload() const {
+    return BaseModelLoader::canReload() && !m_parameters.userId().isNull();
 }
 
 ItemModel::ItemModel(QObject *parent)

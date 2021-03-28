@@ -58,7 +58,7 @@ void StartupUserDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject StartupUserDto::toJson() {
+QJsonObject StartupUserDto::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
@@ -100,9 +100,14 @@ namespace Support {
 using StartupUserDto = Jellyfin::DTO::StartupUserDto;
 
 template <>
-StartupUserDto fromJsonValue<StartupUserDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+StartupUserDto fromJsonValue(const QJsonValue &source, convertType<StartupUserDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return StartupUserDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const StartupUserDto &source, convertType<StartupUserDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

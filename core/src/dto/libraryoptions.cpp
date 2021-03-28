@@ -127,7 +127,7 @@ void LibraryOptions::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject LibraryOptions::toJson() {
+QJsonObject LibraryOptions::toJson() const {
 	QJsonObject result;
 	result["EnablePhotos"] = Jellyfin::Support::toJsonValue<bool>(m_enablePhotos);
 	result["EnableRealtimeMonitor"] = Jellyfin::Support::toJsonValue<bool>(m_enableRealtimeMonitor);
@@ -393,9 +393,14 @@ namespace Support {
 using LibraryOptions = Jellyfin::DTO::LibraryOptions;
 
 template <>
-LibraryOptions fromJsonValue<LibraryOptions>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+LibraryOptions fromJsonValue(const QJsonValue &source, convertType<LibraryOptions>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return LibraryOptions::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const LibraryOptions &source, convertType<LibraryOptions>) {
+	return source.toJson();
 }
 
 } // NS DTO

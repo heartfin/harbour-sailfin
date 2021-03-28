@@ -97,7 +97,7 @@ void PlaybackInfoDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PlaybackInfoDto::toJson() {
+QJsonObject PlaybackInfoDto::toJson() const {
 	QJsonObject result;
 	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
 	result["MaxStreamingBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxStreamingBitrate);
@@ -314,9 +314,14 @@ namespace Support {
 using PlaybackInfoDto = Jellyfin::DTO::PlaybackInfoDto;
 
 template <>
-PlaybackInfoDto fromJsonValue<PlaybackInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PlaybackInfoDto fromJsonValue(const QJsonValue &source, convertType<PlaybackInfoDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PlaybackInfoDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PlaybackInfoDto &source, convertType<PlaybackInfoDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

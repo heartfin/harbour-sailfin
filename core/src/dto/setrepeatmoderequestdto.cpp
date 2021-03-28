@@ -55,7 +55,7 @@ void SetRepeatModeRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SetRepeatModeRequestDto::toJson() {
+QJsonObject SetRepeatModeRequestDto::toJson() const {
 	QJsonObject result;
 	result["Mode"] = Jellyfin::Support::toJsonValue<GroupRepeatMode>(m_mode);
 
@@ -76,9 +76,14 @@ namespace Support {
 using SetRepeatModeRequestDto = Jellyfin::DTO::SetRepeatModeRequestDto;
 
 template <>
-SetRepeatModeRequestDto fromJsonValue<SetRepeatModeRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SetRepeatModeRequestDto fromJsonValue(const QJsonValue &source, convertType<SetRepeatModeRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SetRepeatModeRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SetRepeatModeRequestDto &source, convertType<SetRepeatModeRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

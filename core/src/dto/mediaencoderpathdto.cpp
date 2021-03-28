@@ -58,7 +58,7 @@ void MediaEncoderPathDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MediaEncoderPathDto::toJson() {
+QJsonObject MediaEncoderPathDto::toJson() const {
 	QJsonObject result;
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
 	result["PathType"] = Jellyfin::Support::toJsonValue<QString>(m_pathType);
@@ -100,9 +100,14 @@ namespace Support {
 using MediaEncoderPathDto = Jellyfin::DTO::MediaEncoderPathDto;
 
 template <>
-MediaEncoderPathDto fromJsonValue<MediaEncoderPathDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MediaEncoderPathDto fromJsonValue(const QJsonValue &source, convertType<MediaEncoderPathDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MediaEncoderPathDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MediaEncoderPathDto &source, convertType<MediaEncoderPathDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

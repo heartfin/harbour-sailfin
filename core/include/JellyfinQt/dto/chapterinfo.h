@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static ChapterInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -108,6 +112,18 @@ protected:
 	QDateTime m_imageDateModified;
 	QString m_imageTag;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ChapterInfo = Jellyfin::DTO::ChapterInfo;
+
+template <>
+ChapterInfo fromJsonValue(const QJsonValue &source, convertType<ChapterInfo>);
+
+template<>
+QJsonValue toJsonValue(const ChapterInfo &source, convertType<ChapterInfo>);
 
 } // NS DTO
 } // NS Jellyfin

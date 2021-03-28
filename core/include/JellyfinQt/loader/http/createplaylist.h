@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/playlistcreationresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Creates a new playlist.
  */
-class CreatePlaylistLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaylistCreationResult, CreatePlaylistParams> {
+
+class CreatePlaylistLoader : public Jellyfin::Support::HttpLoader<PlaylistCreationResult, CreatePlaylistParams> {
 public:
 	explicit CreatePlaylistLoader(ApiClient *apiClient = nullptr);
 

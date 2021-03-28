@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -52,7 +56,7 @@ public:
 	
 	static Version fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -94,6 +98,18 @@ protected:
 	qint32 m_majorRevision;
 	qint32 m_minorRevision;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using Version = Jellyfin::DTO::Version;
+
+template <>
+Version fromJsonValue(const QJsonValue &source, convertType<Version>);
+
+template<>
+QJsonValue toJsonValue(const Version &source, convertType<Version>);
 
 } // NS DTO
 } // NS Jellyfin

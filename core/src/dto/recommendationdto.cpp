@@ -64,7 +64,7 @@ void RecommendationDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject RecommendationDto::toJson() {
+QJsonObject RecommendationDto::toJson() const {
 	QJsonObject result;
 	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
 	result["RecommendationType"] = Jellyfin::Support::toJsonValue<RecommendationType>(m_recommendationType);
@@ -120,9 +120,14 @@ namespace Support {
 using RecommendationDto = Jellyfin::DTO::RecommendationDto;
 
 template <>
-RecommendationDto fromJsonValue<RecommendationDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+RecommendationDto fromJsonValue(const QJsonValue &source, convertType<RecommendationDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return RecommendationDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const RecommendationDto &source, convertType<RecommendationDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

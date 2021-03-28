@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ImageOrientationClass {
@@ -58,7 +62,19 @@ private:
 	explicit ImageOrientationClass();
 };
 
-typedef ImageOrientationClass::Value ImageOrientation;
+using ImageOrientation = ImageOrientationClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ImageOrientation = Jellyfin::DTO::ImageOrientation;
+
+template <>
+ImageOrientation fromJsonValue(const QJsonValue &source, convertType<ImageOrientation>);
+
+template <>
+QJsonValue toJsonValue(const ImageOrientation &source, convertType<ImageOrientation>);
 
 } // NS DTO
 } // NS Jellyfin

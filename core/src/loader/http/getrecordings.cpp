@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetRecordingsLoader::GetRecordingsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecordingsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetRecordingsParams>(apiClient) {}
 
 QString GetRecordingsLoader::path(const GetRecordingsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,61 +51,61 @@ QUrlQuery GetRecordingsLoader::query(const GetRecordingsParams &params) const {
 
 	// Optional parameters
 	if (!params.channelIdNull()) {
-		result.addQueryItem("channelId", Support::toString(params.channelId()));
+		result.addQueryItem("channelId", Support::toString<QString>(params.channelId()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.statusNull()) {
-		result.addQueryItem("status", Support::toString(params.status()));
+		result.addQueryItem("status", Support::toString<RecordingStatus>(params.status()));
 	}
 	if (!params.isInProgressNull()) {
-		result.addQueryItem("isInProgress", Support::toString(params.isInProgress()));
+		result.addQueryItem("isInProgress", Support::toString<std::optional<bool>>(params.isInProgress()));
 	}
 	if (!params.seriesTimerIdNull()) {
-		result.addQueryItem("seriesTimerId", Support::toString(params.seriesTimerId()));
+		result.addQueryItem("seriesTimerId", Support::toString<QString>(params.seriesTimerId()));
 	}
 	if (!params.enableImagesNull()) {
-		result.addQueryItem("enableImages", Support::toString(params.enableImages()));
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString(params.imageTypeLimit()));
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
 	}
 	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString(params.enableImageTypes()));
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.enableUserDataNull()) {
-		result.addQueryItem("enableUserData", Support::toString(params.enableUserData()));
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	if (!params.isMovieNull()) {
-		result.addQueryItem("isMovie", Support::toString(params.isMovie()));
+		result.addQueryItem("isMovie", Support::toString<std::optional<bool>>(params.isMovie()));
 	}
 	if (!params.isSeriesNull()) {
-		result.addQueryItem("isSeries", Support::toString(params.isSeries()));
+		result.addQueryItem("isSeries", Support::toString<std::optional<bool>>(params.isSeries()));
 	}
 	if (!params.isKidsNull()) {
-		result.addQueryItem("isKids", Support::toString(params.isKids()));
+		result.addQueryItem("isKids", Support::toString<std::optional<bool>>(params.isKids()));
 	}
 	if (!params.isSportsNull()) {
-		result.addQueryItem("isSports", Support::toString(params.isSports()));
+		result.addQueryItem("isSports", Support::toString<std::optional<bool>>(params.isSports()));
 	}
 	if (!params.isNewsNull()) {
-		result.addQueryItem("isNews", Support::toString(params.isNews()));
+		result.addQueryItem("isNews", Support::toString<std::optional<bool>>(params.isNews()));
 	}
 	if (!params.isLibraryItemNull()) {
-		result.addQueryItem("isLibraryItem", Support::toString(params.isLibraryItem()));
+		result.addQueryItem("isLibraryItem", Support::toString<std::optional<bool>>(params.isLibraryItem()));
 	}
 	if (!params.enableTotalRecordCountNull()) {
-		result.addQueryItem("enableTotalRecordCount", Support::toString(params.enableTotalRecordCount()));
+		result.addQueryItem("enableTotalRecordCount", Support::toString<std::optional<bool>>(params.enableTotalRecordCount()));
 	}
 	
 	return result;

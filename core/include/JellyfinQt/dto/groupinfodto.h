@@ -42,6 +42,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -57,7 +61,7 @@ public:
 	
 	static GroupInfoDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -113,6 +117,18 @@ protected:
 	QStringList m_participants;
 	QDateTime m_lastUpdatedAt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using GroupInfoDto = Jellyfin::DTO::GroupInfoDto;
+
+template <>
+GroupInfoDto fromJsonValue(const QJsonValue &source, convertType<GroupInfoDto>);
+
+template<>
+QJsonValue toJsonValue(const GroupInfoDto &source, convertType<GroupInfoDto>);
 
 } // NS DTO
 } // NS Jellyfin

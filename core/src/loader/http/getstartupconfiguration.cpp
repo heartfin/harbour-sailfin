@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetStartupConfigurationLoader::GetStartupConfigurationLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupConfigurationDto, GetStartupConfigurationParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<StartupConfigurationDto, GetStartupConfigurationParams>(apiClient) {}
 
 QString GetStartupConfigurationLoader::path(const GetStartupConfigurationParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

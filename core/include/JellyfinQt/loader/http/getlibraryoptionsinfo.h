@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/libraryoptionsresultdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets the library options info.
  */
-class GetLibraryOptionsInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::LibraryOptionsResultDto, GetLibraryOptionsInfoParams> {
+
+class GetLibraryOptionsInfoLoader : public Jellyfin::Support::HttpLoader<LibraryOptionsResultDto, GetLibraryOptionsInfoParams> {
 public:
 	explicit GetLibraryOptionsInfoLoader(ApiClient *apiClient = nullptr);
 

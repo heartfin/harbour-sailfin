@@ -34,7 +34,6 @@ namespace DTO {
 
 RecommendationTypeClass::RecommendationTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using RecommendationType = Jellyfin::DTO::RecommendationType;
 
 template <>
-RecommendationType fromJsonValue<RecommendationType>(const QJsonValue &source) {
+RecommendationType fromJsonValue(const QJsonValue &source, convertType<RecommendationType>) {
 	if (!source.isString()) return RecommendationType::EnumNotSet;
 
 	QString str = source.toString();
@@ -66,6 +65,28 @@ RecommendationType fromJsonValue<RecommendationType>(const QJsonValue &source) {
 	}
 	
 	return RecommendationType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const RecommendationType &source, convertType<RecommendationType>) {
+	switch(source) {
+	case RecommendationType::SimilarToRecentlyPlayed:
+		return QStringLiteral("SimilarToRecentlyPlayed");
+	case RecommendationType::SimilarToLikedItem:
+		return QStringLiteral("SimilarToLikedItem");
+	case RecommendationType::HasDirectorFromRecentlyPlayed:
+		return QStringLiteral("HasDirectorFromRecentlyPlayed");
+	case RecommendationType::HasActorFromRecentlyPlayed:
+		return QStringLiteral("HasActorFromRecentlyPlayed");
+	case RecommendationType::HasLikedDirector:
+		return QStringLiteral("HasLikedDirector");
+	case RecommendationType::HasLikedActor:
+		return QStringLiteral("HasLikedActor");
+
+	case RecommendationType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

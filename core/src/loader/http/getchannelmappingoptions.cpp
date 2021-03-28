@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetChannelMappingOptionsLoader::GetChannelMappingOptionsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ChannelMappingOptionsDto, GetChannelMappingOptionsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<ChannelMappingOptionsDto, GetChannelMappingOptionsParams>(apiClient) {}
 
 QString GetChannelMappingOptionsLoader::path(const GetChannelMappingOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,7 +51,7 @@ QUrlQuery GetChannelMappingOptionsLoader::query(const GetChannelMappingOptionsPa
 
 	// Optional parameters
 	if (!params.providerIdNull()) {
-		result.addQueryItem("providerId", Support::toString(params.providerId()));
+		result.addQueryItem("providerId", Support::toString<QString>(params.providerId()));
 	}
 	
 	return result;

@@ -67,7 +67,7 @@ void AccessSchedule::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject AccessSchedule::toJson() {
+QJsonObject AccessSchedule::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<qint32>(m_jellyfinId);
 	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
@@ -116,9 +116,14 @@ namespace Support {
 using AccessSchedule = Jellyfin::DTO::AccessSchedule;
 
 template <>
-AccessSchedule fromJsonValue<AccessSchedule>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+AccessSchedule fromJsonValue(const QJsonValue &source, convertType<AccessSchedule>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return AccessSchedule::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const AccessSchedule &source, convertType<AccessSchedule>) {
+	return source.toJson();
 }
 
 } // NS DTO

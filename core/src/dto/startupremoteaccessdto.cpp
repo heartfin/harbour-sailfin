@@ -58,7 +58,7 @@ void StartupRemoteAccessDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject StartupRemoteAccessDto::toJson() {
+QJsonObject StartupRemoteAccessDto::toJson() const {
 	QJsonObject result;
 	result["EnableRemoteAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteAccess);
 	result["EnableAutomaticPortMapping"] = Jellyfin::Support::toJsonValue<bool>(m_enableAutomaticPortMapping);
@@ -86,9 +86,14 @@ namespace Support {
 using StartupRemoteAccessDto = Jellyfin::DTO::StartupRemoteAccessDto;
 
 template <>
-StartupRemoteAccessDto fromJsonValue<StartupRemoteAccessDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+StartupRemoteAccessDto fromJsonValue(const QJsonValue &source, convertType<StartupRemoteAccessDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return StartupRemoteAccessDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const StartupRemoteAccessDto &source, convertType<StartupRemoteAccessDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

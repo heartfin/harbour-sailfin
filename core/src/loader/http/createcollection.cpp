@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 CreateCollectionLoader::CreateCollectionLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::CollectionCreationResult, CreateCollectionParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<CollectionCreationResult, CreateCollectionParams>(apiClient) {}
 
 QString CreateCollectionLoader::path(const CreateCollectionParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,16 +51,16 @@ QUrlQuery CreateCollectionLoader::query(const CreateCollectionParams &params) co
 
 	// Optional parameters
 	if (!params.nameNull()) {
-		result.addQueryItem("name", Support::toString(params.name()));
+		result.addQueryItem("name", Support::toString<QString>(params.name()));
 	}
 	if (!params.idsNull()) {
-		result.addQueryItem("ids", Support::toString(params.ids()));
+		result.addQueryItem("ids", Support::toString<QStringList>(params.ids()));
 	}
 	if (!params.parentIdNull()) {
-		result.addQueryItem("parentId", Support::toString(params.parentId()));
+		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
 	if (!params.isLockedNull()) {
-		result.addQueryItem("isLocked", Support::toString(params.isLocked()));
+		result.addQueryItem("isLocked", Support::toString<std::optional<bool>>(params.isLocked()));
 	}
 	
 	return result;

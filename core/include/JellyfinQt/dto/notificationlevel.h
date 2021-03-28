@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class NotificationLevelClass {
@@ -53,7 +57,19 @@ private:
 	explicit NotificationLevelClass();
 };
 
-typedef NotificationLevelClass::Value NotificationLevel;
+using NotificationLevel = NotificationLevelClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using NotificationLevel = Jellyfin::DTO::NotificationLevel;
+
+template <>
+NotificationLevel fromJsonValue(const QJsonValue &source, convertType<NotificationLevel>);
+
+template <>
+QJsonValue toJsonValue(const NotificationLevel &source, convertType<NotificationLevel>);
 
 } // NS DTO
 } // NS Jellyfin

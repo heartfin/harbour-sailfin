@@ -64,7 +64,7 @@ void UpdateUserPassword::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject UpdateUserPassword::toJson() {
+QJsonObject UpdateUserPassword::toJson() const {
 	QJsonObject result;
 	result["CurrentPassword"] = Jellyfin::Support::toJsonValue<QString>(m_currentPassword);
 	result["CurrentPw"] = Jellyfin::Support::toJsonValue<QString>(m_currentPw);
@@ -127,9 +127,14 @@ namespace Support {
 using UpdateUserPassword = Jellyfin::DTO::UpdateUserPassword;
 
 template <>
-UpdateUserPassword fromJsonValue<UpdateUserPassword>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+UpdateUserPassword fromJsonValue(const QJsonValue &source, convertType<UpdateUserPassword>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return UpdateUserPassword::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const UpdateUserPassword &source, convertType<UpdateUserPassword>) {
+	return source.toJson();
 }
 
 } // NS DTO

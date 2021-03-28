@@ -130,7 +130,7 @@ void SystemInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SystemInfo::toJson() {
+QJsonObject SystemInfo::toJson() const {
 	QJsonObject result;
 	result["LocalAddress"] = Jellyfin::Support::toJsonValue<QString>(m_localAddress);
 	result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
@@ -445,9 +445,14 @@ namespace Support {
 using SystemInfo = Jellyfin::DTO::SystemInfo;
 
 template <>
-SystemInfo fromJsonValue<SystemInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SystemInfo fromJsonValue(const QJsonValue &source, convertType<SystemInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SystemInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SystemInfo &source, convertType<SystemInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

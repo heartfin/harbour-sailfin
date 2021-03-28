@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets similar items.
  */
-class GetSimilarShowsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSimilarShowsParams> {
+
+class GetSimilarShowsLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetSimilarShowsParams> {
 public:
 	explicit GetSimilarShowsLoader(ApiClient *apiClient = nullptr);
 

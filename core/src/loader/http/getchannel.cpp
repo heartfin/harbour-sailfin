@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetChannelLoader::GetChannelLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetChannelParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDto, GetChannelParams>(apiClient) {}
 
 QString GetChannelLoader::path(const GetChannelParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/LiveTv/Channels/") + Support::toString(params.channelId()) ;
+	return QStringLiteral("/LiveTv/Channels/") + Support::toString< QString>(params.channelId()) ;
 }
 
 QUrlQuery GetChannelLoader::query(const GetChannelParams &params) const {
@@ -50,7 +51,7 @@ QUrlQuery GetChannelLoader::query(const GetChannelParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;

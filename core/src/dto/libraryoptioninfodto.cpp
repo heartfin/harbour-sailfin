@@ -58,7 +58,7 @@ void LibraryOptionInfoDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject LibraryOptionInfoDto::toJson() {
+QJsonObject LibraryOptionInfoDto::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["DefaultEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_defaultEnabled);
@@ -93,9 +93,14 @@ namespace Support {
 using LibraryOptionInfoDto = Jellyfin::DTO::LibraryOptionInfoDto;
 
 template <>
-LibraryOptionInfoDto fromJsonValue<LibraryOptionInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+LibraryOptionInfoDto fromJsonValue(const QJsonValue &source, convertType<LibraryOptionInfoDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return LibraryOptionInfoDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const LibraryOptionInfoDto &source, convertType<LibraryOptionInfoDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static NotificationsSummaryDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -75,6 +79,18 @@ protected:
 	qint32 m_unreadCount;
 	NotificationLevel m_maxUnreadNotificationLevel;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using NotificationsSummaryDto = Jellyfin::DTO::NotificationsSummaryDto;
+
+template <>
+NotificationsSummaryDto fromJsonValue(const QJsonValue &source, convertType<NotificationsSummaryDto>);
+
+template<>
+QJsonValue toJsonValue(const NotificationsSummaryDto &source, convertType<NotificationsSummaryDto>);
 
 } // NS DTO
 } // NS Jellyfin

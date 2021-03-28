@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 UpdateUserItemRatingLoader::UpdateUserItemRatingLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, UpdateUserItemRatingParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<UserItemDataDto, UpdateUserItemRatingParams>(apiClient) {}
 
 QString UpdateUserItemRatingLoader::path(const UpdateUserItemRatingParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/Rating");
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Rating");
 }
 
 QUrlQuery UpdateUserItemRatingLoader::query(const UpdateUserItemRatingParams &params) const {
@@ -50,7 +51,7 @@ QUrlQuery UpdateUserItemRatingLoader::query(const UpdateUserItemRatingParams &pa
 
 	// Optional parameters
 	if (!params.likesNull()) {
-		result.addQueryItem("likes", Support::toString(params.likes()));
+		result.addQueryItem("likes", Support::toString<std::optional<bool>>(params.likes()));
 	}
 	
 	return result;

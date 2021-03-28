@@ -61,7 +61,7 @@ void ActivityLogEntryQueryResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ActivityLogEntryQueryResult::toJson() {
+QJsonObject ActivityLogEntryQueryResult::toJson() const {
 	QJsonObject result;
 	result["Items"] = Jellyfin::Support::toJsonValue<QList<ActivityLogEntry>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
@@ -103,9 +103,14 @@ namespace Support {
 using ActivityLogEntryQueryResult = Jellyfin::DTO::ActivityLogEntryQueryResult;
 
 template <>
-ActivityLogEntryQueryResult fromJsonValue<ActivityLogEntryQueryResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ActivityLogEntryQueryResult fromJsonValue(const QJsonValue &source, convertType<ActivityLogEntryQueryResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ActivityLogEntryQueryResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ActivityLogEntryQueryResult &source, convertType<ActivityLogEntryQueryResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

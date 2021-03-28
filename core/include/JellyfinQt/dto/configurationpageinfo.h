@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static ConfigurationPageInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -136,6 +140,18 @@ protected:
 	ConfigurationPageType m_configurationPageType;
 	QString m_pluginId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ConfigurationPageInfo = Jellyfin::DTO::ConfigurationPageInfo;
+
+template <>
+ConfigurationPageInfo fromJsonValue(const QJsonValue &source, convertType<ConfigurationPageInfo>);
+
+template<>
+QJsonValue toJsonValue(const ConfigurationPageInfo &source, convertType<ConfigurationPageInfo>);
 
 } // NS DTO
 } // NS Jellyfin

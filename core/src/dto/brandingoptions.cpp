@@ -58,7 +58,7 @@ void BrandingOptions::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject BrandingOptions::toJson() {
+QJsonObject BrandingOptions::toJson() const {
 	QJsonObject result;
 	result["LoginDisclaimer"] = Jellyfin::Support::toJsonValue<QString>(m_loginDisclaimer);
 	result["CustomCss"] = Jellyfin::Support::toJsonValue<QString>(m_customCss);
@@ -100,9 +100,14 @@ namespace Support {
 using BrandingOptions = Jellyfin::DTO::BrandingOptions;
 
 template <>
-BrandingOptions fromJsonValue<BrandingOptions>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+BrandingOptions fromJsonValue(const QJsonValue &source, convertType<BrandingOptions>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return BrandingOptions::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const BrandingOptions &source, convertType<BrandingOptions>) {
+	return source.toJson();
 }
 
 } // NS DTO

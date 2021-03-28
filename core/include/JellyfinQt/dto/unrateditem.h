@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class UnratedItemClass {
@@ -59,7 +63,19 @@ private:
 	explicit UnratedItemClass();
 };
 
-typedef UnratedItemClass::Value UnratedItem;
+using UnratedItem = UnratedItemClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using UnratedItem = Jellyfin::DTO::UnratedItem;
+
+template <>
+UnratedItem fromJsonValue(const QJsonValue &source, convertType<UnratedItem>);
+
+template <>
+QJsonValue toJsonValue(const UnratedItem &source, convertType<UnratedItem>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -85,7 +85,7 @@ void PlaybackStopInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PlaybackStopInfo::toJson() {
+QJsonObject PlaybackStopInfo::toJson() const {
 	QJsonObject result;
 	result["Item"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_item);
 	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
@@ -232,9 +232,14 @@ namespace Support {
 using PlaybackStopInfo = Jellyfin::DTO::PlaybackStopInfo;
 
 template <>
-PlaybackStopInfo fromJsonValue<PlaybackStopInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PlaybackStopInfo fromJsonValue(const QJsonValue &source, convertType<PlaybackStopInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PlaybackStopInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PlaybackStopInfo &source, convertType<PlaybackStopInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

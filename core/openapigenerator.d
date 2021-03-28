@@ -201,7 +201,8 @@ void realMain(string[] args) {
 			
 			File headerFile = File(headerFileName, "w+");
 			File implementationFile = File(implementationFileName, "w+");
-			generateFileForEndpoint(path, operation, endpoint, root["components"]["schemas"], headerFile, implementationFile, endpoints);
+			generateFileForEndpoint(path, operation, endpoint, root["components"]["schemas"], headerFile, 
+					implementationFile, endpoints);
 		}
 	}
 	string typesHeaderPath = buildPath(outputDirectory, "include", INCLUDE_PREFIX, LOADER_FOLDER, "requesttypes.h");
@@ -372,8 +373,7 @@ void generateFileForEndpoint(ref const string path, ref const string operation, 
 	string[] userImports = [
 			buildPath(SUPPORT_FOLDER, "jsonconv.h"),
 			buildPath(SUPPORT_FOLDER, "loader.h"), 
-			buildPath(LOADER_FOLDER, "requesttypes.h"),
-			"apiclient.h"
+			buildPath(LOADER_FOLDER, "requesttypes.h")
 	];
 	
 	// Find the most likely result response.
@@ -382,19 +382,34 @@ void generateFileForEndpoint(ref const string path, ref const string operation, 
 		if ([200, 201].canFind(codeNo)) {
 			foreach(string contentType, const Node content; response["content"]) {
 				if (contentType == "application/json") {
+					endpoint.hasSuccessResponse = true;
 					if ("$ref" in content["schema"]) {
-						endpoint.hasSuccessResponse = true;
 						string reference = content["schema"]["$ref"].as!string.chompPrefix("#/components/schemas/");
 						endpoint.resultIsReference = true;
 						endpoint.resultType = reference;
-						string importFile = reference.applyCasePolicy(CasePolicy.PASCAL, CasePolicy.LOWER) ~ ".h";
-						userImports ~= [buildPath(MODEL_FOLDER, importFile)];
-					} else {
+						userImports ~= [buildPath(MODEL_FOLDER, reference.applyCasePolicy(CasePolicy.PASCAL, CasePolicy.LOWER) ~ ".h")];
+					} else if ("schema" in content){
 						endpoint.resultIsReference = false;
+						string typeName = endpoint.name ~ "Response";
+						MetaTypeInfo responseType = getType(typeName, content["schema"], allSchemas);
+						endpoint.resultType = responseType.typeName;
+						if (responseType.needsLocalImport && !responseType.isContainer) {
+							userImports ~= [buildPath(MODEL_FOLDER, endpoint.resultType)];
+						}
+						
+						MetaTypeInfo t = responseType;
+						while(t.isContainer) {
+							t = t.containerType;
+							if (t.needsLocalImport) {
+								userImports ~= [buildPath(MODEL_FOLDER, t.fileName)];
+							} else if (t.needsSystemImport && !t.isContainer){
+								systemImports ~= [t.typeName];
+							}
+						} 
 					}
 				}
 			}
-		}
+			}
 	}
 	
 	// Build the parameter structure.
@@ -444,7 +459,9 @@ void generateFileForEndpoint(ref const string path, ref const string operation, 
 		string pathStringInterpolation() {
 			string result = "QStringLiteral(\"" ~ endpoint.path ~ "\")";
 			foreach(p; endpoint.parameters.filter!(p => p.location == ParameterLocation.PATH)) {
-				result = result.replace("{" ~ p.name ~ "}", "\") + Support::toString(params." ~ p.type.name ~ "()) + QStringLiteral(\"");
+				result = result.replace("{" ~ p.name ~ "}", "\") + Support::toString< " 
+					~ p.type.typeNameWithQualifiers ~">(params." ~ p.type.name 
+					~ "()) + QStringLiteral(\"");
 			}
 			result = result.replace(`+ QStringLiteral("")`, "");
 			return result;
@@ -473,12 +490,13 @@ void generateFileForSchema(ref const string name, ref const Node scheme, Node al
 	if ("enum" in scheme) {
 		string[3] imports = ["QJsonValue", "QObject", "QString"];
 		string[1] userImports = [buildPath(SUPPORT_FOLDER, "jsonconv.h")];
-		writeHeaderPreamble(headerFile, CPP_NAMESPACE_DTO, name, imports, userImports);
 		
 		Appender!(string[]) values;
 		foreach (string value; scheme["enum"]) {
 			values ~= value;
 		}
+		
+		writeHeaderPreamble(headerFile, CPP_NAMESPACE_DTO, name, imports, userImports);
 		writeEnumHeader(headerFile, name, values[]);
 		writeHeaderPostamble(headerFile, CPP_NAMESPACE_DTO, name);
 		
@@ -663,6 +681,9 @@ MetaTypeInfo getType(ref const string name, const ref Node node, const ref Node 
 		goto default;
 	case "object":
 		info.typeName = "QJsonObject"; // This'll do for now
+		info.isTypeNullable = true;
+		info.typeNullableCheck = ".isEmpty()";
+		info.typeNullableSetter = "= QJsonObject()";
 		return info;
 	case "array":
 		string containedTypeName = "arrayItem";
@@ -772,6 +793,12 @@ void writeHeaderPreamble(File output, immutable string[] fileNamespace, string c
 	}
 	if (userImports.length > 0) output.writeln();
 	
+	// FIXME: Should be configurable
+	output.writefln("namespace Jellyfin {");
+	output.writefln("// Forward declaration");
+	output.writefln("class ApiClient;");
+	output.writefln("}");
+	
 	foreach (namespace; fileNamespace) {
 		output.writefln("namespace %s {", namespace);
 	}
@@ -853,7 +880,6 @@ string applyCasePolicy(string source, CasePolicy input, CasePolicy output) {
 		throw new Exception("Not implemented");
 	case CasePolicy.SCREAMING_SNAKE:
 		if (input == CasePolicy.CAMEL || input == CasePolicy.PASCAL) {
-			char[] mutableSource = source.dup;
 			Appender!(char[]) result;
 			foreach(window; source.slide!(Yes.withPartial)(2)) {
 				dchar c = window.front;
@@ -862,8 +888,6 @@ string applyCasePolicy(string source, CasePolicy input, CasePolicy output) {
 				if (isLower(c) && !isLower(n)) {
 					result ~= toUpper(c);
 					result ~= '_';
-				} else if (!isLower(c) && !isLower(n)) {
-					result ~= toUpper(c);
 				} else {
 					result ~= toUpper(c);
 				} 
@@ -949,17 +973,17 @@ public:
 		if (needsOptional) {
 			return " = std::nullopt";
 		}
-		if (typeNullableSetter.startsWith("=")) {
-			return typeNullableSetter;
-		} else {
-			return typeNullableSetter;
-		}
+		return typeNullableSetter;
 	}
 	
 	string defaultInitializer() {
 		if (needsPointer) return "nullptr";
 		if (needsOptional) return "std::nullopt";
 		return "";
+	}
+	
+	string fileName (){
+		return typeName.applyCasePolicy(CasePolicy.PASCAL, CasePolicy.LOWER) ~ ".h";
 	}
 }
 

@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static LogFile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -102,6 +106,18 @@ protected:
 	qint64 m_size;
 	QString m_name;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LogFile = Jellyfin::DTO::LogFile;
+
+template <>
+LogFile fromJsonValue(const QJsonValue &source, convertType<LogFile>);
+
+template<>
+QJsonValue toJsonValue(const LogFile &source, convertType<LogFile>);
 
 } // NS DTO
 } // NS Jellyfin

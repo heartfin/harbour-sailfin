@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetDeviceOptionsLoader::GetDeviceOptionsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceOptions, GetDeviceOptionsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<DeviceOptions, GetDeviceOptionsParams>(apiClient) {}
 
 QString GetDeviceOptionsLoader::path(const GetDeviceOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -47,7 +48,7 @@ QUrlQuery GetDeviceOptionsLoader::query(const GetDeviceOptionsParams &params) co
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
-	result.addQueryItem("id", params.jellyfinId());
+	result.addQueryItem("id", Support::toString<QString>(params.jellyfinId()));
 
 	// Optional parameters
 	

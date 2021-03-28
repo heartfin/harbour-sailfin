@@ -79,7 +79,7 @@ void DeviceInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject DeviceInfo::toJson() {
+QJsonObject DeviceInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
@@ -198,9 +198,14 @@ namespace Support {
 using DeviceInfo = Jellyfin::DTO::DeviceInfo;
 
 template <>
-DeviceInfo fromJsonValue<DeviceInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+DeviceInfo fromJsonValue(const QJsonValue &source, convertType<DeviceInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return DeviceInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const DeviceInfo &source, convertType<DeviceInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

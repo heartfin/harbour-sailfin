@@ -34,7 +34,6 @@ namespace DTO {
 
 ChannelItemSortFieldClass::ChannelItemSortFieldClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ChannelItemSortField = Jellyfin::DTO::ChannelItemSortField;
 
 template <>
-ChannelItemSortField fromJsonValue<ChannelItemSortField>(const QJsonValue &source) {
+ChannelItemSortField fromJsonValue(const QJsonValue &source, convertType<ChannelItemSortField>) {
 	if (!source.isString()) return ChannelItemSortField::EnumNotSet;
 
 	QString str = source.toString();
@@ -69,6 +68,30 @@ ChannelItemSortField fromJsonValue<ChannelItemSortField>(const QJsonValue &sourc
 	}
 	
 	return ChannelItemSortField::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ChannelItemSortField &source, convertType<ChannelItemSortField>) {
+	switch(source) {
+	case ChannelItemSortField::Name:
+		return QStringLiteral("Name");
+	case ChannelItemSortField::CommunityRating:
+		return QStringLiteral("CommunityRating");
+	case ChannelItemSortField::PremiereDate:
+		return QStringLiteral("PremiereDate");
+	case ChannelItemSortField::DateCreated:
+		return QStringLiteral("DateCreated");
+	case ChannelItemSortField::Runtime:
+		return QStringLiteral("Runtime");
+	case ChannelItemSortField::PlayCount:
+		return QStringLiteral("PlayCount");
+	case ChannelItemSortField::CommunityPlayCount:
+		return QStringLiteral("CommunityPlayCount");
+
+	case ChannelItemSortField::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

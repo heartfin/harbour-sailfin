@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetSpecialFeaturesLoader::GetSpecialFeaturesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<BaseItemDto>, GetSpecialFeaturesParams>(apiClient) {}
+
+QString GetSpecialFeaturesLoader::path(const GetSpecialFeaturesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/SpecialFeatures");
+}
+
+QUrlQuery GetSpecialFeaturesLoader::query(const GetSpecialFeaturesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

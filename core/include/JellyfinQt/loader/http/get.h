@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/searchhintresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets the search hint result.
  */
-class GetLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::SearchHintResult, GetParams> {
+
+class GetLoader : public Jellyfin::Support::HttpLoader<SearchHintResult, GetParams> {
 public:
 	explicit GetLoader(ApiClient *apiClient = nullptr);
 

@@ -64,7 +64,7 @@ void ThemeMediaResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ThemeMediaResult::toJson() {
+QJsonObject ThemeMediaResult::toJson() const {
 	QJsonObject result;
 	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
@@ -113,9 +113,14 @@ namespace Support {
 using ThemeMediaResult = Jellyfin::DTO::ThemeMediaResult;
 
 template <>
-ThemeMediaResult fromJsonValue<ThemeMediaResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ThemeMediaResult fromJsonValue(const QJsonValue &source, convertType<ThemeMediaResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ThemeMediaResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ThemeMediaResult &source, convertType<ThemeMediaResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

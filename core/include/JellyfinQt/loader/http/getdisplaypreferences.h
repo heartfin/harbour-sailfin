@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/displaypreferencesdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Get Display Preferences.
  */
-class GetDisplayPreferencesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DisplayPreferencesDto, GetDisplayPreferencesParams> {
+
+class GetDisplayPreferencesLoader : public Jellyfin::Support::HttpLoader<DisplayPreferencesDto, GetDisplayPreferencesParams> {
 public:
 	explicit GetDisplayPreferencesLoader(ApiClient *apiClient = nullptr);
 

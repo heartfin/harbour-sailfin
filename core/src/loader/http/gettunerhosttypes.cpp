@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetTunerHostTypesLoader::GetTunerHostTypesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<NameIdPair>, GetTunerHostTypesParams>(apiClient) {}
+
+QString GetTunerHostTypesLoader::path(const GetTunerHostTypesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/TunerHosts/Types");
+}
+
+QUrlQuery GetTunerHostTypesLoader::query(const GetTunerHostTypesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

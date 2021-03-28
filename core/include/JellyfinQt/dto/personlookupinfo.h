@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static PersonLookupInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -104,11 +108,11 @@ public:
 	/**
 	 * @brief Gets or sets the provider ids.
 	 */
-	std::optional<QJsonObject> providerIds() const;
+	QJsonObject providerIds() const;
 	/**
 	* @brief Gets or sets the provider ids.
 	*/
-	void setProviderIds(std::optional<QJsonObject> newProviderIds);
+	void setProviderIds(QJsonObject newProviderIds);
 	bool providerIdsNull() const;
 	void setProviderIdsNull();
 
@@ -155,13 +159,25 @@ protected:
 	QString m_path;
 	QString m_metadataLanguage;
 	QString m_metadataCountryCode;
-	std::optional<QJsonObject> m_providerIds = std::nullopt;
+	QJsonObject m_providerIds;
 	std::optional<qint32> m_year = std::nullopt;
 	std::optional<qint32> m_indexNumber = std::nullopt;
 	std::optional<qint32> m_parentIndexNumber = std::nullopt;
 	QDateTime m_premiereDate;
 	bool m_isAutomated;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PersonLookupInfo = Jellyfin::DTO::PersonLookupInfo;
+
+template <>
+PersonLookupInfo fromJsonValue(const QJsonValue &source, convertType<PersonLookupInfo>);
+
+template<>
+QJsonValue toJsonValue(const PersonLookupInfo &source, convertType<PersonLookupInfo>);
 
 } // NS DTO
 } // NS Jellyfin

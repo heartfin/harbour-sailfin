@@ -61,7 +61,7 @@ void BaseItemDtoQueryResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject BaseItemDtoQueryResult::toJson() {
+QJsonObject BaseItemDtoQueryResult::toJson() const {
 	QJsonObject result;
 	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
@@ -103,9 +103,14 @@ namespace Support {
 using BaseItemDtoQueryResult = Jellyfin::DTO::BaseItemDtoQueryResult;
 
 template <>
-BaseItemDtoQueryResult fromJsonValue<BaseItemDtoQueryResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+BaseItemDtoQueryResult fromJsonValue(const QJsonValue &source, convertType<BaseItemDtoQueryResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return BaseItemDtoQueryResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const BaseItemDtoQueryResult &source, convertType<BaseItemDtoQueryResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

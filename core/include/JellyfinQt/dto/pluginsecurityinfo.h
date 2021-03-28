@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static PluginSecurityInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -81,6 +85,18 @@ protected:
 	QString m_supporterKey;
 	bool m_isMbSupporter;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PluginSecurityInfo = Jellyfin::DTO::PluginSecurityInfo;
+
+template <>
+PluginSecurityInfo fromJsonValue(const QJsonValue &source, convertType<PluginSecurityInfo>);
+
+template<>
+QJsonValue toJsonValue(const PluginSecurityInfo &source, convertType<PluginSecurityInfo>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -61,7 +61,7 @@ void ContainerProfile::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ContainerProfile::toJson() {
+QJsonObject ContainerProfile::toJson() const {
 	QJsonObject result;
 	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
 	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
@@ -110,9 +110,14 @@ namespace Support {
 using ContainerProfile = Jellyfin::DTO::ContainerProfile;
 
 template <>
-ContainerProfile fromJsonValue<ContainerProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ContainerProfile fromJsonValue(const QJsonValue &source, convertType<ContainerProfile>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ContainerProfile::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ContainerProfile &source, convertType<ContainerProfile>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 ConnectLoader::ConnectLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectResult, ConnectParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<QuickConnectResult, ConnectParams>(apiClient) {}
 
 QString ConnectLoader::path(const ConnectParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -47,7 +48,7 @@ QUrlQuery ConnectLoader::query(const ConnectParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
-	result.addQueryItem("secret", params.secret());
+	result.addQueryItem("secret", Support::toString<QString>(params.secret()));
 
 	// Optional parameters
 	

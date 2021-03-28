@@ -34,7 +34,6 @@ namespace DTO {
 
 TranscodeReasonClass::TranscodeReasonClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using TranscodeReason = Jellyfin::DTO::TranscodeReason;
 
 template <>
-TranscodeReason fromJsonValue<TranscodeReason>(const QJsonValue &source) {
+TranscodeReason fromJsonValue(const QJsonValue &source, convertType<TranscodeReason>) {
 	if (!source.isString()) return TranscodeReason::EnumNotSet;
 
 	QString str = source.toString();
@@ -117,6 +116,62 @@ TranscodeReason fromJsonValue<TranscodeReason>(const QJsonValue &source) {
 	}
 	
 	return TranscodeReason::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const TranscodeReason &source, convertType<TranscodeReason>) {
+	switch(source) {
+	case TranscodeReason::ContainerNotSupported:
+		return QStringLiteral("ContainerNotSupported");
+	case TranscodeReason::VideoCodecNotSupported:
+		return QStringLiteral("VideoCodecNotSupported");
+	case TranscodeReason::AudioCodecNotSupported:
+		return QStringLiteral("AudioCodecNotSupported");
+	case TranscodeReason::ContainerBitrateExceedsLimit:
+		return QStringLiteral("ContainerBitrateExceedsLimit");
+	case TranscodeReason::AudioBitrateNotSupported:
+		return QStringLiteral("AudioBitrateNotSupported");
+	case TranscodeReason::AudioChannelsNotSupported:
+		return QStringLiteral("AudioChannelsNotSupported");
+	case TranscodeReason::VideoResolutionNotSupported:
+		return QStringLiteral("VideoResolutionNotSupported");
+	case TranscodeReason::UnknownVideoStreamInfo:
+		return QStringLiteral("UnknownVideoStreamInfo");
+	case TranscodeReason::UnknownAudioStreamInfo:
+		return QStringLiteral("UnknownAudioStreamInfo");
+	case TranscodeReason::AudioProfileNotSupported:
+		return QStringLiteral("AudioProfileNotSupported");
+	case TranscodeReason::AudioSampleRateNotSupported:
+		return QStringLiteral("AudioSampleRateNotSupported");
+	case TranscodeReason::AnamorphicVideoNotSupported:
+		return QStringLiteral("AnamorphicVideoNotSupported");
+	case TranscodeReason::InterlacedVideoNotSupported:
+		return QStringLiteral("InterlacedVideoNotSupported");
+	case TranscodeReason::SecondaryAudioNotSupported:
+		return QStringLiteral("SecondaryAudioNotSupported");
+	case TranscodeReason::RefFramesNotSupported:
+		return QStringLiteral("RefFramesNotSupported");
+	case TranscodeReason::VideoBitDepthNotSupported:
+		return QStringLiteral("VideoBitDepthNotSupported");
+	case TranscodeReason::VideoBitrateNotSupported:
+		return QStringLiteral("VideoBitrateNotSupported");
+	case TranscodeReason::VideoFramerateNotSupported:
+		return QStringLiteral("VideoFramerateNotSupported");
+	case TranscodeReason::VideoLevelNotSupported:
+		return QStringLiteral("VideoLevelNotSupported");
+	case TranscodeReason::VideoProfileNotSupported:
+		return QStringLiteral("VideoProfileNotSupported");
+	case TranscodeReason::AudioBitDepthNotSupported:
+		return QStringLiteral("AudioBitDepthNotSupported");
+	case TranscodeReason::SubtitleCodecNotSupported:
+		return QStringLiteral("SubtitleCodecNotSupported");
+	case TranscodeReason::DirectPlayError:
+		return QStringLiteral("DirectPlayError");
+
+	case TranscodeReason::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

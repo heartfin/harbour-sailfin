@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static UtcTimeResponse fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -79,6 +83,18 @@ protected:
 	QDateTime m_requestReceptionTime;
 	QDateTime m_responseTransmissionTime;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UtcTimeResponse = Jellyfin::DTO::UtcTimeResponse;
+
+template <>
+UtcTimeResponse fromJsonValue(const QJsonValue &source, convertType<UtcTimeResponse>);
+
+template<>
+QJsonValue toJsonValue(const UtcTimeResponse &source, convertType<UtcTimeResponse>);
 
 } // NS DTO
 } // NS Jellyfin

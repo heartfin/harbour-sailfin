@@ -70,7 +70,7 @@ void InstallationInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject InstallationInfo::toJson() {
+QJsonObject InstallationInfo::toJson() const {
 	QJsonObject result;
 	result["Guid"] = Jellyfin::Support::toJsonValue<QString>(m_guid);
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
@@ -154,9 +154,14 @@ namespace Support {
 using InstallationInfo = Jellyfin::DTO::InstallationInfo;
 
 template <>
-InstallationInfo fromJsonValue<InstallationInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+InstallationInfo fromJsonValue(const QJsonValue &source, convertType<InstallationInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return InstallationInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const InstallationInfo &source, convertType<InstallationInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

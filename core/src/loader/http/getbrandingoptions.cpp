@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetBrandingOptionsLoader::GetBrandingOptionsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BrandingOptions, GetBrandingOptionsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BrandingOptions, GetBrandingOptionsParams>(apiClient) {}
 
 QString GetBrandingOptionsLoader::path(const GetBrandingOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

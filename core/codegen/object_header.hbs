@@ -19,7 +19,7 @@ public:
 	
 	static {{className}} fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -61,3 +61,16 @@ protected:
 
 {{/each}}
 };
+
+} // NS DTO
+
+namespace Support {
+
+using {{className}} = Jellyfin::DTO::{{className}};
+
+template <>
+
+{{className}} fromJsonValue(const QJsonValue &source, convertType<{{className}}>);
+
+template<>
+QJsonValue toJsonValue(const {{className}} &source, convertType<{{className}}>);

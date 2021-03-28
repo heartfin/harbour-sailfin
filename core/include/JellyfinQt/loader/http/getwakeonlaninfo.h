@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/wakeonlaninfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets wake on lan information.
+ */
+
+class GetWakeOnLanInfoLoader : public Jellyfin::Support::HttpLoader<QList<WakeOnLanInfo>, GetWakeOnLanInfoParams> {
+public:
+	explicit GetWakeOnLanInfoLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetWakeOnLanInfoParams& parameters) const override;
+	QUrlQuery query(const GetWakeOnLanInfoParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

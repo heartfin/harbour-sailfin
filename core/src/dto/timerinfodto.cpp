@@ -136,7 +136,7 @@ void TimerInfoDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TimerInfoDto::toJson() {
+QJsonObject TimerInfoDto::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
@@ -465,9 +465,14 @@ namespace Support {
 using TimerInfoDto = Jellyfin::DTO::TimerInfoDto;
 
 template <>
-TimerInfoDto fromJsonValue<TimerInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TimerInfoDto fromJsonValue(const QJsonValue &source, convertType<TimerInfoDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TimerInfoDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TimerInfoDto &source, convertType<TimerInfoDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

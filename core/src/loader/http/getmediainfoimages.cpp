@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetMediaInfoImagesLoader::GetMediaInfoImagesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<ImageByNameInfo>, GetMediaInfoImagesParams>(apiClient) {}
+
+QString GetMediaInfoImagesLoader::path(const GetMediaInfoImagesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Images/MediaInfo");
+}
+
+QUrlQuery GetMediaInfoImagesLoader::query(const GetMediaInfoImagesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

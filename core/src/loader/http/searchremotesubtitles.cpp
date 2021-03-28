@@ -34,6 +34,29 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+SearchRemoteSubtitlesLoader::SearchRemoteSubtitlesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<RemoteSubtitleInfo>, SearchRemoteSubtitlesParams>(apiClient) {}
+
+QString SearchRemoteSubtitlesLoader::path(const SearchRemoteSubtitlesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/RemoteSearch/Subtitles/") + Support::toString< QString>(params.language()) ;
+}
+
+QUrlQuery SearchRemoteSubtitlesLoader::query(const SearchRemoteSubtitlesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.isPerfectMatchNull()) {
+		result.addQueryItem("isPerfectMatch", Support::toString<std::optional<bool>>(params.isPerfectMatch()));
+	}
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

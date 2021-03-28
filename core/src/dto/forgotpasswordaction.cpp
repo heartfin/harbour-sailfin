@@ -34,7 +34,6 @@ namespace DTO {
 
 ForgotPasswordActionClass::ForgotPasswordActionClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ForgotPasswordAction = Jellyfin::DTO::ForgotPasswordAction;
 
 template <>
-ForgotPasswordAction fromJsonValue<ForgotPasswordAction>(const QJsonValue &source) {
+ForgotPasswordAction fromJsonValue(const QJsonValue &source, convertType<ForgotPasswordAction>) {
 	if (!source.isString()) return ForgotPasswordAction::EnumNotSet;
 
 	QString str = source.toString();
@@ -57,6 +56,22 @@ ForgotPasswordAction fromJsonValue<ForgotPasswordAction>(const QJsonValue &sourc
 	}
 	
 	return ForgotPasswordAction::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ForgotPasswordAction &source, convertType<ForgotPasswordAction>) {
+	switch(source) {
+	case ForgotPasswordAction::ContactAdmin:
+		return QStringLiteral("ContactAdmin");
+	case ForgotPasswordAction::PinCode:
+		return QStringLiteral("PinCode");
+	case ForgotPasswordAction::InNetworkRequired:
+		return QStringLiteral("InNetworkRequired");
+
+	case ForgotPasswordAction::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

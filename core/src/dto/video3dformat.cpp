@@ -34,7 +34,6 @@ namespace DTO {
 
 Video3DFormatClass::Video3DFormatClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using Video3DFormat = Jellyfin::DTO::Video3DFormat;
 
 template <>
-Video3DFormat fromJsonValue<Video3DFormat>(const QJsonValue &source) {
+Video3DFormat fromJsonValue(const QJsonValue &source, convertType<Video3DFormat>) {
 	if (!source.isString()) return Video3DFormat::EnumNotSet;
 
 	QString str = source.toString();
@@ -63,6 +62,26 @@ Video3DFormat fromJsonValue<Video3DFormat>(const QJsonValue &source) {
 	}
 	
 	return Video3DFormat::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const Video3DFormat &source, convertType<Video3DFormat>) {
+	switch(source) {
+	case Video3DFormat::HalfSideBySide:
+		return QStringLiteral("HalfSideBySide");
+	case Video3DFormat::FullSideBySide:
+		return QStringLiteral("FullSideBySide");
+	case Video3DFormat::FullTopAndBottom:
+		return QStringLiteral("FullTopAndBottom");
+	case Video3DFormat::HalfTopAndBottom:
+		return QStringLiteral("HalfTopAndBottom");
+	case Video3DFormat::MVC:
+		return QStringLiteral("MVC");
+
+	case Video3DFormat::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

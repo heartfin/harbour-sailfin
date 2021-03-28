@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/useritemdatadto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Updates a user's rating for an item.
  */
-class UpdateUserItemRatingLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, UpdateUserItemRatingParams> {
+
+class UpdateUserItemRatingLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, UpdateUserItemRatingParams> {
 public:
 	explicit UpdateUserItemRatingLoader(ApiClient *apiClient = nullptr);
 

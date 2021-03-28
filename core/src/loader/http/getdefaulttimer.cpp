@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetDefaultTimerLoader::GetDefaultTimerLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::SeriesTimerInfoDto, GetDefaultTimerParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<SeriesTimerInfoDto, GetDefaultTimerParams>(apiClient) {}
 
 QString GetDefaultTimerLoader::path(const GetDefaultTimerParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,7 +51,7 @@ QUrlQuery GetDefaultTimerLoader::query(const GetDefaultTimerParams &params) cons
 
 	// Optional parameters
 	if (!params.programIdNull()) {
-		result.addQueryItem("programId", Support::toString(params.programId()));
+		result.addQueryItem("programId", Support::toString<QString>(params.programId()));
 	}
 	
 	return result;

@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ImageFormatClass {
@@ -55,7 +59,19 @@ private:
 	explicit ImageFormatClass();
 };
 
-typedef ImageFormatClass::Value ImageFormat;
+using ImageFormat = ImageFormatClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ImageFormat = Jellyfin::DTO::ImageFormat;
+
+template <>
+ImageFormat fromJsonValue(const QJsonValue &source, convertType<ImageFormat>);
+
+template <>
+QJsonValue toJsonValue(const ImageFormat &source, convertType<ImageFormat>);
 
 } // NS DTO
 } // NS Jellyfin

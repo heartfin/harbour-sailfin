@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/filesystementryinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets network paths.
+ */
+
+class GetNetworkSharesLoader : public Jellyfin::Support::HttpLoader<QList<FileSystemEntryInfo>, GetNetworkSharesParams> {
+public:
+	explicit GetNetworkSharesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetNetworkSharesParams& parameters) const override;
+	QUrlQuery query(const GetNetworkSharesParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

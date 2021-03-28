@@ -35,13 +35,29 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets a named configuration.
+ */
+
+class GetNamedConfigurationLoader : public Jellyfin::Support::HttpLoader<QString, GetNamedConfigurationParams> {
+public:
+	explicit GetNamedConfigurationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetNamedConfigurationParams& parameters) const override;
+	QUrlQuery query(const GetNamedConfigurationParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

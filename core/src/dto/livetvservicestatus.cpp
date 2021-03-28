@@ -34,7 +34,6 @@ namespace DTO {
 
 LiveTvServiceStatusClass::LiveTvServiceStatusClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using LiveTvServiceStatus = Jellyfin::DTO::LiveTvServiceStatus;
 
 template <>
-LiveTvServiceStatus fromJsonValue<LiveTvServiceStatus>(const QJsonValue &source) {
+LiveTvServiceStatus fromJsonValue(const QJsonValue &source, convertType<LiveTvServiceStatus>) {
 	if (!source.isString()) return LiveTvServiceStatus::EnumNotSet;
 
 	QString str = source.toString();
@@ -54,6 +53,20 @@ LiveTvServiceStatus fromJsonValue<LiveTvServiceStatus>(const QJsonValue &source)
 	}
 	
 	return LiveTvServiceStatus::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const LiveTvServiceStatus &source, convertType<LiveTvServiceStatus>) {
+	switch(source) {
+	case LiveTvServiceStatus::Ok:
+		return QStringLiteral("Ok");
+	case LiveTvServiceStatus::Unavailable:
+		return QStringLiteral("Unavailable");
+
+	case LiveTvServiceStatus::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

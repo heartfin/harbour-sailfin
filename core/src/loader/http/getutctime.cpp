@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetUtcTimeLoader::GetUtcTimeLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UtcTimeResponse, GetUtcTimeParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<UtcTimeResponse, GetUtcTimeParams>(apiClient) {}
 
 QString GetUtcTimeLoader::path(const GetUtcTimeParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

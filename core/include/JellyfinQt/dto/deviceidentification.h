@@ -41,6 +41,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -56,7 +60,7 @@ public:
 	
 	static DeviceIdentification fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -170,6 +174,18 @@ protected:
 	QString m_manufacturerUrl;
 	QList<HttpHeaderInfo> m_headers;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DeviceIdentification = Jellyfin::DTO::DeviceIdentification;
+
+template <>
+DeviceIdentification fromJsonValue(const QJsonValue &source, convertType<DeviceIdentification>);
+
+template<>
+QJsonValue toJsonValue(const DeviceIdentification &source, convertType<DeviceIdentification>);
 
 } // NS DTO
 } // NS Jellyfin

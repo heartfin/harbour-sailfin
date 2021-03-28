@@ -58,7 +58,7 @@ void MediaUrl::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MediaUrl::toJson() {
+QJsonObject MediaUrl::toJson() const {
 	QJsonObject result;
 	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
@@ -100,9 +100,14 @@ namespace Support {
 using MediaUrl = Jellyfin::DTO::MediaUrl;
 
 template <>
-MediaUrl fromJsonValue<MediaUrl>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MediaUrl fromJsonValue(const QJsonValue &source, convertType<MediaUrl>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MediaUrl::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MediaUrl &source, convertType<MediaUrl>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -19,6 +19,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "JellyfinQt/apiclient.h"
 
+#include "JellyfinQt/support/jsonconv.h"
+#include "JellyfinQt/websocket.h"
+
+
 namespace Jellyfin {
 
 ApiClient::ApiClient(QObject *parent)
@@ -240,7 +244,10 @@ void ApiClient::postCapabilities() {
             supportedCommands.append(m_supportedCommands[i].value<DTO::GeneralCommandType>());
         }
     }
-    capabilities["SupportedCommands"] = Support::toJsonValue(supportedCommands);
+    QList<int> foo = {1, 2, 3};
+    qDebug() << Support::toJsonValue<int>(3713);
+    qDebug() << Support::toJsonValue<QList<int>>(foo);
+    capabilities["SupportedCommands"] = Support::toJsonValue<QList<DTO::GeneralCommandType>>(supportedCommands);
     capabilities["SupportsPersistentIdentifier"] = true;
     capabilities["SupportsMediaControl"] = false;
     capabilities["SupportsSync"] = false;
@@ -257,7 +264,7 @@ QString ApiClient::downloadUrl(const QString &itemId) const {
 }
 
 void ApiClient::generateDeviceProfile() {
-    QJsonObject root = DeviceProfile::generateProfile();
+    QJsonObject root = Model::DeviceProfile::generateProfile();
     m_playbackDeviceProfile = QJsonObject(root);
     root["Name"] = m_deviceName;
     root["Id"] = m_deviceId;

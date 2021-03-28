@@ -41,6 +41,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -56,7 +60,7 @@ public:
 	
 	static LibraryOptionsResultDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -110,6 +114,18 @@ protected:
 	QList<LibraryOptionInfoDto> m_subtitleFetchers;
 	QList<LibraryTypeOptionsDto> m_typeOptions;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LibraryOptionsResultDto = Jellyfin::DTO::LibraryOptionsResultDto;
+
+template <>
+LibraryOptionsResultDto fromJsonValue(const QJsonValue &source, convertType<LibraryOptionsResultDto>);
+
+template<>
+QJsonValue toJsonValue(const LibraryOptionsResultDto &source, convertType<LibraryOptionsResultDto>);
 
 } // NS DTO
 } // NS Jellyfin

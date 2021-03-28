@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static TaskTriggerInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -114,6 +118,18 @@ protected:
 	DayOfWeek m_dayOfWeek;
 	std::optional<qint64> m_maxRuntimeTicks = std::nullopt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TaskTriggerInfo = Jellyfin::DTO::TaskTriggerInfo;
+
+template <>
+TaskTriggerInfo fromJsonValue(const QJsonValue &source, convertType<TaskTriggerInfo>);
+
+template<>
+QJsonValue toJsonValue(const TaskTriggerInfo &source, convertType<TaskTriggerInfo>);
 
 } // NS DTO
 } // NS Jellyfin

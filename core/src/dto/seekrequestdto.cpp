@@ -55,7 +55,7 @@ void SeekRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SeekRequestDto::toJson() {
+QJsonObject SeekRequestDto::toJson() const {
 	QJsonObject result;
 	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
 
@@ -76,9 +76,14 @@ namespace Support {
 using SeekRequestDto = Jellyfin::DTO::SeekRequestDto;
 
 template <>
-SeekRequestDto fromJsonValue<SeekRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SeekRequestDto fromJsonValue(const QJsonValue &source, convertType<SeekRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SeekRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SeekRequestDto &source, convertType<SeekRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

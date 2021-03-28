@@ -42,6 +42,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -57,7 +61,7 @@ public:
 	
 	static UserDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -213,6 +217,18 @@ protected:
 	QSharedPointer<UserPolicy> m_policy = nullptr;
 	std::optional<double> m_primaryImageAspectRatio = std::nullopt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UserDto = Jellyfin::DTO::UserDto;
+
+template <>
+UserDto fromJsonValue(const QJsonValue &source, convertType<UserDto>);
+
+template<>
+QJsonValue toJsonValue(const UserDto &source, convertType<UserDto>);
 
 } // NS DTO
 } // NS Jellyfin

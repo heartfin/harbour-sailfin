@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ForgotPasswordActionClass {
@@ -53,7 +57,19 @@ private:
 	explicit ForgotPasswordActionClass();
 };
 
-typedef ForgotPasswordActionClass::Value ForgotPasswordAction;
+using ForgotPasswordAction = ForgotPasswordActionClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ForgotPasswordAction = Jellyfin::DTO::ForgotPasswordAction;
+
+template <>
+ForgotPasswordAction fromJsonValue(const QJsonValue &source, convertType<ForgotPasswordAction>);
+
+template <>
+QJsonValue toJsonValue(const ForgotPasswordAction &source, convertType<ForgotPasswordAction>);
 
 } // NS DTO
 } // NS Jellyfin

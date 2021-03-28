@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/remotesearchresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Get movie remote search.
+ */
+
+class GetMovieRemoteSearchResultsLoader : public Jellyfin::Support::HttpLoader<QList<RemoteSearchResult>, GetMovieRemoteSearchResultsParams> {
+public:
+	explicit GetMovieRemoteSearchResultsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetMovieRemoteSearchResultsParams& parameters) const override;
+	QUrlQuery query(const GetMovieRemoteSearchResultsParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

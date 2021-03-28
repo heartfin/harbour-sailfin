@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetLiveTvChannelsLoader::GetLiveTvChannelsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetLiveTvChannelsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetLiveTvChannelsParams>(apiClient) {}
 
 QString GetLiveTvChannelsLoader::path(const GetLiveTvChannelsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,67 +51,67 @@ QUrlQuery GetLiveTvChannelsLoader::query(const GetLiveTvChannelsParams &params) 
 
 	// Optional parameters
 	if (!params.typeNull()) {
-		result.addQueryItem("type", Support::toString(params.type()));
+		result.addQueryItem("type", Support::toString<ChannelType>(params.type()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.isMovieNull()) {
-		result.addQueryItem("isMovie", Support::toString(params.isMovie()));
+		result.addQueryItem("isMovie", Support::toString<std::optional<bool>>(params.isMovie()));
 	}
 	if (!params.isSeriesNull()) {
-		result.addQueryItem("isSeries", Support::toString(params.isSeries()));
+		result.addQueryItem("isSeries", Support::toString<std::optional<bool>>(params.isSeries()));
 	}
 	if (!params.isNewsNull()) {
-		result.addQueryItem("isNews", Support::toString(params.isNews()));
+		result.addQueryItem("isNews", Support::toString<std::optional<bool>>(params.isNews()));
 	}
 	if (!params.isKidsNull()) {
-		result.addQueryItem("isKids", Support::toString(params.isKids()));
+		result.addQueryItem("isKids", Support::toString<std::optional<bool>>(params.isKids()));
 	}
 	if (!params.isSportsNull()) {
-		result.addQueryItem("isSports", Support::toString(params.isSports()));
+		result.addQueryItem("isSports", Support::toString<std::optional<bool>>(params.isSports()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.isFavoriteNull()) {
-		result.addQueryItem("isFavorite", Support::toString(params.isFavorite()));
+		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
 	}
 	if (!params.isLikedNull()) {
-		result.addQueryItem("isLiked", Support::toString(params.isLiked()));
+		result.addQueryItem("isLiked", Support::toString<std::optional<bool>>(params.isLiked()));
 	}
 	if (!params.isDislikedNull()) {
-		result.addQueryItem("isDisliked", Support::toString(params.isDisliked()));
+		result.addQueryItem("isDisliked", Support::toString<std::optional<bool>>(params.isDisliked()));
 	}
 	if (!params.enableImagesNull()) {
-		result.addQueryItem("enableImages", Support::toString(params.enableImages()));
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString(params.imageTypeLimit()));
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
 	}
 	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString(params.enableImageTypes()));
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.enableUserDataNull()) {
-		result.addQueryItem("enableUserData", Support::toString(params.enableUserData()));
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QStringList>(params.sortBy()));
 	}
 	if (!params.sortOrderNull()) {
-		result.addQueryItem("sortOrder", Support::toString(params.sortOrder()));
+		result.addQueryItem("sortOrder", Support::toString<SortOrder>(params.sortOrder()));
 	}
 	if (!params.enableFavoriteSortingNull()) {
-		result.addQueryItem("enableFavoriteSorting", Support::toString(params.enableFavoriteSorting()));
+		result.addQueryItem("enableFavoriteSorting", Support::toString<std::optional<bool>>(params.enableFavoriteSorting()));
 	}
 	if (!params.addCurrentProgramNull()) {
-		result.addQueryItem("addCurrentProgram", Support::toString(params.addCurrentProgram()));
+		result.addQueryItem("addCurrentProgram", Support::toString<std::optional<bool>>(params.addCurrentProgram()));
 	}
 	
 	return result;

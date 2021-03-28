@@ -42,6 +42,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -57,7 +61,7 @@ public:
 	
 	static RemoteSearchResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -74,11 +78,11 @@ public:
 	/**
 	 * @brief Gets or sets the provider ids.
 	 */
-	std::optional<QJsonObject> providerIds() const;
+	QJsonObject providerIds() const;
 	/**
 	* @brief Gets or sets the provider ids.
 	*/
-	void setProviderIds(std::optional<QJsonObject> newProviderIds);
+	void setProviderIds(QJsonObject newProviderIds);
 	bool providerIdsNull() const;
 	void setProviderIdsNull();
 
@@ -157,7 +161,7 @@ public:
 
 protected:
 	QString m_name;
-	std::optional<QJsonObject> m_providerIds = std::nullopt;
+	QJsonObject m_providerIds;
 	std::optional<qint32> m_productionYear = std::nullopt;
 	std::optional<qint32> m_indexNumber = std::nullopt;
 	std::optional<qint32> m_indexNumberEnd = std::nullopt;
@@ -169,6 +173,18 @@ protected:
 	QSharedPointer<RemoteSearchResult> m_albumArtist = nullptr;
 	QList<RemoteSearchResult> m_artists;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using RemoteSearchResult = Jellyfin::DTO::RemoteSearchResult;
+
+template <>
+RemoteSearchResult fromJsonValue(const QJsonValue &source, convertType<RemoteSearchResult>);
+
+template<>
+QJsonValue toJsonValue(const RemoteSearchResult &source, convertType<RemoteSearchResult>);
 
 } // NS DTO
 } // NS Jellyfin

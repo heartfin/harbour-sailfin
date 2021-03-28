@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetLatestChannelItemsLoader::GetLatestChannelItemsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetLatestChannelItemsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetLatestChannelItemsParams>(apiClient) {}
 
 QString GetLatestChannelItemsLoader::path(const GetLatestChannelItemsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,22 +51,22 @@ QUrlQuery GetLatestChannelItemsLoader::query(const GetLatestChannelItemsParams &
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.filtersNull()) {
-		result.addQueryItem("filters", Support::toString(params.filters()));
+		result.addQueryItem("filters", Support::toString<QList<ItemFilter>>(params.filters()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.channelIdsNull()) {
-		result.addQueryItem("channelIds", Support::toString(params.channelIds()));
+		result.addQueryItem("channelIds", Support::toString<QStringList>(params.channelIds()));
 	}
 	
 	return result;

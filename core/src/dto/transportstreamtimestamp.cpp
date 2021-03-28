@@ -34,7 +34,6 @@ namespace DTO {
 
 TransportStreamTimestampClass::TransportStreamTimestampClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using TransportStreamTimestamp = Jellyfin::DTO::TransportStreamTimestamp;
 
 template <>
-TransportStreamTimestamp fromJsonValue<TransportStreamTimestamp>(const QJsonValue &source) {
+TransportStreamTimestamp fromJsonValue(const QJsonValue &source, convertType<TransportStreamTimestamp>) {
 	if (!source.isString()) return TransportStreamTimestamp::EnumNotSet;
 
 	QString str = source.toString();
@@ -57,6 +56,22 @@ TransportStreamTimestamp fromJsonValue<TransportStreamTimestamp>(const QJsonValu
 	}
 	
 	return TransportStreamTimestamp::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const TransportStreamTimestamp &source, convertType<TransportStreamTimestamp>) {
+	switch(source) {
+	case TransportStreamTimestamp::None:
+		return QStringLiteral("None");
+	case TransportStreamTimestamp::Zero:
+		return QStringLiteral("Zero");
+	case TransportStreamTimestamp::Valid:
+		return QStringLiteral("Valid");
+
+	case TransportStreamTimestamp::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

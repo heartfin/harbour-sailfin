@@ -41,6 +41,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -56,7 +60,7 @@ public:
 	
 	static SearchHint fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -378,6 +382,18 @@ protected:
 	QString m_channelName;
 	std::optional<double> m_primaryImageAspectRatio = std::nullopt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SearchHint = Jellyfin::DTO::SearchHint;
+
+template <>
+SearchHint fromJsonValue(const QJsonValue &source, convertType<SearchHint>);
+
+template<>
+QJsonValue toJsonValue(const SearchHint &source, convertType<SearchHint>);
 
 } // NS DTO
 } // NS Jellyfin

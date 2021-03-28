@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -52,7 +56,7 @@ public:
 	
 	static IgnoreWaitRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -68,6 +72,18 @@ public:
 protected:
 	bool m_ignoreWait;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using IgnoreWaitRequestDto = Jellyfin::DTO::IgnoreWaitRequestDto;
+
+template <>
+IgnoreWaitRequestDto fromJsonValue(const QJsonValue &source, convertType<IgnoreWaitRequestDto>);
+
+template<>
+QJsonValue toJsonValue(const IgnoreWaitRequestDto &source, convertType<IgnoreWaitRequestDto>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -41,6 +41,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -56,7 +60,7 @@ public:
 	
 	static SongInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -106,11 +110,11 @@ public:
 	/**
 	 * @brief Gets or sets the provider ids.
 	 */
-	std::optional<QJsonObject> providerIds() const;
+	QJsonObject providerIds() const;
 	/**
 	* @brief Gets or sets the provider ids.
 	*/
-	void setProviderIds(std::optional<QJsonObject> newProviderIds);
+	void setProviderIds(QJsonObject newProviderIds);
 	bool providerIdsNull() const;
 	void setProviderIdsNull();
 
@@ -178,7 +182,7 @@ protected:
 	QString m_path;
 	QString m_metadataLanguage;
 	QString m_metadataCountryCode;
-	std::optional<QJsonObject> m_providerIds = std::nullopt;
+	QJsonObject m_providerIds;
 	std::optional<qint32> m_year = std::nullopt;
 	std::optional<qint32> m_indexNumber = std::nullopt;
 	std::optional<qint32> m_parentIndexNumber = std::nullopt;
@@ -188,6 +192,18 @@ protected:
 	QString m_album;
 	QStringList m_artists;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SongInfo = Jellyfin::DTO::SongInfo;
+
+template <>
+SongInfo fromJsonValue(const QJsonValue &source, convertType<SongInfo>);
+
+template<>
+QJsonValue toJsonValue(const SongInfo &source, convertType<SongInfo>);
 
 } // NS DTO
 } // NS Jellyfin

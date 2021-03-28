@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/deviceprofile.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets the default profile.
  */
-class GetDefaultProfileLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceProfile, GetDefaultProfileParams> {
+
+class GetDefaultProfileLoader : public Jellyfin::Support::HttpLoader<DeviceProfile, GetDefaultProfileParams> {
 public:
 	explicit GetDefaultProfileLoader(ApiClient *apiClient = nullptr);
 

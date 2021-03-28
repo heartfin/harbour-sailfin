@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 AuthenticateUserByNameLoader::AuthenticateUserByNameLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationResult, AuthenticateUserByNameParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<AuthenticationResult, AuthenticateUserByNameParams>(apiClient) {}
 
 QString AuthenticateUserByNameLoader::path(const AuthenticateUserByNameParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

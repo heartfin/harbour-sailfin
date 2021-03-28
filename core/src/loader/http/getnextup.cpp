@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetNextUpLoader::GetNextUpLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetNextUpParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetNextUpParams>(apiClient) {}
 
 QString GetNextUpLoader::path(const GetNextUpParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,40 +51,40 @@ QUrlQuery GetNextUpLoader::query(const GetNextUpParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.seriesIdNull()) {
-		result.addQueryItem("seriesId", Support::toString(params.seriesId()));
+		result.addQueryItem("seriesId", Support::toString<QString>(params.seriesId()));
 	}
 	if (!params.parentIdNull()) {
-		result.addQueryItem("parentId", Support::toString(params.parentId()));
+		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
 	if (!params.enableImgesNull()) {
-		result.addQueryItem("enableImges", Support::toString(params.enableImges()));
+		result.addQueryItem("enableImges", Support::toString<std::optional<bool>>(params.enableImges()));
 	}
 	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString(params.imageTypeLimit()));
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
 	}
 	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString(params.enableImageTypes()));
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
 	}
 	if (!params.enableUserDataNull()) {
-		result.addQueryItem("enableUserData", Support::toString(params.enableUserData()));
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	if (!params.enableTotalRecordCountNull()) {
-		result.addQueryItem("enableTotalRecordCount", Support::toString(params.enableTotalRecordCount()));
+		result.addQueryItem("enableTotalRecordCount", Support::toString<std::optional<bool>>(params.enableTotalRecordCount()));
 	}
 	if (!params.disableFirstEpisodeNull()) {
-		result.addQueryItem("disableFirstEpisode", Support::toString(params.disableFirstEpisode()));
+		result.addQueryItem("disableFirstEpisode", Support::toString<std::optional<bool>>(params.disableFirstEpisode()));
 	}
 	
 	return result;

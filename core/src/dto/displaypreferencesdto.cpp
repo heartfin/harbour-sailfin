@@ -84,7 +84,7 @@ void DisplayPreferencesDto::setFromJson(QJsonObject source) {
 	m_rememberIndexing = Jellyfin::Support::fromJsonValue<bool>(source["RememberIndexing"]);
 	m_primaryImageHeight = Jellyfin::Support::fromJsonValue<qint32>(source["PrimaryImageHeight"]);
 	m_primaryImageWidth = Jellyfin::Support::fromJsonValue<qint32>(source["PrimaryImageWidth"]);
-	m_customPrefs = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["CustomPrefs"]);
+	m_customPrefs = Jellyfin::Support::fromJsonValue<QJsonObject>(source["CustomPrefs"]);
 	m_scrollDirection = Jellyfin::Support::fromJsonValue<ScrollDirection>(source["ScrollDirection"]);
 	m_showBackdrop = Jellyfin::Support::fromJsonValue<bool>(source["ShowBackdrop"]);
 	m_rememberSorting = Jellyfin::Support::fromJsonValue<bool>(source["RememberSorting"]);
@@ -94,7 +94,7 @@ void DisplayPreferencesDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject DisplayPreferencesDto::toJson() {
+QJsonObject DisplayPreferencesDto::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["ViewType"] = Jellyfin::Support::toJsonValue<QString>(m_viewType);
@@ -103,7 +103,7 @@ QJsonObject DisplayPreferencesDto::toJson() {
 	result["RememberIndexing"] = Jellyfin::Support::toJsonValue<bool>(m_rememberIndexing);
 	result["PrimaryImageHeight"] = Jellyfin::Support::toJsonValue<qint32>(m_primaryImageHeight);
 	result["PrimaryImageWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_primaryImageWidth);
-	result["CustomPrefs"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_customPrefs);
+	result["CustomPrefs"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_customPrefs);
 	result["ScrollDirection"] = Jellyfin::Support::toJsonValue<ScrollDirection>(m_scrollDirection);
 	result["ShowBackdrop"] = Jellyfin::Support::toJsonValue<bool>(m_showBackdrop);
 	result["RememberSorting"] = Jellyfin::Support::toJsonValue<bool>(m_rememberSorting);
@@ -184,17 +184,17 @@ void DisplayPreferencesDto::setPrimaryImageWidth(qint32 newPrimaryImageWidth) {
 	m_primaryImageWidth = newPrimaryImageWidth;
 }
 
-std::optional<QJsonObject> DisplayPreferencesDto::customPrefs() const { return m_customPrefs; }
+QJsonObject DisplayPreferencesDto::customPrefs() const { return m_customPrefs; }
 
-void DisplayPreferencesDto::setCustomPrefs(std::optional<QJsonObject> newCustomPrefs) {
+void DisplayPreferencesDto::setCustomPrefs(QJsonObject newCustomPrefs) {
 	m_customPrefs = newCustomPrefs;
 }
 bool DisplayPreferencesDto::customPrefsNull() const {
-	return !m_customPrefs.has_value();
+	return m_customPrefs.isEmpty();
 }
 
 void DisplayPreferencesDto::setCustomPrefsNull() {
-	m_customPrefs = std::nullopt;
+	m_customPrefs= QJsonObject();
 
 }
 ScrollDirection DisplayPreferencesDto::scrollDirection() const { return m_scrollDirection; }
@@ -248,9 +248,14 @@ namespace Support {
 using DisplayPreferencesDto = Jellyfin::DTO::DisplayPreferencesDto;
 
 template <>
-DisplayPreferencesDto fromJsonValue<DisplayPreferencesDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+DisplayPreferencesDto fromJsonValue(const QJsonValue &source, convertType<DisplayPreferencesDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return DisplayPreferencesDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const DisplayPreferencesDto &source, convertType<DisplayPreferencesDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

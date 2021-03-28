@@ -34,7 +34,6 @@ namespace DTO {
 
 ProgramAudioClass::ProgramAudioClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ProgramAudio = Jellyfin::DTO::ProgramAudio;
 
 template <>
-ProgramAudio fromJsonValue<ProgramAudio>(const QJsonValue &source) {
+ProgramAudio fromJsonValue(const QJsonValue &source, convertType<ProgramAudio>) {
 	if (!source.isString()) return ProgramAudio::EnumNotSet;
 
 	QString str = source.toString();
@@ -66,6 +65,28 @@ ProgramAudio fromJsonValue<ProgramAudio>(const QJsonValue &source) {
 	}
 	
 	return ProgramAudio::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ProgramAudio &source, convertType<ProgramAudio>) {
+	switch(source) {
+	case ProgramAudio::Mono:
+		return QStringLiteral("Mono");
+	case ProgramAudio::Stereo:
+		return QStringLiteral("Stereo");
+	case ProgramAudio::Dolby:
+		return QStringLiteral("Dolby");
+	case ProgramAudio::DolbyDigital:
+		return QStringLiteral("DolbyDigital");
+	case ProgramAudio::Thx:
+		return QStringLiteral("Thx");
+	case ProgramAudio::Atmos:
+		return QStringLiteral("Atmos");
+
+	case ProgramAudio::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

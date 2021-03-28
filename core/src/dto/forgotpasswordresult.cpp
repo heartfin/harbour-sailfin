@@ -61,7 +61,7 @@ void ForgotPasswordResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ForgotPasswordResult::toJson() {
+QJsonObject ForgotPasswordResult::toJson() const {
 	QJsonObject result;
 	result["Action"] = Jellyfin::Support::toJsonValue<ForgotPasswordAction>(m_action);
 	result["PinFile"] = Jellyfin::Support::toJsonValue<QString>(m_pinFile);
@@ -110,9 +110,14 @@ namespace Support {
 using ForgotPasswordResult = Jellyfin::DTO::ForgotPasswordResult;
 
 template <>
-ForgotPasswordResult fromJsonValue<ForgotPasswordResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ForgotPasswordResult fromJsonValue(const QJsonValue &source, convertType<ForgotPasswordResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ForgotPasswordResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ForgotPasswordResult &source, convertType<ForgotPasswordResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

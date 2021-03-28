@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class SyncPlayUserAccessTypeClass {
@@ -53,7 +57,19 @@ private:
 	explicit SyncPlayUserAccessTypeClass();
 };
 
-typedef SyncPlayUserAccessTypeClass::Value SyncPlayUserAccessType;
+using SyncPlayUserAccessType = SyncPlayUserAccessTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using SyncPlayUserAccessType = Jellyfin::DTO::SyncPlayUserAccessType;
+
+template <>
+SyncPlayUserAccessType fromJsonValue(const QJsonValue &source, convertType<SyncPlayUserAccessType>);
+
+template <>
+QJsonValue toJsonValue(const SyncPlayUserAccessType &source, convertType<SyncPlayUserAccessType>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetPluginsLoader::GetPluginsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<PluginInfo>, GetPluginsParams>(apiClient) {}
+
+QString GetPluginsLoader::path(const GetPluginsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Plugins");
+}
+
+QUrlQuery GetPluginsLoader::query(const GetPluginsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -58,7 +58,7 @@ void UpdateLibraryOptionsDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject UpdateLibraryOptionsDto::toJson() {
+QJsonObject UpdateLibraryOptionsDto::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
@@ -86,9 +86,14 @@ namespace Support {
 using UpdateLibraryOptionsDto = Jellyfin::DTO::UpdateLibraryOptionsDto;
 
 template <>
-UpdateLibraryOptionsDto fromJsonValue<UpdateLibraryOptionsDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+UpdateLibraryOptionsDto fromJsonValue(const QJsonValue &source, convertType<UpdateLibraryOptionsDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return UpdateLibraryOptionsDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const UpdateLibraryOptionsDto &source, convertType<UpdateLibraryOptionsDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

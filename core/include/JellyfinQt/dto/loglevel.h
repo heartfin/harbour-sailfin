@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class LogLevelClass {
@@ -57,7 +61,19 @@ private:
 	explicit LogLevelClass();
 };
 
-typedef LogLevelClass::Value LogLevel;
+using LogLevel = LogLevelClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using LogLevel = Jellyfin::DTO::LogLevel;
+
+template <>
+LogLevel fromJsonValue(const QJsonValue &source, convertType<LogLevel>);
+
+template <>
+QJsonValue toJsonValue(const LogLevel &source, convertType<LogLevel>);
 
 } // NS DTO
 } // NS Jellyfin

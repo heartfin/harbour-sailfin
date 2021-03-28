@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetTimersLoader::GetTimersLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::TimerInfoDtoQueryResult, GetTimersParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<TimerInfoDtoQueryResult, GetTimersParams>(apiClient) {}
 
 QString GetTimersLoader::path(const GetTimersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,16 +51,16 @@ QUrlQuery GetTimersLoader::query(const GetTimersParams &params) const {
 
 	// Optional parameters
 	if (!params.channelIdNull()) {
-		result.addQueryItem("channelId", Support::toString(params.channelId()));
+		result.addQueryItem("channelId", Support::toString<QString>(params.channelId()));
 	}
 	if (!params.seriesTimerIdNull()) {
-		result.addQueryItem("seriesTimerId", Support::toString(params.seriesTimerId()));
+		result.addQueryItem("seriesTimerId", Support::toString<QString>(params.seriesTimerId()));
 	}
 	if (!params.isActiveNull()) {
-		result.addQueryItem("isActive", Support::toString(params.isActive()));
+		result.addQueryItem("isActive", Support::toString<std::optional<bool>>(params.isActive()));
 	}
 	if (!params.isScheduledNull()) {
-		result.addQueryItem("isScheduled", Support::toString(params.isScheduled()));
+		result.addQueryItem("isScheduled", Support::toString<std::optional<bool>>(params.isScheduled()));
 	}
 	
 	return result;

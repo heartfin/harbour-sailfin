@@ -61,7 +61,7 @@ void PlayRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PlayRequestDto::toJson() {
+QJsonObject PlayRequestDto::toJson() const {
 	QJsonObject result;
 	result["PlayingQueue"] = Jellyfin::Support::toJsonValue<QStringList>(m_playingQueue);
 	result["PlayingItemPosition"] = Jellyfin::Support::toJsonValue<qint32>(m_playingItemPosition);
@@ -103,9 +103,14 @@ namespace Support {
 using PlayRequestDto = Jellyfin::DTO::PlayRequestDto;
 
 template <>
-PlayRequestDto fromJsonValue<PlayRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PlayRequestDto fromJsonValue(const QJsonValue &source, convertType<PlayRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PlayRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PlayRequestDto &source, convertType<PlayRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

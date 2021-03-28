@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets live tv recording groups.
  */
-class GetRecordingGroupsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetRecordingGroupsParams> {
+
+class GetRecordingGroupsLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetRecordingGroupsParams> {
 public:
 	explicit GetRecordingGroupsLoader(ApiClient *apiClient = nullptr);
 

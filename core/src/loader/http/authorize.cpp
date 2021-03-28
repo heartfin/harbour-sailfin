@@ -34,6 +34,27 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+AuthorizeLoader::AuthorizeLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<bool, AuthorizeParams>(apiClient) {}
+
+QString AuthorizeLoader::path(const AuthorizeParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/QuickConnect/Authorize");
+}
+
+QUrlQuery AuthorizeLoader::query(const AuthorizeParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("code", Support::toString<QString>(params.code()));
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

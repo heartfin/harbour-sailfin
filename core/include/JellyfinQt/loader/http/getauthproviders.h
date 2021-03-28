@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/nameidpair.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Get all auth providers.
+ */
+
+class GetAuthProvidersLoader : public Jellyfin::Support::HttpLoader<QList<NameIdPair>, GetAuthProvidersParams> {
+public:
+	explicit GetAuthProvidersLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetAuthProvidersParams& parameters) const override;
+	QUrlQuery query(const GetAuthProvidersParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

@@ -50,6 +50,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -65,7 +69,7 @@ public:
 	
 	static SessionInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -325,6 +329,18 @@ protected:
 	QString m_userPrimaryImageTag;
 	QList<GeneralCommandType> m_supportedCommands;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SessionInfo = Jellyfin::DTO::SessionInfo;
+
+template <>
+SessionInfo fromJsonValue(const QJsonValue &source, convertType<SessionInfo>);
+
+template<>
+QJsonValue toJsonValue(const SessionInfo &source, convertType<SessionInfo>);
 
 } // NS DTO
 } // NS Jellyfin

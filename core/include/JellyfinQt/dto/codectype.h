@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class CodecTypeClass {
@@ -53,7 +57,19 @@ private:
 	explicit CodecTypeClass();
 };
 
-typedef CodecTypeClass::Value CodecType;
+using CodecType = CodecTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using CodecType = Jellyfin::DTO::CodecType;
+
+template <>
+CodecType fromJsonValue(const QJsonValue &source, convertType<CodecType>);
+
+template <>
+QJsonValue toJsonValue(const CodecType &source, convertType<CodecType>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -18,9 +18,22 @@
  */
 #include "JellyfinQt/support/jsonconv.h"
 
+#include <QDebug>
+
 namespace Jellyfin {
 namespace Support {
 
+const char * ParseException::what() const noexcept {
+    return m_message.c_str();
+}
+
+QException *ParseException::clone() const {
+    return new ParseException(*this);
+}
+
+void ParseException::raise() const {
+    throw *this;
+}
 
 QString uuidToString(const QUuid &source) {
     QString str = source.toString();
@@ -29,7 +42,7 @@ QString uuidToString(const QUuid &source) {
     return QString(str.mid(1, 8) + str.mid(10, 4) + str.mid(15, 4) + str.mid(20, 4) + str.mid(25 + 12));
 }
 QUuid stringToUuid(const QString &source) {
-    if (source.size() != 32) throw new ParseException("Error while trying to parse JSON value as QUid: invalid length");
+    if (source.size() != 32) throw ParseException("Error while trying to parse JSON value as QUid: invalid length");
     // Convert xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx       (length: 32)
     //      to {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx} (length: 38)
     QString qtParseableString;
@@ -52,73 +65,141 @@ QUuid stringToUuid(const QString &source) {
 
 // int
 template <>
-int fromJsonValue(const QJsonValue &source) {
-    if (!source.isDouble()) throw new ParseException("Error while trying to parse JSON value as integer: not an integer");
+int fromJsonValue<int>(const QJsonValue &source, convertType<int>) {
+    if (!source.isDouble()) throw ParseException("Error while trying to parse JSON value as integer: not an integer");
     return source.toInt();
 }
 
 template <>
-QJsonValue toJsonValue(const int &source) {
+QJsonValue toJsonValue<int>(const int &source, convertType<int>) {
     return QJsonValue(source);
+}
+
+// "long"
+template <>
+qint64 fromJsonValue<qint64>(const QJsonValue &source, convertType<qint64>) {
+    if (!source.isDouble()) throw ParseException("Error while trying to parse JSON value as integer: not an integer");
+    return static_cast<qint64>(source.toDouble());
+}
+
+template <>
+QJsonValue toJsonValue<qint64>(const qint64 &source, convertType<qint64>) {
+    return QJsonValue(static_cast<qint64>(source));
 }
 
 // bool
 template <>
-bool fromJsonValue(const QJsonValue &source) {
-    if (!source.isBool()) throw new ParseException("Error while trying to parse JSON value as boolean: not a boolean");
+bool fromJsonValue<bool>(const QJsonValue &source, convertType<bool>) {
+    if (!source.isBool()) throw ParseException("Error while trying to parse JSON value as boolean: not a boolean");
     return source.toBool();
 }
 
 template <>
-QJsonValue toJsonValue(const bool &source) {
+QJsonValue toJsonValue<bool>(const bool &source, convertType<bool>) {
     return QJsonValue(source);
 }
 
 // QString
 template <>
-QString fromJsonValue(const QJsonValue &source) {
-    if (!source.isString()) throw new ParseException("Error while trying to parse JSON value as string: not a string");
+QString fromJsonValue<QString>(const QJsonValue &source, convertType<QString>) {
+    if (source.isNull()) {
+        return QString();
+    }
+    if (!source.isString()) {
+        throw ParseException(QStringLiteral("Error while trying to parse JSON value %1 as string: not a string").arg(source.type()));
+    }
     return source.toString();
 }
 
 template <>
-QJsonValue toJsonValue(const QString &source) {
+QJsonValue toJsonValue<QString>(const QString &source, convertType<QString>) {
+    return QJsonValue(source);
+}
+
+// QStringList
+template <>
+QStringList fromJsonValue<QStringList>(const QJsonValue &source, convertType<QStringList>) {
+    switch(source.type()) {
+    case QJsonValue::Array: {
+        QJsonArray arr = source.toArray();
+        QStringList result;
+        result.reserve(arr.size());
+        for(int i = 0; i < arr.size(); i++) {
+            result.append(fromJsonValue<QString>(arr.at(i)));
+        }
+        return result;
+    }
+    case QJsonValue::Null:
+        return QStringList();
+    default:
+        throw ParseException(QStringLiteral("Error while trying to parse JSON value %1 as stringlist: not a list of strings").arg(source.type()));
+    }
+}
+
+
+template <>
+QJsonValue toJsonValue<QStringList>(const QStringList &source, convertType<QStringList>) {
+    QJsonArray result;
+    for (int i = 0; i < source.size(); i++) {
+        result.append(source[i]);
+    }
+    return result;
+}
+
+// QJsonObject
+template <>
+QJsonObject fromJsonValue<QJsonObject>(const QJsonValue &source, convertType<QJsonObject>) {
+    if (!source.isObject()) throw ParseException("Error parsing JSON value as object: not a double");
+    return source.toObject();
+}
+
+template <>
+QJsonValue toJsonValue<QJsonObject>(const QJsonObject &source, convertType<QJsonObject>) {
     return QJsonValue(source);
 }
 
 // Double
 template <>
-double fromJsonValue(const QJsonValue &source) {
-    if (!source.isDouble()) throw new ParseException("Error while trying to parse JSON value as integer: not a double");
+double fromJsonValue<double>(const QJsonValue &source, convertType<double>) {
+    if (!source.isDouble()) throw ParseException("Error parsing JSON value as integer: not a double");
     return source.toDouble();
 }
 
 template <>
-QJsonValue toJsonValue(const double &source) {
+QJsonValue toJsonValue<double>(const double &source, convertType<double>) {
     return QJsonValue(source);
 }
 
 // QDateTime
 template <>
-QDateTime fromJsonValue(const QJsonValue &source) {
-    if (!source.isString()) throw new ParseException("Error while trying to parse JSON value as DateTime: not a string");
-    return QDateTime::fromString(source.toString(), Qt::ISODateWithMs);
+QDateTime fromJsonValue<QDateTime>(const QJsonValue &source, convertType<QDateTime>) {
+    switch (source.type()) {
+    case QJsonValue::Null:
+        return QDateTime();
+    case QJsonValue::String:
+        return QDateTime::fromString(source.toString(), Qt::ISODateWithMs);
+    default:
+        throw ParseException("Error while trying to parse JSON value as DateTime: not a string");
+    }
 }
 
 template <>
-QJsonValue toJsonValue(const QDateTime &source) {
+QJsonValue toJsonValue<QDateTime>(const QDateTime &source, convertType<QDateTime>) {
     return QJsonValue(source.toString(Qt::ISODateWithMs));
 }
 
 // QUuid
 template <>
-QUuid fromJsonValue(const QJsonValue &source) {
-    if (!source.isString()) throw new ParseException("Error while trying to parse JSON value as QUuid: not a string");
+QUuid fromJsonValue<QUuid>(const QJsonValue &source, convertType<QUuid>) {
+    if (!source.isString()) {
+        qCritical() << "JSON Value " << source << "is not a string";
+        throw ParseException(QStringLiteral("Error while trying to parse JSON value as QUuid: not a string"));
+    }
     return stringToUuid(source.toString());
 }
 
 template <>
-QJsonValue toJsonValue(const QUuid &source) {
+QJsonValue toJsonValue<QUuid>(const QUuid &source, convertType<QUuid>) {
     return uuidToString(source);
 }
 

@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class PluginStatusClass {
@@ -57,7 +61,19 @@ private:
 	explicit PluginStatusClass();
 };
 
-typedef PluginStatusClass::Value PluginStatus;
+using PluginStatus = PluginStatusClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using PluginStatus = Jellyfin::DTO::PluginStatus;
+
+template <>
+PluginStatus fromJsonValue(const QJsonValue &source, convertType<PluginStatus>);
+
+template <>
+QJsonValue toJsonValue(const PluginStatus &source, convertType<PluginStatus>);
 
 } // NS DTO
 } // NS Jellyfin

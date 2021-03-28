@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static ActivityLogEntry fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -169,6 +173,18 @@ protected:
 	QString m_userPrimaryImageTag;
 	LogLevel m_severity;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ActivityLogEntry = Jellyfin::DTO::ActivityLogEntry;
+
+template <>
+ActivityLogEntry fromJsonValue(const QJsonValue &source, convertType<ActivityLogEntry>);
+
+template<>
+QJsonValue toJsonValue(const ActivityLogEntry &source, convertType<ActivityLogEntry>);
 
 } // NS DTO
 } // NS Jellyfin

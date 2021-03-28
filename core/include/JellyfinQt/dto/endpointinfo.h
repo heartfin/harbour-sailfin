@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -52,7 +56,7 @@ public:
 	
 	static EndPointInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -70,6 +74,18 @@ protected:
 	bool m_isLocal;
 	bool m_isInNetwork;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using EndPointInfo = Jellyfin::DTO::EndPointInfo;
+
+template <>
+EndPointInfo fromJsonValue(const QJsonValue &source, convertType<EndPointInfo>);
+
+template<>
+QJsonValue toJsonValue(const EndPointInfo &source, convertType<EndPointInfo>);
 
 } // NS DTO
 } // NS Jellyfin

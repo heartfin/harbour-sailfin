@@ -34,7 +34,6 @@ namespace DTO {
 
 SubtitlePlaybackModeClass::SubtitlePlaybackModeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using SubtitlePlaybackMode = Jellyfin::DTO::SubtitlePlaybackMode;
 
 template <>
-SubtitlePlaybackMode fromJsonValue<SubtitlePlaybackMode>(const QJsonValue &source) {
+SubtitlePlaybackMode fromJsonValue(const QJsonValue &source, convertType<SubtitlePlaybackMode>) {
 	if (!source.isString()) return SubtitlePlaybackMode::EnumNotSet;
 
 	QString str = source.toString();
@@ -63,6 +62,26 @@ SubtitlePlaybackMode fromJsonValue<SubtitlePlaybackMode>(const QJsonValue &sourc
 	}
 	
 	return SubtitlePlaybackMode::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const SubtitlePlaybackMode &source, convertType<SubtitlePlaybackMode>) {
+	switch(source) {
+	case SubtitlePlaybackMode::Default:
+		return QStringLiteral("Default");
+	case SubtitlePlaybackMode::Always:
+		return QStringLiteral("Always");
+	case SubtitlePlaybackMode::OnlyForced:
+		return QStringLiteral("OnlyForced");
+	case SubtitlePlaybackMode::None:
+		return QStringLiteral("None");
+	case SubtitlePlaybackMode::Smart:
+		return QStringLiteral("Smart");
+
+	case SubtitlePlaybackMode::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

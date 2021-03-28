@@ -35,13 +35,29 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets branding css.
+ */
+
+class GetBrandingCss_2Loader : public Jellyfin::Support::HttpLoader<QString, GetBrandingCss_2Params> {
+public:
+	explicit GetBrandingCss_2Loader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetBrandingCss_2Params& parameters) const override;
+	QUrlQuery query(const GetBrandingCss_2Params& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

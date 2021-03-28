@@ -43,6 +43,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -58,7 +62,7 @@ public:
 	
 	static SystemInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -342,6 +346,18 @@ protected:
 	FFmpegLocation m_encoderLocation;
 	Architecture m_systemArchitecture;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SystemInfo = Jellyfin::DTO::SystemInfo;
+
+template <>
+SystemInfo fromJsonValue(const QJsonValue &source, convertType<SystemInfo>);
+
+template<>
+QJsonValue toJsonValue(const SystemInfo &source, convertType<SystemInfo>);
 
 } // NS DTO
 } // NS Jellyfin

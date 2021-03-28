@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetBrandingCssLoader::GetBrandingCssLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QString, GetBrandingCssParams>(apiClient) {}
+
+QString GetBrandingCssLoader::path(const GetBrandingCssParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Branding/Css");
+}
+
+QUrlQuery GetBrandingCssLoader::query(const GetBrandingCssParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

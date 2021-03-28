@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static CreatePlaylistDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -109,6 +113,18 @@ protected:
 	QString m_userId;
 	QString m_mediaType;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using CreatePlaylistDto = Jellyfin::DTO::CreatePlaylistDto;
+
+template <>
+CreatePlaylistDto fromJsonValue(const QJsonValue &source, convertType<CreatePlaylistDto>);
+
+template<>
+QJsonValue toJsonValue(const CreatePlaylistDto &source, convertType<CreatePlaylistDto>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -34,6 +34,29 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetAncestorsLoader::GetAncestorsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<BaseItemDto>, GetAncestorsParams>(apiClient) {}
+
+QString GetAncestorsLoader::path(const GetAncestorsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Ancestors");
+}
+
+QUrlQuery GetAncestorsLoader::query(const GetAncestorsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

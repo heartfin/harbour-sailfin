@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/remoteimageresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets available remote images for an item.
  */
-class GetRemoteImagesLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::RemoteImageResult, GetRemoteImagesParams> {
+
+class GetRemoteImagesLoader : public Jellyfin::Support::HttpLoader<RemoteImageResult, GetRemoteImagesParams> {
 public:
 	explicit GetRemoteImagesLoader(ApiClient *apiClient = nullptr);
 

@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/itemcounts.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Get item counts.
  */
-class GetItemCountsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ItemCounts, GetItemCountsParams> {
+
+class GetItemCountsLoader : public Jellyfin::Support::HttpLoader<ItemCounts, GetItemCountsParams> {
 public:
 	explicit GetItemCountsLoader(ApiClient *apiClient = nullptr);
 

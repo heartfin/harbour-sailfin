@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class SendCommandTypeClass {
@@ -54,7 +58,19 @@ private:
 	explicit SendCommandTypeClass();
 };
 
-typedef SendCommandTypeClass::Value SendCommandType;
+using SendCommandType = SendCommandTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using SendCommandType = Jellyfin::DTO::SendCommandType;
+
+template <>
+SendCommandType fromJsonValue(const QJsonValue &source, convertType<SendCommandType>);
+
+template <>
+QJsonValue toJsonValue(const SendCommandType &source, convertType<SendCommandType>);
 
 } // NS DTO
 } // NS Jellyfin

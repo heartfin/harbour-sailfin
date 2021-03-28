@@ -64,7 +64,7 @@ void PersonLookupInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PersonLookupInfoRemoteSearchQuery::toJson() {
+QJsonObject PersonLookupInfoRemoteSearchQuery::toJson() const {
 	QJsonObject result;
 	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<PersonLookupInfo>>(m_searchInfo);
 	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
@@ -113,9 +113,14 @@ namespace Support {
 using PersonLookupInfoRemoteSearchQuery = Jellyfin::DTO::PersonLookupInfoRemoteSearchQuery;
 
 template <>
-PersonLookupInfoRemoteSearchQuery fromJsonValue<PersonLookupInfoRemoteSearchQuery>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PersonLookupInfoRemoteSearchQuery fromJsonValue(const QJsonValue &source, convertType<PersonLookupInfoRemoteSearchQuery>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PersonLookupInfoRemoteSearchQuery::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PersonLookupInfoRemoteSearchQuery &source, convertType<PersonLookupInfoRemoteSearchQuery>) {
+	return source.toJson();
 }
 
 } // NS DTO

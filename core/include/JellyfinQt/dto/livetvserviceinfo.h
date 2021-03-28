@@ -41,6 +41,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -56,7 +60,7 @@ public:
 	
 	static LiveTvServiceInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -144,6 +148,18 @@ protected:
 	bool m_isVisible;
 	QStringList m_tuners;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using LiveTvServiceInfo = Jellyfin::DTO::LiveTvServiceInfo;
+
+template <>
+LiveTvServiceInfo fromJsonValue(const QJsonValue &source, convertType<LiveTvServiceInfo>);
+
+template<>
+QJsonValue toJsonValue(const LiveTvServiceInfo &source, convertType<LiveTvServiceInfo>);
 
 } // NS DTO
 } // NS Jellyfin

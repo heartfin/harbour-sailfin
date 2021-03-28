@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static IPlugin fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -135,6 +139,18 @@ protected:
 	bool m_canUninstall;
 	QString m_dataFolderPath;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using IPlugin = Jellyfin::DTO::IPlugin;
+
+template <>
+IPlugin fromJsonValue(const QJsonValue &source, convertType<IPlugin>);
+
+template<>
+QJsonValue toJsonValue(const IPlugin &source, convertType<IPlugin>);
 
 } // NS DTO
 } // NS Jellyfin

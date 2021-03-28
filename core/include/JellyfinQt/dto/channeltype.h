@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ChannelTypeClass {
@@ -52,7 +56,19 @@ private:
 	explicit ChannelTypeClass();
 };
 
-typedef ChannelTypeClass::Value ChannelType;
+using ChannelType = ChannelTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelType = Jellyfin::DTO::ChannelType;
+
+template <>
+ChannelType fromJsonValue(const QJsonValue &source, convertType<ChannelType>);
+
+template <>
+QJsonValue toJsonValue(const ChannelType &source, convertType<ChannelType>);
 
 } // NS DTO
 } // NS Jellyfin

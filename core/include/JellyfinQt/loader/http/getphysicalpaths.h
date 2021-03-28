@@ -31,17 +31,34 @@
 #define JELLYFIN_LOADER_HTTP_GETPHYSICALPATHS_H
 
 #include <optional>
+#include <QString>
 
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets a list of physical paths from virtual folders.
+ */
+
+class GetPhysicalPathsLoader : public Jellyfin::Support::HttpLoader<QStringList, GetPhysicalPathsParams> {
+public:
+	explicit GetPhysicalPathsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetPhysicalPathsParams& parameters) const override;
+	QUrlQuery query(const GetPhysicalPathsParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

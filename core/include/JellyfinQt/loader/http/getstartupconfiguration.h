@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/startupconfigurationdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets the initial startup wizard configuration.
  */
-class GetStartupConfigurationLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupConfigurationDto, GetStartupConfigurationParams> {
+
+class GetStartupConfigurationLoader : public Jellyfin::Support::HttpLoader<StartupConfigurationDto, GetStartupConfigurationParams> {
 public:
 	explicit GetStartupConfigurationLoader(ApiClient *apiClient = nullptr);
 

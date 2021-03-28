@@ -70,7 +70,7 @@ void Version::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject Version::toJson() {
+QJsonObject Version::toJson() const {
 	QJsonObject result;
 	result["Major"] = Jellyfin::Support::toJsonValue<qint32>(m_major);
 	result["Minor"] = Jellyfin::Support::toJsonValue<qint32>(m_minor);
@@ -126,9 +126,14 @@ namespace Support {
 using Version = Jellyfin::DTO::Version;
 
 template <>
-Version fromJsonValue<Version>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+Version fromJsonValue(const QJsonValue &source, convertType<Version>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return Version::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const Version &source, convertType<Version>) {
+	return source.toJson();
 }
 
 } // NS DTO

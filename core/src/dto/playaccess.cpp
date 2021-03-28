@@ -34,7 +34,6 @@ namespace DTO {
 
 PlayAccessClass::PlayAccessClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using PlayAccess = Jellyfin::DTO::PlayAccess;
 
 template <>
-PlayAccess fromJsonValue<PlayAccess>(const QJsonValue &source) {
+PlayAccess fromJsonValue(const QJsonValue &source, convertType<PlayAccess>) {
 	if (!source.isString()) return PlayAccess::EnumNotSet;
 
 	QString str = source.toString();
@@ -54,6 +53,20 @@ PlayAccess fromJsonValue<PlayAccess>(const QJsonValue &source) {
 	}
 	
 	return PlayAccess::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const PlayAccess &source, convertType<PlayAccess>) {
+	switch(source) {
+	case PlayAccess::Full:
+		return QStringLiteral("Full");
+	case PlayAccess::None:
+		return QStringLiteral("None");
+
+	case PlayAccess::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

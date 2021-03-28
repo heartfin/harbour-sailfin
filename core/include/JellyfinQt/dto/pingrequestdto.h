@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -52,7 +56,7 @@ public:
 	
 	static PingRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -68,6 +72,18 @@ public:
 protected:
 	qint64 m_ping;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PingRequestDto = Jellyfin::DTO::PingRequestDto;
+
+template <>
+PingRequestDto fromJsonValue(const QJsonValue &source, convertType<PingRequestDto>);
+
+template<>
+QJsonValue toJsonValue(const PingRequestDto &source, convertType<PingRequestDto>);
 
 } // NS DTO
 } // NS Jellyfin

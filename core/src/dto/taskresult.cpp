@@ -76,7 +76,7 @@ void TaskResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TaskResult::toJson() {
+QJsonObject TaskResult::toJson() const {
 	QJsonObject result;
 	result["StartTimeUtc"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startTimeUtc);
 	result["EndTimeUtc"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endTimeUtc);
@@ -181,9 +181,14 @@ namespace Support {
 using TaskResult = Jellyfin::DTO::TaskResult;
 
 template <>
-TaskResult fromJsonValue<TaskResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TaskResult fromJsonValue(const QJsonValue &source, convertType<TaskResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TaskResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TaskResult &source, convertType<TaskResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

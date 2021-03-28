@@ -58,7 +58,7 @@ void PathSubstitution::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PathSubstitution::toJson() {
+QJsonObject PathSubstitution::toJson() const {
 	QJsonObject result;
 	result["From"] = Jellyfin::Support::toJsonValue<QString>(m_from);
 	result["To"] = Jellyfin::Support::toJsonValue<QString>(m_to);
@@ -100,9 +100,14 @@ namespace Support {
 using PathSubstitution = Jellyfin::DTO::PathSubstitution;
 
 template <>
-PathSubstitution fromJsonValue<PathSubstitution>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PathSubstitution fromJsonValue(const QJsonValue &source, convertType<PathSubstitution>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PathSubstitution::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PathSubstitution &source, convertType<PathSubstitution>) {
+	return source.toJson();
 }
 
 } // NS DTO

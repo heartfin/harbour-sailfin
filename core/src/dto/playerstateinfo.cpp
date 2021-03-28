@@ -82,7 +82,7 @@ void PlayerStateInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PlayerStateInfo::toJson() {
+QJsonObject PlayerStateInfo::toJson() const {
 	QJsonObject result;
 	result["PositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_positionTicks);
 	result["CanSeek"] = Jellyfin::Support::toJsonValue<bool>(m_canSeek);
@@ -201,9 +201,14 @@ namespace Support {
 using PlayerStateInfo = Jellyfin::DTO::PlayerStateInfo;
 
 template <>
-PlayerStateInfo fromJsonValue<PlayerStateInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PlayerStateInfo fromJsonValue(const QJsonValue &source, convertType<PlayerStateInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PlayerStateInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PlayerStateInfo &source, convertType<PlayerStateInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

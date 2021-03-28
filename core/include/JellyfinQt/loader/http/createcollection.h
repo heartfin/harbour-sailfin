@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/collectioncreationresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Creates a new collection.
  */
-class CreateCollectionLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::CollectionCreationResult, CreateCollectionParams> {
+
+class CreateCollectionLoader : public Jellyfin::Support::HttpLoader<CollectionCreationResult, CreateCollectionParams> {
 public:
 	explicit CreateCollectionLoader(ApiClient *apiClient = nullptr);
 

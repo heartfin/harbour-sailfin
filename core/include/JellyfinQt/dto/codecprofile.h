@@ -42,6 +42,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -57,7 +61,7 @@ public:
 	
 	static CodecProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -101,6 +105,18 @@ protected:
 	QString m_codec;
 	QString m_container;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using CodecProfile = Jellyfin::DTO::CodecProfile;
+
+template <>
+CodecProfile fromJsonValue(const QJsonValue &source, convertType<CodecProfile>);
+
+template<>
+QJsonValue toJsonValue(const CodecProfile &source, convertType<CodecProfile>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetPingSystemLoader::GetPingSystemLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QString, GetPingSystemParams>(apiClient) {}
+
+QString GetPingSystemLoader::path(const GetPingSystemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/System/Ping");
+}
+
+QUrlQuery GetPingSystemLoader::query(const GetPingSystemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

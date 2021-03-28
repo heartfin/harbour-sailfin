@@ -61,7 +61,7 @@ void ObjectGroupUpdate::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ObjectGroupUpdate::toJson() {
+QJsonObject ObjectGroupUpdate::toJson() const {
 	QJsonObject result;
 	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);
 	result["Type"] = Jellyfin::Support::toJsonValue<GroupUpdateType>(m_type);
@@ -96,9 +96,14 @@ namespace Support {
 using ObjectGroupUpdate = Jellyfin::DTO::ObjectGroupUpdate;
 
 template <>
-ObjectGroupUpdate fromJsonValue<ObjectGroupUpdate>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ObjectGroupUpdate fromJsonValue(const QJsonValue &source, convertType<ObjectGroupUpdate>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ObjectGroupUpdate::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ObjectGroupUpdate &source, convertType<ObjectGroupUpdate>) {
+	return source.toJson();
 }
 
 } // NS DTO

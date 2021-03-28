@@ -34,7 +34,6 @@ namespace DTO {
 
 UnratedItemClass::UnratedItemClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using UnratedItem = Jellyfin::DTO::UnratedItem;
 
 template <>
-UnratedItem fromJsonValue<UnratedItem>(const QJsonValue &source) {
+UnratedItem fromJsonValue(const QJsonValue &source, convertType<UnratedItem>) {
 	if (!source.isString()) return UnratedItem::EnumNotSet;
 
 	QString str = source.toString();
@@ -75,6 +74,34 @@ UnratedItem fromJsonValue<UnratedItem>(const QJsonValue &source) {
 	}
 	
 	return UnratedItem::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const UnratedItem &source, convertType<UnratedItem>) {
+	switch(source) {
+	case UnratedItem::Movie:
+		return QStringLiteral("Movie");
+	case UnratedItem::Trailer:
+		return QStringLiteral("Trailer");
+	case UnratedItem::Series:
+		return QStringLiteral("Series");
+	case UnratedItem::Music:
+		return QStringLiteral("Music");
+	case UnratedItem::Book:
+		return QStringLiteral("Book");
+	case UnratedItem::LiveTvChannel:
+		return QStringLiteral("LiveTvChannel");
+	case UnratedItem::LiveTvProgram:
+		return QStringLiteral("LiveTvProgram");
+	case UnratedItem::ChannelContent:
+		return QStringLiteral("ChannelContent");
+	case UnratedItem::Other:
+		return QStringLiteral("Other");
+
+	case UnratedItem::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

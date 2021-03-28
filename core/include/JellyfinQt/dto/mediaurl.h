@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static MediaUrl fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -75,6 +79,18 @@ protected:
 	QString m_url;
 	QString m_name;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaUrl = Jellyfin::DTO::MediaUrl;
+
+template <>
+MediaUrl fromJsonValue(const QJsonValue &source, convertType<MediaUrl>);
+
+template<>
+QJsonValue toJsonValue(const MediaUrl &source, convertType<MediaUrl>);
 
 } // NS DTO
 } // NS Jellyfin

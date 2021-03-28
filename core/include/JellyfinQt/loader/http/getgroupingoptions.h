@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/specialviewoptiondto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Get user view grouping options.
+ */
+
+class GetGroupingOptionsLoader : public Jellyfin::Support::HttpLoader<QList<SpecialViewOptionDto>, GetGroupingOptionsParams> {
+public:
+	explicit GetGroupingOptionsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetGroupingOptionsParams& parameters) const override;
+	QUrlQuery query(const GetGroupingOptionsParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

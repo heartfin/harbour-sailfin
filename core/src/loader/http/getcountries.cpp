@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetCountriesLoader::GetCountriesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<CountryInfo>, GetCountriesParams>(apiClient) {}
+
+QString GetCountriesLoader::path(const GetCountriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Localization/Countries");
+}
+
+QUrlQuery GetCountriesLoader::query(const GetCountriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class EncodingContextClass {
@@ -52,7 +56,19 @@ private:
 	explicit EncodingContextClass();
 };
 
-typedef EncodingContextClass::Value EncodingContext;
+using EncodingContext = EncodingContextClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using EncodingContext = Jellyfin::DTO::EncodingContext;
+
+template <>
+EncodingContext fromJsonValue(const QJsonValue &source, convertType<EncodingContext>);
+
+template <>
+QJsonValue toJsonValue(const EncodingContext &source, convertType<EncodingContext>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -58,7 +58,7 @@ void QueueRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject QueueRequestDto::toJson() {
+QJsonObject QueueRequestDto::toJson() const {
 	QJsonObject result;
 	result["ItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemIds);
 	result["Mode"] = Jellyfin::Support::toJsonValue<GroupQueueMode>(m_mode);
@@ -93,9 +93,14 @@ namespace Support {
 using QueueRequestDto = Jellyfin::DTO::QueueRequestDto;
 
 template <>
-QueueRequestDto fromJsonValue<QueueRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+QueueRequestDto fromJsonValue(const QJsonValue &source, convertType<QueueRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return QueueRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const QueueRequestDto &source, convertType<QueueRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetPersonsLoader::GetPersonsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetPersonsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetPersonsParams>(apiClient) {}
 
 QString GetPersonsLoader::path(const GetPersonsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,43 +51,43 @@ QUrlQuery GetPersonsLoader::query(const GetPersonsParams &params) const {
 
 	// Optional parameters
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.searchTermNull()) {
-		result.addQueryItem("searchTerm", Support::toString(params.searchTerm()));
+		result.addQueryItem("searchTerm", Support::toString<QString>(params.searchTerm()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.filtersNull()) {
-		result.addQueryItem("filters", Support::toString(params.filters()));
+		result.addQueryItem("filters", Support::toString<QList<ItemFilter>>(params.filters()));
 	}
 	if (!params.isFavoriteNull()) {
-		result.addQueryItem("isFavorite", Support::toString(params.isFavorite()));
+		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
 	}
 	if (!params.enableUserDataNull()) {
-		result.addQueryItem("enableUserData", Support::toString(params.enableUserData()));
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString(params.imageTypeLimit()));
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
 	}
 	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString(params.enableImageTypes()));
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
 	}
 	if (!params.excludePersonTypesNull()) {
-		result.addQueryItem("excludePersonTypes", Support::toString(params.excludePersonTypes()));
+		result.addQueryItem("excludePersonTypes", Support::toString<QStringList>(params.excludePersonTypes()));
 	}
 	if (!params.personTypesNull()) {
-		result.addQueryItem("personTypes", Support::toString(params.personTypes()));
+		result.addQueryItem("personTypes", Support::toString<QStringList>(params.personTypes()));
 	}
 	if (!params.appearsInItemIdNull()) {
-		result.addQueryItem("appearsInItemId", Support::toString(params.appearsInItemId()));
+		result.addQueryItem("appearsInItemId", Support::toString<QString>(params.appearsInItemId()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.enableImagesNull()) {
-		result.addQueryItem("enableImages", Support::toString(params.enableImages()));
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	
 	return result;

@@ -1,4 +1,7 @@
 {{#if endpoint.hasSuccessResponse}}
+
+using namespace {{dtoNamespace}};
+
 {{#if endpoint.description.length > 0}}
 /**
  * @brief {{endpoint.description}}
@@ -6,7 +9,8 @@
  */
 {{/if}}
 
-class {{className}}Loader : public {{supportNamespace}}::HttpLoader<{{dtoNamespace}}::{{endpoint.resultType}}, {{endpoint.parameterType}}> {
+
+class {{className}}Loader : public {{supportNamespace}}::HttpLoader<{{endpoint.resultType}}, {{endpoint.parameterType}}> {
 public:
 	explicit {{className}}Loader(ApiClient *apiClient = nullptr);
 

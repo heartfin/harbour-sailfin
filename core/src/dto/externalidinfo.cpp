@@ -64,7 +64,7 @@ void ExternalIdInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ExternalIdInfo::toJson() {
+QJsonObject ExternalIdInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
@@ -127,9 +127,14 @@ namespace Support {
 using ExternalIdInfo = Jellyfin::DTO::ExternalIdInfo;
 
 template <>
-ExternalIdInfo fromJsonValue<ExternalIdInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ExternalIdInfo fromJsonValue(const QJsonValue &source, convertType<ExternalIdInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ExternalIdInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ExternalIdInfo &source, convertType<ExternalIdInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

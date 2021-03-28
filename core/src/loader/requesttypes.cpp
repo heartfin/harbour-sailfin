@@ -4251,7 +4251,7 @@ void GetAudioStreamParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetAudioStreamParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetAudioStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -4260,14 +4260,14 @@ void GetAudioStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
 
 bool GetAudioStreamParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetAudioStreamParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -5260,7 +5260,7 @@ void GetAudioStreamByContainerParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetAudioStreamByContainerParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetAudioStreamByContainerParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -5269,14 +5269,14 @@ void GetAudioStreamByContainerParams::setStreamOptions(QJsonObject newStreamOpti
 
 bool GetAudioStreamByContainerParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetAudioStreamByContainerParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -8601,7 +8601,7 @@ void GetHlsAudioSegmentParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetHlsAudioSegmentParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetHlsAudioSegmentParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -8610,14 +8610,14 @@ void GetHlsAudioSegmentParams::setStreamOptions(QJsonObject newStreamOptions)  {
 
 bool GetHlsAudioSegmentParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetHlsAudioSegmentParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -9694,7 +9694,7 @@ void GetHlsVideoSegmentParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetHlsVideoSegmentParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetHlsVideoSegmentParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -9703,14 +9703,14 @@ void GetHlsVideoSegmentParams::setStreamOptions(QJsonObject newStreamOptions)  {
 
 bool GetHlsVideoSegmentParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetHlsVideoSegmentParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -16838,7 +16838,7 @@ void GetLiveHlsStreamParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetLiveHlsStreamParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetLiveHlsStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -16847,14 +16847,14 @@ void GetLiveHlsStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
 
 bool GetLiveHlsStreamParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetLiveHlsStreamParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -19050,7 +19050,7 @@ void GetMasterHlsAudioPlaylistParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetMasterHlsAudioPlaylistParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetMasterHlsAudioPlaylistParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -19059,14 +19059,14 @@ void GetMasterHlsAudioPlaylistParams::setStreamOptions(QJsonObject newStreamOpti
 
 bool GetMasterHlsAudioPlaylistParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetMasterHlsAudioPlaylistParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -20059,7 +20059,7 @@ void GetMasterHlsVideoPlaylistParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetMasterHlsVideoPlaylistParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetMasterHlsVideoPlaylistParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -20068,14 +20068,14 @@ void GetMasterHlsVideoPlaylistParams::setStreamOptions(QJsonObject newStreamOpti
 
 bool GetMasterHlsVideoPlaylistParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetMasterHlsVideoPlaylistParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -32023,7 +32023,7 @@ void GetVariantHlsAudioPlaylistParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetVariantHlsAudioPlaylistParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetVariantHlsAudioPlaylistParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -32032,14 +32032,14 @@ void GetVariantHlsAudioPlaylistParams::setStreamOptions(QJsonObject newStreamOpt
 
 bool GetVariantHlsAudioPlaylistParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetVariantHlsAudioPlaylistParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -33023,7 +33023,7 @@ void GetVariantHlsVideoPlaylistParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetVariantHlsVideoPlaylistParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetVariantHlsVideoPlaylistParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -33032,14 +33032,14 @@ void GetVariantHlsVideoPlaylistParams::setStreamOptions(QJsonObject newStreamOpt
 
 bool GetVariantHlsVideoPlaylistParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetVariantHlsVideoPlaylistParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -34044,7 +34044,7 @@ void GetVideoStreamParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetVideoStreamParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetVideoStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -34053,14 +34053,14 @@ void GetVideoStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
 
 bool GetVideoStreamParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetVideoStreamParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -35062,7 +35062,7 @@ void GetVideoStreamByContainerParams::setStaticStreamingNull() {
 
 
 const QJsonObject &GetVideoStreamByContainerParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void GetVideoStreamByContainerParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -35071,14 +35071,14 @@ void GetVideoStreamByContainerParams::setStreamOptions(QJsonObject newStreamOpti
 
 bool GetVideoStreamByContainerParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void GetVideoStreamByContainerParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -36769,7 +36769,7 @@ void HeadAudioStreamParams::setStaticStreamingNull() {
 
 
 const QJsonObject &HeadAudioStreamParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void HeadAudioStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -36778,14 +36778,14 @@ void HeadAudioStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
 
 bool HeadAudioStreamParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void HeadAudioStreamParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -37778,7 +37778,7 @@ void HeadAudioStreamByContainerParams::setStaticStreamingNull() {
 
 
 const QJsonObject &HeadAudioStreamByContainerParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void HeadAudioStreamByContainerParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -37787,14 +37787,14 @@ void HeadAudioStreamByContainerParams::setStreamOptions(QJsonObject newStreamOpt
 
 bool HeadAudioStreamByContainerParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void HeadAudioStreamByContainerParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -40385,7 +40385,7 @@ void HeadMasterHlsAudioPlaylistParams::setStaticStreamingNull() {
 
 
 const QJsonObject &HeadMasterHlsAudioPlaylistParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void HeadMasterHlsAudioPlaylistParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -40394,14 +40394,14 @@ void HeadMasterHlsAudioPlaylistParams::setStreamOptions(QJsonObject newStreamOpt
 
 bool HeadMasterHlsAudioPlaylistParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void HeadMasterHlsAudioPlaylistParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -41394,7 +41394,7 @@ void HeadMasterHlsVideoPlaylistParams::setStaticStreamingNull() {
 
 
 const QJsonObject &HeadMasterHlsVideoPlaylistParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void HeadMasterHlsVideoPlaylistParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -41403,14 +41403,14 @@ void HeadMasterHlsVideoPlaylistParams::setStreamOptions(QJsonObject newStreamOpt
 
 bool HeadMasterHlsVideoPlaylistParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void HeadMasterHlsVideoPlaylistParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -45433,7 +45433,7 @@ void HeadVideoStreamParams::setStaticStreamingNull() {
 
 
 const QJsonObject &HeadVideoStreamParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void HeadVideoStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -45442,14 +45442,14 @@ void HeadVideoStreamParams::setStreamOptions(QJsonObject newStreamOptions)  {
 
 bool HeadVideoStreamParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void HeadVideoStreamParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 
@@ -46451,7 +46451,7 @@ void HeadVideoStreamByContainerParams::setStaticStreamingNull() {
 
 
 const QJsonObject &HeadVideoStreamByContainerParams::streamOptions() const {
-	return m_streamOptions.value();
+	return m_streamOptions;
 }
 
 void HeadVideoStreamByContainerParams::setStreamOptions(QJsonObject newStreamOptions)  {
@@ -46460,14 +46460,14 @@ void HeadVideoStreamByContainerParams::setStreamOptions(QJsonObject newStreamOpt
 
 bool HeadVideoStreamByContainerParams::streamOptionsNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_streamOptions.has_value();
+	return m_streamOptions.isEmpty();
 }
 
 void HeadVideoStreamByContainerParams::setStreamOptionsNull() {
-	m_streamOptions = std::nullopt;
+	m_streamOptions= QJsonObject();
 }
 
 

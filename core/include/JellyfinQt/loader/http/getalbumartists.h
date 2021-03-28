@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets all album artists from a given item, folder, or the entire library.
  */
-class GetAlbumArtistsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetAlbumArtistsParams> {
+
+class GetAlbumArtistsLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetAlbumArtistsParams> {
 public:
 	explicit GetAlbumArtistsLoader(ApiClient *apiClient = nullptr);
 

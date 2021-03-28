@@ -85,7 +85,7 @@ void RemoteSubtitleInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject RemoteSubtitleInfo::toJson() {
+QJsonObject RemoteSubtitleInfo::toJson() const {
 	QJsonObject result;
 	result["ThreeLetterISOLanguageName"] = Jellyfin::Support::toJsonValue<QString>(m_threeLetterISOLanguageName);
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
@@ -253,9 +253,14 @@ namespace Support {
 using RemoteSubtitleInfo = Jellyfin::DTO::RemoteSubtitleInfo;
 
 template <>
-RemoteSubtitleInfo fromJsonValue<RemoteSubtitleInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+RemoteSubtitleInfo fromJsonValue(const QJsonValue &source, convertType<RemoteSubtitleInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return RemoteSubtitleInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const RemoteSubtitleInfo &source, convertType<RemoteSubtitleInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

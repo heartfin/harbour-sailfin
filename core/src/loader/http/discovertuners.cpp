@@ -34,6 +34,29 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+DiscoverTunersLoader::DiscoverTunersLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<TunerHostInfo>, DiscoverTunersParams>(apiClient) {}
+
+QString DiscoverTunersLoader::path(const DiscoverTunersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/Tuners/Discover");
+}
+
+QUrlQuery DiscoverTunersLoader::query(const DiscoverTunersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.newDevicesOnlyNull()) {
+		result.addQueryItem("newDevicesOnly", Support::toString<std::optional<bool>>(params.newDevicesOnly()));
+	}
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

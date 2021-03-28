@@ -37,7 +37,7 @@ ApplicationWindow {
 
     Connections {
         target: ApiClient
-        onSetupRequired: pageStack.replace(Qt.resolvedUrl("pages/setup/ServerSelectPage.qml"));
+        onSetupRequired:  { pageStack.replace(Qt.resolvedUrl("pages/setup/ServerSelectPage.qml")); }
     }
 
     Component.onCompleted: {

@@ -34,7 +34,6 @@ namespace DTO {
 
 ScrollDirectionClass::ScrollDirectionClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ScrollDirection = Jellyfin::DTO::ScrollDirection;
 
 template <>
-ScrollDirection fromJsonValue<ScrollDirection>(const QJsonValue &source) {
+ScrollDirection fromJsonValue(const QJsonValue &source, convertType<ScrollDirection>) {
 	if (!source.isString()) return ScrollDirection::EnumNotSet;
 
 	QString str = source.toString();
@@ -54,6 +53,20 @@ ScrollDirection fromJsonValue<ScrollDirection>(const QJsonValue &source) {
 	}
 	
 	return ScrollDirection::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ScrollDirection &source, convertType<ScrollDirection>) {
+	switch(source) {
+	case ScrollDirection::Horizontal:
+		return QStringLiteral("Horizontal");
+	case ScrollDirection::Vertical:
+		return QStringLiteral("Vertical");
+
+	case ScrollDirection::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

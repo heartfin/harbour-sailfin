@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static WakeOnLanInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -81,6 +85,18 @@ protected:
 	QString m_macAddress;
 	qint32 m_port;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using WakeOnLanInfo = Jellyfin::DTO::WakeOnLanInfo;
+
+template <>
+WakeOnLanInfo fromJsonValue(const QJsonValue &source, convertType<WakeOnLanInfo>);
+
+template<>
+QJsonValue toJsonValue(const WakeOnLanInfo &source, convertType<WakeOnLanInfo>);
 
 } // NS DTO
 } // NS Jellyfin

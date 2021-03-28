@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static GuideInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -79,6 +83,18 @@ protected:
 	QDateTime m_startDate;
 	QDateTime m_endDate;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using GuideInfo = Jellyfin::DTO::GuideInfo;
+
+template <>
+GuideInfo fromJsonValue(const QJsonValue &source, convertType<GuideInfo>);
+
+template<>
+QJsonValue toJsonValue(const GuideInfo &source, convertType<GuideInfo>);
 
 } // NS DTO
 } // NS Jellyfin

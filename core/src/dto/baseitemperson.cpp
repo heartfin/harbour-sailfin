@@ -66,18 +66,18 @@ void BaseItemPerson::setFromJson(QJsonObject source) {
 	m_role = Jellyfin::Support::fromJsonValue<QString>(source["Role"]);
 	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
 	m_primaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["PrimaryImageTag"]);
-	m_imageBlurHashes = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ImageBlurHashes"]);
+	m_imageBlurHashes = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ImageBlurHashes"]);
 
 }
 	
-QJsonObject BaseItemPerson::toJson() {
+QJsonObject BaseItemPerson::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["Role"] = Jellyfin::Support::toJsonValue<QString>(m_role);
 	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
 	result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
-	result["ImageBlurHashes"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_imageBlurHashes);
+	result["ImageBlurHashes"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageBlurHashes);
 
 	return result;
 }
@@ -147,17 +147,17 @@ void BaseItemPerson::setPrimaryImageTagNull() {
 	m_primaryImageTag.clear();
 
 }
-std::optional<QJsonObject> BaseItemPerson::imageBlurHashes() const { return m_imageBlurHashes; }
+QJsonObject BaseItemPerson::imageBlurHashes() const { return m_imageBlurHashes; }
 
-void BaseItemPerson::setImageBlurHashes(std::optional<QJsonObject> newImageBlurHashes) {
+void BaseItemPerson::setImageBlurHashes(QJsonObject newImageBlurHashes) {
 	m_imageBlurHashes = newImageBlurHashes;
 }
 bool BaseItemPerson::imageBlurHashesNull() const {
-	return !m_imageBlurHashes.has_value();
+	return m_imageBlurHashes.isEmpty();
 }
 
 void BaseItemPerson::setImageBlurHashesNull() {
-	m_imageBlurHashes = std::nullopt;
+	m_imageBlurHashes= QJsonObject();
 
 }
 
@@ -168,9 +168,14 @@ namespace Support {
 using BaseItemPerson = Jellyfin::DTO::BaseItemPerson;
 
 template <>
-BaseItemPerson fromJsonValue<BaseItemPerson>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+BaseItemPerson fromJsonValue(const QJsonValue &source, convertType<BaseItemPerson>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return BaseItemPerson::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const BaseItemPerson &source, convertType<BaseItemPerson>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class FFmpegLocationClass {
@@ -54,7 +58,19 @@ private:
 	explicit FFmpegLocationClass();
 };
 
-typedef FFmpegLocationClass::Value FFmpegLocation;
+using FFmpegLocation = FFmpegLocationClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using FFmpegLocation = Jellyfin::DTO::FFmpegLocation;
+
+template <>
+FFmpegLocation fromJsonValue(const QJsonValue &source, convertType<FFmpegLocation>);
+
+template <>
+QJsonValue toJsonValue(const FFmpegLocation &source, convertType<FFmpegLocation>);
 
 } // NS DTO
 } // NS Jellyfin

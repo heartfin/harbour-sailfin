@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetStudioLoader::GetStudioLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetStudioParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDto, GetStudioParams>(apiClient) {}
 
 QString GetStudioLoader::path(const GetStudioParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Studios/") + Support::toString(params.name()) ;
+	return QStringLiteral("/Studios/") + Support::toString< QString>(params.name()) ;
 }
 
 QUrlQuery GetStudioLoader::query(const GetStudioParams &params) const {
@@ -50,7 +51,7 @@ QUrlQuery GetStudioLoader::query(const GetStudioParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;

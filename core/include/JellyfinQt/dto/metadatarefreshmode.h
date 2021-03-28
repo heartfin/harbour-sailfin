@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class MetadataRefreshModeClass {
@@ -54,7 +58,19 @@ private:
 	explicit MetadataRefreshModeClass();
 };
 
-typedef MetadataRefreshModeClass::Value MetadataRefreshMode;
+using MetadataRefreshMode = MetadataRefreshModeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using MetadataRefreshMode = Jellyfin::DTO::MetadataRefreshMode;
+
+template <>
+MetadataRefreshMode fromJsonValue(const QJsonValue &source, convertType<MetadataRefreshMode>);
+
+template <>
+QJsonValue toJsonValue(const MetadataRefreshMode &source, convertType<MetadataRefreshMode>);
 
 } // NS DTO
 } // NS Jellyfin

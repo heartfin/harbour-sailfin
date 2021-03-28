@@ -58,7 +58,7 @@ void EndPointInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject EndPointInfo::toJson() {
+QJsonObject EndPointInfo::toJson() const {
 	QJsonObject result;
 	result["IsLocal"] = Jellyfin::Support::toJsonValue<bool>(m_isLocal);
 	result["IsInNetwork"] = Jellyfin::Support::toJsonValue<bool>(m_isInNetwork);
@@ -86,9 +86,14 @@ namespace Support {
 using EndPointInfo = Jellyfin::DTO::EndPointInfo;
 
 template <>
-EndPointInfo fromJsonValue<EndPointInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+EndPointInfo fromJsonValue(const QJsonValue &source, convertType<EndPointInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return EndPointInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const EndPointInfo &source, convertType<EndPointInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -55,7 +55,7 @@ void QuickConnectDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject QuickConnectDto::toJson() {
+QJsonObject QuickConnectDto::toJson() const {
 	QJsonObject result;
 	result["Token"] = Jellyfin::Support::toJsonValue<QString>(m_token);
 
@@ -76,9 +76,14 @@ namespace Support {
 using QuickConnectDto = Jellyfin::DTO::QuickConnectDto;
 
 template <>
-QuickConnectDto fromJsonValue<QuickConnectDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+QuickConnectDto fromJsonValue(const QJsonValue &source, convertType<QuickConnectDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return QuickConnectDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const QuickConnectDto &source, convertType<QuickConnectDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

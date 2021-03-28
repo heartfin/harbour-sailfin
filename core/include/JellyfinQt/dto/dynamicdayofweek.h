@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class DynamicDayOfWeekClass {
@@ -60,7 +64,19 @@ private:
 	explicit DynamicDayOfWeekClass();
 };
 
-typedef DynamicDayOfWeekClass::Value DynamicDayOfWeek;
+using DynamicDayOfWeek = DynamicDayOfWeekClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using DynamicDayOfWeek = Jellyfin::DTO::DynamicDayOfWeek;
+
+template <>
+DynamicDayOfWeek fromJsonValue(const QJsonValue &source, convertType<DynamicDayOfWeek>);
+
+template <>
+QJsonValue toJsonValue(const DynamicDayOfWeek &source, convertType<DynamicDayOfWeek>);
 
 } // NS DTO
 } // NS Jellyfin

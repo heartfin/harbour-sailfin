@@ -76,7 +76,7 @@ void PackageInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PackageInfo::toJson() {
+QJsonObject PackageInfo::toJson() const {
 	QJsonObject result;
 	result["name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
@@ -202,9 +202,14 @@ namespace Support {
 using PackageInfo = Jellyfin::DTO::PackageInfo;
 
 template <>
-PackageInfo fromJsonValue<PackageInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PackageInfo fromJsonValue(const QJsonValue &source, convertType<PackageInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PackageInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PackageInfo &source, convertType<PackageInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ExternalIdMediaTypeClass {
@@ -62,7 +66,19 @@ private:
 	explicit ExternalIdMediaTypeClass();
 };
 
-typedef ExternalIdMediaTypeClass::Value ExternalIdMediaType;
+using ExternalIdMediaType = ExternalIdMediaTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ExternalIdMediaType = Jellyfin::DTO::ExternalIdMediaType;
+
+template <>
+ExternalIdMediaType fromJsonValue(const QJsonValue &source, convertType<ExternalIdMediaType>);
+
+template <>
+QJsonValue toJsonValue(const ExternalIdMediaType &source, convertType<ExternalIdMediaType>);
 
 } // NS DTO
 } // NS Jellyfin

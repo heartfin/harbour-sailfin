@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/authenticationinfoqueryresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Get all keys.
  */
-class GetKeysLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationInfoQueryResult, GetKeysParams> {
+
+class GetKeysLoader : public Jellyfin::Support::HttpLoader<AuthenticationInfoQueryResult, GetKeysParams> {
 public:
 	explicit GetKeysLoader(ApiClient *apiClient = nullptr);
 

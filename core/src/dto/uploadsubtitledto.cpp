@@ -64,7 +64,7 @@ void UploadSubtitleDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject UploadSubtitleDto::toJson() {
+QJsonObject UploadSubtitleDto::toJson() const {
 	QJsonObject result;
 	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
 	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
@@ -106,9 +106,14 @@ namespace Support {
 using UploadSubtitleDto = Jellyfin::DTO::UploadSubtitleDto;
 
 template <>
-UploadSubtitleDto fromJsonValue<UploadSubtitleDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+UploadSubtitleDto fromJsonValue(const QJsonValue &source, convertType<UploadSubtitleDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return UploadSubtitleDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const UploadSubtitleDto &source, convertType<UploadSubtitleDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

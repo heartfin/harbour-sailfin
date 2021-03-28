@@ -34,7 +34,6 @@ namespace DTO {
 
 MetadataFieldClass::MetadataFieldClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using MetadataField = Jellyfin::DTO::MetadataField;
 
 template <>
-MetadataField fromJsonValue<MetadataField>(const QJsonValue &source) {
+MetadataField fromJsonValue(const QJsonValue &source, convertType<MetadataField>) {
 	if (!source.isString()) return MetadataField::EnumNotSet;
 
 	QString str = source.toString();
@@ -75,6 +74,34 @@ MetadataField fromJsonValue<MetadataField>(const QJsonValue &source) {
 	}
 	
 	return MetadataField::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const MetadataField &source, convertType<MetadataField>) {
+	switch(source) {
+	case MetadataField::Cast:
+		return QStringLiteral("Cast");
+	case MetadataField::Genres:
+		return QStringLiteral("Genres");
+	case MetadataField::ProductionLocations:
+		return QStringLiteral("ProductionLocations");
+	case MetadataField::Studios:
+		return QStringLiteral("Studios");
+	case MetadataField::Tags:
+		return QStringLiteral("Tags");
+	case MetadataField::Name:
+		return QStringLiteral("Name");
+	case MetadataField::Overview:
+		return QStringLiteral("Overview");
+	case MetadataField::Runtime:
+		return QStringLiteral("Runtime");
+	case MetadataField::OfficialRating:
+		return QStringLiteral("OfficialRating");
+
+	case MetadataField::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

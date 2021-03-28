@@ -58,7 +58,7 @@ void TimerEventInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TimerEventInfo::toJson() {
+QJsonObject TimerEventInfo::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
@@ -100,9 +100,14 @@ namespace Support {
 using TimerEventInfo = Jellyfin::DTO::TimerEventInfo;
 
 template <>
-TimerEventInfo fromJsonValue<TimerEventInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TimerEventInfo fromJsonValue(const QJsonValue &source, convertType<TimerEventInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TimerEventInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TimerEventInfo &source, convertType<TimerEventInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

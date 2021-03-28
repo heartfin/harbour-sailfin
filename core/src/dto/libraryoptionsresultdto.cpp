@@ -64,7 +64,7 @@ void LibraryOptionsResultDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject LibraryOptionsResultDto::toJson() {
+QJsonObject LibraryOptionsResultDto::toJson() const {
 	QJsonObject result;
 	result["MetadataSavers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataSavers);
 	result["MetadataReaders"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataReaders);
@@ -134,9 +134,14 @@ namespace Support {
 using LibraryOptionsResultDto = Jellyfin::DTO::LibraryOptionsResultDto;
 
 template <>
-LibraryOptionsResultDto fromJsonValue<LibraryOptionsResultDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+LibraryOptionsResultDto fromJsonValue(const QJsonValue &source, convertType<LibraryOptionsResultDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return LibraryOptionsResultDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const LibraryOptionsResultDto &source, convertType<LibraryOptionsResultDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

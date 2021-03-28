@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/recommendationdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets movie recommendations.
+ */
+
+class GetMovieRecommendationsLoader : public Jellyfin::Support::HttpLoader<QList<RecommendationDto>, GetMovieRecommendationsParams> {
+public:
+	explicit GetMovieRecommendationsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetMovieRecommendationsParams& parameters) const override;
+	QUrlQuery query(const GetMovieRecommendationsParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

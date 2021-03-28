@@ -67,7 +67,7 @@ void ChapterInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ChapterInfo::toJson() {
+QJsonObject ChapterInfo::toJson() const {
 	QJsonObject result;
 	result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_startPositionTicks);
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
@@ -137,9 +137,14 @@ namespace Support {
 using ChapterInfo = Jellyfin::DTO::ChapterInfo;
 
 template <>
-ChapterInfo fromJsonValue<ChapterInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ChapterInfo fromJsonValue(const QJsonValue &source, convertType<ChapterInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ChapterInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ChapterInfo &source, convertType<ChapterInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

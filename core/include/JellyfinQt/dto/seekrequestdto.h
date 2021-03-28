@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -52,7 +56,7 @@ public:
 	
 	static SeekRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -68,6 +72,18 @@ public:
 protected:
 	qint64 m_positionTicks;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SeekRequestDto = Jellyfin::DTO::SeekRequestDto;
+
+template <>
+SeekRequestDto fromJsonValue(const QJsonValue &source, convertType<SeekRequestDto>);
+
+template<>
+QJsonValue toJsonValue(const SeekRequestDto &source, convertType<SeekRequestDto>);
 
 } // NS DTO
 } // NS Jellyfin

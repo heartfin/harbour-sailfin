@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/imagebynameinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Get all media info images.
+ */
+
+class GetMediaInfoImagesLoader : public Jellyfin::Support::HttpLoader<QList<ImageByNameInfo>, GetMediaInfoImagesParams> {
+public:
+	explicit GetMediaInfoImagesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetMediaInfoImagesParams& parameters) const override;
+	QUrlQuery query(const GetMediaInfoImagesParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

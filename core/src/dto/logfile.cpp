@@ -64,7 +64,7 @@ void LogFile::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject LogFile::toJson() {
+QJsonObject LogFile::toJson() const {
 	QJsonObject result;
 	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
 	result["DateModified"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateModified);
@@ -113,9 +113,14 @@ namespace Support {
 using LogFile = Jellyfin::DTO::LogFile;
 
 template <>
-LogFile fromJsonValue<LogFile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+LogFile fromJsonValue(const QJsonValue &source, convertType<LogFile>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return LogFile::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const LogFile &source, convertType<LogFile>) {
+	return source.toJson();
 }
 
 } // NS DTO

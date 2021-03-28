@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetRemoteImagesLoader::GetRemoteImagesLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::RemoteImageResult, GetRemoteImagesParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<RemoteImageResult, GetRemoteImagesParams>(apiClient) {}
 
 QString GetRemoteImagesLoader::path(const GetRemoteImagesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/RemoteImages");
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/RemoteImages");
 }
 
 QUrlQuery GetRemoteImagesLoader::query(const GetRemoteImagesParams &params) const {
@@ -50,19 +51,19 @@ QUrlQuery GetRemoteImagesLoader::query(const GetRemoteImagesParams &params) cons
 
 	// Optional parameters
 	if (!params.typeNull()) {
-		result.addQueryItem("type", Support::toString(params.type()));
+		result.addQueryItem("type", Support::toString<ImageType>(params.type()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.providerNameNull()) {
-		result.addQueryItem("providerName", Support::toString(params.providerName()));
+		result.addQueryItem("providerName", Support::toString<QString>(params.providerName()));
 	}
 	if (!params.includeAllLanguagesNull()) {
-		result.addQueryItem("includeAllLanguages", Support::toString(params.includeAllLanguages()));
+		result.addQueryItem("includeAllLanguages", Support::toString<std::optional<bool>>(params.includeAllLanguages()));
 	}
 	
 	return result;

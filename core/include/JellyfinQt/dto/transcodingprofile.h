@@ -41,6 +41,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -56,7 +60,7 @@ public:
 	
 	static TranscodingProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -162,6 +166,18 @@ protected:
 	qint32 m_segmentLength;
 	bool m_breakOnNonKeyFrames;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TranscodingProfile = Jellyfin::DTO::TranscodingProfile;
+
+template <>
+TranscodingProfile fromJsonValue(const QJsonValue &source, convertType<TranscodingProfile>);
+
+template<>
+QJsonValue toJsonValue(const TranscodingProfile &source, convertType<TranscodingProfile>);
 
 } // NS DTO
 } // NS Jellyfin

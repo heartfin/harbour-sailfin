@@ -55,7 +55,7 @@ void PreviousItemRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PreviousItemRequestDto::toJson() {
+QJsonObject PreviousItemRequestDto::toJson() const {
 	QJsonObject result;
 	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
 
@@ -76,9 +76,14 @@ namespace Support {
 using PreviousItemRequestDto = Jellyfin::DTO::PreviousItemRequestDto;
 
 template <>
-PreviousItemRequestDto fromJsonValue<PreviousItemRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PreviousItemRequestDto fromJsonValue(const QJsonValue &source, convertType<PreviousItemRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PreviousItemRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PreviousItemRequestDto &source, convertType<PreviousItemRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

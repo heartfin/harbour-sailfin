@@ -58,7 +58,7 @@ void MediaUpdateInfoDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MediaUpdateInfoDto::toJson() {
+QJsonObject MediaUpdateInfoDto::toJson() const {
 	QJsonObject result;
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
 	result["UpdateType"] = Jellyfin::Support::toJsonValue<QString>(m_updateType);
@@ -100,9 +100,14 @@ namespace Support {
 using MediaUpdateInfoDto = Jellyfin::DTO::MediaUpdateInfoDto;
 
 template <>
-MediaUpdateInfoDto fromJsonValue<MediaUpdateInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MediaUpdateInfoDto fromJsonValue(const QJsonValue &source, convertType<MediaUpdateInfoDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MediaUpdateInfoDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MediaUpdateInfoDto &source, convertType<MediaUpdateInfoDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

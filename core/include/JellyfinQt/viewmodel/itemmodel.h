@@ -21,6 +21,7 @@
 
 #include <QAbstractListModel>
 #include <QObject>
+#include <QScopedPointer>
 
 #include "propertyhelper.h"
 #include "../dto/baseitemdto.h"
@@ -70,6 +71,8 @@ public:
     FWDPROP(QStringList, artists, Artists)
     FWDPROP(bool, recursive, Recursive)
     //FWDPROP(bool, collapseBoxSetItems)
+protected:
+    virtual bool canReload() const override;
 private slots:
     void apiClientChanged(ApiClient *newApiClient);
     void userIdChanged(const QString &newUserId);

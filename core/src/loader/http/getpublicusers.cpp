@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetPublicUsersLoader::GetPublicUsersLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<UserDto>, GetPublicUsersParams>(apiClient) {}
+
+QString GetPublicUsersLoader::path(const GetPublicUsersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/Public");
+}
+
+QUrlQuery GetPublicUsersLoader::query(const GetPublicUsersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/parentalrating.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets known parental ratings.
+ */
+
+class GetParentalRatingsLoader : public Jellyfin::Support::HttpLoader<QList<ParentalRating>, GetParentalRatingsParams> {
+public:
+	explicit GetParentalRatingsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetParentalRatingsParams& parameters) const override;
+	QUrlQuery query(const GetParentalRatingsParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

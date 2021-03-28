@@ -34,7 +34,6 @@ namespace DTO {
 
 RecordingStatusClass::RecordingStatusClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using RecordingStatus = Jellyfin::DTO::RecordingStatus;
 
 template <>
-RecordingStatus fromJsonValue<RecordingStatus>(const QJsonValue &source) {
+RecordingStatus fromJsonValue(const QJsonValue &source, convertType<RecordingStatus>) {
 	if (!source.isString()) return RecordingStatus::EnumNotSet;
 
 	QString str = source.toString();
@@ -69,6 +68,30 @@ RecordingStatus fromJsonValue<RecordingStatus>(const QJsonValue &source) {
 	}
 	
 	return RecordingStatus::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const RecordingStatus &source, convertType<RecordingStatus>) {
+	switch(source) {
+	case RecordingStatus::New:
+		return QStringLiteral("New");
+	case RecordingStatus::InProgress:
+		return QStringLiteral("InProgress");
+	case RecordingStatus::Completed:
+		return QStringLiteral("Completed");
+	case RecordingStatus::Cancelled:
+		return QStringLiteral("Cancelled");
+	case RecordingStatus::ConflictedOk:
+		return QStringLiteral("ConflictedOk");
+	case RecordingStatus::ConflictedNotOk:
+		return QStringLiteral("ConflictedNotOk");
+	case RecordingStatus::Error:
+		return QStringLiteral("Error");
+
+	case RecordingStatus::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

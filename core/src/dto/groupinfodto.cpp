@@ -67,7 +67,7 @@ void GroupInfoDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject GroupInfoDto::toJson() {
+QJsonObject GroupInfoDto::toJson() const {
 	QJsonObject result;
 	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);
 	result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);
@@ -130,9 +130,14 @@ namespace Support {
 using GroupInfoDto = Jellyfin::DTO::GroupInfoDto;
 
 template <>
-GroupInfoDto fromJsonValue<GroupInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+GroupInfoDto fromJsonValue(const QJsonValue &source, convertType<GroupInfoDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return GroupInfoDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const GroupInfoDto &source, convertType<GroupInfoDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

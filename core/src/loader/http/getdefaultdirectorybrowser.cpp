@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetDefaultDirectoryBrowserLoader::GetDefaultDirectoryBrowserLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::DefaultDirectoryBrowserInfoDto, GetDefaultDirectoryBrowserParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<DefaultDirectoryBrowserInfoDto, GetDefaultDirectoryBrowserParams>(apiClient) {}
 
 QString GetDefaultDirectoryBrowserLoader::path(const GetDefaultDirectoryBrowserParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

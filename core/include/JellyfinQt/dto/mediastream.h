@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static MediaStream fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -571,6 +575,18 @@ protected:
 	std::optional<double> m_level = std::nullopt;
 	std::optional<bool> m_isAnamorphic = std::nullopt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaStream = Jellyfin::DTO::MediaStream;
+
+template <>
+MediaStream fromJsonValue(const QJsonValue &source, convertType<MediaStream>);
+
+template<>
+QJsonValue toJsonValue(const MediaStream &source, convertType<MediaStream>);
 
 } // NS DTO
 } // NS Jellyfin

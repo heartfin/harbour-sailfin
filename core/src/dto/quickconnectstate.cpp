@@ -34,7 +34,6 @@ namespace DTO {
 
 QuickConnectStateClass::QuickConnectStateClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using QuickConnectState = Jellyfin::DTO::QuickConnectState;
 
 template <>
-QuickConnectState fromJsonValue<QuickConnectState>(const QJsonValue &source) {
+QuickConnectState fromJsonValue(const QJsonValue &source, convertType<QuickConnectState>) {
 	if (!source.isString()) return QuickConnectState::EnumNotSet;
 
 	QString str = source.toString();
@@ -57,6 +56,22 @@ QuickConnectState fromJsonValue<QuickConnectState>(const QJsonValue &source) {
 	}
 	
 	return QuickConnectState::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const QuickConnectState &source, convertType<QuickConnectState>) {
+	switch(source) {
+	case QuickConnectState::Unavailable:
+		return QStringLiteral("Unavailable");
+	case QuickConnectState::Available:
+		return QStringLiteral("Available");
+	case QuickConnectState::Active:
+		return QStringLiteral("Active");
+
+	case QuickConnectState::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

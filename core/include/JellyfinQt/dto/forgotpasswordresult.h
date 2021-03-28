@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static ForgotPasswordResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -91,6 +95,18 @@ protected:
 	QString m_pinFile;
 	QDateTime m_pinExpirationDate;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ForgotPasswordResult = Jellyfin::DTO::ForgotPasswordResult;
+
+template <>
+ForgotPasswordResult fromJsonValue(const QJsonValue &source, convertType<ForgotPasswordResult>);
+
+template<>
+QJsonValue toJsonValue(const ForgotPasswordResult &source, convertType<ForgotPasswordResult>);
 
 } // NS DTO
 } // NS Jellyfin

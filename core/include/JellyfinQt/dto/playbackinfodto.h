@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static PlaybackInfoDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -235,6 +239,18 @@ protected:
 	std::optional<bool> m_allowAudioStreamCopy = std::nullopt;
 	std::optional<bool> m_autoOpenLiveStream = std::nullopt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PlaybackInfoDto = Jellyfin::DTO::PlaybackInfoDto;
+
+template <>
+PlaybackInfoDto fromJsonValue(const QJsonValue &source, convertType<PlaybackInfoDto>);
+
+template<>
+QJsonValue toJsonValue(const PlaybackInfoDto &source, convertType<PlaybackInfoDto>);
 
 } // NS DTO
 } // NS Jellyfin

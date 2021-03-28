@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetMetadataEditorInfoLoader::GetMetadataEditorInfoLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::MetadataEditorInfo, GetMetadataEditorInfoParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<MetadataEditorInfo, GetMetadataEditorInfoParams>(apiClient) {}
 
 QString GetMetadataEditorInfoLoader::path(const GetMetadataEditorInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Items/") + Support::toString(params.itemId()) + QStringLiteral("/MetadataEditor");
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/MetadataEditor");
 }
 
 QUrlQuery GetMetadataEditorInfoLoader::query(const GetMetadataEditorInfoParams &params) const {

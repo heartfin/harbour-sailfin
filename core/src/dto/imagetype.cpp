@@ -34,7 +34,6 @@ namespace DTO {
 
 ImageTypeClass::ImageTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ImageType = Jellyfin::DTO::ImageType;
 
 template <>
-ImageType fromJsonValue<ImageType>(const QJsonValue &source) {
+ImageType fromJsonValue(const QJsonValue &source, convertType<ImageType>) {
 	if (!source.isString()) return ImageType::EnumNotSet;
 
 	QString str = source.toString();
@@ -87,6 +86,42 @@ ImageType fromJsonValue<ImageType>(const QJsonValue &source) {
 	}
 	
 	return ImageType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ImageType &source, convertType<ImageType>) {
+	switch(source) {
+	case ImageType::Primary:
+		return QStringLiteral("Primary");
+	case ImageType::Art:
+		return QStringLiteral("Art");
+	case ImageType::Backdrop:
+		return QStringLiteral("Backdrop");
+	case ImageType::Banner:
+		return QStringLiteral("Banner");
+	case ImageType::Logo:
+		return QStringLiteral("Logo");
+	case ImageType::Thumb:
+		return QStringLiteral("Thumb");
+	case ImageType::Disc:
+		return QStringLiteral("Disc");
+	case ImageType::Box:
+		return QStringLiteral("Box");
+	case ImageType::Screenshot:
+		return QStringLiteral("Screenshot");
+	case ImageType::Menu:
+		return QStringLiteral("Menu");
+	case ImageType::Chapter:
+		return QStringLiteral("Chapter");
+	case ImageType::BoxRear:
+		return QStringLiteral("BoxRear");
+	case ImageType::Profile:
+		return QStringLiteral("Profile");
+
+	case ImageType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

@@ -1,6 +1,5 @@
 {{className}}Class::{{className}}Class() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -9,7 +8,7 @@ using {{className}} = Jellyfin::DTO::{{className}};
 
 template <>
 
-{{className}} fromJsonValue<{{className}}>(const QJsonValue &source) {
+{{className}} fromJsonValue(const QJsonValue &source, convertType<{{className}}>) {
 	if (!source.isString()) return {{className}}::EnumNotSet;
 
 	QString str = source.toString();
@@ -22,4 +21,20 @@ template <>
 	{{/each}}
 	
 	return {{className}}::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const {{className}} &source, convertType<{{className}}>) {
+	switch(source) {
+
+	{{#each values as |value|}}
+	case {{className}}::{{value}}:
+		return QStringLiteral("{{value}}");
+
+	{{/each}}
+
+	case {{className}}::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }

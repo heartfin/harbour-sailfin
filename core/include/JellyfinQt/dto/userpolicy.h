@@ -43,6 +43,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -58,7 +62,7 @@ public:
 	
 	static UserPolicy fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -342,6 +346,18 @@ protected:
 	QString m_passwordResetProviderId;
 	SyncPlayUserAccessType m_syncPlayAccess;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UserPolicy = Jellyfin::DTO::UserPolicy;
+
+template <>
+UserPolicy fromJsonValue(const QJsonValue &source, convertType<UserPolicy>);
+
+template<>
+QJsonValue toJsonValue(const UserPolicy &source, convertType<UserPolicy>);
 
 } // NS DTO
 } // NS Jellyfin

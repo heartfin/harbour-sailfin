@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetGeneralImagesLoader::GetGeneralImagesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<ImageByNameInfo>, GetGeneralImagesParams>(apiClient) {}
+
+QString GetGeneralImagesLoader::path(const GetGeneralImagesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Images/General");
+}
+
+QUrlQuery GetGeneralImagesLoader::query(const GetGeneralImagesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

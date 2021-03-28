@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static PublicSystemInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -143,6 +147,18 @@ protected:
 	QString m_jellyfinId;
 	std::optional<bool> m_startupWizardCompleted = std::nullopt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PublicSystemInfo = Jellyfin::DTO::PublicSystemInfo;
+
+template <>
+PublicSystemInfo fromJsonValue(const QJsonValue &source, convertType<PublicSystemInfo>);
+
+template<>
+QJsonValue toJsonValue(const PublicSystemInfo &source, convertType<PublicSystemInfo>);
 
 } // NS DTO
 } // NS Jellyfin

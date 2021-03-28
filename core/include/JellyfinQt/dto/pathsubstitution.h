@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static PathSubstitution fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -83,6 +87,18 @@ protected:
 	QString m_from;
 	QString m_to;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PathSubstitution = Jellyfin::DTO::PathSubstitution;
+
+template <>
+PathSubstitution fromJsonValue(const QJsonValue &source, convertType<PathSubstitution>);
+
+template<>
+QJsonValue toJsonValue(const PathSubstitution &source, convertType<PathSubstitution>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -45,6 +45,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -60,7 +64,7 @@ public:
 	
 	static MetadataEditorInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -114,6 +118,18 @@ protected:
 	QString m_contentType;
 	QList<NameValuePair> m_contentTypeOptions;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MetadataEditorInfo = Jellyfin::DTO::MetadataEditorInfo;
+
+template <>
+MetadataEditorInfo fromJsonValue(const QJsonValue &source, convertType<MetadataEditorInfo>);
+
+template<>
+QJsonValue toJsonValue(const MetadataEditorInfo &source, convertType<MetadataEditorInfo>);
 
 } // NS DTO
 } // NS Jellyfin

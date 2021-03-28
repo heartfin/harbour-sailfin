@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static SetChannelMappingDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -89,6 +93,18 @@ protected:
 	QString m_tunerChannelId;
 	QString m_providerChannelId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SetChannelMappingDto = Jellyfin::DTO::SetChannelMappingDto;
+
+template <>
+SetChannelMappingDto fromJsonValue(const QJsonValue &source, convertType<SetChannelMappingDto>);
+
+template<>
+QJsonValue toJsonValue(const SetChannelMappingDto &source, convertType<SetChannelMappingDto>);
 
 } // NS DTO
 } // NS Jellyfin

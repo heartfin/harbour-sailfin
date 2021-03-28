@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/baseitemdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets local trailers for an item.
+ */
+
+class GetLocalTrailersLoader : public Jellyfin::Support::HttpLoader<QList<BaseItemDto>, GetLocalTrailersParams> {
+public:
+	explicit GetLocalTrailersLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetLocalTrailersParams& parameters) const override;
+	QUrlQuery query(const GetLocalTrailersParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

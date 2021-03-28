@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/userdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets a list of publicly visible users for display on a login screen.
+ */
+
+class GetPublicUsersLoader : public Jellyfin::Support::HttpLoader<QList<UserDto>, GetPublicUsersParams> {
+public:
+	explicit GetPublicUsersLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetPublicUsersParams& parameters) const override;
+	QUrlQuery query(const GetPublicUsersParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static CultureDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -117,6 +121,18 @@ protected:
 	QString m_threeLetterISOLanguageName;
 	QStringList m_threeLetterISOLanguageNames;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using CultureDto = Jellyfin::DTO::CultureDto;
+
+template <>
+CultureDto fromJsonValue(const QJsonValue &source, convertType<CultureDto>);
+
+template<>
+QJsonValue toJsonValue(const CultureDto &source, convertType<CultureDto>);
 
 } // NS DTO
 } // NS Jellyfin

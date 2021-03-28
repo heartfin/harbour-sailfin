@@ -41,6 +41,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -56,7 +60,7 @@ public:
 	
 	static TranscodingInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -154,6 +158,18 @@ protected:
 	std::optional<qint32> m_audioChannels = std::nullopt;
 	QList<TranscodeReason> m_transcodeReasons;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TranscodingInfo = Jellyfin::DTO::TranscodingInfo;
+
+template <>
+TranscodingInfo fromJsonValue(const QJsonValue &source, convertType<TranscodingInfo>);
+
+template<>
+QJsonValue toJsonValue(const TranscodingInfo &source, convertType<TranscodingInfo>);
 
 } // NS DTO
 } // NS Jellyfin

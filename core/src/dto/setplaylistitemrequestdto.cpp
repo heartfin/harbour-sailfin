@@ -55,7 +55,7 @@ void SetPlaylistItemRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SetPlaylistItemRequestDto::toJson() {
+QJsonObject SetPlaylistItemRequestDto::toJson() const {
 	QJsonObject result;
 	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
 
@@ -76,9 +76,14 @@ namespace Support {
 using SetPlaylistItemRequestDto = Jellyfin::DTO::SetPlaylistItemRequestDto;
 
 template <>
-SetPlaylistItemRequestDto fromJsonValue<SetPlaylistItemRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SetPlaylistItemRequestDto fromJsonValue(const QJsonValue &source, convertType<SetPlaylistItemRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SetPlaylistItemRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SetPlaylistItemRequestDto &source, convertType<SetPlaylistItemRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

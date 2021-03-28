@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static UpdateUserPassword fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -105,6 +109,18 @@ protected:
 	QString m_newPw;
 	bool m_resetPassword;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UpdateUserPassword = Jellyfin::DTO::UpdateUserPassword;
+
+template <>
+UpdateUserPassword fromJsonValue(const QJsonValue &source, convertType<UpdateUserPassword>);
+
+template<>
+QJsonValue toJsonValue(const UpdateUserPassword &source, convertType<UpdateUserPassword>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -34,6 +34,32 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetTasksLoader::GetTasksLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<TaskInfo>, GetTasksParams>(apiClient) {}
+
+QString GetTasksLoader::path(const GetTasksParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/ScheduledTasks");
+}
+
+QUrlQuery GetTasksLoader::query(const GetTasksParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.isHiddenNull()) {
+		result.addQueryItem("isHidden", Support::toString<std::optional<bool>>(params.isHidden()));
+	}
+	if (!params.isEnabledNull()) {
+		result.addQueryItem("isEnabled", Support::toString<std::optional<bool>>(params.isEnabled()));
+	}
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

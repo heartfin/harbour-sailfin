@@ -91,7 +91,7 @@ void OpenLiveStreamDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject OpenLiveStreamDto::toJson() {
+QJsonObject OpenLiveStreamDto::toJson() const {
 	QJsonObject result;
 	result["OpenToken"] = Jellyfin::Support::toJsonValue<QString>(m_openToken);
 	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
@@ -280,9 +280,14 @@ namespace Support {
 using OpenLiveStreamDto = Jellyfin::DTO::OpenLiveStreamDto;
 
 template <>
-OpenLiveStreamDto fromJsonValue<OpenLiveStreamDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+OpenLiveStreamDto fromJsonValue(const QJsonValue &source, convertType<OpenLiveStreamDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return OpenLiveStreamDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const OpenLiveStreamDto &source, convertType<OpenLiveStreamDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ProfileConditionTypeClass {
@@ -55,7 +59,19 @@ private:
 	explicit ProfileConditionTypeClass();
 };
 
-typedef ProfileConditionTypeClass::Value ProfileConditionType;
+using ProfileConditionType = ProfileConditionTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ProfileConditionType = Jellyfin::DTO::ProfileConditionType;
+
+template <>
+ProfileConditionType fromJsonValue(const QJsonValue &source, convertType<ProfileConditionType>);
+
+template <>
+QJsonValue toJsonValue(const ProfileConditionType &source, convertType<ProfileConditionType>);
 
 } // NS DTO
 } // NS Jellyfin

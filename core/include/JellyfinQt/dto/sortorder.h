@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class SortOrderClass {
@@ -52,7 +56,19 @@ private:
 	explicit SortOrderClass();
 };
 
-typedef SortOrderClass::Value SortOrder;
+using SortOrder = SortOrderClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using SortOrder = Jellyfin::DTO::SortOrder;
+
+template <>
+SortOrder fromJsonValue(const QJsonValue &source, convertType<SortOrder>);
+
+template <>
+QJsonValue toJsonValue(const SortOrder &source, convertType<SortOrder>);
 
 } // NS DTO
 } // NS Jellyfin

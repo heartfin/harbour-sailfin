@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/metadataeditorinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets metadata editor info for an item.
  */
-class GetMetadataEditorInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::MetadataEditorInfo, GetMetadataEditorInfoParams> {
+
+class GetMetadataEditorInfoLoader : public Jellyfin::Support::HttpLoader<MetadataEditorInfo, GetMetadataEditorInfoParams> {
 public:
 	explicit GetMetadataEditorInfoLoader(ApiClient *apiClient = nullptr);
 

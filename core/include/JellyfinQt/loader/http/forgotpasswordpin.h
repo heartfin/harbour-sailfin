@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/pinredeemresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Redeems a forgot password pin.
  */
-class ForgotPasswordPinLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::PinRedeemResult, ForgotPasswordPinParams> {
+
+class ForgotPasswordPinLoader : public Jellyfin::Support::HttpLoader<PinRedeemResult, ForgotPasswordPinParams> {
 public:
 	explicit ForgotPasswordPinLoader(ApiClient *apiClient = nullptr);
 

@@ -58,7 +58,7 @@ void SearchHintResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SearchHintResult::toJson() {
+QJsonObject SearchHintResult::toJson() const {
 	QJsonObject result;
 	result["SearchHints"] = Jellyfin::Support::toJsonValue<QList<SearchHint>>(m_searchHints);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
@@ -93,9 +93,14 @@ namespace Support {
 using SearchHintResult = Jellyfin::DTO::SearchHintResult;
 
 template <>
-SearchHintResult fromJsonValue<SearchHintResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SearchHintResult fromJsonValue(const QJsonValue &source, convertType<SearchHintResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SearchHintResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SearchHintResult &source, convertType<SearchHintResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

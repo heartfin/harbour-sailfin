@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static BoxSetInfoRemoteSearchQuery fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -95,6 +99,18 @@ protected:
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using BoxSetInfoRemoteSearchQuery = Jellyfin::DTO::BoxSetInfoRemoteSearchQuery;
+
+template <>
+BoxSetInfoRemoteSearchQuery fromJsonValue(const QJsonValue &source, convertType<BoxSetInfoRemoteSearchQuery>);
+
+template<>
+QJsonValue toJsonValue(const BoxSetInfoRemoteSearchQuery &source, convertType<BoxSetInfoRemoteSearchQuery>);
 
 } // NS DTO
 } // NS Jellyfin

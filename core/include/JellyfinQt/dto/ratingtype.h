@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class RatingTypeClass {
@@ -52,7 +56,19 @@ private:
 	explicit RatingTypeClass();
 };
 
-typedef RatingTypeClass::Value RatingType;
+using RatingType = RatingTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using RatingType = Jellyfin::DTO::RatingType;
+
+template <>
+RatingType fromJsonValue(const QJsonValue &source, convertType<RatingType>);
+
+template <>
+QJsonValue toJsonValue(const RatingType &source, convertType<RatingType>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -74,7 +74,7 @@ RemoteSearchResult RemoteSearchResult::fromJson(QJsonObject source) {
 
 void RemoteSearchResult::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
-	m_providerIds = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ProviderIds"]);
+	m_providerIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ProviderIds"]);
 	m_productionYear = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ProductionYear"]);
 	m_indexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["IndexNumber"]);
 	m_indexNumberEnd = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["IndexNumberEnd"]);
@@ -88,10 +88,10 @@ void RemoteSearchResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject RemoteSearchResult::toJson() {
+QJsonObject RemoteSearchResult::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["ProviderIds"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_providerIds);
+	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
 	result["ProductionYear"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_productionYear);
 	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
 	result["IndexNumberEnd"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumberEnd);
@@ -119,17 +119,17 @@ void RemoteSearchResult::setNameNull() {
 	m_name.clear();
 
 }
-std::optional<QJsonObject> RemoteSearchResult::providerIds() const { return m_providerIds; }
+QJsonObject RemoteSearchResult::providerIds() const { return m_providerIds; }
 
-void RemoteSearchResult::setProviderIds(std::optional<QJsonObject> newProviderIds) {
+void RemoteSearchResult::setProviderIds(QJsonObject newProviderIds) {
 	m_providerIds = newProviderIds;
 }
 bool RemoteSearchResult::providerIdsNull() const {
-	return !m_providerIds.has_value();
+	return m_providerIds.isEmpty();
 }
 
 void RemoteSearchResult::setProviderIdsNull() {
-	m_providerIds = std::nullopt;
+	m_providerIds= QJsonObject();
 
 }
 std::optional<qint32> RemoteSearchResult::productionYear() const { return m_productionYear; }
@@ -263,9 +263,14 @@ namespace Support {
 using RemoteSearchResult = Jellyfin::DTO::RemoteSearchResult;
 
 template <>
-RemoteSearchResult fromJsonValue<RemoteSearchResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+RemoteSearchResult fromJsonValue(const QJsonValue &source, convertType<RemoteSearchResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return RemoteSearchResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const RemoteSearchResult &source, convertType<RemoteSearchResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

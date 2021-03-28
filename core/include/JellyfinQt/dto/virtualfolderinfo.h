@@ -42,6 +42,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -57,7 +61,7 @@ public:
 	
 	static VirtualFolderInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -145,6 +149,18 @@ protected:
 	std::optional<double> m_refreshProgress = std::nullopt;
 	QString m_refreshStatus;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using VirtualFolderInfo = Jellyfin::DTO::VirtualFolderInfo;
+
+template <>
+VirtualFolderInfo fromJsonValue(const QJsonValue &source, convertType<VirtualFolderInfo>);
+
+template<>
+QJsonValue toJsonValue(const VirtualFolderInfo &source, convertType<VirtualFolderInfo>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 CreatePlaylistLoader::CreatePlaylistLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::PlaylistCreationResult, CreatePlaylistParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<PlaylistCreationResult, CreatePlaylistParams>(apiClient) {}
 
 QString CreatePlaylistLoader::path(const CreatePlaylistParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,16 +51,16 @@ QUrlQuery CreatePlaylistLoader::query(const CreatePlaylistParams &params) const 
 
 	// Optional parameters
 	if (!params.nameNull()) {
-		result.addQueryItem("name", Support::toString(params.name()));
+		result.addQueryItem("name", Support::toString<QString>(params.name()));
 	}
 	if (!params.idsNull()) {
-		result.addQueryItem("ids", Support::toString(params.ids()));
+		result.addQueryItem("ids", Support::toString<QStringList>(params.ids()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.mediaTypeNull()) {
-		result.addQueryItem("mediaType", Support::toString(params.mediaType()));
+		result.addQueryItem("mediaType", Support::toString<QString>(params.mediaType()));
 	}
 	
 	return result;

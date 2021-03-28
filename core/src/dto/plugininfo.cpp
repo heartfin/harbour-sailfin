@@ -76,7 +76,7 @@ void PluginInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PluginInfo::toJson() {
+QJsonObject PluginInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);
@@ -167,9 +167,14 @@ namespace Support {
 using PluginInfo = Jellyfin::DTO::PluginInfo;
 
 template <>
-PluginInfo fromJsonValue<PluginInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PluginInfo fromJsonValue(const QJsonValue &source, convertType<PluginInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PluginInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PluginInfo &source, convertType<PluginInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

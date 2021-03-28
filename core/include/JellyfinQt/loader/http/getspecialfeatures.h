@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/baseitemdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets special features for an item.
+ */
+
+class GetSpecialFeaturesLoader : public Jellyfin::Support::HttpLoader<QList<BaseItemDto>, GetSpecialFeaturesParams> {
+public:
+	explicit GetSpecialFeaturesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetSpecialFeaturesParams& parameters) const override;
+	QUrlQuery query(const GetSpecialFeaturesParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

@@ -55,7 +55,7 @@ void LiveStreamResponse::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject LiveStreamResponse::toJson() {
+QJsonObject LiveStreamResponse::toJson() const {
 	QJsonObject result;
 	result["MediaSource"] = Jellyfin::Support::toJsonValue<QSharedPointer<MediaSourceInfo>>(m_mediaSource);
 
@@ -76,9 +76,14 @@ namespace Support {
 using LiveStreamResponse = Jellyfin::DTO::LiveStreamResponse;
 
 template <>
-LiveStreamResponse fromJsonValue<LiveStreamResponse>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+LiveStreamResponse fromJsonValue(const QJsonValue &source, convertType<LiveStreamResponse>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return LiveStreamResponse::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const LiveStreamResponse &source, convertType<LiveStreamResponse>) {
+	return source.toJson();
 }
 
 } // NS DTO

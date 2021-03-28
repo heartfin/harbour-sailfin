@@ -34,7 +34,6 @@ namespace DTO {
 
 SortOrderClass::SortOrderClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using SortOrder = Jellyfin::DTO::SortOrder;
 
 template <>
-SortOrder fromJsonValue<SortOrder>(const QJsonValue &source) {
+SortOrder fromJsonValue(const QJsonValue &source, convertType<SortOrder>) {
 	if (!source.isString()) return SortOrder::EnumNotSet;
 
 	QString str = source.toString();
@@ -54,6 +53,20 @@ SortOrder fromJsonValue<SortOrder>(const QJsonValue &source) {
 	}
 	
 	return SortOrder::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const SortOrder &source, convertType<SortOrder>) {
+	switch(source) {
+	case SortOrder::Ascending:
+		return QStringLiteral("Ascending");
+	case SortOrder::Descending:
+		return QStringLiteral("Descending");
+
+	case SortOrder::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

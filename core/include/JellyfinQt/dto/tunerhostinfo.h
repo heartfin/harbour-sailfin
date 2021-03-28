@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static TunerHostInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -139,6 +143,18 @@ protected:
 	qint32 m_tunerCount;
 	QString m_userAgent;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TunerHostInfo = Jellyfin::DTO::TunerHostInfo;
+
+template <>
+TunerHostInfo fromJsonValue(const QJsonValue &source, convertType<TunerHostInfo>);
+
+template<>
+QJsonValue toJsonValue(const TunerHostInfo &source, convertType<TunerHostInfo>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -58,7 +58,7 @@ void MediaPathInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MediaPathInfo::toJson() {
+QJsonObject MediaPathInfo::toJson() const {
 	QJsonObject result;
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
 	result["NetworkPath"] = Jellyfin::Support::toJsonValue<QString>(m_networkPath);
@@ -100,9 +100,14 @@ namespace Support {
 using MediaPathInfo = Jellyfin::DTO::MediaPathInfo;
 
 template <>
-MediaPathInfo fromJsonValue<MediaPathInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MediaPathInfo fromJsonValue(const QJsonValue &source, convertType<MediaPathInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MediaPathInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MediaPathInfo &source, convertType<MediaPathInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

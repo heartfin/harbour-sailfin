@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetMediaFoldersLoader::GetMediaFoldersLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetMediaFoldersParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetMediaFoldersParams>(apiClient) {}
 
 QString GetMediaFoldersLoader::path(const GetMediaFoldersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,7 +51,7 @@ QUrlQuery GetMediaFoldersLoader::query(const GetMediaFoldersParams &params) cons
 
 	// Optional parameters
 	if (!params.isHiddenNull()) {
-		result.addQueryItem("isHidden", Support::toString(params.isHidden()));
+		result.addQueryItem("isHidden", Support::toString<std::optional<bool>>(params.isHidden()));
 	}
 	
 	return result;

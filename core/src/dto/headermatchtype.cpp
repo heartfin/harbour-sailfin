@@ -34,7 +34,6 @@ namespace DTO {
 
 HeaderMatchTypeClass::HeaderMatchTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using HeaderMatchType = Jellyfin::DTO::HeaderMatchType;
 
 template <>
-HeaderMatchType fromJsonValue<HeaderMatchType>(const QJsonValue &source) {
+HeaderMatchType fromJsonValue(const QJsonValue &source, convertType<HeaderMatchType>) {
 	if (!source.isString()) return HeaderMatchType::EnumNotSet;
 
 	QString str = source.toString();
@@ -57,6 +56,22 @@ HeaderMatchType fromJsonValue<HeaderMatchType>(const QJsonValue &source) {
 	}
 	
 	return HeaderMatchType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const HeaderMatchType &source, convertType<HeaderMatchType>) {
+	switch(source) {
+	case HeaderMatchType::Equals:
+		return QStringLiteral("Equals");
+	case HeaderMatchType::Regex:
+		return QStringLiteral("Regex");
+	case HeaderMatchType::Substring:
+		return QStringLiteral("Substring");
+
+	case HeaderMatchType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

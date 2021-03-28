@@ -34,24 +34,25 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 AuthenticateUserLoader::AuthenticateUserLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationResult, AuthenticateUserParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<AuthenticationResult, AuthenticateUserParams>(apiClient) {}
 
 QString AuthenticateUserLoader::path(const AuthenticateUserParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/Authenticate");
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Authenticate");
 }
 
 QUrlQuery AuthenticateUserLoader::query(const AuthenticateUserParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
-	result.addQueryItem("pw", params.pw());
+	result.addQueryItem("pw", Support::toString<QString>(params.pw()));
 
 	// Optional parameters
 	if (!params.passwordNull()) {
-		result.addQueryItem("password", Support::toString(params.password()));
+		result.addQueryItem("password", Support::toString<QString>(params.password()));
 	}
 	
 	return result;

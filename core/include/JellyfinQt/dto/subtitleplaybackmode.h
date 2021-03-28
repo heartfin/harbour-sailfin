@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class SubtitlePlaybackModeClass {
@@ -55,7 +59,19 @@ private:
 	explicit SubtitlePlaybackModeClass();
 };
 
-typedef SubtitlePlaybackModeClass::Value SubtitlePlaybackMode;
+using SubtitlePlaybackMode = SubtitlePlaybackModeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using SubtitlePlaybackMode = Jellyfin::DTO::SubtitlePlaybackMode;
+
+template <>
+SubtitlePlaybackMode fromJsonValue(const QJsonValue &source, convertType<SubtitlePlaybackMode>);
+
+template <>
+QJsonValue toJsonValue(const SubtitlePlaybackMode &source, convertType<SubtitlePlaybackMode>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -64,7 +64,7 @@ void CreatePlaylistDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject CreatePlaylistDto::toJson() {
+QJsonObject CreatePlaylistDto::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Ids"] = Jellyfin::Support::toJsonValue<QStringList>(m_ids);
@@ -134,9 +134,14 @@ namespace Support {
 using CreatePlaylistDto = Jellyfin::DTO::CreatePlaylistDto;
 
 template <>
-CreatePlaylistDto fromJsonValue<CreatePlaylistDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+CreatePlaylistDto fromJsonValue(const QJsonValue &source, convertType<CreatePlaylistDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return CreatePlaylistDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const CreatePlaylistDto &source, convertType<CreatePlaylistDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

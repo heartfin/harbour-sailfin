@@ -34,7 +34,6 @@ namespace DTO {
 
 ExternalIdMediaTypeClass::ExternalIdMediaTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ExternalIdMediaType = Jellyfin::DTO::ExternalIdMediaType;
 
 template <>
-ExternalIdMediaType fromJsonValue<ExternalIdMediaType>(const QJsonValue &source) {
+ExternalIdMediaType fromJsonValue(const QJsonValue &source, convertType<ExternalIdMediaType>) {
 	if (!source.isString()) return ExternalIdMediaType::EnumNotSet;
 
 	QString str = source.toString();
@@ -84,6 +83,40 @@ ExternalIdMediaType fromJsonValue<ExternalIdMediaType>(const QJsonValue &source)
 	}
 	
 	return ExternalIdMediaType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ExternalIdMediaType &source, convertType<ExternalIdMediaType>) {
+	switch(source) {
+	case ExternalIdMediaType::Album:
+		return QStringLiteral("Album");
+	case ExternalIdMediaType::AlbumArtist:
+		return QStringLiteral("AlbumArtist");
+	case ExternalIdMediaType::Artist:
+		return QStringLiteral("Artist");
+	case ExternalIdMediaType::BoxSet:
+		return QStringLiteral("BoxSet");
+	case ExternalIdMediaType::Episode:
+		return QStringLiteral("Episode");
+	case ExternalIdMediaType::Movie:
+		return QStringLiteral("Movie");
+	case ExternalIdMediaType::OtherArtist:
+		return QStringLiteral("OtherArtist");
+	case ExternalIdMediaType::Person:
+		return QStringLiteral("Person");
+	case ExternalIdMediaType::ReleaseGroup:
+		return QStringLiteral("ReleaseGroup");
+	case ExternalIdMediaType::Season:
+		return QStringLiteral("Season");
+	case ExternalIdMediaType::Series:
+		return QStringLiteral("Series");
+	case ExternalIdMediaType::Track:
+		return QStringLiteral("Track");
+
+	case ExternalIdMediaType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

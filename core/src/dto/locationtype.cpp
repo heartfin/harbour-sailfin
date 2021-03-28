@@ -34,7 +34,6 @@ namespace DTO {
 
 LocationTypeClass::LocationTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using LocationType = Jellyfin::DTO::LocationType;
 
 template <>
-LocationType fromJsonValue<LocationType>(const QJsonValue &source) {
+LocationType fromJsonValue(const QJsonValue &source, convertType<LocationType>) {
 	if (!source.isString()) return LocationType::EnumNotSet;
 
 	QString str = source.toString();
@@ -60,6 +59,24 @@ LocationType fromJsonValue<LocationType>(const QJsonValue &source) {
 	}
 	
 	return LocationType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const LocationType &source, convertType<LocationType>) {
+	switch(source) {
+	case LocationType::FileSystem:
+		return QStringLiteral("FileSystem");
+	case LocationType::Remote:
+		return QStringLiteral("Remote");
+	case LocationType::Virtual:
+		return QStringLiteral("Virtual");
+	case LocationType::Offline:
+		return QStringLiteral("Offline");
+
+	case LocationType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

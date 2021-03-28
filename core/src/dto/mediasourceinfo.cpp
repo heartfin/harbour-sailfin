@@ -168,7 +168,7 @@ void MediaSourceInfo::setFromJson(QJsonObject source) {
 	m_formats = Jellyfin::Support::fromJsonValue<QStringList>(source["Formats"]);
 	m_bitrate = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Bitrate"]);
 	m_timestamp = Jellyfin::Support::fromJsonValue<TransportStreamTimestamp>(source["Timestamp"]);
-	m_requiredHttpHeaders = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["RequiredHttpHeaders"]);
+	m_requiredHttpHeaders = Jellyfin::Support::fromJsonValue<QJsonObject>(source["RequiredHttpHeaders"]);
 	m_transcodingUrl = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingUrl"]);
 	m_transcodingSubProtocol = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingSubProtocol"]);
 	m_transcodingContainer = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingContainer"]);
@@ -178,7 +178,7 @@ void MediaSourceInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MediaSourceInfo::toJson() {
+QJsonObject MediaSourceInfo::toJson() const {
 	QJsonObject result;
 	result["Protocol"] = Jellyfin::Support::toJsonValue<MediaProtocol>(m_protocol);
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
@@ -215,7 +215,7 @@ QJsonObject MediaSourceInfo::toJson() {
 	result["Formats"] = Jellyfin::Support::toJsonValue<QStringList>(m_formats);
 	result["Bitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitrate);
 	result["Timestamp"] = Jellyfin::Support::toJsonValue<TransportStreamTimestamp>(m_timestamp);
-	result["RequiredHttpHeaders"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_requiredHttpHeaders);
+	result["RequiredHttpHeaders"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_requiredHttpHeaders);
 	result["TranscodingUrl"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingUrl);
 	result["TranscodingSubProtocol"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingSubProtocol);
 	result["TranscodingContainer"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingContainer);
@@ -541,17 +541,17 @@ void MediaSourceInfo::setTimestamp(TransportStreamTimestamp newTimestamp) {
 	m_timestamp = newTimestamp;
 }
 
-std::optional<QJsonObject> MediaSourceInfo::requiredHttpHeaders() const { return m_requiredHttpHeaders; }
+QJsonObject MediaSourceInfo::requiredHttpHeaders() const { return m_requiredHttpHeaders; }
 
-void MediaSourceInfo::setRequiredHttpHeaders(std::optional<QJsonObject> newRequiredHttpHeaders) {
+void MediaSourceInfo::setRequiredHttpHeaders(QJsonObject newRequiredHttpHeaders) {
 	m_requiredHttpHeaders = newRequiredHttpHeaders;
 }
 bool MediaSourceInfo::requiredHttpHeadersNull() const {
-	return !m_requiredHttpHeaders.has_value();
+	return m_requiredHttpHeaders.isEmpty();
 }
 
 void MediaSourceInfo::setRequiredHttpHeadersNull() {
-	m_requiredHttpHeaders = std::nullopt;
+	m_requiredHttpHeaders= QJsonObject();
 
 }
 QString MediaSourceInfo::transcodingUrl() const { return m_transcodingUrl; }
@@ -640,9 +640,14 @@ namespace Support {
 using MediaSourceInfo = Jellyfin::DTO::MediaSourceInfo;
 
 template <>
-MediaSourceInfo fromJsonValue<MediaSourceInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MediaSourceInfo fromJsonValue(const QJsonValue &source, convertType<MediaSourceInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MediaSourceInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MediaSourceInfo &source, convertType<MediaSourceInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

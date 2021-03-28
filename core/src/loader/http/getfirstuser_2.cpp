@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetFirstUser_2Loader::GetFirstUser_2Loader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::StartupUserDto, GetFirstUser_2Params>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<StartupUserDto, GetFirstUser_2Params>(apiClient) {}
 
 QString GetFirstUser_2Loader::path(const GetFirstUser_2Params &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

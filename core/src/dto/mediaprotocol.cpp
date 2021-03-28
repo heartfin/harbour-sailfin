@@ -34,7 +34,6 @@ namespace DTO {
 
 MediaProtocolClass::MediaProtocolClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using MediaProtocol = Jellyfin::DTO::MediaProtocol;
 
 template <>
-MediaProtocol fromJsonValue<MediaProtocol>(const QJsonValue &source) {
+MediaProtocol fromJsonValue(const QJsonValue &source, convertType<MediaProtocol>) {
 	if (!source.isString()) return MediaProtocol::EnumNotSet;
 
 	QString str = source.toString();
@@ -69,6 +68,30 @@ MediaProtocol fromJsonValue<MediaProtocol>(const QJsonValue &source) {
 	}
 	
 	return MediaProtocol::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const MediaProtocol &source, convertType<MediaProtocol>) {
+	switch(source) {
+	case MediaProtocol::File:
+		return QStringLiteral("File");
+	case MediaProtocol::Http:
+		return QStringLiteral("Http");
+	case MediaProtocol::Rtmp:
+		return QStringLiteral("Rtmp");
+	case MediaProtocol::Rtsp:
+		return QStringLiteral("Rtsp");
+	case MediaProtocol::Udp:
+		return QStringLiteral("Udp");
+	case MediaProtocol::Rtp:
+		return QStringLiteral("Rtp");
+	case MediaProtocol::Ftp:
+		return QStringLiteral("Ftp");
+
+	case MediaProtocol::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

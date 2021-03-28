@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class VideoTypeClass {
@@ -54,7 +58,19 @@ private:
 	explicit VideoTypeClass();
 };
 
-typedef VideoTypeClass::Value VideoType;
+using VideoType = VideoTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using VideoType = Jellyfin::DTO::VideoType;
+
+template <>
+VideoType fromJsonValue(const QJsonValue &source, convertType<VideoType>);
+
+template <>
+QJsonValue toJsonValue(const VideoType &source, convertType<VideoType>);
 
 } // NS DTO
 } // NS Jellyfin

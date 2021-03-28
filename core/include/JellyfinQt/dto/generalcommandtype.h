@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class GeneralCommandTypeClass {
@@ -91,7 +95,19 @@ private:
 	explicit GeneralCommandTypeClass();
 };
 
-typedef GeneralCommandTypeClass::Value GeneralCommandType;
+using GeneralCommandType = GeneralCommandTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using GeneralCommandType = Jellyfin::DTO::GeneralCommandType;
+
+template <>
+GeneralCommandType fromJsonValue(const QJsonValue &source, convertType<GeneralCommandType>);
+
+template <>
+QJsonValue toJsonValue(const GeneralCommandType &source, convertType<GeneralCommandType>);
 
 } // NS DTO
 } // NS Jellyfin

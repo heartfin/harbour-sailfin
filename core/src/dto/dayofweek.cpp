@@ -34,7 +34,6 @@ namespace DTO {
 
 DayOfWeekClass::DayOfWeekClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using DayOfWeek = Jellyfin::DTO::DayOfWeek;
 
 template <>
-DayOfWeek fromJsonValue<DayOfWeek>(const QJsonValue &source) {
+DayOfWeek fromJsonValue(const QJsonValue &source, convertType<DayOfWeek>) {
 	if (!source.isString()) return DayOfWeek::EnumNotSet;
 
 	QString str = source.toString();
@@ -69,6 +68,30 @@ DayOfWeek fromJsonValue<DayOfWeek>(const QJsonValue &source) {
 	}
 	
 	return DayOfWeek::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const DayOfWeek &source, convertType<DayOfWeek>) {
+	switch(source) {
+	case DayOfWeek::Sunday:
+		return QStringLiteral("Sunday");
+	case DayOfWeek::Monday:
+		return QStringLiteral("Monday");
+	case DayOfWeek::Tuesday:
+		return QStringLiteral("Tuesday");
+	case DayOfWeek::Wednesday:
+		return QStringLiteral("Wednesday");
+	case DayOfWeek::Thursday:
+		return QStringLiteral("Thursday");
+	case DayOfWeek::Friday:
+		return QStringLiteral("Friday");
+	case DayOfWeek::Saturday:
+		return QStringLiteral("Saturday");
+
+	case DayOfWeek::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

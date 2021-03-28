@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetSuggestionsLoader::GetSuggestionsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetSuggestionsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetSuggestionsParams>(apiClient) {}
 
 QString GetSuggestionsLoader::path(const GetSuggestionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/Suggestions");
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Suggestions");
 }
 
 QUrlQuery GetSuggestionsLoader::query(const GetSuggestionsParams &params) const {
@@ -50,19 +51,19 @@ QUrlQuery GetSuggestionsLoader::query(const GetSuggestionsParams &params) const 
 
 	// Optional parameters
 	if (!params.mediaTypeNull()) {
-		result.addQueryItem("mediaType", Support::toString(params.mediaType()));
+		result.addQueryItem("mediaType", Support::toString<QStringList>(params.mediaType()));
 	}
 	if (!params.typeNull()) {
-		result.addQueryItem("type", Support::toString(params.type()));
+		result.addQueryItem("type", Support::toString<QStringList>(params.type()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.enableTotalRecordCountNull()) {
-		result.addQueryItem("enableTotalRecordCount", Support::toString(params.enableTotalRecordCount()));
+		result.addQueryItem("enableTotalRecordCount", Support::toString<std::optional<bool>>(params.enableTotalRecordCount()));
 	}
 	
 	return result;

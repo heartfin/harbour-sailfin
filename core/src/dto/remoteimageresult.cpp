@@ -61,7 +61,7 @@ void RemoteImageResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject RemoteImageResult::toJson() {
+QJsonObject RemoteImageResult::toJson() const {
 	QJsonObject result;
 	result["Images"] = Jellyfin::Support::toJsonValue<QList<RemoteImageInfo>>(m_images);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
@@ -110,9 +110,14 @@ namespace Support {
 using RemoteImageResult = Jellyfin::DTO::RemoteImageResult;
 
 template <>
-RemoteImageResult fromJsonValue<RemoteImageResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+RemoteImageResult fromJsonValue(const QJsonValue &source, convertType<RemoteImageResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return RemoteImageResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const RemoteImageResult &source, convertType<RemoteImageResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

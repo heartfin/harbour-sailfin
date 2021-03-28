@@ -61,7 +61,7 @@ void StartupConfigurationDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject StartupConfigurationDto::toJson() {
+QJsonObject StartupConfigurationDto::toJson() const {
 	QJsonObject result;
 	result["UICulture"] = Jellyfin::Support::toJsonValue<QString>(m_uICulture);
 	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
@@ -117,9 +117,14 @@ namespace Support {
 using StartupConfigurationDto = Jellyfin::DTO::StartupConfigurationDto;
 
 template <>
-StartupConfigurationDto fromJsonValue<StartupConfigurationDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+StartupConfigurationDto fromJsonValue(const QJsonValue &source, convertType<StartupConfigurationDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return StartupConfigurationDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const StartupConfigurationDto &source, convertType<StartupConfigurationDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

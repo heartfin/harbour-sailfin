@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static PinRedeemResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -83,6 +87,18 @@ protected:
 	bool m_success;
 	QStringList m_usersReset;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using PinRedeemResult = Jellyfin::DTO::PinRedeemResult;
+
+template <>
+PinRedeemResult fromJsonValue(const QJsonValue &source, convertType<PinRedeemResult>);
+
+template<>
+QJsonValue toJsonValue(const PinRedeemResult &source, convertType<PinRedeemResult>);
 
 } // NS DTO
 } // NS Jellyfin

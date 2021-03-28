@@ -42,6 +42,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -57,7 +61,7 @@ public:
 	
 	static BaseItem fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -143,6 +147,18 @@ protected:
 	QStringList m_extraIds;
 	bool m_supportsExternalTransfer;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using BaseItem = Jellyfin::DTO::BaseItem;
+
+template <>
+BaseItem fromJsonValue(const QJsonValue &source, convertType<BaseItem>);
+
+template<>
+QJsonValue toJsonValue(const BaseItem &source, convertType<BaseItem>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -67,7 +67,7 @@ void ProblemDetails::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ProblemDetails::toJson() {
+QJsonObject ProblemDetails::toJson() const {
 	QJsonObject result;
 	result["type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
 	result["title"] = Jellyfin::Support::toJsonValue<QString>(m_title);
@@ -151,9 +151,14 @@ namespace Support {
 using ProblemDetails = Jellyfin::DTO::ProblemDetails;
 
 template <>
-ProblemDetails fromJsonValue<ProblemDetails>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ProblemDetails fromJsonValue(const QJsonValue &source, convertType<ProblemDetails>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ProblemDetails::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ProblemDetails &source, convertType<ProblemDetails>) {
+	return source.toJson();
 }
 
 } // NS DTO

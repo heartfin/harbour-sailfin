@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetGenresLoader::GetGenresLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetGenresParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetGenresParams>(apiClient) {}
 
 QString GetGenresLoader::path(const GetGenresParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,52 +51,52 @@ QUrlQuery GetGenresLoader::query(const GetGenresParams &params) const {
 
 	// Optional parameters
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.searchTermNull()) {
-		result.addQueryItem("searchTerm", Support::toString(params.searchTerm()));
+		result.addQueryItem("searchTerm", Support::toString<QString>(params.searchTerm()));
 	}
 	if (!params.parentIdNull()) {
-		result.addQueryItem("parentId", Support::toString(params.parentId()));
+		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
 	}
 	if (!params.isFavoriteNull()) {
-		result.addQueryItem("isFavorite", Support::toString(params.isFavorite()));
+		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
 	}
 	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString(params.imageTypeLimit()));
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
 	}
 	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString(params.enableImageTypes()));
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.nameStartsWithOrGreaterNull()) {
-		result.addQueryItem("nameStartsWithOrGreater", Support::toString(params.nameStartsWithOrGreater()));
+		result.addQueryItem("nameStartsWithOrGreater", Support::toString<QString>(params.nameStartsWithOrGreater()));
 	}
 	if (!params.nameStartsWithNull()) {
-		result.addQueryItem("nameStartsWith", Support::toString(params.nameStartsWith()));
+		result.addQueryItem("nameStartsWith", Support::toString<QString>(params.nameStartsWith()));
 	}
 	if (!params.nameLessThanNull()) {
-		result.addQueryItem("nameLessThan", Support::toString(params.nameLessThan()));
+		result.addQueryItem("nameLessThan", Support::toString<QString>(params.nameLessThan()));
 	}
 	if (!params.enableImagesNull()) {
-		result.addQueryItem("enableImages", Support::toString(params.enableImages()));
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	if (!params.enableTotalRecordCountNull()) {
-		result.addQueryItem("enableTotalRecordCount", Support::toString(params.enableTotalRecordCount()));
+		result.addQueryItem("enableTotalRecordCount", Support::toString<std::optional<bool>>(params.enableTotalRecordCount()));
 	}
 	
 	return result;

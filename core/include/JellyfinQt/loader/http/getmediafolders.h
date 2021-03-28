@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets all user media folders.
  */
-class GetMediaFoldersLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetMediaFoldersParams> {
+
+class GetMediaFoldersLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetMediaFoldersParams> {
 public:
 	explicit GetMediaFoldersLoader(ApiClient *apiClient = nullptr);
 

@@ -82,7 +82,7 @@ void ClientCapabilities::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ClientCapabilities::toJson() {
+QJsonObject ClientCapabilities::toJson() const {
 	QJsonObject result;
 	result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QStringList>(m_playableMediaTypes);
 	result["SupportedCommands"] = Jellyfin::Support::toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
@@ -201,9 +201,14 @@ namespace Support {
 using ClientCapabilities = Jellyfin::DTO::ClientCapabilities;
 
 template <>
-ClientCapabilities fromJsonValue<ClientCapabilities>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ClientCapabilities fromJsonValue(const QJsonValue &source, convertType<ClientCapabilities>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ClientCapabilities::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ClientCapabilities &source, convertType<ClientCapabilities>) {
+	return source.toJson();
 }
 
 } // NS DTO

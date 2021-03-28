@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static TaskResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -147,6 +151,18 @@ protected:
 	QString m_errorMessage;
 	QString m_longErrorMessage;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TaskResult = Jellyfin::DTO::TaskResult;
+
+template <>
+TaskResult fromJsonValue(const QJsonValue &source, convertType<TaskResult>);
+
+template<>
+QJsonValue toJsonValue(const TaskResult &source, convertType<TaskResult>);
 
 } // NS DTO
 } // NS Jellyfin

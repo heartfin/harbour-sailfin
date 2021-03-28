@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static ValidatePathDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -93,6 +97,18 @@ protected:
 	QString m_path;
 	std::optional<bool> m_isFile = std::nullopt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ValidatePathDto = Jellyfin::DTO::ValidatePathDto;
+
+template <>
+ValidatePathDto fromJsonValue(const QJsonValue &source, convertType<ValidatePathDto>);
+
+template<>
+QJsonValue toJsonValue(const ValidatePathDto &source, convertType<ValidatePathDto>);
 
 } // NS DTO
 } // NS Jellyfin

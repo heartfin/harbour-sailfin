@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/notificationtypeinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets notification types.
+ */
+
+class GetNotificationTypesLoader : public Jellyfin::Support::HttpLoader<QList<NotificationTypeInfo>, GetNotificationTypesParams> {
+public:
+	explicit GetNotificationTypesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetNotificationTypesParams& parameters) const override;
+	QUrlQuery query(const GetNotificationTypesParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

@@ -61,7 +61,7 @@ void ImageOption::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ImageOption::toJson() {
+QJsonObject ImageOption::toJson() const {
 	QJsonObject result;
 	result["Type"] = Jellyfin::Support::toJsonValue<ImageType>(m_type);
 	result["Limit"] = Jellyfin::Support::toJsonValue<qint32>(m_limit);
@@ -96,9 +96,14 @@ namespace Support {
 using ImageOption = Jellyfin::DTO::ImageOption;
 
 template <>
-ImageOption fromJsonValue<ImageOption>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ImageOption fromJsonValue(const QJsonValue &source, convertType<ImageOption>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ImageOption::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ImageOption &source, convertType<ImageOption>) {
+	return source.toJson();
 }
 
 } // NS DTO

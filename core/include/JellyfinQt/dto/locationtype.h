@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class LocationTypeClass {
@@ -54,7 +58,19 @@ private:
 	explicit LocationTypeClass();
 };
 
-typedef LocationTypeClass::Value LocationType;
+using LocationType = LocationTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using LocationType = Jellyfin::DTO::LocationType;
+
+template <>
+LocationType fromJsonValue(const QJsonValue &source, convertType<LocationType>);
+
+template <>
+QJsonValue toJsonValue(const LocationType &source, convertType<LocationType>);
 
 } // NS DTO
 } // NS Jellyfin

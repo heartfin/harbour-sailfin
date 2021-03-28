@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class SubtitleDeliveryMethodClass {
@@ -54,7 +58,19 @@ private:
 	explicit SubtitleDeliveryMethodClass();
 };
 
-typedef SubtitleDeliveryMethodClass::Value SubtitleDeliveryMethod;
+using SubtitleDeliveryMethod = SubtitleDeliveryMethodClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using SubtitleDeliveryMethod = Jellyfin::DTO::SubtitleDeliveryMethod;
+
+template <>
+SubtitleDeliveryMethod fromJsonValue(const QJsonValue &source, convertType<SubtitleDeliveryMethod>);
+
+template <>
+QJsonValue toJsonValue(const SubtitleDeliveryMethod &source, convertType<SubtitleDeliveryMethod>);
 
 } // NS DTO
 } // NS Jellyfin

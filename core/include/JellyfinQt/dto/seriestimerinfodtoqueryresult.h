@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static SeriesTimerInfoDtoQueryResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -93,6 +97,18 @@ protected:
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SeriesTimerInfoDtoQueryResult = Jellyfin::DTO::SeriesTimerInfoDtoQueryResult;
+
+template <>
+SeriesTimerInfoDtoQueryResult fromJsonValue(const QJsonValue &source, convertType<SeriesTimerInfoDtoQueryResult>);
+
+template<>
+QJsonValue toJsonValue(const SeriesTimerInfoDtoQueryResult &source, convertType<SeriesTimerInfoDtoQueryResult>);
 
 } // NS DTO
 } // NS Jellyfin

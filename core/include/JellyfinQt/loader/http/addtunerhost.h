@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/tunerhostinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Adds a tuner host.
  */
-class AddTunerHostLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TunerHostInfo, AddTunerHostParams> {
+
+class AddTunerHostLoader : public Jellyfin::Support::HttpLoader<TunerHostInfo, AddTunerHostParams> {
 public:
 	explicit AddTunerHostLoader(ApiClient *apiClient = nullptr);
 

@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static DeviceProfileInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -90,6 +94,18 @@ protected:
 	QString m_name;
 	DeviceProfileType m_type;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DeviceProfileInfo = Jellyfin::DTO::DeviceProfileInfo;
+
+template <>
+DeviceProfileInfo fromJsonValue(const QJsonValue &source, convertType<DeviceProfileInfo>);
+
+template<>
+QJsonValue toJsonValue(const DeviceProfileInfo &source, convertType<DeviceProfileInfo>);
 
 } // NS DTO
 } // NS Jellyfin

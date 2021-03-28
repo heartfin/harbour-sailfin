@@ -34,7 +34,6 @@ namespace DTO {
 
 DlnaProfileTypeClass::DlnaProfileTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using DlnaProfileType = Jellyfin::DTO::DlnaProfileType;
 
 template <>
-DlnaProfileType fromJsonValue<DlnaProfileType>(const QJsonValue &source) {
+DlnaProfileType fromJsonValue(const QJsonValue &source, convertType<DlnaProfileType>) {
 	if (!source.isString()) return DlnaProfileType::EnumNotSet;
 
 	QString str = source.toString();
@@ -57,6 +56,22 @@ DlnaProfileType fromJsonValue<DlnaProfileType>(const QJsonValue &source) {
 	}
 	
 	return DlnaProfileType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const DlnaProfileType &source, convertType<DlnaProfileType>) {
+	switch(source) {
+	case DlnaProfileType::Audio:
+		return QStringLiteral("Audio");
+	case DlnaProfileType::Video:
+		return QStringLiteral("Video");
+	case DlnaProfileType::Photo:
+		return QStringLiteral("Photo");
+
+	case DlnaProfileType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

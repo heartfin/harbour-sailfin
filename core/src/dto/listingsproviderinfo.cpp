@@ -106,7 +106,7 @@ void ListingsProviderInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ListingsProviderInfo::toJson() {
+QJsonObject ListingsProviderInfo::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
@@ -365,9 +365,14 @@ namespace Support {
 using ListingsProviderInfo = Jellyfin::DTO::ListingsProviderInfo;
 
 template <>
-ListingsProviderInfo fromJsonValue<ListingsProviderInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ListingsProviderInfo fromJsonValue(const QJsonValue &source, convertType<ListingsProviderInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ListingsProviderInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ListingsProviderInfo &source, convertType<ListingsProviderInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -73,7 +73,7 @@ void ResponseProfile::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ResponseProfile::toJson() {
+QJsonObject ResponseProfile::toJson() const {
 	QJsonObject result;
 	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
 	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
@@ -178,9 +178,14 @@ namespace Support {
 using ResponseProfile = Jellyfin::DTO::ResponseProfile;
 
 template <>
-ResponseProfile fromJsonValue<ResponseProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ResponseProfile fromJsonValue(const QJsonValue &source, convertType<ResponseProfile>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ResponseProfile::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ResponseProfile &source, convertType<ResponseProfile>) {
+	return source.toJson();
 }
 
 } // NS DTO

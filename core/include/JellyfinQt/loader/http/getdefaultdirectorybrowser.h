@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/defaultdirectorybrowserinfodto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Get Default directory browser.
  */
-class GetDefaultDirectoryBrowserLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::DefaultDirectoryBrowserInfoDto, GetDefaultDirectoryBrowserParams> {
+
+class GetDefaultDirectoryBrowserLoader : public Jellyfin::Support::HttpLoader<DefaultDirectoryBrowserInfoDto, GetDefaultDirectoryBrowserParams> {
 public:
 	explicit GetDefaultDirectoryBrowserLoader(ApiClient *apiClient = nullptr);
 

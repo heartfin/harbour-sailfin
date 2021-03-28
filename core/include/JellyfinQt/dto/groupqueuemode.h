@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class GroupQueueModeClass {
@@ -52,7 +56,19 @@ private:
 	explicit GroupQueueModeClass();
 };
 
-typedef GroupQueueModeClass::Value GroupQueueMode;
+using GroupQueueMode = GroupQueueModeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using GroupQueueMode = Jellyfin::DTO::GroupQueueMode;
+
+template <>
+GroupQueueMode fromJsonValue(const QJsonValue &source, convertType<GroupQueueMode>);
+
+template <>
+QJsonValue toJsonValue(const GroupQueueMode &source, convertType<GroupQueueMode>);
 
 } // NS DTO
 } // NS Jellyfin

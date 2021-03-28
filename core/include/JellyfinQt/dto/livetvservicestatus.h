@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class LiveTvServiceStatusClass {
@@ -52,7 +56,19 @@ private:
 	explicit LiveTvServiceStatusClass();
 };
 
-typedef LiveTvServiceStatusClass::Value LiveTvServiceStatus;
+using LiveTvServiceStatus = LiveTvServiceStatusClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using LiveTvServiceStatus = Jellyfin::DTO::LiveTvServiceStatus;
+
+template <>
+LiveTvServiceStatus fromJsonValue(const QJsonValue &source, convertType<LiveTvServiceStatus>);
+
+template <>
+QJsonValue toJsonValue(const LiveTvServiceStatus &source, convertType<LiveTvServiceStatus>);
 
 } // NS DTO
 } // NS Jellyfin

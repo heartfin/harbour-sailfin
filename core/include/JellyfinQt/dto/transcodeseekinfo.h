@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class TranscodeSeekInfoClass {
@@ -52,7 +56,19 @@ private:
 	explicit TranscodeSeekInfoClass();
 };
 
-typedef TranscodeSeekInfoClass::Value TranscodeSeekInfo;
+using TranscodeSeekInfo = TranscodeSeekInfoClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using TranscodeSeekInfo = Jellyfin::DTO::TranscodeSeekInfo;
+
+template <>
+TranscodeSeekInfo fromJsonValue(const QJsonValue &source, convertType<TranscodeSeekInfo>);
+
+template <>
+QJsonValue toJsonValue(const TranscodeSeekInfo &source, convertType<TranscodeSeekInfo>);
 
 } // NS DTO
 } // NS Jellyfin

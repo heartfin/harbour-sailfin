@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetParentalRatingsLoader::GetParentalRatingsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<ParentalRating>, GetParentalRatingsParams>(apiClient) {}
+
+QString GetParentalRatingsLoader::path(const GetParentalRatingsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Localization/ParentalRatings");
+}
+
+QUrlQuery GetParentalRatingsLoader::query(const GetParentalRatingsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

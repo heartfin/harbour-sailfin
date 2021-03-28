@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class Video3DFormatClass {
@@ -55,7 +59,19 @@ private:
 	explicit Video3DFormatClass();
 };
 
-typedef Video3DFormatClass::Value Video3DFormat;
+using Video3DFormat = Video3DFormatClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using Video3DFormat = Jellyfin::DTO::Video3DFormat;
+
+template <>
+Video3DFormat fromJsonValue(const QJsonValue &source, convertType<Video3DFormat>);
+
+template <>
+QJsonValue toJsonValue(const Video3DFormat &source, convertType<Video3DFormat>);
 
 } // NS DTO
 } // NS Jellyfin

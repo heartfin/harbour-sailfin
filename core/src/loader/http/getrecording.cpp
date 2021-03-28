@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetRecordingLoader::GetRecordingLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetRecordingParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDto, GetRecordingParams>(apiClient) {}
 
 QString GetRecordingLoader::path(const GetRecordingParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/LiveTv/Recordings/") + Support::toString(params.recordingId()) ;
+	return QStringLiteral("/LiveTv/Recordings/") + Support::toString< QString>(params.recordingId()) ;
 }
 
 QUrlQuery GetRecordingLoader::query(const GetRecordingParams &params) const {
@@ -50,7 +51,7 @@ QUrlQuery GetRecordingLoader::query(const GetRecordingParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;

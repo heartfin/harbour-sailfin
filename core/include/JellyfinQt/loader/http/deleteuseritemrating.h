@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/useritemdatadto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Deletes a user's saved personal rating for an item.
  */
-class DeleteUserItemRatingLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, DeleteUserItemRatingParams> {
+
+class DeleteUserItemRatingLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, DeleteUserItemRatingParams> {
 public:
 	explicit DeleteUserItemRatingLoader(ApiClient *apiClient = nullptr);
 

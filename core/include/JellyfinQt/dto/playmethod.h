@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class PlayMethodClass {
@@ -53,7 +57,19 @@ private:
 	explicit PlayMethodClass();
 };
 
-typedef PlayMethodClass::Value PlayMethod;
+using PlayMethod = PlayMethodClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using PlayMethod = Jellyfin::DTO::PlayMethod;
+
+template <>
+PlayMethod fromJsonValue(const QJsonValue &source, convertType<PlayMethod>);
+
+template <>
+QJsonValue toJsonValue(const PlayMethod &source, convertType<PlayMethod>);
 
 } // NS DTO
 } // NS Jellyfin

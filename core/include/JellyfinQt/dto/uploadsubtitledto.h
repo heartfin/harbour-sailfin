@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static UploadSubtitleDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -99,6 +103,18 @@ protected:
 	bool m_isForced;
 	QString m_data;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using UploadSubtitleDto = Jellyfin::DTO::UploadSubtitleDto;
+
+template <>
+UploadSubtitleDto fromJsonValue(const QJsonValue &source, convertType<UploadSubtitleDto>);
+
+template<>
+QJsonValue toJsonValue(const UploadSubtitleDto &source, convertType<UploadSubtitleDto>);
 
 } // NS DTO
 } // NS Jellyfin

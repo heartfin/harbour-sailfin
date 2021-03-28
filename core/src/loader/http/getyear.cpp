@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetYearLoader::GetYearLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetYearParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDto, GetYearParams>(apiClient) {}
 
 QString GetYearLoader::path(const GetYearParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Years/") + Support::toString(params.year()) ;
+	return QStringLiteral("/Years/") + Support::toString< qint32>(params.year()) ;
 }
 
 QUrlQuery GetYearLoader::query(const GetYearParams &params) const {
@@ -50,7 +51,7 @@ QUrlQuery GetYearLoader::query(const GetYearParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;

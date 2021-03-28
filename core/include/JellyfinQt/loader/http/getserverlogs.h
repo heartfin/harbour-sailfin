@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/logfile.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets a list of available server log files.
+ */
+
+class GetServerLogsLoader : public Jellyfin::Support::HttpLoader<QList<LogFile>, GetServerLogsParams> {
+public:
+	explicit GetServerLogsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetServerLogsParams& parameters) const override;
+	QUrlQuery query(const GetServerLogsParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

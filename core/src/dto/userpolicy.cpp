@@ -169,7 +169,7 @@ void UserPolicy::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject UserPolicy::toJson() {
+QJsonObject UserPolicy::toJson() const {
 	QJsonObject result;
 	result["IsAdministrator"] = Jellyfin::Support::toJsonValue<bool>(m_isAdministrator);
 	result["IsHidden"] = Jellyfin::Support::toJsonValue<bool>(m_isHidden);
@@ -540,9 +540,14 @@ namespace Support {
 using UserPolicy = Jellyfin::DTO::UserPolicy;
 
 template <>
-UserPolicy fromJsonValue<UserPolicy>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+UserPolicy fromJsonValue(const QJsonValue &source, convertType<UserPolicy>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return UserPolicy::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const UserPolicy &source, convertType<UserPolicy>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -34,7 +34,6 @@ namespace DTO {
 
 GroupShuffleModeClass::GroupShuffleModeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using GroupShuffleMode = Jellyfin::DTO::GroupShuffleMode;
 
 template <>
-GroupShuffleMode fromJsonValue<GroupShuffleMode>(const QJsonValue &source) {
+GroupShuffleMode fromJsonValue(const QJsonValue &source, convertType<GroupShuffleMode>) {
 	if (!source.isString()) return GroupShuffleMode::EnumNotSet;
 
 	QString str = source.toString();
@@ -54,6 +53,20 @@ GroupShuffleMode fromJsonValue<GroupShuffleMode>(const QJsonValue &source) {
 	}
 	
 	return GroupShuffleMode::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const GroupShuffleMode &source, convertType<GroupShuffleMode>) {
+	switch(source) {
+	case GroupShuffleMode::Sorted:
+		return QStringLiteral("Sorted");
+	case GroupShuffleMode::Shuffle:
+		return QStringLiteral("Shuffle");
+
+	case GroupShuffleMode::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

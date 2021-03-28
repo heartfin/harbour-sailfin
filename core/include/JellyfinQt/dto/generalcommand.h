@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static GeneralCommand fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -68,9 +72,9 @@ public:
 	void setControllingUserId(QString newControllingUserId);
 
 
-	std::optional<QJsonObject> arguments() const;
+	QJsonObject arguments() const;
 
-	void setArguments(std::optional<QJsonObject> newArguments);
+	void setArguments(QJsonObject newArguments);
 	bool argumentsNull() const;
 	void setArgumentsNull();
 
@@ -78,8 +82,20 @@ public:
 protected:
 	GeneralCommandType m_name;
 	QString m_controllingUserId;
-	std::optional<QJsonObject> m_arguments = std::nullopt;
+	QJsonObject m_arguments;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using GeneralCommand = Jellyfin::DTO::GeneralCommand;
+
+template <>
+GeneralCommand fromJsonValue(const QJsonValue &source, convertType<GeneralCommand>);
+
+template<>
+QJsonValue toJsonValue(const GeneralCommand &source, convertType<GeneralCommand>);
 
 } // NS DTO
 } // NS Jellyfin

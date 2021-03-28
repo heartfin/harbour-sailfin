@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static SpecialViewOptionDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -83,6 +87,18 @@ protected:
 	QString m_name;
 	QString m_jellyfinId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SpecialViewOptionDto = Jellyfin::DTO::SpecialViewOptionDto;
+
+template <>
+SpecialViewOptionDto fromJsonValue(const QJsonValue &source, convertType<SpecialViewOptionDto>);
+
+template<>
+QJsonValue toJsonValue(const SpecialViewOptionDto &source, convertType<SpecialViewOptionDto>);
 
 } // NS DTO
 } // NS Jellyfin

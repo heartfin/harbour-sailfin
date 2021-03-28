@@ -64,7 +64,7 @@ void TrailerInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TrailerInfoRemoteSearchQuery::toJson() {
+QJsonObject TrailerInfoRemoteSearchQuery::toJson() const {
 	QJsonObject result;
 	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<TrailerInfo>>(m_searchInfo);
 	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
@@ -113,9 +113,14 @@ namespace Support {
 using TrailerInfoRemoteSearchQuery = Jellyfin::DTO::TrailerInfoRemoteSearchQuery;
 
 template <>
-TrailerInfoRemoteSearchQuery fromJsonValue<TrailerInfoRemoteSearchQuery>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TrailerInfoRemoteSearchQuery fromJsonValue(const QJsonValue &source, convertType<TrailerInfoRemoteSearchQuery>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TrailerInfoRemoteSearchQuery::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TrailerInfoRemoteSearchQuery &source, convertType<TrailerInfoRemoteSearchQuery>) {
+	return source.toJson();
 }
 
 } // NS DTO

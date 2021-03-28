@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class RecommendationTypeClass {
@@ -56,7 +60,19 @@ private:
 	explicit RecommendationTypeClass();
 };
 
-typedef RecommendationTypeClass::Value RecommendationType;
+using RecommendationType = RecommendationTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using RecommendationType = Jellyfin::DTO::RecommendationType;
+
+template <>
+RecommendationType fromJsonValue(const QJsonValue &source, convertType<RecommendationType>);
+
+template <>
+QJsonValue toJsonValue(const RecommendationType &source, convertType<RecommendationType>);
 
 } // NS DTO
 } // NS Jellyfin

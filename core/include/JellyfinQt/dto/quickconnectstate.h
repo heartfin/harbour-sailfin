@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class QuickConnectStateClass {
@@ -53,7 +57,19 @@ private:
 	explicit QuickConnectStateClass();
 };
 
-typedef QuickConnectStateClass::Value QuickConnectState;
+using QuickConnectState = QuickConnectStateClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using QuickConnectState = Jellyfin::DTO::QuickConnectState;
+
+template <>
+QuickConnectState fromJsonValue(const QJsonValue &source, convertType<QuickConnectState>);
+
+template <>
+QJsonValue toJsonValue(const QuickConnectState &source, convertType<QuickConnectState>);
 
 } // NS DTO
 } // NS Jellyfin

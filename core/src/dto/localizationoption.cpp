@@ -58,7 +58,7 @@ void LocalizationOption::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject LocalizationOption::toJson() {
+QJsonObject LocalizationOption::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
@@ -100,9 +100,14 @@ namespace Support {
 using LocalizationOption = Jellyfin::DTO::LocalizationOption;
 
 template <>
-LocalizationOption fromJsonValue<LocalizationOption>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+LocalizationOption fromJsonValue(const QJsonValue &source, convertType<LocalizationOption>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return LocalizationOption::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const LocalizationOption &source, convertType<LocalizationOption>) {
+	return source.toJson();
 }
 
 } // NS DTO

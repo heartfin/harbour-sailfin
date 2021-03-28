@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 MarkUnplayedItemLoader::MarkUnplayedItemLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, MarkUnplayedItemParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<UserItemDataDto, MarkUnplayedItemParams>(apiClient) {}
 
 QString MarkUnplayedItemLoader::path(const MarkUnplayedItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/PlayedItems/") + Support::toString(params.itemId()) ;
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/PlayedItems/") + Support::toString< QString>(params.itemId()) ;
 }
 
 QUrlQuery MarkUnplayedItemLoader::query(const MarkUnplayedItemParams &params) const {

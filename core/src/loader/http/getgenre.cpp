@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetGenreLoader::GetGenreLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetGenreParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDto, GetGenreParams>(apiClient) {}
 
 QString GetGenreLoader::path(const GetGenreParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Genres/") + Support::toString(params.genreName()) ;
+	return QStringLiteral("/Genres/") + Support::toString< QString>(params.genreName()) ;
 }
 
 QUrlQuery GetGenreLoader::query(const GetGenreParams &params) const {
@@ -50,7 +51,7 @@ QUrlQuery GetGenreLoader::query(const GetGenreParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;

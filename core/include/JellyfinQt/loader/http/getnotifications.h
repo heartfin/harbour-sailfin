@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/notificationresultdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets a user's notifications.
  */
-class GetNotificationsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::NotificationResultDto, GetNotificationsParams> {
+
+class GetNotificationsLoader : public Jellyfin::Support::HttpLoader<NotificationResultDto, GetNotificationsParams> {
 public:
 	explicit GetNotificationsLoader(ApiClient *apiClient = nullptr);
 

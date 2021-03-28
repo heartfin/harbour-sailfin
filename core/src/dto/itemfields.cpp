@@ -34,7 +34,6 @@ namespace DTO {
 
 ItemFieldsClass::ItemFieldsClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ItemFields = Jellyfin::DTO::ItemFields;
 
 template <>
-ItemFields fromJsonValue<ItemFields>(const QJsonValue &source) {
+ItemFields fromJsonValue(const QJsonValue &source, convertType<ItemFields>) {
 	if (!source.isString()) return ItemFields::EnumNotSet;
 
 	QString str = source.toString();
@@ -231,6 +230,138 @@ ItemFields fromJsonValue<ItemFields>(const QJsonValue &source) {
 	}
 	
 	return ItemFields::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ItemFields &source, convertType<ItemFields>) {
+	switch(source) {
+	case ItemFields::AirTime:
+		return QStringLiteral("AirTime");
+	case ItemFields::CanDelete:
+		return QStringLiteral("CanDelete");
+	case ItemFields::CanDownload:
+		return QStringLiteral("CanDownload");
+	case ItemFields::ChannelInfo:
+		return QStringLiteral("ChannelInfo");
+	case ItemFields::Chapters:
+		return QStringLiteral("Chapters");
+	case ItemFields::ChildCount:
+		return QStringLiteral("ChildCount");
+	case ItemFields::CumulativeRunTimeTicks:
+		return QStringLiteral("CumulativeRunTimeTicks");
+	case ItemFields::CustomRating:
+		return QStringLiteral("CustomRating");
+	case ItemFields::DateCreated:
+		return QStringLiteral("DateCreated");
+	case ItemFields::DateLastMediaAdded:
+		return QStringLiteral("DateLastMediaAdded");
+	case ItemFields::DisplayPreferencesId:
+		return QStringLiteral("DisplayPreferencesId");
+	case ItemFields::Etag:
+		return QStringLiteral("Etag");
+	case ItemFields::ExternalUrls:
+		return QStringLiteral("ExternalUrls");
+	case ItemFields::Genres:
+		return QStringLiteral("Genres");
+	case ItemFields::HomePageUrl:
+		return QStringLiteral("HomePageUrl");
+	case ItemFields::ItemCounts:
+		return QStringLiteral("ItemCounts");
+	case ItemFields::MediaSourceCount:
+		return QStringLiteral("MediaSourceCount");
+	case ItemFields::MediaSources:
+		return QStringLiteral("MediaSources");
+	case ItemFields::OriginalTitle:
+		return QStringLiteral("OriginalTitle");
+	case ItemFields::Overview:
+		return QStringLiteral("Overview");
+	case ItemFields::ParentId:
+		return QStringLiteral("ParentId");
+	case ItemFields::Path:
+		return QStringLiteral("Path");
+	case ItemFields::People:
+		return QStringLiteral("People");
+	case ItemFields::PlayAccess:
+		return QStringLiteral("PlayAccess");
+	case ItemFields::ProductionLocations:
+		return QStringLiteral("ProductionLocations");
+	case ItemFields::ProviderIds:
+		return QStringLiteral("ProviderIds");
+	case ItemFields::PrimaryImageAspectRatio:
+		return QStringLiteral("PrimaryImageAspectRatio");
+	case ItemFields::RecursiveItemCount:
+		return QStringLiteral("RecursiveItemCount");
+	case ItemFields::Settings:
+		return QStringLiteral("Settings");
+	case ItemFields::ScreenshotImageTags:
+		return QStringLiteral("ScreenshotImageTags");
+	case ItemFields::SeriesPrimaryImage:
+		return QStringLiteral("SeriesPrimaryImage");
+	case ItemFields::SeriesStudio:
+		return QStringLiteral("SeriesStudio");
+	case ItemFields::SortName:
+		return QStringLiteral("SortName");
+	case ItemFields::SpecialEpisodeNumbers:
+		return QStringLiteral("SpecialEpisodeNumbers");
+	case ItemFields::Studios:
+		return QStringLiteral("Studios");
+	case ItemFields::BasicSyncInfo:
+		return QStringLiteral("BasicSyncInfo");
+	case ItemFields::SyncInfo:
+		return QStringLiteral("SyncInfo");
+	case ItemFields::Taglines:
+		return QStringLiteral("Taglines");
+	case ItemFields::Tags:
+		return QStringLiteral("Tags");
+	case ItemFields::RemoteTrailers:
+		return QStringLiteral("RemoteTrailers");
+	case ItemFields::MediaStreams:
+		return QStringLiteral("MediaStreams");
+	case ItemFields::SeasonUserData:
+		return QStringLiteral("SeasonUserData");
+	case ItemFields::ServiceName:
+		return QStringLiteral("ServiceName");
+	case ItemFields::ThemeSongIds:
+		return QStringLiteral("ThemeSongIds");
+	case ItemFields::ThemeVideoIds:
+		return QStringLiteral("ThemeVideoIds");
+	case ItemFields::ExternalEtag:
+		return QStringLiteral("ExternalEtag");
+	case ItemFields::PresentationUniqueKey:
+		return QStringLiteral("PresentationUniqueKey");
+	case ItemFields::InheritedParentalRatingValue:
+		return QStringLiteral("InheritedParentalRatingValue");
+	case ItemFields::ExternalSeriesId:
+		return QStringLiteral("ExternalSeriesId");
+	case ItemFields::SeriesPresentationUniqueKey:
+		return QStringLiteral("SeriesPresentationUniqueKey");
+	case ItemFields::DateLastRefreshed:
+		return QStringLiteral("DateLastRefreshed");
+	case ItemFields::DateLastSaved:
+		return QStringLiteral("DateLastSaved");
+	case ItemFields::RefreshState:
+		return QStringLiteral("RefreshState");
+	case ItemFields::ChannelImage:
+		return QStringLiteral("ChannelImage");
+	case ItemFields::EnableMediaSourceDisplay:
+		return QStringLiteral("EnableMediaSourceDisplay");
+	case ItemFields::Width:
+		return QStringLiteral("Width");
+	case ItemFields::Height:
+		return QStringLiteral("Height");
+	case ItemFields::ExtraIds:
+		return QStringLiteral("ExtraIds");
+	case ItemFields::LocalTrailerCount:
+		return QStringLiteral("LocalTrailerCount");
+	case ItemFields::IsHD:
+		return QStringLiteral("IsHD");
+	case ItemFields::SpecialFeatureCount:
+		return QStringLiteral("SpecialFeatureCount");
+
+	case ItemFields::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

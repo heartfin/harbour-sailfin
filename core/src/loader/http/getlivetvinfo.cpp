@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetLiveTvInfoLoader::GetLiveTvInfoLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::LiveTvInfo, GetLiveTvInfoParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<LiveTvInfo, GetLiveTvInfoParams>(apiClient) {}
 
 QString GetLiveTvInfoLoader::path(const GetLiveTvInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

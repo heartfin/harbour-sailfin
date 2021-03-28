@@ -34,6 +34,27 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetParentPathLoader::GetParentPathLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QString, GetParentPathParams>(apiClient) {}
+
+QString GetParentPathLoader::path(const GetParentPathParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Environment/ParentPath");
+}
+
+QUrlQuery GetParentPathLoader::query(const GetParentPathParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("path", Support::toString<QString>(params.path()));
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

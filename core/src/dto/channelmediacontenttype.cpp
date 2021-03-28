@@ -34,7 +34,6 @@ namespace DTO {
 
 ChannelMediaContentTypeClass::ChannelMediaContentTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ChannelMediaContentType = Jellyfin::DTO::ChannelMediaContentType;
 
 template <>
-ChannelMediaContentType fromJsonValue<ChannelMediaContentType>(const QJsonValue &source) {
+ChannelMediaContentType fromJsonValue(const QJsonValue &source, convertType<ChannelMediaContentType>) {
 	if (!source.isString()) return ChannelMediaContentType::EnumNotSet;
 
 	QString str = source.toString();
@@ -72,6 +71,32 @@ ChannelMediaContentType fromJsonValue<ChannelMediaContentType>(const QJsonValue 
 	}
 	
 	return ChannelMediaContentType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ChannelMediaContentType &source, convertType<ChannelMediaContentType>) {
+	switch(source) {
+	case ChannelMediaContentType::Clip:
+		return QStringLiteral("Clip");
+	case ChannelMediaContentType::Podcast:
+		return QStringLiteral("Podcast");
+	case ChannelMediaContentType::Trailer:
+		return QStringLiteral("Trailer");
+	case ChannelMediaContentType::Movie:
+		return QStringLiteral("Movie");
+	case ChannelMediaContentType::Episode:
+		return QStringLiteral("Episode");
+	case ChannelMediaContentType::Song:
+		return QStringLiteral("Song");
+	case ChannelMediaContentType::MovieExtra:
+		return QStringLiteral("MovieExtra");
+	case ChannelMediaContentType::TvExtra:
+		return QStringLiteral("TvExtra");
+
+	case ChannelMediaContentType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

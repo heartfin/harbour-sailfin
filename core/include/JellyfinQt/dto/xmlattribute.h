@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static XmlAttribute fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -83,6 +87,18 @@ protected:
 	QString m_name;
 	QString m_value;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using XmlAttribute = Jellyfin::DTO::XmlAttribute;
+
+template <>
+XmlAttribute fromJsonValue(const QJsonValue &source, convertType<XmlAttribute>);
+
+template<>
+QJsonValue toJsonValue(const XmlAttribute &source, convertType<XmlAttribute>);
 
 } // NS DTO
 } // NS Jellyfin

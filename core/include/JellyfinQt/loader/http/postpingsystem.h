@@ -35,13 +35,29 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Pings the system.
+ */
+
+class PostPingSystemLoader : public Jellyfin::Support::HttpLoader<QString, PostPingSystemParams> {
+public:
+	explicit PostPingSystemLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const PostPingSystemParams& parameters) const override;
+	QUrlQuery query(const PostPingSystemParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

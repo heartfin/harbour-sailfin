@@ -67,7 +67,7 @@ void SubtitleProfile::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SubtitleProfile::toJson() {
+QJsonObject SubtitleProfile::toJson() const {
 	QJsonObject result;
 	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
 	result["Method"] = Jellyfin::Support::toJsonValue<SubtitleDeliveryMethod>(m_method);
@@ -144,9 +144,14 @@ namespace Support {
 using SubtitleProfile = Jellyfin::DTO::SubtitleProfile;
 
 template <>
-SubtitleProfile fromJsonValue<SubtitleProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SubtitleProfile fromJsonValue(const QJsonValue &source, convertType<SubtitleProfile>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SubtitleProfile::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SubtitleProfile &source, convertType<SubtitleProfile>) {
+	return source.toJson();
 }
 
 } // NS DTO

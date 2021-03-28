@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/deviceprofileinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Get profile infos.
+ */
+
+class GetProfileInfosLoader : public Jellyfin::Support::HttpLoader<QList<DeviceProfileInfo>, GetProfileInfosParams> {
+public:
+	explicit GetProfileInfosLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetProfileInfosParams& parameters) const override;
+	QUrlQuery query(const GetProfileInfosParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

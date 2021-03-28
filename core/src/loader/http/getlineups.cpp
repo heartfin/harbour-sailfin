@@ -34,6 +34,38 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetLineupsLoader::GetLineupsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<NameIdPair>, GetLineupsParams>(apiClient) {}
+
+QString GetLineupsLoader::path(const GetLineupsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/ListingProviders/Lineups");
+}
+
+QUrlQuery GetLineupsLoader::query(const GetLineupsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.jellyfinIdNull()) {
+		result.addQueryItem("id", Support::toString<QString>(params.jellyfinId()));
+	}
+	if (!params.typeNull()) {
+		result.addQueryItem("type", Support::toString<QString>(params.type()));
+	}
+	if (!params.locationNull()) {
+		result.addQueryItem("location", Support::toString<QString>(params.location()));
+	}
+	if (!params.countryNull()) {
+		result.addQueryItem("country", Support::toString<QString>(params.country()));
+	}
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

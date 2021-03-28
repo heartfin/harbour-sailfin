@@ -88,7 +88,7 @@ void AuthenticationInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject AuthenticationInfo::toJson() {
+QJsonObject AuthenticationInfo::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<qint64>(m_jellyfinId);
 	result["AccessToken"] = Jellyfin::Support::toJsonValue<QString>(m_accessToken);
@@ -235,9 +235,14 @@ namespace Support {
 using AuthenticationInfo = Jellyfin::DTO::AuthenticationInfo;
 
 template <>
-AuthenticationInfo fromJsonValue<AuthenticationInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+AuthenticationInfo fromJsonValue(const QJsonValue &source, convertType<AuthenticationInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return AuthenticationInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const AuthenticationInfo &source, convertType<AuthenticationInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

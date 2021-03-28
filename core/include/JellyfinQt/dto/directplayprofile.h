@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static DirectPlayProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -90,6 +94,18 @@ protected:
 	QString m_videoCodec;
 	DlnaProfileType m_type;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DirectPlayProfile = Jellyfin::DTO::DirectPlayProfile;
+
+template <>
+DirectPlayProfile fromJsonValue(const QJsonValue &source, convertType<DirectPlayProfile>);
+
+template<>
+QJsonValue toJsonValue(const DirectPlayProfile &source, convertType<DirectPlayProfile>);
 
 } // NS DTO
 } // NS Jellyfin

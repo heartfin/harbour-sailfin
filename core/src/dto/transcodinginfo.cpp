@@ -88,7 +88,7 @@ void TranscodingInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TranscodingInfo::toJson() {
+QJsonObject TranscodingInfo::toJson() const {
 	QJsonObject result;
 	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
 	result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
@@ -256,9 +256,14 @@ namespace Support {
 using TranscodingInfo = Jellyfin::DTO::TranscodingInfo;
 
 template <>
-TranscodingInfo fromJsonValue<TranscodingInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TranscodingInfo fromJsonValue(const QJsonValue &source, convertType<TranscodingInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TranscodingInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TranscodingInfo &source, convertType<TranscodingInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

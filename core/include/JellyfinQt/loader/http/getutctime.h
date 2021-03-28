@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/utctimeresponse.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets the current UTC time.
  */
-class GetUtcTimeLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UtcTimeResponse, GetUtcTimeParams> {
+
+class GetUtcTimeLoader : public Jellyfin::Support::HttpLoader<UtcTimeResponse, GetUtcTimeParams> {
 public:
 	explicit GetUtcTimeLoader(ApiClient *apiClient = nullptr);
 

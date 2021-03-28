@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+SyncPlayGetGroupsLoader::SyncPlayGetGroupsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<GroupInfoDto>, SyncPlayGetGroupsParams>(apiClient) {}
+
+QString SyncPlayGetGroupsLoader::path(const SyncPlayGetGroupsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/SyncPlay/List");
+}
+
+QUrlQuery SyncPlayGetGroupsLoader::query(const SyncPlayGetGroupsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

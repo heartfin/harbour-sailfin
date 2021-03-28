@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ScrollDirectionClass {
@@ -52,7 +56,19 @@ private:
 	explicit ScrollDirectionClass();
 };
 
-typedef ScrollDirectionClass::Value ScrollDirection;
+using ScrollDirection = ScrollDirectionClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ScrollDirection = Jellyfin::DTO::ScrollDirection;
+
+template <>
+ScrollDirection fromJsonValue(const QJsonValue &source, convertType<ScrollDirection>);
+
+template <>
+QJsonValue toJsonValue(const ScrollDirection &source, convertType<ScrollDirection>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -61,7 +61,7 @@ void ValidatePathDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ValidatePathDto::toJson() {
+QJsonObject ValidatePathDto::toJson() const {
 	QJsonObject result;
 	result["ValidateWritable"] = Jellyfin::Support::toJsonValue<bool>(m_validateWritable);
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
@@ -110,9 +110,14 @@ namespace Support {
 using ValidatePathDto = Jellyfin::DTO::ValidatePathDto;
 
 template <>
-ValidatePathDto fromJsonValue<ValidatePathDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ValidatePathDto fromJsonValue(const QJsonValue &source, convertType<ValidatePathDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ValidatePathDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ValidatePathDto &source, convertType<ValidatePathDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

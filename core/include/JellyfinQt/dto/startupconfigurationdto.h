@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static StartupConfigurationDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -95,6 +99,18 @@ protected:
 	QString m_metadataCountryCode;
 	QString m_preferredMetadataLanguage;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using StartupConfigurationDto = Jellyfin::DTO::StartupConfigurationDto;
+
+template <>
+StartupConfigurationDto fromJsonValue(const QJsonValue &source, convertType<StartupConfigurationDto>);
+
+template<>
+QJsonValue toJsonValue(const StartupConfigurationDto &source, convertType<StartupConfigurationDto>);
 
 } // NS DTO
 } // NS Jellyfin

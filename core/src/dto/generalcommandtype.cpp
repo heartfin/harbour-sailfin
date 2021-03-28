@@ -34,7 +34,6 @@ namespace DTO {
 
 GeneralCommandTypeClass::GeneralCommandTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using GeneralCommandType = Jellyfin::DTO::GeneralCommandType;
 
 template <>
-GeneralCommandType fromJsonValue<GeneralCommandType>(const QJsonValue &source) {
+GeneralCommandType fromJsonValue(const QJsonValue &source, convertType<GeneralCommandType>) {
 	if (!source.isString()) return GeneralCommandType::EnumNotSet;
 
 	QString str = source.toString();
@@ -171,6 +170,98 @@ GeneralCommandType fromJsonValue<GeneralCommandType>(const QJsonValue &source) {
 	}
 	
 	return GeneralCommandType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const GeneralCommandType &source, convertType<GeneralCommandType>) {
+	switch(source) {
+	case GeneralCommandType::MoveUp:
+		return QStringLiteral("MoveUp");
+	case GeneralCommandType::MoveDown:
+		return QStringLiteral("MoveDown");
+	case GeneralCommandType::MoveLeft:
+		return QStringLiteral("MoveLeft");
+	case GeneralCommandType::MoveRight:
+		return QStringLiteral("MoveRight");
+	case GeneralCommandType::PageUp:
+		return QStringLiteral("PageUp");
+	case GeneralCommandType::PageDown:
+		return QStringLiteral("PageDown");
+	case GeneralCommandType::PreviousLetter:
+		return QStringLiteral("PreviousLetter");
+	case GeneralCommandType::NextLetter:
+		return QStringLiteral("NextLetter");
+	case GeneralCommandType::ToggleOsd:
+		return QStringLiteral("ToggleOsd");
+	case GeneralCommandType::ToggleContextMenu:
+		return QStringLiteral("ToggleContextMenu");
+	case GeneralCommandType::Select:
+		return QStringLiteral("Select");
+	case GeneralCommandType::Back:
+		return QStringLiteral("Back");
+	case GeneralCommandType::TakeScreenshot:
+		return QStringLiteral("TakeScreenshot");
+	case GeneralCommandType::SendKey:
+		return QStringLiteral("SendKey");
+	case GeneralCommandType::SendString:
+		return QStringLiteral("SendString");
+	case GeneralCommandType::GoHome:
+		return QStringLiteral("GoHome");
+	case GeneralCommandType::GoToSettings:
+		return QStringLiteral("GoToSettings");
+	case GeneralCommandType::VolumeUp:
+		return QStringLiteral("VolumeUp");
+	case GeneralCommandType::VolumeDown:
+		return QStringLiteral("VolumeDown");
+	case GeneralCommandType::Mute:
+		return QStringLiteral("Mute");
+	case GeneralCommandType::Unmute:
+		return QStringLiteral("Unmute");
+	case GeneralCommandType::ToggleMute:
+		return QStringLiteral("ToggleMute");
+	case GeneralCommandType::SetVolume:
+		return QStringLiteral("SetVolume");
+	case GeneralCommandType::SetAudioStreamIndex:
+		return QStringLiteral("SetAudioStreamIndex");
+	case GeneralCommandType::SetSubtitleStreamIndex:
+		return QStringLiteral("SetSubtitleStreamIndex");
+	case GeneralCommandType::ToggleFullscreen:
+		return QStringLiteral("ToggleFullscreen");
+	case GeneralCommandType::DisplayContent:
+		return QStringLiteral("DisplayContent");
+	case GeneralCommandType::GoToSearch:
+		return QStringLiteral("GoToSearch");
+	case GeneralCommandType::DisplayMessage:
+		return QStringLiteral("DisplayMessage");
+	case GeneralCommandType::SetRepeatMode:
+		return QStringLiteral("SetRepeatMode");
+	case GeneralCommandType::ChannelUp:
+		return QStringLiteral("ChannelUp");
+	case GeneralCommandType::ChannelDown:
+		return QStringLiteral("ChannelDown");
+	case GeneralCommandType::Guide:
+		return QStringLiteral("Guide");
+	case GeneralCommandType::ToggleStats:
+		return QStringLiteral("ToggleStats");
+	case GeneralCommandType::PlayMediaSource:
+		return QStringLiteral("PlayMediaSource");
+	case GeneralCommandType::PlayTrailers:
+		return QStringLiteral("PlayTrailers");
+	case GeneralCommandType::SetShuffleQueue:
+		return QStringLiteral("SetShuffleQueue");
+	case GeneralCommandType::PlayState:
+		return QStringLiteral("PlayState");
+	case GeneralCommandType::PlayNext:
+		return QStringLiteral("PlayNext");
+	case GeneralCommandType::ToggleOsdMenu:
+		return QStringLiteral("ToggleOsdMenu");
+	case GeneralCommandType::Play:
+		return QStringLiteral("Play");
+
+	case GeneralCommandType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

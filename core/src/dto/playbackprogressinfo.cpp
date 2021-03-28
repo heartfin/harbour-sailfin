@@ -112,7 +112,7 @@ void PlaybackProgressInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PlaybackProgressInfo::toJson() {
+QJsonObject PlaybackProgressInfo::toJson() const {
 	QJsonObject result;
 	result["CanSeek"] = Jellyfin::Support::toJsonValue<bool>(m_canSeek);
 	result["Item"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_item);
@@ -357,9 +357,14 @@ namespace Support {
 using PlaybackProgressInfo = Jellyfin::DTO::PlaybackProgressInfo;
 
 template <>
-PlaybackProgressInfo fromJsonValue<PlaybackProgressInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PlaybackProgressInfo fromJsonValue(const QJsonValue &source, convertType<PlaybackProgressInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PlaybackProgressInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PlaybackProgressInfo &source, convertType<PlaybackProgressInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

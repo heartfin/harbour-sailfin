@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/quickconnectstate.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets the current quick connect state.
  */
-class GetStatusLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectState, GetStatusParams> {
+
+class GetStatusLoader : public Jellyfin::Support::HttpLoader<QuickConnectState, GetStatusParams> {
 public:
 	explicit GetStatusLoader(ApiClient *apiClient = nullptr);
 

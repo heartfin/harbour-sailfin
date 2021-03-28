@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets the root folder from a user's library.
  */
-class GetRootFolderLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDto, GetRootFolderParams> {
+
+class GetRootFolderLoader : public Jellyfin::Support::HttpLoader<BaseItemDto, GetRootFolderParams> {
 public:
 	explicit GetRootFolderLoader(ApiClient *apiClient = nullptr);
 

@@ -73,7 +73,7 @@ void ConfigurationPageInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ConfigurationPageInfo::toJson() {
+QJsonObject ConfigurationPageInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["EnableInMainMenu"] = Jellyfin::Support::toJsonValue<bool>(m_enableInMainMenu);
@@ -171,9 +171,14 @@ namespace Support {
 using ConfigurationPageInfo = Jellyfin::DTO::ConfigurationPageInfo;
 
 template <>
-ConfigurationPageInfo fromJsonValue<ConfigurationPageInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ConfigurationPageInfo fromJsonValue(const QJsonValue &source, convertType<ConfigurationPageInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ConfigurationPageInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ConfigurationPageInfo &source, convertType<ConfigurationPageInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

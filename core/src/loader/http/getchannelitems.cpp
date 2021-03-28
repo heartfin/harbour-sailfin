@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetChannelItemsLoader::GetChannelItemsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetChannelItemsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetChannelItemsParams>(apiClient) {}
 
 QString GetChannelItemsLoader::path(const GetChannelItemsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Channels/") + Support::toString(params.channelId()) + QStringLiteral("/Items");
+	return QStringLiteral("/Channels/") + Support::toString< QString>(params.channelId()) + QStringLiteral("/Items");
 }
 
 QUrlQuery GetChannelItemsLoader::query(const GetChannelItemsParams &params) const {
@@ -50,28 +51,28 @@ QUrlQuery GetChannelItemsLoader::query(const GetChannelItemsParams &params) cons
 
 	// Optional parameters
 	if (!params.folderIdNull()) {
-		result.addQueryItem("folderId", Support::toString(params.folderId()));
+		result.addQueryItem("folderId", Support::toString<QString>(params.folderId()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.sortOrderNull()) {
-		result.addQueryItem("sortOrder", Support::toString(params.sortOrder()));
+		result.addQueryItem("sortOrder", Support::toString<QString>(params.sortOrder()));
 	}
 	if (!params.filtersNull()) {
-		result.addQueryItem("filters", Support::toString(params.filters()));
+		result.addQueryItem("filters", Support::toString<QList<ItemFilter>>(params.filters()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QString>(params.sortBy()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	
 	return result;

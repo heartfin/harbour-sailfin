@@ -34,7 +34,6 @@ namespace DTO {
 
 TranscodeSeekInfoClass::TranscodeSeekInfoClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using TranscodeSeekInfo = Jellyfin::DTO::TranscodeSeekInfo;
 
 template <>
-TranscodeSeekInfo fromJsonValue<TranscodeSeekInfo>(const QJsonValue &source) {
+TranscodeSeekInfo fromJsonValue(const QJsonValue &source, convertType<TranscodeSeekInfo>) {
 	if (!source.isString()) return TranscodeSeekInfo::EnumNotSet;
 
 	QString str = source.toString();
@@ -54,6 +53,20 @@ TranscodeSeekInfo fromJsonValue<TranscodeSeekInfo>(const QJsonValue &source) {
 	}
 	
 	return TranscodeSeekInfo::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const TranscodeSeekInfo &source, convertType<TranscodeSeekInfo>) {
+	switch(source) {
+	case TranscodeSeekInfo::Auto:
+		return QStringLiteral("Auto");
+	case TranscodeSeekInfo::Bytes:
+		return QStringLiteral("Bytes");
+
+	case TranscodeSeekInfo::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

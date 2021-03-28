@@ -193,7 +193,7 @@ void MediaStream::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject MediaStream::toJson() {
+QJsonObject MediaStream::toJson() const {
 	QJsonObject result;
 	result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
 	result["CodecTag"] = Jellyfin::Support::toJsonValue<QString>(m_codecTag);
@@ -802,9 +802,14 @@ namespace Support {
 using MediaStream = Jellyfin::DTO::MediaStream;
 
 template <>
-MediaStream fromJsonValue<MediaStream>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+MediaStream fromJsonValue(const QJsonValue &source, convertType<MediaStream>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return MediaStream::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const MediaStream &source, convertType<MediaStream>) {
+	return source.toJson();
 }
 
 } // NS DTO

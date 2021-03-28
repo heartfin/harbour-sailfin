@@ -58,7 +58,7 @@ void UtcTimeResponse::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject UtcTimeResponse::toJson() {
+QJsonObject UtcTimeResponse::toJson() const {
 	QJsonObject result;
 	result["RequestReceptionTime"] = Jellyfin::Support::toJsonValue<QDateTime>(m_requestReceptionTime);
 	result["ResponseTransmissionTime"] = Jellyfin::Support::toJsonValue<QDateTime>(m_responseTransmissionTime);
@@ -86,9 +86,14 @@ namespace Support {
 using UtcTimeResponse = Jellyfin::DTO::UtcTimeResponse;
 
 template <>
-UtcTimeResponse fromJsonValue<UtcTimeResponse>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+UtcTimeResponse fromJsonValue(const QJsonValue &source, convertType<UtcTimeResponse>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return UtcTimeResponse::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const UtcTimeResponse &source, convertType<UtcTimeResponse>) {
+	return source.toJson();
 }
 
 } // NS DTO

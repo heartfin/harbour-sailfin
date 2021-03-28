@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetMovieRemoteSearchResultsLoader::GetMovieRemoteSearchResultsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<RemoteSearchResult>, GetMovieRemoteSearchResultsParams>(apiClient) {}
+
+QString GetMovieRemoteSearchResultsLoader::path(const GetMovieRemoteSearchResultsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/RemoteSearch/Movie");
+}
+
+QUrlQuery GetMovieRemoteSearchResultsLoader::query(const GetMovieRemoteSearchResultsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

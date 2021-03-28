@@ -79,7 +79,7 @@ void SongInfo::setFromJson(QJsonObject source) {
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
-	m_providerIds = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ProviderIds"]);
+	m_providerIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ProviderIds"]);
 	m_year = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Year"]);
 	m_indexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["IndexNumber"]);
 	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ParentIndexNumber"]);
@@ -91,13 +91,13 @@ void SongInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SongInfo::toJson() {
+QJsonObject SongInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
 	result["MetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_metadataLanguage);
 	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
-	result["ProviderIds"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_providerIds);
+	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
 	result["Year"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_year);
 	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
 	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
@@ -162,17 +162,17 @@ void SongInfo::setMetadataCountryCodeNull() {
 	m_metadataCountryCode.clear();
 
 }
-std::optional<QJsonObject> SongInfo::providerIds() const { return m_providerIds; }
+QJsonObject SongInfo::providerIds() const { return m_providerIds; }
 
-void SongInfo::setProviderIds(std::optional<QJsonObject> newProviderIds) {
+void SongInfo::setProviderIds(QJsonObject newProviderIds) {
 	m_providerIds = newProviderIds;
 }
 bool SongInfo::providerIdsNull() const {
-	return !m_providerIds.has_value();
+	return m_providerIds.isEmpty();
 }
 
 void SongInfo::setProviderIdsNull() {
-	m_providerIds = std::nullopt;
+	m_providerIds= QJsonObject();
 
 }
 std::optional<qint32> SongInfo::year() const { return m_year; }
@@ -280,9 +280,14 @@ namespace Support {
 using SongInfo = Jellyfin::DTO::SongInfo;
 
 template <>
-SongInfo fromJsonValue<SongInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SongInfo fromJsonValue(const QJsonValue &source, convertType<SongInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SongInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SongInfo &source, convertType<SongInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

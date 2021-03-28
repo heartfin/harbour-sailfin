@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetChannelsLoader::GetChannelsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetChannelsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetChannelsParams>(apiClient) {}
 
 QString GetChannelsLoader::path(const GetChannelsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,22 +51,22 @@ QUrlQuery GetChannelsLoader::query(const GetChannelsParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.supportsLatestItemsNull()) {
-		result.addQueryItem("supportsLatestItems", Support::toString(params.supportsLatestItems()));
+		result.addQueryItem("supportsLatestItems", Support::toString<std::optional<bool>>(params.supportsLatestItems()));
 	}
 	if (!params.supportsMediaDeletionNull()) {
-		result.addQueryItem("supportsMediaDeletion", Support::toString(params.supportsMediaDeletion()));
+		result.addQueryItem("supportsMediaDeletion", Support::toString<std::optional<bool>>(params.supportsMediaDeletion()));
 	}
 	if (!params.isFavoriteNull()) {
-		result.addQueryItem("isFavorite", Support::toString(params.isFavorite()));
+		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
 	}
 	
 	return result;

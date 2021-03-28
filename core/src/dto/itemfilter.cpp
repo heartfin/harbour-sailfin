@@ -34,7 +34,6 @@ namespace DTO {
 
 ItemFilterClass::ItemFilterClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ItemFilter = Jellyfin::DTO::ItemFilter;
 
 template <>
-ItemFilter fromJsonValue<ItemFilter>(const QJsonValue &source) {
+ItemFilter fromJsonValue(const QJsonValue &source, convertType<ItemFilter>) {
 	if (!source.isString()) return ItemFilter::EnumNotSet;
 
 	QString str = source.toString();
@@ -75,6 +74,34 @@ ItemFilter fromJsonValue<ItemFilter>(const QJsonValue &source) {
 	}
 	
 	return ItemFilter::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ItemFilter &source, convertType<ItemFilter>) {
+	switch(source) {
+	case ItemFilter::IsFolder:
+		return QStringLiteral("IsFolder");
+	case ItemFilter::IsNotFolder:
+		return QStringLiteral("IsNotFolder");
+	case ItemFilter::IsUnplayed:
+		return QStringLiteral("IsUnplayed");
+	case ItemFilter::IsPlayed:
+		return QStringLiteral("IsPlayed");
+	case ItemFilter::IsFavorite:
+		return QStringLiteral("IsFavorite");
+	case ItemFilter::IsResumable:
+		return QStringLiteral("IsResumable");
+	case ItemFilter::Likes:
+		return QStringLiteral("Likes");
+	case ItemFilter::Dislikes:
+		return QStringLiteral("Dislikes");
+	case ItemFilter::IsFavoriteOrLikes:
+		return QStringLiteral("IsFavoriteOrLikes");
+
+	case ItemFilter::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

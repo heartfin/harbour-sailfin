@@ -88,7 +88,7 @@ void ChannelFeatures::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ChannelFeatures::toJson() {
+QJsonObject ChannelFeatures::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
@@ -235,9 +235,14 @@ namespace Support {
 using ChannelFeatures = Jellyfin::DTO::ChannelFeatures;
 
 template <>
-ChannelFeatures fromJsonValue<ChannelFeatures>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ChannelFeatures fromJsonValue(const QJsonValue &source, convertType<ChannelFeatures>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ChannelFeatures::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ChannelFeatures &source, convertType<ChannelFeatures>) {
+	return source.toJson();
 }
 
 } // NS DTO

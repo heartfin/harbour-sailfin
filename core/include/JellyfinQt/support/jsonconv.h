@@ -19,12 +19,12 @@
 #ifndef JELLYFIN_SUPPORT_JSONCONV_H
 #define JELLYFIN_SUPPORT_JSONCONV_H
 
-#include <exception>
-#include <stdexcept>
+#include <QException>
 
 #include <QtGlobal>
 #include <QDateTime>
 #include <QJsonArray>
+#include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
 #include <QUuid>
@@ -39,46 +39,115 @@ QUuid stringToUuid(const QString &source);
 /**
  * @brief Thrown when JSON cannot be parsed.
  */
-class ParseException : public std::runtime_error {
+class ParseException : public QException {
 public:
-    explicit ParseException(const char *message)
-        : std::runtime_error(message) {}
+    explicit ParseException(const QString &message)
+          : m_message(message.toStdString()) {}
+
+    /*explicit ParseException(const ParseException &other)
+          : m_message(other.m_message) {}*/
+
+    virtual const char *what() const noexcept override;
+
+    virtual QException *clone() const override;
+    virtual void raise() const override;
+private:
+    std::string m_message;
 };
+
+// https://www.fluentcpp.com/2017/08/15/function-templates-partial-specialization-cpp/
+template <typename T>
+struct convertType{};
 
 /**
  * Template for converting types from JSON into their respective type.
  */
 template <typename T>
-T fromJsonValue(const QJsonValue &source) {
+T fromJsonValue(const QJsonValue &source, convertType<T>) {
     Q_UNUSED(source)
     Q_ASSERT_X(false, "fromJsonValue<T>", "fromJsonValue called with unimplemented type");
 }
 
+
 template <typename T>
-QJsonValue toJsonValue(const T &source) {
+QJsonValue toJsonValue(const T &source, convertType<T>) {
     Q_UNUSED(source)
-    Q_ASSERT_X(false, "toJsonValue<T>", "toJsonValue called with unimplemented type");
+    std::string msg = "toJsonValue called with unimplemented type ";
+    msg += typeid (T).name();
+    Q_ASSERT_X(false, "toJsonValue<T>", msg.c_str());
+    return QJsonValue();
+}
+
+template<typename T>
+T fromJsonValue(const QJsonValue &source) {
+    return fromJsonValue(source, convertType<T>{});
+}
+
+
+template<typename T>
+QJsonValue toJsonValue(const T &source) {
+    return toJsonValue(source, convertType<T>{});
 }
 
 // QList
 template <typename T>
-QList<T> fromJsonValue(const QJsonArray &source) {
+QList<T> fromJsonValue(const QJsonValue &source, convertType<QList<T>>) {
     QList<T> result;
-    result.reserve(source.size());
-    for (auto it = source.cbegin(); it != source.cend(); it++) {
+    QJsonArray arr = source.toArray();
+    result.reserve(arr.size());
+    for (auto it = arr.cbegin(); it != arr.cend(); it++) {
         result.append(fromJsonValue<T>(*it));
     }
     return result;
 }
 
 template <typename T>
-QJsonValue toJsonValue(const QList<T> &source) {
+QJsonValue toJsonValue(const QList<T> &source, convertType<QList<T>>) {
     QJsonArray result;
     for (auto it = source.cbegin(); it != source.cend(); it++) {
-        result.push_back(*it);
+        result.push_back(toJsonValue<T>(*it));
     }
     return result;
 }
+
+// Optional
+
+template <typename T>
+std::optional<T> fromJsonValue(const QJsonValue &source, convertType<std::optional<T>>) {
+    if (source.isNull()) {
+        return std::nullopt;
+    } else {
+        return fromJsonValue<T>(source, convertType<T>{});
+    }
+}
+
+template <typename T>
+QJsonValue toJsonValue(const std::optional<T> &source, convertType<std::optional<T>>) {
+    if (source.has_value()) {
+        return toJsonValue<T>(source.value(), convertType<T>{});
+    } else {
+        // Null
+        return QJsonValue();
+    }
+}
+
+// QSharedPointer
+template <typename T>
+QSharedPointer<T> fromJsonValue(const QJsonValue &source, convertType<QSharedPointer<T>>) {
+    if (source.isNull()) {
+        return QSharedPointer<T>();
+    }
+    return QSharedPointer<T>::create(fromJsonValue<T>(source));
+}
+
+template <typename T>
+QJsonValue toJsonValue(const QSharedPointer<T> &source, convertType<QSharedPointer<T>>) {
+    if (source.isNull()) {
+        return QJsonValue();
+    }
+    return toJsonValue<T>(*source);
+}
+
 
 /**
  * Templates for string conversion.

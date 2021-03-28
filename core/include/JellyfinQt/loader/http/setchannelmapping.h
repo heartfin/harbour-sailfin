@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/tunerchannelmapping.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Set channel mappings.
  */
-class SetChannelMappingLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::TunerChannelMapping, SetChannelMappingParams> {
+
+class SetChannelMappingLoader : public Jellyfin::Support::HttpLoader<TunerChannelMapping, SetChannelMappingParams> {
 public:
 	explicit SetChannelMappingLoader(ApiClient *apiClient = nullptr);
 

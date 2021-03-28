@@ -60,6 +60,10 @@
 #include "JellyfinQt/dto/videotype.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace Loader {
 
 using namespace Jellyfin::DTO;
@@ -3019,7 +3023,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -3517,7 +3521,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -5807,7 +5811,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -6405,7 +6409,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -10193,7 +10197,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -11377,7 +11381,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -11875,7 +11879,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -19027,7 +19031,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -19517,7 +19521,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -20017,7 +20021,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -20523,7 +20527,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -21415,7 +21419,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -21913,7 +21917,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -23293,7 +23297,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -23791,7 +23795,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -25897,7 +25901,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
@@ -26403,7 +26407,7 @@ private:
 	std::optional<qint32> m_segmentLength = std::nullopt;
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<bool> m_staticStreaming = std::nullopt;
-	std::optional<QJsonObject> m_streamOptions = std::nullopt;
+	QJsonObject m_streamOptions;
 	QString m_subtitleCodec;
 	SubtitleDeliveryMethod m_subtitleMethod;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;

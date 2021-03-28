@@ -55,32 +55,32 @@ ControlResponse ControlResponse::fromJson(QJsonObject source) {
 
 
 void ControlResponse::setFromJson(QJsonObject source) {
-	m_headers = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["Headers"]);
+	m_headers = Jellyfin::Support::fromJsonValue<QJsonObject>(source["Headers"]);
 	m_xml = Jellyfin::Support::fromJsonValue<QString>(source["Xml"]);
 	m_isSuccessful = Jellyfin::Support::fromJsonValue<bool>(source["IsSuccessful"]);
 
 }
 	
-QJsonObject ControlResponse::toJson() {
+QJsonObject ControlResponse::toJson() const {
 	QJsonObject result;
-	result["Headers"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_headers);
+	result["Headers"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_headers);
 	result["Xml"] = Jellyfin::Support::toJsonValue<QString>(m_xml);
 	result["IsSuccessful"] = Jellyfin::Support::toJsonValue<bool>(m_isSuccessful);
 
 	return result;
 }
 
-std::optional<QJsonObject> ControlResponse::headers() const { return m_headers; }
+QJsonObject ControlResponse::headers() const { return m_headers; }
 
-void ControlResponse::setHeaders(std::optional<QJsonObject> newHeaders) {
+void ControlResponse::setHeaders(QJsonObject newHeaders) {
 	m_headers = newHeaders;
 }
 bool ControlResponse::headersNull() const {
-	return !m_headers.has_value();
+	return m_headers.isEmpty();
 }
 
 void ControlResponse::setHeadersNull() {
-	m_headers = std::nullopt;
+	m_headers= QJsonObject();
 
 }
 QString ControlResponse::xml() const { return m_xml; }
@@ -110,9 +110,14 @@ namespace Support {
 using ControlResponse = Jellyfin::DTO::ControlResponse;
 
 template <>
-ControlResponse fromJsonValue<ControlResponse>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ControlResponse fromJsonValue(const QJsonValue &source, convertType<ControlResponse>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ControlResponse::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ControlResponse &source, convertType<ControlResponse>) {
+	return source.toJson();
 }
 
 } // NS DTO

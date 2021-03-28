@@ -58,7 +58,7 @@ void QueueItem::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject QueueItem::toJson() {
+QJsonObject QueueItem::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
@@ -93,9 +93,14 @@ namespace Support {
 using QueueItem = Jellyfin::DTO::QueueItem;
 
 template <>
-QueueItem fromJsonValue<QueueItem>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+QueueItem fromJsonValue(const QJsonValue &source, convertType<QueueItem>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return QueueItem::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const QueueItem &source, convertType<QueueItem>) {
+	return source.toJson();
 }
 
 } // NS DTO

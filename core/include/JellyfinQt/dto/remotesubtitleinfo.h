@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static RemoteSubtitleInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -148,6 +152,18 @@ protected:
 	std::optional<qint32> m_downloadCount = std::nullopt;
 	std::optional<bool> m_isHashMatch = std::nullopt;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using RemoteSubtitleInfo = Jellyfin::DTO::RemoteSubtitleInfo;
+
+template <>
+RemoteSubtitleInfo fromJsonValue(const QJsonValue &source, convertType<RemoteSubtitleInfo>);
+
+template<>
+QJsonValue toJsonValue(const RemoteSubtitleInfo &source, convertType<RemoteSubtitleInfo>);
 
 } // NS DTO
 } // NS Jellyfin

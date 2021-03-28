@@ -34,7 +34,6 @@ namespace DTO {
 
 ProfileConditionValueClass::ProfileConditionValueClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ProfileConditionValue = Jellyfin::DTO::ProfileConditionValue;
 
 template <>
-ProfileConditionValue fromJsonValue<ProfileConditionValue>(const QJsonValue &source) {
+ProfileConditionValue fromJsonValue(const QJsonValue &source, convertType<ProfileConditionValue>) {
 	if (!source.isString()) return ProfileConditionValue::EnumNotSet;
 
 	QString str = source.toString();
@@ -117,6 +116,62 @@ ProfileConditionValue fromJsonValue<ProfileConditionValue>(const QJsonValue &sou
 	}
 	
 	return ProfileConditionValue::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ProfileConditionValue &source, convertType<ProfileConditionValue>) {
+	switch(source) {
+	case ProfileConditionValue::AudioChannels:
+		return QStringLiteral("AudioChannels");
+	case ProfileConditionValue::AudioBitrate:
+		return QStringLiteral("AudioBitrate");
+	case ProfileConditionValue::AudioProfile:
+		return QStringLiteral("AudioProfile");
+	case ProfileConditionValue::Width:
+		return QStringLiteral("Width");
+	case ProfileConditionValue::Height:
+		return QStringLiteral("Height");
+	case ProfileConditionValue::Has64BitOffsets:
+		return QStringLiteral("Has64BitOffsets");
+	case ProfileConditionValue::PacketLength:
+		return QStringLiteral("PacketLength");
+	case ProfileConditionValue::VideoBitDepth:
+		return QStringLiteral("VideoBitDepth");
+	case ProfileConditionValue::VideoBitrate:
+		return QStringLiteral("VideoBitrate");
+	case ProfileConditionValue::VideoFramerate:
+		return QStringLiteral("VideoFramerate");
+	case ProfileConditionValue::VideoLevel:
+		return QStringLiteral("VideoLevel");
+	case ProfileConditionValue::VideoProfile:
+		return QStringLiteral("VideoProfile");
+	case ProfileConditionValue::VideoTimestamp:
+		return QStringLiteral("VideoTimestamp");
+	case ProfileConditionValue::IsAnamorphic:
+		return QStringLiteral("IsAnamorphic");
+	case ProfileConditionValue::RefFrames:
+		return QStringLiteral("RefFrames");
+	case ProfileConditionValue::NumAudioStreams:
+		return QStringLiteral("NumAudioStreams");
+	case ProfileConditionValue::NumVideoStreams:
+		return QStringLiteral("NumVideoStreams");
+	case ProfileConditionValue::IsSecondaryAudio:
+		return QStringLiteral("IsSecondaryAudio");
+	case ProfileConditionValue::VideoCodecTag:
+		return QStringLiteral("VideoCodecTag");
+	case ProfileConditionValue::IsAvc:
+		return QStringLiteral("IsAvc");
+	case ProfileConditionValue::IsInterlaced:
+		return QStringLiteral("IsInterlaced");
+	case ProfileConditionValue::AudioSampleRate:
+		return QStringLiteral("AudioSampleRate");
+	case ProfileConditionValue::AudioBitDepth:
+		return QStringLiteral("AudioBitDepth");
+
+	case ProfileConditionValue::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

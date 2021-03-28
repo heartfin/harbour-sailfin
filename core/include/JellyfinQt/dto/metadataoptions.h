@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static MetadataOptions fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -117,6 +121,18 @@ protected:
 	QStringList m_disabledImageFetchers;
 	QStringList m_imageFetcherOrder;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MetadataOptions = Jellyfin::DTO::MetadataOptions;
+
+template <>
+MetadataOptions fromJsonValue(const QJsonValue &source, convertType<MetadataOptions>);
+
+template<>
+QJsonValue toJsonValue(const MetadataOptions &source, convertType<MetadataOptions>);
 
 } // NS DTO
 } // NS Jellyfin

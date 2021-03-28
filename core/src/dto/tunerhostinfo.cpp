@@ -85,7 +85,7 @@ void TunerHostInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TunerHostInfo::toJson() {
+QJsonObject TunerHostInfo::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
@@ -225,9 +225,14 @@ namespace Support {
 using TunerHostInfo = Jellyfin::DTO::TunerHostInfo;
 
 template <>
-TunerHostInfo fromJsonValue<TunerHostInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TunerHostInfo fromJsonValue(const QJsonValue &source, convertType<TunerHostInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TunerHostInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TunerHostInfo &source, convertType<TunerHostInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

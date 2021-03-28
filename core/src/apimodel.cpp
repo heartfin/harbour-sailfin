@@ -45,7 +45,7 @@ void BaseModelLoader::componentComplete() {
 }
 
 void BaseModelLoader::autoReloadIfNeeded() {
-    if (m_autoReload && m_apiClient != nullptr) {
+    if (m_autoReload && canReload()) {
         emit reloadWanted();
     }
 }
@@ -71,6 +71,10 @@ void BaseModelLoader::setAutoReload(bool newAutoReload) {
         m_autoReload = newAutoReload;
         emit autoReloadChanged(newAutoReload);
     }
+}
+
+bool BaseModelLoader::canReload() const {
+    return m_apiClient != nullptr && (!m_needsAuthentication || m_apiClient->authenticated());
 }
 
 void BaseApiModel::reload() {

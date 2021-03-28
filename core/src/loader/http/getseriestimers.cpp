@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetSeriesTimersLoader::GetSeriesTimersLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::SeriesTimerInfoDtoQueryResult, GetSeriesTimersParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<SeriesTimerInfoDtoQueryResult, GetSeriesTimersParams>(apiClient) {}
 
 QString GetSeriesTimersLoader::path(const GetSeriesTimersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,10 +51,10 @@ QUrlQuery GetSeriesTimersLoader::query(const GetSeriesTimersParams &params) cons
 
 	// Optional parameters
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QString>(params.sortBy()));
 	}
 	if (!params.sortOrderNull()) {
-		result.addQueryItem("sortOrder", Support::toString(params.sortOrder()));
+		result.addQueryItem("sortOrder", Support::toString<SortOrder>(params.sortOrder()));
 	}
 	
 	return result;

@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/endpointinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets information about the request endpoint.
  */
-class GetEndpointInfoLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::EndPointInfo, GetEndpointInfoParams> {
+
+class GetEndpointInfoLoader : public Jellyfin::Support::HttpLoader<EndPointInfo, GetEndpointInfoParams> {
 public:
 	explicit GetEndpointInfoLoader(ApiClient *apiClient = nullptr);
 

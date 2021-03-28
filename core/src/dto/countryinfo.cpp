@@ -64,7 +64,7 @@ void CountryInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject CountryInfo::toJson() {
+QJsonObject CountryInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
@@ -134,9 +134,14 @@ namespace Support {
 using CountryInfo = Jellyfin::DTO::CountryInfo;
 
 template <>
-CountryInfo fromJsonValue<CountryInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+CountryInfo fromJsonValue(const QJsonValue &source, convertType<CountryInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return CountryInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const CountryInfo &source, convertType<CountryInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

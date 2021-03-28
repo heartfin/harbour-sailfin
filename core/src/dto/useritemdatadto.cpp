@@ -85,7 +85,7 @@ void UserItemDataDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject UserItemDataDto::toJson() {
+QJsonObject UserItemDataDto::toJson() const {
 	QJsonObject result;
 	result["Rating"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_rating);
 	result["PlayedPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_playedPercentage);
@@ -225,9 +225,14 @@ namespace Support {
 using UserItemDataDto = Jellyfin::DTO::UserItemDataDto;
 
 template <>
-UserItemDataDto fromJsonValue<UserItemDataDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+UserItemDataDto fromJsonValue(const QJsonValue &source, convertType<UserItemDataDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return UserItemDataDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const UserItemDataDto &source, convertType<UserItemDataDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

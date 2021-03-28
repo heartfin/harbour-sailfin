@@ -58,7 +58,7 @@ void NotificationsSummaryDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject NotificationsSummaryDto::toJson() {
+QJsonObject NotificationsSummaryDto::toJson() const {
 	QJsonObject result;
 	result["UnreadCount"] = Jellyfin::Support::toJsonValue<qint32>(m_unreadCount);
 	result["MaxUnreadNotificationLevel"] = Jellyfin::Support::toJsonValue<NotificationLevel>(m_maxUnreadNotificationLevel);
@@ -86,9 +86,14 @@ namespace Support {
 using NotificationsSummaryDto = Jellyfin::DTO::NotificationsSummaryDto;
 
 template <>
-NotificationsSummaryDto fromJsonValue<NotificationsSummaryDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+NotificationsSummaryDto fromJsonValue(const QJsonValue &source, convertType<NotificationsSummaryDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return NotificationsSummaryDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const NotificationsSummaryDto &source, convertType<NotificationsSummaryDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetNotificationServicesLoader::GetNotificationServicesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<NameIdPair>, GetNotificationServicesParams>(apiClient) {}
+
+QString GetNotificationServicesLoader::path(const GetNotificationServicesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Notifications/Services");
+}
+
+QUrlQuery GetNotificationServicesLoader::query(const GetNotificationServicesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

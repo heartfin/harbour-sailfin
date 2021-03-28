@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static CollectionCreationResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -65,6 +69,18 @@ public:
 protected:
 	QString m_jellyfinId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using CollectionCreationResult = Jellyfin::DTO::CollectionCreationResult;
+
+template <>
+CollectionCreationResult fromJsonValue(const QJsonValue &source, convertType<CollectionCreationResult>);
+
+template<>
+QJsonValue toJsonValue(const CollectionCreationResult &source, convertType<CollectionCreationResult>);
 
 } // NS DTO
 } // NS Jellyfin

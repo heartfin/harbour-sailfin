@@ -82,7 +82,7 @@ void TaskInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TaskInfo::toJson() {
+QJsonObject TaskInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["State"] = Jellyfin::Support::toJsonValue<TaskState>(m_state);
@@ -215,9 +215,14 @@ namespace Support {
 using TaskInfo = Jellyfin::DTO::TaskInfo;
 
 template <>
-TaskInfo fromJsonValue<TaskInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TaskInfo fromJsonValue(const QJsonValue &source, convertType<TaskInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TaskInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TaskInfo &source, convertType<TaskInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

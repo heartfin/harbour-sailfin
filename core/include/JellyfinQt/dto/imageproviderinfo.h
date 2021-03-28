@@ -41,6 +41,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -56,7 +60,7 @@ public:
 	
 	static ImageProviderInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -86,6 +90,18 @@ protected:
 	QString m_name;
 	QList<ImageType> m_supportedImages;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ImageProviderInfo = Jellyfin::DTO::ImageProviderInfo;
+
+template <>
+ImageProviderInfo fromJsonValue(const QJsonValue &source, convertType<ImageProviderInfo>);
+
+template<>
+QJsonValue toJsonValue(const ImageProviderInfo &source, convertType<ImageProviderInfo>);
 
 } // NS DTO
 } // NS Jellyfin

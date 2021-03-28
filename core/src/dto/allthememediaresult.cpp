@@ -61,7 +61,7 @@ void AllThemeMediaResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject AllThemeMediaResult::toJson() {
+QJsonObject AllThemeMediaResult::toJson() const {
 	QJsonObject result;
 	result["ThemeVideosResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeVideosResult);
 	result["ThemeSongsResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeSongsResult);
@@ -96,9 +96,14 @@ namespace Support {
 using AllThemeMediaResult = Jellyfin::DTO::AllThemeMediaResult;
 
 template <>
-AllThemeMediaResult fromJsonValue<AllThemeMediaResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+AllThemeMediaResult fromJsonValue(const QJsonValue &source, convertType<AllThemeMediaResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return AllThemeMediaResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const AllThemeMediaResult &source, convertType<AllThemeMediaResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

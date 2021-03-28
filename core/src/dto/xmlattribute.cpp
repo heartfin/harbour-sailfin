@@ -58,7 +58,7 @@ void XmlAttribute::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject XmlAttribute::toJson() {
+QJsonObject XmlAttribute::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
@@ -100,9 +100,14 @@ namespace Support {
 using XmlAttribute = Jellyfin::DTO::XmlAttribute;
 
 template <>
-XmlAttribute fromJsonValue<XmlAttribute>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+XmlAttribute fromJsonValue(const QJsonValue &source, convertType<XmlAttribute>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return XmlAttribute::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const XmlAttribute &source, convertType<XmlAttribute>) {
+	return source.toJson();
 }
 
 } // NS DTO

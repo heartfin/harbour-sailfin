@@ -34,7 +34,6 @@ namespace DTO {
 
 PlaystateCommandClass::PlaystateCommandClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using PlaystateCommand = Jellyfin::DTO::PlaystateCommand;
 
 template <>
-PlaystateCommand fromJsonValue<PlaystateCommand>(const QJsonValue &source) {
+PlaystateCommand fromJsonValue(const QJsonValue &source, convertType<PlaystateCommand>) {
 	if (!source.isString()) return PlaystateCommand::EnumNotSet;
 
 	QString str = source.toString();
@@ -75,6 +74,34 @@ PlaystateCommand fromJsonValue<PlaystateCommand>(const QJsonValue &source) {
 	}
 	
 	return PlaystateCommand::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const PlaystateCommand &source, convertType<PlaystateCommand>) {
+	switch(source) {
+	case PlaystateCommand::Stop:
+		return QStringLiteral("Stop");
+	case PlaystateCommand::Pause:
+		return QStringLiteral("Pause");
+	case PlaystateCommand::Unpause:
+		return QStringLiteral("Unpause");
+	case PlaystateCommand::NextTrack:
+		return QStringLiteral("NextTrack");
+	case PlaystateCommand::PreviousTrack:
+		return QStringLiteral("PreviousTrack");
+	case PlaystateCommand::Seek:
+		return QStringLiteral("Seek");
+	case PlaystateCommand::Rewind:
+		return QStringLiteral("Rewind");
+	case PlaystateCommand::FastForward:
+		return QStringLiteral("FastForward");
+	case PlaystateCommand::PlayPause:
+		return QStringLiteral("PlayPause");
+
+	case PlaystateCommand::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

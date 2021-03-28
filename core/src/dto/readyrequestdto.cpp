@@ -64,7 +64,7 @@ void ReadyRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ReadyRequestDto::toJson() {
+QJsonObject ReadyRequestDto::toJson() const {
 	QJsonObject result;
 	result["When"] = Jellyfin::Support::toJsonValue<QDateTime>(m_when);
 	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
@@ -106,9 +106,14 @@ namespace Support {
 using ReadyRequestDto = Jellyfin::DTO::ReadyRequestDto;
 
 template <>
-ReadyRequestDto fromJsonValue<ReadyRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ReadyRequestDto fromJsonValue(const QJsonValue &source, convertType<ReadyRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ReadyRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ReadyRequestDto &source, convertType<ReadyRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

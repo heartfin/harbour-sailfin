@@ -35,13 +35,29 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets the parent path of a given path.
+ */
+
+class GetParentPathLoader : public Jellyfin::Support::HttpLoader<QString, GetParentPathParams> {
+public:
+	explicit GetParentPathLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetParentPathParams& parameters) const override;
+	QUrlQuery query(const GetParentPathParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

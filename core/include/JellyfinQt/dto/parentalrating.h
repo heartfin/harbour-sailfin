@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static ParentalRating fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -81,6 +85,18 @@ protected:
 	QString m_name;
 	qint32 m_value;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ParentalRating = Jellyfin::DTO::ParentalRating;
+
+template <>
+ParentalRating fromJsonValue(const QJsonValue &source, convertType<ParentalRating>);
+
+template<>
+QJsonValue toJsonValue(const ParentalRating &source, convertType<ParentalRating>);
 
 } // NS DTO
 } // NS Jellyfin

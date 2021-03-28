@@ -34,7 +34,6 @@ namespace DTO {
 
 ArchitectureClass::ArchitectureClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using Architecture = Jellyfin::DTO::Architecture;
 
 template <>
-Architecture fromJsonValue<Architecture>(const QJsonValue &source) {
+Architecture fromJsonValue(const QJsonValue &source, convertType<Architecture>) {
 	if (!source.isString()) return Architecture::EnumNotSet;
 
 	QString str = source.toString();
@@ -63,6 +62,26 @@ Architecture fromJsonValue<Architecture>(const QJsonValue &source) {
 	}
 	
 	return Architecture::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const Architecture &source, convertType<Architecture>) {
+	switch(source) {
+	case Architecture::X86:
+		return QStringLiteral("X86");
+	case Architecture::X64:
+		return QStringLiteral("X64");
+	case Architecture::Arm:
+		return QStringLiteral("Arm");
+	case Architecture::Arm64:
+		return QStringLiteral("Arm64");
+	case Architecture::Wasm:
+		return QStringLiteral("Wasm");
+
+	case Architecture::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

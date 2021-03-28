@@ -35,13 +35,29 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets available countries.
+ */
+
+class GetSchedulesDirectCountriesLoader : public Jellyfin::Support::HttpLoader<QString, GetSchedulesDirectCountriesParams> {
+public:
+	explicit GetSchedulesDirectCountriesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetSchedulesDirectCountriesParams& parameters) const override;
+	QUrlQuery query(const GetSchedulesDirectCountriesParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

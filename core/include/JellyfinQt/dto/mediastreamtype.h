@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class MediaStreamTypeClass {
@@ -54,7 +58,19 @@ private:
 	explicit MediaStreamTypeClass();
 };
 
-typedef MediaStreamTypeClass::Value MediaStreamType;
+using MediaStreamType = MediaStreamTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using MediaStreamType = Jellyfin::DTO::MediaStreamType;
+
+template <>
+MediaStreamType fromJsonValue(const QJsonValue &source, convertType<MediaStreamType>);
+
+template <>
+QJsonValue toJsonValue(const MediaStreamType &source, convertType<MediaStreamType>);
 
 } // NS DTO
 } // NS Jellyfin

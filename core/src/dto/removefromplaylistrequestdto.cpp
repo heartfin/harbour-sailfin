@@ -55,7 +55,7 @@ void RemoveFromPlaylistRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject RemoveFromPlaylistRequestDto::toJson() {
+QJsonObject RemoveFromPlaylistRequestDto::toJson() const {
 	QJsonObject result;
 	result["PlaylistItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_playlistItemIds);
 
@@ -83,9 +83,14 @@ namespace Support {
 using RemoveFromPlaylistRequestDto = Jellyfin::DTO::RemoveFromPlaylistRequestDto;
 
 template <>
-RemoveFromPlaylistRequestDto fromJsonValue<RemoveFromPlaylistRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+RemoveFromPlaylistRequestDto fromJsonValue(const QJsonValue &source, convertType<RemoveFromPlaylistRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return RemoveFromPlaylistRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const RemoveFromPlaylistRequestDto &source, convertType<RemoveFromPlaylistRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

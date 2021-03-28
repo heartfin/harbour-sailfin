@@ -58,7 +58,7 @@ void PinRedeemResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PinRedeemResult::toJson() {
+QJsonObject PinRedeemResult::toJson() const {
 	QJsonObject result;
 	result["Success"] = Jellyfin::Support::toJsonValue<bool>(m_success);
 	result["UsersReset"] = Jellyfin::Support::toJsonValue<QStringList>(m_usersReset);
@@ -93,9 +93,14 @@ namespace Support {
 using PinRedeemResult = Jellyfin::DTO::PinRedeemResult;
 
 template <>
-PinRedeemResult fromJsonValue<PinRedeemResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PinRedeemResult fromJsonValue(const QJsonValue &source, convertType<PinRedeemResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PinRedeemResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PinRedeemResult &source, convertType<PinRedeemResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

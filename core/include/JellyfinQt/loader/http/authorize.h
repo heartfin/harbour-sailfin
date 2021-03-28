@@ -35,13 +35,29 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Authorizes a pending quick connect request.
+ */
+
+class AuthorizeLoader : public Jellyfin::Support::HttpLoader<bool, AuthorizeParams> {
+public:
+	explicit AuthorizeLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const AuthorizeParams& parameters) const override;
+	QUrlQuery query(const AuthorizeParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

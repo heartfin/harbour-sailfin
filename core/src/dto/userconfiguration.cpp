@@ -97,7 +97,7 @@ void UserConfiguration::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject UserConfiguration::toJson() {
+QJsonObject UserConfiguration::toJson() const {
 	QJsonObject result;
 	result["AudioLanguagePreference"] = Jellyfin::Support::toJsonValue<QString>(m_audioLanguagePreference);
 	result["PlayDefaultAudioTrack"] = Jellyfin::Support::toJsonValue<bool>(m_playDefaultAudioTrack);
@@ -258,9 +258,14 @@ namespace Support {
 using UserConfiguration = Jellyfin::DTO::UserConfiguration;
 
 template <>
-UserConfiguration fromJsonValue<UserConfiguration>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+UserConfiguration fromJsonValue(const QJsonValue &source, convertType<UserConfiguration>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return UserConfiguration::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const UserConfiguration &source, convertType<UserConfiguration>) {
+	return source.toJson();
 }
 
 } // NS DTO

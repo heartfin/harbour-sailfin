@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetWakeOnLanInfoLoader::GetWakeOnLanInfoLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<WakeOnLanInfo>, GetWakeOnLanInfoParams>(apiClient) {}
+
+QString GetWakeOnLanInfoLoader::path(const GetWakeOnLanInfoParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/System/WakeOnLanInfo");
+}
+
+QUrlQuery GetWakeOnLanInfoLoader::query(const GetWakeOnLanInfoParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

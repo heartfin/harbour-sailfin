@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 MarkPlayedItemLoader::MarkPlayedItemLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, MarkPlayedItemParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<UserItemDataDto, MarkPlayedItemParams>(apiClient) {}
 
 QString MarkPlayedItemLoader::path(const MarkPlayedItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString(params.userId()) + QStringLiteral("/PlayedItems/") + Support::toString(params.itemId()) ;
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/PlayedItems/") + Support::toString< QString>(params.itemId()) ;
 }
 
 QUrlQuery MarkPlayedItemLoader::query(const MarkPlayedItemParams &params) const {
@@ -50,7 +51,7 @@ QUrlQuery MarkPlayedItemLoader::query(const MarkPlayedItemParams &params) const 
 
 	// Optional parameters
 	if (!params.datePlayedNull()) {
-		result.addQueryItem("datePlayed", Support::toString(params.datePlayed()));
+		result.addQueryItem("datePlayed", Support::toString<QDateTime>(params.datePlayed()));
 	}
 	
 	return result;

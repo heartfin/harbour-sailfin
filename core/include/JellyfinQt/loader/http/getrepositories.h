@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/repositoryinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets all package repositories.
+ */
+
+class GetRepositoriesLoader : public Jellyfin::Support::HttpLoader<QList<RepositoryInfo>, GetRepositoriesParams> {
+public:
+	explicit GetRepositoriesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetRepositoriesParams& parameters) const override;
+	QUrlQuery query(const GetRepositoriesParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

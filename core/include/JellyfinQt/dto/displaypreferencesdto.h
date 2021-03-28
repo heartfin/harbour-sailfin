@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static DisplayPreferencesDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -132,11 +136,11 @@ public:
 	/**
 	 * @brief Gets or sets the custom prefs.
 	 */
-	std::optional<QJsonObject> customPrefs() const;
+	QJsonObject customPrefs() const;
 	/**
 	* @brief Gets or sets the custom prefs.
 	*/
-	void setCustomPrefs(std::optional<QJsonObject> newCustomPrefs);
+	void setCustomPrefs(QJsonObject newCustomPrefs);
 	bool customPrefsNull() const;
 	void setCustomPrefsNull();
 
@@ -197,7 +201,7 @@ protected:
 	bool m_rememberIndexing;
 	qint32 m_primaryImageHeight;
 	qint32 m_primaryImageWidth;
-	std::optional<QJsonObject> m_customPrefs = std::nullopt;
+	QJsonObject m_customPrefs;
 	ScrollDirection m_scrollDirection;
 	bool m_showBackdrop;
 	bool m_rememberSorting;
@@ -205,6 +209,18 @@ protected:
 	bool m_showSidebar;
 	QString m_client;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using DisplayPreferencesDto = Jellyfin::DTO::DisplayPreferencesDto;
+
+template <>
+DisplayPreferencesDto fromJsonValue(const QJsonValue &source, convertType<DisplayPreferencesDto>);
+
+template<>
+QJsonValue toJsonValue(const DisplayPreferencesDto &source, convertType<DisplayPreferencesDto>);
 
 } // NS DTO
 } // NS Jellyfin

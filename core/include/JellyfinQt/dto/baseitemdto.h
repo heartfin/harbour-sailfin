@@ -60,6 +60,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -75,7 +79,7 @@ public:
 	
 	static BaseItemDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -549,11 +553,11 @@ public:
 	/**
 	 * @brief Gets or sets the provider ids.
 	 */
-	std::optional<QJsonObject> providerIds() const;
+	QJsonObject providerIds() const;
 	/**
 	* @brief Gets or sets the provider ids.
 	*/
-	void setProviderIds(std::optional<QJsonObject> newProviderIds);
+	void setProviderIds(QJsonObject newProviderIds);
 	bool providerIdsNull() const;
 	void setProviderIdsNull();
 
@@ -969,11 +973,11 @@ public:
 	/**
 	 * @brief Gets or sets the image tags.
 	 */
-	std::optional<QJsonObject> imageTags() const;
+	QJsonObject imageTags() const;
 	/**
 	* @brief Gets or sets the image tags.
 	*/
-	void setImageTags(std::optional<QJsonObject> newImageTags);
+	void setImageTags(QJsonObject newImageTags);
 	bool imageTagsNull() const;
 	void setImageTagsNull();
 
@@ -1047,12 +1051,12 @@ public:
 	 * @brief Gets or sets the blurhashes for the image tags.
 Maps image type to dictionary mapping image tag to blurhash value.
 	 */
-	std::optional<QJsonObject> imageBlurHashes() const;
+	QJsonObject imageBlurHashes() const;
 	/**
 	* @brief Gets or sets the blurhashes for the image tags.
 Maps image type to dictionary mapping image tag to blurhash value.
 	*/
-	void setImageBlurHashes(std::optional<QJsonObject> newImageBlurHashes);
+	void setImageBlurHashes(QJsonObject newImageBlurHashes);
 	bool imageBlurHashesNull() const;
 	void setImageBlurHashesNull();
 
@@ -1595,7 +1599,7 @@ protected:
 	std::optional<qint32> m_indexNumberEnd = std::nullopt;
 	std::optional<qint32> m_parentIndexNumber = std::nullopt;
 	QList<MediaUrl> m_remoteTrailers;
-	std::optional<QJsonObject> m_providerIds = std::nullopt;
+	QJsonObject m_providerIds;
 	std::optional<bool> m_isHD = std::nullopt;
 	std::optional<bool> m_isFolder = std::nullopt;
 	QString m_parentId;
@@ -1635,14 +1639,14 @@ protected:
 	VideoType m_videoType;
 	std::optional<qint32> m_partCount = std::nullopt;
 	std::optional<qint32> m_mediaSourceCount = std::nullopt;
-	std::optional<QJsonObject> m_imageTags = std::nullopt;
+	QJsonObject m_imageTags;
 	QStringList m_backdropImageTags;
 	QStringList m_screenshotImageTags;
 	QString m_parentLogoImageTag;
 	QString m_parentArtItemId;
 	QString m_parentArtImageTag;
 	QString m_seriesThumbImageTag;
-	std::optional<QJsonObject> m_imageBlurHashes = std::nullopt;
+	QJsonObject m_imageBlurHashes;
 	QString m_seriesStudio;
 	QString m_parentThumbItemId;
 	QString m_parentThumbImageTag;
@@ -1697,6 +1701,18 @@ protected:
 	QString m_timerId;
 	QSharedPointer<BaseItemDto> m_currentProgram = nullptr;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using BaseItemDto = Jellyfin::DTO::BaseItemDto;
+
+template <>
+BaseItemDto fromJsonValue(const QJsonValue &source, convertType<BaseItemDto>);
+
+template<>
+QJsonValue toJsonValue(const BaseItemDto &source, convertType<BaseItemDto>);
 
 } // NS DTO
 } // NS Jellyfin

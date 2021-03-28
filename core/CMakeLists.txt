@@ -5,6 +5,7 @@ include(GeneratedSources.cmake)
 
 set(JellyfinQt_SOURCES
         # src/DTO/dto.cpp
+        src/model/deviceprofile.cpp
         src/model/item.cpp
         src/support/jsonconv.cpp
         src/support/loader.cpp
@@ -15,7 +16,6 @@ set(JellyfinQt_SOURCES
         src/apiclient.cpp
         src/apimodel.cpp
         src/credentialmanager.cpp
-        src/deviceprofile.cpp
         src/eventbus.cpp
         src/jellyfin.cpp
         src/jsonhelper.cpp
@@ -25,6 +25,7 @@ set(JellyfinQt_SOURCES
 list(APPEND JellyfinQt_SOURCES ${openapi_SOURCES})
 
 set(JellyfinQt_HEADERS
+        include/JellyfinQt/model/deviceprofile.h
         include/JellyfinQt/model/item.h
         include/JellyfinQt/support/jsonconv.h
         include/JellyfinQt/support/loader.h
@@ -36,23 +37,26 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/apiclient.h
         include/JellyfinQt/apimodel.h
         include/JellyfinQt/credentialmanager.h
-        include/JellyfinQt/deviceprofile.h
         include/JellyfinQt/eventbus.h
         include/JellyfinQt/jellyfin.h
         include/JellyfinQt/jsonhelper.h
         include/JellyfinQt/serverdiscoverymodel.h
         include/JellyfinQt/websocket.h)
         
-list(APPEND JellyfinQt_SOURCES ${openapi_HEADERS})
+list(APPEND JellyfinQt_HEADERS ${openapi_HEADERS})
 
 add_definitions(-DSAILFIN_VERSION=\"${SAILFIN_VERSION}\")
+
 if (PLATFORM_SAILFISHOS)
     add_definitions(-DPLATFORM_SAILFISHOS=1)
 endif()
+
 add_library(JellyfinQt ${JellyfinQt_SOURCES} ${JellyfinQt_HEADERS})
+
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0") 
     # target_precompile_headers(JellyfinQt PRIVATE ${JellyfinQt_HEADERS})
 endif()
+
 target_include_directories(JellyfinQt PUBLIC "include")
 target_link_libraries(JellyfinQt PUBLIC Qt5::Core Qt5::Multimedia Qt5::Network Qt5::Qml Qt5::WebSockets)
 set_target_properties(JellyfinQt PROPERTIES CXX_VISIBILITY_PRESET default)

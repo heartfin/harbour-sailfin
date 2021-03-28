@@ -61,7 +61,7 @@ void AuthenticationInfoQueryResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject AuthenticationInfoQueryResult::toJson() {
+QJsonObject AuthenticationInfoQueryResult::toJson() const {
 	QJsonObject result;
 	result["Items"] = Jellyfin::Support::toJsonValue<QList<AuthenticationInfo>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
@@ -103,9 +103,14 @@ namespace Support {
 using AuthenticationInfoQueryResult = Jellyfin::DTO::AuthenticationInfoQueryResult;
 
 template <>
-AuthenticationInfoQueryResult fromJsonValue<AuthenticationInfoQueryResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+AuthenticationInfoQueryResult fromJsonValue(const QJsonValue &source, convertType<AuthenticationInfoQueryResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return AuthenticationInfoQueryResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const AuthenticationInfoQueryResult &source, convertType<AuthenticationInfoQueryResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

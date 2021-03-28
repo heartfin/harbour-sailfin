@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class TransportStreamTimestampClass {
@@ -53,7 +57,19 @@ private:
 	explicit TransportStreamTimestampClass();
 };
 
-typedef TransportStreamTimestampClass::Value TransportStreamTimestamp;
+using TransportStreamTimestamp = TransportStreamTimestampClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using TransportStreamTimestamp = Jellyfin::DTO::TransportStreamTimestamp;
+
+template <>
+TransportStreamTimestamp fromJsonValue(const QJsonValue &source, convertType<TransportStreamTimestamp>);
+
+template <>
+QJsonValue toJsonValue(const TransportStreamTimestamp &source, convertType<TransportStreamTimestamp>);
 
 } // NS DTO
 } // NS Jellyfin

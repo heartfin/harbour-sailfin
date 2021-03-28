@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetPublicSystemInfoLoader::GetPublicSystemInfoLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::PublicSystemInfo, GetPublicSystemInfoParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<PublicSystemInfo, GetPublicSystemInfoParams>(apiClient) {}
 
 QString GetPublicSystemInfoLoader::path(const GetPublicSystemInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

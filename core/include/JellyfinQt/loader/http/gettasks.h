@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/taskinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Get tasks.
+ */
+
+class GetTasksLoader : public Jellyfin::Support::HttpLoader<QList<TaskInfo>, GetTasksParams> {
+public:
+	explicit GetTasksLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetTasksParams& parameters) const override;
+	QUrlQuery query(const GetTasksParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

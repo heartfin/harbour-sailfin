@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 AddTunerHostLoader::AddTunerHostLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::TunerHostInfo, AddTunerHostParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<TunerHostInfo, AddTunerHostParams>(apiClient) {}
 
 QString AddTunerHostLoader::path(const AddTunerHostParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

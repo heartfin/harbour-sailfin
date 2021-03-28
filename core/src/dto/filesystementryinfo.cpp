@@ -61,7 +61,7 @@ void FileSystemEntryInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject FileSystemEntryInfo::toJson() {
+QJsonObject FileSystemEntryInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
@@ -110,9 +110,14 @@ namespace Support {
 using FileSystemEntryInfo = Jellyfin::DTO::FileSystemEntryInfo;
 
 template <>
-FileSystemEntryInfo fromJsonValue<FileSystemEntryInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+FileSystemEntryInfo fromJsonValue(const QJsonValue &source, convertType<FileSystemEntryInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return FileSystemEntryInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const FileSystemEntryInfo &source, convertType<FileSystemEntryInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

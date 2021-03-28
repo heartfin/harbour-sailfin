@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetDefaultProfileLoader::GetDefaultProfileLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceProfile, GetDefaultProfileParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<DeviceProfile, GetDefaultProfileParams>(apiClient) {}
 
 QString GetDefaultProfileLoader::path(const GetDefaultProfileParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

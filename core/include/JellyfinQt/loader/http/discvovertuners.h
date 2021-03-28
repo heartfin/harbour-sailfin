@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/tunerhostinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Discover tuners.
+ */
+
+class DiscvoverTunersLoader : public Jellyfin::Support::HttpLoader<QList<TunerHostInfo>, DiscvoverTunersParams> {
+public:
+	explicit DiscvoverTunersLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DiscvoverTunersParams& parameters) const override;
+	QUrlQuery query(const DiscvoverTunersParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

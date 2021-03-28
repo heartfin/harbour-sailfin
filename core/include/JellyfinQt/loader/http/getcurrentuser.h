@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/userdto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets the user based on auth token.
  */
-class GetCurrentUserLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, GetCurrentUserParams> {
+
+class GetCurrentUserLoader : public Jellyfin::Support::HttpLoader<UserDto, GetCurrentUserParams> {
 public:
 	explicit GetCurrentUserLoader(ApiClient *apiClient = nullptr);
 

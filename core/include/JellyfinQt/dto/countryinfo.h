@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static CountryInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -107,6 +111,18 @@ protected:
 	QString m_twoLetterISORegionName;
 	QString m_threeLetterISORegionName;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using CountryInfo = Jellyfin::DTO::CountryInfo;
+
+template <>
+CountryInfo fromJsonValue(const QJsonValue &source, convertType<CountryInfo>);
+
+template<>
+QJsonValue toJsonValue(const CountryInfo &source, convertType<CountryInfo>);
 
 } // NS DTO
 } // NS Jellyfin

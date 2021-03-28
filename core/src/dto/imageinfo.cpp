@@ -76,7 +76,7 @@ void ImageInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ImageInfo::toJson() {
+QJsonObject ImageInfo::toJson() const {
 	QJsonObject result;
 	result["ImageType"] = Jellyfin::Support::toJsonValue<ImageType>(m_imageType);
 	result["ImageIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_imageIndex);
@@ -188,9 +188,14 @@ namespace Support {
 using ImageInfo = Jellyfin::DTO::ImageInfo;
 
 template <>
-ImageInfo fromJsonValue<ImageInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ImageInfo fromJsonValue(const QJsonValue &source, convertType<ImageInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ImageInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ImageInfo &source, convertType<ImageInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

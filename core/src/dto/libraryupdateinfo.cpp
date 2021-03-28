@@ -73,7 +73,7 @@ void LibraryUpdateInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject LibraryUpdateInfo::toJson() {
+QJsonObject LibraryUpdateInfo::toJson() const {
 	QJsonObject result;
 	result["FoldersAddedTo"] = Jellyfin::Support::toJsonValue<QStringList>(m_foldersAddedTo);
 	result["FoldersRemovedFrom"] = Jellyfin::Support::toJsonValue<QStringList>(m_foldersRemovedFrom);
@@ -178,9 +178,14 @@ namespace Support {
 using LibraryUpdateInfo = Jellyfin::DTO::LibraryUpdateInfo;
 
 template <>
-LibraryUpdateInfo fromJsonValue<LibraryUpdateInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+LibraryUpdateInfo fromJsonValue(const QJsonValue &source, convertType<LibraryUpdateInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return LibraryUpdateInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const LibraryUpdateInfo &source, convertType<LibraryUpdateInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

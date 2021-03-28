@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetDevicesLoader::GetDevicesLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceInfoQueryResult, GetDevicesParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<DeviceInfoQueryResult, GetDevicesParams>(apiClient) {}
 
 QString GetDevicesLoader::path(const GetDevicesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,10 +51,10 @@ QUrlQuery GetDevicesLoader::query(const GetDevicesParams &params) const {
 
 	// Optional parameters
 	if (!params.supportsSyncNull()) {
-		result.addQueryItem("supportsSync", Support::toString(params.supportsSync()));
+		result.addQueryItem("supportsSync", Support::toString<std::optional<bool>>(params.supportsSync()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;

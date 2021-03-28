@@ -73,7 +73,7 @@ void SeriesInfo::setFromJson(QJsonObject source) {
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
-	m_providerIds = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ProviderIds"]);
+	m_providerIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ProviderIds"]);
 	m_year = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Year"]);
 	m_indexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["IndexNumber"]);
 	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ParentIndexNumber"]);
@@ -82,13 +82,13 @@ void SeriesInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SeriesInfo::toJson() {
+QJsonObject SeriesInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
 	result["MetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_metadataLanguage);
 	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
-	result["ProviderIds"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_providerIds);
+	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
 	result["Year"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_year);
 	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
 	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
@@ -150,17 +150,17 @@ void SeriesInfo::setMetadataCountryCodeNull() {
 	m_metadataCountryCode.clear();
 
 }
-std::optional<QJsonObject> SeriesInfo::providerIds() const { return m_providerIds; }
+QJsonObject SeriesInfo::providerIds() const { return m_providerIds; }
 
-void SeriesInfo::setProviderIds(std::optional<QJsonObject> newProviderIds) {
+void SeriesInfo::setProviderIds(QJsonObject newProviderIds) {
 	m_providerIds = newProviderIds;
 }
 bool SeriesInfo::providerIdsNull() const {
-	return !m_providerIds.has_value();
+	return m_providerIds.isEmpty();
 }
 
 void SeriesInfo::setProviderIdsNull() {
-	m_providerIds = std::nullopt;
+	m_providerIds= QJsonObject();
 
 }
 std::optional<qint32> SeriesInfo::year() const { return m_year; }
@@ -229,9 +229,14 @@ namespace Support {
 using SeriesInfo = Jellyfin::DTO::SeriesInfo;
 
 template <>
-SeriesInfo fromJsonValue<SeriesInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SeriesInfo fromJsonValue(const QJsonValue &source, convertType<SeriesInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SeriesInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SeriesInfo &source, convertType<SeriesInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

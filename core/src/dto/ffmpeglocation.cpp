@@ -34,7 +34,6 @@ namespace DTO {
 
 FFmpegLocationClass::FFmpegLocationClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using FFmpegLocation = Jellyfin::DTO::FFmpegLocation;
 
 template <>
-FFmpegLocation fromJsonValue<FFmpegLocation>(const QJsonValue &source) {
+FFmpegLocation fromJsonValue(const QJsonValue &source, convertType<FFmpegLocation>) {
 	if (!source.isString()) return FFmpegLocation::EnumNotSet;
 
 	QString str = source.toString();
@@ -60,6 +59,24 @@ FFmpegLocation fromJsonValue<FFmpegLocation>(const QJsonValue &source) {
 	}
 	
 	return FFmpegLocation::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const FFmpegLocation &source, convertType<FFmpegLocation>) {
+	switch(source) {
+	case FFmpegLocation::NotFound:
+		return QStringLiteral("NotFound");
+	case FFmpegLocation::SetByArgument:
+		return QStringLiteral("SetByArgument");
+	case FFmpegLocation::Custom:
+		return QStringLiteral("Custom");
+	case FFmpegLocation::System:
+		return QStringLiteral("System");
+
+	case FFmpegLocation::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

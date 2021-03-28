@@ -64,7 +64,7 @@ void DirectPlayProfile::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject DirectPlayProfile::toJson() {
+QJsonObject DirectPlayProfile::toJson() const {
 	QJsonObject result;
 	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
 	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
@@ -127,9 +127,14 @@ namespace Support {
 using DirectPlayProfile = Jellyfin::DTO::DirectPlayProfile;
 
 template <>
-DirectPlayProfile fromJsonValue<DirectPlayProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+DirectPlayProfile fromJsonValue(const QJsonValue &source, convertType<DirectPlayProfile>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return DirectPlayProfile::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const DirectPlayProfile &source, convertType<DirectPlayProfile>) {
+	return source.toJson();
 }
 
 } // NS DTO

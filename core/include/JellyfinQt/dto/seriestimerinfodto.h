@@ -44,6 +44,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -59,7 +63,7 @@ public:
 	
 	static SeriesTimerInfoDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -341,11 +345,11 @@ public:
 	/**
 	 * @brief Gets or sets the image tags.
 	 */
-	std::optional<QJsonObject> imageTags() const;
+	QJsonObject imageTags() const;
 	/**
 	* @brief Gets or sets the image tags.
 	*/
-	void setImageTags(std::optional<QJsonObject> newImageTags);
+	void setImageTags(QJsonObject newImageTags);
 	bool imageTagsNull() const;
 	void setImageTagsNull();
 
@@ -425,12 +429,24 @@ protected:
 	bool m_recordNewOnly;
 	QList<DayOfWeek> m_days;
 	DayPattern m_dayPattern;
-	std::optional<QJsonObject> m_imageTags = std::nullopt;
+	QJsonObject m_imageTags;
 	QString m_parentThumbItemId;
 	QString m_parentThumbImageTag;
 	QString m_parentPrimaryImageItemId;
 	QString m_parentPrimaryImageTag;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SeriesTimerInfoDto = Jellyfin::DTO::SeriesTimerInfoDto;
+
+template <>
+SeriesTimerInfoDto fromJsonValue(const QJsonValue &source, convertType<SeriesTimerInfoDto>);
+
+template<>
+QJsonValue toJsonValue(const SeriesTimerInfoDto &source, convertType<SeriesTimerInfoDto>);
 
 } // NS DTO
 } // NS Jellyfin

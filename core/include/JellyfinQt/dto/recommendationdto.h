@@ -42,6 +42,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -57,7 +61,7 @@ public:
 	
 	static RecommendationDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -91,6 +95,18 @@ protected:
 	QString m_baselineItemName;
 	QString m_categoryId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using RecommendationDto = Jellyfin::DTO::RecommendationDto;
+
+template <>
+RecommendationDto fromJsonValue(const QJsonValue &source, convertType<RecommendationDto>);
+
+template<>
+QJsonValue toJsonValue(const RecommendationDto &source, convertType<RecommendationDto>);
 
 } // NS DTO
 } // NS Jellyfin

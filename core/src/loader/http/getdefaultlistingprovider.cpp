@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetDefaultListingProviderLoader::GetDefaultListingProviderLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ListingsProviderInfo, GetDefaultListingProviderParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<ListingsProviderInfo, GetDefaultListingProviderParams>(apiClient) {}
 
 QString GetDefaultListingProviderLoader::path(const GetDefaultListingProviderParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetAuthProvidersLoader::GetAuthProvidersLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<NameIdPair>, GetAuthProvidersParams>(apiClient) {}
+
+QString GetAuthProvidersLoader::path(const GetAuthProvidersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Auth/Providers");
+}
+
+QUrlQuery GetAuthProvidersLoader::query(const GetAuthProvidersParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

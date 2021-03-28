@@ -34,7 +34,6 @@ namespace DTO {
 
 SyncPlayUserAccessTypeClass::SyncPlayUserAccessTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using SyncPlayUserAccessType = Jellyfin::DTO::SyncPlayUserAccessType;
 
 template <>
-SyncPlayUserAccessType fromJsonValue<SyncPlayUserAccessType>(const QJsonValue &source) {
+SyncPlayUserAccessType fromJsonValue(const QJsonValue &source, convertType<SyncPlayUserAccessType>) {
 	if (!source.isString()) return SyncPlayUserAccessType::EnumNotSet;
 
 	QString str = source.toString();
@@ -57,6 +56,22 @@ SyncPlayUserAccessType fromJsonValue<SyncPlayUserAccessType>(const QJsonValue &s
 	}
 	
 	return SyncPlayUserAccessType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const SyncPlayUserAccessType &source, convertType<SyncPlayUserAccessType>) {
+	switch(source) {
+	case SyncPlayUserAccessType::CreateAndJoinGroups:
+		return QStringLiteral("CreateAndJoinGroups");
+	case SyncPlayUserAccessType::JoinGroups:
+		return QStringLiteral("JoinGroups");
+	case SyncPlayUserAccessType::None:
+		return QStringLiteral("None");
+
+	case SyncPlayUserAccessType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

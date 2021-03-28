@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/thememediaresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Get theme videos for an item.
  */
-class GetThemeVideosLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ThemeMediaResult, GetThemeVideosParams> {
+
+class GetThemeVideosLoader : public Jellyfin::Support::HttpLoader<ThemeMediaResult, GetThemeVideosParams> {
 public:
 	explicit GetThemeVideosLoader(ApiClient *apiClient = nullptr);
 

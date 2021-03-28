@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetPackageInfoLoader::GetPackageInfoLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::PackageInfo, GetPackageInfoParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<PackageInfo, GetPackageInfoParams>(apiClient) {}
 
 QString GetPackageInfoLoader::path(const GetPackageInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Packages/") + Support::toString(params.name()) ;
+	return QStringLiteral("/Packages/") + Support::toString< QString>(params.name()) ;
 }
 
 QUrlQuery GetPackageInfoLoader::query(const GetPackageInfoParams &params) const {
@@ -50,7 +51,7 @@ QUrlQuery GetPackageInfoLoader::query(const GetPackageInfoParams &params) const 
 
 	// Optional parameters
 	if (!params.assemblyGuidNull()) {
-		result.addQueryItem("assemblyGuid", Support::toString(params.assemblyGuid()));
+		result.addQueryItem("assemblyGuid", Support::toString<QString>(params.assemblyGuid()));
 	}
 	
 	return result;

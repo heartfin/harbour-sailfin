@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetItemCountsLoader::GetItemCountsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ItemCounts, GetItemCountsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<ItemCounts, GetItemCountsParams>(apiClient) {}
 
 QString GetItemCountsLoader::path(const GetItemCountsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,10 +51,10 @@ QUrlQuery GetItemCountsLoader::query(const GetItemCountsParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.isFavoriteNull()) {
-		result.addQueryItem("isFavorite", Support::toString(params.isFavorite()));
+		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
 	}
 	
 	return result;

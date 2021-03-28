@@ -41,6 +41,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -56,7 +60,7 @@ public:
 	
 	static ThemeMediaResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -104,6 +108,18 @@ protected:
 	qint32 m_startIndex;
 	QString m_ownerId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ThemeMediaResult = Jellyfin::DTO::ThemeMediaResult;
+
+template <>
+ThemeMediaResult fromJsonValue(const QJsonValue &source, convertType<ThemeMediaResult>);
+
+template<>
+QJsonValue toJsonValue(const ThemeMediaResult &source, convertType<ThemeMediaResult>);
 
 } // NS DTO
 } // NS Jellyfin

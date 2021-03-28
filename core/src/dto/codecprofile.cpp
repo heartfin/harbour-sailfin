@@ -67,7 +67,7 @@ void CodecProfile::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject CodecProfile::toJson() {
+QJsonObject CodecProfile::toJson() const {
 	QJsonObject result;
 	result["Type"] = Jellyfin::Support::toJsonValue<CodecType>(m_type);
 	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
@@ -144,9 +144,14 @@ namespace Support {
 using CodecProfile = Jellyfin::DTO::CodecProfile;
 
 template <>
-CodecProfile fromJsonValue<CodecProfile>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+CodecProfile fromJsonValue(const QJsonValue &source, convertType<CodecProfile>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return CodecProfile::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const CodecProfile &source, convertType<CodecProfile>) {
+	return source.toJson();
 }
 
 } // NS DTO

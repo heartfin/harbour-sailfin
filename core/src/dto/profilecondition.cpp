@@ -64,7 +64,7 @@ void ProfileCondition::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ProfileCondition::toJson() {
+QJsonObject ProfileCondition::toJson() const {
 	QJsonObject result;
 	result["Condition"] = Jellyfin::Support::toJsonValue<ProfileConditionType>(m_condition);
 	result["Property"] = Jellyfin::Support::toJsonValue<ProfileConditionValue>(m_property);
@@ -113,9 +113,14 @@ namespace Support {
 using ProfileCondition = Jellyfin::DTO::ProfileCondition;
 
 template <>
-ProfileCondition fromJsonValue<ProfileCondition>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ProfileCondition fromJsonValue(const QJsonValue &source, convertType<ProfileCondition>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ProfileCondition::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ProfileCondition &source, convertType<ProfileCondition>) {
+	return source.toJson();
 }
 
 } // NS DTO

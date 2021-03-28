@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class KeepUntilClass {
@@ -54,7 +58,19 @@ private:
 	explicit KeepUntilClass();
 };
 
-typedef KeepUntilClass::Value KeepUntil;
+using KeepUntil = KeepUntilClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using KeepUntil = Jellyfin::DTO::KeepUntil;
+
+template <>
+KeepUntil fromJsonValue(const QJsonValue &source, convertType<KeepUntil>);
+
+template <>
+QJsonValue toJsonValue(const KeepUntil &source, convertType<KeepUntil>);
 
 } // NS DTO
 } // NS Jellyfin

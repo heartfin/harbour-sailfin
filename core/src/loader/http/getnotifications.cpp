@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetNotificationsLoader::GetNotificationsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::NotificationResultDto, GetNotificationsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<NotificationResultDto, GetNotificationsParams>(apiClient) {}
 
 QString GetNotificationsLoader::path(const GetNotificationsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Notifications/") + Support::toString(params.userId()) ;
+	return QStringLiteral("/Notifications/") + Support::toString< QString>(params.userId()) ;
 }
 
 QUrlQuery GetNotificationsLoader::query(const GetNotificationsParams &params) const {

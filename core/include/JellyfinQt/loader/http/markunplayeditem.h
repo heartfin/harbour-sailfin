@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/useritemdatadto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Marks an item as unplayed for user.
  */
-class MarkUnplayedItemLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, MarkUnplayedItemParams> {
+
+class MarkUnplayedItemLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, MarkUnplayedItemParams> {
 public:
 	explicit MarkUnplayedItemLoader(ApiClient *apiClient = nullptr);
 

@@ -17,8 +17,8 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef JELLYFIN_DEVICE_PROFILE_H
-#define JELLYFIN_DEVICE_PROFILE_H
+#ifndef JELLYFIN_MODEL_DEVICEPROFILE_H
+#define JELLYFIN_MODEL_DEVICEPROFILE_H
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -31,6 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QtMultimedia/QMediaPlayer>
 
 namespace Jellyfin {
+namespace Model {
 namespace DeviceProfile {
     QJsonObject generateProfile();
     // Transport
@@ -48,5 +49,6 @@ namespace DeviceProfile {
     bool supportsMp3VideoAudio();
 }
 }
+}
 
-#endif // JELLYFIN_DEVICE_PROFILE_H
+#endif // JELLYFIN_MODEL_DEVICEPROFILE_H

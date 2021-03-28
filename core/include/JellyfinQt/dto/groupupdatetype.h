@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class GroupUpdateTypeClass {
@@ -61,7 +65,19 @@ private:
 	explicit GroupUpdateTypeClass();
 };
 
-typedef GroupUpdateTypeClass::Value GroupUpdateType;
+using GroupUpdateType = GroupUpdateTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using GroupUpdateType = Jellyfin::DTO::GroupUpdateType;
+
+template <>
+GroupUpdateType fromJsonValue(const QJsonValue &source, convertType<GroupUpdateType>);
+
+template <>
+QJsonValue toJsonValue(const GroupUpdateType &source, convertType<GroupUpdateType>);
 
 } // NS DTO
 } // NS Jellyfin

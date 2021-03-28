@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ArchitectureClass {
@@ -55,7 +59,19 @@ private:
 	explicit ArchitectureClass();
 };
 
-typedef ArchitectureClass::Value Architecture;
+using Architecture = ArchitectureClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using Architecture = Jellyfin::DTO::Architecture;
+
+template <>
+Architecture fromJsonValue(const QJsonValue &source, convertType<Architecture>);
+
+template <>
+QJsonValue toJsonValue(const Architecture &source, convertType<Architecture>);
 
 } // NS DTO
 } // NS Jellyfin

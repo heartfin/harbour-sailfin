@@ -149,7 +149,7 @@ void SeriesTimerInfoDto::setFromJson(QJsonObject source) {
 	m_recordNewOnly = Jellyfin::Support::fromJsonValue<bool>(source["RecordNewOnly"]);
 	m_days = Jellyfin::Support::fromJsonValue<QList<DayOfWeek>>(source["Days"]);
 	m_dayPattern = Jellyfin::Support::fromJsonValue<DayPattern>(source["DayPattern"]);
-	m_imageTags = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ImageTags"]);
+	m_imageTags = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ImageTags"]);
 	m_parentThumbItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentThumbItemId"]);
 	m_parentThumbImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ParentThumbImageTag"]);
 	m_parentPrimaryImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentPrimaryImageItemId"]);
@@ -157,7 +157,7 @@ void SeriesTimerInfoDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SeriesTimerInfoDto::toJson() {
+QJsonObject SeriesTimerInfoDto::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
@@ -189,7 +189,7 @@ QJsonObject SeriesTimerInfoDto::toJson() {
 	result["RecordNewOnly"] = Jellyfin::Support::toJsonValue<bool>(m_recordNewOnly);
 	result["Days"] = Jellyfin::Support::toJsonValue<QList<DayOfWeek>>(m_days);
 	result["DayPattern"] = Jellyfin::Support::toJsonValue<DayPattern>(m_dayPattern);
-	result["ImageTags"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_imageTags);
+	result["ImageTags"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageTags);
 	result["ParentThumbItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbItemId);
 	result["ParentThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbImageTag);
 	result["ParentPrimaryImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentPrimaryImageItemId);
@@ -483,17 +483,17 @@ void SeriesTimerInfoDto::setDayPattern(DayPattern newDayPattern) {
 	m_dayPattern = newDayPattern;
 }
 
-std::optional<QJsonObject> SeriesTimerInfoDto::imageTags() const { return m_imageTags; }
+QJsonObject SeriesTimerInfoDto::imageTags() const { return m_imageTags; }
 
-void SeriesTimerInfoDto::setImageTags(std::optional<QJsonObject> newImageTags) {
+void SeriesTimerInfoDto::setImageTags(QJsonObject newImageTags) {
 	m_imageTags = newImageTags;
 }
 bool SeriesTimerInfoDto::imageTagsNull() const {
-	return !m_imageTags.has_value();
+	return m_imageTags.isEmpty();
 }
 
 void SeriesTimerInfoDto::setImageTagsNull() {
-	m_imageTags = std::nullopt;
+	m_imageTags= QJsonObject();
 
 }
 QString SeriesTimerInfoDto::parentThumbItemId() const { return m_parentThumbItemId; }
@@ -556,9 +556,14 @@ namespace Support {
 using SeriesTimerInfoDto = Jellyfin::DTO::SeriesTimerInfoDto;
 
 template <>
-SeriesTimerInfoDto fromJsonValue<SeriesTimerInfoDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SeriesTimerInfoDto fromJsonValue(const QJsonValue &source, convertType<SeriesTimerInfoDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SeriesTimerInfoDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SeriesTimerInfoDto &source, convertType<SeriesTimerInfoDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

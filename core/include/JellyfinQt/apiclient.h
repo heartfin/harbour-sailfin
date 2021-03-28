@@ -38,16 +38,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QUrlQuery>
 
 #include "dto/generalcommandtype.h"
-#include "support/jsonconv.h"
 #include "credentialmanager.h"
-#include "deviceprofile.h"
+#include "model/deviceprofile.h"
 #include "eventbus.h"
-#include "websocket.h"
 
 namespace Jellyfin {
-class MediaSource;
-class WebSocket;
 class PlaybackManager;
+class WebSocket;
 
 namespace DTO {
     class UserItemDataDto; // Keep it as an opaque pointer
@@ -124,6 +121,7 @@ public:
         UNEXPECTED_STATUS,
         INVALID_PASSWORD
     };
+    Q_ENUM(ApiError)
 
     const QString &baseUrl() const { return this->m_baseUrl; }
     const QString &userId() const { return m_userId; }

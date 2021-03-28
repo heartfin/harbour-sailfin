@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static BrandingOptions fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -83,6 +87,18 @@ protected:
 	QString m_loginDisclaimer;
 	QString m_customCss;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using BrandingOptions = Jellyfin::DTO::BrandingOptions;
+
+template <>
+BrandingOptions fromJsonValue(const QJsonValue &source, convertType<BrandingOptions>);
+
+template<>
+QJsonValue toJsonValue(const BrandingOptions &source, convertType<BrandingOptions>);
 
 } // NS DTO
 } // NS Jellyfin

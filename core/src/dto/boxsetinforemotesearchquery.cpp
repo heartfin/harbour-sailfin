@@ -64,7 +64,7 @@ void BoxSetInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject BoxSetInfoRemoteSearchQuery::toJson() {
+QJsonObject BoxSetInfoRemoteSearchQuery::toJson() const {
 	QJsonObject result;
 	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<BoxSetInfo>>(m_searchInfo);
 	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
@@ -113,9 +113,14 @@ namespace Support {
 using BoxSetInfoRemoteSearchQuery = Jellyfin::DTO::BoxSetInfoRemoteSearchQuery;
 
 template <>
-BoxSetInfoRemoteSearchQuery fromJsonValue<BoxSetInfoRemoteSearchQuery>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+BoxSetInfoRemoteSearchQuery fromJsonValue(const QJsonValue &source, convertType<BoxSetInfoRemoteSearchQuery>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return BoxSetInfoRemoteSearchQuery::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const BoxSetInfoRemoteSearchQuery &source, convertType<BoxSetInfoRemoteSearchQuery>) {
+	return source.toJson();
 }
 
 } // NS DTO

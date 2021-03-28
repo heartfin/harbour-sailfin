@@ -34,7 +34,6 @@ namespace DTO {
 
 PlaybackErrorCodeClass::PlaybackErrorCodeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using PlaybackErrorCode = Jellyfin::DTO::PlaybackErrorCode;
 
 template <>
-PlaybackErrorCode fromJsonValue<PlaybackErrorCode>(const QJsonValue &source) {
+PlaybackErrorCode fromJsonValue(const QJsonValue &source, convertType<PlaybackErrorCode>) {
 	if (!source.isString()) return PlaybackErrorCode::EnumNotSet;
 
 	QString str = source.toString();
@@ -57,6 +56,22 @@ PlaybackErrorCode fromJsonValue<PlaybackErrorCode>(const QJsonValue &source) {
 	}
 	
 	return PlaybackErrorCode::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const PlaybackErrorCode &source, convertType<PlaybackErrorCode>) {
+	switch(source) {
+	case PlaybackErrorCode::NotAllowed:
+		return QStringLiteral("NotAllowed");
+	case PlaybackErrorCode::NoCompatibleStream:
+		return QStringLiteral("NoCompatibleStream");
+	case PlaybackErrorCode::RateLimitExceeded:
+		return QStringLiteral("RateLimitExceeded");
+
+	case PlaybackErrorCode::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

@@ -55,7 +55,7 @@ void DeviceOptions::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject DeviceOptions::toJson() {
+QJsonObject DeviceOptions::toJson() const {
 	QJsonObject result;
 	result["CustomName"] = Jellyfin::Support::toJsonValue<QString>(m_customName);
 
@@ -83,9 +83,14 @@ namespace Support {
 using DeviceOptions = Jellyfin::DTO::DeviceOptions;
 
 template <>
-DeviceOptions fromJsonValue<DeviceOptions>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+DeviceOptions fromJsonValue(const QJsonValue &source, convertType<DeviceOptions>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return DeviceOptions::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const DeviceOptions &source, convertType<DeviceOptions>) {
+	return source.toJson();
 }
 
 } // NS DTO

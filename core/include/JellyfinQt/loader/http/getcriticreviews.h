@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets critic review for an item.
  */
-class GetCriticReviewsLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetCriticReviewsParams> {
+
+class GetCriticReviewsLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetCriticReviewsParams> {
 public:
 	explicit GetCriticReviewsLoader(ApiClient *apiClient = nullptr);
 

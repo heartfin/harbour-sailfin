@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static TimerEventInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -75,6 +79,18 @@ protected:
 	QString m_jellyfinId;
 	QString m_programId;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using TimerEventInfo = Jellyfin::DTO::TimerEventInfo;
+
+template <>
+TimerEventInfo fromJsonValue(const QJsonValue &source, convertType<TimerEventInfo>);
+
+template<>
+QJsonValue toJsonValue(const TimerEventInfo &source, convertType<TimerEventInfo>);
 
 } // NS DTO
 } // NS Jellyfin

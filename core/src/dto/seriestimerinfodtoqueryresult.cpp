@@ -61,7 +61,7 @@ void SeriesTimerInfoDtoQueryResult::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SeriesTimerInfoDtoQueryResult::toJson() {
+QJsonObject SeriesTimerInfoDtoQueryResult::toJson() const {
 	QJsonObject result;
 	result["Items"] = Jellyfin::Support::toJsonValue<QList<SeriesTimerInfoDto>>(m_items);
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
@@ -103,9 +103,14 @@ namespace Support {
 using SeriesTimerInfoDtoQueryResult = Jellyfin::DTO::SeriesTimerInfoDtoQueryResult;
 
 template <>
-SeriesTimerInfoDtoQueryResult fromJsonValue<SeriesTimerInfoDtoQueryResult>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SeriesTimerInfoDtoQueryResult fromJsonValue(const QJsonValue &source, convertType<SeriesTimerInfoDtoQueryResult>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SeriesTimerInfoDtoQueryResult::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SeriesTimerInfoDtoQueryResult &source, convertType<SeriesTimerInfoDtoQueryResult>) {
+	return source.toJson();
 }
 
 } // NS DTO

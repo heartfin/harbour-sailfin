@@ -58,7 +58,7 @@ void SpecialViewOptionDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SpecialViewOptionDto::toJson() {
+QJsonObject SpecialViewOptionDto::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
@@ -100,9 +100,14 @@ namespace Support {
 using SpecialViewOptionDto = Jellyfin::DTO::SpecialViewOptionDto;
 
 template <>
-SpecialViewOptionDto fromJsonValue<SpecialViewOptionDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SpecialViewOptionDto fromJsonValue(const QJsonValue &source, convertType<SpecialViewOptionDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SpecialViewOptionDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SpecialViewOptionDto &source, convertType<SpecialViewOptionDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

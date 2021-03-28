@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 ForgotPasswordLoader::ForgotPasswordLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::ForgotPasswordResult, ForgotPasswordParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<ForgotPasswordResult, ForgotPasswordParams>(apiClient) {}
 
 QString ForgotPasswordLoader::path(const ForgotPasswordParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

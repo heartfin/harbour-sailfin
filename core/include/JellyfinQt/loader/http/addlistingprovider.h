@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/listingsproviderinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Adds a listings provider.
  */
-class AddListingProviderLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ListingsProviderInfo, AddListingProviderParams> {
+
+class AddListingProviderLoader : public Jellyfin::Support::HttpLoader<ListingsProviderInfo, AddListingProviderParams> {
 public:
 	explicit AddListingProviderLoader(ApiClient *apiClient = nullptr);
 

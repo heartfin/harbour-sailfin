@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static AddVirtualFolderDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -66,6 +70,18 @@ public:
 protected:
 	QSharedPointer<LibraryOptions> m_libraryOptions = nullptr;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using AddVirtualFolderDto = Jellyfin::DTO::AddVirtualFolderDto;
+
+template <>
+AddVirtualFolderDto fromJsonValue(const QJsonValue &source, convertType<AddVirtualFolderDto>);
+
+template<>
+QJsonValue toJsonValue(const AddVirtualFolderDto &source, convertType<AddVirtualFolderDto>);
 
 } // NS DTO
 } // NS Jellyfin

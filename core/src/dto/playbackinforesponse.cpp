@@ -61,7 +61,7 @@ void PlaybackInfoResponse::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PlaybackInfoResponse::toJson() {
+QJsonObject PlaybackInfoResponse::toJson() const {
 	QJsonObject result;
 	result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<MediaSourceInfo>>(m_mediaSources);
 	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
@@ -110,9 +110,14 @@ namespace Support {
 using PlaybackInfoResponse = Jellyfin::DTO::PlaybackInfoResponse;
 
 template <>
-PlaybackInfoResponse fromJsonValue<PlaybackInfoResponse>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PlaybackInfoResponse fromJsonValue(const QJsonValue &source, convertType<PlaybackInfoResponse>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PlaybackInfoResponse::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PlaybackInfoResponse &source, convertType<PlaybackInfoResponse>) {
+	return source.toJson();
 }
 
 } // NS DTO

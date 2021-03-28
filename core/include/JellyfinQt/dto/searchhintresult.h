@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static SearchHintResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -83,6 +87,18 @@ protected:
 	QList<SearchHint> m_searchHints;
 	qint32 m_totalRecordCount;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SearchHintResult = Jellyfin::DTO::SearchHintResult;
+
+template <>
+SearchHintResult fromJsonValue(const QJsonValue &source, convertType<SearchHintResult>);
+
+template<>
+QJsonValue toJsonValue(const SearchHintResult &source, convertType<SearchHintResult>);
 
 } // NS DTO
 } // NS Jellyfin

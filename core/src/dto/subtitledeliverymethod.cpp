@@ -34,7 +34,6 @@ namespace DTO {
 
 SubtitleDeliveryMethodClass::SubtitleDeliveryMethodClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using SubtitleDeliveryMethod = Jellyfin::DTO::SubtitleDeliveryMethod;
 
 template <>
-SubtitleDeliveryMethod fromJsonValue<SubtitleDeliveryMethod>(const QJsonValue &source) {
+SubtitleDeliveryMethod fromJsonValue(const QJsonValue &source, convertType<SubtitleDeliveryMethod>) {
 	if (!source.isString()) return SubtitleDeliveryMethod::EnumNotSet;
 
 	QString str = source.toString();
@@ -60,6 +59,24 @@ SubtitleDeliveryMethod fromJsonValue<SubtitleDeliveryMethod>(const QJsonValue &s
 	}
 	
 	return SubtitleDeliveryMethod::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const SubtitleDeliveryMethod &source, convertType<SubtitleDeliveryMethod>) {
+	switch(source) {
+	case SubtitleDeliveryMethod::Encode:
+		return QStringLiteral("Encode");
+	case SubtitleDeliveryMethod::Embed:
+		return QStringLiteral("Embed");
+	case SubtitleDeliveryMethod::External:
+		return QStringLiteral("External");
+	case SubtitleDeliveryMethod::Hls:
+		return QStringLiteral("Hls");
+
+	case SubtitleDeliveryMethod::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

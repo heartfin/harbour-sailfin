@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetQueryFiltersLegacyLoader::GetQueryFiltersLegacyLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::QueryFiltersLegacy, GetQueryFiltersLegacyParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<QueryFiltersLegacy, GetQueryFiltersLegacyParams>(apiClient) {}
 
 QString GetQueryFiltersLegacyLoader::path(const GetQueryFiltersLegacyParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,16 +51,16 @@ QUrlQuery GetQueryFiltersLegacyLoader::query(const GetQueryFiltersLegacyParams &
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.parentIdNull()) {
-		result.addQueryItem("parentId", Support::toString(params.parentId()));
+		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
 	}
 	if (!params.mediaTypesNull()) {
-		result.addQueryItem("mediaTypes", Support::toString(params.mediaTypes()));
+		result.addQueryItem("mediaTypes", Support::toString<QStringList>(params.mediaTypes()));
 	}
 	
 	return result;

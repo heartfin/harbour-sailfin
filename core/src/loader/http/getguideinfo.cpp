@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetGuideInfoLoader::GetGuideInfoLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::GuideInfo, GetGuideInfoParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<GuideInfo, GetGuideInfoParams>(apiClient) {}
 
 QString GetGuideInfoLoader::path(const GetGuideInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

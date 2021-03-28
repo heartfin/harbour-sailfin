@@ -58,7 +58,7 @@ void QueryFilters::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject QueryFilters::toJson() {
+QJsonObject QueryFilters::toJson() const {
 	QJsonObject result;
 	result["Genres"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_genres);
 	result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
@@ -100,9 +100,14 @@ namespace Support {
 using QueryFilters = Jellyfin::DTO::QueryFilters;
 
 template <>
-QueryFilters fromJsonValue<QueryFilters>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+QueryFilters fromJsonValue(const QJsonValue &source, convertType<QueryFilters>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return QueryFilters::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const QueryFilters &source, convertType<QueryFilters>) {
+	return source.toJson();
 }
 
 } // NS DTO

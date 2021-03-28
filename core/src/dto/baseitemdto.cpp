@@ -401,7 +401,7 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_indexNumberEnd = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["IndexNumberEnd"]);
 	m_parentIndexNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ParentIndexNumber"]);
 	m_remoteTrailers = Jellyfin::Support::fromJsonValue<QList<MediaUrl>>(source["RemoteTrailers"]);
-	m_providerIds = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ProviderIds"]);
+	m_providerIds = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ProviderIds"]);
 	m_isHD = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsHD"]);
 	m_isFolder = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsFolder"]);
 	m_parentId = Jellyfin::Support::fromJsonValue<QString>(source["ParentId"]);
@@ -441,14 +441,14 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_videoType = Jellyfin::Support::fromJsonValue<VideoType>(source["VideoType"]);
 	m_partCount = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["PartCount"]);
 	m_mediaSourceCount = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["MediaSourceCount"]);
-	m_imageTags = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ImageTags"]);
+	m_imageTags = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ImageTags"]);
 	m_backdropImageTags = Jellyfin::Support::fromJsonValue<QStringList>(source["BackdropImageTags"]);
 	m_screenshotImageTags = Jellyfin::Support::fromJsonValue<QStringList>(source["ScreenshotImageTags"]);
 	m_parentLogoImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ParentLogoImageTag"]);
 	m_parentArtItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentArtItemId"]);
 	m_parentArtImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ParentArtImageTag"]);
 	m_seriesThumbImageTag = Jellyfin::Support::fromJsonValue<QString>(source["SeriesThumbImageTag"]);
-	m_imageBlurHashes = Jellyfin::Support::fromJsonValue<std::optional<QJsonObject>>(source["ImageBlurHashes"]);
+	m_imageBlurHashes = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ImageBlurHashes"]);
 	m_seriesStudio = Jellyfin::Support::fromJsonValue<QString>(source["SeriesStudio"]);
 	m_parentThumbItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentThumbItemId"]);
 	m_parentThumbImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ParentThumbImageTag"]);
@@ -505,7 +505,7 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject BaseItemDto::toJson() {
+QJsonObject BaseItemDto::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
@@ -557,7 +557,7 @@ QJsonObject BaseItemDto::toJson() {
 	result["IndexNumberEnd"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumberEnd);
 	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
 	result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<MediaUrl>>(m_remoteTrailers);
-	result["ProviderIds"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_providerIds);
+	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
 	result["IsHD"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isHD);
 	result["IsFolder"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isFolder);
 	result["ParentId"] = Jellyfin::Support::toJsonValue<QString>(m_parentId);
@@ -597,14 +597,14 @@ QJsonObject BaseItemDto::toJson() {
 	result["VideoType"] = Jellyfin::Support::toJsonValue<VideoType>(m_videoType);
 	result["PartCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_partCount);
 	result["MediaSourceCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_mediaSourceCount);
-	result["ImageTags"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_imageTags);
+	result["ImageTags"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageTags);
 	result["BackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_backdropImageTags);
 	result["ScreenshotImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_screenshotImageTags);
 	result["ParentLogoImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentLogoImageTag);
 	result["ParentArtItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentArtItemId);
 	result["ParentArtImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentArtImageTag);
 	result["SeriesThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_seriesThumbImageTag);
-	result["ImageBlurHashes"] = Jellyfin::Support::toJsonValue<std::optional<QJsonObject>>(m_imageBlurHashes);
+	result["ImageBlurHashes"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageBlurHashes);
 	result["SeriesStudio"] = Jellyfin::Support::toJsonValue<QString>(m_seriesStudio);
 	result["ParentThumbItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbItemId);
 	result["ParentThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbImageTag);
@@ -1291,17 +1291,17 @@ void BaseItemDto::setRemoteTrailersNull() {
 	m_remoteTrailers.clear();
 
 }
-std::optional<QJsonObject> BaseItemDto::providerIds() const { return m_providerIds; }
+QJsonObject BaseItemDto::providerIds() const { return m_providerIds; }
 
-void BaseItemDto::setProviderIds(std::optional<QJsonObject> newProviderIds) {
+void BaseItemDto::setProviderIds(QJsonObject newProviderIds) {
 	m_providerIds = newProviderIds;
 }
 bool BaseItemDto::providerIdsNull() const {
-	return !m_providerIds.has_value();
+	return m_providerIds.isEmpty();
 }
 
 void BaseItemDto::setProviderIdsNull() {
-	m_providerIds = std::nullopt;
+	m_providerIds= QJsonObject();
 
 }
 std::optional<bool> BaseItemDto::isHD() const { return m_isHD; }
@@ -1797,17 +1797,17 @@ void BaseItemDto::setMediaSourceCountNull() {
 	m_mediaSourceCount = std::nullopt;
 
 }
-std::optional<QJsonObject> BaseItemDto::imageTags() const { return m_imageTags; }
+QJsonObject BaseItemDto::imageTags() const { return m_imageTags; }
 
-void BaseItemDto::setImageTags(std::optional<QJsonObject> newImageTags) {
+void BaseItemDto::setImageTags(QJsonObject newImageTags) {
 	m_imageTags = newImageTags;
 }
 bool BaseItemDto::imageTagsNull() const {
-	return !m_imageTags.has_value();
+	return m_imageTags.isEmpty();
 }
 
 void BaseItemDto::setImageTagsNull() {
-	m_imageTags = std::nullopt;
+	m_imageTags= QJsonObject();
 
 }
 QStringList BaseItemDto::backdropImageTags() const { return m_backdropImageTags; }
@@ -1888,17 +1888,17 @@ void BaseItemDto::setSeriesThumbImageTagNull() {
 	m_seriesThumbImageTag.clear();
 
 }
-std::optional<QJsonObject> BaseItemDto::imageBlurHashes() const { return m_imageBlurHashes; }
+QJsonObject BaseItemDto::imageBlurHashes() const { return m_imageBlurHashes; }
 
-void BaseItemDto::setImageBlurHashes(std::optional<QJsonObject> newImageBlurHashes) {
+void BaseItemDto::setImageBlurHashes(QJsonObject newImageBlurHashes) {
 	m_imageBlurHashes = newImageBlurHashes;
 }
 bool BaseItemDto::imageBlurHashesNull() const {
-	return !m_imageBlurHashes.has_value();
+	return m_imageBlurHashes.isEmpty();
 }
 
 void BaseItemDto::setImageBlurHashesNull() {
-	m_imageBlurHashes = std::nullopt;
+	m_imageBlurHashes= QJsonObject();
 
 }
 QString BaseItemDto::seriesStudio() const { return m_seriesStudio; }
@@ -2556,9 +2556,14 @@ namespace Support {
 using BaseItemDto = Jellyfin::DTO::BaseItemDto;
 
 template <>
-BaseItemDto fromJsonValue<BaseItemDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+BaseItemDto fromJsonValue(const QJsonValue &source, convertType<BaseItemDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return BaseItemDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const BaseItemDto &source, convertType<BaseItemDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

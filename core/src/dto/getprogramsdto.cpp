@@ -133,7 +133,7 @@ void GetProgramsDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject GetProgramsDto::toJson() {
+QJsonObject GetProgramsDto::toJson() const {
 	QJsonObject result;
 	result["ChannelIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_channelIds);
 	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
@@ -504,9 +504,14 @@ namespace Support {
 using GetProgramsDto = Jellyfin::DTO::GetProgramsDto;
 
 template <>
-GetProgramsDto fromJsonValue<GetProgramsDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+GetProgramsDto fromJsonValue(const QJsonValue &source, convertType<GetProgramsDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return GetProgramsDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const GetProgramsDto &source, convertType<GetProgramsDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

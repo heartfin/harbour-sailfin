@@ -139,7 +139,7 @@ void SearchHint::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SearchHint::toJson() {
+QJsonObject SearchHint::toJson() const {
 	QJsonObject result;
 	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
@@ -531,9 +531,14 @@ namespace Support {
 using SearchHint = Jellyfin::DTO::SearchHint;
 
 template <>
-SearchHint fromJsonValue<SearchHint>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SearchHint fromJsonValue(const QJsonValue &source, convertType<SearchHint>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SearchHint::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SearchHint &source, convertType<SearchHint>) {
+	return source.toJson();
 }
 
 } // NS DTO

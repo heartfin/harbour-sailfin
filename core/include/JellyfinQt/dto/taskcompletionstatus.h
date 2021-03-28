@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class TaskCompletionStatusClass {
@@ -54,7 +58,19 @@ private:
 	explicit TaskCompletionStatusClass();
 };
 
-typedef TaskCompletionStatusClass::Value TaskCompletionStatus;
+using TaskCompletionStatus = TaskCompletionStatusClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using TaskCompletionStatus = Jellyfin::DTO::TaskCompletionStatus;
+
+template <>
+TaskCompletionStatus fromJsonValue(const QJsonValue &source, convertType<TaskCompletionStatus>);
+
+template <>
+QJsonValue toJsonValue(const TaskCompletionStatus &source, convertType<TaskCompletionStatus>);
 
 } // NS DTO
 } // NS Jellyfin

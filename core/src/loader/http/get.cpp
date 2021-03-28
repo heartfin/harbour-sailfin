@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetLoader::GetLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::SearchHintResult, GetParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<SearchHintResult, GetParams>(apiClient) {}
 
 QString GetLoader::path(const GetParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -47,59 +48,59 @@ QUrlQuery GetLoader::query(const GetParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
-	result.addQueryItem("searchTerm", params.searchTerm());
+	result.addQueryItem("searchTerm", Support::toString<QString>(params.searchTerm()));
 
 	// Optional parameters
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
 	}
 	if (!params.mediaTypesNull()) {
-		result.addQueryItem("mediaTypes", Support::toString(params.mediaTypes()));
+		result.addQueryItem("mediaTypes", Support::toString<QStringList>(params.mediaTypes()));
 	}
 	if (!params.parentIdNull()) {
-		result.addQueryItem("parentId", Support::toString(params.parentId()));
+		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
 	if (!params.isMovieNull()) {
-		result.addQueryItem("isMovie", Support::toString(params.isMovie()));
+		result.addQueryItem("isMovie", Support::toString<std::optional<bool>>(params.isMovie()));
 	}
 	if (!params.isSeriesNull()) {
-		result.addQueryItem("isSeries", Support::toString(params.isSeries()));
+		result.addQueryItem("isSeries", Support::toString<std::optional<bool>>(params.isSeries()));
 	}
 	if (!params.isNewsNull()) {
-		result.addQueryItem("isNews", Support::toString(params.isNews()));
+		result.addQueryItem("isNews", Support::toString<std::optional<bool>>(params.isNews()));
 	}
 	if (!params.isKidsNull()) {
-		result.addQueryItem("isKids", Support::toString(params.isKids()));
+		result.addQueryItem("isKids", Support::toString<std::optional<bool>>(params.isKids()));
 	}
 	if (!params.isSportsNull()) {
-		result.addQueryItem("isSports", Support::toString(params.isSports()));
+		result.addQueryItem("isSports", Support::toString<std::optional<bool>>(params.isSports()));
 	}
 	if (!params.includePeopleNull()) {
-		result.addQueryItem("includePeople", Support::toString(params.includePeople()));
+		result.addQueryItem("includePeople", Support::toString<std::optional<bool>>(params.includePeople()));
 	}
 	if (!params.includeMediaNull()) {
-		result.addQueryItem("includeMedia", Support::toString(params.includeMedia()));
+		result.addQueryItem("includeMedia", Support::toString<std::optional<bool>>(params.includeMedia()));
 	}
 	if (!params.includeGenresNull()) {
-		result.addQueryItem("includeGenres", Support::toString(params.includeGenres()));
+		result.addQueryItem("includeGenres", Support::toString<std::optional<bool>>(params.includeGenres()));
 	}
 	if (!params.includeStudiosNull()) {
-		result.addQueryItem("includeStudios", Support::toString(params.includeStudios()));
+		result.addQueryItem("includeStudios", Support::toString<std::optional<bool>>(params.includeStudios()));
 	}
 	if (!params.includeArtistsNull()) {
-		result.addQueryItem("includeArtists", Support::toString(params.includeArtists()));
+		result.addQueryItem("includeArtists", Support::toString<std::optional<bool>>(params.includeArtists()));
 	}
 	
 	return result;

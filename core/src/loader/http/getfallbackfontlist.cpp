@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetFallbackFontListLoader::GetFallbackFontListLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<FontFile>, GetFallbackFontListParams>(apiClient) {}
+
+QString GetFallbackFontListLoader::path(const GetFallbackFontListParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/FallbackFont/Fonts");
+}
+
+QUrlQuery GetFallbackFontListLoader::query(const GetFallbackFontListParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

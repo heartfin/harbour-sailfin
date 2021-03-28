@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static HttpHeaderInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -82,6 +86,18 @@ protected:
 	QString m_value;
 	HeaderMatchType m_match;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using HttpHeaderInfo = Jellyfin::DTO::HttpHeaderInfo;
+
+template <>
+HttpHeaderInfo fromJsonValue(const QJsonValue &source, convertType<HttpHeaderInfo>);
+
+template<>
+QJsonValue toJsonValue(const HttpHeaderInfo &source, convertType<HttpHeaderInfo>);
 
 } // NS DTO
 } // NS Jellyfin

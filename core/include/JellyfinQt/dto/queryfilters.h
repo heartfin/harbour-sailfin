@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static QueryFilters fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -77,6 +81,18 @@ protected:
 	QList<NameGuidPair> m_genres;
 	QStringList m_tags;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using QueryFilters = Jellyfin::DTO::QueryFilters;
+
+template <>
+QueryFilters fromJsonValue(const QJsonValue &source, convertType<QueryFilters>);
+
+template<>
+QJsonValue toJsonValue(const QueryFilters &source, convertType<QueryFilters>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 SetChannelMappingLoader::SetChannelMappingLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::TunerChannelMapping, SetChannelMappingParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<TunerChannelMapping, SetChannelMappingParams>(apiClient) {}
 
 QString SetChannelMappingLoader::path(const SetChannelMappingParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

@@ -42,6 +42,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -57,7 +61,7 @@ public:
 	
 	static ContainerProfile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -85,6 +89,18 @@ protected:
 	QList<ProfileCondition> m_conditions;
 	QString m_container;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ContainerProfile = Jellyfin::DTO::ContainerProfile;
+
+template <>
+ContainerProfile fromJsonValue(const QJsonValue &source, convertType<ContainerProfile>);
+
+template<>
+QJsonValue toJsonValue(const ContainerProfile &source, convertType<ContainerProfile>);
 
 } // NS DTO
 } // NS Jellyfin

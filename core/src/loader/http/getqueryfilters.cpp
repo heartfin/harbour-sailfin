@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetQueryFiltersLoader::GetQueryFiltersLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::QueryFilters, GetQueryFiltersParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<QueryFilters, GetQueryFiltersParams>(apiClient) {}
 
 QString GetQueryFiltersLoader::path(const GetQueryFiltersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,34 +51,34 @@ QUrlQuery GetQueryFiltersLoader::query(const GetQueryFiltersParams &params) cons
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.parentIdNull()) {
-		result.addQueryItem("parentId", Support::toString(params.parentId()));
+		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
 	}
 	if (!params.isAiringNull()) {
-		result.addQueryItem("isAiring", Support::toString(params.isAiring()));
+		result.addQueryItem("isAiring", Support::toString<std::optional<bool>>(params.isAiring()));
 	}
 	if (!params.isMovieNull()) {
-		result.addQueryItem("isMovie", Support::toString(params.isMovie()));
+		result.addQueryItem("isMovie", Support::toString<std::optional<bool>>(params.isMovie()));
 	}
 	if (!params.isSportsNull()) {
-		result.addQueryItem("isSports", Support::toString(params.isSports()));
+		result.addQueryItem("isSports", Support::toString<std::optional<bool>>(params.isSports()));
 	}
 	if (!params.isKidsNull()) {
-		result.addQueryItem("isKids", Support::toString(params.isKids()));
+		result.addQueryItem("isKids", Support::toString<std::optional<bool>>(params.isKids()));
 	}
 	if (!params.isNewsNull()) {
-		result.addQueryItem("isNews", Support::toString(params.isNews()));
+		result.addQueryItem("isNews", Support::toString<std::optional<bool>>(params.isNews()));
 	}
 	if (!params.isSeriesNull()) {
-		result.addQueryItem("isSeries", Support::toString(params.isSeries()));
+		result.addQueryItem("isSeries", Support::toString<std::optional<bool>>(params.isSeries()));
 	}
 	if (!params.recursiveNull()) {
-		result.addQueryItem("recursive", Support::toString(params.recursive()));
+		result.addQueryItem("recursive", Support::toString<std::optional<bool>>(params.recursive()));
 	}
 	
 	return result;

@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/filesystementryinfo.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets the contents of a given directory in the file system.
+ */
+
+class GetDirectoryContentsLoader : public Jellyfin::Support::HttpLoader<QList<FileSystemEntryInfo>, GetDirectoryContentsParams> {
+public:
+	explicit GetDirectoryContentsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetDirectoryContentsParams& parameters) const override;
+	QUrlQuery query(const GetDirectoryContentsParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

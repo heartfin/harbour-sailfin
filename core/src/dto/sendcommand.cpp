@@ -70,7 +70,7 @@ void SendCommand::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject SendCommand::toJson() {
+QJsonObject SendCommand::toJson() const {
 	QJsonObject result;
 	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);
 	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
@@ -133,9 +133,14 @@ namespace Support {
 using SendCommand = Jellyfin::DTO::SendCommand;
 
 template <>
-SendCommand fromJsonValue<SendCommand>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+SendCommand fromJsonValue(const QJsonValue &source, convertType<SendCommand>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return SendCommand::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const SendCommand &source, convertType<SendCommand>) {
+	return source.toJson();
 }
 
 } // NS DTO

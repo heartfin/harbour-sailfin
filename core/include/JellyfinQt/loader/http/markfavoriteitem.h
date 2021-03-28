@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/useritemdatadto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Marks an item as a favorite.
  */
-class MarkFavoriteItemLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserItemDataDto, MarkFavoriteItemParams> {
+
+class MarkFavoriteItemLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, MarkFavoriteItemParams> {
 public:
 	explicit MarkFavoriteItemLoader(ApiClient *apiClient = nullptr);
 

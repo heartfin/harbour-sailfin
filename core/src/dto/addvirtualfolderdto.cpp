@@ -55,7 +55,7 @@ void AddVirtualFolderDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject AddVirtualFolderDto::toJson() {
+QJsonObject AddVirtualFolderDto::toJson() const {
 	QJsonObject result;
 	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
 
@@ -76,9 +76,14 @@ namespace Support {
 using AddVirtualFolderDto = Jellyfin::DTO::AddVirtualFolderDto;
 
 template <>
-AddVirtualFolderDto fromJsonValue<AddVirtualFolderDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+AddVirtualFolderDto fromJsonValue(const QJsonValue &source, convertType<AddVirtualFolderDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return AddVirtualFolderDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const AddVirtualFolderDto &source, convertType<AddVirtualFolderDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

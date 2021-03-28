@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetItemsLoader::GetItemsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetItemsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetItemsParams>(apiClient) {}
 
 QString GetItemsLoader::path(const GetItemsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,244 +51,244 @@ QUrlQuery GetItemsLoader::query(const GetItemsParams &params) const {
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.maxOfficialRatingNull()) {
-		result.addQueryItem("maxOfficialRating", Support::toString(params.maxOfficialRating()));
+		result.addQueryItem("maxOfficialRating", Support::toString<QString>(params.maxOfficialRating()));
 	}
 	if (!params.hasThemeSongNull()) {
-		result.addQueryItem("hasThemeSong", Support::toString(params.hasThemeSong()));
+		result.addQueryItem("hasThemeSong", Support::toString<std::optional<bool>>(params.hasThemeSong()));
 	}
 	if (!params.hasThemeVideoNull()) {
-		result.addQueryItem("hasThemeVideo", Support::toString(params.hasThemeVideo()));
+		result.addQueryItem("hasThemeVideo", Support::toString<std::optional<bool>>(params.hasThemeVideo()));
 	}
 	if (!params.hasSubtitlesNull()) {
-		result.addQueryItem("hasSubtitles", Support::toString(params.hasSubtitles()));
+		result.addQueryItem("hasSubtitles", Support::toString<std::optional<bool>>(params.hasSubtitles()));
 	}
 	if (!params.hasSpecialFeatureNull()) {
-		result.addQueryItem("hasSpecialFeature", Support::toString(params.hasSpecialFeature()));
+		result.addQueryItem("hasSpecialFeature", Support::toString<std::optional<bool>>(params.hasSpecialFeature()));
 	}
 	if (!params.hasTrailerNull()) {
-		result.addQueryItem("hasTrailer", Support::toString(params.hasTrailer()));
+		result.addQueryItem("hasTrailer", Support::toString<std::optional<bool>>(params.hasTrailer()));
 	}
 	if (!params.adjacentToNull()) {
-		result.addQueryItem("adjacentTo", Support::toString(params.adjacentTo()));
+		result.addQueryItem("adjacentTo", Support::toString<QString>(params.adjacentTo()));
 	}
 	if (!params.parentIndexNumberNull()) {
-		result.addQueryItem("parentIndexNumber", Support::toString(params.parentIndexNumber()));
+		result.addQueryItem("parentIndexNumber", Support::toString<std::optional<qint32>>(params.parentIndexNumber()));
 	}
 	if (!params.hasParentalRatingNull()) {
-		result.addQueryItem("hasParentalRating", Support::toString(params.hasParentalRating()));
+		result.addQueryItem("hasParentalRating", Support::toString<std::optional<bool>>(params.hasParentalRating()));
 	}
 	if (!params.isHdNull()) {
-		result.addQueryItem("isHd", Support::toString(params.isHd()));
+		result.addQueryItem("isHd", Support::toString<std::optional<bool>>(params.isHd()));
 	}
 	if (!params.is4KNull()) {
-		result.addQueryItem("is4K", Support::toString(params.is4K()));
+		result.addQueryItem("is4K", Support::toString<std::optional<bool>>(params.is4K()));
 	}
 	if (!params.locationTypesNull()) {
-		result.addQueryItem("locationTypes", Support::toString(params.locationTypes()));
+		result.addQueryItem("locationTypes", Support::toString<QList<LocationType>>(params.locationTypes()));
 	}
 	if (!params.excludeLocationTypesNull()) {
-		result.addQueryItem("excludeLocationTypes", Support::toString(params.excludeLocationTypes()));
+		result.addQueryItem("excludeLocationTypes", Support::toString<QList<LocationType>>(params.excludeLocationTypes()));
 	}
 	if (!params.isMissingNull()) {
-		result.addQueryItem("isMissing", Support::toString(params.isMissing()));
+		result.addQueryItem("isMissing", Support::toString<std::optional<bool>>(params.isMissing()));
 	}
 	if (!params.isUnairedNull()) {
-		result.addQueryItem("isUnaired", Support::toString(params.isUnaired()));
+		result.addQueryItem("isUnaired", Support::toString<std::optional<bool>>(params.isUnaired()));
 	}
 	if (!params.minCommunityRatingNull()) {
-		result.addQueryItem("minCommunityRating", Support::toString(params.minCommunityRating()));
+		result.addQueryItem("minCommunityRating", Support::toString<std::optional<double>>(params.minCommunityRating()));
 	}
 	if (!params.minCriticRatingNull()) {
-		result.addQueryItem("minCriticRating", Support::toString(params.minCriticRating()));
+		result.addQueryItem("minCriticRating", Support::toString<std::optional<double>>(params.minCriticRating()));
 	}
 	if (!params.minPremiereDateNull()) {
-		result.addQueryItem("minPremiereDate", Support::toString(params.minPremiereDate()));
+		result.addQueryItem("minPremiereDate", Support::toString<QDateTime>(params.minPremiereDate()));
 	}
 	if (!params.minDateLastSavedNull()) {
-		result.addQueryItem("minDateLastSaved", Support::toString(params.minDateLastSaved()));
+		result.addQueryItem("minDateLastSaved", Support::toString<QDateTime>(params.minDateLastSaved()));
 	}
 	if (!params.minDateLastSavedForUserNull()) {
-		result.addQueryItem("minDateLastSavedForUser", Support::toString(params.minDateLastSavedForUser()));
+		result.addQueryItem("minDateLastSavedForUser", Support::toString<QDateTime>(params.minDateLastSavedForUser()));
 	}
 	if (!params.maxPremiereDateNull()) {
-		result.addQueryItem("maxPremiereDate", Support::toString(params.maxPremiereDate()));
+		result.addQueryItem("maxPremiereDate", Support::toString<QDateTime>(params.maxPremiereDate()));
 	}
 	if (!params.hasOverviewNull()) {
-		result.addQueryItem("hasOverview", Support::toString(params.hasOverview()));
+		result.addQueryItem("hasOverview", Support::toString<std::optional<bool>>(params.hasOverview()));
 	}
 	if (!params.hasImdbIdNull()) {
-		result.addQueryItem("hasImdbId", Support::toString(params.hasImdbId()));
+		result.addQueryItem("hasImdbId", Support::toString<std::optional<bool>>(params.hasImdbId()));
 	}
 	if (!params.hasTmdbIdNull()) {
-		result.addQueryItem("hasTmdbId", Support::toString(params.hasTmdbId()));
+		result.addQueryItem("hasTmdbId", Support::toString<std::optional<bool>>(params.hasTmdbId()));
 	}
 	if (!params.hasTvdbIdNull()) {
-		result.addQueryItem("hasTvdbId", Support::toString(params.hasTvdbId()));
+		result.addQueryItem("hasTvdbId", Support::toString<std::optional<bool>>(params.hasTvdbId()));
 	}
 	if (!params.excludeItemIdsNull()) {
-		result.addQueryItem("excludeItemIds", Support::toString(params.excludeItemIds()));
+		result.addQueryItem("excludeItemIds", Support::toString<QStringList>(params.excludeItemIds()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.recursiveNull()) {
-		result.addQueryItem("recursive", Support::toString(params.recursive()));
+		result.addQueryItem("recursive", Support::toString<std::optional<bool>>(params.recursive()));
 	}
 	if (!params.searchTermNull()) {
-		result.addQueryItem("searchTerm", Support::toString(params.searchTerm()));
+		result.addQueryItem("searchTerm", Support::toString<QString>(params.searchTerm()));
 	}
 	if (!params.sortOrderNull()) {
-		result.addQueryItem("sortOrder", Support::toString(params.sortOrder()));
+		result.addQueryItem("sortOrder", Support::toString<QString>(params.sortOrder()));
 	}
 	if (!params.parentIdNull()) {
-		result.addQueryItem("parentId", Support::toString(params.parentId()));
+		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
 	}
 	if (!params.filtersNull()) {
-		result.addQueryItem("filters", Support::toString(params.filters()));
+		result.addQueryItem("filters", Support::toString<QList<ItemFilter>>(params.filters()));
 	}
 	if (!params.isFavoriteNull()) {
-		result.addQueryItem("isFavorite", Support::toString(params.isFavorite()));
+		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
 	}
 	if (!params.mediaTypesNull()) {
-		result.addQueryItem("mediaTypes", Support::toString(params.mediaTypes()));
+		result.addQueryItem("mediaTypes", Support::toString<QStringList>(params.mediaTypes()));
 	}
 	if (!params.imageTypesNull()) {
-		result.addQueryItem("imageTypes", Support::toString(params.imageTypes()));
+		result.addQueryItem("imageTypes", Support::toString<QList<ImageType>>(params.imageTypes()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QString>(params.sortBy()));
 	}
 	if (!params.isPlayedNull()) {
-		result.addQueryItem("isPlayed", Support::toString(params.isPlayed()));
+		result.addQueryItem("isPlayed", Support::toString<std::optional<bool>>(params.isPlayed()));
 	}
 	if (!params.genresNull()) {
-		result.addQueryItem("genres", Support::toString(params.genres()));
+		result.addQueryItem("genres", Support::toString<QStringList>(params.genres()));
 	}
 	if (!params.officialRatingsNull()) {
-		result.addQueryItem("officialRatings", Support::toString(params.officialRatings()));
+		result.addQueryItem("officialRatings", Support::toString<QStringList>(params.officialRatings()));
 	}
 	if (!params.tagsNull()) {
-		result.addQueryItem("tags", Support::toString(params.tags()));
+		result.addQueryItem("tags", Support::toString<QStringList>(params.tags()));
 	}
 	if (!params.yearsNull()) {
-		result.addQueryItem("years", Support::toString(params.years()));
+		result.addQueryItem("years", Support::toString<QList<qint32>>(params.years()));
 	}
 	if (!params.enableUserDataNull()) {
-		result.addQueryItem("enableUserData", Support::toString(params.enableUserData()));
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString(params.imageTypeLimit()));
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
 	}
 	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString(params.enableImageTypes()));
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
 	}
 	if (!params.personNull()) {
-		result.addQueryItem("person", Support::toString(params.person()));
+		result.addQueryItem("person", Support::toString<QString>(params.person()));
 	}
 	if (!params.personIdsNull()) {
-		result.addQueryItem("personIds", Support::toString(params.personIds()));
+		result.addQueryItem("personIds", Support::toString<QStringList>(params.personIds()));
 	}
 	if (!params.personTypesNull()) {
-		result.addQueryItem("personTypes", Support::toString(params.personTypes()));
+		result.addQueryItem("personTypes", Support::toString<QStringList>(params.personTypes()));
 	}
 	if (!params.studiosNull()) {
-		result.addQueryItem("studios", Support::toString(params.studios()));
+		result.addQueryItem("studios", Support::toString<QStringList>(params.studios()));
 	}
 	if (!params.artistsNull()) {
-		result.addQueryItem("artists", Support::toString(params.artists()));
+		result.addQueryItem("artists", Support::toString<QStringList>(params.artists()));
 	}
 	if (!params.excludeArtistIdsNull()) {
-		result.addQueryItem("excludeArtistIds", Support::toString(params.excludeArtistIds()));
+		result.addQueryItem("excludeArtistIds", Support::toString<QStringList>(params.excludeArtistIds()));
 	}
 	if (!params.artistIdsNull()) {
-		result.addQueryItem("artistIds", Support::toString(params.artistIds()));
+		result.addQueryItem("artistIds", Support::toString<QStringList>(params.artistIds()));
 	}
 	if (!params.albumArtistIdsNull()) {
-		result.addQueryItem("albumArtistIds", Support::toString(params.albumArtistIds()));
+		result.addQueryItem("albumArtistIds", Support::toString<QStringList>(params.albumArtistIds()));
 	}
 	if (!params.contributingArtistIdsNull()) {
-		result.addQueryItem("contributingArtistIds", Support::toString(params.contributingArtistIds()));
+		result.addQueryItem("contributingArtistIds", Support::toString<QStringList>(params.contributingArtistIds()));
 	}
 	if (!params.albumsNull()) {
-		result.addQueryItem("albums", Support::toString(params.albums()));
+		result.addQueryItem("albums", Support::toString<QStringList>(params.albums()));
 	}
 	if (!params.albumIdsNull()) {
-		result.addQueryItem("albumIds", Support::toString(params.albumIds()));
+		result.addQueryItem("albumIds", Support::toString<QStringList>(params.albumIds()));
 	}
 	if (!params.idsNull()) {
-		result.addQueryItem("ids", Support::toString(params.ids()));
+		result.addQueryItem("ids", Support::toString<QStringList>(params.ids()));
 	}
 	if (!params.videoTypesNull()) {
-		result.addQueryItem("videoTypes", Support::toString(params.videoTypes()));
+		result.addQueryItem("videoTypes", Support::toString<QList<VideoType>>(params.videoTypes()));
 	}
 	if (!params.minOfficialRatingNull()) {
-		result.addQueryItem("minOfficialRating", Support::toString(params.minOfficialRating()));
+		result.addQueryItem("minOfficialRating", Support::toString<QString>(params.minOfficialRating()));
 	}
 	if (!params.isLockedNull()) {
-		result.addQueryItem("isLocked", Support::toString(params.isLocked()));
+		result.addQueryItem("isLocked", Support::toString<std::optional<bool>>(params.isLocked()));
 	}
 	if (!params.isPlaceHolderNull()) {
-		result.addQueryItem("isPlaceHolder", Support::toString(params.isPlaceHolder()));
+		result.addQueryItem("isPlaceHolder", Support::toString<std::optional<bool>>(params.isPlaceHolder()));
 	}
 	if (!params.hasOfficialRatingNull()) {
-		result.addQueryItem("hasOfficialRating", Support::toString(params.hasOfficialRating()));
+		result.addQueryItem("hasOfficialRating", Support::toString<std::optional<bool>>(params.hasOfficialRating()));
 	}
 	if (!params.collapseBoxSetItemsNull()) {
-		result.addQueryItem("collapseBoxSetItems", Support::toString(params.collapseBoxSetItems()));
+		result.addQueryItem("collapseBoxSetItems", Support::toString<std::optional<bool>>(params.collapseBoxSetItems()));
 	}
 	if (!params.minWidthNull()) {
-		result.addQueryItem("minWidth", Support::toString(params.minWidth()));
+		result.addQueryItem("minWidth", Support::toString<std::optional<qint32>>(params.minWidth()));
 	}
 	if (!params.minHeightNull()) {
-		result.addQueryItem("minHeight", Support::toString(params.minHeight()));
+		result.addQueryItem("minHeight", Support::toString<std::optional<qint32>>(params.minHeight()));
 	}
 	if (!params.maxWidthNull()) {
-		result.addQueryItem("maxWidth", Support::toString(params.maxWidth()));
+		result.addQueryItem("maxWidth", Support::toString<std::optional<qint32>>(params.maxWidth()));
 	}
 	if (!params.maxHeightNull()) {
-		result.addQueryItem("maxHeight", Support::toString(params.maxHeight()));
+		result.addQueryItem("maxHeight", Support::toString<std::optional<qint32>>(params.maxHeight()));
 	}
 	if (!params.is3DNull()) {
-		result.addQueryItem("is3D", Support::toString(params.is3D()));
+		result.addQueryItem("is3D", Support::toString<std::optional<bool>>(params.is3D()));
 	}
 	if (!params.seriesStatusNull()) {
-		result.addQueryItem("seriesStatus", Support::toString(params.seriesStatus()));
+		result.addQueryItem("seriesStatus", Support::toString<QList<SeriesStatus>>(params.seriesStatus()));
 	}
 	if (!params.nameStartsWithOrGreaterNull()) {
-		result.addQueryItem("nameStartsWithOrGreater", Support::toString(params.nameStartsWithOrGreater()));
+		result.addQueryItem("nameStartsWithOrGreater", Support::toString<QString>(params.nameStartsWithOrGreater()));
 	}
 	if (!params.nameStartsWithNull()) {
-		result.addQueryItem("nameStartsWith", Support::toString(params.nameStartsWith()));
+		result.addQueryItem("nameStartsWith", Support::toString<QString>(params.nameStartsWith()));
 	}
 	if (!params.nameLessThanNull()) {
-		result.addQueryItem("nameLessThan", Support::toString(params.nameLessThan()));
+		result.addQueryItem("nameLessThan", Support::toString<QString>(params.nameLessThan()));
 	}
 	if (!params.studioIdsNull()) {
-		result.addQueryItem("studioIds", Support::toString(params.studioIds()));
+		result.addQueryItem("studioIds", Support::toString<QStringList>(params.studioIds()));
 	}
 	if (!params.genreIdsNull()) {
-		result.addQueryItem("genreIds", Support::toString(params.genreIds()));
+		result.addQueryItem("genreIds", Support::toString<QStringList>(params.genreIds()));
 	}
 	if (!params.enableTotalRecordCountNull()) {
-		result.addQueryItem("enableTotalRecordCount", Support::toString(params.enableTotalRecordCount()));
+		result.addQueryItem("enableTotalRecordCount", Support::toString<std::optional<bool>>(params.enableTotalRecordCount()));
 	}
 	if (!params.enableImagesNull()) {
-		result.addQueryItem("enableImages", Support::toString(params.enableImages()));
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	
 	return result;

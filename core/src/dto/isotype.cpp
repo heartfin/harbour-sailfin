@@ -34,7 +34,6 @@ namespace DTO {
 
 IsoTypeClass::IsoTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using IsoType = Jellyfin::DTO::IsoType;
 
 template <>
-IsoType fromJsonValue<IsoType>(const QJsonValue &source) {
+IsoType fromJsonValue(const QJsonValue &source, convertType<IsoType>) {
 	if (!source.isString()) return IsoType::EnumNotSet;
 
 	QString str = source.toString();
@@ -54,6 +53,20 @@ IsoType fromJsonValue<IsoType>(const QJsonValue &source) {
 	}
 	
 	return IsoType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const IsoType &source, convertType<IsoType>) {
+	switch(source) {
+	case IsoType::Dvd:
+		return QStringLiteral("Dvd");
+	case IsoType::BluRay:
+		return QStringLiteral("BluRay");
+
+	case IsoType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

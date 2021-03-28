@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/culturedto.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Gets known cultures.
+ */
+
+class GetCulturesLoader : public Jellyfin::Support::HttpLoader<QList<CultureDto>, GetCulturesParams> {
+public:
+	explicit GetCulturesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetCulturesParams& parameters) const override;
+	QUrlQuery query(const GetCulturesParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

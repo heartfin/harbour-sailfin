@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static QuickConnectDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -69,6 +73,18 @@ public:
 protected:
 	QString m_token;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using QuickConnectDto = Jellyfin::DTO::QuickConnectDto;
+
+template <>
+QuickConnectDto fromJsonValue(const QJsonValue &source, convertType<QuickConnectDto>);
+
+template<>
+QJsonValue toJsonValue(const QuickConnectDto &source, convertType<QuickConnectDto>);
 
 } // NS DTO
 } // NS Jellyfin

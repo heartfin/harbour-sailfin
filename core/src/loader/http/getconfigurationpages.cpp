@@ -34,6 +34,32 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetConfigurationPagesLoader::GetConfigurationPagesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<ConfigurationPageInfo>, GetConfigurationPagesParams>(apiClient) {}
+
+QString GetConfigurationPagesLoader::path(const GetConfigurationPagesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/web/ConfigurationPages");
+}
+
+QUrlQuery GetConfigurationPagesLoader::query(const GetConfigurationPagesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.enableInMainMenuNull()) {
+		result.addQueryItem("enableInMainMenu", Support::toString<std::optional<bool>>(params.enableInMainMenu()));
+	}
+	if (!params.pageTypeNull()) {
+		result.addQueryItem("pageType", Support::toString<ConfigurationPageType>(params.pageType()));
+	}
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

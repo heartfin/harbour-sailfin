@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetLibraryOptionsInfoLoader::GetLibraryOptionsInfoLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::LibraryOptionsResultDto, GetLibraryOptionsInfoParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<LibraryOptionsResultDto, GetLibraryOptionsInfoParams>(apiClient) {}
 
 QString GetLibraryOptionsInfoLoader::path(const GetLibraryOptionsInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,10 +51,10 @@ QUrlQuery GetLibraryOptionsInfoLoader::query(const GetLibraryOptionsInfoParams &
 
 	// Optional parameters
 	if (!params.libraryContentTypeNull()) {
-		result.addQueryItem("libraryContentType", Support::toString(params.libraryContentType()));
+		result.addQueryItem("libraryContentType", Support::toString<QString>(params.libraryContentType()));
 	}
 	if (!params.isNewLibraryNull()) {
-		result.addQueryItem("isNewLibrary", Support::toString(params.isNewLibrary()));
+		result.addQueryItem("isNewLibrary", Support::toString<std::optional<bool>>(params.isNewLibrary()));
 	}
 	
 	return result;

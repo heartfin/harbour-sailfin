@@ -34,7 +34,6 @@ namespace DTO {
 
 MediaStreamTypeClass::MediaStreamTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using MediaStreamType = Jellyfin::DTO::MediaStreamType;
 
 template <>
-MediaStreamType fromJsonValue<MediaStreamType>(const QJsonValue &source) {
+MediaStreamType fromJsonValue(const QJsonValue &source, convertType<MediaStreamType>) {
 	if (!source.isString()) return MediaStreamType::EnumNotSet;
 
 	QString str = source.toString();
@@ -60,6 +59,24 @@ MediaStreamType fromJsonValue<MediaStreamType>(const QJsonValue &source) {
 	}
 	
 	return MediaStreamType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const MediaStreamType &source, convertType<MediaStreamType>) {
+	switch(source) {
+	case MediaStreamType::Audio:
+		return QStringLiteral("Audio");
+	case MediaStreamType::Video:
+		return QStringLiteral("Video");
+	case MediaStreamType::Subtitle:
+		return QStringLiteral("Subtitle");
+	case MediaStreamType::EmbeddedImage:
+		return QStringLiteral("EmbeddedImage");
+
+	case MediaStreamType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

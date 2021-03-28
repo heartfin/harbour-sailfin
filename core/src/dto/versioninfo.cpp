@@ -79,7 +79,7 @@ void VersionInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject VersionInfo::toJson() {
+QJsonObject VersionInfo::toJson() const {
 	QJsonObject result;
 	result["version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
 	result["VersionNumber"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_versionNumber);
@@ -212,9 +212,14 @@ namespace Support {
 using VersionInfo = Jellyfin::DTO::VersionInfo;
 
 template <>
-VersionInfo fromJsonValue<VersionInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+VersionInfo fromJsonValue(const QJsonValue &source, convertType<VersionInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return VersionInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const VersionInfo &source, convertType<VersionInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

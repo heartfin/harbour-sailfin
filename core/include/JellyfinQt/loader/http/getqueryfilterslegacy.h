@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/queryfilterslegacy.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets legacy query filters.
  */
-class GetQueryFiltersLegacyLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QueryFiltersLegacy, GetQueryFiltersLegacyParams> {
+
+class GetQueryFiltersLegacyLoader : public Jellyfin::Support::HttpLoader<QueryFiltersLegacy, GetQueryFiltersLegacyParams> {
 public:
 	explicit GetQueryFiltersLegacyLoader(ApiClient *apiClient = nullptr);
 

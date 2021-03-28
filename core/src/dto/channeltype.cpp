@@ -34,7 +34,6 @@ namespace DTO {
 
 ChannelTypeClass::ChannelTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ChannelType = Jellyfin::DTO::ChannelType;
 
 template <>
-ChannelType fromJsonValue<ChannelType>(const QJsonValue &source) {
+ChannelType fromJsonValue(const QJsonValue &source, convertType<ChannelType>) {
 	if (!source.isString()) return ChannelType::EnumNotSet;
 
 	QString str = source.toString();
@@ -54,6 +53,20 @@ ChannelType fromJsonValue<ChannelType>(const QJsonValue &source) {
 	}
 	
 	return ChannelType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ChannelType &source, convertType<ChannelType>) {
+	switch(source) {
+	case ChannelType::TV:
+		return QStringLiteral("TV");
+	case ChannelType::Radio:
+		return QStringLiteral("Radio");
+
+	case ChannelType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

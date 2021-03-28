@@ -34,6 +34,26 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+GetPhysicalPathsLoader::GetPhysicalPathsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QStringList, GetPhysicalPathsParams>(apiClient) {}
+
+QString GetPhysicalPathsLoader::path(const GetPhysicalPathsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Library/PhysicalPaths");
+}
+
+QUrlQuery GetPhysicalPathsLoader::query(const GetPhysicalPathsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
 
 } // NS HTTP
 } // NS Loader

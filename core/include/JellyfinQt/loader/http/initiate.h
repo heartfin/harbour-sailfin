@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/quickconnectresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Initiate a new quick connect request.
  */
-class InitiateLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectResult, InitiateParams> {
+
+class InitiateLoader : public Jellyfin::Support::HttpLoader<QuickConnectResult, InitiateParams> {
 public:
 	explicit InitiateLoader(ApiClient *apiClient = nullptr);
 

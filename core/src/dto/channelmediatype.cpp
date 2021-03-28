@@ -34,7 +34,6 @@ namespace DTO {
 
 ChannelMediaTypeClass::ChannelMediaTypeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ChannelMediaType = Jellyfin::DTO::ChannelMediaType;
 
 template <>
-ChannelMediaType fromJsonValue<ChannelMediaType>(const QJsonValue &source) {
+ChannelMediaType fromJsonValue(const QJsonValue &source, convertType<ChannelMediaType>) {
 	if (!source.isString()) return ChannelMediaType::EnumNotSet;
 
 	QString str = source.toString();
@@ -57,6 +56,22 @@ ChannelMediaType fromJsonValue<ChannelMediaType>(const QJsonValue &source) {
 	}
 	
 	return ChannelMediaType::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ChannelMediaType &source, convertType<ChannelMediaType>) {
+	switch(source) {
+	case ChannelMediaType::Audio:
+		return QStringLiteral("Audio");
+	case ChannelMediaType::Video:
+		return QStringLiteral("Video");
+	case ChannelMediaType::Photo:
+		return QStringLiteral("Photo");
+
+	case ChannelMediaType::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

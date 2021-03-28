@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -52,7 +56,7 @@ public:
 	
 	static ItemCounts fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -178,6 +182,18 @@ protected:
 	qint32 m_bookCount;
 	qint32 m_itemCount;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ItemCounts = Jellyfin::DTO::ItemCounts;
+
+template <>
+ItemCounts fromJsonValue(const QJsonValue &source, convertType<ItemCounts>);
+
+template<>
+QJsonValue toJsonValue(const ItemCounts &source, convertType<ItemCounts>);
 
 } // NS DTO
 } // NS Jellyfin

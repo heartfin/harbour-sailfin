@@ -91,6 +91,11 @@ public:
 
     ModelStatus status() const { return m_status; }
 
+    /**
+     * @brief Clears and reloads the model
+     */
+    Q_INVOKABLE virtual void reload() {};
+
     // QQmlParserStatus interface
     virtual void classBegin() override;
     virtual void componentComplete() override;
@@ -103,19 +108,33 @@ signals:
     void limitChanged(int newLimit);
     void autoReloadChanged(bool newAutoReload);
 
+    /**
+     * @brief Emitted when the model should clear itself
+     */
+    void modelShouldClear();
+    /**
+     * Emitted when new items are loaded.
+     */
+    void itemsLoaded();
     void reloadWanted();
+
+protected slots:
+    virtual void futureReady() = 0;
 
 protected:
     // Is this object being parsed by the QML engine
     bool m_isBeingParsed = false;
     ApiClient *m_apiClient = nullptr;
     bool m_autoReload = true;
+    bool m_needsAuthentication = true;
 
     // Query/record controlling properties
     int m_limit = -1;
     int m_startIndex = 0;
     int m_totalRecordCount = 0;
     const int DEFAULT_LIMIT = 100;
+    void emitModelShouldClear() { emit modelShouldClear(); }
+    void emitItemsLoaded() { emit itemsLoaded(); }
 
     ModelStatus m_status = ModelStatus::Uninitialised;
     void setStatus(ModelStatus newStatus) {
@@ -127,6 +146,7 @@ protected:
             }
         }
     }
+    virtual bool canReload() const;
 };
 
 /**
@@ -137,37 +157,56 @@ template <class T>
 class ModelLoader : public BaseModelLoader {
 public:
     ModelLoader(QObject *parent = nullptr)
-        : BaseModelLoader(parent) {}
-
-    QList<T> reload() {
-        m_startIndex = 0;
-        m_totalRecordCount = -1;
-        return loadMore();
+        : BaseModelLoader(parent) {
     }
 
-    QList<T> loadMore() {
-        if (m_startIndex == 0) {
-            this->setStatus(ModelStatus::Loading);
-        } else {
-            this->setStatus(ModelStatus::LoadingMore);
+    void reload() override {
+        if (!canReload()) {
+            qDebug() << "Cannot yet reload ApiModel: canReload() returned false.";
+            return;
         }
-        std::pair<QList<T>, int> result;
-        try {
-            result = loadMore(m_startIndex, m_limit);
-        } catch(Support::LoadException &e) {
-            qWarning() << "Exception while loading in ModelLoader: " << e.what();
-            return QList<T>();
+        m_startIndex = 0;
+        m_totalRecordCount = -1;
+        this->setStatus(ModelStatus::Loading);
+        emitModelShouldClear();
+        loadMore(0, -1);
+    }
+
+    void loadMore() {
+        if (!canReload()) {
+            qDebug() << "Cannot yet reload ApiModel: canReload() returned false.";
+            return;
         }
-        m_startIndex += result.first.size();
-        m_totalRecordCount = result.second;
-        return result.first;
+        this->setStatus(ModelStatus::LoadingMore);
+        loadMore(m_startIndex, m_limit);
     }
 
     virtual bool canLoadMore() const {
         return m_totalRecordCount == -1 || m_startIndex < m_totalRecordCount;
     }
+
+    /**
+     * @brief Holds the result. Moves it result to the caller and therefore can be only called once
+     * when the itemsLoaded is emitted.
+     * @return pair containing the items loaded and the integer containing the starting offset. A starting
+     * offset of -1 means an error has occurred.
+     */
+    std::pair<QList<T>, int> &&result() { return std::move(m_result); }
 protected:
-    virtual std::pair<QList<T>, int> loadMore(int offset, int limit) = 0;
+    /**
+     * @brief Loads data from the given offset with a maximum count of limit.
+     * The itemsLoaded() signal is emitted when new data is ready. Call
+     * getLoadedItems to retrieve the loaded items.
+     *
+     * @param offset The offset to start loading items from
+     * @param limit The maximum amount of items to load.
+     */
+    virtual void loadMore(int offset, int limit) = 0;
+    void updatePosition(int startIndex, int totalRecordCount) {
+        m_startIndex = startIndex;
+        m_totalRecordCount = totalRecordCount;
+    }
+    std::pair<QList<T>, int> m_result;
 };
 
 /**
@@ -210,54 +249,66 @@ void setRequestStartIndex(P &parameters, int startIndex) {
 template <class T, class D,  class R, class P>
 class LoaderModelLoader : public ModelLoader<T> {
 public:
-    explicit LoaderModelLoader(Support::Loader<R, P> loader, QObject *parent = nullptr)
-        : ModelLoader<T>(parent), m_loader(loader) { }
+    explicit LoaderModelLoader(Support::Loader<R, P> *loader, QObject *parent = nullptr)
+        : ModelLoader<T>(parent), m_loader(QScopedPointer<Support::Loader<R, P>>(loader)) {
+        QObject::connect(&m_futureWatcher, &QFutureWatcher<QList<T>>::finished, this, &BaseModelLoader::futureReady);
+    }
 protected:
-    std::pair<QList<T>, int> loadMore(int offset, int limit) override {
-        QMutexLocker(&this->m_mutex);
+    void loadMore(int offset, int limit) override {
+        // This method should only be callable on one thread.
+        // If futureWatcher's future is running, this method should not be called again.
+        if (m_futureWatcher.isRunning()) return;
+        // Set an invalid result.
+        this->m_result = { QList<T>(), -1 };
+
         // We never want to set this while the loader is running, hence the Mutex and setting it here
         // instead when Loader::setApiClient is called.
-        this->m_loader.setApiClient(this->m_apiClient);
-        try {
-            setRequestStartIndex<P>(this->m_parameters, offset);
-            setRequestLimit(this->m_parameters, limit);
-            R result;
-            try {
-                std::optional<R> optResult = m_loader.load(this->m_parameters);
-                if (!optResult.has_value()) {
-                    this->setStatus(ModelStatus::Error);
-                    return {QList<T>(), -1};
-                }
-                result = optResult.value();
-            } catch (Support::LoadException e) {
-                this->setStatus(ModelStatus::Error);
-                return {QList<T>(), -1};
-            }
+        this->m_loader->setApiClient(this->m_apiClient);
+        setRequestStartIndex<P>(this->m_parameters, offset);
+        setRequestLimit<P>(this->m_parameters, limit);
 
-            QList<D> records = extractRecords<D, R>(result);
-            int totalRecordCount = extractTotalRecordCount<R>(result);
-            // If totalRecordCount < 0, it is not supported for this endpoint
-            if (totalRecordCount < 0) {
-                totalRecordCount = records.size();
-            }
-            QList<T> models;
-            models.reserve(records.size());
-
-            // Convert the DTOs into models
-            for (int i = 0; i < records.size(); i++) {
-                models[i] = T(records[i], m_loader.apiClient());
-            }
-            this->setStatus(ModelStatus::Ready);
-            return { models, totalRecordCount};
-        }  catch (Support::LoadException e) {
-            //this->setErrorString(QString(e.what()));
-            this->setStatus(ModelStatus::Error);
-            return {QList<T>(), -1};
-        }
+        this->m_loader->setParameters(this->m_parameters);
+        this->m_loader->prepareLoad();
+        QFuture<std::optional<R>> future = QtConcurrent::run(this->m_loader.data(), &Support::Loader<R, P>::load);
+        this->m_futureWatcher.setFuture(future);
     }
-    Support::Loader<R, P> m_loader;
+
+    QScopedPointer<Support::Loader<R, P>> m_loader;
     QMutex m_mutex;
     P m_parameters;
+    QFutureWatcher<std::optional<R>> m_futureWatcher;
+
+    void futureReady() override {
+        R result;
+        try {
+            std::optional<R> optResult = m_futureWatcher.result();
+            if (!optResult.has_value()) {
+                this->setStatus(ModelStatus::Error);
+            }
+            result = optResult.value();
+        } catch (Support::LoadException e) {
+            qWarning() << "Exception while loading: " << e.what();
+            this->setStatus(ModelStatus::Error);
+        }
+
+        QList<D> records = extractRecords<D, R>(result);
+        int totalRecordCount = extractTotalRecordCount<R>(result);
+        // If totalRecordCount < 0, it is not supported for this endpoint
+        if (totalRecordCount < 0) {
+            totalRecordCount = records.size();
+        }
+        QList<T> models;
+        models.reserve(records.size());
+
+        // Convert the DTOs into models
+        for (int i = 0; i < records.size(); i++) {
+            models[i] = T(records[i], m_loader->apiClient());
+        }
+        this->setStatus(ModelStatus::Ready);
+        this->m_result = { models, totalRecordCount};
+        this->emitItemsLoaded();
+    }
+
 };
 
 class BaseApiModel : public QAbstractListModel {
@@ -270,12 +321,22 @@ public:
 
     virtual BaseModelLoader *loader() const = 0;
     virtual void setLoader(BaseModelLoader *newLoader) {
-        Q_UNUSED(newLoader);
         connect(newLoader, &BaseModelLoader::reloadWanted, this, &BaseApiModel::reload);
+        connect(newLoader, &BaseModelLoader::modelShouldClear, this, &BaseApiModel::clear);
+        connect(newLoader, &BaseModelLoader::itemsLoaded, this, &BaseApiModel::loadingFinished);
         emit loaderChanged();
     };
+    void disconnectOldLoader(BaseModelLoader *oldLoader) {
+        if (oldLoader != nullptr) {
+            // Disconnect all signals
+            disconnect(oldLoader, nullptr, this, nullptr);
+        }
+    }
 public slots:
-    virtual void reload();
+    virtual void reload() = 0;
+    virtual void clear() = 0;
+protected slots:
+    virtual void loadingFinished() = 0;
 signals:
     void loaderChanged();
 };
@@ -341,8 +402,6 @@ public:
      */
     explicit ApiModel(QObject *parent = nullptr)
         : BaseApiModel(parent) {
-        m_futureWatcherConnection = connect(&m_futureWatcher, &QFutureWatcher<QList<T>>::finished,
-                                            [&](){ futureFinished(); });
     }
 
     // Standard QAbstractItemModel overrides
@@ -376,8 +435,17 @@ public:
     };
 
     void removeAt(int index) {
+        Q_ASSERT(index < size());
         this->beginRemoveRows(QModelIndex(), index, index);
         m_array.removeAt(index);
+        this->endRemoveRows();
+    }
+
+    void removeUntilEnd(int from) {
+        this->beginRemoveRows(QModelIndex(), from , m_array.size());
+        while (m_array.size() != from) {
+            m_array.removeLast();
+        }
         this->endRemoveRows();
     }
 
@@ -386,6 +454,12 @@ public:
         if (idx >= 0) {
             removeAt(idx);
         }
+    }
+
+    void clear() override {
+        this->beginResetModel();
+        m_array.clear();
+        this->endResetModel();
     }
 
     // From AbstractListModel, gets implemented in ApiModel<T>
@@ -399,8 +473,7 @@ public:
     virtual void fetchMore(const QModelIndex &parent) override {
         if (parent.isValid()) return;
         if (m_loader != nullptr) {
-            QFuture<QList<T>> result = QtConcurrent::run(m_loader, &ModelLoader<T>::loadMore);
-            m_futureWatcher.setFuture(result);
+            m_loader->loadMore();
         }
     }
 
@@ -411,9 +484,10 @@ public:
     void setLoader(BaseModelLoader *newLoader) {
         ModelLoader<T> *castedLoader = dynamic_cast<ModelLoader<T> *>(newLoader);
         if (castedLoader != nullptr) {
-            m_loader = castedLoader;
             // Hacky way to emit a signal
             BaseApiModel::setLoader(newLoader);
+            BaseApiModel::disconnectOldLoader(m_loader);
+            m_loader = castedLoader;
         } else {
             qWarning() << "Somehow set a BaseModelLoader on ApiModel instead of a ModelLoader<T>";
         }
@@ -421,23 +495,28 @@ public:
 
     void reload() override {
         if (m_loader != nullptr) {
-            QFuture<QList<T>> result = QtConcurrent::run(m_loader, &ModelLoader<T>::reload);
-            m_futureWatcher.setFuture(result);
+            m_loader->reload();
         }
     }
 
 protected:
     // Model-specific properties.
     QList<T> m_array;
-    ModelLoader<T> *m_loader;
-    QFutureWatcher<QList<T>> m_futureWatcher;
+    ModelLoader<T> *m_loader = nullptr;
 
-    void futureFinished() {
-        try {
-            QList<T> result = m_futureWatcher.result();
-            append(result);
-        } catch (QUnhandledException &e) {
-            qWarning() << "Unhandled exception while waiting for a future: " << e.what();
+    void loadingFinished() override {
+        Q_ASSERT(m_loader != nullptr);
+        std::pair<QList<T>, int> result = m_loader->result();
+        if (result.second == -1) {
+            clear();
+        } else if (result.second == m_array.size()) {
+            append(result.first);
+        } else if (result.second < m_array.size()){
+            removeUntilEnd(result.second);
+            append(result.first);
+        } else {
+            // result.second > m_array.size()
+            qWarning() << "Retrieved data from loader at position bigger than size()";
         }
     }
 private:

@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetStatusLoader::GetStatusLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::QuickConnectState, GetStatusParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<QuickConnectState, GetStatusParams>(apiClient) {}
 
 QString GetStatusLoader::path(const GetStatusParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

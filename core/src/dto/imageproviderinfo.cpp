@@ -58,7 +58,7 @@ void ImageProviderInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject ImageProviderInfo::toJson() {
+QJsonObject ImageProviderInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["SupportedImages"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImages);
@@ -100,9 +100,14 @@ namespace Support {
 using ImageProviderInfo = Jellyfin::DTO::ImageProviderInfo;
 
 template <>
-ImageProviderInfo fromJsonValue<ImageProviderInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+ImageProviderInfo fromJsonValue(const QJsonValue &source, convertType<ImageProviderInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return ImageProviderInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const ImageProviderInfo &source, convertType<ImageProviderInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

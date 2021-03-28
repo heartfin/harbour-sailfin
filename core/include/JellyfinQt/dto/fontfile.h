@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static FontFile fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -102,6 +106,18 @@ protected:
 	QDateTime m_dateCreated;
 	QDateTime m_dateModified;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using FontFile = Jellyfin::DTO::FontFile;
+
+template <>
+FontFile fromJsonValue(const QJsonValue &source, convertType<FontFile>);
+
+template<>
+QJsonValue toJsonValue(const FontFile &source, convertType<FontFile>);
 
 } // NS DTO
 } // NS Jellyfin

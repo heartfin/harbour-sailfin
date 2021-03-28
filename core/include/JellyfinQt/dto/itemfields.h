@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ItemFieldsClass {
@@ -111,7 +115,19 @@ private:
 	explicit ItemFieldsClass();
 };
 
-typedef ItemFieldsClass::Value ItemFields;
+using ItemFields = ItemFieldsClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ItemFields = Jellyfin::DTO::ItemFields;
+
+template <>
+ItemFields fromJsonValue(const QJsonValue &source, convertType<ItemFields>);
+
+template <>
+QJsonValue toJsonValue(const ItemFields &source, convertType<ItemFields>);
 
 } // NS DTO
 } // NS Jellyfin

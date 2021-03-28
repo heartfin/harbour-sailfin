@@ -35,13 +35,30 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/dto/nameidpair.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
+/**
+ * @brief Get tuner host types.
+ */
+
+class GetTunerHostTypesLoader : public Jellyfin::Support::HttpLoader<QList<NameIdPair>, GetTunerHostTypesParams> {
+public:
+	explicit GetTunerHostTypesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetTunerHostTypesParams& parameters) const override;
+	QUrlQuery query(const GetTunerHostTypesParams& parameters) const override;
+};
 
 } // NS HTTP
 } // NS Loader

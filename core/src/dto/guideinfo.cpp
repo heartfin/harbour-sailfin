@@ -58,7 +58,7 @@ void GuideInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject GuideInfo::toJson() {
+QJsonObject GuideInfo::toJson() const {
 	QJsonObject result;
 	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
 	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
@@ -86,9 +86,14 @@ namespace Support {
 using GuideInfo = Jellyfin::DTO::GuideInfo;
 
 template <>
-GuideInfo fromJsonValue<GuideInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+GuideInfo fromJsonValue(const QJsonValue &source, convertType<GuideInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return GuideInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const GuideInfo &source, convertType<GuideInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -55,7 +55,7 @@ void PingRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PingRequestDto::toJson() {
+QJsonObject PingRequestDto::toJson() const {
 	QJsonObject result;
 	result["Ping"] = Jellyfin::Support::toJsonValue<qint64>(m_ping);
 
@@ -76,9 +76,14 @@ namespace Support {
 using PingRequestDto = Jellyfin::DTO::PingRequestDto;
 
 template <>
-PingRequestDto fromJsonValue<PingRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PingRequestDto fromJsonValue(const QJsonValue &source, convertType<PingRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PingRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PingRequestDto &source, convertType<PingRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

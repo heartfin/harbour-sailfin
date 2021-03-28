@@ -34,7 +34,6 @@ namespace DTO {
 
 LogLevelClass::LogLevelClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using LogLevel = Jellyfin::DTO::LogLevel;
 
 template <>
-LogLevel fromJsonValue<LogLevel>(const QJsonValue &source) {
+LogLevel fromJsonValue(const QJsonValue &source, convertType<LogLevel>) {
 	if (!source.isString()) return LogLevel::EnumNotSet;
 
 	QString str = source.toString();
@@ -69,6 +68,30 @@ LogLevel fromJsonValue<LogLevel>(const QJsonValue &source) {
 	}
 	
 	return LogLevel::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const LogLevel &source, convertType<LogLevel>) {
+	switch(source) {
+	case LogLevel::Trace:
+		return QStringLiteral("Trace");
+	case LogLevel::Debug:
+		return QStringLiteral("Debug");
+	case LogLevel::Information:
+		return QStringLiteral("Information");
+	case LogLevel::Warning:
+		return QStringLiteral("Warning");
+	case LogLevel::Error:
+		return QStringLiteral("Error");
+	case LogLevel::Critical:
+		return QStringLiteral("Critical");
+	case LogLevel::None:
+		return QStringLiteral("None");
+
+	case LogLevel::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ImageSavingConventionClass {
@@ -52,7 +56,19 @@ private:
 	explicit ImageSavingConventionClass();
 };
 
-typedef ImageSavingConventionClass::Value ImageSavingConvention;
+using ImageSavingConvention = ImageSavingConventionClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ImageSavingConvention = Jellyfin::DTO::ImageSavingConvention;
+
+template <>
+ImageSavingConvention fromJsonValue(const QJsonValue &source, convertType<ImageSavingConvention>);
+
+template <>
+QJsonValue toJsonValue(const ImageSavingConvention &source, convertType<ImageSavingConvention>);
 
 } // NS DTO
 } // NS Jellyfin

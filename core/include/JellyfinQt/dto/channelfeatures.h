@@ -43,6 +43,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -58,7 +62,7 @@ public:
 	
 	static ChannelFeatures fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -198,6 +202,18 @@ protected:
 	bool m_canFilter;
 	bool m_supportsContentDownloading;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using ChannelFeatures = Jellyfin::DTO::ChannelFeatures;
+
+template <>
+ChannelFeatures fromJsonValue(const QJsonValue &source, convertType<ChannelFeatures>);
+
+template<>
+QJsonValue toJsonValue(const ChannelFeatures &source, convertType<ChannelFeatures>);
 
 } // NS DTO
 } // NS Jellyfin

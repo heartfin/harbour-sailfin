@@ -76,7 +76,7 @@ void NotificationDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject NotificationDto::toJson() {
+QJsonObject NotificationDto::toJson() const {
 	QJsonObject result;
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
 	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
@@ -181,9 +181,14 @@ namespace Support {
 using NotificationDto = Jellyfin::DTO::NotificationDto;
 
 template <>
-NotificationDto fromJsonValue<NotificationDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+NotificationDto fromJsonValue(const QJsonValue &source, convertType<NotificationDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return NotificationDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const NotificationDto &source, convertType<NotificationDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

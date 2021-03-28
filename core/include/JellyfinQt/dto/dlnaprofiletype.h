@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class DlnaProfileTypeClass {
@@ -53,7 +57,19 @@ private:
 	explicit DlnaProfileTypeClass();
 };
 
-typedef DlnaProfileTypeClass::Value DlnaProfileType;
+using DlnaProfileType = DlnaProfileTypeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using DlnaProfileType = Jellyfin::DTO::DlnaProfileType;
+
+template <>
+DlnaProfileType fromJsonValue(const QJsonValue &source, convertType<DlnaProfileType>);
+
+template <>
+QJsonValue toJsonValue(const DlnaProfileType &source, convertType<DlnaProfileType>);
 
 } // NS DTO
 } // NS Jellyfin

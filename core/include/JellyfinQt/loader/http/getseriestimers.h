@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/seriestimerinfodtoqueryresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Gets live tv series timers.
  */
-class GetSeriesTimersLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::SeriesTimerInfoDtoQueryResult, GetSeriesTimersParams> {
+
+class GetSeriesTimersLoader : public Jellyfin::Support::HttpLoader<SeriesTimerInfoDtoQueryResult, GetSeriesTimersParams> {
 public:
 	explicit GetSeriesTimersLoader(ApiClient *apiClient = nullptr);
 

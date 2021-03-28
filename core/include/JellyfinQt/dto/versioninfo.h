@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static VersionInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -163,6 +167,18 @@ protected:
 	QString m_repositoryName;
 	QString m_repositoryUrl;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using VersionInfo = Jellyfin::DTO::VersionInfo;
+
+template <>
+VersionInfo fromJsonValue(const QJsonValue &source, convertType<VersionInfo>);
+
+template<>
+QJsonValue toJsonValue(const VersionInfo &source, convertType<VersionInfo>);
 
 } // NS DTO
 } // NS Jellyfin

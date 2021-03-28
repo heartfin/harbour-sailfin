@@ -61,7 +61,7 @@ void PlaystateRequest::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject PlaystateRequest::toJson() {
+QJsonObject PlaystateRequest::toJson() const {
 	QJsonObject result;
 	result["Command"] = Jellyfin::Support::toJsonValue<PlaystateCommand>(m_command);
 	result["SeekPositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_seekPositionTicks);
@@ -110,9 +110,14 @@ namespace Support {
 using PlaystateRequest = Jellyfin::DTO::PlaystateRequest;
 
 template <>
-PlaystateRequest fromJsonValue<PlaystateRequest>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+PlaystateRequest fromJsonValue(const QJsonValue &source, convertType<PlaystateRequest>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return PlaystateRequest::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const PlaystateRequest &source, convertType<PlaystateRequest>) {
+	return source.toJson();
 }
 
 } // NS DTO

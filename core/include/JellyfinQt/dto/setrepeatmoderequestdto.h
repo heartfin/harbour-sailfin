@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static SetRepeatModeRequestDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 
@@ -65,6 +69,18 @@ public:
 protected:
 	GroupRepeatMode m_mode;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using SetRepeatModeRequestDto = Jellyfin::DTO::SetRepeatModeRequestDto;
+
+template <>
+SetRepeatModeRequestDto fromJsonValue(const QJsonValue &source, convertType<SetRepeatModeRequestDto>);
+
+template<>
+QJsonValue toJsonValue(const SetRepeatModeRequestDto &source, convertType<SetRepeatModeRequestDto>);
 
 } // NS DTO
 } // NS Jellyfin

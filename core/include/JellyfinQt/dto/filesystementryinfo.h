@@ -39,6 +39,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -54,7 +58,7 @@ public:
 	
 	static FileSystemEntryInfo fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -90,6 +94,18 @@ protected:
 	QString m_path;
 	FileSystemEntryType m_type;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using FileSystemEntryInfo = Jellyfin::DTO::FileSystemEntryInfo;
+
+template <>
+FileSystemEntryInfo fromJsonValue(const QJsonValue &source, convertType<FileSystemEntryInfo>);
+
+template<>
+QJsonValue toJsonValue(const FileSystemEntryInfo &source, convertType<FileSystemEntryInfo>);
 
 } // NS DTO
 } // NS Jellyfin

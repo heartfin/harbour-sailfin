@@ -61,7 +61,7 @@ void HttpHeaderInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject HttpHeaderInfo::toJson() {
+QJsonObject HttpHeaderInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
@@ -110,9 +110,14 @@ namespace Support {
 using HttpHeaderInfo = Jellyfin::DTO::HttpHeaderInfo;
 
 template <>
-HttpHeaderInfo fromJsonValue<HttpHeaderInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+HttpHeaderInfo fromJsonValue(const QJsonValue &source, convertType<HttpHeaderInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return HttpHeaderInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const HttpHeaderInfo &source, convertType<HttpHeaderInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

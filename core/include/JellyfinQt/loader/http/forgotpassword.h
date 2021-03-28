@@ -35,17 +35,23 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/dto/forgotpasswordresult.h"
 
+namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
 namespace Jellyfin {
 namespace Loader {
 namespace HTTP {
 
+
+using namespace Jellyfin::DTO;
 /**
  * @brief Initiates the forgot password process for a local user.
  */
-class ForgotPasswordLoader : public Jellyfin::Support::HttpLoader<Jellyfin::DTO::ForgotPasswordResult, ForgotPasswordParams> {
+
+class ForgotPasswordLoader : public Jellyfin::Support::HttpLoader<ForgotPasswordResult, ForgotPasswordParams> {
 public:
 	explicit ForgotPasswordLoader(ApiClient *apiClient = nullptr);
 

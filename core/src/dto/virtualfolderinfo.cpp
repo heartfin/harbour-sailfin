@@ -76,7 +76,7 @@ void VirtualFolderInfo::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject VirtualFolderInfo::toJson() {
+QJsonObject VirtualFolderInfo::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["Locations"] = Jellyfin::Support::toJsonValue<QStringList>(m_locations);
@@ -195,9 +195,14 @@ namespace Support {
 using VirtualFolderInfo = Jellyfin::DTO::VirtualFolderInfo;
 
 template <>
-VirtualFolderInfo fromJsonValue<VirtualFolderInfo>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+VirtualFolderInfo fromJsonValue(const QJsonValue &source, convertType<VirtualFolderInfo>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return VirtualFolderInfo::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const VirtualFolderInfo &source, convertType<VirtualFolderInfo>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetProfileLoader::GetProfileLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::DeviceProfile, GetProfileParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<DeviceProfile, GetProfileParams>(apiClient) {}
 
 QString GetProfileLoader::path(const GetProfileParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Dlna/Profiles/") + Support::toString(params.profileId()) ;
+	return QStringLiteral("/Dlna/Profiles/") + Support::toString< QString>(params.profileId()) ;
 }
 
 QUrlQuery GetProfileLoader::query(const GetProfileParams &params) const {

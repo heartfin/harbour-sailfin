@@ -34,7 +34,6 @@ namespace DTO {
 
 ImageOrientationClass::ImageOrientationClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using ImageOrientation = Jellyfin::DTO::ImageOrientation;
 
 template <>
-ImageOrientation fromJsonValue<ImageOrientation>(const QJsonValue &source) {
+ImageOrientation fromJsonValue(const QJsonValue &source, convertType<ImageOrientation>) {
 	if (!source.isString()) return ImageOrientation::EnumNotSet;
 
 	QString str = source.toString();
@@ -72,6 +71,32 @@ ImageOrientation fromJsonValue<ImageOrientation>(const QJsonValue &source) {
 	}
 	
 	return ImageOrientation::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const ImageOrientation &source, convertType<ImageOrientation>) {
+	switch(source) {
+	case ImageOrientation::TopLeft:
+		return QStringLiteral("TopLeft");
+	case ImageOrientation::TopRight:
+		return QStringLiteral("TopRight");
+	case ImageOrientation::BottomRight:
+		return QStringLiteral("BottomRight");
+	case ImageOrientation::BottomLeft:
+		return QStringLiteral("BottomLeft");
+	case ImageOrientation::LeftTop:
+		return QStringLiteral("LeftTop");
+	case ImageOrientation::RightTop:
+		return QStringLiteral("RightTop");
+	case ImageOrientation::RightBottom:
+		return QStringLiteral("RightBottom");
+	case ImageOrientation::LeftBottom:
+		return QStringLiteral("LeftBottom");
+
+	case ImageOrientation::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

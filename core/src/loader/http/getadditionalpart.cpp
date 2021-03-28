@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetAdditionalPartLoader::GetAdditionalPartLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetAdditionalPartParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetAdditionalPartParams>(apiClient) {}
 
 QString GetAdditionalPartLoader::path(const GetAdditionalPartParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Videos/") + Support::toString(params.itemId()) + QStringLiteral("/AdditionalParts");
+	return QStringLiteral("/Videos/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/AdditionalParts");
 }
 
 QUrlQuery GetAdditionalPartLoader::query(const GetAdditionalPartParams &params) const {
@@ -50,7 +51,7 @@ QUrlQuery GetAdditionalPartLoader::query(const GetAdditionalPartParams &params) 
 
 	// Optional parameters
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;

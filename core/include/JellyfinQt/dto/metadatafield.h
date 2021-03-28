@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class MetadataFieldClass {
@@ -59,7 +63,19 @@ private:
 	explicit MetadataFieldClass();
 };
 
-typedef MetadataFieldClass::Value MetadataField;
+using MetadataField = MetadataFieldClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using MetadataField = Jellyfin::DTO::MetadataField;
+
+template <>
+MetadataField fromJsonValue(const QJsonValue &source, convertType<MetadataField>);
+
+template <>
+QJsonValue toJsonValue(const MetadataField &source, convertType<MetadataField>);
 
 } // NS DTO
 } // NS Jellyfin

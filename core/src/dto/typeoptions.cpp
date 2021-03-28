@@ -70,7 +70,7 @@ void TypeOptions::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject TypeOptions::toJson() {
+QJsonObject TypeOptions::toJson() const {
 	QJsonObject result;
 	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
 	result["MetadataFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetchers);
@@ -168,9 +168,14 @@ namespace Support {
 using TypeOptions = Jellyfin::DTO::TypeOptions;
 
 template <>
-TypeOptions fromJsonValue<TypeOptions>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+TypeOptions fromJsonValue(const QJsonValue &source, convertType<TypeOptions>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return TypeOptions::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const TypeOptions &source, convertType<TypeOptions>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -67,7 +67,7 @@ void CultureDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject CultureDto::toJson() {
+QJsonObject CultureDto::toJson() const {
 	QJsonObject result;
 	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
@@ -151,9 +151,14 @@ namespace Support {
 using CultureDto = Jellyfin::DTO::CultureDto;
 
 template <>
-CultureDto fromJsonValue<CultureDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+CultureDto fromJsonValue(const QJsonValue &source, convertType<CultureDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return CultureDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const CultureDto &source, convertType<CultureDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

@@ -34,7 +34,6 @@ namespace DTO {
 
 RepeatModeClass::RepeatModeClass() {}
 
-
 } // NS DTO
 
 namespace Support {
@@ -42,7 +41,7 @@ namespace Support {
 using RepeatMode = Jellyfin::DTO::RepeatMode;
 
 template <>
-RepeatMode fromJsonValue<RepeatMode>(const QJsonValue &source) {
+RepeatMode fromJsonValue(const QJsonValue &source, convertType<RepeatMode>) {
 	if (!source.isString()) return RepeatMode::EnumNotSet;
 
 	QString str = source.toString();
@@ -57,6 +56,22 @@ RepeatMode fromJsonValue<RepeatMode>(const QJsonValue &source) {
 	}
 	
 	return RepeatMode::EnumNotSet;
+}
+
+template <>
+QJsonValue toJsonValue(const RepeatMode &source, convertType<RepeatMode>) {
+	switch(source) {
+	case RepeatMode::RepeatNone:
+		return QStringLiteral("RepeatNone");
+	case RepeatMode::RepeatAll:
+		return QStringLiteral("RepeatAll");
+	case RepeatMode::RepeatOne:
+		return QStringLiteral("RepeatOne");
+
+	case RepeatMode::EnumNotSet: // Fallthrough
+	default:
+		return QJsonValue();
+	}
 }
 
 } // NS DTO

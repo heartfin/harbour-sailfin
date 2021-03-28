@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static MediaUpdateInfoDto fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -85,6 +89,18 @@ protected:
 	QString m_path;
 	QString m_updateType;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using MediaUpdateInfoDto = Jellyfin::DTO::MediaUpdateInfoDto;
+
+template <>
+MediaUpdateInfoDto fromJsonValue(const QJsonValue &source, convertType<MediaUpdateInfoDto>);
+
+template<>
+QJsonValue toJsonValue(const MediaUpdateInfoDto &source, convertType<MediaUpdateInfoDto>);
 
 } // NS DTO
 } // NS Jellyfin

@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 AuthenticateWithQuickConnectLoader::AuthenticateWithQuickConnectLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::AuthenticationResult, AuthenticateWithQuickConnectParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<AuthenticationResult, AuthenticateWithQuickConnectParams>(apiClient) {}
 
 QString AuthenticateWithQuickConnectLoader::path(const AuthenticateWithQuickConnectParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

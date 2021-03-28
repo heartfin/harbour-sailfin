@@ -34,8 +34,9 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetLiveTvProgramsLoader::GetLiveTvProgramsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::BaseItemDtoQueryResult, GetLiveTvProgramsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetLiveTvProgramsParams>(apiClient) {}
 
 QString GetLiveTvProgramsLoader::path(const GetLiveTvProgramsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,85 +51,85 @@ QUrlQuery GetLiveTvProgramsLoader::query(const GetLiveTvProgramsParams &params) 
 
 	// Optional parameters
 	if (!params.channelIdsNull()) {
-		result.addQueryItem("channelIds", Support::toString(params.channelIds()));
+		result.addQueryItem("channelIds", Support::toString<QStringList>(params.channelIds()));
 	}
 	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString(params.userId()));
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.minStartDateNull()) {
-		result.addQueryItem("minStartDate", Support::toString(params.minStartDate()));
+		result.addQueryItem("minStartDate", Support::toString<QDateTime>(params.minStartDate()));
 	}
 	if (!params.hasAiredNull()) {
-		result.addQueryItem("hasAired", Support::toString(params.hasAired()));
+		result.addQueryItem("hasAired", Support::toString<std::optional<bool>>(params.hasAired()));
 	}
 	if (!params.isAiringNull()) {
-		result.addQueryItem("isAiring", Support::toString(params.isAiring()));
+		result.addQueryItem("isAiring", Support::toString<std::optional<bool>>(params.isAiring()));
 	}
 	if (!params.maxStartDateNull()) {
-		result.addQueryItem("maxStartDate", Support::toString(params.maxStartDate()));
+		result.addQueryItem("maxStartDate", Support::toString<QDateTime>(params.maxStartDate()));
 	}
 	if (!params.minEndDateNull()) {
-		result.addQueryItem("minEndDate", Support::toString(params.minEndDate()));
+		result.addQueryItem("minEndDate", Support::toString<QDateTime>(params.minEndDate()));
 	}
 	if (!params.maxEndDateNull()) {
-		result.addQueryItem("maxEndDate", Support::toString(params.maxEndDate()));
+		result.addQueryItem("maxEndDate", Support::toString<QDateTime>(params.maxEndDate()));
 	}
 	if (!params.isMovieNull()) {
-		result.addQueryItem("isMovie", Support::toString(params.isMovie()));
+		result.addQueryItem("isMovie", Support::toString<std::optional<bool>>(params.isMovie()));
 	}
 	if (!params.isSeriesNull()) {
-		result.addQueryItem("isSeries", Support::toString(params.isSeries()));
+		result.addQueryItem("isSeries", Support::toString<std::optional<bool>>(params.isSeries()));
 	}
 	if (!params.isNewsNull()) {
-		result.addQueryItem("isNews", Support::toString(params.isNews()));
+		result.addQueryItem("isNews", Support::toString<std::optional<bool>>(params.isNews()));
 	}
 	if (!params.isKidsNull()) {
-		result.addQueryItem("isKids", Support::toString(params.isKids()));
+		result.addQueryItem("isKids", Support::toString<std::optional<bool>>(params.isKids()));
 	}
 	if (!params.isSportsNull()) {
-		result.addQueryItem("isSports", Support::toString(params.isSports()));
+		result.addQueryItem("isSports", Support::toString<std::optional<bool>>(params.isSports()));
 	}
 	if (!params.startIndexNull()) {
-		result.addQueryItem("startIndex", Support::toString(params.startIndex()));
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
 	}
 	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString(params.limit()));
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QString>(params.sortBy()));
 	}
 	if (!params.sortOrderNull()) {
-		result.addQueryItem("sortOrder", Support::toString(params.sortOrder()));
+		result.addQueryItem("sortOrder", Support::toString<QString>(params.sortOrder()));
 	}
 	if (!params.genresNull()) {
-		result.addQueryItem("genres", Support::toString(params.genres()));
+		result.addQueryItem("genres", Support::toString<QStringList>(params.genres()));
 	}
 	if (!params.genreIdsNull()) {
-		result.addQueryItem("genreIds", Support::toString(params.genreIds()));
+		result.addQueryItem("genreIds", Support::toString<QStringList>(params.genreIds()));
 	}
 	if (!params.enableImagesNull()) {
-		result.addQueryItem("enableImages", Support::toString(params.enableImages()));
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString(params.imageTypeLimit()));
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
 	}
 	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString(params.enableImageTypes()));
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
 	}
 	if (!params.enableUserDataNull()) {
-		result.addQueryItem("enableUserData", Support::toString(params.enableUserData()));
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	if (!params.seriesTimerIdNull()) {
-		result.addQueryItem("seriesTimerId", Support::toString(params.seriesTimerId()));
+		result.addQueryItem("seriesTimerId", Support::toString<QString>(params.seriesTimerId()));
 	}
 	if (!params.librarySeriesIdNull()) {
-		result.addQueryItem("librarySeriesId", Support::toString(params.librarySeriesId()));
+		result.addQueryItem("librarySeriesId", Support::toString<QString>(params.librarySeriesId()));
 	}
 	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString(params.fields()));
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.enableTotalRecordCountNull()) {
-		result.addQueryItem("enableTotalRecordCount", Support::toString(params.enableTotalRecordCount()));
+		result.addQueryItem("enableTotalRecordCount", Support::toString<std::optional<bool>>(params.enableTotalRecordCount()));
 	}
 	
 	return result;

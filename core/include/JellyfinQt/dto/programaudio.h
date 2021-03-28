@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class ProgramAudioClass {
@@ -56,7 +60,19 @@ private:
 	explicit ProgramAudioClass();
 };
 
-typedef ProgramAudioClass::Value ProgramAudio;
+using ProgramAudio = ProgramAudioClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using ProgramAudio = Jellyfin::DTO::ProgramAudio;
+
+template <>
+ProgramAudio fromJsonValue(const QJsonValue &source, convertType<ProgramAudio>);
+
+template <>
+QJsonValue toJsonValue(const ProgramAudio &source, convertType<ProgramAudio>);
 
 } // NS DTO
 } // NS Jellyfin

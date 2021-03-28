@@ -34,13 +34,14 @@ namespace Loader {
 namespace HTTP {
 
 
+using namespace Jellyfin::DTO;
 GetUserByIdLoader::GetUserByIdLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<Jellyfin::DTO::UserDto, GetUserByIdParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<UserDto, GetUserByIdParams>(apiClient) {}
 
 QString GetUserByIdLoader::path(const GetUserByIdParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString(params.userId()) ;
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) ;
 }
 
 QUrlQuery GetUserByIdLoader::query(const GetUserByIdParams &params) const {

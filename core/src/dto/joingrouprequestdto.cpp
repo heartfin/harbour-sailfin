@@ -55,7 +55,7 @@ void JoinGroupRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject JoinGroupRequestDto::toJson() {
+QJsonObject JoinGroupRequestDto::toJson() const {
 	QJsonObject result;
 	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);
 
@@ -76,9 +76,14 @@ namespace Support {
 using JoinGroupRequestDto = Jellyfin::DTO::JoinGroupRequestDto;
 
 template <>
-JoinGroupRequestDto fromJsonValue<JoinGroupRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+JoinGroupRequestDto fromJsonValue(const QJsonValue &source, convertType<JoinGroupRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return JoinGroupRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const JoinGroupRequestDto &source, convertType<JoinGroupRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

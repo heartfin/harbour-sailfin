@@ -40,6 +40,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -55,7 +59,7 @@ public:
 	
 	static RemoteImageResult fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -95,6 +99,18 @@ protected:
 	qint32 m_totalRecordCount;
 	QStringList m_providers;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using RemoteImageResult = Jellyfin::DTO::RemoteImageResult;
+
+template <>
+RemoteImageResult fromJsonValue(const QJsonValue &source, convertType<RemoteImageResult>);
+
+template<>
+QJsonValue toJsonValue(const RemoteImageResult &source, convertType<RemoteImageResult>);
 
 } // NS DTO
 } // NS Jellyfin

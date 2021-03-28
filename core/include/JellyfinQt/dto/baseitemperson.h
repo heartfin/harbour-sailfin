@@ -38,6 +38,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 
@@ -53,7 +57,7 @@ public:
 	
 	static BaseItemPerson fromJson(QJsonObject source);
 	void setFromJson(QJsonObject source);
-	QJsonObject toJson();
+	QJsonObject toJson() const;
 	
 	// Properties
 	/**
@@ -114,11 +118,11 @@ public:
 	/**
 	 * @brief Gets or sets the primary image blurhash.
 	 */
-	std::optional<QJsonObject> imageBlurHashes() const;
+	QJsonObject imageBlurHashes() const;
 	/**
 	* @brief Gets or sets the primary image blurhash.
 	*/
-	void setImageBlurHashes(std::optional<QJsonObject> newImageBlurHashes);
+	void setImageBlurHashes(QJsonObject newImageBlurHashes);
 	bool imageBlurHashesNull() const;
 	void setImageBlurHashesNull();
 
@@ -129,8 +133,20 @@ protected:
 	QString m_role;
 	QString m_type;
 	QString m_primaryImageTag;
-	std::optional<QJsonObject> m_imageBlurHashes = std::nullopt;
+	QJsonObject m_imageBlurHashes;
 };
+
+} // NS DTO
+
+namespace Support {
+
+using BaseItemPerson = Jellyfin::DTO::BaseItemPerson;
+
+template <>
+BaseItemPerson fromJsonValue(const QJsonValue &source, convertType<BaseItemPerson>);
+
+template<>
+QJsonValue toJsonValue(const BaseItemPerson &source, convertType<BaseItemPerson>);
 
 } // NS DTO
 } // NS Jellyfin

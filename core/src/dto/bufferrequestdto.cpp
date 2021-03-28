@@ -64,7 +64,7 @@ void BufferRequestDto::setFromJson(QJsonObject source) {
 
 }
 	
-QJsonObject BufferRequestDto::toJson() {
+QJsonObject BufferRequestDto::toJson() const {
 	QJsonObject result;
 	result["When"] = Jellyfin::Support::toJsonValue<QDateTime>(m_when);
 	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
@@ -106,9 +106,14 @@ namespace Support {
 using BufferRequestDto = Jellyfin::DTO::BufferRequestDto;
 
 template <>
-BufferRequestDto fromJsonValue<BufferRequestDto>(const QJsonValue &source) {
-	if (!source.isObject()) throw new ParseException("Expected JSON Object");
+BufferRequestDto fromJsonValue(const QJsonValue &source, convertType<BufferRequestDto>) {
+	if (!source.isObject()) throw ParseException("Expected JSON Object");
 	return BufferRequestDto::fromJson(source.toObject());
+}
+
+template<>
+QJsonValue toJsonValue(const BufferRequestDto &source, convertType<BufferRequestDto>) {
+	return source.toJson();
 }
 
 } // NS DTO

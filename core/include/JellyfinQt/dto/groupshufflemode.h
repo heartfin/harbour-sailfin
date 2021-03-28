@@ -37,6 +37,10 @@
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
+// Forward declaration
+class ApiClient;
+}
+namespace Jellyfin {
 namespace DTO {
 
 class GroupShuffleModeClass {
@@ -52,7 +56,19 @@ private:
 	explicit GroupShuffleModeClass();
 };
 
-typedef GroupShuffleModeClass::Value GroupShuffleMode;
+using GroupShuffleMode = GroupShuffleModeClass::Value;
+
+} // NS DTO
+
+namespace Support {
+
+using GroupShuffleMode = Jellyfin::DTO::GroupShuffleMode;
+
+template <>
+GroupShuffleMode fromJsonValue(const QJsonValue &source, convertType<GroupShuffleMode>);
+
+template <>
+QJsonValue toJsonValue(const GroupShuffleMode &source, convertType<GroupShuffleMode>);
 
 } // NS DTO
 } // NS Jellyfin

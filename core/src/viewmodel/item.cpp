@@ -21,11 +21,10 @@
 namespace Jellyfin {
 namespace ViewModel {
 
-Item::Item(QObject *parent)
-    : Item(nullptr, parent){}
+Item::Item(QObject *parent, QSharedPointer<Model::Item> data)
+    : QObject(parent), m_data(data){
 
-Item::Item(QSharedPointer<Model::Item> data, QObject *parent)
-    : QObject(parent), m_data(data){}
+}
 
 void Item::setData(QSharedPointer<Model::Item> newData) {
     Model::Item oldData = *m_data.data();
@@ -36,7 +35,8 @@ void Item::setData(QSharedPointer<Model::Item> newData) {
 // ItemLoader
 
 ItemLoader::ItemLoader(QObject *parent)
-    : BaseClass(Jellyfin::Loader::HTTP::GetItemLoader(), parent) {
+    : BaseClass(new Jellyfin::Loader::HTTP::GetItemLoader(), parent) {
+    connect(this, &LoaderBase::apiClientChanged, this, &ItemLoader::onApiClientChanged);
 }
 
 void ItemLoader::onApiClientChanged(ApiClient *newApiClient) {
@@ -54,7 +54,9 @@ void ItemLoader::setUserId(const QString &newUserId) {
 }
 
 bool ItemLoader::canReload() const {
-    return BaseClass::canReload() && !m_parameters.itemId().isEmpty();
+    return BaseClass::canReload()
+            && !m_parameters.itemId().isEmpty()
+            && !m_parameters.userId().isEmpty();
 }
 
 }

@@ -21,7 +21,7 @@ Page {
 
     J.ItemModel {
         id: mediaLibraryModel
-        loader: J.UsersViewLoader {
+        loader: J.UsersViewsLoader {
             id: mediaLibraryModelLoader
             apiClient: ApiClient
         }
@@ -30,6 +30,7 @@ Page {
     ScrollView {
         anchors.fill: parent
         contentHeight: content.height
+        contentWidth: availableWidth
         Column {
             id: content
             width: parent.width
@@ -37,12 +38,15 @@ Page {
                 model: mediaLibraryModel
                 Column {
                     width: parent.width
-                    /*J.UserItemLatestModel {
+                    J.ItemModel{
                         id: userItemModel
-                        apiClient: ApiClient
-                        parentId: model.id
-                        limit: 16
-                    }*/
+                        loader: J.LatestMediaLoader {
+                            id: latestMediaLoader
+                            apiClient: ApiClient
+                            parentId: model.jellyfinId
+                            //limit: 16
+                        }
+                    }
                     Label {
                         text: model.name ? model.name : "<Model without name>"
                     }
@@ -51,13 +55,14 @@ Page {
                         width: parent.width
                         height: SailfinStyle.unit * 20
                         orientation: ListView.Horizontal
-                        model: 10 // userItemModel
+                        model: userItemModel
                         delegate: ItemDelegate {
                             width: 12 * SailfinStyle.unit
                             height: 20 * SailfinStyle.unit
                             Image {
                                 anchors.fill: parent
-                                source: ApiClient.baseUrl + "/Items/" + model.id + "/Images/Primary?tag=" + model.tag
+                                source: ApiClient.baseUrl + "/Items/" + model.jellyfinId
+                                        + "/Images/Primary?tag=" + model.imageTags["Primary"] //model.tag
                             }
                             Label {
                                 anchors.left: parent.left
@@ -65,14 +70,18 @@ Page {
                                 anchors.right: parent.right
                                 text: model.name
                             }
-                            onClicked: stackView.push(Qt.resolvedUrl("DetailPage.qml"), {"itemId": model.id})
+                            onClicked: stackView.push(Qt.resolvedUrl(
+                                                          "DetailPage.qml"), {
+                                                          "itemId": model.jellyfinId
+                                                      })
                         }
                     }
                     Connections {
                         target: mediaLibraryModelLoader
                         onReady: {
                             if (mediaLibraryModelLoader.status === ModelStatus.Ready) {
-                                //userItemModel.reload()
+
+                                latestMediaLoader.reload()
                             }
                         }
                     }
@@ -81,13 +90,14 @@ Page {
         }
     }
 
+
     /**
      * Loads models if not laoded. Set force to true to reload models
      * even if loaded.
      */
     function loadModels(force) {
         if (force || (ApiClient.authenticated && !_modelsLoaded)) {
-            _modelsLoaded = true;
+            _modelsLoaded = true
             mediaLibraryModel.reload()
         }
     }

@@ -149,8 +149,14 @@ QJsonValue toJsonValue<QStringList>(const QStringList &source, convertType<QStri
 // QJsonObject
 template <>
 QJsonObject fromJsonValue<QJsonObject>(const QJsonValue &source, convertType<QJsonObject>) {
-    if (!source.isObject()) throw ParseException("Error parsing JSON value as object: not a double");
-    return source.toObject();
+    switch(source.type()) {
+    case QJsonValue::Null:
+        return QJsonObject();
+    case QJsonValue::Object:
+        return source.toObject();
+    default:
+        throw ParseException("Error parsing JSON value as object: not an object");
+    }
 }
 
 template <>
@@ -161,13 +167,25 @@ QJsonValue toJsonValue<QJsonObject>(const QJsonObject &source, convertType<QJson
 // Double
 template <>
 double fromJsonValue<double>(const QJsonValue &source, convertType<double>) {
-    if (!source.isDouble()) throw ParseException("Error parsing JSON value as integer: not a double");
+    if (!source.isDouble()) throw ParseException("Error parsing JSON value as double: not a double");
     return source.toDouble();
 }
 
 template <>
 QJsonValue toJsonValue<double>(const double &source, convertType<double>) {
     return QJsonValue(source);
+}
+
+// Float
+template <>
+float fromJsonValue<float>(const QJsonValue &source, convertType<float>) {
+    if (!source.isDouble()) throw ParseException("Error parsing JSON value as float: not a double");
+    return static_cast<float>(source.toDouble());
+}
+
+template <>
+QJsonValue toJsonValue<float>(const float &source, convertType<float>) {
+    return QJsonValue(static_cast<double>(source));
 }
 
 // QDateTime
@@ -205,27 +223,37 @@ QJsonValue toJsonValue<QUuid>(const QUuid &source, convertType<QUuid>) {
 
 // String types
 template <>
-QString toString(const QUuid &source) {
+QString toString(const QUuid &source, convertType<QUuid>) {
     return uuidToString(source);
 }
 
 template <>
-QString toString(const qint32 &source) {
+QString toString(const qint32 &source, convertType<qint32>) {
     return QString::number(source);
 }
 
 template <>
-QString toString(const qint64 &source) {
+QString toString(const qint64 &source, convertType<qint64>) {
     return QString::number(source);
 }
 
 template <>
-QString toString(const bool &source) {
+QString toString(const float &source, convertType<float>) {
+    return QString::number(source);
+}
+
+template <>
+QString toString(const double &source, convertType<double>) {
+    return QString::number(source);
+}
+
+template <>
+QString toString(const bool &source, convertType<bool>) {
     return source ? QStringLiteral("true") : QStringLiteral("false");
 }
 
 template <>
-QString toString(const QString &source) {
+QString toString(const QString &source, convertType<QString>) {
     return source;
 }
 

@@ -80,7 +80,7 @@ public:
     Q_PROPERTY(PlayMethod playMethod READ playMethod NOTIFY playMethodChanged)
 
     // Current Item and queue informatoion
-    Q_PROPERTY(Model::Item *item READ item NOTIFY itemChanged)
+    Q_PROPERTY(ViewModel::Item *item READ item NOTIFY itemChanged)
     Q_PROPERTY(QAbstractItemModel *queue READ queue NOTIFY queueChanged)
     Q_PROPERTY(int queueIndex READ queueIndex NOTIFY queueIndexChanged)
 
@@ -94,7 +94,7 @@ public:
     Q_PROPERTY(QMediaPlayer::State playbackState READ playbackState NOTIFY playbackStateChanged)
     Q_PROPERTY(qint64 position READ position NOTIFY positionChanged)
 
-    Model::Item *item() const { return m_item.data(); }
+    ViewModel::Item *item() const { return m_displayItem.get(); }
     void setApiClient(ApiClient *apiClient);
 
     QString streamUrl() const { return m_streamUrl; }
@@ -169,6 +169,8 @@ private:
     QTimer m_updateTimer;
     ApiClient *m_apiClient = nullptr;
     QSharedPointer<Model::Item> m_item;
+    QScopedPointer<ViewModel::Item> m_displayItem = QScopedPointer<ViewModel::Item>(new ViewModel::Item());
+
     QString m_streamUrl;
     QString m_playSessionId;
     int m_audioIndex = 0;

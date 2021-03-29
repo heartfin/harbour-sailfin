@@ -62,7 +62,7 @@ void BaseModelLoader::setApiClient(ApiClient *newApiClient) {
 void BaseModelLoader::setLimit(int newLimit) {
     int oldLimit = this->m_limit;
     m_limit = newLimit;
-    if (oldLimit != this->m_limit) {
+    if (oldLimit != newLimit) {
         emit limitChanged(this->m_limit);
     }
 }
@@ -76,6 +76,7 @@ void BaseModelLoader::setAutoReload(bool newAutoReload) {
 
 bool BaseModelLoader::canReload() const {
     return m_apiClient != nullptr
+            && !m_isBeingParsed
             // If the loader for this model needs authentication (almost every one does)
             // block if the ApiClient is not authenticated yet.
             && (!m_needsAuthentication || m_apiClient->authenticated())
@@ -87,6 +88,8 @@ bool BaseModelLoader::canReload() const {
 void BaseApiModel::reload() {
     qWarning() << " BaseApiModel slot called instead of overloaded method";
 }
+
+// Parameters injectors and result extractors
 
 template <>
 bool setRequestStartIndex(Loader::GetUserViewsParams &params, int startIndex) {
@@ -110,6 +113,28 @@ QList<DTO::BaseItemDto> extractRecords(const DTO::BaseItemDtoQueryResult &result
 template <>
 int extractTotalRecordCount(const DTO::BaseItemDtoQueryResult &result) {
     return result.totalRecordCount();
+}
+
+template <>
+QList<DTO::BaseItemDto> extractRecords(const QList<DTO::BaseItemDto> &result) {
+    return result;
+}
+
+template <>
+int extractTotalRecordCount(const QList<DTO::BaseItemDto> &result) {
+    return result.size();
+}
+
+template<>
+void setRequestLimit(Loader::GetLatestMediaParams &params, int limit) {
+    params.setLimit(limit);
+}
+
+template<>
+bool setRequestStartIndex(Loader::GetLatestMediaParams &params, int offset) {
+    Q_UNUSED(params)
+    Q_UNUSED(offset)
+    return false;
 }
 
 

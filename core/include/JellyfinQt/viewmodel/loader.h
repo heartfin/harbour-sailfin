@@ -144,13 +144,14 @@ template <class T, class R, class P>
 class Loader : public LoaderBase {
     using RFutureWatcher = QFutureWatcher<std::optional<R>>;
 public:
-    Loader(Support::Loader<R, P> loaderImpl, QObject *parent = nullptr)
+    Loader(Support::Loader<R, P> *loaderImpl, QObject *parent = nullptr)
         : Loader(nullptr, loaderImpl, parent) {}
 
-    Loader(ApiClient *apiClient, Support::Loader<R, P> loaderImpl, QObject *parent = nullptr)
+    Loader(ApiClient *apiClient, Support::Loader<R, P> *loaderImpl, QObject *parent = nullptr)
         : LoaderBase(apiClient, parent),
           m_loader(loaderImpl),
-          m_futureWatcher(new QFutureWatcher<std::optional<R>>) {
+          m_futureWatcher(new QFutureWatcher<std::optional<R>>(this)) {
+
         m_dataViewModel = new T(this);
         connect(m_futureWatcher, &RFutureWatcher::finished, this, &Loader<T, R, P>::updateData);
     }
@@ -161,8 +162,9 @@ public:
     void reload() override {
         if (m_futureWatcher->isRunning()) return;
         setStatus(Loading);
-        m_loader.setParameters(m_parameters);
-        m_loader.prepareLoad();
+        this->m_loader->setApiClient(m_apiClient);
+        m_loader->setParameters(m_parameters);
+        m_loader->prepareLoad();
         QFuture<std::optional<R>> future = QtConcurrent::run(this, &Loader<T, R, P>::invokeLoader);
         m_futureWatcher->setFuture(future);
     }
@@ -172,7 +174,7 @@ protected:
     /**
      * @brief Subclasses should initialize this to a loader that actually loads stuff.
      */
-    Support::Loader<R, P> m_loader;
+    QScopedPointer<Support::Loader<R, P>> m_loader = nullptr;
 private:
     QFutureWatcher<std::optional<R>> *m_futureWatcher;
 
@@ -184,9 +186,8 @@ private:
      */
     std::optional<R> invokeLoader() {
         QMutexLocker(&this->m_mutex);
-        this->m_loader.setApiClient(m_apiClient);
         try {
-            return this->m_loader.load();
+            return this->m_loader->load();
         }  catch (Support::LoadException &e) {
             qWarning() << "Exception while loading an item: " << e.what();
             this->setErrorString(QString(e.what()));
@@ -206,7 +207,7 @@ private:
             } else {
                 // Replace the model
                 using PointerType = typename decltype(m_dataViewModel->data())::Type;
-                m_dataViewModel = new T(QSharedPointer<PointerType>::create(newData), this);
+                m_dataViewModel = new T(this, QSharedPointer<PointerType>::create(newData, m_apiClient));
             }
             setStatus(Ready);
             emitDataChanged();

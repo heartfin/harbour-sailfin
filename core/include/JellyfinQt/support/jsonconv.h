@@ -152,9 +152,24 @@ QJsonValue toJsonValue(const QSharedPointer<T> &source, convertType<QSharedPoint
 /**
  * Templates for string conversion.
  */
+
+template <typename T>
+QString toString(const T &source, convertType<T>) {
+    return toJsonValue(source).toString();
+}
+
+template <typename T>
+QString toString(const std::optional<T> &source, convertType<std::optional<T>>) {
+    if (source.has_value()) {
+        return toString<T>(source.value(), convertType<T>{});
+    } else {
+        return QString();
+    }
+}
+
 template <typename T>
 QString toString(const T &source) {
-    return toJsonValue(source).toString();
+    return toString(source, convertType<T>{});
 }
 
 

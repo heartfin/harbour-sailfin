@@ -33,6 +33,16 @@ namespace Model {
 
 class Item : public DTO::BaseItemDto {
 public:
+    /**
+     * @brief Constructor that creates an empty item.
+     */
+    Item();
+
+    /**
+     * @brief Copies the data from the DTO into this model and attaches an ApiClient
+     * @param data The DTO to copy information from
+     * @param apiClient The ApiClient to attach to, to listen for updates and so on.
+     */
     Item(const DTO::BaseItemDto &data, ApiClient *apiClient = nullptr);
     virtual ~Item();
 

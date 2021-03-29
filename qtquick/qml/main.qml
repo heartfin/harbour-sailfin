@@ -14,6 +14,11 @@ ApplicationWindow {
     height: 600
     visible: true
     property int _oldDepth: 0
+    property alias playbackManager: playbackManager
+
+    J.PlaybackManager {
+        id: playbackManager
+    }
 
     background: Background {
         id: background
@@ -42,5 +47,21 @@ ApplicationWindow {
 
     Component.onCompleted: {
         ApiClient.restoreSavedSession()
+    }
+
+    footer: Column {
+        id: footer
+        Text {
+            text: qsTr("Now playing")
+            color: "white"
+        }
+        Text {
+            text: playbackManager.item.name ? playbackManager.item.name : "Nothing"
+            color: "white"
+        }
+    }
+    Rectangle {
+        color: "darkblue"
+        anchors.fill: footer
     }
 }

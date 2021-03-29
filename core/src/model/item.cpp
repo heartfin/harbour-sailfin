@@ -22,6 +22,10 @@
 namespace Jellyfin {
 namespace Model {
 
+
+Item::Item()
+    : Item(DTO::BaseItemDto(), nullptr) { }
+
 Item::Item(const DTO::BaseItemDto &data, ApiClient *apiClient)
     : DTO::BaseItemDto(data), m_apiClient(apiClient) {
     if (m_apiClient != nullptr) {

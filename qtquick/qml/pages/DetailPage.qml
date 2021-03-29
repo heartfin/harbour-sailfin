@@ -6,12 +6,14 @@ import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../components"
 import "../.."
+import ".."
 
 Page {
+    id: detailPage
     property bool _modelsLoaded: false
     property StackView stackView: StackView.view
     property string itemId
-    property alias jellyfinItem: jellyfinItem.data
+    property alias jellyfinItem: jellyfinItemLoader.data
     header: ToolBar {
         Label {
             anchors.horizontalCenter: parent.horizontalCenter
@@ -25,13 +27,33 @@ Page {
         onClicked: stackView.pop()
     }
     J.ItemLoader {
-        id: jellyfinItem
-        jellyfinId: itemId
+        id: jellyfinItemLoader
+        itemId: detailPage.itemId
         apiClient: ApiClient
     }
 
     Image {
-        anchors.centerIn: parent
+        anchors.top: parent.top
+        width: parent.width
+        height: parent.height / 3
         source: ApiClient.baseUrl + "/Items/" + itemId + "/Images/Primary?tag=" + jellyfinItem.tag
+    }
+
+    ListView {
+        width: parent.width
+        height: parent.height / 3 * 2
+        anchors.bottom: parent.bottom
+        model: J.ItemModel {
+                    loader: J.UserItemsLoader {
+                        apiClient: ApiClient
+                        parentId: detailPage.itemId
+                    }
+               }
+        delegate: ItemDelegate{
+            icon.source: ApiClient.baseUrl + "/Items/" + model.jellyfinId + "/Images/Primary?tag=" + model.tag
+            text: model.name
+            width: parent.width
+            onClicked: playbackManager.play(model.jellyfinId)
+        }
     }
 }

@@ -44,7 +44,44 @@ namespace ViewModel {
 
 // This file contains all models that expose a Model::Item
 
-using UserViewsLoaderBase = LoaderModelLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetUserViewsParams>;
+/**
+ * @brief Class intended for models which have a mandatory userId property, which can be extracted from the
+ * ApiClient.
+ */
+template <class T, class D, class R, class P>
+class AbstractUserParameterLoader :  public LoaderModelLoader<T, D, R, P> {
+public:
+    explicit AbstractUserParameterLoader(Support::Loader<R, P> *loader, QObject *parent = nullptr)
+            : LoaderModelLoader<T, D, R, P>(loader, parent) {
+        this->connect(this, &BaseModelLoader::apiClientChanged, this, &AbstractUserParameterLoader<T, D, R, P>::apiClientChanged);
+    }
+protected:
+    virtual bool canReload() const override {
+        return BaseModelLoader::canReload() && !this->m_parameters.userId().isNull();
+    }
+private:
+    void apiClientChanged(ApiClient *newApiClient) {
+        if (this->m_apiClient != nullptr) {
+            this->disconnect(this->m_apiClient, &ApiClient::userIdChanged, this, &AbstractUserParameterLoader<T, D, R, P>::userIdChanged);
+        }
+        if (newApiClient != nullptr) {
+            this->connect(newApiClient, &ApiClient::userIdChanged, this, &AbstractUserParameterLoader<T, D, R, P>::userIdChanged);
+            if (!newApiClient->userId().isNull()) {
+                this->m_parameters.setUserId(newApiClient->userId());
+            }
+        }
+    }
+
+    void userIdChanged(const QString &newUserId) {
+        this->m_parameters.setUserId(newUserId);
+        this->autoReloadIfNeeded();
+    }
+};
+
+/**
+ * Loads the views of an user, such as "Videos", "Music" and so on.
+ */
+using UserViewsLoaderBase = AbstractUserParameterLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetUserViewsParams>;
 class UserViewsLoader : public UserViewsLoaderBase {
     Q_OBJECT
 public:
@@ -53,12 +90,27 @@ public:
     FWDPROP(bool, includeExternalContent, IncludeExternalContent)
     FWDPROP(bool, includeHidden, IncludeHidden)
     FWDPROP(QStringList, presetViews, PresetViews)
-private slots:
-    void apiClientChanged(ApiClient *newApiClient);
-    void userIdChanged(const QString &newUserId);
 };
 
-using UserItemsLoaderBase = LoaderModelLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetItemsByUserIdParams>;
+using LatestMediaBase = AbstractUserParameterLoader<Model::Item, DTO::BaseItemDto, QList<DTO::BaseItemDto>, Jellyfin::Loader::GetLatestMediaParams>;
+class LatestMediaLoader : public LatestMediaBase {
+    Q_OBJECT
+public:
+    explicit LatestMediaLoader(QObject *parent = nullptr);
+
+    // Optional
+    FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, enableImageTypes, EnableImageTypes)
+    FWDPROP(bool, enableImages, EnableImages)
+    FWDPROP(bool, enableUserData, EnableUserData)
+    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
+    FWDPROP(bool, groupItems, GroupItems)
+    FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
+    FWDPROP(QStringList, includeItemTypes, IncludeItemTypes)
+    FWDPROP(bool, isPlayed, IsPlayed)
+    FWDPROP(QString, parentId, ParentId)
+};
+
+using UserItemsLoaderBase = AbstractUserParameterLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetItemsByUserIdParams>;
 class UserItemsLoader : public UserItemsLoaderBase {
     Q_OBJECT
 public:
@@ -70,14 +122,26 @@ public:
     FWDPROP(QStringList, albums, Albums)
     FWDPROP(QStringList, artistIds, ArtistIds)
     FWDPROP(QStringList, artists, Artists)
+    FWDPROP(bool, collapseBoxSetItems, CollapseBoxSetItems)
+    FWDPROP(QStringList, contributingArtistIds, ContributingArtistIds)
+    FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, enableImageTypes, EnableImageTypes);
+    FWDPROP(bool, enableImages, EnableImages)
+    FWDPROP(bool, enableTotalRecordCount, EnableTotalRecordCount)
+    FWDPROP(bool, enableUserData, EnableUserData)
+    FWDPROP(QStringList, excludeArtistIds, ExcludeArtistIds)
+    FWDPROP(QStringList, excludeItemIds, ExcludeItemIds)
+    FWDPROP(QStringList, excludeItemTypes, ExcludeItemTypes)
+    FWDPROP(QList<Jellyfin::DTO::LocationTypeClass::Value>, excludeLocationTypes, ExcludeLocationTypes)
+    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
+    FWDPROP(QList<Jellyfin::DTO::ItemFilterClass::Value>, filters, Filters)
+
+    FWDPROP(QString, parentId, ParentId)
     FWDPROP(bool, recursive, Recursive)
     //FWDPROP(bool, collapseBoxSetItems)
-protected:
-    virtual bool canReload() const override;
-private slots:
-    void apiClientChanged(ApiClient *newApiClient);
-    void userIdChanged(const QString &newUserId);
 };
+
+
+
 /**
  * @brief Base class for each model that works with items.
  */
@@ -95,7 +159,10 @@ public:
         playlistItemId,
         dateCreated,
         dateLastMediaAdded,
-        extraType
+        extraType,
+
+        // Hand-picked, important ones
+        imageTags
     };
 
     explicit ItemModel (QObject *parent = nullptr);
@@ -111,7 +178,9 @@ public:
             JFRN(playlistItemId),
             JFRN(dateCreated),
             JFRN(dateLastMediaAdded),
-            JFRN(extraType)
+            JFRN(extraType),
+            // Handpicked, important ones
+            JFRN(imageTags),
         };
     }
     QVariant data(const QModelIndex &index, int role) const override;

@@ -22,20 +22,25 @@ namespace Jellyfin {
 void registerTypes(const char *uri) {
     qmlRegisterType<ApiClient>(uri, 1, 0, "ApiClient");
     qmlRegisterType<ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
+    qmlRegisterType<ViewModel::PlaybackManager>(uri, 1, 0, "PlaybackManager");
+    qmlRegisterUncreatableType<ViewModel::Item>(uri, 1, 0, "Item", "Acquire one via ItemLoader or exposed properties");
+    qmlRegisterUncreatableType<WebSocket>(uri, 1, 0, "WebSocket", "Obtain one via your ApiClient");
 
-
+    // AbstractItemModels
     qmlRegisterUncreatableType<BaseApiModel>(uri, 1, 0, "BaseApiModel", "Please use one of its subclasses");
     qmlRegisterUncreatableType<BaseModelLoader>(uri, 1, 0, "BaseModelLoader", "Please use one of its subclasses");
-    qmlRegisterUncreatableType<ViewModel::LoaderBase>(uri, 1, 0, "LoaderBase", "Use on eof its subclasses");
-
-    qmlRegisterUncreatableType<ViewModel::Item>(uri, 1, 0, "Item", "Acquire one via ItemLoader or exposed properties");
-    qmlRegisterType<ViewModel::ItemLoader>(uri, 1, 0, "ItemLoader");
     qmlRegisterType<ViewModel::ItemModel>(uri, 1, 0, "ItemModel");
-    qmlRegisterType<ViewModel::UserViewsLoader>(uri, 1, 0, "UsersViewLoader");
 
-    qmlRegisterType<ViewModel::PlaybackManager>(uri, 1, 0, "PlaybackManager");
+    // Loaders
+    qmlRegisterUncreatableType<ViewModel::LoaderBase>(uri, 1, 0, "LoaderBase", "Use one of its subclasses");
+    qmlRegisterType<ViewModel::ItemLoader>(uri, 1, 0, "ItemLoader");
+    qmlRegisterType<ViewModel::LatestMediaLoader>(uri, 1, 0, "LatestMediaLoader");
+    qmlRegisterType<ViewModel::UserItemsLoader>(uri, 1, 0, "UserItemsLoader");
+    qmlRegisterType<ViewModel::UserViewsLoader>(uri, 1, 0, "UsersViewsLoader");
 
+    // Enumerations
     qmlRegisterUncreatableType<DTO::GeneralCommandTypeClass>(uri, 1, 0, "GeneralCommandType", "Is an enum");
     qmlRegisterUncreatableType<ViewModel::ModelStatusClass>(uri, 1, 0, "ModelStatus", "Is an enum");
+
 }
 }

@@ -18,6 +18,9 @@
  */
 #include "JellyfinQt/viewmodel/itemmodel.h"
 
+#include "JellyfinQt/loader/http/getlatestmedia.h"
+#include "JellyfinQt/loader/http/getitemsbyuserid.h"
+
 #define JF_CASE(roleName) case roleName: \
     try { \
         return QVariant(item.roleName()); \
@@ -30,37 +33,13 @@ namespace Jellyfin {
 namespace ViewModel {
 
 UserViewsLoader::UserViewsLoader(QObject *parent)
-    : UserViewsLoaderBase(new Jellyfin::Loader::HTTP::GetUserViewsLoader(), parent) {
-    connect(this, &BaseModelLoader::apiClientChanged, this, &UserViewsLoader::apiClientChanged);
-}
+    : UserViewsLoaderBase(new Jellyfin::Loader::HTTP::GetUserViewsLoader(), parent) { }
 
-void UserViewsLoader::apiClientChanged(ApiClient *newApiClient) {
-    if (m_apiClient != nullptr) disconnect(m_apiClient, &ApiClient::userIdChanged, this, &UserViewsLoader::userIdChanged);
-    if (newApiClient != nullptr) {
-        connect(newApiClient, &ApiClient::userIdChanged, this, &UserViewsLoader::userIdChanged);
-        if (!newApiClient->userId().isNull()) {
-            m_parameters.setUserId(newApiClient->userId());
-        }
-    }
-}
+LatestMediaLoader::LatestMediaLoader(QObject *parent)
+    : LatestMediaBase(new Jellyfin::Loader::HTTP::GetLatestMediaLoader(), parent){ }
 
-void UserViewsLoader::userIdChanged(const QString &newUserId) {
-    m_parameters.setUserId(newUserId);
-    autoReloadIfNeeded();
-}
-void UserItemsLoader::apiClientChanged(ApiClient *newApiClient) {
-    if (m_apiClient != nullptr) disconnect(m_apiClient, &ApiClient::userIdChanged, this, &UserItemsLoader::userIdChanged);
-    if (newApiClient != nullptr) connect(newApiClient, &ApiClient::userIdChanged, this, &UserItemsLoader::userIdChanged);
-}
-
-void UserItemsLoader::userIdChanged(const QString &newUserId) {
-    m_parameters.setUserId(newUserId);
-    autoReloadIfNeeded();
-}
-
-bool UserItemsLoader::canReload() const {
-    return BaseModelLoader::canReload() && !m_parameters.userId().isNull();
-}
+UserItemsLoader::UserItemsLoader(QObject *parent)
+    : UserItemsLoaderBase(new Jellyfin::Loader::HTTP::GetItemsByUserIdLoader(), parent) {}
 
 ItemModel::ItemModel(QObject *parent)
     : ApiModel<Model::Item>(parent) { }
@@ -81,6 +60,8 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
     JF_CASE(dateCreated)
     JF_CASE(dateLastMediaAdded)
     JF_CASE(extraType)
+    // Handpicked, important ones
+    JF_CASE(imageTags)
     default:
         return QVariant();
     }

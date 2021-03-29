@@ -51,9 +51,7 @@ namespace ViewModel {
 class Item : public QObject {
     Q_OBJECT
 public:
-    explicit Item(QObject *parent = nullptr);
-    explicit Item(QSharedPointer<Model::Item> data = QSharedPointer<Model::Item>(),
-                              QObject *parent = nullptr);
+    explicit Item(QObject *parent = nullptr, QSharedPointer<Model::Item> data = QSharedPointer<Model::Item>::create());
 
     // Please keep the order of the properties the same as in the file linked above.
     Q_PROPERTY(QUuid jellyfinId READ jellyfinId NOTIFY jellyfinIdChanged)
@@ -194,7 +192,7 @@ public:
     Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
 
     QString itemId() const { return m_parameters.itemId(); }
-    void setItemId(QString newItemId) { m_parameters.setItemId(newItemId); }
+    void setItemId(QString newItemId) { m_parameters.setItemId(newItemId); emit itemIdChanged(newItemId); }
     virtual bool canReload() const override;
 
 signals:

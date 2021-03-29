@@ -30,6 +30,7 @@
 #include "apiclient.h"
 #include "apimodel.h"
 #include "serverdiscoverymodel.h"
+#include "websocket.h"
 #include "viewmodel/item.h"
 #include "viewmodel/itemmodel.h"
 #include "viewmodel/loader.h"

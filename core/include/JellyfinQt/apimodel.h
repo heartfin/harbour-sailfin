@@ -168,7 +168,7 @@ public:
         m_startIndex = 0;
         m_totalRecordCount = -1;
         emitModelShouldClear();
-        loadMore(0, -1, ViewModel::ModelStatus::Loading);
+        loadMore(0, m_limit, ViewModel::ModelStatus::Loading);
     }
 
     void loadMore() {
@@ -272,7 +272,9 @@ protected:
             // meaning loadMore is not supported.
             return;
         }
-        setRequestLimit<P>(this->m_parameters, limit);
+        if (limit > 0) {
+                setRequestLimit<P>(this->m_parameters, limit);
+        }
         this->setStatus(suggestedModelStatus);
 
         // We never want to set this while the loader is running, hence the Mutex and setting it here

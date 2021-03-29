@@ -44,32 +44,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "dto/baseitemdtoqueryresult.h"
 #include "loader/requesttypes.h"
 #include "support/loader.h"
+#include "viewmodel/modelstatus.h"
 
 namespace Jellyfin {
-
-/**
- * Pageable response, which support offset and record parameters. The result
- * should contain a field with the total item count, returned item count and an array
- * containing the results.
- */
-struct PageableResponse;
-
-class ModelStatusClass {
-    Q_GADGET
-public:
-    enum ModelStatus {
-        Uninitialised,
-        Loading,
-        Ready,
-        Error,
-        LoadingMore
-    };
-    Q_ENUM(ModelStatus)
-private:
-    ModelStatusClass() {}
-};
-
-using ModelStatus = ModelStatusClass::ModelStatus;
 
 class BaseModelLoader : public QObject, public QQmlParserStatus  {
     Q_INTERFACES(QQmlParserStatus)
@@ -77,7 +54,7 @@ class BaseModelLoader : public QObject, public QQmlParserStatus  {
 public:
     explicit BaseModelLoader(QObject *parent = nullptr);
     Q_PROPERTY(ApiClient *apiClient READ apiClient WRITE setApiClient NOTIFY apiClientChanged)
-    Q_PROPERTY(ModelStatus status READ status NOTIFY statusChanged)
+    Q_PROPERTY(ViewModel::ModelStatus status READ status NOTIFY statusChanged)
     Q_PROPERTY(int limit READ limit WRITE setLimit NOTIFY limitChanged)
     Q_PROPERTY(bool autoReload READ autoReload WRITE setAutoReload NOTIFY autoReloadChanged)
 
@@ -89,7 +66,7 @@ public:
     bool autoReload() const { return m_autoReload; }
     void setAutoReload(bool newAutoReload);
 
-    ModelStatus status() const { return m_status; }
+    ViewModel::ModelStatus status() const { return m_status; }
 
     /**
      * @brief Clears and reloads the model
@@ -136,12 +113,12 @@ protected:
     void emitModelShouldClear() { emit modelShouldClear(); }
     void emitItemsLoaded() { emit itemsLoaded(); }
 
-    ModelStatus m_status = ModelStatus::Uninitialised;
-    void setStatus(ModelStatus newStatus) {
+    ViewModel::ModelStatus m_status = ViewModel::ModelStatus::Uninitialised;
+    void setStatus(ViewModel::ModelStatus newStatus) {
         if (this->m_status != newStatus) {
             this->m_status = newStatus;
             emit this->statusChanged();
-            if (this->m_status == ModelStatus::Ready) {
+            if (this->m_status == ViewModel::ModelStatus::Ready) {
                 emit ready();
             }
         }
@@ -167,7 +144,7 @@ public:
         }
         m_startIndex = 0;
         m_totalRecordCount = -1;
-        this->setStatus(ModelStatus::Loading);
+        this->setStatus(ViewModel::ModelStatus::Loading);
         emitModelShouldClear();
         loadMore(0, -1);
     }
@@ -177,7 +154,7 @@ public:
             qDebug() << "Cannot yet reload ApiModel: canReload() returned false.";
             return;
         }
-        this->setStatus(ModelStatus::LoadingMore);
+        this->setStatus(ViewModel::ModelStatus::LoadingMore);
         loadMore(m_startIndex, m_limit);
     }
 
@@ -283,12 +260,14 @@ protected:
         try {
             std::optional<R> optResult = m_futureWatcher.result();
             if (!optResult.has_value()) {
-                this->setStatus(ModelStatus::Error);
+                this->setStatus(ViewModel::ModelStatus::Error);
+                qWarning() << "ModelLoader returned with empty optional";
+                return;
             }
             result = optResult.value();
         } catch (Support::LoadException e) {
             qWarning() << "Exception while loading: " << e.what();
-            this->setStatus(ModelStatus::Error);
+            this->setStatus(ViewModel::ModelStatus::Error);
         }
 
         QList<D> records = extractRecords<D, R>(result);
@@ -304,7 +283,7 @@ protected:
         for (int i = 0; i < records.size(); i++) {
             models[i] = T(records[i], m_loader->apiClient());
         }
-        this->setStatus(ModelStatus::Ready);
+        this->setStatus(ViewModel::ModelStatus::Ready);
         this->m_result = { models, totalRecordCount};
         this->emitItemsLoaded();
     }

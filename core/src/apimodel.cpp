@@ -19,9 +19,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "JellyfinQt/apimodel.h"
 
-#include "JellyfinQt/DTO/baseitemdto.h"
-#include "JellyfinQt/DTO/useritemdatadto.h"
-#include "JellyfinQt/DTO/userdto.h"
+#include "JellyfinQt/dto/baseitemdto.h"
+#include "JellyfinQt/dto/useritemdatadto.h"
+#include "JellyfinQt/dto/userdto.h"
 
 namespace Jellyfin {
 

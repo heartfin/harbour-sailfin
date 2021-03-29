@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "JellyfinQt/websocket.h"
 
-#include <JellyfinQt/DTO/useritemdatadto.h>
+#include <JellyfinQt/dto/useritemdatadto.h>
 
 namespace Jellyfin {
 WebSocket::WebSocket(ApiClient *client)

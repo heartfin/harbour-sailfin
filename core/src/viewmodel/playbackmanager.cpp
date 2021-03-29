@@ -22,7 +22,7 @@
 #include "JellyfinQt/apimodel.h"
 
 // #include "JellyfinQt/DTO/dto.h"
-#include <JellyfinQt/DTO/useritemdatadto.h>
+#include <JellyfinQt/dto/useritemdatadto.h>
 
 namespace Jellyfin {
 class ItemModel;

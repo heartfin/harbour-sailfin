@@ -23,13 +23,14 @@
 #include <QObject>
 #include <QScopedPointer>
 
-#include "propertyhelper.h"
 #include "../dto/baseitemdto.h"
 #include "../dto/baseitemdtoqueryresult.h"
 #include "../loader/http/getuserviews.h"
 #include "../loader/requesttypes.h"
 #include "../model/item.h"
 #include "../apimodel.h"
+#include "modelstatus.h"
+#include "propertyhelper.h"
 
 // Jellyfin Forward Read/Write Property
 #define FWDPROP(type, propName, propSetName) JF_FWD_RW_PROP(type, propName, propSetName, this->m_parameters)

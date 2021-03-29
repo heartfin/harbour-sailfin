@@ -56,7 +56,9 @@ endif()
 add_library(JellyfinQt ${JellyfinQt_SOURCES} ${JellyfinQt_HEADERS})
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0") 
-    # target_precompile_headers(JellyfinQt PRIVATE ${JellyfinQt_HEADERS})
+    if(BUILD_PRECOMPILED_HEADERS)
+        target_precompile_headers(JellyfinQt PRIVATE ${JellyfinQt_HEADERS})
+    endif()
 endif()
 
 target_include_directories(JellyfinQt PUBLIC "include")

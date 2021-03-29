@@ -19,7 +19,11 @@
 #include "JellyfinQt/viewmodel/itemmodel.h"
 
 #define JF_CASE(roleName) case roleName: \
-    return QVariant(item.roleName());
+    try { \
+        return QVariant(item.roleName()); \
+    } catch(std::bad_optional_access e) { \
+        return QVariant(); \
+    }
 
 namespace Jellyfin {
 

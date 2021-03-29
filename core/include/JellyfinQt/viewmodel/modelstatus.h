@@ -42,36 +42,6 @@ private:
 };
 
 using ModelStatus = ModelStatusClass::Value;
-
-
-class ModelStatusTest : public QObject {
-    Q_OBJECT
-public:
-    explicit ModelStatusTest(QObject *parent = nullptr) : QObject(parent) {
-        m_timer.setInterval(500);
-        connect(&m_timer, &QTimer::timeout, this, &ModelStatusTest::rotateStatus);
-        m_timer.setSingleShot(false);
-        m_timer.start();
-    }
-    Q_PROPERTY(ModelStatus status READ status WRITE setStatus NOTIFY statusChanged)
-
-    ModelStatus status() const { return m_status; }
-
-    void setStatus(ModelStatus newStatus) {
-        m_status = newStatus;
-        emit statusChanged();
-    }
-signals:
-    void statusChanged();
-private slots:
-    void rotateStatus() {
-        setStatus(static_cast<ModelStatus>((m_status + 1) % ModelStatus::LoadingMore));
-    }
-private:
-    ModelStatus m_status = ModelStatus::Uninitialised;
-    QTimer m_timer;
-};
-
 }
 } // NS Jellyfin
 

@@ -19,25 +19,11 @@ Page {
         }
     }
 
-    Text {
-        id: simpleLog
-        text: "Simple log: \n"
-    }
-
     J.ItemModel {
         id: mediaLibraryModel
         loader: J.UsersViewLoader {
             id: mediaLibraryModelLoader
             apiClient: ApiClient
-            onStatusChanged: {
-            }
-        }
-    }
-
-    J.ModelStatusTest {
-        status: J.ModelStatus.Uninitialized
-        onStatusChanged: {
-            simpleLog.text += new Date().toString() + ": " + status + "\n"
         }
     }
 
@@ -58,7 +44,7 @@ Page {
                         limit: 16
                     }*/
                     Label {
-                        text: model.name
+                        text: model.name ? model.name : "<Model without name>"
                     }
 
                     ListView {

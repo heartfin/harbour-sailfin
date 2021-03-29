@@ -46,6 +46,7 @@ void BaseModelLoader::componentComplete() {
 
 void BaseModelLoader::autoReloadIfNeeded() {
     if (m_autoReload && canReload()) {
+        qDebug() << "reloading due to 'autoReloadIfNeeded()'";
         emit reloadWanted();
     }
 }
@@ -74,28 +75,39 @@ void BaseModelLoader::setAutoReload(bool newAutoReload) {
 }
 
 bool BaseModelLoader::canReload() const {
-    return m_apiClient != nullptr && (!m_needsAuthentication || m_apiClient->authenticated());
+    return m_apiClient != nullptr
+            // If the loader for this model needs authentication (almost every one does)
+            // block if the ApiClient is not authenticated yet.
+            && (!m_needsAuthentication || m_apiClient->authenticated())
+            // Only allow for a reload if this model is ready or uninitialised.
+            && (m_status == ViewModel::ModelStatus::Ready
+                || m_status == ViewModel::ModelStatus::Uninitialised);
 }
 
 void BaseApiModel::reload() {
     qWarning() << " BaseApiModel slot called instead of overloaded method";
 }
 
-void setStartIndex(Loader::GetUserViewsParams &params, int startIndex) {
+template <>
+bool setRequestStartIndex(Loader::GetUserViewsParams &params, int startIndex) {
     // Not supported
     Q_UNUSED(params)
     Q_UNUSED(startIndex)
+    return false;
 }
 
-void setLimit(Loader::GetUserViewsParams &params, int limit) {
+template <>
+void setRequestLimit(Loader::GetUserViewsParams &params, int limit) {
     Q_UNUSED(params)
     Q_UNUSED(limit)
 }
 
+template <>
 QList<DTO::BaseItemDto> extractRecords(const DTO::BaseItemDtoQueryResult &result) {
     return result.items();
 }
 
+template <>
 int extractTotalRecordCount(const DTO::BaseItemDtoQueryResult &result) {
     return result.totalRecordCount();
 }

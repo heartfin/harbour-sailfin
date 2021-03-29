@@ -29,7 +29,6 @@ void registerTypes(const char *uri) {
     qmlRegisterUncreatableType<ViewModel::LoaderBase>(uri, 1, 0, "LoaderBase", "Use on eof its subclasses");
 
     qmlRegisterUncreatableType<ViewModel::Item>(uri, 1, 0, "Item", "Acquire one via ItemLoader or exposed properties");
-    qmlRegisterType<ViewModel::ModelStatusTest>(uri, 1, 0, "ModelStatusTest");
     qmlRegisterType<ViewModel::ItemLoader>(uri, 1, 0, "ItemLoader");
     qmlRegisterType<ViewModel::ItemModel>(uri, 1, 0, "ItemModel");
     qmlRegisterType<ViewModel::UserViewsLoader>(uri, 1, 0, "UsersViewLoader");

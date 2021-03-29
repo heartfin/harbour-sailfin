@@ -48,13 +48,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 namespace Jellyfin {
 
+/*
+ * A brief description of this file:
+ *
+ * The reason why all of this is this complex is because Qt MOC's lack of support for template classes
+ * with Q_OBJECT. To work around this, "base classes", such as BaseModelLoader, are created which contain
+ * all functionallity required by Q_OBJECT. This class is extended by the templated class, which in turn
+ * is extended once more, so it can be registered for the QML engine.
+ *
+ * The loading of the data has beens separated from the QAbstractModels into ViewModel::Loaders
+ * to allow for loading over the network, loading from the cache and so on, without the QAbstractModel
+ * knowing anything about how it's done, except for the parameters it can pass to the loader and the result.
+ *
+ */
+
 class BaseModelLoader : public QObject, public QQmlParserStatus  {
     Q_INTERFACES(QQmlParserStatus)
     Q_OBJECT
 public:
     explicit BaseModelLoader(QObject *parent = nullptr);
     Q_PROPERTY(ApiClient *apiClient READ apiClient WRITE setApiClient NOTIFY apiClientChanged)
-    Q_PROPERTY(ViewModel::ModelStatus status READ status NOTIFY statusChanged)
+    Q_PROPERTY(Jellyfin::ViewModel::ModelStatusClass::Value status READ status NOTIFY statusChanged)
     Q_PROPERTY(int limit READ limit WRITE setLimit NOTIFY limitChanged)
     Q_PROPERTY(bool autoReload READ autoReload WRITE setAutoReload NOTIFY autoReloadChanged)
 
@@ -123,6 +137,15 @@ protected:
             }
         }
     }
+    /**
+     * @brief Determines if this model is able to reload.
+     *
+     * The default implementation checks if the user is authenticated,
+     * and the model is not reloading. If overriding this method, please
+     * call this method as well in determining if the model should be reloadable.
+     *
+     * @return True if the model can reload, false otherwise.
+     */
     virtual bool canReload() const;
 };
 
@@ -144,9 +167,8 @@ public:
         }
         m_startIndex = 0;
         m_totalRecordCount = -1;
-        this->setStatus(ViewModel::ModelStatus::Loading);
         emitModelShouldClear();
-        loadMore(0, -1);
+        loadMore(0, -1, ViewModel::ModelStatus::Loading);
     }
 
     void loadMore() {
@@ -154,8 +176,7 @@ public:
             qDebug() << "Cannot yet reload ApiModel: canReload() returned false.";
             return;
         }
-        this->setStatus(ViewModel::ModelStatus::LoadingMore);
-        loadMore(m_startIndex, m_limit);
+        loadMore(m_startIndex, m_limit, ViewModel::ModelStatus::LoadingMore);
     }
 
     virtual bool canLoadMore() const {
@@ -177,8 +198,10 @@ protected:
      *
      * @param offset The offset to start loading items from
      * @param limit The maximum amount of items to load.
+     * @param suggestedStatus The suggested status this model should take on if it is able to load (more).
+     *        Either LOADING or LOAD_MORE.
      */
-    virtual void loadMore(int offset, int limit) = 0;
+    virtual void loadMore(int offset, int limit, ViewModel::ModelStatus suggestedStatus) = 0;
     void updatePosition(int startIndex, int totalRecordCount) {
         m_startIndex = startIndex;
         m_totalRecordCount = totalRecordCount;
@@ -209,15 +232,20 @@ void setRequestLimit(R &parameters, int limit) {
     Q_UNIMPLEMENTED();
 }
 
+/**
+ * @return True if able to set the startIndex, false otherwise.
+ */
 template <class P>
-void setRequestStartIndex(P &parameters, int startIndex) {
+bool setRequestStartIndex(P &parameters, int startIndex) {
     Q_UNUSED(parameters)
     Q_UNUSED(startIndex)
     Q_UNIMPLEMENTED();
+    return false;
 }
 
 /**
- * Template for implementing a loader for the given type, response and parameters
+ * Template for implementing a loader for the given type, response and parameters using Jellyfin::Support:Loaders.
+ *
  * @tparam T type of which this loader should load a list of
  * @tparam D type of the DTO which can be converted into T using T(const D&, ApiClient*);
  * @tparam R type of the deserialized loader response
@@ -231,19 +259,25 @@ public:
         QObject::connect(&m_futureWatcher, &QFutureWatcher<QList<T>>::finished, this, &BaseModelLoader::futureReady);
     }
 protected:
-    void loadMore(int offset, int limit) override {
+    void loadMore(int offset, int limit, ViewModel::ModelStatus suggestedModelStatus) override {
         // This method should only be callable on one thread.
         // If futureWatcher's future is running, this method should not be called again.
         if (m_futureWatcher.isRunning()) return;
         // Set an invalid result.
         this->m_result = { QList<T>(), -1 };
 
+        if (!setRequestStartIndex<P>(this->m_parameters, offset)
+                && suggestedModelStatus == ViewModel::ModelStatus::LoadingMore) {
+            // This loader's parameters does not setting a starting index,
+            // meaning loadMore is not supported.
+            return;
+        }
+        setRequestLimit<P>(this->m_parameters, limit);
+        this->setStatus(suggestedModelStatus);
+
         // We never want to set this while the loader is running, hence the Mutex and setting it here
         // instead when Loader::setApiClient is called.
         this->m_loader->setApiClient(this->m_apiClient);
-        setRequestStartIndex<P>(this->m_parameters, offset);
-        setRequestLimit<P>(this->m_parameters, limit);
-
         this->m_loader->setParameters(this->m_parameters);
         this->m_loader->prepareLoad();
         QFuture<std::optional<R>> future = QtConcurrent::run(this->m_loader.data(), &Support::Loader<R, P>::load);
@@ -268,10 +302,13 @@ protected:
         } catch (Support::LoadException e) {
             qWarning() << "Exception while loading: " << e.what();
             this->setStatus(ViewModel::ModelStatus::Error);
+            return;
         }
+
 
         QList<D> records = extractRecords<D, R>(result);
         int totalRecordCount = extractTotalRecordCount<R>(result);
+        qDebug() << "Total record count: " << totalRecordCount << ", records in request: " << records.size();
         // If totalRecordCount < 0, it is not supported for this endpoint
         if (totalRecordCount < 0) {
             totalRecordCount = records.size();
@@ -281,10 +318,11 @@ protected:
 
         // Convert the DTOs into models
         for (int i = 0; i < records.size(); i++) {
-            models[i] = T(records[i], m_loader->apiClient());
+            models.append(T(records[i], m_loader->apiClient()));
         }
         this->setStatus(ViewModel::ModelStatus::Ready);
-        this->m_result = { models, totalRecordCount};
+        this->m_result = { models, this->m_startIndex};
+        this->m_startIndex += totalRecordCount;
         this->emitItemsLoaded();
     }
 
@@ -408,7 +446,7 @@ public:
     void append(T &object) { insert(size(), object); }
     void append(QList<T> &objects) {
         int index = size();
-        this->beginInsertRows(QModelIndex(), index, index + objects.size());
+        this->beginInsertRows(QModelIndex(), index, index + objects.size() - 1);
         m_array.append(objects);
         this->endInsertRows();
     };
@@ -486,6 +524,7 @@ protected:
     void loadingFinished() override {
         Q_ASSERT(m_loader != nullptr);
         std::pair<QList<T>, int> result = m_loader->result();
+        qDebug() << "Results loaded: index: " << result.second << ", count: " << result.first.size();
         if (result.second == -1) {
             clear();
         } else if (result.second == m_array.size()) {

@@ -162,12 +162,14 @@ public:
         extraType,
 
         // Hand-picked, important ones
-        imageTags
+        imageTags,
+
+        jellyfinExtendModelAfterHere = Qt::UserRole + 300 // Should be enough for now
     };
 
     explicit ItemModel (QObject *parent = nullptr);
 
-    QHash<int, QByteArray> roleNames() const override {
+    virtual QHash<int, QByteArray> roleNames() const override {
         return {
             JFRN(jellyfinId),
             JFRN(name),

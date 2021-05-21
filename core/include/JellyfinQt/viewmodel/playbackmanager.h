@@ -94,7 +94,7 @@ public:
     Q_PROPERTY(QMediaPlayer::State playbackState READ playbackState NOTIFY playbackStateChanged)
     Q_PROPERTY(qint64 position READ position NOTIFY positionChanged)
 
-    ViewModel::Item *item() const { return m_displayItem.get(); }
+    ViewModel::Item *item() const { return m_displayItem; }
     void setApiClient(ApiClient *apiClient);
 
     QString streamUrl() const { return m_streamUrl; }
@@ -134,7 +134,9 @@ signals:
     void errorStringChanged(const QString &newErrorString);
 public slots:
     /**
-     * @brief playItem Plays the item with the given id. This will construct the Jellyfin::Item internally
+     * @brief playItem Replaces the current queue and plays the item with the given id.
+     *
+     * This will construct the Jellyfin::Item internally
      * and delete it later.
      * @param itemId The id of the item to play.
      */
@@ -166,39 +168,57 @@ private slots:
     void updatePlaybackInfo();
 
 private:
+    /// Factor to multiply with when converting from milliseconds to ticks.
+    const static int MS_TICK_FACTOR = 10000;
+    enum PlaybackInfoType { Started, Stopped, Progress };
+
     QTimer m_updateTimer;
     ApiClient *m_apiClient = nullptr;
     QSharedPointer<Model::Item> m_item;
-    QScopedPointer<ViewModel::Item> m_displayItem = QScopedPointer<ViewModel::Item>(new ViewModel::Item());
+    ViewModel::Item *m_displayItem = new ViewModel::Item(this);
 
+    // Properties for making the streaming request.
     QString m_streamUrl;
     QString m_playSessionId;
+    /// The index of the mediastreams of the to-be-played item containing the audio
     int m_audioIndex = 0;
+    /// The index of the mediastreams of the to-be-played item containing subtitles
     int m_subtitleIndex = -1;
+    /// The position in ticks to resume playback from
     qint64 m_resumePosition = 0;
-    qint64 m_oldPosition = 0;
+    /// The position in ticks the playback was stopped
     qint64 m_stopPosition = 0;
+
+    /// Keeps track of latest playback position
+    qint64 m_oldPosition = 0;
+    /**
+     * @brief Whether to automatically open the livestream of the item;
+     */
+    bool m_autoOpen = false;
+
+
+    // Playback-related members
     QMediaPlayer::State m_oldState = QMediaPlayer::StoppedState;
     PlayMethod m_playMethod = Transcode;
     QMediaPlayer::State m_playbackState = QMediaPlayer::StoppedState;
-    // Pointer to the current media player.
+    /// Pointer to the current media player.
     QMediaPlayer *m_mediaPlayer = nullptr;
 
+    // There are 2 media players over here, so one is able to preload the next song
+    // before the other starts playing
+
+    /// Media player 1
     QMediaPlayer *m_mediaPlayer1;
+    /// Media player 2
     QMediaPlayer *m_mediaPlayer2;
     ItemModel *m_queue = nullptr;
     int m_queueIndex = 0;
     bool m_resumePlayback = true;
 
+    // Helper methods
     void setItem(ViewModel::Item *newItem);
     void swapMediaPlayer();
 
-    bool m_qmlIsParsingComponent = false;
-
-    /**
-     * @brief Whether to automatically open the livestream of the item;
-     */
-    bool m_autoOpen = false;
 
     /**
      * @brief Retrieves the URL of the stream to open.
@@ -211,10 +231,7 @@ private:
     Model::Item *nextItem();
     void setQueue(ItemModel *itemModel);
 
-    // Factor to multiply with when converting from milliseconds to ticks.
-    const static int MS_TICK_FACTOR = 10000;
 
-    enum PlaybackInfoType { Started, Stopped, Progress };
 
     /**
      * @brief Posts the playback information
@@ -222,10 +239,10 @@ private:
     void postPlaybackInfo(PlaybackInfoType type);
 
 
-    void classBegin() override {
-        m_qmlIsParsingComponent = true;
-    }
+    // QQmlParserListener interface
+    void classBegin() override { m_qmlIsParsingComponent = true; }
     void componentComplete() override;
+    bool m_qmlIsParsingComponent = false;
 };
 
 } // NS ViewModel

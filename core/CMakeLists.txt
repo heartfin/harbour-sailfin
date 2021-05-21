@@ -7,6 +7,7 @@ set(JellyfinQt_SOURCES
         # src/DTO/dto.cpp
         src/model/deviceprofile.cpp
         src/model/item.cpp
+        src/model/playlist.cpp
         src/support/jsonconv.cpp
         src/support/loader.cpp
         src/viewmodel/item.cpp
@@ -14,6 +15,7 @@ set(JellyfinQt_SOURCES
         src/viewmodel/loader.cpp
         src/viewmodel/modelstatus.cpp
         src/viewmodel/playbackmanager.cpp
+        src/viewmodel/playlist.cpp
         src/apiclient.cpp
         src/apimodel.cpp
         src/credentialmanager.cpp
@@ -28,6 +30,7 @@ list(APPEND JellyfinQt_SOURCES ${openapi_SOURCES})
 set(JellyfinQt_HEADERS
         include/JellyfinQt/model/deviceprofile.h
         include/JellyfinQt/model/item.h
+        include/JellyfinQt/model/playlist.h
         include/JellyfinQt/support/jsonconv.h
         include/JellyfinQt/support/loader.h
         include/JellyfinQt/viewmodel/item.h
@@ -36,6 +39,7 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/viewmodel/modelstatus.h
         include/JellyfinQt/viewmodel/propertyhelper.h
         include/JellyfinQt/viewmodel/playbackmanager.h
+        include/JellyfinQt/viewmodel/playlist.h
         include/JellyfinQt/apiclient.h
         include/JellyfinQt/apimodel.h
         include/JellyfinQt/credentialmanager.h

@@ -430,7 +430,7 @@ public:
     }
 
     // QList-like API
-    T& at(int index) { return m_array.at(index); }
+    const T& at(int index) { return m_array.at(index); }
     /**
      * @return the amount of objects in this model.
      */
@@ -452,6 +452,10 @@ public:
         m_array.append(objects);
         this->endInsertRows();
     };
+
+    QList<T> mid(int pos, int length = -1) {
+        return m_array.mid(pos, length);
+    }
 
     void removeAt(int index) {
         Q_ASSERT(index < size());

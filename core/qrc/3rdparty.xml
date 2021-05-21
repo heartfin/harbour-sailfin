@@ -1,0 +1,22 @@
+<includes>
+    <include>
+        <name>Storeman</name>
+		<url>https://github.com/mentaljam/harbour-storeman/tree/f64314e7f72550faf35f95f046b52cee42501cf8</url>
+		<type>SNIPPET</type>
+		<license>
+			<type>MIT</type>
+			<copyright>Copyright (c) 2017 Petr Tsymbarovich</copyright>
+			<text>licenses/MIT.txt</text>
+		</license>
+    </include>
+    <include>
+        <name>CMake-qmlplugin</name>
+        <type>LIBRARY</type>
+        <url>https://github.com/xarxer/cmake-qmlplugin</url>
+        <license>
+            <type>MIT</type>
+            <copyright>Copyright (c) 2018 Pontus Sjögren</copyright>
+            <text>licenses/MIT.txt</text>
+        </license>
+    </include>
+</includes>

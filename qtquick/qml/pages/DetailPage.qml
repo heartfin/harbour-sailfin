@@ -53,7 +53,7 @@ Page {
             icon.source: ApiClient.baseUrl + "/Items/" + model.jellyfinId + "/Images/Primary?tag=" + model.tag
             text: model.name
             width: parent.width
-            onClicked: playbackManager.play(model.jellyfinId)
+            onClicked: playbackManager.playItem(model.jellyfinId)
         }
     }
 }

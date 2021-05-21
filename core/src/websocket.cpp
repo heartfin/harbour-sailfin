@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "JellyfinQt/websocket.h"
 
+#include <JellyfinQt/dto/generalcommand.h>
+#include <JellyfinQt/dto/generalcommandtype.h>
 #include <JellyfinQt/dto/useritemdatadto.h>
 
 namespace Jellyfin {
@@ -70,15 +72,21 @@ void WebSocket::textMessageReceived(const QString &message) {
         return;
     }
     QJsonObject messageRoot = doc.object();
-    if (!messageRoot.contains("MessageType") || !messageRoot.contains("Data")) {
-        qWarning() << "Malformed message received over WebSocket: no MessageType and Data set.";
+    if (!messageRoot.contains("MessageType")) {
+        qWarning() << "Malformed message received over WebSocket: no MessageType set.";
         return;
     }
 
     // Convert the type so we can use it in our enums.
     QString messageTypeStr = messageRoot["MessageType"].toString();
+    QJsonValue data = messageRoot["Data"];
+    if (messageTypeStr == QStringLiteral("ForceKeepAlive")) {
+        setupKeepAlive(data.toInt());
+    } else {
+        qDebug() << messageTypeStr;
+    }
     bool ok;
-    MessageType messageType = static_cast<MessageType>(QMetaEnum::fromType<WebSocket::MessageType>().keyToValue(messageTypeStr.toLatin1(), &ok));
+    /*MessageType messageType = static_cast<MessageType>(QMetaEnum::fromType<WebSocket::MessageType>().keyToValue(messageTypeStr.toLatin1(), &ok));
     if (!ok) {
         qWarning() << "Unknown message arrived: " << messageTypeStr;
         if (messageRoot.contains("Data")) {
@@ -87,7 +95,6 @@ void WebSocket::textMessageReceived(const QString &message) {
         return;
     }
 
-    QJsonValue data = messageRoot["Data"];
     qDebug() << "Received message: " << messageTypeStr;
 
     switch (messageType) {
@@ -111,7 +118,7 @@ void WebSocket::textMessageReceived(const QString &message) {
 
     }
         break;
-    }
+    }*/
 
 }
 

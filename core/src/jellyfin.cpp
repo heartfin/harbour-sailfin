@@ -24,6 +24,7 @@ void registerTypes(const char *uri) {
     qmlRegisterType<ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
     qmlRegisterType<ViewModel::PlaybackManager>(uri, 1, 0, "PlaybackManager");
     qmlRegisterUncreatableType<ViewModel::Item>(uri, 1, 0, "Item", "Acquire one via ItemLoader or exposed properties");
+    qmlRegisterUncreatableType<EventBus>(uri, 1, 0, "EventBus", "Obtain one via your ApiClient");
     qmlRegisterUncreatableType<WebSocket>(uri, 1, 0, "WebSocket", "Obtain one via your ApiClient");
 
     // AbstractItemModels

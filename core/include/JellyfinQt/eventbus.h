@@ -42,6 +42,12 @@ signals:
      * @param userData The new userData
      */
     void itemUserDataUpdated(const QString &itemId, const DTO::UserItemDataDto &userData);
+
+    /**
+     * @brief The server has requested to display an message to the user
+     * @param message The message to show.
+     */
+    void displayMessage(const QString &message);
 };
 
 }

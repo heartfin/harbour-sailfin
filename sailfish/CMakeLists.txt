@@ -18,25 +18,27 @@ set(harbour-sailfin_SOURCES
 	src/harbour-sailfin.cpp)
 
 set(sailfin_QML_SOURCES
+        qml/ApiClient.qml
 	qml/Constants.qml
 	qml/Utils.js
-        qml/components/music/NarrowAlbumCover.qml
-        qml/components/music/WideAlbumCover.qml
-        qml/components/music/SongDelegate.qml
-        qml/components/videoplayer/VideoError.qml
-        qml/components/videoplayer/VideoHud.qml
+	qml/components/music/NarrowAlbumCover.qml
+	qml/components/music/WideAlbumCover.qml
+	qml/components/music/SongDelegate.qml
+	qml/components/videoplayer/VideoError.qml
+	qml/components/videoplayer/VideoHud.qml
 	qml/components/IconListItem.qml
-	qml/components/LibraryItemDelegate.qml
+        qml/components/JItem.qml
+        qml/components/LibraryItemDelegate.qml
 	qml/components/MoreSection.qml
 	qml/components/PlainLabel.qml
-        qml/components/PlaybackBar.qml
-        qml/components/PlayQueue.qml
-        qml/components/PlayToolbar.qml
+	qml/components/PlaybackBar.qml
+	qml/components/PlayQueue.qml
+	qml/components/PlayToolbar.qml
 	qml/components/RemoteImage.qml
 	qml/components/Shim.qml
 	qml/components/UserGridDelegate.qml
 	qml/components/VideoPlayer.qml
-        qml/components/VideoTrackSelector.qml
+	qml/components/VideoTrackSelector.qml
 	qml/cover/CoverPage.qml
 	qml/cover/PosterCover.qml
 	qml/cover/VideoCover.qml
@@ -51,21 +53,22 @@ set(sailfin_QML_SOURCES
 	qml/pages/itemdetails/EpisodePage.qml
 	qml/pages/itemdetails/FilmPage.qml
 	qml/pages/itemdetails/MusicAlbumPage.qml
-        qml/pages/itemdetails/PhotoPage.qml
+	qml/pages/itemdetails/PhotoPage.qml
 	qml/pages/itemdetails/SeasonPage.qml
 	qml/pages/itemdetails/SeriesPage.qml
 	qml/pages/itemdetails/UnsupportedPage.qml
 	qml/pages/itemdetails/VideoPage.qml
-        qml/pages/settings/DebugPage.qml
+	qml/pages/settings/DebugPage.qml
 	qml/pages/setup/AddServerConnectingPage.qml
-	qml/pages/setup/LoginDialog.qml
+        qml/pages/setup/AddServerPage.qml
+        qml/pages/setup/LoginDialog.qml
 	qml/qmldir)
 	
 add_executable(harbour-sailfin ${harbour-sailfin_SOURCES} ${sailfin_QML_SOURCES})
 target_link_libraries(harbour-sailfin PRIVATE Qt5::Gui Qt5::Qml Qt5::Quick SailfishApp::SailfishApp 
 	# Note: this may break when the compiler changes. -rdynamic and -pie seem to be needed for the 
 	# invoker/booster to work
-	jellyfin-qt "-Wl,-rpath,${CMAKE_INSTALL_LIBDIR} -rdynamic -pie")
+	JellyfinQt "-Wl,-rpath,${CMAKE_INSTALL_LIBDIR} -rdynamic -pie")
 target_compile_definitions(harbour-sailfin
       PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 

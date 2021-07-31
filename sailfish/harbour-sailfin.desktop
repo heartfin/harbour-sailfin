@@ -3,7 +3,7 @@ Type=Application
 Version=1.1
 X-Nemo-Application-Type=silica-qt5
 Icon=harbour-sailfin
-Exec=harbour-sailfin --attempt-sandbox
+Exec=harbour-sailfin
 
 
 Name=Sailfin

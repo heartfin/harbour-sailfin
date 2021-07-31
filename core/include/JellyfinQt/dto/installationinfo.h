@@ -124,7 +124,7 @@ public:
 protected:
 	QString m_guid;
 	QString m_name;
-	QSharedPointer<Version> m_version = nullptr;
+	QSharedPointer<Version> m_version = QSharedPointer<Version>();
 	QString m_changelog;
 	QString m_sourceUrl;
 	QString m_checksum;

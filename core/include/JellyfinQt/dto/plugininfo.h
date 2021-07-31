@@ -136,7 +136,7 @@ public:
 
 protected:
 	QString m_name;
-	QSharedPointer<Version> m_version = nullptr;
+	QSharedPointer<Version> m_version = QSharedPointer<Version>();
 	QString m_configurationFileName;
 	QString m_description;
 	QString m_jellyfinId;

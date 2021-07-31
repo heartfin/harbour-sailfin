@@ -18,9 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 import QtQuick 2.6
 import Sailfish.Silica 1.0
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../../components"
+import "../../"
 
 /**
  * Page where the user can login on their server. Is displayed after the AddServerPage successfully connected
@@ -31,7 +32,7 @@ Dialog {
     id: loginDialog
     property string loginMessage
     property Page firstPage
-    property User selectedUser: null
+    property QtObject /*User*/ selectedUser: null
 
     property string error
 
@@ -65,11 +66,13 @@ Dialog {
         }
     }
 
-    PublicUserModel {
+    QtObject { id: userModel; }
+
+    /*PublicUserModel {
         id: userModel
         apiClient: ApiClient
         Component.onCompleted: reload();
-    }
+    }*/
 
     DialogHeader {
         id: dialogHeader
@@ -97,7 +100,7 @@ Dialog {
                 width: parent.width
                 Repeater {
                     id: userRepeater
-                    model: userModel
+                    model: 0 //userModel
                     delegate: UserGridDelegate {
                         name: model.name
                         image: model.primaryImageTag ? "%1/Users/%2/Images/Primary?tag=%3".arg(ApiClient.baseUrl).arg(model.jellyfinId).arg(model.primaryImageTag) : ""

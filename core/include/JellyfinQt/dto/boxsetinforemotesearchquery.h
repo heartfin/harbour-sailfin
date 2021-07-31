@@ -94,7 +94,7 @@ public:
 
 
 protected:
-	QSharedPointer<BoxSetInfo> m_searchInfo = nullptr;
+	QSharedPointer<BoxSetInfo> m_searchInfo = QSharedPointer<BoxSetInfo>();
 	QString m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;

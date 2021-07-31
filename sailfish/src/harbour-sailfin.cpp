@@ -60,14 +60,14 @@ int main(int argc, char *argv[]) {
     QCommandLineParser cmdParser;
     cmdParser.addHelpOption();
     cmdParser.addVersionOption();
-    QCommandLineOption sandboxOption("attempt-sandbox", app->translate("Command line argument description", "Try to start with FireJail."));
+    QCommandLineOption sandboxOption("no-attempt-sandbox", app->translate("Command line argument description", "Try to not start with FireJail."));
     if (canSanbox) {
         cmdParser.addOption(sandboxOption);
     }
     cmdParser.process(*app);
 
-    if (canSanbox && cmdParser.isSet(sandboxOption)) {
-        qDebug() << "Restarting in Sanbox mode";
+    if (canSanbox && !cmdParser.isSet(sandboxOption)) {
+        qDebug() << "Restarting in sandbox mode";
         QProcess::execute(QString(SANDBOX_PROGRAM),
                                 QStringList() << "-p" << "harbour-sailfin.desktop" << "/usr/bin/harbour-sailfin");
         return 0;

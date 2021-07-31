@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../../components"
 import "../.."
@@ -33,11 +33,11 @@ BaseDetailPage {
     property alias subtitle: pageHeader.description
     default property alias _data: content.data
     property real _playbackProsition: itemData.userData.playbackPositionTicks
-    readonly property bool _userdataReady:  itemData.status == JellyfinItem.Ready && itemData.userData != null
+    readonly property bool _userdataReady:  itemData.status === J.ItemLoader.Ready && itemData.userData !== null
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height + Theme.paddingLarge
-        visible: itemData.status !== JellyfinItem.Error
+        visible: itemData.status !== J.ItemLoader.Error
 
         VerticalScrollDecorator {}
 
@@ -84,7 +84,7 @@ BaseDetailPage {
     Connections {
         target: itemData
         onStatusChanged: {
-            if (status == JellyfinItem.Ready) {
+            if (status === J.ItemLoader.Ready) {
                 console.log(itemData.mediaStreams)
             }
         }

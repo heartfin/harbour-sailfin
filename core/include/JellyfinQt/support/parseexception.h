@@ -16,20 +16,35 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "JellyfinQt/viewmodel/playlist.h"
+#ifndef JELLYFIN_SUPPORT_PARSEEXCEPTION_H
+#define JELLYFIN_SUPPORT_PARSEEXCEPTION_H
+
+#include <QException>
+#include <QString>
 
 namespace Jellyfin {
-namespace ViewModel {
+namespace Support {
 
-/*Playlist::Playlist(ApiClient *apiClient, QObject *parent)
-    : ItemModel(parent) {
+/**
+ * @brief Thrown when JSON cannot be parsed.
+ */
+class ParseException : public QException {
+public:
+    explicit ParseException(const QString &message)
+          : m_message(message.toStdString()) {}
 
-    connect(this, &QAbstractListModel::rowsInserted, this, &Playlist::onItemsAdded);
-    connect(this, &QAbstractListModel::rowsRemoved, this, &Playlist::onItemsRemoved);
-    connect(this, &QAbstractListModel::rowsMoved, this, &Playlist::onItemsMoved);
-    connect(this, &QAbstractListModel::modelReset, this, &Playlist::onItemsReset);
+    /*explicit ParseException(const ParseException &other)
+          : m_message(other.m_message) {}*/
 
-}*/
+    virtual const char *what() const noexcept override;
 
-} // NS ViewModel
+    virtual QException *clone() const override;
+    virtual void raise() const override;
+private:
+    std::string m_message;
+};
+
+} // NS Support
 } // NS Jellyfin
+
+#endif // JELLYFIN_SUPPORT_PARSEEXCEPTION_H

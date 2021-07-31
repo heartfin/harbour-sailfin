@@ -231,7 +231,7 @@ protected:
 	std::optional<qint32> m_maxAudioChannels = std::nullopt;
 	QString m_mediaSourceId;
 	QString m_liveStreamId;
-	QSharedPointer<DeviceProfile> m_deviceProfile = nullptr;
+	QSharedPointer<DeviceProfile> m_deviceProfile = QSharedPointer<DeviceProfile>();
 	std::optional<bool> m_enableDirectPlay = std::nullopt;
 	std::optional<bool> m_enableDirectStream = std::nullopt;
 	std::optional<bool> m_enableTranscoding = std::nullopt;

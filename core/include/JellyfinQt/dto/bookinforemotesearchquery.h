@@ -94,7 +94,7 @@ public:
 
 
 protected:
-	QSharedPointer<BookInfo> m_searchInfo = nullptr;
+	QSharedPointer<BookInfo> m_searchInfo = QSharedPointer<BookInfo>();
 	QString m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;

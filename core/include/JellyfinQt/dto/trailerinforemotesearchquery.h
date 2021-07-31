@@ -94,7 +94,7 @@ public:
 
 
 protected:
-	QSharedPointer<TrailerInfo> m_searchInfo = nullptr;
+	QSharedPointer<TrailerInfo> m_searchInfo = QSharedPointer<TrailerInfo>();
 	QString m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;

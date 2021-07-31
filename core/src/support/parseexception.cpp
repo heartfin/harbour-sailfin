@@ -16,20 +16,23 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "JellyfinQt/viewmodel/playlist.h"
+
+#include "JellyfinQt/support/parseexception.h"
 
 namespace Jellyfin {
-namespace ViewModel {
+namespace Support {
 
-/*Playlist::Playlist(ApiClient *apiClient, QObject *parent)
-    : ItemModel(parent) {
+const char * ParseException::what() const noexcept {
+    return m_message.c_str();
+}
 
-    connect(this, &QAbstractListModel::rowsInserted, this, &Playlist::onItemsAdded);
-    connect(this, &QAbstractListModel::rowsRemoved, this, &Playlist::onItemsRemoved);
-    connect(this, &QAbstractListModel::rowsMoved, this, &Playlist::onItemsMoved);
-    connect(this, &QAbstractListModel::modelReset, this, &Playlist::onItemsReset);
+QException *ParseException::clone() const {
+    return new ParseException(*this);
+}
 
-}*/
+void ParseException::raise() const {
+    throw *this;
+}
 
-} // NS ViewModel
+} // NS Support
 } // NS Jellyfin

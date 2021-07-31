@@ -478,7 +478,7 @@ public:
 protected:
 	QString m_name;
 	QString m_jellyfinId;
-	QSharedPointer<DeviceIdentification> m_identification = nullptr;
+	QSharedPointer<DeviceIdentification> m_identification = QSharedPointer<DeviceIdentification>();
 	QString m_friendlyName;
 	QString m_manufacturer;
 	QString m_manufacturerUrl;

@@ -101,7 +101,7 @@ public:
 signals:
     void tokenRetrieved(const QString &server, const QString &user, const QString &token) const;
     void serversListed(const QStringList &servers) const;
-    void usersListed(const QStringList &users) const;
+    void usersListed(const QString& server, const QStringList &users) const;
 
 protected:
     explicit CredentialsManager(QObject *parent = nullptr) : QObject (parent) {}

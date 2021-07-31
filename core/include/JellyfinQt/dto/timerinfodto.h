@@ -362,7 +362,7 @@ protected:
 	QString m_seriesTimerId;
 	QString m_externalSeriesTimerId;
 	std::optional<qint64> m_runTimeTicks = std::nullopt;
-	QSharedPointer<BaseItemDto> m_programInfo = nullptr;
+	QSharedPointer<BaseItemDto> m_programInfo = QSharedPointer<BaseItemDto>();
 };
 
 } // NS DTO

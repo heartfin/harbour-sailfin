@@ -89,8 +89,8 @@ public:
 
 
 protected:
-	QSharedPointer<UserDto> m_user = nullptr;
-	QSharedPointer<SessionInfo> m_sessionInfo = nullptr;
+	QSharedPointer<UserDto> m_user = QSharedPointer<UserDto>();
+	QSharedPointer<SessionInfo> m_sessionInfo = QSharedPointer<SessionInfo>();
 	QString m_accessToken;
 	QString m_serverId;
 };

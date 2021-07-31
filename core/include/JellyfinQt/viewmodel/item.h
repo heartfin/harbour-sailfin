@@ -84,14 +84,14 @@ public:
     Q_PROPERTY(QStringList productionLocations READ productionLocations NOTIFY productionLocationsChanged)
 
     // Handpicked, important ones
-    Q_PROPERTY(qint64 runTimeTicks READ runTimeTicks NOTIFY runTimeTicksChanged)
+    Q_PROPERTY(qint64 runTimeTicks READ runTimeTicks NOTIFY runTimeTicksChanged)*/
     Q_PROPERTY(QString overview READ overview NOTIFY overviewChanged)
     Q_PROPERTY(int productionYear READ productionYear NOTIFY productionYearChanged)
     Q_PROPERTY(int indexNumber READ indexNumber NOTIFY indexNumberChanged)
     Q_PROPERTY(int indexNumberEnd READ indexNumberEnd NOTIFY indexNumberEndChanged)
     Q_PROPERTY(bool isFolder READ isFolder NOTIFY isFolderChanged)
     Q_PROPERTY(QString type READ type NOTIFY typeChanged)
-    Q_PROPERTY(QString parentBackdropItemId READ parentBackdropItemId NOTIFY parentBackdropItemIdChanged)
+    /*Q_PROPERTY(QString parentBackdropItemId READ parentBackdropItemId NOTIFY parentBackdropItemIdChanged)
     Q_PROPERTY(QStringList parentBackdropImageTags READ parentBackdropImageTags NOTIFY parentBackdropImageTagsChanged)
     Q_PROPERTY(UserData *userData READ userData NOTIFY userDataChanged)
     Q_PROPERTY(int recursiveItemCount READ recursiveItemCount NOTIFY recursiveItemCountChanged)
@@ -125,6 +125,12 @@ public:
     int airsBeforeSeasonNumber() const { return m_data->airsBeforeSeasonNumber().value_or(0); }
     int airsAfterSeasonNumber() const { return m_data->airsAfterSeasonNumber().value_or(999); }
     int airsBeforeEpisodeNumber() const { return m_data->airsBeforeEpisodeNumber().value_or(0); }
+    QString overview() const { return m_data->overview(); }
+    int productionYear() const { return m_data->productionYear().value_or(0); }
+    int indexNumber() const { return m_data->indexNumber().value_or(-1); }
+    int indexNumberEnd() const { return m_data->indexNumberEnd().value_or(-1); }
+    bool isFolder() const { return m_data->isFolder().value_or(false); }
+    QString type() const { return m_data->type(); }
 
     QSharedPointer<Model::Item> data() const { return m_data; }
     void setData(QSharedPointer<Model::Item> newData);
@@ -192,7 +198,7 @@ public:
     Q_PROPERTY(QString itemId READ itemId WRITE setItemId NOTIFY itemIdChanged)
 
     QString itemId() const { return m_parameters.itemId(); }
-    void setItemId(QString newItemId) { m_parameters.setItemId(newItemId); emit itemIdChanged(newItemId); }
+    void setItemId(QString newItemId);
     virtual bool canReload() const override;
 
 signals:

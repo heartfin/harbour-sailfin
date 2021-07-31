@@ -213,8 +213,8 @@ protected:
 	std::optional<bool> m_enableAutoLogin = std::nullopt;
 	QDateTime m_lastLoginDate;
 	QDateTime m_lastActivityDate;
-	QSharedPointer<UserConfiguration> m_configuration = nullptr;
-	QSharedPointer<UserPolicy> m_policy = nullptr;
+	QSharedPointer<UserConfiguration> m_configuration = QSharedPointer<UserConfiguration>();
+	QSharedPointer<UserPolicy> m_policy = QSharedPointer<UserPolicy>();
 	std::optional<double> m_primaryImageAspectRatio = std::nullopt;
 };
 

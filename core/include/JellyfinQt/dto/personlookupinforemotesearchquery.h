@@ -94,7 +94,7 @@ public:
 
 
 protected:
-	QSharedPointer<PersonLookupInfo> m_searchInfo = nullptr;
+	QSharedPointer<PersonLookupInfo> m_searchInfo = QSharedPointer<PersonLookupInfo>();
 	QString m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;

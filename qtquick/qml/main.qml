@@ -2,6 +2,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.12
 
+import QtMultimedia 5.12
+
 import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "components"
@@ -18,6 +20,7 @@ ApplicationWindow {
 
     J.PlaybackManager {
         id: playbackManager
+        apiClient: ApiClient
     }
 
     background: Background {
@@ -49,16 +52,45 @@ ApplicationWindow {
         ApiClient.restoreSavedSession()
     }
 
-    footer: Column {
+    footer: Item {
         id: footer
-        Text {
-            text: qsTr("Now playing")
-            color: "white"
+        height: Math.max(details.height, playButtons.height)
+        Column {
+            id: details
+            anchors.verticalCenter: parent.verticalCenter
+            Text {
+                text: qsTr("Now playing")
+                color: "white"
+            }
+            Text {
+                text: "%1\n%2".arg(playbackManager.item.name ? playbackManager.item.name : "Nothing").arg(playbackManager.streamUrl)
+                color: "white"
+            }
         }
-        Text {
-            text: playbackManager.item.name ? playbackManager.item.name : "Nothing"
-            color: "white"
+        Row {
+            id: playButtons
+            anchors {
+                verticalCenter: parent.verticalCenter
+                right: parent.right
+            }
+            Button {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Previous"
+                onClicked: playbackManager.previous();
+            }
+            Button {
+                readonly property bool _playing: manager.playbackState === MediaPlayer.PlayingState;
+                anchors.verticalCenter: parent.verticalCenter
+                text:  _playing ? "Pause" : "Play"
+                onClicked: _playing ? playbackManager.pause() : playbackManager.play()
+            }
+            Button {
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Next"
+                onClicked: playbackManager.next();
+            }
         }
+
     }
     Rectangle {
         color: "darkblue"

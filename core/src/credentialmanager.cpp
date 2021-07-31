@@ -87,5 +87,5 @@ void FallbackCredentialsManager::listUsers(const QString &server) {
     qDebug() << "Users: " << users;
     m_settings.endGroup();
     m_settings.endGroup();
-    emit CredentialsManager::usersListed(users);
+    emit CredentialsManager::usersListed(server, users);
 }

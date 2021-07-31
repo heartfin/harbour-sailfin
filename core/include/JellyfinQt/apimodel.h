@@ -108,8 +108,7 @@ signals:
      */
     void itemsLoaded();
     void reloadWanted();
-
-protected slots:
+public slots:
     virtual void futureReady() = 0;
 
 protected:
@@ -243,6 +242,18 @@ bool setRequestStartIndex(P &parameters, int startIndex) {
     return false;
 }
 
+#ifndef JELLYFIN_APIMODEL_CPP
+extern template bool setRequestStartIndex(Loader::GetUserViewsParams &params, int startIndex);
+extern template void setRequestLimit(Loader::GetUserViewsParams &params, int limit);
+extern template QList<DTO::BaseItemDto> extractRecords(const DTO::BaseItemDtoQueryResult &result);
+extern template int extractTotalRecordCount(const DTO::BaseItemDtoQueryResult &result);
+extern template QList<DTO::BaseItemDto> extractRecords(const QList<DTO::BaseItemDto> &result);
+extern template int extractTotalRecordCount(const QList<DTO::BaseItemDto> &result);
+extern template void setRequestLimit(Loader::GetLatestMediaParams &params, int limit);
+extern template bool setRequestStartIndex(Loader::GetLatestMediaParams &params, int offset);
+
+#endif
+
 /**
  * Template for implementing a loader for the given type, response and parameters using Jellyfin::Support:Loaders.
  *
@@ -301,7 +312,7 @@ protected:
                 return;
             }
             result = optResult.value();
-        } catch (Support::LoadException e) {
+        } catch (Support::LoadException &e) {
             qWarning() << "Exception while loading: " << e.what();
             this->setStatus(ViewModel::ModelStatus::Error);
             return;
@@ -430,11 +441,11 @@ public:
     }
 
     // QList-like API
-    const T& at(int index) { return m_array.at(index); }
+    const T& at(int index) const { return m_array.at(index); }
     /**
      * @return the amount of objects in this model.
      */
-    int size() {
+    int size() const {
         return m_array.size();
     }
 

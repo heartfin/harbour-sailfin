@@ -16,24 +16,13 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "JellyfinQt/support/jsonconv.h"
+#include "JellyfinQt/support/jsonconvimpl.h"
+#include "JellyfinQt/support/parseexception.h"
 
 #include <QDebug>
 
 namespace Jellyfin {
 namespace Support {
-
-const char * ParseException::what() const noexcept {
-    return m_message.c_str();
-}
-
-QException *ParseException::clone() const {
-    return new ParseException(*this);
-}
-
-void ParseException::raise() const {
-    throw *this;
-}
 
 QString uuidToString(const QUuid &source) {
     QString str = source.toString();
@@ -195,7 +184,8 @@ QDateTime fromJsonValue<QDateTime>(const QJsonValue &source, convertType<QDateTi
     case QJsonValue::Null:
         return QDateTime();
     case QJsonValue::String:
-        return QDateTime::fromString(source.toString(), Qt::ISODateWithMs);
+        // 2005-02-21T00:00:00.0000000Z
+        return QDateTime::fromString(source.toString(), Qt::ISODate);
     default:
         throw ParseException("Error while trying to parse JSON value as DateTime: not a string");
     }
@@ -203,7 +193,18 @@ QDateTime fromJsonValue<QDateTime>(const QJsonValue &source, convertType<QDateTi
 
 template <>
 QJsonValue toJsonValue<QDateTime>(const QDateTime &source, convertType<QDateTime>) {
-    return QJsonValue(source.toString(Qt::ISODateWithMs));
+    return QJsonValue(source.toString(Qt::ISODate));
+}
+
+// QVariant
+template <>
+QVariant fromJsonValue<QVariant>(const QJsonValue &source, convertType<QVariant>) {
+    return source.toVariant();
+}
+
+template<>
+QJsonValue toJsonValue<QVariant>(const QVariant &source, convertType<QVariant>) {
+    return QJsonValue::fromVariant(source);
 }
 
 // QUuid

@@ -944,7 +944,7 @@ public:
 	
 	string typeNameWithQualifiers() {
 		if (needsPointer) {
-			return "QSharedPointer<" ~ typeName~ ">";
+			return "QSharedPointer<" ~ typeName ~ ">";
 		}
 		if (needsOptional) {
 			return "std::optional<" ~ typeName ~ ">";
@@ -977,7 +977,7 @@ public:
 	}
 	
 	string defaultInitializer() {
-		if (needsPointer) return "nullptr";
+		if (needsPointer) return "QSharedPointer<" ~ typeName ~ ">()";
 		if (needsOptional) return "std::nullopt";
 		return "";
 	}

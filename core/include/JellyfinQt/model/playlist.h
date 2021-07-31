@@ -1,39 +1,110 @@
+/*
+ * Sailfin: a Jellyfin client written using Qt
+ * Copyright (C) 2021 Chris Josten and the Sailfin Contributors.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ */
 #ifndef JELLYFIN_MODEL_PLAYLIST_H
 #define JELLYFIN_MODEL_PLAYLIST_H
 
+#include <QObject>
 #include <QSharedPointer>
 #include <QString>
 #include <QUrl>
 #include <QVector>
 
+#include "../viewmodel/itemmodel.h"
+#include "item.h"
 
 namespace Jellyfin {
 namespace Model {
 
-// Forward declaration
-class Item;
+class Shuffle;
 
-class Playlist {
+/**
+ * @brief Model of a playlist, a list of items that can be played.
+ *
+ * This tries to take the managing what items to play away from the PlaybackManager,
+ * which now only will be informed about the current and next item to play.
+ *
+ * The playlist has actually two list, one named list and the other named queue. When
+ * playing, the queue has priority over the list and will not be affected by the
+ * shuffle mode. After all items of the queue are played, the items in the list are played.
+ * Items in the list may be shuffled.
+ */
+class Playlist : public QObject {
+    Q_OBJECT
 public:
-    explicit Playlist();
+    explicit Playlist(QObject *parent = nullptr);
 
-    /// Start loading data for the next item.
-    void preloadNext();
+    /// Returns the current item in the queue
+    QSharedPointer<Item> currentItem();
+    QSharedPointer<Item> nextItem();
 
+    /**
+     * @brief Determine the previous item to be played.
+     */
+    void previous();
 
+    /**
+     * @brief Determine the next item to be played.
+     */
+    void next();
+
+    // int queueSize() { return m_queue.size(); };
+    int listSize() const { return m_list.size(); };
+    int totalSize() const { return m_queue.size() + m_list.size(); }
+
+    QSharedPointer<const Item> listAt(int index) const;
+    /**
+     * @brief Removes all the items from the playlist
+     */
+    void clearList();
+
+    /**
+     * @brief Appends all items from the given itemModel to this list
+     */
+    void appendToList(const ViewModel::ItemModel &model);
+
+    /**
+     * @brief Start playing this playlist
+     * @param index The index to start from.
+     */
+    void play(int index = 0);
+signals:
+    void listCleared();
+    void itemsAddedToQueue(int index, int count);
+    void itemsAddedToList(int index, int count);
+    void listReshuffled();
 private:
-    /// Extra data about each itemId that this playlist manages
-    struct ExtendedItem {
-        QSharedPointer<Item> item;
-        /// The url from which this item can be streamed.
-        QUrl url;
-        /// Playsession that should be reported to Jellyfin's server.
-        QString playSession;
-        /// Text to be shown when an error occurred while fetching playback information.
-        QString errorText;
-    };
+    void reshuffle();
 
-    QVector<ExtendedItem> list;
+    QSharedPointer<Item> m_currentItem;
+    bool m_currentItemFromQueue = false;
+    QSharedPointer<Item> m_nextItem;
+    bool m_nextItemFromQueue = false;
+
+    /// list of the items in the queue
+    QVector<QSharedPointer<Item>> m_queue;
+    /// list of the items in the playlist
+    QVector<QSharedPointer<Item>> m_list;
+    /// The current position in the playlist
+    int m_pos = 0;
+
+    /// Algorithm for shuffling the playlist.
+    Shuffle *m_shuffler;
 };
 
 }

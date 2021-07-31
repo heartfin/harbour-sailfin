@@ -244,7 +244,7 @@ public:
 
 protected:
 	bool m_canSeek;
-	QSharedPointer<BaseItemDto> m_item = nullptr;
+	QSharedPointer<BaseItemDto> m_item = QSharedPointer<BaseItemDto>();
 	QString m_itemId;
 	QString m_sessionId;
 	QString m_mediaSourceId;

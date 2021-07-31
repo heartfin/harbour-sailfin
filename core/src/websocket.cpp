@@ -66,6 +66,7 @@ void WebSocket::onDisconnected() {
 }
 
 void WebSocket::textMessageReceived(const QString &message) {
+    qDebug() << "WebSocket: message received: " << message;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
     if (doc.isNull() || !doc.isObject()) {
         qWarning() << "Malformed message received over WebSocket: parse error or root not an object.";

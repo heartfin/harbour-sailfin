@@ -38,22 +38,24 @@ Page {
         height: parent.height / 3
         source: ApiClient.baseUrl + "/Items/" + itemId + "/Images/Primary?tag=" + jellyfinItem.tag
     }
+    J.ItemModel {
+        id: tracks
+        loader: J.UserItemsLoader {
+            apiClient: ApiClient
+            parentId: detailPage.itemId
+        }
+    }
 
     ListView {
         width: parent.width
         height: parent.height / 3 * 2
         anchors.bottom: parent.bottom
-        model: J.ItemModel {
-                    loader: J.UserItemsLoader {
-                        apiClient: ApiClient
-                        parentId: detailPage.itemId
-                    }
-               }
-        delegate: ItemDelegate{
+        model: tracks
+        delegate: ItemDelegate {
             icon.source: ApiClient.baseUrl + "/Items/" + model.jellyfinId + "/Images/Primary?tag=" + model.tag
             text: model.name
-            width: parent.width
-            onClicked: playbackManager.playItem(model.jellyfinId)
+            width: ListView.view.width
+            onClicked: playbackManager.playItemInList(tracks, model.index)
         }
     }
 }

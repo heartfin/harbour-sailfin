@@ -20,7 +20,7 @@ import QtQuick 2.6
 import Sailfish.Silica 1.0
 import QtQuick.Layouts 1.1
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../../components"
 import "../../components/music"
@@ -33,13 +33,15 @@ BaseDetailPage {
 
     readonly property bool _twoColumns: albumPageRoot.width / Theme.pixelRatio >= 800
 
-    UserItemModel {
+    J.ItemModel {
         id: collectionModel
-        apiClient: ApiClient
-        sortBy: ["SortName"]
-        fields: ["ItemCounts","PrimaryImageAspectRatio","BasicSyncInfo","CanDelete","MediaSourceCount"]
-        parentId: itemData.jellyfinId
-        onParentIdChanged: reload()
+        loader: J.UserItemsLoader {
+            apiClient: ApiClient
+            //sortBy: ["SortName"]
+            //fields: ["ItemCounts","PrimaryImageAspectRatio","BasicSyncInfo","CanDelete","MediaSourceCount"]
+            parentId: itemData.jellyfinId
+            onParentIdChanged: reload()
+        }
     }
     RowLayout {
         anchors.fill: parent
@@ -50,9 +52,9 @@ BaseDetailPage {
             visible: _twoColumns
             Layout.minimumWidth: 1000 / Theme.pixelRatio
             Layout.fillHeight: true
-            source: visible
+            /*source: visible
                     ? "../../components/music/WideAlbumCover.qml" : ""
-            onLoaded: bindAlbum(item)
+            onLoaded: bindAlbum(item)*/
         }
         Item {height: 1; width: Theme.horizontalPageMargin; visible: wideAlbumCover.visible; }
         SilicaListView {
@@ -62,8 +64,8 @@ BaseDetailPage {
             model: collectionModel
             header: Loader {
                 width: parent.width
-                source: "../../components/music/NarrowAlbumCover.qml"
-                onLoaded: bindAlbum(item)
+                /*source: "../../components/music/NarrowAlbumCover.qml"
+                onLoaded: bindAlbum(item)*/
             }
             section {
                 property: "parentIndexNumber"
@@ -84,14 +86,8 @@ BaseDetailPage {
         }
     }
 
-    Connections {
-        target: itemData
-        onAlbumArtistsChanged: {
-        }
-    }
-
     function bindAlbum(item) {
-        item.albumArt = Qt.binding(function(){ return Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})})
+        //item.albumArt = Qt.binding(function(){ return Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})})
         item.name = Qt.binding(function(){ return itemData.name})
         item.releaseYear = Qt.binding(function() { return itemData.productionYear})
         item.albumArtist = Qt.binding(function() { return itemData.albumArtist})

@@ -27,7 +27,6 @@ Item::Item(QObject *parent, QSharedPointer<Model::Item> data)
 }
 
 void Item::setData(QSharedPointer<Model::Item> newData) {
-    Model::Item oldData = *m_data.data();
     m_data = newData;
 }
 
@@ -44,21 +43,32 @@ void ItemLoader::onApiClientChanged(ApiClient *newApiClient) {
         disconnect(m_apiClient, &ApiClient::userIdChanged, this, &ItemLoader::setUserId);
     }
     if (newApiClient != nullptr) {
-        m_parameters.setUserId(newApiClient->userId());
         connect(newApiClient, &ApiClient::userIdChanged, this, &ItemLoader::setUserId);
+        setUserId(newApiClient->userId());
     }
 }
 
 void ItemLoader::setUserId(const QString &newUserId) {
-    m_parameters.setUserId(newUserId);
+    qDebug() << "ItemLoader: userId set to " << m_apiClient->userId();
+    m_parameters.setUserId(m_apiClient->userId());
+    qDebug() << "New userId: " << m_parameters.userId();
+    reloadIfNeeded();
 }
 
 bool ItemLoader::canReload() const {
+    qDebug() << "ItemLoader::canReload(): baseClass=" << BaseClass::canReload() << ", itemId=" << m_parameters.userId() << ", userId=" << m_parameters.userId();
     return BaseClass::canReload()
             && !m_parameters.itemId().isEmpty()
             && !m_parameters.userId().isEmpty();
 }
 
+void ItemLoader::setItemId(QString newItemId) {
+    qDebug() << "ItemLoader: itemId set to " << newItemId;
+    m_parameters.setItemId(newItemId);
+    qDebug() << "New itemId: " << m_parameters.itemId();
+    emit itemIdChanged(newItemId);
+    reloadIfNeeded();
+}
 }
 
 }

@@ -143,7 +143,7 @@ protected:
 	QString m_name;
 	QStringList m_locations;
 	QString m_collectionType;
-	QSharedPointer<LibraryOptions> m_libraryOptions = nullptr;
+	QSharedPointer<LibraryOptions> m_libraryOptions = QSharedPointer<LibraryOptions>();
 	QString m_itemId;
 	QString m_primaryImageItemId;
 	std::optional<double> m_refreshProgress = std::nullopt;

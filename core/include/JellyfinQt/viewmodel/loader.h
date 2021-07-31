@@ -110,15 +110,19 @@ protected:
     void setError(QNetworkReply::NetworkError error);
     void setErrorString(const QString &newErrorString);
 
+
+    void reloadIfNeeded() {
+        if (canReload()) {
+            reload();
+        }
+    }
     void classBegin() override {
         m_isParsing = true;
     }
 
     void componentComplete() override {
         m_isParsing = false;
-        if (canReload()) {
-            reload();
-        }
+        reloadIfNeeded();
     }
     ApiClient *m_apiClient = nullptr;
 protected:
@@ -157,7 +161,7 @@ public:
     }
 
     T *dataViewModel() const { return m_dataViewModel; }
-    QObject *data() const { return m_dataViewModel; }
+    QObject *data() const override { return m_dataViewModel; }
 
     void reload() override {
         if (m_futureWatcher->isRunning()) return;

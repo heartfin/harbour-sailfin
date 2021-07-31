@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../../components"
 import "../.."
@@ -32,14 +32,14 @@ import "../.."
  */
 Page {
     id: pageRoot
-    property alias itemId: jItem.jellyfinId
-    property alias itemData: jItem
+    property string itemId: ""
+    property alias itemData: jItemLoader.data
     //property string itemId: ""
     //property var itemData: ({})
-    property bool _loading: jItem.status === "Loading"
-    readonly property bool hasLogo: (typeof itemData.ImageTags !== "undefined") && (typeof itemData.ImageTags["Logo"] !== "undefined")
+    property bool _loading: jItemLoader.status === J.ItemLoader.Loading
+    readonly property bool hasLogo: (typeof itemData.imageTags !== "undefined") && (typeof itemData.imageTags["Logo"] !== "undefined")
     property string _chosenBackdropImage: ""
-    readonly property string parentId: itemData.ParentId || ""
+    readonly property string parentId: itemData.parentId || ""
 
     function updateBackdrop() {
         var rand = 0;
@@ -62,13 +62,13 @@ Page {
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: errorContent.height
-        visible: jItem.status == JellyfinItem.Error
+        visible: jItemLoader.status === J.ItemLoader.Error
 
         PullDownMenu {
-            busy: jItem.status == JellyfinItem.Loading
+            busy: jItemLoader.status === J.ItemLoader.Loading
             MenuItem {
                 text: qsTr("Retry")
-                onClicked: jItem.reload()
+                onClicked: jItemLoader.reload()
             }
         }
 
@@ -79,20 +79,25 @@ Page {
             ViewPlaceholder {
                 enabled: true
                 text: qsTr("An error has occured")
-                hintText: jItem.errorString
+                hintText: jItemLoader.errorString
             }
         }
     }
 
-    JellyfinItem {
-        id: jItem
+    J.ItemLoader {
+        id: jItemLoader
         apiClient: ApiClient
+        itemId: pageRoot.itemId
         onStatusChanged: {
-            //console.log("Status changed: " + newStatus, JSON.stringify(jItem))
-            if (status == JellyfinItem.Ready) {
+            console.log("Status changed: " + newStatus, JSON.stringify(jItemLoader.data))
+            if (status === J.ItemLoader.Ready) {
                 updateBackdrop()
             }
         }
+    }
+
+    Label {
+        text: "ItemLoader status=%1, \nitemId=%2\nitemData=%3".arg(jItemLoader.status).arg(jItemLoader.itemId).arg(jItemLoader.data)
     }
 
     onStatusChanged: {
@@ -100,7 +105,7 @@ Page {
             //appWindow.itemData = ({})
         }
         if (status == PageStatus.Active) {
-            appWindow.itemData = jItem
+            //appWindow.itemData = jItemLoader.data
         }
     }
 }

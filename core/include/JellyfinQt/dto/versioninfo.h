@@ -158,7 +158,7 @@ public:
 
 protected:
 	QString m_version;
-	QSharedPointer<Version> m_versionNumber = nullptr;
+	QSharedPointer<Version> m_versionNumber = QSharedPointer<Version>();
 	QString m_changelog;
 	QString m_targetAbi;
 	QString m_sourceUrl;

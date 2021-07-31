@@ -163,6 +163,10 @@ public:
 
         // Hand-picked, important ones
         imageTags,
+        imageBlurHashes,
+        mediaType,
+        type,
+        collectionType,
 
         jellyfinExtendModelAfterHere = Qt::UserRole + 300 // Should be enough for now
     };
@@ -183,9 +187,14 @@ public:
             JFRN(extraType),
             // Handpicked, important ones
             JFRN(imageTags),
+            JFRN(imageBlurHashes),
+            JFRN(mediaType),
+            JFRN(type),
+            JFRN(collectionType),
         };
     }
     QVariant data(const QModelIndex &index, int role) const override;
+    QSharedPointer<Model::Item> itemAt(int index);
 };
 
 /*class UserItemModel : public ItemModel {

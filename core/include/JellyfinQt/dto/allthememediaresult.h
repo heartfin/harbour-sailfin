@@ -78,9 +78,9 @@ public:
 
 
 protected:
-	QSharedPointer<ThemeMediaResult> m_themeVideosResult = nullptr;
-	QSharedPointer<ThemeMediaResult> m_themeSongsResult = nullptr;
-	QSharedPointer<ThemeMediaResult> m_soundtrackSongsResult = nullptr;
+	QSharedPointer<ThemeMediaResult> m_themeVideosResult = QSharedPointer<ThemeMediaResult>();
+	QSharedPointer<ThemeMediaResult> m_themeSongsResult = QSharedPointer<ThemeMediaResult>();
+	QSharedPointer<ThemeMediaResult> m_soundtrackSongsResult = QSharedPointer<ThemeMediaResult>();
 };
 
 } // NS DTO

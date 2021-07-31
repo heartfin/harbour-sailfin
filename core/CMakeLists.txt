@@ -8,8 +8,11 @@ set(JellyfinQt_SOURCES
         src/model/deviceprofile.cpp
         src/model/item.cpp
         src/model/playlist.cpp
+        src/model/shuffle.cpp
+
         src/support/jsonconv.cpp
         src/support/loader.cpp
+        src/support/parseexception.cpp
         src/viewmodel/item.cpp
         src/viewmodel/itemmodel.cpp
         src/viewmodel/loader.cpp
@@ -31,8 +34,11 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/model/deviceprofile.h
         include/JellyfinQt/model/item.h
         include/JellyfinQt/model/playlist.h
+        include/JellyfinQt/model/shuffle.h
         include/JellyfinQt/support/jsonconv.h
+        include/JellyfinQt/support/jsonconvimpl.h
         include/JellyfinQt/support/loader.h
+        include/JellyfinQt/support/parseexception.h
         include/JellyfinQt/viewmodel/item.h
         include/JellyfinQt/viewmodel/itemmodel.h
         include/JellyfinQt/viewmodel/loader.h

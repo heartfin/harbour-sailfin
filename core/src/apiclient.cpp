@@ -31,10 +31,10 @@ ApiClient::ApiClient(QObject *parent)
       m_eventbus(new EventBus(this)),
       m_deviceName(QHostInfo::localHostName()) {
 
-    m_deviceId = Support::uuidToString(retrieveDeviceId());
-
+    m_deviceId = Support::toString(retrieveDeviceId());
     m_credManager = CredentialsManager::newInstance(this);
-
+    connect(m_credManager, &CredentialsManager::serversListed, this, &ApiClient::credManagerServersListed);
+    connect(m_credManager, &CredentialsManager::usersListed, this, &ApiClient::credManagerUsersListed);
     generateDeviceProfile();
 }
 
@@ -92,47 +92,46 @@ QNetworkReply *ApiClient::post(const QString &path, const QJsonDocument &data, c
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ApiClient::restoreSavedSession(){
-    QObject *ctx1 = new QObject(this);
-    connect(m_credManager, &CredentialsManager::serversListed, ctx1, [this, ctx1](const QStringList &servers) {
-        qDebug() << "Servers listed: " << servers;
-        if (servers.size() == 0) {
-            emit this->setupRequired();
-            return;
-        }
-
-        //FIXME: support multiple servers
-        QString server = servers[0];
-        this->m_baseUrl = server;
-        qDebug() << "Server: " << server;
-        QObject *ctx2 = new QObject(this);
-        connect(m_credManager, &CredentialsManager::usersListed, ctx2, [this, server, ctx2](const QStringList &users) {
-            if (users.size() == 0) {
-                emit this->setupRequired();
-                return;
-            }
-            //FIXME: support multiple users
-            QString user = users[0];
-            qDebug() << "User: " << user;
-
-            QObject *ctx3 = new QObject(this);
-            connect(m_credManager, &CredentialsManager::tokenRetrieved, ctx3, [this, ctx3]
-                    (const QString &server, const QString &user, const QString &token) {
-                Q_UNUSED(server)
-                this->m_token = token;
-                this->setUserId(user);
-                this->setAuthenticated(true);
-                this->postCapabilities();
-                disconnect(ctx3);
-            }, Qt::UniqueConnection);
-            m_credManager->get(server, user);
-            delete ctx2;
-        }, Qt::UniqueConnection);
-        m_credManager->listUsers(server);
-        qDebug() << "Listing users";
-        delete ctx1;
-    }, Qt::UniqueConnection);
-    qDebug() << "Listing servers";
     m_credManager->listServers();
+}
+
+void ApiClient::credManagerServersListed(QStringList servers) {
+    qDebug() << "Servers listed: " << servers;
+    if (servers.size() == 0) {
+        emit this->setupRequired();
+        return;
+    }
+
+    //FIXME: support multiple servers
+    QString server = servers[0];
+    this->m_baseUrl = server;
+    qDebug() << "Chosen server: " << server;
+    m_credManager->listUsers(server);
+}
+
+void ApiClient::credManagerUsersListed(const QString &server, QStringList users) {
+    if (users.size() == 0) {
+        emit this->setupRequired();
+        return;
+    }
+    //FIXME: support multiple users
+    QString user = users[0];
+    qDebug() << "Chosen user: " << user;
+
+    QObject *ctx3 = new QObject(this);
+    connect(m_credManager, &CredentialsManager::tokenRetrieved, ctx3, [this, ctx3]
+            (const QString &server, const QString &user, const QString &token) {
+        Q_UNUSED(server)
+        this->m_token = token;
+        this->setUserId(user);
+        this->setAuthenticated(true);
+        this->postCapabilities();
+        disconnect(ctx3);
+    }, Qt::UniqueConnection);
+    m_credManager->get(server, user);
+}
+void ApiClient::credManagerTokenRetrieved(const QString &server, const QString &user, const QString &token) {
+
 }
 
 void ApiClient::setupConnection() {

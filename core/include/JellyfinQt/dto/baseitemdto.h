@@ -1611,7 +1611,7 @@ protected:
 	QString m_parentBackdropItemId;
 	QStringList m_parentBackdropImageTags;
 	std::optional<qint32> m_localTrailerCount = std::nullopt;
-	QSharedPointer<UserItemDataDto> m_userData = nullptr;
+	QSharedPointer<UserItemDataDto> m_userData = QSharedPointer<UserItemDataDto>();
 	std::optional<qint32> m_recursiveItemCount = std::nullopt;
 	std::optional<qint32> m_childCount = std::nullopt;
 	QString m_seriesName;
@@ -1699,7 +1699,7 @@ protected:
 	std::optional<bool> m_isKids = std::nullopt;
 	std::optional<bool> m_isPremiere = std::nullopt;
 	QString m_timerId;
-	QSharedPointer<BaseItemDto> m_currentProgram = nullptr;
+	QSharedPointer<BaseItemDto> m_currentProgram = QSharedPointer<BaseItemDto>();
 };
 
 } // NS DTO

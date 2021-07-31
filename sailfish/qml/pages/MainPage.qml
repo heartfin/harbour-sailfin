@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../components"
 import "../"
@@ -32,7 +32,7 @@ Page {
     /// True if the models on this page already have been loaded and don't necessarily need a refresh
     property bool _modelsLoaded: false
 
-    id: page
+    id: mainPage
     allowedOrientations: Orientation.All
 
     // This component is reused both in the normal state and error state
@@ -49,7 +49,7 @@ Page {
                 text: qsTr("Reload")
                 onClicked: loadModels(true)
             }
-            busy: mediaLibraryModel.status == ApiModel.Loading
+            busy: userViewsLoader.status === J.UsersViewsLoader.Loading
         }
     }
 
@@ -67,29 +67,33 @@ Page {
         // of the page, followed by our content.
         Column {
             id: column
-            width: page.width
+            width: mainPage.width
 
-            UserViewModel {
-                id: mediaLibraryModel2
-                apiClient: ApiClient
+            J.ItemModel {
+                id: mediaLibraryModel
+                loader: J.UsersViewsLoader {
+                    id: mediaLibraryLoader
+                    apiClient: ApiClient
+                }
             }
 
             MoreSection {
                 //- Section header for films and TV shows that an user hasn't completed yet.
                 text: qsTr("Resume watching")
                 clickable: false
-                busy: userResumeModel.status === ApiModel.Loading
+                //busy: userResumeModel.status === J.ApiModel.Loading
                 Loader {
                     width: parent.width
                     sourceComponent: carrouselView
                     property alias itemModel: userResumeModel
                     property string collectionType: "series"
 
-                    UserItemResumeModel {
+                    J.ItemModel {
                         id: userResumeModel
-                        apiClient: ApiClient
+                        // Resume model
+                        /*apiClient: ApiClient
                         limit: 12
-                        recursive: true
+                        recursive: true*/
                     }
                 }
             }
@@ -97,7 +101,7 @@ Page {
                 //- Section header for next episodes in a TV show that an user was watching.
                 text: qsTr("Next up")
                 clickable: false
-                busy: showNextUpModel.status === ApiModel.Loading
+                //busy: showNextUpModel.status === .Loading
 
                 Loader {
                     width: parent.width
@@ -105,23 +109,18 @@ Page {
                     property alias itemModel: showNextUpModel
                     property string collectionType: "series"
 
-                    ShowNextUpModel {
+                    J.ItemModel {
                         id: showNextUpModel
-                        apiClient: ApiClient
-                        limit: 12
+                        /*apiClient: ApiClient
+                        limit: 12*/
                     }
                 }
-            }
-
-            UserViewModel {
-                id: mediaLibraryModel
-                apiClient: ApiClient
             }
             Repeater {
                 model: mediaLibraryModel
                 MoreSection {
                     text: model.name
-                    busy: userItemModel.status !== ApiModel.Ready
+                    busy: userItemModel.status !== J.UsersViewsLoader.Ready
 
                     onHeaderClicked: pageStack.push(Qt.resolvedUrl("itemdetails/CollectionPage.qml"), {"itemId": model.jellyfinId})
                     Loader {
@@ -130,11 +129,12 @@ Page {
                         property alias itemModel: userItemModel
                         property string collectionType: model.collectionType || ""
 
-                        UserItemLatestModel {
+                        J.ItemModel {
                             id: userItemModel
-                            apiClient: ApiClient
-                            parentId: jellyfinId
-                            limit: 16
+                            loader: J.LatestMediaLoader {
+                                apiClient: ApiClient
+                                parentId: jellyfinId
+                            }
                         }
                         Connections {
                             target: mediaLibraryModel
@@ -184,8 +184,8 @@ Page {
         if (force || (ApiClient.authenticated && !_modelsLoaded)) {
             _modelsLoaded = true;
             mediaLibraryModel.reload()
-            userResumeModel.reload()
-            showNextUpModel.reload()
+            //userResumeModel.reload()
+            //showNextUpModel.reload()
         }
     }
 
@@ -236,11 +236,11 @@ Page {
     states: [
         State {
             name: "default"
-            when: mediaLibraryModel2.status !== ApiModel.Error
+            when: mediaLibraryLoader.status !== J.UsersViewsLoader.Error
         },
         State {
             name: "error"
-            when: mediaLibraryModel2.status === ApiModel.Error
+            when: mediaLibraryLoader.status === J.UsersViewsLoader.Error
 
             PropertyChanges {
                 target: errorFlickable

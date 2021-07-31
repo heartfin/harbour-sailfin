@@ -18,7 +18,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 import QtQuick 2.6
 import Sailfish.Silica 1.0
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
+
+import "../../"
 
 /**
  * Dialog showed when the user has to connect to a Jellyfin server.
@@ -49,7 +51,7 @@ Dialog {
 			title: qsTr("Connect to Jellyfin")
 		}
 		
-		ServerDiscoveryModel {
+        J.ServerDiscoveryModel {
 			id: serverModel
 		}
 		

@@ -170,7 +170,7 @@ protected:
 	QString m_imageUrl;
 	QString m_searchProviderName;
 	QString m_overview;
-	QSharedPointer<RemoteSearchResult> m_albumArtist = nullptr;
+	QSharedPointer<RemoteSearchResult> m_albumArtist = QSharedPointer<RemoteSearchResult>();
 	QList<RemoteSearchResult> m_artists;
 };
 

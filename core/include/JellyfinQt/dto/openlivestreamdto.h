@@ -215,7 +215,7 @@ protected:
 	QString m_itemId;
 	std::optional<bool> m_enableDirectPlay = std::nullopt;
 	std::optional<bool> m_enableDirectStream = std::nullopt;
-	QSharedPointer<DeviceProfile> m_deviceProfile = nullptr;
+	QSharedPointer<DeviceProfile> m_deviceProfile = QSharedPointer<DeviceProfile>();
 	QList<MediaProtocol> m_directPlayProtocols;
 };
 

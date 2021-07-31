@@ -94,7 +94,7 @@ public:
 
 
 protected:
-	QSharedPointer<AlbumInfo> m_searchInfo = nullptr;
+	QSharedPointer<AlbumInfo> m_searchInfo = QSharedPointer<AlbumInfo>();
 	QString m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;

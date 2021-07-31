@@ -170,7 +170,7 @@ protected:
 	QString m_messageCallbackUrl;
 	bool m_supportsPersistentIdentifier;
 	bool m_supportsSync;
-	QSharedPointer<DeviceProfile> m_deviceProfile = nullptr;
+	QSharedPointer<DeviceProfile> m_deviceProfile = QSharedPointer<DeviceProfile>();
 	QString m_appStoreUrl;
 	QString m_iconUrl;
 };

@@ -68,6 +68,7 @@ function itemModelImageUrl(baseUrl, itemId, tag, type, options) {
 }
 
 function usePortraitCover(itemType) {
+    console.log("ItemType: " + itemType)
     return ["Series", "Movie", "tvshows", "movies"].indexOf(itemType) >= 0
 }
 

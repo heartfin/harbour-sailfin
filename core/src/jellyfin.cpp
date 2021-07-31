@@ -40,8 +40,10 @@ void registerTypes(const char *uri) {
     qmlRegisterType<ViewModel::UserViewsLoader>(uri, 1, 0, "UsersViewsLoader");
 
     // Enumerations
-    qmlRegisterUncreatableType<DTO::GeneralCommandTypeClass>(uri, 1, 0, "GeneralCommandType", "Is an enum");
-    qmlRegisterUncreatableType<ViewModel::ModelStatusClass>(uri, 1, 0, "ModelStatus", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::DTO::GeneralCommandTypeClass>(uri, 1, 0, "GeneralCommandType", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::ViewModel::ModelStatusClass>(uri, 1, 0, "ModelStatus", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::DTO::PlayMethodClass>(uri, 1, 0, "PlayMethod", "Is an enum");
 
+    qRegisterMetaType<Jellyfin::DTO::PlayMethodClass::Value>();
 }
 }

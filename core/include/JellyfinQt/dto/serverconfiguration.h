@@ -819,7 +819,7 @@ protected:
 	qint32 m_logFileRetentionDays;
 	bool m_isStartupWizardCompleted;
 	QString m_cachePath;
-	QSharedPointer<Version> m_previousVersion = nullptr;
+	QSharedPointer<Version> m_previousVersion = QSharedPointer<Version>();
 	QString m_previousVersionStr;
 	bool m_enableUPnP;
 	bool m_enableMetrics;

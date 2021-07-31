@@ -43,7 +43,7 @@ Files:
     
 Macros:
   - '__provides_exclude_from; ^%{_datadir}/.*$'
-  - '__requires_exclude; ^libjellyfin-qt.*$'
+  - '__requires_exclude; ^libJellyfinQt.*$'
   # Turn off facist build policy
   - '_unpackaged_files_terminate_build; 0 '
 

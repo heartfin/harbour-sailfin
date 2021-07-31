@@ -168,7 +168,7 @@ protected:
 	TaskState m_state;
 	std::optional<double> m_currentProgressPercentage = std::nullopt;
 	QString m_jellyfinId;
-	QSharedPointer<TaskResult> m_lastExecutionResult = nullptr;
+	QSharedPointer<TaskResult> m_lastExecutionResult = QSharedPointer<TaskResult>();
 	QList<TaskTriggerInfo> m_triggers;
 	QString m_description;
 	QString m_category;

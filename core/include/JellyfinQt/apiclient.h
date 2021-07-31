@@ -231,6 +231,9 @@ public slots:
 protected slots:
     void defaultNetworkErrorHandler(QNetworkReply::NetworkError error);
     void onUserDataChanged(const QString &itemId, UserData *newData);
+    void credManagerServersListed(QStringList users);
+    void credManagerUsersListed(const QString &server, QStringList users);
+    void credManagerTokenRetrieved(const QString &server, const QString &user, const QString &token);
 
 protected:
     /**

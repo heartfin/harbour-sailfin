@@ -27,6 +27,7 @@ import Nemo.KeepAlive 1.2
 
 import "components"
 import "pages"
+import "." as D
 
 ApplicationWindow {
     id: appWindow
@@ -35,14 +36,13 @@ ApplicationWindow {
     //readonly property MediaPlayer mediaPlayer: _mediaPlayer
     readonly property PlaybackManager playbackManager: _playbackManager
 
-    // Data of the currently selected item. For use on the cover.
-    property JellyfinItem itemData
+    // Due QTBUG-10822, declarartions such as `property J.Item foo` are not possible.
+    property QtObject itemData
     // Id of the collection currently browsing. For use on the cover.
     property string collectionId
 
     // Bad way to implement settings, but it'll do for now.
     property bool showDebugInfo: true
-
     property bool _hidePlaybackBar: false
 
     bottomMargin: playbackBar.visibleSize
@@ -52,14 +52,14 @@ ApplicationWindow {
     initialPage: Component {
         MainPage {
             Connections {
-                target: ApiClient
+                target: D.ApiClient
                 // Replace the MainPage if no server was set up.
 
             }
             onStatusChanged: {
                 if (status == PageStatus.Active && !_hasInitialized) {
                     _hasInitialized = true;
-                    ApiClient.restoreSavedSession();
+                    D.ApiClient.restoreSavedSession();
                 }
             }
         }
@@ -94,7 +94,7 @@ ApplicationWindow {
 
     PlaybackManager {
         id: _playbackManager
-        apiClient: ApiClient
+        apiClient: D.ApiClient
         audioIndex: 0
         autoOpen: true
     }
@@ -118,7 +118,7 @@ ApplicationWindow {
 
     //FIXME: proper error handling
     Connections {
-        target: ApiClient
+        target: D.ApiClient
         onNetworkError: errorNotification.show("Network error: " + error)
         onConnectionFailed: errorNotification.show("Connect error: " + error)
         //onConnectionSuccess: errorNotification.show("Success: " + loginMessage)

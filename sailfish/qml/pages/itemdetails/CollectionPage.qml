@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../.."
 import "../../components"
@@ -27,12 +27,13 @@ import "../../components"
 BaseDetailPage {
     id: pageRoot
 
-    UserItemModel {
+    J.ItemModel {
         id: collectionModel
-        apiClient: ApiClient
-        parentId: itemData.jellyfinId
-        sortBy: ["SortName"]
-        onParentIdChanged: reload()
+        //sortBy: ["SortName"]
+        loader: J.UserItemsLoader {
+            apiClient: ApiClient
+            parentId: itemData.jellyfinId
+        }
     }
 
     SilicaGridView {
@@ -42,7 +43,7 @@ BaseDetailPage {
         cellWidth: Constants.libraryDelegateWidth
         cellHeight: Utils.usePortraitCover(itemData.collectionType) ? Constants.libraryDelegatePosterHeight
                                                                     : Constants.libraryDelegateHeight
-        visible: itemData.status !== JellyfinItem.Error
+        visible: itemData.status !== J.ItemLoader.Error
 
         header: PageHeader {
             title: itemData.name || qsTr("Loading")
@@ -54,7 +55,7 @@ BaseDetailPage {
                 text: qsTr("Sort by")
                 onClicked: pageStack.push(sortPageComponent)
             }
-            busy: collectionModel.status === ApiModel.Loading
+            busy: collectionModel.status === J.UserItemsLoader.Loading
         }
         delegate: GridItem {
             RemoteImage {

@@ -68,7 +68,7 @@ public:
 
 
 protected:
-	QSharedPointer<MediaSourceInfo> m_mediaSource = nullptr;
+	QSharedPointer<MediaSourceInfo> m_mediaSource = QSharedPointer<MediaSourceInfo>();
 };
 
 } // NS DTO

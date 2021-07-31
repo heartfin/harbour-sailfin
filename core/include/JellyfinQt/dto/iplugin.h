@@ -134,7 +134,7 @@ protected:
 	QString m_name;
 	QString m_description;
 	QString m_jellyfinId;
-	QSharedPointer<Version> m_version = nullptr;
+	QSharedPointer<Version> m_version = QSharedPointer<Version>();
 	QString m_assemblyFilePath;
 	bool m_canUninstall;
 	QString m_dataFolderPath;

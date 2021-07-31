@@ -91,7 +91,7 @@ public:
 protected:
 	QString m_name;
 	QString m_path;
-	QSharedPointer<MediaPathInfo> m_pathInfo = nullptr;
+	QSharedPointer<MediaPathInfo> m_pathInfo = QSharedPointer<MediaPathInfo>();
 };
 
 } // NS DTO

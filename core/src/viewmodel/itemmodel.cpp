@@ -24,7 +24,7 @@
 #define JF_CASE(roleName) case roleName: \
     try { \
         return QVariant(item.roleName()); \
-    } catch(std::bad_optional_access e) { \
+    } catch(std::bad_optional_access &e) { \
         return QVariant(); \
     }
 
@@ -62,10 +62,18 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
     JF_CASE(extraType)
     // Handpicked, important ones
     JF_CASE(imageTags)
+    JF_CASE(imageBlurHashes)
+    JF_CASE(mediaType)
+    JF_CASE(type)
+    JF_CASE(collectionType)
     default:
         return QVariant();
     }
 
+}
+
+QSharedPointer<Model::Item> ItemModel::itemAt(int index) {
+    return QSharedPointer<Model::Item>::create(m_array[index]);
 }
 
 } // NS ViewModel

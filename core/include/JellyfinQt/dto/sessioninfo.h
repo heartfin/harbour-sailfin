@@ -300,9 +300,9 @@ public:
 
 
 protected:
-	QSharedPointer<PlayerStateInfo> m_playState = nullptr;
+	QSharedPointer<PlayerStateInfo> m_playState = QSharedPointer<PlayerStateInfo>();
 	QList<SessionUserInfo> m_additionalUsers;
-	QSharedPointer<ClientCapabilities> m_capabilities = nullptr;
+	QSharedPointer<ClientCapabilities> m_capabilities = QSharedPointer<ClientCapabilities>();
 	QString m_remoteEndPoint;
 	QStringList m_playableMediaTypes;
 	QString m_jellyfinId;
@@ -313,12 +313,12 @@ protected:
 	QDateTime m_lastPlaybackCheckIn;
 	QString m_deviceName;
 	QString m_deviceType;
-	QSharedPointer<BaseItemDto> m_nowPlayingItem = nullptr;
-	QSharedPointer<BaseItem> m_fullNowPlayingItem = nullptr;
-	QSharedPointer<BaseItemDto> m_nowViewingItem = nullptr;
+	QSharedPointer<BaseItemDto> m_nowPlayingItem = QSharedPointer<BaseItemDto>();
+	QSharedPointer<BaseItem> m_fullNowPlayingItem = QSharedPointer<BaseItem>();
+	QSharedPointer<BaseItemDto> m_nowViewingItem = QSharedPointer<BaseItemDto>();
 	QString m_deviceId;
 	QString m_applicationVersion;
-	QSharedPointer<TranscodingInfo> m_transcodingInfo = nullptr;
+	QSharedPointer<TranscodingInfo> m_transcodingInfo = QSharedPointer<TranscodingInfo>();
 	bool m_isActive;
 	bool m_supportsMediaControl;
 	bool m_supportsRemoteControl;

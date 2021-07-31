@@ -153,7 +153,7 @@ protected:
 	QString m_appVersion;
 	QString m_lastUserId;
 	QDateTime m_dateLastActivity;
-	QSharedPointer<ClientCapabilities> m_capabilities = nullptr;
+	QSharedPointer<ClientCapabilities> m_capabilities = QSharedPointer<ClientCapabilities>();
 	QString m_iconUrl;
 };
 

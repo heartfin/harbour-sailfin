@@ -68,7 +68,7 @@ public:
 
 
 protected:
-	QSharedPointer<LibraryOptions> m_libraryOptions = nullptr;
+	QSharedPointer<LibraryOptions> m_libraryOptions = QSharedPointer<LibraryOptions>();
 };
 
 } // NS DTO

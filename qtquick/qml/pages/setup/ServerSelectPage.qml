@@ -30,11 +30,26 @@ Page {
         header: Column {
             width: parent.width
             Label {
-                text: "Enter an IP address"
+                text: "Enter the Jellyfin server URL"
                 width: parent.width
             }
-            TextField {
+            Row {
                 width: parent.width
+                TextField {
+                    id: serverAddressField
+                    width: parent.width - goButton.width
+                }
+
+                Button {
+                    id: goButton
+                    text: "Go"
+                    onClicked: {
+                        selectedServerName = serverAddressField.text
+                        ApiClient.baseUrl = serverAddressField.text
+                        ApiClient.setupConnection()
+                        busyDialog.open()
+                    }
+                }
             }
         }
         delegate: RadioDelegate {

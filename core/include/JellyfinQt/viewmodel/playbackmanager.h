@@ -226,21 +226,12 @@ private:
     /// Pointer to the current media player.
     QMediaPlayer *m_mediaPlayer = nullptr;
 
-    // There are 2 media players over here, so one is able to preload the next song
-    // before the other starts playing
-
-    /// Media player 1
-    QMediaPlayer *m_mediaPlayer1;
-    /// Media player 2
-    QMediaPlayer *m_mediaPlayer2;
-
     Model::Playlist *m_queue = nullptr;
     int m_queueIndex = 0;
     bool m_resumePlayback = true;
 
     // Helper methods
     void setItem(QSharedPointer<Model::Item> newItem);
-    void swapMediaPlayer();
 
     void setStreamUrl(const QUrl &streamUrl);
     void setPlaybackState(QMediaPlayer::State newState);

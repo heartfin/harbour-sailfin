@@ -37,12 +37,10 @@ namespace ViewModel {
 PlaybackManager::PlaybackManager(QObject *parent)
     : QObject(parent),
       m_item(nullptr),
-      m_mediaPlayer1(new QMediaPlayer(this)),
-      m_mediaPlayer2(new QMediaPlayer(this)),
+      m_mediaPlayer(new QMediaPlayer(this)),
       m_urlFetcherThread(new ItemUrlFetcherThread(this)),
       m_queue(new Model::Playlist(this)) {
     // Set up connections.
-    swapMediaPlayer();
     m_updateTimer.setInterval(10000); // 10 seconds
     m_updateTimer.setSingleShot(false);
 
@@ -52,6 +50,15 @@ PlaybackManager::PlaybackManager(QObject *parent)
     connect(&m_updateTimer, &QTimer::timeout, this, &PlaybackManager::updatePlaybackInfo);
     connect(m_urlFetcherThread, &ItemUrlFetcherThread::itemUrlFetched, this, &PlaybackManager::onItemExtraDataReceived);
     m_urlFetcherThread->start();
+
+    connect(m_mediaPlayer, &QMediaPlayer::stateChanged, this, &PlaybackManager::mediaPlayerStateChanged);
+    connect(m_mediaPlayer, &QMediaPlayer::positionChanged, this, &PlaybackManager::mediaPlayerPositionChanged);
+    connect(m_mediaPlayer, &QMediaPlayer::durationChanged, this, &PlaybackManager::mediaPlayerDurationChanged);
+    connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &PlaybackManager::mediaPlayerMediaStatusChanged);
+    connect(m_mediaPlayer, &QMediaPlayer::videoAvailableChanged, this, &PlaybackManager::hasVideoChanged);
+    //                     I do not like the complicated overload cast
+    connect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(mediaPlayerError(QMediaPlayer::Error)));
+
 }
 
 void PlaybackManager::onDestroyed() {
@@ -184,7 +191,6 @@ void PlaybackManager::playItemInList(ItemModel *playlist, int index) {
 void PlaybackManager::next() {
     m_mediaPlayer->stop();
     m_mediaPlayer->setMedia(QMediaContent());
-    swapMediaPlayer();
 
     if (m_nextItem.isNull()) {
         setItem(m_queue->nextItem());
@@ -203,7 +209,6 @@ void PlaybackManager::previous() {
     m_nextStreamUrl = m_streamUrl;
     m_streamUrl = QString();
     m_nextItem = m_item;
-    swapMediaPlayer();
 
     m_queue->previous();
     setItem(m_queue->currentItem());
@@ -256,32 +261,6 @@ void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
         rep->deleteLater();
     });
     m_apiClient->setDefaultErrorHandler(rep);
-}
-
-void PlaybackManager::swapMediaPlayer() {
-    if (m_mediaPlayer != nullptr) {
-        disconnect(m_mediaPlayer, &QMediaPlayer::stateChanged, this, &PlaybackManager::mediaPlayerStateChanged);
-        disconnect(m_mediaPlayer, &QMediaPlayer::positionChanged, this, &PlaybackManager::mediaPlayerPositionChanged);
-        disconnect(m_mediaPlayer, &QMediaPlayer::durationChanged, this, &PlaybackManager::mediaPlayerDurationChanged);
-        disconnect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &PlaybackManager::mediaPlayerMediaStatusChanged);
-        disconnect(m_mediaPlayer, &QMediaPlayer::videoAvailableChanged, this, &PlaybackManager::hasVideoChanged);
-        //                     I do not like the complicated overload cast
-        disconnect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(mediaPlayerError(QMediaPlayer::Error)));
-    }
-    if (m_mediaPlayer == m_mediaPlayer1) {
-        m_mediaPlayer = m_mediaPlayer2;
-        emit mediaPlayerChanged(m_mediaPlayer);
-    } else {
-        m_mediaPlayer = m_mediaPlayer1;
-        emit mediaPlayerChanged(m_mediaPlayer);
-    }
-    connect(m_mediaPlayer, &QMediaPlayer::stateChanged, this, &PlaybackManager::mediaPlayerStateChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::positionChanged, this, &PlaybackManager::mediaPlayerPositionChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::durationChanged, this, &PlaybackManager::mediaPlayerDurationChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &PlaybackManager::mediaPlayerMediaStatusChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::videoAvailableChanged, this, &PlaybackManager::hasVideoChanged);
-    //                     I do not like the complicated overload cast
-    connect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(mediaPlayerError(QMediaPlayer::Error)));
 }
 
 void PlaybackManager::componentComplete() {
@@ -410,11 +389,6 @@ void PlaybackManager::onItemExtraDataReceived(const QString &itemId, const QUrl 
         emit playMethodChanged(m_playMethod);
         m_mediaPlayer->setMedia(QMediaContent(url));
         m_mediaPlayer->play();
-    } else if (!m_nextItem.isNull() && m_nextItem->jellyfinId() == itemId){
-        QMediaPlayer *otherMediaPlayer = m_mediaPlayer == m_mediaPlayer1 ? m_mediaPlayer2 : m_mediaPlayer1;
-        m_nextPlaySessionId = playSession;
-        m_nextStreamUrl = url.toString();
-        otherMediaPlayer->setMedia(QMediaContent(url));
     } else {
         qDebug() << "Late reply for " << itemId << " received, ignoring";
     }

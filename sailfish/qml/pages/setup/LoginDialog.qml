@@ -46,14 +46,14 @@ Dialog {
         }
         onStatusChanged: {
             if(status == PageStatus.Active) {
-                ApiClient.authenticate(username.text, password.text, true)
+                apiClient.authenticate(username.text, password.text, true)
             }
         }
 
         Connections {
-            target: ApiClient
+            target: apiClient
             onAuthenticatedChanged: {
-                if (ApiClient.authenticated) {
+                if (apiClient.authenticated) {
                     console.log("authenticated!")
                     pageStack.replaceAbove(null, Qt.resolvedUrl("../MainPage.qml"))
                 }
@@ -70,7 +70,7 @@ Dialog {
 
     /*PublicUserModel {
         id: userModel
-        apiClient: ApiClient
+        apiClient: appWindow.apiClient
         Component.onCompleted: reload();
     }*/
 
@@ -103,7 +103,7 @@ Dialog {
                     model: 0 //userModel
                     delegate: UserGridDelegate {
                         name: model.name
-                        image: model.primaryImageTag ? "%1/Users/%2/Images/Primary?tag=%3".arg(ApiClient.baseUrl).arg(model.jellyfinId).arg(model.primaryImageTag) : ""
+                        image: model.primaryImageTag ? "%1/Users/%2/Images/Primary?tag=%3".arg(apiClient.baseUrl).arg(model.jellyfinId).arg(model.primaryImageTag) : ""
                         highlighted: model.name === username.text
                         onHighlightedChanged: {
                             if (highlighted) {

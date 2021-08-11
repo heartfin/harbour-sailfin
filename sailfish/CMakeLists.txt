@@ -18,7 +18,6 @@ set(harbour-sailfin_SOURCES
 	src/harbour-sailfin.cpp)
 
 set(sailfin_QML_SOURCES
-        qml/ApiClient.qml
 	qml/Constants.qml
 	qml/Utils.js
 	qml/components/music/NarrowAlbumCover.qml
@@ -27,8 +26,8 @@ set(sailfin_QML_SOURCES
 	qml/components/videoplayer/VideoError.qml
 	qml/components/videoplayer/VideoHud.qml
 	qml/components/IconListItem.qml
-        qml/components/JItem.qml
-        qml/components/LibraryItemDelegate.qml
+    qml/components/JItem.qml
+    qml/components/LibraryItemDelegate.qml
 	qml/components/MoreSection.qml
 	qml/components/PlainLabel.qml
 	qml/components/PlaybackBar.qml
@@ -60,8 +59,8 @@ set(sailfin_QML_SOURCES
 	qml/pages/itemdetails/VideoPage.qml
 	qml/pages/settings/DebugPage.qml
 	qml/pages/setup/AddServerConnectingPage.qml
-        qml/pages/setup/AddServerPage.qml
-        qml/pages/setup/LoginDialog.qml
+    qml/pages/setup/AddServerPage.qml
+    qml/pages/setup/LoginDialog.qml
 	qml/qmldir)
 	
 add_executable(harbour-sailfin ${harbour-sailfin_SOURCES} ${sailfin_QML_SOURCES})

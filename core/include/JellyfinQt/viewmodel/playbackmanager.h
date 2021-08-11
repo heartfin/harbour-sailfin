@@ -91,6 +91,7 @@ public:
     Q_PROPERTY(QMediaPlayer::Error error READ error NOTIFY errorChanged)
     Q_PROPERTY(QString errorString READ errorString NOTIFY errorStringChanged)
     Q_PROPERTY(bool hasVideo READ hasVideo NOTIFY hasVideoChanged)
+    Q_PROPERTY(bool seekable READ seekable NOTIFY seekableChanged)
     Q_PROPERTY(QObject* mediaObject READ mediaObject NOTIFY mediaObjectChanged)
     Q_PROPERTY(QMediaPlayer::MediaStatus mediaStatus READ mediaStatus NOTIFY mediaStatusChanged)
     Q_PROPERTY(QMediaPlayer::State playbackState READ playbackState NOTIFY playbackStateChanged)
@@ -108,9 +109,10 @@ public:
     int queueIndex() const { return m_queueIndex; }
 
     // Current media player related property getters
-    QMediaPlayer::State playbackState() const { return m_playbackState; }
+    QMediaPlayer::State playbackState() const { return m_mediaPlayer->state()/*m_playbackState*/; }
     QMediaPlayer::MediaStatus mediaStatus() const { return m_mediaPlayer->mediaStatus(); }
     bool hasVideo() const { return m_mediaPlayer->isVideoAvailable(); }
+    bool seekable() const { return m_mediaPlayer->isSeekable(); }
     QMediaPlayer::Error error () const { return m_mediaPlayer->error(); }
     QString errorString() const { return m_mediaPlayer->errorString(); }
 signals:
@@ -132,6 +134,7 @@ signals:
     void playbackStateChanged(QMediaPlayer::State newState);
     void mediaStatusChanged(QMediaPlayer::MediaStatus newMediaStatus);
     void hasVideoChanged(bool newHasVideo);
+    void seekableChanged(bool newSeekable);
     void errorChanged(QMediaPlayer::Error newError);
     void errorStringChanged(const QString &newErrorString);
 public slots:

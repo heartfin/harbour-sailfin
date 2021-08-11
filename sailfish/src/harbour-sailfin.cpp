@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
     if (canSanbox && !cmdParser.isSet(sandboxOption)) {
         qDebug() << "Restarting in sandbox mode";
         QProcess::execute(QString(SANDBOX_PROGRAM),
-                                QStringList() << "-p" << "harbour-sailfin.desktop" << "/usr/bin/harbour-sailfin");
+                                QStringList() << "-p" << "harbour-sailfin.desktop" << "harbour-sailfin");
         return 0;
     }
 

@@ -54,7 +54,7 @@ Page {
                 label: qsTr("Connection state")
                 value: {
                     var stateText
-                    switch(ApiClient.websocket.state) {
+                    switch(apiClient.websocket.state) {
                     case 0:
                         //- Socket state
                         stateText = qsTr("Unconnected");
@@ -85,7 +85,7 @@ Page {
                         break;
                     }
                     //- Socket state: "state no (state description)"
-                    qsTr("%1 (%2)").arg(ApiClient.websocket.state).arg(stateText)
+                    qsTr("%1 (%2)").arg(apiClient.websocket.state).arg(stateText)
                 }
             }
 
@@ -105,7 +105,7 @@ Page {
                 Label {
                     id: deviceProfile
                     color: Theme.secondaryHighlightColor
-                    text: JSON.stringify(ApiClient.deviceProfile, null, '\t')
+                    text: JSON.stringify(apiClient.deviceProfile, null, '\t')
                 }
                 HorizontalScrollDecorator {}
             }

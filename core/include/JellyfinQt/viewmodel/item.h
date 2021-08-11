@@ -46,7 +46,14 @@
 #include "loader.h"
 
 namespace Jellyfin {
+
+namespace DTO {
+class UserItemDataDto;
+} // NS DTO
+
 namespace ViewModel {
+
+class UserData;
 
 class Item : public QObject {
     Q_OBJECT
@@ -54,7 +61,7 @@ public:
     explicit Item(QObject *parent = nullptr, QSharedPointer<Model::Item> data = QSharedPointer<Model::Item>::create());
 
     // Please keep the order of the properties the same as in the file linked above.
-    Q_PROPERTY(QUuid jellyfinId READ jellyfinId NOTIFY jellyfinIdChanged)
+    Q_PROPERTY(QString jellyfinId READ jellyfinId NOTIFY jellyfinIdChanged)
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QString originalTitle READ originalTitle NOTIFY originalTitleChanged)
     Q_PROPERTY(QString serverId READ serverId NOTIFY serverIdChanged)
@@ -81,27 +88,29 @@ public:
     //SKIP: ExternalUrls
     //SKIP: MediaSources
     Q_PROPERTY(float criticRating READ criticRating NOTIFY criticRatingChanged)
-    Q_PROPERTY(QStringList productionLocations READ productionLocations NOTIFY productionLocationsChanged)
+    Q_PROPERTY(QStringList productionLocations READ productionLocations NOTIFY productionLocationsChanged)*/
 
     // Handpicked, important ones
-    Q_PROPERTY(qint64 runTimeTicks READ runTimeTicks NOTIFY runTimeTicksChanged)*/
+    Q_PROPERTY(qint64 runTimeTicks READ runTimeTicks NOTIFY runTimeTicksChanged)
     Q_PROPERTY(QString overview READ overview NOTIFY overviewChanged)
     Q_PROPERTY(int productionYear READ productionYear NOTIFY productionYearChanged)
     Q_PROPERTY(int indexNumber READ indexNumber NOTIFY indexNumberChanged)
     Q_PROPERTY(int indexNumberEnd READ indexNumberEnd NOTIFY indexNumberEndChanged)
     Q_PROPERTY(bool isFolder READ isFolder NOTIFY isFolderChanged)
     Q_PROPERTY(QString type READ type NOTIFY typeChanged)
-    /*Q_PROPERTY(QString parentBackdropItemId READ parentBackdropItemId NOTIFY parentBackdropItemIdChanged)
+    Q_PROPERTY(QString parentBackdropItemId READ parentBackdropItemId NOTIFY parentBackdropItemIdChanged)
     Q_PROPERTY(QStringList parentBackdropImageTags READ parentBackdropImageTags NOTIFY parentBackdropImageTagsChanged)
     Q_PROPERTY(UserData *userData READ userData NOTIFY userDataChanged)
     Q_PROPERTY(int recursiveItemCount READ recursiveItemCount NOTIFY recursiveItemCountChanged)
     Q_PROPERTY(int childCount READ childCount NOTIFY childCountChanged)
     Q_PROPERTY(QString albumArtist READ albumArtist NOTIFY albumArtistChanged)
-    Q_PROPERTY(QVariantList albumArtists READ albumArtists NOTIFY albumArtistsChanged)
+    /*Q_PROPERTY(QVariantList albumArtists READ albumArtists NOTIFY albumArtistsChanged)*/
     Q_PROPERTY(QString seriesName READ seriesName NOTIFY seriesNameChanged)
+    Q_PROPERTY(QString seriesId READ seriesId NOTIFY seriesIdChanged)
+    Q_PROPERTY(QString seasonId READ seasonId NOTIFY seasonIdChanged)
     Q_PROPERTY(QString seasonName READ seasonName NOTIFY seasonNameChanged)
-    Q_PROPERTY(QList<MediaStream *> __list__mediaStreams MEMBER __list__m_mediaStreams NOTIFY mediaStreamsChanged)
-    Q_PROPERTY(QVariantList mediaStreams READ mediaStreams NOTIFY mediaStreamsChanged STORED false)
+    /*Q_PROPERTY(QList<MediaStream *> __list__mediaStreams MEMBER __list__m_mediaStreams NOTIFY mediaStreamsChanged)
+    Q_PROPERTY(QVariantList mediaStreams READ mediaStreams NOTIFY mediaStreamsChanged STORED false)*/
     Q_PROPERTY(QStringList artists READ artists NOTIFY artistsChanged)
     // Why is this a QJsonObject? Well, because I couldn't be bothered to implement the deserialisations of
     // a QHash at the moment.
@@ -110,9 +119,9 @@ public:
     Q_PROPERTY(QJsonObject imageBlurHashes READ imageBlurHashes NOTIFY imageBlurHashesChanged)
     Q_PROPERTY(QString mediaType READ mediaType READ mediaType NOTIFY mediaTypeChanged)
     Q_PROPERTY(int width READ width NOTIFY widthChanged)
-    Q_PROPERTY(int height READ height NOTIFY heightChanged)*/
+    Q_PROPERTY(int height READ height NOTIFY heightChanged)
 
-    QUuid jellyfinId() const { return m_data->jellyfinId(); }
+    QString jellyfinId() const { return m_data->jellyfinId(); }
     QString name() const { return m_data->name(); }
     QString originalTitle() const { return m_data->originalTitle(); }
     QString serverId() const { return m_data->serverId(); }
@@ -125,17 +134,36 @@ public:
     int airsBeforeSeasonNumber() const { return m_data->airsBeforeSeasonNumber().value_or(0); }
     int airsAfterSeasonNumber() const { return m_data->airsAfterSeasonNumber().value_or(999); }
     int airsBeforeEpisodeNumber() const { return m_data->airsBeforeEpisodeNumber().value_or(0); }
+    qint64 runTimeTicks() const { return m_data->runTimeTicks().value_or(0); }
     QString overview() const { return m_data->overview(); }
     int productionYear() const { return m_data->productionYear().value_or(0); }
     int indexNumber() const { return m_data->indexNumber().value_or(-1); }
     int indexNumberEnd() const { return m_data->indexNumberEnd().value_or(-1); }
     bool isFolder() const { return m_data->isFolder().value_or(false); }
     QString type() const { return m_data->type(); }
+    QString parentBackdropItemId() const { return m_data->parentBackdropItemId(); }
+    QStringList parentBackdropImageTags() const { return m_data->parentBackdropImageTags(); }
+    UserData *userData() const { return m_userData; }
+    int recursiveItemCount() const { return m_data->recursiveItemCount().value_or(0); }
+    int childCount() const { return m_data->childCount().value_or(0); }
+    QString albumArtist() const { return m_data->albumArtist(); }
+    QString seriesName() const { return m_data->seriesName(); }
+    QString seriesId() const { return m_data->seriesId(); }
+    QString seasonId() const { return m_data->seasonId(); }
+    QString seasonName() const { return m_data->seasonName(); }
+
+    QStringList artists() const { return m_data->artists(); }
+    QJsonObject imageTags() const { return m_data->imageTags(); }
+    QStringList backdropImageTags() const { return m_data->backdropImageTags(); }
+    QJsonObject imageBlurHashes() const { return m_data->imageBlurHashes(); }
+    QString mediaType() const { return m_data->mediaType(); }
+    int width() const { return m_data->width().value_or(0); }
+    int height() const { return m_data->height().value_or(0); }
 
     QSharedPointer<Model::Item> data() const { return m_data; }
     void setData(QSharedPointer<Model::Item> newData);
 signals:
-    void jellyfinIdChanged(const QUuid &newId);
+    void jellyfinIdChanged(const QString &newId);
     void nameChanged(const QString &newName);
     void originalTitleChanged(const QString &newOriginalTitle);
     void serverIdChanged(const QString &newServerId);
@@ -171,12 +199,14 @@ signals:
     void typeChanged(const QString &newType);
     void parentBackdropItemIdChanged();
     void parentBackdropImageTagsChanged();
-    //void userDataChanged(UserData *newUserData);
+    void userDataChanged(UserData *newUserData);
     void recursiveItemCountChanged(int newRecursiveItemCount);
     void childCountChanged(int newChildCount);
     void albumArtistChanged(const QString &newAlbumArtist);
     //void albumArtistsChanged(NameGuidPair *newAlbumArtists);
     void seriesNameChanged(const QString &newSeriesName);
+    void seriesIdChanged(const QString &newSeriesId);
+    void seasonIdChanged(const QString &newSeasonId);
     void seasonNameChanged(const QString &newSeasonName);
     void mediaStreamsChanged(/*const QList<MediaStream *> &newMediaStreams*/);
     void artistsChanged(const QStringList &newArtists);
@@ -187,7 +217,13 @@ signals:
     void widthChanged(int newWidth);
     void heightChanged(int newHeight);
 protected:
+    void setUserData(DTO::UserItemDataDto &newData);
+    void setUserData(QSharedPointer<DTO::UserItemDataDto> newData);
+
     QSharedPointer<Model::Item> m_data;
+    UserData *m_userData = nullptr;
+private slots:
+    void onUserDataChanged(const DTO::UserItemDataDto &userData);
 };
 
 class ItemLoader : public Loader<ViewModel::Item, DTO::BaseItemDto, Jellyfin::Loader::GetItemParams> {

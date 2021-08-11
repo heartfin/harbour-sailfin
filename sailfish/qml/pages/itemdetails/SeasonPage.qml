@@ -19,19 +19,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../.."
 import "../../components"
 import ".."
 
 BaseDetailPage {
-    ShowEpisodesModel {
+    J.ItemModel {
         id: episodeModel
-        apiClient: ApiClient
-        show: itemData.seriesId
-        seasonId: itemData.jellyfinId
-        fields: ["Overview"]
+        loader: J.ShowEpisodesLoader {
+                apiClient: appWindow.apiClient
+                seriesId: itemData.seriesId
+                seasonId: itemData.jellyfinId
+                fields: [J.ItemFields.Overview]
+                autoReload: itemData.jellyfinId.length > 0
+        }
     }
 
     Connections {
@@ -42,7 +45,7 @@ BaseDetailPage {
     SilicaListView {
         anchors.fill: parent
         contentHeight: content.height
-        visible: itemData.status !== JellyfinItem.Error
+        //visible: itemData.status !== JellyfinItem.Error
 
         header: PageHeader {
             title: itemData.name
@@ -60,7 +63,7 @@ BaseDetailPage {
                 }
                 width: Constants.libraryDelegateWidth
                 height: Constants.libraryDelegateHeight
-                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxHeight": height})
+                source: Utils.itemModelImageUrl(apiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxHeight": height})
                 blurhash: model.imageBlurHashes.Primary[model.imageTags.Primary]
                 fillMode: Image.PreserveAspectCrop
                 clip: true
@@ -157,8 +160,8 @@ BaseDetailPage {
     onStatusChanged: {
         if (status == PageStatus.Active) {
             //console.log(JSON.stringify(itemData))
-            episodeModel.show = itemData.seriesId
-            episodeModel.seasonId = itemData.jellyfinId
+            //episodeModel.show = itemData.seriesId
+            //episodeModel.seasonId = itemData.jellyfinId
         }
     }
 }

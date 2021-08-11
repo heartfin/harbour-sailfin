@@ -29,10 +29,13 @@ BaseDetailPage {
 
     J.ItemModel {
         id: collectionModel
-        //sortBy: ["SortName"]
         loader: J.UserItemsLoader {
-            apiClient: ApiClient
+            id: collectionLoader
+            apiClient: appWindow.apiClient
             parentId: itemData.jellyfinId
+            autoReload: itemData.jellyfinId.length > 0
+            onParentIdChanged: if (parentId.length > 0) reload()
+            sortBy: "SortName"
         }
     }
 
@@ -61,7 +64,7 @@ BaseDetailPage {
             RemoteImage {
                 id: itemImage
                 anchors.fill: parent
-                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxWidth": width})
+                source: Utils.itemModelImageUrl(apiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxWidth": width})
                 blurhash: model.imageBlurHashes.Primary[model.imageTags.Primary]
                 fallbackColor: Utils.colorFromString(model.name)
                 fillMode: Image.PreserveAspectCrop
@@ -138,20 +141,20 @@ BaseDetailPage {
                         MenuItem {
                             //: Sort order
                             text: qsTr("Ascending")
-                            onClicked: apply(model.value, ApiModel.Ascending)
+                            onClicked: apply(model.value, "Ascending")
                         }
                         MenuItem {
                             //: Sort order
                             text: qsTr("Descending")
-                            onClicked: apply(model.value, ApiModel.Descending)
+                            onClicked: apply(model.value, "Descending")
                         }
                     }
                     onClicked: openMenu()
 
                     function apply(field, order) {
-                        collectionModel.sortBy = [field];
-                        collectionModel.sortOrder = order;
-                        collectionModel.reload()
+                        collectionLoader.sortBy = field;
+                        collectionLoader.sortOrder = order;
+                        collectionLoader.reload()
                         pageStack.pop()
                     }
                 }

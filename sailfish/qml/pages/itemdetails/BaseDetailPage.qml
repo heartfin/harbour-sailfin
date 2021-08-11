@@ -22,7 +22,7 @@ import Sailfish.Silica 1.0
 import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../../components"
-import "../.."
+import "../../"
 
 /**
  * This page displays details about a film, show, season, episode, and so on.
@@ -34,8 +34,6 @@ Page {
     id: pageRoot
     property string itemId: ""
     property alias itemData: jItemLoader.data
-    //property string itemId: ""
-    //property var itemData: ({})
     property bool _loading: jItemLoader.status === J.ItemLoader.Loading
     readonly property bool hasLogo: (typeof itemData.imageTags !== "undefined") && (typeof itemData.imageTags["Logo"] !== "undefined")
     property string _chosenBackdropImage: ""
@@ -46,10 +44,10 @@ Page {
         if (itemData.backdropImageTags.length > 0) {
             rand = Math.floor(Math.random() * (itemData.backdropImageTags.length - 0.001))
             console.log("Random: ", rand)
-            _chosenBackdropImage = ApiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" +itemData.backdropImageTags[rand] + "&maxHeight" + height
+            _chosenBackdropImage = apiClient.baseUrl + "/Items/" + itemId + "/Images/Backdrop/" + rand + "?tag=" +itemData.backdropImageTags[rand] + "&maxHeight" + height
         } else if (itemData.parentBackdropImageTags.length > 0) {
             rand = Math.floor(Math.random() * (itemData.parentBackdropImageTags.length - 0.001))
-            _chosenBackdropImage = ApiClient.baseUrl + "/Items/" + itemData.parentBackdropItemId + "/Images/Backdrop/" + rand + "?tag=" + itemData.parentBackdropImageTags[0]
+            _chosenBackdropImage = apiClient.baseUrl + "/Items/" + itemData.parentBackdropItemId + "/Images/Backdrop/" + rand + "?tag=" + itemData.parentBackdropImageTags[0]
         }
     }
 
@@ -86,8 +84,9 @@ Page {
 
     J.ItemLoader {
         id: jItemLoader
-        apiClient: ApiClient
+        apiClient: appWindow.apiClient
         itemId: pageRoot.itemId
+        autoReload: false
         onStatusChanged: {
             console.log("Status changed: " + newStatus, JSON.stringify(jItemLoader.data))
             if (status === J.ItemLoader.Ready) {
@@ -96,15 +95,13 @@ Page {
         }
     }
 
-    Label {
-        text: "ItemLoader status=%1, \nitemId=%2\nitemData=%3".arg(jItemLoader.status).arg(jItemLoader.itemId).arg(jItemLoader.data)
-    }
-
     onStatusChanged: {
-        if (status == PageStatus.Deactivating) {
+        if (status === PageStatus.Deactivating) {
             //appWindow.itemData = ({})
         }
-        if (status == PageStatus.Active) {
+        if (status === PageStatus.Active) {
+            console.log("Page ready, ItemID: ", itemId, ", UserID: ", apiClient.userId)
+            jItemLoader.autoReload = true
             //appWindow.itemData = jItemLoader.data
         }
     }

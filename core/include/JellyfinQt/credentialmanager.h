@@ -123,7 +123,6 @@ public:
 
 private:
     QString urlToGroupName(const QString &url) const;
-    QString groupNameToUrl(const QString &group) const;
     QSettings m_settings;
 };
 

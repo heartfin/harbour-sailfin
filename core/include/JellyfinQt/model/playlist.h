@@ -76,7 +76,7 @@ public:
     /**
      * @brief Appends all items from the given itemModel to this list
      */
-    void appendToList(const ViewModel::ItemModel &model);
+    void appendToList(ViewModel::ItemModel &model);
 
     /**
      * @brief Start playing this playlist

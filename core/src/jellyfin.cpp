@@ -38,11 +38,15 @@ void registerTypes(const char *uri) {
     qmlRegisterType<ViewModel::LatestMediaLoader>(uri, 1, 0, "LatestMediaLoader");
     qmlRegisterType<ViewModel::UserItemsLoader>(uri, 1, 0, "UserItemsLoader");
     qmlRegisterType<ViewModel::UserViewsLoader>(uri, 1, 0, "UsersViewsLoader");
+    qmlRegisterType<ViewModel::ResumeItemsLoader>(uri, 1, 0, "ResumeItemsLoader");
+    qmlRegisterType<ViewModel::ShowSeasonsLoader>(uri, 1, 0, "ShowSeasonsLoader");
+    qmlRegisterType<ViewModel::ShowEpisodesLoader>(uri, 1, 0, "ShowEpisodesLoader");
 
     // Enumerations
     qmlRegisterUncreatableType<Jellyfin::DTO::GeneralCommandTypeClass>(uri, 1, 0, "GeneralCommandType", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::ViewModel::ModelStatusClass>(uri, 1, 0, "ModelStatus", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::DTO::PlayMethodClass>(uri, 1, 0, "PlayMethod", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::DTO::ItemFieldsClass>(uri, 1, 0, "ItemFields", "Is an enum");
 
     qRegisterMetaType<Jellyfin::DTO::PlayMethodClass::Value>();
 }

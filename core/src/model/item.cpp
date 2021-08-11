@@ -23,25 +23,14 @@ namespace Jellyfin {
 namespace Model {
 
 
-Item::Item()
-    : Item(DTO::BaseItemDto(), nullptr) { }
+Item::Item(QObject *parent)
+    : Item(DTO::BaseItemDto(), nullptr, parent) { }
 
-Item::Item(const DTO::BaseItemDto &data, ApiClient *apiClient)
-    : DTO::BaseItemDto(data), m_apiClient(apiClient) {
-    if (m_apiClient != nullptr) {
-        m_apiClientConnections.append(QObject::connect(
-                                          m_apiClient->eventbus(),
-                                          &EventBus::itemUserDataUpdated,
-                                          [&](auto itemId, auto userData) {
-                                              onUserDataUpdated(itemId, userData);
-                                          }));
-    }
-}
-
-Item::~Item() {
-    for(auto it = m_apiClientConnections.begin(); it != m_apiClientConnections.end(); it++) {
-        QObject::disconnect(*it);
-    }
+Item::Item(const DTO::BaseItemDto &data, ApiClient *apiClient, QObject *parent)
+    : DTO::BaseItemDto(data),
+      QObject(parent),
+      m_apiClient(nullptr) {
+    setApiClient(apiClient);
 }
 
 bool Item::sameAs(const DTO::BaseItemDto &other) {
@@ -50,23 +39,20 @@ bool Item::sameAs(const DTO::BaseItemDto &other) {
 
 void Item::setApiClient(ApiClient *apiClient) {
     if (m_apiClient != nullptr) {
-        for(auto it = m_apiClientConnections.begin(); it != m_apiClientConnections.end(); it++) {
-            QObject::disconnect(*it);
-        }
-        m_apiClientConnections.clear();
+        disconnect(m_apiClient->eventbus(), &EventBus::itemUserDataUpdated,
+                   this, &Item::updateUserData);
     }
     this->m_apiClient = apiClient;
     if (apiClient != nullptr) {
-        m_apiClientConnections.append(QObject::connect(
-                                          m_apiClient->eventbus(),
-                                          &EventBus::itemUserDataUpdated,
-                                          [&](auto itemId, auto userData) {
-                                              onUserDataUpdated(itemId, userData);
-                                          }));
+        QObject::connect(m_apiClient->eventbus(), &EventBus::itemUserDataUpdated,
+                         this, &Item::updateUserData);
     }
 }
-void Item::onUserDataUpdated(const QString &itemId, const DTO::UserItemDataDto &userData) {
 
+void Item::updateUserData(const QString &itemId, const DTO::UserItemDataDto &userData) {
+    if (itemId == this->jellyfinId()) {
+        emit userDataChanged(userData);
+    }
 }
 
 }

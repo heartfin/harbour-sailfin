@@ -35,6 +35,7 @@ ApiClient::ApiClient(QObject *parent)
     m_credManager = CredentialsManager::newInstance(this);
     connect(m_credManager, &CredentialsManager::serversListed, this, &ApiClient::credManagerServersListed);
     connect(m_credManager, &CredentialsManager::usersListed, this, &ApiClient::credManagerUsersListed);
+    connect(m_credManager, &CredentialsManager::tokenRetrieved, this, &ApiClient::credManagerTokenRetrieved);
     generateDeviceProfile();
 }
 
@@ -118,20 +119,14 @@ void ApiClient::credManagerUsersListed(const QString &server, QStringList users)
     QString user = users[0];
     qDebug() << "Chosen user: " << user;
 
-    QObject *ctx3 = new QObject(this);
-    connect(m_credManager, &CredentialsManager::tokenRetrieved, ctx3, [this, ctx3]
-            (const QString &server, const QString &user, const QString &token) {
-        Q_UNUSED(server)
-        this->m_token = token;
-        this->setUserId(user);
-        this->setAuthenticated(true);
-        this->postCapabilities();
-        disconnect(ctx3);
-    }, Qt::UniqueConnection);
     m_credManager->get(server, user);
 }
 void ApiClient::credManagerTokenRetrieved(const QString &server, const QString &user, const QString &token) {
-
+    this->m_token = token;
+    qDebug() << "Token retreived, logged in as user " << user;
+    this->setUserId(user);
+    this->setAuthenticated(true);
+    this->postCapabilities();
 }
 
 void ApiClient::setupConnection() {

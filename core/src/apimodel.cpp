@@ -71,6 +71,10 @@ void BaseModelLoader::setAutoReload(bool newAutoReload) {
     if (m_autoReload != newAutoReload) {
         m_autoReload = newAutoReload;
         emit autoReloadChanged(newAutoReload);
+
+        if (canReload()) {
+            reload();
+        }
     }
 }
 

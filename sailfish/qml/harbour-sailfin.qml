@@ -35,6 +35,7 @@ ApplicationWindow {
     // The global mediaPlayer instance
     //readonly property MediaPlayer mediaPlayer: _mediaPlayer
     readonly property PlaybackManager playbackManager: _playbackManager
+    readonly property ApiClient apiClient: _apiClient
 
     // Due QTBUG-10822, declarartions such as `property J.Item foo` are not possible.
     property QtObject itemData
@@ -46,20 +47,23 @@ ApplicationWindow {
     property bool _hidePlaybackBar: false
 
     bottomMargin: playbackBar.visibleSize
-
-
+    ApiClient {
+        id: _apiClient
+        objectName: "Test"
+        supportedCommands: [J.GeneralCommandType.Play, J.GeneralCommandType.DisplayContent, J.GeneralCommandType.DisplayMessage]
+    }
 
     initialPage: Component {
         MainPage {
             Connections {
-                target: D.ApiClient
+                target: apiClient
                 // Replace the MainPage if no server was set up.
 
             }
             onStatusChanged: {
                 if (status == PageStatus.Active && !_hasInitialized) {
                     _hasInitialized = true;
-                    D.ApiClient.restoreSavedSession();
+                    apiClient.restoreSavedSession();
                 }
             }
         }
@@ -87,14 +91,9 @@ ApplicationWindow {
         }
     }
 
-    /*MediaPlayer {
-        id: _mediaPlayer
-        autoPlay: true
-    }*/
-
     PlaybackManager {
         id: _playbackManager
-        apiClient: D.ApiClient
+        apiClient: appWindow.apiClient
         audioIndex: 0
         autoOpen: true
     }
@@ -111,14 +110,13 @@ ApplicationWindow {
     PlaybackBar {
         id: playbackBar
         manager: _playbackManager
-        state: "hidden"
         // CTMBWSIU: Code That Might Break When Silica Is Updated
         Component.onCompleted: playbackBar.parent = __silica_applicationwindow_instance._rotatingItem
     }
 
     //FIXME: proper error handling
     Connections {
-        target: D.ApiClient
+        target: apiClient
         onNetworkError: errorNotification.show("Network error: " + error)
         onConnectionFailed: errorNotification.show("Connect error: " + error)
         //onConnectionSuccess: errorNotification.show("Success: " + loginMessage)

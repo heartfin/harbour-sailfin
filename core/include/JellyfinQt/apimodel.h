@@ -188,7 +188,7 @@ public:
      * @return pair containing the items loaded and the integer containing the starting offset. A starting
      * offset of -1 means an error has occurred.
      */
-    std::pair<QList<T>, int> &&result() { return std::move(m_result); }
+    std::pair<QList<T*>, int> &&result() { return std::move(m_result); }
 protected:
     /**
      * @brief Loads data from the given offset with a maximum count of limit.
@@ -205,7 +205,7 @@ protected:
         m_startIndex = startIndex;
         m_totalRecordCount = totalRecordCount;
     }
-    std::pair<QList<T>, int> m_result;
+    std::pair<QList<T*>, int> m_result;
 };
 
 /**
@@ -275,7 +275,7 @@ protected:
         // If futureWatcher's future is running, this method should not be called again.
         if (m_futureWatcher.isRunning()) return;
         // Set an invalid result.
-        this->m_result = { QList<T>(), -1 };
+        this->m_result = { QList<T*>(), -1 };
 
         if (!setRequestStartIndex<P>(this->m_parameters, offset)
                 && suggestedModelStatus == ViewModel::ModelStatus::LoadingMore) {
@@ -326,12 +326,12 @@ protected:
         if (totalRecordCount < 0) {
             totalRecordCount = records.size();
         }
-        QList<T> models;
+        QList<T*> models;
         models.reserve(records.size());
 
         // Convert the DTOs into models
         for (int i = 0; i < records.size(); i++) {
-            models.append(T(records[i], m_loader->apiClient()));
+            models.append(new T(records[i], m_loader->apiClient()));
         }
         this->setStatus(ViewModel::ModelStatus::Ready);
         this->m_result = { models, this->m_startIndex};
@@ -441,7 +441,7 @@ public:
     }
 
     // QList-like API
-    const T& at(int index) const { return m_array.at(index); }
+    QSharedPointer<T> at(int index) const { return m_array.at(index); }
     /**
      * @return the amount of objects in this model.
      */
@@ -449,22 +449,23 @@ public:
         return m_array.size();
     }
 
-    void insert(int index, T &object) {
+    void insert(int index, QSharedPointer<T> object) {
         Q_ASSERT(index >= 0 && index <= size());
         this->beginInsertRows(QModelIndex(), index, index);
         m_array.insert(index, object);
         this->endInsertRows();
     }
 
-    void append(T &object) { insert(size(), object); }
-    void append(QList<T> &objects) {
+    void append(QSharedPointer<T> object) { insert(size(), object); }
+    //void append(T &object) { insert(size(), object); }
+    void append(QList<QSharedPointer<T>> &objects) {
         int index = size();
         this->beginInsertRows(QModelIndex(), index, index + objects.size() - 1);
         m_array.append(objects);
         this->endInsertRows();
     };
 
-    QList<T> mid(int pos, int length = -1) {
+    QList<T*> mid(int pos, int length = -1) {
         return m_array.mid(pos, length);
     }
 
@@ -483,7 +484,7 @@ public:
         this->endRemoveRows();
     }
 
-    void removeOne(T &object) {
+    void removeOne(QSharedPointer<T> object) {
         int idx = m_array.indexOf(object);
         if (idx >= 0) {
             removeAt(idx);
@@ -535,20 +536,26 @@ public:
 
 protected:
     // Model-specific properties.
-    QList<T> m_array;
+    QList<QSharedPointer<T>> m_array;
     ModelLoader<T> *m_loader = nullptr;
 
     void loadingFinished() override {
         Q_ASSERT(m_loader != nullptr);
-        std::pair<QList<T>, int> result = m_loader->result();
+        std::pair<QList<T*>, int> result = m_loader->result();
         qDebug() << "Results loaded: index: " << result.second << ", count: " << result.first.size();
         if (result.second == -1) {
             clear();
         } else if (result.second == m_array.size()) {
-            append(result.first);
+            m_array.reserve(m_array.size() + result.second);
+            for (auto it = result.first.begin(); it != result.first.end(); it++) {
+                append(QSharedPointer<T>(*it));
+            }
         } else if (result.second < m_array.size()){
             removeUntilEnd(result.second);
-            append(result.first);
+            m_array.reserve(m_array.size() + result.second);
+            for (auto it = result.first.begin(); it != result.first.end(); it++) {
+                append(QSharedPointer<T>(*it));
+            }
         } else {
             // result.second > m_array.size()
             qWarning() << "Retrieved data from loader at position bigger than size()";

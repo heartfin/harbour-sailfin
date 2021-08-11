@@ -56,6 +56,7 @@ PlaybackManager::PlaybackManager(QObject *parent)
     connect(m_mediaPlayer, &QMediaPlayer::durationChanged, this, &PlaybackManager::mediaPlayerDurationChanged);
     connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &PlaybackManager::mediaPlayerMediaStatusChanged);
     connect(m_mediaPlayer, &QMediaPlayer::videoAvailableChanged, this, &PlaybackManager::hasVideoChanged);
+    connect(m_mediaPlayer, &QMediaPlayer::seekableChanged, this, &PlaybackManager::seekableChanged);
     //                     I do not like the complicated overload cast
     connect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(mediaPlayerError(QMediaPlayer::Error)));
 
@@ -142,6 +143,7 @@ void PlaybackManager::mediaPlayerStateChanged(QMediaPlayer::State newState) {
         postPlaybackInfo(Progress);
     }
     m_oldState = newState;
+    emit playbackStateChanged(newState);
 }
 
 void PlaybackManager::mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus newStatus) {
@@ -352,6 +354,9 @@ void ItemUrlFetcherThread::run() {
                 playMethod = PlayMethod::DirectPlay;
             } else if (source.supportsDirectStream()) {
                 QString mediaType = item->mediaType();
+                if (mediaType == "Video") {
+                    mediaType.append('s');
+                }
                 QUrlQuery query;
                 query.addQueryItem("mediaSourceId", source.jellyfinId());
                 query.addQueryItem("deviceId", m_parent->m_apiClient->deviceId());

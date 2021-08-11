@@ -134,12 +134,108 @@ public:
     FWDPROP(QList<Jellyfin::DTO::LocationTypeClass::Value>, excludeLocationTypes, ExcludeLocationTypes)
     FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
     FWDPROP(QList<Jellyfin::DTO::ItemFilterClass::Value>, filters, Filters)
+    FWDPROP(QStringList, genreIds, GenreIds)
+    FWDPROP(QStringList, genres, Genres)
+    FWDPROP(bool, hasImdbId, HasImdbId)
+    FWDPROP(bool, hasOfficialRating, HasOfficialRating)
+    FWDPROP(bool, hasOverview, HasOverview)
+    FWDPROP(bool, hasParentalRating, HasParentalRating)
+    FWDPROP(bool, hasSpecialFeature, HasSpecialFeature)
+    FWDPROP(bool, hasSubtitles, HasSubtitles)
+    FWDPROP(bool, hasThemeSong, HasThemeSong)
+    FWDPROP(bool, hasThemeVideo, HasThemeVideo)
+    FWDPROP(bool, hasTmdbId, HasTmdbId)
+    FWDPROP(bool, hasTrailer, HasTrailer)
+    FWDPROP(bool, hasTvdbId, HasTvdbId)
+    FWDPROP(QStringList, ids, Ids)
+    FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
+    FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, imageTypes, ImageTypes)
+    FWDPROP(QStringList, includeItemTypes, IncludeItemTypes)
+    FWDPROP(bool, is3D, Is3D)
+    FWDPROP(bool, is4K, Is4K)
+    FWDPROP(bool, isFavorite, IsFavorite)
+    FWDPROP(bool, isHd, IsHd)
+    FWDPROP(bool, isLocked, IsLocked)
+    FWDPROP(bool, isMissing, IsMissing)
+    FWDPROP(bool, isPlaceHolder, IsPlaceHolder)
+    FWDPROP(bool, isPlayed, IsPlayed)
+    FWDPROP(bool, isUnaired, IsUnaired)
+    FWDPROP(QList<Jellyfin::DTO::LocationTypeClass::Value>, locationTypes, LocationTypes)
+    FWDPROP(qint32, maxHeight, MaxHeight)
+    FWDPROP(QString, maxOfficialRating, MaxOfficialRating)
+    FWDPROP(QDateTime, maxPremiereDate, MaxPremiereDate)
+    FWDPROP(qint32, maxWidth, MaxWidth)
+    FWDPROP(QStringList, mediaTypes, MediaTypes)
+    FWDPROP(qint32, minHeight, MinHeight)
+    FWDPROP(QString, minOfficialRating, MinOfficialRating)
+    FWDPROP(QDateTime, minPremiereDate, MinPremiereDate)
+    FWDPROP(qint32, minWidth, MinWidth)
+    FWDPROP(QString, sortBy, SortBy)
+    FWDPROP(QString, sortOrder, SortOrder)
+    FWDPROP(QStringList, tags, Tags)
+    FWDPROP(QList<qint32>, years, Years)
 
     FWDPROP(QString, parentId, ParentId)
     FWDPROP(bool, recursive, Recursive)
+    FWDPROP(QString, searchTerm, SearchTerm)
     //FWDPROP(bool, collapseBoxSetItems)
 };
 
+using ResumeItemsLoaderBase = AbstractUserParameterLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetResumeItemsParams>;
+class ResumeItemsLoader : public ResumeItemsLoaderBase {
+    Q_OBJECT
+public:
+    explicit ResumeItemsLoader(QObject *parent = nullptr);
+
+    FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, enableImageTypes, EnableImageTypes);
+    FWDPROP(bool, enableImages, EnableImages)
+    FWDPROP(bool, enableTotalRecordCount, EnableTotalRecordCount)
+    FWDPROP(bool, enableUserData, EnableUserData)
+    FWDPROP(QStringList, excludeItemTypes, ExcludeItemTypes)
+    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
+    FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
+    FWDPROP(QStringList, includeItemTypes, IncludeItemTypes)
+    FWDPROP(QStringList, mediaTypes, MediaTypes)
+    FWDPROP(QString, parentId, ParentId)
+    FWDPROP(QString, searchTerm, SearchTerm)
+};
+
+using ShowSeasonsLoaderBase = AbstractUserParameterLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetSeasonsParams>;
+class ShowSeasonsLoader : public ShowSeasonsLoaderBase {
+    Q_OBJECT
+public:
+    explicit ShowSeasonsLoader(QObject *parent = nullptr);
+
+    FWDPROP(QString, seriesId, SeriesId)
+    FWDPROP(QString, adjacentTo, AdjacentTo)
+    FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, enableImageTypes, EnableImageTypes)
+    FWDPROP(bool, enableImages, EnableImages)
+    FWDPROP(bool, enableUserData, EnableUserData)
+    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
+    FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
+    FWDPROP(bool, isMissing, IsMissing)
+    FWDPROP(bool, isSpecialSeason, IsSpecialSeason)
+
+};
+
+using ShowEpisodesLoaderBase = AbstractUserParameterLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetEpisodesParams>;
+class ShowEpisodesLoader : public ShowEpisodesLoaderBase {
+    Q_OBJECT
+public:
+    explicit ShowEpisodesLoader(QObject *parent = nullptr);
+
+    FWDPROP(QString, seriesId, SeriesId)
+    FWDPROP(QString, adjacentTo, AdjacentTo)
+    FWDPROP(bool, enableImages, EnableImages)
+    FWDPROP(bool, enableUserData, EnableUserData)
+    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
+    FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
+    FWDPROP(bool, isMissing, IsMissing)
+    FWDPROP(qint32, season, Season)
+    FWDPROP(QString, seasonId, SeasonId)
+    FWDPROP(QString, sortBy, SortBy)
+    FWDPROP(QString, startItemId, StartItemId)
+};
 
 
 /**
@@ -167,6 +263,11 @@ public:
         mediaType,
         type,
         collectionType,
+        indexNumber,
+        runTimeTicks,
+        artists,
+        isFolder,
+        parentIndexNumber,
 
         jellyfinExtendModelAfterHere = Qt::UserRole + 300 // Should be enough for now
     };
@@ -191,6 +292,11 @@ public:
             JFRN(mediaType),
             JFRN(type),
             JFRN(collectionType),
+            JFRN(indexNumber),
+            JFRN(runTimeTicks),
+            JFRN(artists),
+            JFRN(isFolder),
+            JFRN(parentIndexNumber),
         };
     }
     QVariant data(const QModelIndex &index, int role) const override;

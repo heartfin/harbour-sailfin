@@ -28,40 +28,40 @@ import "../../"
  * This dialog allows manual address entry or use one of the addresses discovered via UDP broadcasts.
  */
 Dialog {
-	id: dialogRoot
-	allowedOrientations: Orientation.All
-	// Picks the address of the ComboBox if selected, otherwise the manual address entry
-	readonly property string address: serverSelect.currentItem._address
-	readonly property bool addressCorrect: serverSelect.currentIndex > 0 || manualAddress.acceptableInput
-	readonly property string serverName: serverSelect.currentItem._name
+    id: dialogRoot
+    allowedOrientations: Orientation.All
+    // Picks the address of the ComboBox if selected, otherwise the manual address entry
+    readonly property string address: serverSelect.currentItem._address
+    readonly property bool addressCorrect: serverSelect.currentIndex > 0 || manualAddress.acceptableInput
+    readonly property string serverName: serverSelect.currentItem._name
     readonly property bool _isSetupPage: true
-	
-	
-	acceptDestination: AddServerConnectingPage {
-		id: connectingPage
-		serverName: dialogRoot.serverName
-		serverAddress: address
-		firstPage: dialogRoot
-	}
-	
-	Column {
-		width: parent.width
-		DialogHeader {
-			acceptText: qsTr("Connect")
-			title: qsTr("Connect to Jellyfin")
-		}
-		
-        J.ServerDiscoveryModel {
-			id: serverModel
-		}
-		
-		
-		ComboBox {
-			id: serverSelect
-            label: qsTr("Server")
-            description: qsTr("Sailfin will try to search for Jellyfin servers on your local network automatically")
 
-            menu: ContextMenu {
+
+    acceptDestination: AddServerConnectingPage {
+        id: connectingPage
+        serverName: dialogRoot.serverName
+        serverAddress: address
+        firstPage: dialogRoot
+    }
+
+    Column {
+        width: parent.width
+        DialogHeader {
+            acceptText: qsTr("Connect")
+            title: qsTr("Connect to Jellyfin")
+        }
+
+        J.ServerDiscoveryModel {
+            id: serverModel
+        }
+
+
+        ComboBox {
+            id: serverSelect
+                label: qsTr("Server")
+                description: qsTr("Sailfin will try to search for Jellyfin servers on your local network automatically")
+
+                menu: ContextMenu {
                 MenuItem {
                     // Special values are cool, aren't they?
                     readonly property string _address: manualAddress.text
@@ -106,8 +106,8 @@ Dialog {
 
     function tryConnect() {
         console.log("Hi there!")
-        ApiClient.baseUrl = address;
-        //ApiClient.setupConnection()
+        apiClient.baseUrl = address;
+        //apiClient.setupConnection()
         //fakeTimer.start()
     }
 

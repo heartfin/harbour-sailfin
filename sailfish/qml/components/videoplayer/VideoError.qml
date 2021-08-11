@@ -20,11 +20,12 @@ import QtQuick 2.6
 import Sailfish.Silica 1.0
 import QtMultimedia 5.6
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 Rectangle {
     id: videoError
-    property PlaybackManager player
+    //FIXME: Once QTBUG-10822 is resolved, change to J.PlaybackManager
+    property var player
     color: pal.palette.overlayBackgroundColor
     opacity: player.error === MediaPlayer.NoError ? 0.0 : 1.0
     Behavior on opacity { FadeAnimator {} }

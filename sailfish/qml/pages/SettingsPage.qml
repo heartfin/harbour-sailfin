@@ -22,6 +22,7 @@ import Sailfish.Silica 1.0
 import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../components"
+import ".."
 
 Page {
     id: settingsPage
@@ -69,7 +70,7 @@ Page {
                         top: parent.top
                         bottom: parent.bottom
                     }
-                    source: ApiClient.baseUrl + "/Users/" + ApiClient.userId + "/Images/Primary?tag=" + loggedInUser.primaryImageTag
+                    source: apiClient.baseUrl + "/Users/" + apiClient.userId + "/Images/Primary?tag=" + loggedInUser.primaryImageTag
                 }
 
                 Label {
@@ -80,7 +81,7 @@ Page {
                         bottom: parent.verticalCenter
                         right: parent.right
                     }
-                    text: loggedInUser.status == User.Ready ? loggedInUser.name : ApiClient.userId
+                    text: loggedInUser.status == User.Ready ? loggedInUser.name : apiClient.userId
                     color: Theme.highlightColor
                 }
 
@@ -92,7 +93,7 @@ Page {
                         top: parent.verticalCenter
                         right: parent.right
                     }
-                    text: ApiClient.baseUrl
+                    text: apiClient.baseUrl
                     color: Theme.secondaryHighlightColor
                 }
 
@@ -104,21 +105,23 @@ Page {
             ButtonLayout {
                 Button {
                     text: qsTr("Log out")
-                    onClicked: remorse.execute(qsTr("Logging out"), ApiClient.deleteSession)
+                    onClicked: remorse.execute(qsTr("Logging out"), apiClient.deleteSession)
                 }
             }
 
             SectionHeader {
-                //: Other settings
+                //: Other settings menu item
                 text: qsTr("Other")
             }
 
             IconListItem {
+                //: Debug information settings menu itemy
                 text: qsTr("Debug information")
                 iconSource: "image://theme/icon-s-developer"
                 onClicked: pageStack.push(Qt.resolvedUrl("settings/DebugPage.qml"))
             }
 
+            //: About Sailfin settings menu itemy
             IconListItem {
                 text: qsTr("About Sailfin")
                 iconSource: "image://theme/icon-m-about"

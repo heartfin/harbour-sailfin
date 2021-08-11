@@ -23,7 +23,6 @@ import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../components"
 import "../"
-import "../Utils.js" as Utils
 
 /**
  * Main page, which simply shows some content of every library, as well as next items.
@@ -49,7 +48,7 @@ Page {
                 text: qsTr("Reload")
                 onClicked: loadModels(true)
             }
-            busy: userViewsLoader.status === J.UsersViewsLoader.Loading
+            busy: mediaLibraryLoader.status === J.UsersViewsLoader.Loading
         }
     }
 
@@ -73,7 +72,7 @@ Page {
                 id: mediaLibraryModel
                 loader: J.UsersViewsLoader {
                     id: mediaLibraryLoader
-                    apiClient: ApiClient
+                    apiClient: appWindow.apiClient
                 }
             }
 
@@ -81,7 +80,7 @@ Page {
                 //- Section header for films and TV shows that an user hasn't completed yet.
                 text: qsTr("Resume watching")
                 clickable: false
-                //busy: userResumeModel.status === J.ApiModel.Loading
+                busy: userResumeLoader.status === J.ApiModel.Loading
                 Loader {
                     width: parent.width
                     sourceComponent: carrouselView
@@ -90,10 +89,12 @@ Page {
 
                     J.ItemModel {
                         id: userResumeModel
-                        // Resume model
-                        /*apiClient: ApiClient
-                        limit: 12
-                        recursive: true*/
+                        loader: J.ResumeItemsLoader {
+                            id: userResumeLoader
+                            apiClient: appWindow.apiClient
+                            limit: 12
+                            //recursive: true*/
+                        }
                     }
                 }
             }
@@ -111,7 +112,7 @@ Page {
 
                     J.ItemModel {
                         id: showNextUpModel
-                        /*apiClient: ApiClient
+                        /*apiClient: appWindow.apiClient
                         limit: 12*/
                     }
                 }
@@ -132,7 +133,7 @@ Page {
                         J.ItemModel {
                             id: userItemModel
                             loader: J.LatestMediaLoader {
-                                apiClient: ApiClient
+                                apiClient: appWindow.apiClient
                                 parentId: jellyfinId
                             }
                         }
@@ -171,7 +172,7 @@ Page {
     }
 
     Connections {
-        target: ApiClient
+        target: appWindow.apiClient
         onAuthenticatedChanged: loadModels(false)
     }
 
@@ -181,7 +182,7 @@ Page {
      * even if loaded.
      */
     function loadModels(force) {
-        if (force || (ApiClient.authenticated && !_modelsLoaded)) {
+        if (force || (appWindow.apiClient.authenticated && !_modelsLoaded)) {
             _modelsLoaded = true;
             mediaLibraryModel.reload()
             //userResumeModel.reload()
@@ -192,14 +193,15 @@ Page {
     Component {
         id: carrouselView
         SilicaListView {
+            property bool isPortrait: Utils.usePortraitCover(collectionType)
             id: list
             clip: true
             height: {
                 if (count > 0) {
-                    if (["tvshows", "movies"].indexOf(collectionType) == -1) {
-                        Constants.libraryDelegateHeight
-                    } else {
+                    if (isPortrait) {
                         Constants.libraryDelegatePosterHeight
+                    } else {
+                        Constants.libraryDelegateHeight
                     }
                 } else {
                     0
@@ -217,12 +219,12 @@ Page {
             delegate: LibraryItemDelegate {
                 property string id: model.jellyfinId
                 title: model.name
-                poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"maxHeight": height})
+                poster: Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"maxHeight": height})
                 Binding on blurhash {
                     when: poster !== ""
                     value: model.imageBlurHashes["Primary"][model.imageTags["Primary"]]
                 }
-                landscape: !Utils.usePortraitCover(collectionType)
+                landscape: !isPortrait
                 progress: (typeof model.userData !== "undefined") ? model.userData.playedPercentage / 100 : 0.0
 
                 onClicked: {

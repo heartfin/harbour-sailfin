@@ -20,7 +20,7 @@ import QtQuick 2.6
 import QtMultimedia 5.6
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "videoplayer"
 import "../"
@@ -31,7 +31,8 @@ import "../"
 
 SilicaItem {
     id: playerRoot
-    property JellyfinItem item
+    //FIXME: Once QTBUG-10822 is resolved, change to J.Item
+    property var item
     property string title: item.name
     property bool resume
     property int progress
@@ -39,7 +40,8 @@ SilicaItem {
     readonly property bool hudVisible: !hud.hidden || manager.error !== MediaPlayer.NoError
     property int audioTrack: 0
     property int subtitleTrack: 0
-    property PlaybackManager manager;
+    //FIXME: Once QTBUG-10822 is resolved, change to J.PlaybackManager
+    property var manager;
 
     // Blackground to prevent the ambience from leaking through
     Rectangle {
@@ -59,21 +61,6 @@ SilicaItem {
         manager: playerRoot.manager
         title: videoPlayer.title
 
-        Label {
-            anchors.fill: parent
-            anchors.margins: Theme.horizontalPageMargin
-            text: item.jellyfinId + "\n" + appWindow.playbackManager.streamUrl + "\n"
-                  + (manager.playMethod === PlaybackManager.DirectPlay ? "Direct Play" : "Transcoding") + "\n"
-                  + manager.position + "\n"
-                  + manager.mediaStatus + "\n"
-                  // + player.bufferProgress + "\n"
-                  // + player.metaData.videoCodec + "@" + player.metaData.videoFrameRate + "(" + player.metaData.videoBitRate + ")" + "\n"
-                  // + player.metaData.audioCodec + "(" + player.metaData.audioBitRate + ")" + "\n"
-                  // + player.errorString + "\n"
-            font.pixelSize: Theme.fontSizeExtraSmall
-            wrapMode: "WordWrap"
-            visible: appWindow.showDebugInfo
-        }
     }
 
     VideoError {
@@ -81,11 +68,35 @@ SilicaItem {
         player: manager
     }
 
+    Label {
+        anchors.fill: parent
+        anchors.margins: Theme.horizontalPageMargin
+        text: item.jellyfinId + "\n" + appWindow.playbackManager.streamUrl + "\n"
+          + (manager.playMethod === J.PlaybackManager.DirectPlay ? "Direct Play" : "Transcoding") + "\n"
+          + manager.position + "\n"
+          + manager.mediaStatus + "\n"
+          // + player.bufferProgress + "\n"
+          // + player.metaData.videoCodec + "@" + player.metaData.videoFrameRate + "(" + player.metaData.videoBitRate + ")" + "\n"
+          // + player.metaData.audioCodec + "(" + player.metaData.audioBitRate + ")" + "\n"
+          // + player.errorString + "\n"
+        font.pixelSize: Theme.fontSizeExtraSmall
+        wrapMode: "WordWrap"
+        visible: appWindow.showDebugInfo
+
+        MouseArea {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            enabled: parent.visible
+            onClicked: Clipboard.text = appWindow.playbackManager.streamUrl
+        }
+    }
+
     function start() {
         manager.audioIndex = audioTrack
         manager.subtitleIndex = subtitleTrack
         manager.resumePlayback = resume
-        manager.playItem(item.jellyfinId)
+        manager.playItem(item)
     }
 
     function stop() {

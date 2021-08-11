@@ -26,27 +26,26 @@ import "../.."
  * Page to indicate that the application is connecting to a server.
  */
 Page {
-	property string serverName
-	property string serverAddress
-	property Page firstPage
-	
-	allowedOrientations: Orientation.All
-	
-	
-	BusyLabel {
-		text: qsTr("Connecting to %1").arg(serverName)
-		running: true
-	}
-	
-	onStatusChanged: {
-		if (status == PageStatus.Active) {
-			console.log("Connecting page active");
-			ApiClient.setupConnection();
-		}
-	}
-	
-	Connections {
-		target: ApiClient
+    property string serverName
+    property string serverAddress
+    property Page firstPage
+
+    allowedOrientations: Orientation.All
+
+
+    BusyLabel {
+        text: qsTr("Connecting to %1").arg(serverName)
+        running: true
+    }
+
+    onStatusChanged: {
+        if (status == PageStatus.Active) {
+            apiClient.setupConnection();
+        }
+    }
+
+    Connections {
+        target: apiClient
         onConnectionSuccess: {
             console.log("Login success: " + loginMessage);
             pageStack.replace(Qt.resolvedUrl("LoginDialog.qml"), {"loginMessage": loginMessage, "firstPage": firstPage});

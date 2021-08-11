@@ -46,7 +46,7 @@ QtObject {
         }
     }
 
-    readonly property real libraryDelegatePosterHeight: libraryDelegateHeight * 1.6667
+    readonly property real libraryDelegatePosterHeight: libraryDelegateHeight * 1.5 // 1.6667
 
     readonly property real libraryProgressHeight: Theme.paddingMedium
 

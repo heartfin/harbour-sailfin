@@ -55,7 +55,7 @@ BaseDetailPage {
             PlayToolbar {
                 id: toolbar
                 width: parent.width
-                imageSource: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
+                imageSource: Utils.itemImageUrl(apiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
                 imageAspectRatio: Constants.horizontalVideoAspectRatio
                 imageBlurhash: itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]
                 Binding on favourited {

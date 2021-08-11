@@ -103,12 +103,12 @@ QSharedPointer<Item> Playlist::nextItem() {
     return m_nextItem;
 }
 
-void Playlist::appendToList(const ViewModel::ItemModel &model) {
+void Playlist::appendToList(ViewModel::ItemModel &model) {
     int start = m_list.size();
     int count = model.size();
     m_list.reserve(count);
     for (int i = 0; i < count; i++) {
-        m_list.append(QSharedPointer<Model::Item>::create(model.at(i)));
+        m_list.append(QSharedPointer<Model::Item>(model.at(i)));
     }
     emit itemsAddedToList(start, count);
     reshuffle();

@@ -21,7 +21,7 @@ import Sailfish.Silica 1.0
 
 import "../components"
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 /**
  * Page only containing a video player.
@@ -33,7 +33,7 @@ Page {
     id: videoPage
     // PlaybackBar will hide itself when it encounters a page with such a property
     property bool __hidePlaybackBar: true
-    property JellyfinItem itemData
+    property var itemData
     property int audioTrack
     property int subtitleTrack
     property bool resume: true

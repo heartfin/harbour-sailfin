@@ -18,12 +18,15 @@
  */
 #include "JellyfinQt/viewmodel/itemmodel.h"
 
+#include "JellyfinQt/loader/http/getepisodes.h"
 #include "JellyfinQt/loader/http/getlatestmedia.h"
 #include "JellyfinQt/loader/http/getitemsbyuserid.h"
+#include "JellyfinQt/loader/http/getresumeitems.h"
+#include "JellyfinQt/loader/http/getseasons.h"
 
 #define JF_CASE(roleName) case roleName: \
     try { \
-        return QVariant(item.roleName()); \
+        return QVariant(item->roleName()); \
     } catch(std::bad_optional_access &e) { \
         return QVariant(); \
     }
@@ -41,6 +44,15 @@ LatestMediaLoader::LatestMediaLoader(QObject *parent)
 UserItemsLoader::UserItemsLoader(QObject *parent)
     : UserItemsLoaderBase(new Jellyfin::Loader::HTTP::GetItemsByUserIdLoader(), parent) {}
 
+ResumeItemsLoader::ResumeItemsLoader(QObject *parent)
+    : ResumeItemsLoaderBase(new Jellyfin::Loader::HTTP::GetResumeItemsLoader(), parent) {}
+
+ShowSeasonsLoader::ShowSeasonsLoader(QObject *parent)
+    : ShowSeasonsLoaderBase(new Jellyfin::Loader::HTTP::GetSeasonsLoader(), parent) {}
+
+ShowEpisodesLoader::ShowEpisodesLoader(QObject *parent)
+    : ShowEpisodesLoaderBase(new Jellyfin::Loader::HTTP::GetEpisodesLoader(), parent) {}
+
 ItemModel::ItemModel(QObject *parent)
     : ApiModel<Model::Item>(parent) { }
 
@@ -48,7 +60,7 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
     if (role <= Qt::UserRole || !index.isValid()) return QVariant();
     int row = index.row();
     if (row < 0 || row >= m_array.size()) return QVariant();
-    Model::Item item = m_array[row];
+    QSharedPointer<Model::Item> item = m_array[row];
     switch(role) {
     JF_CASE(jellyfinId)
     JF_CASE(name)
@@ -66,6 +78,15 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
     JF_CASE(mediaType)
     JF_CASE(type)
     JF_CASE(collectionType)
+    case RoleNames::indexNumber:
+        return QVariant(item->indexNumber().value_or(0));
+    case RoleNames::runTimeTicks:
+        return QVariant(item->runTimeTicks().value_or(0));
+    JF_CASE(artists)
+    case RoleNames::isFolder:
+        return QVariant(item->isFolder().value_or(false));
+    case RoleNames::parentIndexNumber:
+        return QVariant(item->parentIndexNumber().value_or(1));
     default:
         return QVariant();
     }
@@ -73,7 +94,7 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
 }
 
 QSharedPointer<Model::Item> ItemModel::itemAt(int index) {
-    return QSharedPointer<Model::Item>::create(m_array[index]);
+    return m_array[index];
 }
 
 } // NS ViewModel

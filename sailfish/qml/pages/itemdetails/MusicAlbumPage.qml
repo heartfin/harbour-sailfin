@@ -36,11 +36,12 @@ BaseDetailPage {
     J.ItemModel {
         id: collectionModel
         loader: J.UserItemsLoader {
-            apiClient: ApiClient
-            //sortBy: ["SortName"]
+            apiClient: appWindow.apiClient
+            sortBy: "SortName"
             //fields: ["ItemCounts","PrimaryImageAspectRatio","BasicSyncInfo","CanDelete","MediaSourceCount"]
             parentId: itemData.jellyfinId
-            onParentIdChanged: reload()
+            autoReload: itemData.jellyfinId.length > 0
+            onParentIdChanged: if (parentId.length > 0) reload()
         }
     }
     RowLayout {
@@ -52,9 +53,9 @@ BaseDetailPage {
             visible: _twoColumns
             Layout.minimumWidth: 1000 / Theme.pixelRatio
             Layout.fillHeight: true
-            /*source: visible
+            source: visible
                     ? "../../components/music/WideAlbumCover.qml" : ""
-            onLoaded: bindAlbum(item)*/
+            onLoaded: bindAlbum(item)
         }
         Item {height: 1; width: Theme.horizontalPageMargin; visible: wideAlbumCover.visible; }
         SilicaListView {
@@ -64,8 +65,8 @@ BaseDetailPage {
             model: collectionModel
             header: Loader {
                 width: parent.width
-                /*source: "../../components/music/NarrowAlbumCover.qml"
-                onLoaded: bindAlbum(item)*/
+                source: "../../components/music/NarrowAlbumCover.qml"
+                onLoaded: bindAlbum(item)
             }
             section {
                 property: "parentIndexNumber"
@@ -79,7 +80,7 @@ BaseDetailPage {
                 artists: model.artists
                 duration: model.runTimeTicks
                 indexNumber: model.indexNumber
-                onClicked: window.playbackManager.playItem(model.jellyfinId)
+                onClicked: window.playbackManager.playItemInList(collectionModel, model.index)
             }
 
             VerticalScrollDecorator {}
@@ -87,7 +88,7 @@ BaseDetailPage {
     }
 
     function bindAlbum(item) {
-        //item.albumArt = Qt.binding(function(){ return Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})})
+        item.albumArt = Qt.binding(function(){ return Utils.itemImageUrl(apiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})})
         item.name = Qt.binding(function(){ return itemData.name})
         item.releaseYear = Qt.binding(function() { return itemData.productionYear})
         item.albumArtist = Qt.binding(function() { return itemData.albumArtist})

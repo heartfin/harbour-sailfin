@@ -31,7 +31,7 @@ BaseDetailPage {
 
             enabled: true
             text: qsTr("Item type (%1) unsupported").arg(itemData.type)
-            hintText: qsTr("This is still an alpha version :)")
+            hintText: qsTr("Fallback page for %2 not found either\nThis is still an alpha version :)").arg(itemData.mediaType)
         }
     }
 }

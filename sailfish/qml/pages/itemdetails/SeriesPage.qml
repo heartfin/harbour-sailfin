@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 import QtQuick 2.6
 import Sailfish.Silica 1.0
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../../components"
 import "../.."
@@ -28,7 +28,7 @@ BaseDetailPage {
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height
-        visible: itemData.status !== JellyfinItem.Error
+        //visible: itemData.status !== JellyfinItem.Error
 
         Column {
             id: content
@@ -47,7 +47,7 @@ BaseDetailPage {
                 RemoteImage {
                     id: logoImage
                     anchors.centerIn: parent
-                    source: Utils.itemImageUrl(ApiClient.baseUrl, itemData, "Logo")
+                    source: Utils.itemImageUrl(apiClient.baseUrl, itemData, "Logo")
                 }
             }
 
@@ -63,11 +63,14 @@ BaseDetailPage {
                 text: qsTr("Seasons")
             }
 
-            ShowSeasonsModel {
+            J.ItemModel {
                 id: showSeasonsModel
-                apiClient: ApiClient
-                show: itemData.jellyfinId
-                onShowChanged: reload()
+                loader: J.ShowSeasonsLoader {
+                    id: showSeasonLoader
+                    apiClient: appWindow.apiClient
+                    seriesId: itemData.jellyfinId
+                    autoReload: itemData.jellyfinId.length > 0
+                }
             }
             Connections {
                 target: itemData
@@ -84,7 +87,7 @@ BaseDetailPage {
                 leftMargin: Theme.horizontalPageMargin
                 rightMargin: Theme.horizontalPageMargin
                 delegate: LibraryItemDelegate {
-                    poster: Utils.itemModelImageUrl(ApiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxHeight": height})
+                    poster: Utils.itemModelImageUrl(apiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxHeight": height})
                     blurhash: model.imageBlurHashes["Primary"][model.imageTags.Primary]
                     title: model.name
                     onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.jellyfinId})

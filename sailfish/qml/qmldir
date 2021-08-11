@@ -16,5 +16,4 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 singleton Constants 1.0 Constants.qml
-singleton ApiClient 1.0 ApiClient.qml
 Utils 1.0 Utils.js

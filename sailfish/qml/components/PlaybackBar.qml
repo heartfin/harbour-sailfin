@@ -21,7 +21,7 @@ import QtQuick 2.6
 import QtMultimedia 5.6
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../"
 
@@ -30,7 +30,7 @@ import "../"
  * +---+--------------------------------------+
  * |\   /|                              +---+ |
  * | \ / |   Media title                |   | |
- * |  X  |                              | ⏸︎| |
+ * |  X  |                              | ⏸︎ | |
  * | / \ |   Artist 1, artist 2         |   | |
  * |/   \|                              +---+ |
  * +-----+------------------------------------+
@@ -40,13 +40,15 @@ PanelBackground {
     height: Theme.itemSizeLarge
     width: parent.width
     y: parent.height - height
-    property PlaybackManager manager
+    //FIXME: Once QTBUG-10822 is resolved, change to J.PlaybackManager
+    property var manager
     property bool open
     property real visibleSize: height
     property bool isFullPage: false
     property bool showQueue: false
 
     property bool _pageWasShowingNavigationIndicator
+    readonly property bool mediaLoading: [MediaPlayer.Loading, MediaPlayer.Buffering].indexOf(manager.mediaStatus) >= 0
 
 
     transform: Translate {id: playbackBarTranslate; y: 0}
@@ -72,10 +74,11 @@ PanelBackground {
             }
             source: largeAlbumArt.source
             fillMode: Image.PreserveAspectCrop
+            opacity: 1
 
             Image {
                 id: largeAlbumArt
-                source: Utils.itemImageUrl(ApiClient.baseUrl, manager.item, "Primary")
+                source: Utils.itemImageUrl(apiClient.baseUrl, manager.item, "Primary")
                 fillMode: Image.PreserveAspectFit
                 anchors.fill: parent
                 opacity: 0
@@ -119,11 +122,11 @@ PanelBackground {
             Label {
                 id: artists
                 text: {
-                    if (manager.item == null) return qsTr("Play some media!")
-                    console.log(manager.item.type)
-                    switch(manager.item.type) {
+                    //return manager.item.mediaType;
+                    if (manager.item === null) return qsTr("Play some media!")
+                    switch(manager.item.mediaType) {
                     case "Audio":
-                        return manager.item.artists.join(", ")
+                        return manager.item.artists //.join(", ")
                     }
                     return qsTr("Not audio")
                 }
@@ -157,6 +160,7 @@ PanelBackground {
             icon.source: "image://theme/icon-m-previous"
             enabled: false
             opacity: 0
+            onClicked: manager.previous()
         }
 
         IconButton {
@@ -182,6 +186,7 @@ PanelBackground {
             icon.source: "image://theme/icon-m-next"
             enabled: false
             opacity: 0
+            onClicked: manager.next()
         }
         IconButton {
             id: queueButton
@@ -206,7 +211,7 @@ PanelBackground {
             minimumValue: 0
             value: manager.position
             maximumValue: manager.duration
-            indeterminate: [MediaPlayer.Loading, MediaPlayer.Buffering].indexOf(manager.mediaStatus) >= 0
+            indeterminate: mediaLoading
         }
 
         Slider {
@@ -352,7 +357,7 @@ PanelBackground {
         },
         State {
             name: "hidden"
-            when: (manager.playbackState === MediaPlayer.StoppedState || "__hidePlaybackBar" in pageStack.currentPage) && !isFullPage
+            when: ((manager.playbackState === MediaPlayer.StoppedState && !mediaLoading) || "__hidePlaybackBar" in pageStack.currentPage) && !isFullPage
             PropertyChanges {
                 target: playbackBarTranslate
                 // + small padding since the ProgressBar otherwise would stick out

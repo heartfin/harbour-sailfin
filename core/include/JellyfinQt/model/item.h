@@ -20,9 +20,11 @@
 #ifndef JELLYFIN_MODEL_ITEM
 #define JELLYFIN_MODEL_ITEM
 
+#include <functional>
+#include <map>
+
+#include <QObject>
 #include <QList>
-#include <QThreadPool>
-#include <QtConcurrent/QtConcurrent>
 
 #include "../dto/baseitemdto.h"
 #include "../support/loader.h"
@@ -31,20 +33,22 @@
 namespace Jellyfin {
 namespace Model {
 
-class Item : public DTO::BaseItemDto {
+class Item : public QObject, public DTO::BaseItemDto {
+    Q_OBJECT
 public:
+    using UserDataChangedCallback = std::function<void(DTO::UserItemDataDto)>;
     /**
      * @brief Constructor that creates an empty item.
      */
-    Item();
+    Item(QObject *parent = nullptr);
 
     /**
      * @brief Copies the data from the DTO into this model and attaches an ApiClient
      * @param data The DTO to copy information from
      * @param apiClient The ApiClient to attach to, to listen for updates and so on.
      */
-    Item(const DTO::BaseItemDto &data, ApiClient *apiClient = nullptr);
-    virtual ~Item();
+    Item(const DTO::BaseItemDto &data, ApiClient *apiClient = nullptr, QObject *parent = nullptr);
+    //virtual ~Item();
 
     /**
      * @brief sameAs Returns true if this item represents the same item as `other`
@@ -58,11 +62,13 @@ public:
     bool sameAs(const DTO::BaseItemDto &other);
 
     void setApiClient(ApiClient *apiClient);
+
+signals:
+    void userDataChanged(const DTO::UserItemDataDto &newUserData);
 private:
     ApiClient *m_apiClient = nullptr;
-    QList<QMetaObject::Connection> m_apiClientConnections;
+    void updateUserData(const QString &itemId, const DTO::UserItemDataDto &userData);
 
-    void onUserDataUpdated(const QString &itemId, const DTO::UserItemDataDto &userData);
 };
 
 }

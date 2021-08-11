@@ -42,11 +42,6 @@ QString FallbackCredentialsManager::urlToGroupName(const QString &url) const {
     return QString::number(qHash(url), 16);
 }
 
-QString FallbackCredentialsManager::groupNameToUrl(const QString &group) const {
-    QString tmp = QString(group);
-    return tmp.replace('|', "/");
-}
-
 void FallbackCredentialsManager::store(const QString &server, const QString &user, const QString &token) {
     m_settings.setValue(urlToGroupName(server) + "/users/" + user + "/accessToken", token);
     m_settings.setValue(urlToGroupName(server) + "/address", server);

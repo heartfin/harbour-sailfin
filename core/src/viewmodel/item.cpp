@@ -17,17 +17,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "JellyfinQt/viewmodel/item.h"
+#include "JellyfinQt/viewmodel/userdata.h"
 
 namespace Jellyfin {
 namespace ViewModel {
 
 Item::Item(QObject *parent, QSharedPointer<Model::Item> data)
-    : QObject(parent), m_data(data){
-
+    : QObject(parent),
+      m_data(data),
+      m_userData(new UserData(this)){
+    connect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
 }
 
 void Item::setData(QSharedPointer<Model::Item> newData) {
+    if (!m_data.isNull()) {
+        disconnect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
+    }
     m_data = newData;
+    if (!m_data.isNull()) {
+        connect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
+    }
+}
+
+void Item::setUserData(DTO::UserItemDataDto &newData) {
+    setUserData(QSharedPointer<DTO::UserItemDataDto>::create(newData));
+}
+
+void Item::setUserData(QSharedPointer<DTO::UserItemDataDto> newData)  {
+    m_userData->setData(newData);
+    emit userDataChanged(m_userData);
+}
+
+void Item::onUserDataChanged(const DTO::UserItemDataDto &newData) {
+    setUserData(QSharedPointer<DTO::UserItemDataDto>::create(newData));
 }
 
 

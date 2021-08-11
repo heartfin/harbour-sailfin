@@ -54,7 +54,7 @@ Page {
                       "Copyright © Chris Josten 2020</p>" +
                       "<p>Sailfin is Free Software licensed under the <a href='lgpl'>LGPL-v2.1</a> or later, at your choice. " +
                       "Parts of the code of Sailfin are from other libraries. <a href='3rdparty'>View their licenses here</a>.</p>")
-                        .arg(ApiClient.version)
+                        .arg(apiClient.version)
                 textFormat: Text.StyledText
                 color: Theme.secondaryHighlightColor
                 linkColor: Theme.primaryColor

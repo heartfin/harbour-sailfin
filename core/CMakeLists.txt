@@ -19,6 +19,7 @@ set(JellyfinQt_SOURCES
         src/viewmodel/modelstatus.cpp
         src/viewmodel/playbackmanager.cpp
         src/viewmodel/playlist.cpp
+        src/viewmodel/userdata.cpp
         src/apiclient.cpp
         src/apimodel.cpp
         src/credentialmanager.cpp
@@ -46,6 +47,7 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/viewmodel/propertyhelper.h
         include/JellyfinQt/viewmodel/playbackmanager.h
         include/JellyfinQt/viewmodel/playlist.h
+        include/JellyfinQt/viewmodel/userdata.h
         include/JellyfinQt/apiclient.h
         include/JellyfinQt/apimodel.h
         include/JellyfinQt/credentialmanager.h

@@ -124,7 +124,7 @@ public:
     Q_ENUM(ApiError)
 
     const QString &baseUrl() const { return this->m_baseUrl; }
-    const QString &userId() const { return m_userId; }
+    const QString userId() const { return m_userId; }
     const QString &deviceId() const { return m_deviceId; }
     /**
      * @brief QML applications can set this type to indicate which commands they support.
@@ -275,7 +275,7 @@ private:
     QString m_token;
     QString m_deviceName;
     QString m_deviceId;
-    QString m_userId = "";
+    QString m_userId;
     QJsonObject m_deviceProfile;
     QJsonObject m_playbackDeviceProfile;
     bool m_online = true;

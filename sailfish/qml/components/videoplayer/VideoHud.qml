@@ -20,7 +20,7 @@ import QtQuick 2.6
 import QtMultimedia 5.6
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../../Utils.js" as Utils
 
@@ -30,7 +30,8 @@ import "../../Utils.js" as Utils
  */
 Item {
     id: videoHud
-    property PlaybackManager manager
+    //FIXME: Once QTBUG-10822 is resolved, change to J.PlaybackManager
+    property var manager
     property string title
     property bool _manuallyActivated: false
     readonly property bool hidden: opacity == 0.0

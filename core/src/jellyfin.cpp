@@ -24,6 +24,7 @@ void registerTypes(const char *uri) {
     qmlRegisterType<ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
     qmlRegisterType<ViewModel::PlaybackManager>(uri, 1, 0, "PlaybackManager");
     qmlRegisterUncreatableType<ViewModel::Item>(uri, 1, 0, "Item", "Acquire one via ItemLoader or exposed properties");
+    qmlRegisterUncreatableType<ViewModel::User>(uri, 1, 0, "User", "Acquire one via UserLoader or exposed properties");
     qmlRegisterUncreatableType<EventBus>(uri, 1, 0, "EventBus", "Obtain one via your ApiClient");
     qmlRegisterUncreatableType<WebSocket>(uri, 1, 0, "WebSocket", "Obtain one via your ApiClient");
     qmlRegisterUncreatableType<ViewModel::UserData>(uri, 1, 0, "UserData", "Obtain one via an Item");
@@ -32,16 +33,19 @@ void registerTypes(const char *uri) {
     qmlRegisterUncreatableType<BaseApiModel>(uri, 1, 0, "BaseApiModel", "Please use one of its subclasses");
     qmlRegisterUncreatableType<BaseModelLoader>(uri, 1, 0, "BaseModelLoader", "Please use one of its subclasses");
     qmlRegisterType<ViewModel::ItemModel>(uri, 1, 0, "ItemModel");
+    qmlRegisterType<ViewModel::UserModel>(uri, 1, 0, "UserModel");
 
     // Loaders
     qmlRegisterUncreatableType<ViewModel::LoaderBase>(uri, 1, 0, "LoaderBase", "Use one of its subclasses");
     qmlRegisterType<ViewModel::ItemLoader>(uri, 1, 0, "ItemLoader");
+    qmlRegisterType<ViewModel::UserLoader>(uri, 1, 0, "UserLoader");
     qmlRegisterType<ViewModel::LatestMediaLoader>(uri, 1, 0, "LatestMediaLoader");
     qmlRegisterType<ViewModel::UserItemsLoader>(uri, 1, 0, "UserItemsLoader");
     qmlRegisterType<ViewModel::UserViewsLoader>(uri, 1, 0, "UsersViewsLoader");
     qmlRegisterType<ViewModel::ResumeItemsLoader>(uri, 1, 0, "ResumeItemsLoader");
     qmlRegisterType<ViewModel::ShowSeasonsLoader>(uri, 1, 0, "ShowSeasonsLoader");
     qmlRegisterType<ViewModel::ShowEpisodesLoader>(uri, 1, 0, "ShowEpisodesLoader");
+    qmlRegisterType<ViewModel::PublicUsersLoader>(uri, 1, 0, "PublicUsersLoader");
 
     // Enumerations
     qmlRegisterUncreatableType<Jellyfin::DTO::GeneralCommandTypeClass>(uri, 1, 0, "GeneralCommandType", "Is an enum");

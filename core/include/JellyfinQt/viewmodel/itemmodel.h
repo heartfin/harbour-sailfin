@@ -323,7 +323,6 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
     QSharedPointer<Model::Item> itemAt(int index);
 };
-
 #undef JFRN
 
 } // NS Jellyfin

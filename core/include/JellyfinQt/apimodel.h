@@ -252,6 +252,8 @@ extern template int extractTotalRecordCount(const QList<DTO::BaseItemDto> &resul
 extern template void setRequestLimit(Loader::GetLatestMediaParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetLatestMediaParams &params, int offset);
 
+extern template QList<DTO::UserDto> extractRecords(const QList<DTO::UserDto> &result);
+extern template int extractTotalRecordCount(const QList<DTO::UserDto> &result);
 #endif
 
 /**

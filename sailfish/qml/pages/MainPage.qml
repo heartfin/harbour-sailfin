@@ -185,8 +185,8 @@ Page {
         if (force || (appWindow.apiClient.authenticated && !_modelsLoaded)) {
             _modelsLoaded = true;
             mediaLibraryModel.reload()
-            //userResumeModel.reload()
-            //showNextUpModel.reload()
+            userResumeModel.reload()
+            showNextUpModel.reload()
         }
     }
 
@@ -225,7 +225,7 @@ Page {
                     value: model.imageBlurHashes["Primary"][model.imageTags["Primary"]]
                 }
                 landscape: !isPortrait
-                progress: (typeof model.userData !== "undefined") ? model.userData.playedPercentage / 100 : 0.0
+                progress: (typeof model.userDataPlayedProgress !== 0.0) ? model.userDataPlayedPercentage / 100 : 0.0
 
                 onClicked: {
                     pageStack.push(Utils.getPageUrl(model.mediaType, model.type, model.isFolder), {"itemId": model.jellyfinId, "itemData": model.qtObject})

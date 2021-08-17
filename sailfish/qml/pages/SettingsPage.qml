@@ -28,6 +28,8 @@ Page {
     id: settingsPage
     allowedOrientations: Orientation.All
 
+    property alias loggedInUser: userLoader.data
+
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height
@@ -58,9 +60,10 @@ Page {
                     rightMargin: Theme.horizontalPageMargin
                 }
                 height: user.implicitHeight + server.implicitHeight + Theme.paddingMedium
-                QtObject {
-                    id: loggedInUser
-                    //apiClient: ApiClient
+                J.UserLoader{
+                    id: userLoader
+                    apiClient: appWindow.apiClient
+                    userId: appWindow.apiClient.userId
                 }
                 RemoteImage {
                     id: userIcon
@@ -81,7 +84,7 @@ Page {
                         bottom: parent.verticalCenter
                         right: parent.right
                     }
-                    text: loggedInUser.status == User.Ready ? loggedInUser.name : apiClient.userId
+                    text: userLoader.status === J.UserLoader.Ready ? loggedInUser.name : apiClient.userId
                     color: Theme.highlightColor
                 }
 

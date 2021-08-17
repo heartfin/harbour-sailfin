@@ -1,6 +1,6 @@
 /*
  * Sailfin: a Jellyfin client written using Qt
- * Copyright (C) 2021 Chris Josten and the Sailfin Contributors
+ * Copyright (C) 2021 Chris Josten and the Sailfin Contributors.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,34 +16,24 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#ifndef JELLYFIN_H
-#define JELLYFIN_H
+#ifndef JELLYFIN_MODEL_USER_H
+#define JELLYFIN_MODEL_USER_H
 
-#include <QtQml>
-
-#include "model/item.h"
-#include "dto/mediastream.h"
-#include "dto/nameguidpair.h"
-#include "dto/userdto.h"
-#include "dto/useritemdatadto.h"
-
-#include "apiclient.h"
-#include "apimodel.h"
-#include "serverdiscoverymodel.h"
-#include "websocket.h"
-#include "viewmodel/item.h"
-#include "viewmodel/itemmodel.h"
-#include "viewmodel/loader.h"
-#include "viewmodel/modelstatus.h"
-#include "viewmodel/playbackmanager.h"
-#include "viewmodel/userdata.h"
-#include "viewmodel/usermodel.h"
-#include "viewmodel/user.h"
+#include "../dto/userdto.h"
 
 namespace Jellyfin {
+namespace Model {
 
-void registerTypes(const char *uri = "nl.netsoj.chris.Jellyfin");
+class User : public DTO::UserDto {
+
+public:
+    User();
+    User(const DTO::UserDto &data, ApiClient *apiClient = nullptr);
+
+    bool sameAs(const DTO::UserDto &other);
+};
 
 }
+} // NS Jellyfin
 
-#endif // JELLYFIN_H
+#endif // JELLYFIN_MODEL_USER_H

@@ -33,6 +33,8 @@ Dialog {
     property string loginMessage
     property Page firstPage
     property QtObject /*User*/ selectedUser: null
+    property bool userSelected: false
+    property bool selectedUserHasPassword: true
 
     property string error
 
@@ -66,13 +68,13 @@ Dialog {
         }
     }
 
-    QtObject { id: userModel; }
-
-    /*PublicUserModel {
+    J.UserModel {
         id: userModel
-        apiClient: appWindow.apiClient
-        Component.onCompleted: reload();
-    }*/
+        loader: J.PublicUsersLoader {
+            id: userLoader
+            apiClient: appWindow.apiClient
+        }
+    }
 
     DialogHeader {
         id: dialogHeader
@@ -100,14 +102,15 @@ Dialog {
                 width: parent.width
                 Repeater {
                     id: userRepeater
-                    model: 0 //userModel
+                    model: userModel
                     delegate: UserGridDelegate {
                         name: model.name
-                        image: model.primaryImageTag ? "%1/Users/%2/Images/Primary?tag=%3".arg(apiClient.baseUrl).arg(model.jellyfinId).arg(model.primaryImageTag) : ""
+                        image: model.primaryImageTag ? "%1/Users/%2/Images/Primary?tag=%3".arg(apiClient.baseUrl).arg(model.userId).arg(model.primaryImageTag) : ""
                         highlighted: model.name === username.text
                         onHighlightedChanged: {
                             if (highlighted) {
-                                selectedUser = model.qtObject
+                                userSelected = true
+                                selectedUserHasPassword = model.hasPassword
                             }
                         }
                         onClicked: {
@@ -138,7 +141,7 @@ Dialog {
                     // Wil be executed before the onHighlightChanged of the UserDelegate
                     // This is done to update the UI after an user is selected and this field has
                     // been changed, to not let the UI be in an invalid state (e.g. no user selected, password field disabled)
-                    selectedUser = null
+                    userSelected = false
                 }
             }
 
@@ -199,7 +202,7 @@ Dialog {
         },
         State {
             name: "users"
-            when: userRepeater.count != 0 && selectedUser === null
+            when: userRepeater.count != 0 && !userSelected
             PropertyChanges {
                 target: userList
                 visible: true
@@ -207,7 +210,7 @@ Dialog {
         },
         State {
             name: "selectedUserPassword"
-            when: selectedUser !== null && selectedUser.hasPassword
+            when:  userSelected && selectedUserHasPassword
             extend: "users"
             PropertyChanges {
                 target: password
@@ -216,7 +219,7 @@ Dialog {
         },
         State {
             name: "selectedUserNoPassword"
-            when: selectedUser !== null && !selectedUser.hasPassword
+            when: userSelected && !selectedUserHasPassword
             extend: "users"
             PropertyChanges {
                 target: password

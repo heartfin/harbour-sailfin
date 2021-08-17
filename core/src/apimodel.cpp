@@ -141,6 +141,15 @@ bool setRequestStartIndex(Loader::GetLatestMediaParams &params, int offset) {
     return false;
 }
 
+template<>
+QList<DTO::UserDto> extractRecords(const QList<DTO::UserDto> &result) {
+    return result;
+}
+
+template<>
+int extractTotalRecordCount(const QList<DTO::UserDto> &result) {
+    return result.size();
+}
 
 void registerModels(const char *URI) {
     Q_UNUSED(URI)

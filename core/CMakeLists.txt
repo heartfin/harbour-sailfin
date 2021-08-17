@@ -9,6 +9,7 @@ set(JellyfinQt_SOURCES
         src/model/item.cpp
         src/model/playlist.cpp
         src/model/shuffle.cpp
+        src/model/user.cpp
 
         src/support/jsonconv.cpp
         src/support/loader.cpp
@@ -20,6 +21,8 @@ set(JellyfinQt_SOURCES
         src/viewmodel/playbackmanager.cpp
         src/viewmodel/playlist.cpp
         src/viewmodel/userdata.cpp
+        src/viewmodel/usermodel.cpp
+        src/viewmodel/user.cpp
         src/apiclient.cpp
         src/apimodel.cpp
         src/credentialmanager.cpp
@@ -36,6 +39,7 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/model/item.h
         include/JellyfinQt/model/playlist.h
         include/JellyfinQt/model/shuffle.h
+        include/JellyfinQt/model/user.h
         include/JellyfinQt/support/jsonconv.h
         include/JellyfinQt/support/jsonconvimpl.h
         include/JellyfinQt/support/loader.h
@@ -48,6 +52,8 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/viewmodel/playbackmanager.h
         include/JellyfinQt/viewmodel/playlist.h
         include/JellyfinQt/viewmodel/userdata.h
+        include/JellyfinQt/viewmodel/usermodel.h
+        include/JellyfinQt/viewmodel/user.h
         include/JellyfinQt/apiclient.h
         include/JellyfinQt/apimodel.h
         include/JellyfinQt/credentialmanager.h

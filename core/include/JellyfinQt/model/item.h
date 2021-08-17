@@ -37,6 +37,7 @@ class Item : public QObject, public DTO::BaseItemDto {
     Q_OBJECT
 public:
     using UserDataChangedCallback = std::function<void(DTO::UserItemDataDto)>;
+    using BaseItemDto::userData;
     /**
      * @brief Constructor that creates an empty item.
      */

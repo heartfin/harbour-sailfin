@@ -51,6 +51,9 @@ Page {
         height: parent.height / 3 * 2
         anchors.bottom: parent.bottom
         model: tracks
+        header: Label {
+            text: "Play count: %1".arg(jellyfinItem.userData.playCount)
+        }
         delegate: ItemDelegate {
             icon.source: ApiClient.baseUrl + "/Items/" + model.jellyfinId + "/Images/Primary?tag=" + model.tag
             text: model.name

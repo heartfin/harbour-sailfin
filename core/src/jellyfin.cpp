@@ -26,6 +26,7 @@ void registerTypes(const char *uri) {
     qmlRegisterUncreatableType<ViewModel::Item>(uri, 1, 0, "Item", "Acquire one via ItemLoader or exposed properties");
     qmlRegisterUncreatableType<EventBus>(uri, 1, 0, "EventBus", "Obtain one via your ApiClient");
     qmlRegisterUncreatableType<WebSocket>(uri, 1, 0, "WebSocket", "Obtain one via your ApiClient");
+    qmlRegisterUncreatableType<ViewModel::UserData>(uri, 1, 0, "UserData", "Obtain one via an Item");
 
     // AbstractItemModels
     qmlRegisterUncreatableType<BaseApiModel>(uri, 1, 0, "BaseApiModel", "Please use one of its subclasses");

@@ -27,16 +27,21 @@ Item::Item(QObject *parent, QSharedPointer<Model::Item> data)
       m_data(data),
       m_userData(new UserData(this)){
     connect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
+    m_userData->setData(data->userData());
 }
 
 void Item::setData(QSharedPointer<Model::Item> newData) {
     if (!m_data.isNull()) {
         disconnect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
     }
+
     m_data = newData;
+
     if (!m_data.isNull()) {
         connect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
+        setUserData(m_data->userData());
     }
+    emit userDataChanged(m_userData);
 }
 
 void Item::setUserData(DTO::UserItemDataDto &newData) {
@@ -44,7 +49,11 @@ void Item::setUserData(DTO::UserItemDataDto &newData) {
 }
 
 void Item::setUserData(QSharedPointer<DTO::UserItemDataDto> newData)  {
-    m_userData->setData(newData);
+    if (m_data.isNull() || m_data->userData().isNull()) {
+        m_userData->setData(QSharedPointer<DTO::UserData>::create());
+    } else {
+        m_userData->setData(newData);
+    }
     emit userDataChanged(m_userData);
 }
 

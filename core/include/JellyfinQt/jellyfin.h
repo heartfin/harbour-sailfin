@@ -36,6 +36,7 @@
 #include "viewmodel/loader.h"
 #include "viewmodel/modelstatus.h"
 #include "viewmodel/playbackmanager.h"
+#include "viewmodel/userdata.h"
 
 namespace Jellyfin {
 

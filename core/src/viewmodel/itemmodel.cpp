@@ -24,6 +24,8 @@
 #include "JellyfinQt/loader/http/getresumeitems.h"
 #include "JellyfinQt/loader/http/getseasons.h"
 
+#include "JellyfinQt/viewmodel/userdata.h"
+
 #define JF_CASE(roleName) case roleName: \
     try { \
         return QVariant(item->roleName()); \
@@ -87,6 +89,27 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
         return QVariant(item->isFolder().value_or(false));
     case RoleNames::parentIndexNumber:
         return QVariant(item->parentIndexNumber().value_or(1));
+    // UserData
+    case RoleNames::userDataRating:
+        return QVariant(item->userData()->rating().value_or(0.0));
+    case RoleNames::userDataPlayedPercentage:
+        return QVariant(item->userData()->playedPercentage().value_or(0.0));
+    case RoleNames::userDataUnplayedItemCount:
+        return QVariant(item->userData()->unplayedItemCount().value_or(0));
+    case RoleNames::userDataPlaybackPositionTicks:
+        return QVariant(item->userData()->playbackPositionTicks());
+    case RoleNames::userDataPlayCount:
+        return QVariant(item->userData()->playCount());
+    case RoleNames::userDataFavorite:
+        return QVariant(item->userData()->isFavorite());
+    case RoleNames::userDataLikes:
+        return QVariant(item->userData()->likes().value_or(false));
+    case RoleNames::userDataLastPlayedDate:
+        return QVariant(item->userData()->lastPlayedDate());
+    case RoleNames::userDataPlayed:
+        return QVariant(item->userData()->played());
+    case RoleNames::userDataKey:
+        return QVariant(item->userData()->key());
     default:
         return QVariant();
     }

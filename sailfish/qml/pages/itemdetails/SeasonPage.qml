@@ -79,7 +79,7 @@ BaseDetailPage {
                     shimColor: Theme.overlayBackgroundColor
                     shimOpacity: Theme.opacityOverlay
                     //width: model.userData.PlayedPercentage * parent.width / 100
-                    visible: episodeProgress.width > 0 || model.userData.played || model.userData.isFavorite // It doesn't look nice when it's visible on every image
+                    visible: episodeProgress.width > 0 || model.userDataPlayed || model.userDataFavorite // It doesn't look nice when it's visible on every image
                 }
 
                 Rectangle {
@@ -89,7 +89,7 @@ BaseDetailPage {
                         bottom: parent.bottom
                     }
                     height: Theme.paddingMedium
-                    width:  model.userData.playedPercentage * parent.width / 100
+                    width:  model.userDataPlayedPercentage * parent.width / 100
                     color: Theme.highlightColor
                 }
                 Row {
@@ -103,12 +103,12 @@ BaseDetailPage {
 
                     Icon {
                         source: "image://theme/icon-s-checkmark"
-                        visible: model.userData.played
+                        visible: model.userDataPlayed
                     }
 
                     Icon {
                         source: "image://theme/icon-s-favorite"
-                        visible: model.userData.isFavorite
+                        visible: model.userDataFavorite
                     }
                 }
             }

@@ -100,7 +100,7 @@ public:
     Q_PROPERTY(QString type READ type NOTIFY typeChanged)
     Q_PROPERTY(QString parentBackdropItemId READ parentBackdropItemId NOTIFY parentBackdropItemIdChanged)
     Q_PROPERTY(QStringList parentBackdropImageTags READ parentBackdropImageTags NOTIFY parentBackdropImageTagsChanged)
-    Q_PROPERTY(UserData *userData READ userData NOTIFY userDataChanged)
+    Q_PROPERTY(Jellyfin::ViewModel::UserData *userData READ userData NOTIFY userDataChanged)
     Q_PROPERTY(int recursiveItemCount READ recursiveItemCount NOTIFY recursiveItemCountChanged)
     Q_PROPERTY(int childCount READ childCount NOTIFY childCountChanged)
     Q_PROPERTY(QString albumArtist READ albumArtist NOTIFY albumArtistChanged)

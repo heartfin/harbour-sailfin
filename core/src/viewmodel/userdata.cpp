@@ -22,17 +22,24 @@ namespace Jellyfin {
 namespace ViewModel {
 
 UserData::UserData(QObject *parent)
-    : QObject(parent),
-      m_data(QSharedPointer<DTO::UserItemDataDto>::create()) {
+    : UserData(QSharedPointer<DTO::UserItemDataDto>::create(), parent) {
+
 }
 
 UserData::UserData(QSharedPointer<DTO::UserItemDataDto> data, QObject *parent)
     : QObject(parent),
       m_data(data) {
+    if (m_data.isNull()) {
+        m_data = QSharedPointer<DTO::UserItemDataDto>::create();
+    }
 }
 
 void UserData::setData(QSharedPointer<DTO::UserItemDataDto> data) {
-    m_data = data;
+    if (data.isNull()) {
+        m_data = QSharedPointer<DTO::UserItemDataDto>::create();
+    } else {
+        m_data = data;
+    }
 }
 
 } // NS ViewModel

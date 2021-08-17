@@ -34,6 +34,7 @@ Page {
     id: pageRoot
     property string itemId: ""
     property alias itemData: jItemLoader.data
+    property alias itemLoader: jItemLoader
     property bool _loading: jItemLoader.status === J.ItemLoader.Loading
     readonly property bool hasLogo: (typeof itemData.imageTags !== "undefined") && (typeof itemData.imageTags["Logo"] !== "undefined")
     property string _chosenBackdropImage: ""

@@ -33,7 +33,7 @@ BaseDetailPage {
     property alias subtitle: pageHeader.description
     default property alias _data: content.data
     property real _playbackProsition: itemData.userData.playbackPositionTicks
-    readonly property bool _userdataReady:  itemData.status === J.ItemLoader.Ready && itemData.userData !== null
+    readonly property bool _userdataReady:  itemLoader.status === J.ItemLoader.Ready && itemData.userData !== null
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height + Theme.paddingLarge
@@ -60,7 +60,7 @@ BaseDetailPage {
                 imageBlurhash: itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]
                 Binding on favourited {
                     when: _userdataReady
-                    value: itemData.userData.isFavorite
+                    value: itemData.userData.favorite
                 }
                 Binding on playProgress {
                     when: _userdataReady
@@ -82,7 +82,7 @@ BaseDetailPage {
     }
 
     Connections {
-        target: itemData
+        target: itemLoader
         onStatusChanged: {
             if (status === J.ItemLoader.Ready) {
                 console.log(itemData.mediaStreams)

@@ -28,6 +28,7 @@
 #include "../loader/http/getuserviews.h"
 #include "../loader/requesttypes.h"
 #include "../model/item.h"
+#include "../viewmodel/item.h"
 #include "../apimodel.h"
 #include "modelstatus.h"
 #include "propertyhelper.h"
@@ -268,6 +269,16 @@ public:
         artists,
         isFolder,
         parentIndexNumber,
+        userDataRating,
+        userDataPlayedPercentage,
+        userDataUnplayedItemCount,
+        userDataPlaybackPositionTicks,
+        userDataPlayCount,
+        userDataFavorite,
+        userDataLikes,
+        userDataLastPlayedDate,
+        userDataPlayed,
+        userDataKey,
 
         jellyfinExtendModelAfterHere = Qt::UserRole + 300 // Should be enough for now
     };
@@ -297,41 +308,22 @@ public:
             JFRN(artists),
             JFRN(isFolder),
             JFRN(parentIndexNumber),
+            JFRN(userDataRating),
+            JFRN(userDataPlayedPercentage),
+            JFRN(userDataUnplayedItemCount),
+            JFRN(userDataPlaybackPositionTicks),
+            JFRN(userDataPlayCount),
+            JFRN(userDataFavorite),
+            JFRN(userDataLikes),
+            JFRN(userDataLastPlayedDate),
+            JFRN(userDataPlayed),
+            JFRN(userDataKey),
         };
     }
     QVariant data(const QModelIndex &index, int role) const override;
     QSharedPointer<Model::Item> itemAt(int index);
 };
 
-/*class UserItemModel : public ItemModel {
-public:
-    explicit UserItemModel (QObject *parent = nullptr);
-};
-
-class UserItemResumeModel : public ItemModel {
-public:
-    explicit UserItemResumeModel (QObject *parent = nullptr);
-};
-
-class UserItemLatestModel : public ItemModel {
-public:
-    explicit UserItemLatestModel (QObject *parent = nullptr);
-};
-
-class ShowNextUpModel : public ItemModel {
-public:
-    explicit ShowNextUpModel (QObject *parent = nullptr);
-};
-
-class ShowSeasonsModel : public ItemModel {
-public:
-    explicit ShowSeasonsModel (QObject *parent = nullptr);
-};
-
-class ShowEpisodesModel : public ItemModel {
-public:
-    explicit ShowEpisodesModel (QObject *parent = nullptr);
-};*/
 #undef JFRN
 
 } // NS Jellyfin

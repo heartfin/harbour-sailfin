@@ -50,7 +50,7 @@ ApplicationWindow {
     ApiClient {
         id: _apiClient
         objectName: "Test"
-        supportedCommands: [J.GeneralCommandType.Play, J.GeneralCommandType.DisplayContent, J.GeneralCommandType.DisplayMessage]
+        supportedCommands: [GeneralCommandType.Play, GeneralCommandType.DisplayContent, GeneralCommandType.DisplayMessage]
     }
 
     initialPage: Component {

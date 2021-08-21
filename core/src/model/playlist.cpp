@@ -28,6 +28,7 @@ Playlist::Playlist(QObject *parent)
       m_shuffler(new NoShuffle(this)){}
 
 void Playlist::clearList() {
+    emit beforeListCleared();
     m_currentItem.clear();
     m_nextItem.clear();
     m_list.clear();
@@ -50,13 +51,16 @@ void Playlist::previous() {
     }
     m_nextItemFromQueue = !m_queue.isEmpty();
     m_currentItemFromQueue = false;
+    emit currentItemChanged();
 }
 
 void Playlist::next() {
     // Determine the new current item
     if (!m_queue.isEmpty()) {
         m_currentItem = m_queue.first();
+        emit beforeItemsRemovedFromQueue(0, 1);
         m_queue.removeFirst();
+        emit itemsRemovedFromQueue();
         m_currentItemFromQueue = true;
     } else if (!m_list.isEmpty()) {
         // The queue is empty
@@ -89,14 +93,31 @@ void Playlist::next() {
     } else {
         m_nextItem.clear();
     }
+    emit currentItemChanged();
 }
 
 QSharedPointer<const Item> Playlist::listAt(int index) const {
-    return m_list.at(index);
+    if (m_shuffler->canShuffleInAdvance()) {
+        return m_list.at(m_shuffler->itemAt(index));
+    } else {
+        return m_list.at(index);
+    }
+}
+
+QSharedPointer<const Item> Playlist::queueAt(int index) const {
+    return m_queue.at(index);
 }
 
 QSharedPointer<Item> Playlist::currentItem() {
     return m_currentItem;
+}
+
+int Playlist::currentItemIndexInList() const {
+    if (m_currentItemFromQueue) {
+        return -1;
+    } else {
+        return m_shuffler->currentItem();
+    }
 }
 
 QSharedPointer<Item> Playlist::nextItem() {
@@ -107,10 +128,11 @@ void Playlist::appendToList(ViewModel::ItemModel &model) {
     int start = m_list.size();
     int count = model.size();
     m_list.reserve(count);
+    emit beforeItemsAddedToList(start, count);
     for (int i = 0; i < count; i++) {
         m_list.append(QSharedPointer<Model::Item>(model.at(i)));
     }
-    emit itemsAddedToList(start, count);
+    emit itemsAddedToList();
     reshuffle();
 }
 
@@ -130,6 +152,7 @@ void Playlist::reshuffle() {
         }
     }
     emit listReshuffled();
+    emit currentItemChanged();
 }
 
 void Playlist::play(int index) {
@@ -142,6 +165,11 @@ void Playlist::play(int index) {
             m_nextItem.clear();
         }
     }
+    emit currentItemChanged();
+}
+
+bool Playlist::playingFromQueue() const {
+    return m_currentItemFromQueue;
 }
 
 } // NS Model

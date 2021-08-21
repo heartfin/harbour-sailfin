@@ -21,36 +21,81 @@
 
 #include <optional>
 
-#include <QAtomicInteger>
-#include <QMutex>
-#include <QMutexLocker>
+#include <QAbstractListModel>
+#include <QByteArray>
+#include <QHash>
 #include <QObject>
-#include <QQueue>
-#include <QWaitCondition>
-#include <QtMultimedia/QMediaPlaylist>
+#include <QSharedPointer>
+#include <QVariant>
 
 #include "../apiclient.h"
+#include "../model/playlist.h"
 #include "itemmodel.h"
 
 namespace Jellyfin {
 namespace ViewModel {
 
 /**
- * @brief Playlist/queue that can be exposed to the UI. It also containts the playlist-related logic,
- * which is mostly relevant
+ * @brief Indicator in which part of the playing queue a given item is positioned.
  */
-/*class Playlist : public ItemModel {
+class NowPlayingSection {
+    Q_GADGET
+public:
+    enum Value {
+        Queue,
+        NowPlaying,
+    };
+    Q_ENUM(Value);
+};
+
+/**
+ * @brief Playlist/queue that can be exposed to QML.
+ */
+class Playlist : public QAbstractListModel {
     Q_OBJECT
     friend class ItemUrlFetcherThread;
 public:
-    explicit Playlist(ApiClient *apiClient, QObject *parent = nullptr);
+    enum RoleNames {
+        // Item properties
+        name = Qt::UserRole + 1,
+        artists,
+        runTimeTicks,
+
+        // Non-item properties
+        playing,
+        section,
+    };
+    explicit Playlist(Model::Playlist *data, QObject *parent = nullptr);
+
+    QVariant data(const QModelIndex &parent, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    QHash<int, QByteArray> roleNames() const override;
+
 
 private slots:
-    void onItemsAdded(const QModelIndex &parent, int startIndex, int endIndex);
-    void onItemsMoved(const QModelIndex &parent, int startIndex, int endIndex, const QModelIndex &destination, int destinationRow);
-    void onItemsRemoved(const QModelIndex &parent, int startIndex, int endIndex);
-    void onItemsReset();
-};*/
+    void onBeforePlaylistCleared();
+    void onPlaylistCleared();
+    void onBeforeItemsAddedToList(int startIndex, int amount);
+    void onBeforeItemsAddedToQueue(int startIndex, int amount);
+    void onItemsAddedToList();
+    void onItemsAddedToQueue();
+    void onBeforeItemsRemovedFromList(int startIndex, int amount);
+    void onBeforeItemsRemovedFromQueue(int startIndex, int amount);
+    void onItemsRemovedFromList();
+    void onItemsRemovedFromQueue();
+    void onReshuffled();
+    void onPlayingItemChanged();
+private:
+    Model::Playlist *m_data;
+    // The index of the last played item.
+    int m_lastPlayedRow = -1;
+
+    /**
+     * @param index The index, from 0..rowCount();
+     * @return True if the item at the current index is being played, false otherwise.
+     */
+    bool isPlaying(int index) const;
+};
 
 
 

@@ -63,6 +63,10 @@ int NoShuffle::previousIndex() const {
     }
 }
 
+int NoShuffle::itemAt(int index) const {
+    return index;
+}
+
 int NoShuffle::nextIndex() const {
     if (m_repeatAll) {
         return (m_index + 1) % m_playlist->listSize();
@@ -89,6 +93,10 @@ int ListShuffleBase::currentItem() const {
 
 int ListShuffleBase::nextItem() const {
     return m_map[nextIndex()];
+}
+
+int ListShuffleBase::itemAt(int index) const {
+    return m_map[index];
 }
 
 // SimpleListShuffle

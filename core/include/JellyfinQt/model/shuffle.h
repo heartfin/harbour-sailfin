@@ -103,6 +103,7 @@ public:
 
     virtual int currentItem() const override;
     virtual int nextItem() const override;
+    virtual int itemAt(int index) const override;
 
     virtual void previous() override;
     virtual void next() override;
@@ -122,6 +123,7 @@ public:
     ListShuffleBase(const Playlist *parent);
     virtual int currentItem() const override;
     virtual int nextItem() const override;
+    virtual int itemAt(int index) const override;
 protected:
     QVector<int> m_map;
 };

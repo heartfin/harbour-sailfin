@@ -27,6 +27,7 @@ ListItem {
     property real duration
     property string name
     property int indexNumber
+    property bool playing
 
     contentHeight: songName.height + songArtists.height + 2 * Theme.paddingMedium
     width: parent.width
@@ -49,6 +50,7 @@ ListItem {
         horizontalAlignment: Text.AlignRight
         font.pixelSize: Theme.fontSizeExtraLarge
         width: indexMetrics.width
+        highlighted: playing
     }
 
     Label {
@@ -64,6 +66,7 @@ ListItem {
         text: name
         font.pixelSize: Theme.fontSizeMedium
         truncationMode: TruncationMode.Fade
+        highlighted: down || playing
     }
     Label {
         id: songArtists
@@ -78,6 +81,7 @@ ListItem {
         font.pixelSize: Theme.fontSizeSmall
         truncationMode: TruncationMode.Fade
         color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+        highlighted: down || playing
     }
 
     Label {
@@ -91,5 +95,6 @@ ListItem {
         text: Utils.ticksToText(songDelegateRoot.duration)
         font.pixelSize: Theme.fontSizeSmall
         color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+        highlighted: down || playing
     }
 }

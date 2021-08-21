@@ -34,6 +34,7 @@ void registerTypes(const char *uri) {
     qmlRegisterUncreatableType<BaseModelLoader>(uri, 1, 0, "BaseModelLoader", "Please use one of its subclasses");
     qmlRegisterType<ViewModel::ItemModel>(uri, 1, 0, "ItemModel");
     qmlRegisterType<ViewModel::UserModel>(uri, 1, 0, "UserModel");
+    qmlRegisterUncreatableType<ViewModel::Playlist>(uri, 1, 0, "Playlist", "Available via PlaybackManager");
 
     // Loaders
     qmlRegisterUncreatableType<ViewModel::LoaderBase>(uri, 1, 0, "LoaderBase", "Use one of its subclasses");
@@ -52,6 +53,7 @@ void registerTypes(const char *uri) {
     qmlRegisterUncreatableType<Jellyfin::ViewModel::ModelStatusClass>(uri, 1, 0, "ModelStatus", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::DTO::PlayMethodClass>(uri, 1, 0, "PlayMethod", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::DTO::ItemFieldsClass>(uri, 1, 0, "ItemFields", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::ViewModel::NowPlayingSection>(uri, 1, 0, "NowPlayingSection", "Is an enum");
 
     qRegisterMetaType<Jellyfin::DTO::PlayMethodClass::Value>();
 }

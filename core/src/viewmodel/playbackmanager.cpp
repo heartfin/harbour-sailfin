@@ -40,6 +40,8 @@ PlaybackManager::PlaybackManager(QObject *parent)
       m_mediaPlayer(new QMediaPlayer(this)),
       m_urlFetcherThread(new ItemUrlFetcherThread(this)),
       m_queue(new Model::Playlist(this)) {
+
+    m_displayQueue = new ViewModel::Playlist(m_queue, this);
     // Set up connections.
     m_updateTimer.setInterval(10000); // 10 seconds
     m_updateTimer.setSingleShot(false);

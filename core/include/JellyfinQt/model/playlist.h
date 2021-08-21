@@ -52,6 +52,11 @@ public:
     /// Returns the current item in the queue
     QSharedPointer<Item> currentItem();
     QSharedPointer<Item> nextItem();
+    /**
+     * @return the current index of the playing item if it is in the list. If playing from the queue,
+     * returns -1.
+     */
+    int currentItemIndexInList() const;
 
     /**
      * @brief Determine the previous item to be played.
@@ -63,13 +68,26 @@ public:
      */
     void next();
 
-    // int queueSize() { return m_queue.size(); };
+    int queueSize() { return m_queue.size(); };
     int listSize() const { return m_list.size(); };
     int totalSize() const { return m_queue.size() + m_list.size(); }
 
-    QSharedPointer<const Item> listAt(int index) const;
     /**
-     * @brief Removes all the items from the playlist
+     * @brief Returns the item at the given index of the currently selected playlist, excluding the queue.
+     * @param index
+     * @return The given item.
+     */
+    QSharedPointer<const Item> listAt(int index) const;
+
+    /**
+     * @brief Returns the item at the given index of the currently queue, excluding the playlist.
+     * @param index
+     * @return The given item.
+     */
+    QSharedPointer<const Item> queueAt(int index) const;
+
+    /**
+     * @brief Removes all the items from the playlist, but not from the queue.
      */
     void clearList();
 
@@ -83,11 +101,26 @@ public:
      * @param index The index to start from.
      */
     void play(int index = 0);
+
+    /**
+     * @brief playingFromQueue
+     * @return True if the currently played item comes from the queue.
+     */
+    bool playingFromQueue() const;
+
 signals:
+    void beforeListCleared();
     void listCleared();
-    void itemsAddedToQueue(int index, int count);
-    void itemsAddedToList(int index, int count);
+    void beforeItemsAddedToQueue(int index, int count);
+    void beforeItemsAddedToList(int index, int count);
+    void itemsAddedToQueue();
+    void itemsAddedToList();
+    void beforeItemsRemovedFromQueue(int index, int count);
+    void beforeItemsRemovedFromList(int index, int count);
+    void itemsRemovedFromQueue();
+    void itemsRemovedFromList();
     void listReshuffled();
+    void currentItemChanged();
 private:
     void reshuffle();
 

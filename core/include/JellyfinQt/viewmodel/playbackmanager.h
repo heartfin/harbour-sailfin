@@ -41,6 +41,7 @@
 #include "../model/playlist.h"
 #include "../support/jsonconv.h"
 #include "../viewmodel/item.h"
+#include "../viewmodel/playlist.h"
 #include "../apiclient.h"
 #include "itemmodel.h"
 
@@ -83,8 +84,8 @@ public:
 
     // Current Item and queue informatoion
     Q_PROPERTY(QObject *item READ item NOTIFY itemChanged)
-    // Q_PROPERTY(QAbstractItemModel *queue READ queue NOTIFY queueChanged)
     Q_PROPERTY(int queueIndex READ queueIndex NOTIFY queueIndexChanged)
+    Q_PROPERTY(Jellyfin::ViewModel::Playlist *queue READ queue NOTIFY queueChanged)
 
     // Current media player related property getters
     Q_PROPERTY(qint64 duration READ duration NOTIFY durationChanged)
@@ -105,7 +106,7 @@ public:
     QObject *mediaObject() const { return m_mediaPlayer; }
     qint64 position() const { return m_mediaPlayer->position(); }
     qint64 duration() const { return m_mediaPlayer->duration(); }
-    //ItemModel *queue() const { return m_queue; }
+    ViewModel::Playlist *queue() const { return m_displayQueue; }
     int queueIndex() const { return m_queueIndex; }
 
     // Current media player related property getters
@@ -129,7 +130,7 @@ signals:
     void mediaObjectChanged(QObject *newMediaObject);
     void positionChanged(qint64 newPosition);
     void durationChanged(qint64 newDuration);
-    //void queueChanged(ItemModel *newQue);
+    void queueChanged(QAbstractItemModel *newQueue);
     void queueIndexChanged(int newIndex);
     void playbackStateChanged(QMediaPlayer::State newState);
     void mediaStatusChanged(QMediaPlayer::MediaStatus newMediaStatus);
@@ -198,6 +199,8 @@ private:
     QSharedPointer<Model::Item> m_nextItem;
     /// The currently played item that will be shown in the GUI
     ViewModel::Item *m_displayItem = new ViewModel::Item(this);
+    /// The currently played queue that will be shown in the GUI
+    ViewModel::Playlist *m_displayQueue = nullptr;
 
     // Properties for making the streaming request.
     QString m_streamUrl;

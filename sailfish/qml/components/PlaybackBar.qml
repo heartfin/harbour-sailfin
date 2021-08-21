@@ -98,6 +98,12 @@ PanelBackground {
                 value: manager.queue
                 //currentIndex: manager.queueIndex
             }
+            Binding {
+                when: queueLoader.item !== null
+                target: queueLoader.item
+                property: "playbackManager"
+                value: manager
+            }
         }
 
         Column {

@@ -192,6 +192,20 @@ void PlaybackManager::playItemInList(ItemModel *playlist, int index) {
     setItem(playlist->itemAt(index));
 }
 
+void PlaybackManager::skipToItemIndex(int index) {
+    if (index < m_queue->queueSize()) {
+        // Skip until we hit the right number in the queue
+        index++;
+        while(index != 0) {
+            m_queue->next();
+            index--;
+        }
+    } else {
+        m_queue->play(index);
+    }
+    setItem(m_queue->currentItem());
+}
+
 void PlaybackManager::next() {
     m_mediaPlayer->stop();
     m_mediaPlayer->setMedia(QMediaContent());

@@ -148,6 +148,11 @@ public slots:
      */
     void playItem(Item *item);
     void playItemInList(ItemModel *itemList, int index);
+    /**
+     * @brief skipToItemIndex Skips to an item in the current playlist
+     * @param index The index to skip to
+     */
+    void skipToItemIndex(int index);
     void play() { m_mediaPlayer->play(); }
     void pause() { m_mediaPlayer->pause(); }
     void seek(qint64 pos) { m_mediaPlayer->setPosition(pos); }

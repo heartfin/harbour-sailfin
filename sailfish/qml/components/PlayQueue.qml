@@ -7,6 +7,7 @@ import "music"
 
 SilicaListView {
     //header: PageHeader { title: qsTr("Play queue") }
+    property var playbackManager
     section.property: "section"
     section.delegate: SectionHeader {
         text: {
@@ -29,6 +30,7 @@ SilicaListView {
         indexNumber: index + 1
         duration: model.runTimeTicks
         playing: model.playing
+        onClicked: playbackManager.skipToItemIndex(model.index)
     }
     clip: true
 }

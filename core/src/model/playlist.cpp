@@ -165,6 +165,7 @@ void Playlist::play(int index) {
             m_nextItem.clear();
         }
     }
+    m_currentItem = m_list[m_shuffler->currentItem()];
     emit currentItemChanged();
 }
 

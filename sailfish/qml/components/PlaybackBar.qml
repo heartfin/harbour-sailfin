@@ -59,7 +59,6 @@ PanelBackground {
         height: parent.height
         onClicked: playbackBar.state = "large"
 
-
         RemoteImage {
             id: albumArt
             anchors {
@@ -85,12 +84,18 @@ PanelBackground {
                 Behavior on opacity { FadeAnimation {} }
             }
         }
+        Rectangle {
+            id: playQueueShim
+            color: Theme.rgba(Theme.overlayBackgroundColor, Theme.opacityLow)
+            opacity: 0
+        }
         Loader {
             id: queueLoader
             source: Qt.resolvedUrl("PlayQueue.qml")
             anchors.fill: albumArt
             active: false
             visible: false
+            opacity: 0
             Binding {
                 when: queueLoader.item !== null
                 target: queueLoader.item
@@ -119,7 +124,7 @@ PanelBackground {
 
             Label {
                 id: name
-                text: manager.item == null ? qsTr("No media selected") : manager.item.name
+                text: manager.item === null ? qsTr("No media selected") : manager.item.name
                 width: Math.min(contentWidth, parent.width)
                 font.pixelSize: Theme.fontSizeMedium
                 maximumLineCount: 1
@@ -132,9 +137,9 @@ PanelBackground {
                     if (manager.item === null) return qsTr("Play some media!")
                     switch(manager.item.mediaType) {
                     case "Audio":
-                        return manager.item.artists //.join(", ")
+                        return manager.item.artists.join(", ")
                     }
-                    return qsTr("Not audio")
+                    return qsTr("No audio")
                 }
                 width: Math.min(contentWidth, parent.width)
                 font.pixelSize: Theme.fontSizeSmall
@@ -255,7 +260,7 @@ PanelBackground {
             }
             PropertyChanges {
                 target: albumArt
-                state: "blurhash"
+                forceBlurhash: true
                 width: parent.width
                 anchors.bottomMargin: Theme.paddingLarge
             }
@@ -324,7 +329,7 @@ PanelBackground {
                 target: nextButton; opacity: 1; enabled: true;
             }
             PropertyChanges {
-                target: playModeButton; opacity: 1; enabled: true;
+                target: playModeButton; opacity: 1; //enabled: true;
             }
             PropertyChanges {
                 target: queueButton; opacity: 1; enabled: true;
@@ -367,7 +372,7 @@ PanelBackground {
             PropertyChanges {
                 target: playbackBarTranslate
                 // + small padding since the ProgressBar otherwise would stick out
-                y: playbackBar.height + Theme.paddingSmall
+                y: playbackBar.height + Theme.paddingMedium
             }
             PropertyChanges {
                 target: playbackBar
@@ -394,11 +399,16 @@ PanelBackground {
             PropertyChanges {
                 target: queueLoader
                 visible: true
+                opacity: 1
             }
             PropertyChanges {
                 target: largeAlbumArt
                 opacity: 0
                 visible: false
+            }
+            PropertyChanges {
+                target: playQueueShim
+                opacity: 1
             }
         }
     ]
@@ -411,7 +421,7 @@ PanelBackground {
             allowedOrientations: appWindow.allowedOrientations
             SilicaFlickable {
                 anchors.fill: parent
-                PullDownMenu {
+                /*PullDownMenu {
                     MenuItem {
                         //: Pulley menu item to view detailed media information of a song
                         text: qsTr("Info")
@@ -420,7 +430,7 @@ PanelBackground {
                         //: Pulley menu item: add music to a playlist
                         text: qsTr("Add to playlist")
                     }
-                }
+                }*/
                 Loader {
                     Component.onCompleted: setSource(Qt.resolvedUrl("PlaybackBar.qml"),
                                                      {"isFullPage": true, "manager": manager, "y": 0})
@@ -432,7 +442,7 @@ PanelBackground {
 
     transitions: [
         Transition {
-            from: "*"
+            from: ""
             to: "large"
             // We animate this object to a large size and then quickly swap out this component
             // with a page containing this component.
@@ -463,6 +473,8 @@ PanelBackground {
                     script: {
                         pageStack.currentPage.showNavigationIndicator = _pageWasShowingNavigationIndicator
                         pageStack.push(fullPage, {"background": pageStack.currentPage.background}, PageStackAction.Immediate)
+                        /*playbackBarTranslate.y = playbackBar.height + Theme.paddingMedium
+                        appWindow.bottomMargin = 0*/
                     }
                 }
             }
@@ -473,9 +485,10 @@ PanelBackground {
         },
         Transition {
             from: "hidden"
+            to: ""
             NumberAnimation {
                 targets: [playbackBarTranslate, playbackBar]
-                properties: "y,visibileSize"
+                properties: "y,visibleSize"
                 duration: 250
                 easing.type: Easing.OutQuad
             }
@@ -495,7 +508,7 @@ PanelBackground {
                 ParallelAnimation {
                     NumberAnimation {
                         targets: [playbackBarTranslate, playbackBar]
-                        properties: "y,visibileSize"
+                        properties: "y,visibleSize"
                         duration: 250
                         easing.type: Easing.OutQuad
                     }
@@ -508,6 +521,35 @@ PanelBackground {
                         easing.type: Easing.OutQuad
                     }
                 }
+            }
+        },
+        Transition {
+            from: "page"
+            to: "pageQueue"
+            reversible: false
+
+            SequentialAnimation {
+                FadeAnimation {
+                    targets: [playQueueShim, largeAlbumArt, queueLoader]
+                    property: "opacity"
+                }
+                PropertyAction { target: largeAlbumArt; property: "visible"; value: false }
+            }
+        },
+        Transition {
+            from: "pageQueue"
+            to: "page"
+            reversible: false
+            SequentialAnimation {
+                PropertyAction { target: largeAlbumArt; property: "visible"; value: true }
+                PropertyAction { target: largeAlbumArt; property: "opacity"; value: 0 }
+
+                FadeAnimation {
+                    targets: [playQueueShim, largeAlbumArt, queueLoader]
+                    property: "opacity"
+                }
+
+                PropertyAction { target: queueLoader; property: "visible"; value: false }
             }
         }
     ]

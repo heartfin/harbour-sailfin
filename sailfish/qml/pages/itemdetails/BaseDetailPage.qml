@@ -103,7 +103,7 @@ Page {
         if (status === PageStatus.Active) {
             console.log("Page ready, ItemID: ", itemId, ", UserID: ", apiClient.userId)
             jItemLoader.autoReload = true
-            //appWindow.itemData = jItemLoader.data
+            appWindow.itemData = jItemLoader.data
         }
     }
 }

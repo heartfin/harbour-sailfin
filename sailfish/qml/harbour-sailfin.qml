@@ -38,7 +38,7 @@ ApplicationWindow {
     readonly property ApiClient apiClient: _apiClient
 
     // Due QTBUG-10822, declarartions such as `property J.Item foo` are not possible.
-    property QtObject itemData
+    property var itemData
     // Id of the collection currently browsing. For use on the cover.
     property string collectionId
 
@@ -68,8 +68,10 @@ ApplicationWindow {
             }
         }
     }
-    cover: {
-        if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(playbackManager.status) >= 0) {
+    cover: CoverBackground {CoverPlaceholder { icon.source: "icon.png"; text: "Sailfin"}}
+    /*{
+        // Disabled due to buggy Loader behaviour
+        if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(_playbackManager.mediaStatus) >= 0) {
             if (itemData) {
                 return Qt.resolvedUrl("cover/PosterCover.qml")
             } else {
@@ -78,7 +80,7 @@ ApplicationWindow {
         } else if (playbackManager.hasVideo){
             return Qt.resolvedUrl("cover/VideoCover.qml")
         }
-    }
+    }*/
 
     Notification {
         id: errorNotification

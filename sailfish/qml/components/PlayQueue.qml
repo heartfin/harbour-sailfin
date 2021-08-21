@@ -11,7 +11,7 @@ SilicaListView {
     section.property: "section"
     section.delegate: SectionHeader {
         text: {
-            switch(section) {
+            switch(Number(section)) {
             case J.NowPlayingSection.Queue:
                 //: Now playing page queue section header
                 return qsTr("Queue")
@@ -19,7 +19,7 @@ SilicaListView {
                 //: Now playing page playlist section header
                 return qsTr("Playlist")
             default:
-                return qsTr("Unknown section")
+                return qsTr("Unknown section: %1").arg(ListView.section)
             }
         }
     }

@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../components"
 import "../Utils.js" as Utils
@@ -33,26 +33,32 @@ CoverBackground {
     }
     property int rowCount: 8
 
-    UserItemModel {
+    J.ItemModel {
         id: randomItems1
-        apiClient: ApiClient
-        limit: cover.rowCount
-        imageTypes: ["Primary"]
-        sortBy: ["IsFavoriteOrLiked", "Random"]
-        recursive: true
-        parentId: appWindow.collectionId
-        Component.onCompleted: reload()
+        /*loader: J.UserItemsLoader {
+            apiClient: appWindow.apiClient
+            limit: cover.rowCount
+            imageTypes: ["Primary"]
+            sortBy: ["IsFavoriteOrLiked", "Random"]
+            recursive: true
+            parentId: appWindow.collectionId
+            autoReload: false
+        }*/
+        //Component.onCompleted: reload()
     }
 
-    UserItemModel {
+    J.ItemModel {
         id: randomItems2
-        apiClient: ApiClient
-        limit: cover.rowCount
-        imageTypes: ["Primary"]
-        sortBy: ["IsFavoriteOrLiked", "Random"]
-        recursive: true
-        parentId: appWindow.collectionId
-        Component.onCompleted: reload()
+        /*loader: J.UserItemsLoader {
+            apiClient: appWindow.apiClient
+            limit: cover.rowCount
+            imageTypes: ["Primary"]
+            sortBy: ["IsFavoriteOrLiked", "Random"]
+            recursive: true
+            parentId: appWindow.collectionId
+            autoReload: false
+        }*/
+        //Component.onCompleted: reload()
     }
 
     Row {
@@ -79,7 +85,7 @@ CoverBackground {
                 clip: true
                 height: row1.height
                 width: height
-                source: model.id ? Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": row1.height})
+                source: model.id ? Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": row1.height})
                                  : ""
                 fillMode: Image.PreserveAspectCrop
             }
@@ -123,7 +129,7 @@ CoverBackground {
                 clip: true
                 height: row2.height
                 width: height
-                source: Utils.itemModelImageUrl(ApiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": row1.height})
+                source: Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": row1.height})
                 fillMode: Image.PreserveAspectCrop
             }
         }

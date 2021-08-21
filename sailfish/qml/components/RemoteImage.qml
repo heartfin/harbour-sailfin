@@ -33,6 +33,7 @@ SilicaItem {
     property string fallbackImage
     property bool usingFallbackImage
     property color fallbackColor: Theme.highlightColor
+    property bool forceBlurhash: false // Force display the blurhash state even though the image is already loaded
 
     property var __parentPage : null
     property bool _alreadyLoaded: false
@@ -117,7 +118,7 @@ SilicaItem {
     states: [
         State {
             name: "fallback"
-            when: (blurhash.length === 0) && (realImage.status === Image.Error || realImage.status === Image.Null || realImage.status === Image.Loading)
+            when: !forceBlurhash && (blurhash.length === 0) && (realImage.status === Image.Error || realImage.status === Image.Null || realImage.status === Image.Loading)
             PropertyChanges {
                 target: fallbackBackground
                 opacity: 1
@@ -125,7 +126,7 @@ SilicaItem {
         },
         State {
             name: "blurhash"
-            when: blurhash.length > 0 && (realImage.status === Image.Error || realImage.status === Image.Null || realImage.status === Image.Loading)
+            when: !forceBlurhash && blurhash.length > 0 && (realImage.status === Image.Error || realImage.status === Image.Null || realImage.status === Image.Loading)
             PropertyChanges {
                 target: blurhashImage
                 opacity: 1
@@ -133,10 +134,18 @@ SilicaItem {
         },
         State {
             name: "loaded"
-            when: realImage.status === Image.Ready
+            when: !root.forceBlurhash && realImage.status === Image.Ready
             PropertyChanges {
                 target: realImage
                 //opacity: 1
+            }
+        },
+        State {
+            name: "forcedBlurhash"
+            when: forceBlurhash
+            PropertyChanges {
+                target: blurhashImage
+                opacity: 1
             }
         }
     ]

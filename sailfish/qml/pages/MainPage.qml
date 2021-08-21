@@ -80,7 +80,7 @@ Page {
                 //- Section header for films and TV shows that an user hasn't completed yet.
                 text: qsTr("Resume watching")
                 clickable: false
-                busy: userResumeLoader.status === J.ApiModel.Loading
+                busy: userResumeLoader.status === J.UsersViewsLoader.Loading
                 Loader {
                     width: parent.width
                     sourceComponent: carrouselView

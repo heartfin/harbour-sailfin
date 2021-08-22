@@ -20,16 +20,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../components"
 import ".."
 
 CoverBackground {
-    property JellyfinItem mData: appWindow.itemData
+    // Due QTBUG-10822, declarartions such as `property J.Item foo` are not possible.
+    property var mData: appWindow.itemData
     RemoteImage {
         anchors.fill: parent
-        source: mData == null ? "" : Utils.itemImageUrl(ApiClient.baseUrl, mData, "Primary", {"maxWidth": parent.width})
+        source: mData === null ? "" : Utils.itemImageUrl(appWindow.apiClient.baseUrl, mData, "Primary", {"maxWidth": parent.width})
         fillMode: Image.PreserveAspectCrop
         onSourceChanged: console.log(source)
     }

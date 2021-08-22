@@ -38,9 +38,7 @@ ApplicationWindow {
     readonly property ApiClient apiClient: _apiClient
 
     // Due QTBUG-10822, declarartions such as `property J.Item foo` are not possible.
-    property var itemData
-    // Id of the collection currently browsing. For use on the cover.
-    property string collectionId
+    property var itemData: pageStack.currentPage.itemData
 
     // Bad way to implement settings, but it'll do for now.
     property bool showDebugInfo: true
@@ -68,19 +66,17 @@ ApplicationWindow {
             }
         }
     }
-    cover: CoverBackground {CoverPlaceholder { icon.source: "icon.png"; text: "Sailfin"}}
-    /*{
+    //cover: CoverBackground {CoverPlaceholder { icon.source: "icon.png"; text: "Sailfin"}}
+    cover: {
         // Disabled due to buggy Loader behaviour
         if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(_playbackManager.mediaStatus) >= 0) {
-            if (itemData) {
-                return Qt.resolvedUrl("cover/PosterCover.qml")
-            } else {
-                return Qt.resolvedUrl("cover/CoverPage.qml")
-            }
+            return Qt.resolvedUrl("cover/CoverPage.qml")
         } else if (playbackManager.hasVideo){
             return Qt.resolvedUrl("cover/VideoCover.qml")
+        } else {
+            return Qt.resolvedUrl("cover/CoverPage.qml")
         }
-    }*/
+    }
 
     Notification {
         id: errorNotification
@@ -98,6 +94,17 @@ ApplicationWindow {
         apiClient: appWindow.apiClient
         audioIndex: 0
         autoOpen: true
+    }
+
+    Connections {
+        target: pageStack
+        onCurrentPageChanged: {
+            if ("itemData" in pageStack.currentPage) {
+                appWindow.itemData =  pageStack.currentPage.itemData
+            } else {
+                appWindow.itemData = null
+            }
+        }
     }
 
     // Keep the sytem alive while playing media

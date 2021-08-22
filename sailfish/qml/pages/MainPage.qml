@@ -138,7 +138,7 @@ Page {
                             }
                         }
                         Connections {
-                            target: mediaLibraryModel
+                            target: mediaLibraryLoader
                             onReady: userItemModel.reload()
                         }
                     }

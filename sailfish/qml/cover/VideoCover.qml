@@ -26,8 +26,7 @@ import nl.netsoj.chris.Jellyfin 1.0
 import "../components"
 
 PosterCover {
-    readonly property MediaPlayer player: appWindow.mediaPlayer
-    property var mData: appWindow.itemData
+    readonly property var player: appWindow.playbackManager
 
     // Wanted to display the currently running move on here, but it's hard :/
     /*Rectangle {

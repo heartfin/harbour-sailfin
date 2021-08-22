@@ -26,149 +26,115 @@ import "../Utils.js" as Utils
 
 CoverBackground {
     id: cover
-    Label {
-        id: label
+    readonly property int rowCount: 8
+    readonly property real rowOffset: ((rowCount - 1) * 0.5)
+    readonly property real rowHeight: height / 2
+    readonly property real bottomOffset: width - rowHeight
+    readonly property bool onMainScreen: appWindow.itemData === null
+    readonly property bool itemId: appWindow.itemData.jellyfinId || appWindow.pageStack.currentPage.itemId
+    readonly property bool hasParent: !appWindow.itemData !== null && appWindow.itemData.jellyfinId.length !== 0
+
+    J.ItemModel {
+        id: randomItems
+        loader: J.UserItemsLoader {
+            id: randomItemsLoader
+            apiClient: appWindow.apiClient
+            limit: cover.rowCount * 2
+            imageTypes: [J.ImageType.Primary]
+            sortBy: "IsFavoriteOrLiked,Random"
+            recursive: false
+            parentId: hasParent ? itemId : ""
+            autoReload:  false
+            onParentIdChanged: {
+                if (parentId.length > 0) reload()
+            }
+        }
+    }
+    PathView {
+        id: pathView
+        model: randomItems
+        path: Path {
+            startX: -rowHeight * rowOffset
+            startY: rowHeight * 0.5
+
+            PathLine {
+                x: rowHeight * rowOffset
+                y: rowHeight * 0.5
+            }
+            PathPercent {
+                value: 0.5
+            }
+            PathLine {
+                x: rowHeight * rowOffset + bottomOffset
+                y: rowHeight * 1.5
+            }
+            PathPercent {
+                value: 0.5
+            }
+            PathLine {
+                x: -rowHeight * rowOffset + bottomOffset
+                y: rowHeight * 1.5
+            }
+            PathPercent {
+                value: 1
+            }
+            PathLine {
+                x: -rowHeight * rowOffset
+                y: rowHeight * 0.5
+            }
+        }
+        delegate: RemoteImage {
+                height: rowHeight
+                width: height
+                source: model.jellyfinId
+                            ? Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"maxHeight": row1.height})
+                            : ""
+                blurhash: model.jellyfinId
+                            ? model.imageBlurHashes["Primary"][model.imageTags["Primary"]]
+                            : ""
+                fillMode: Image.PreserveAspectCrop
+            }
+    }
+
+     Rectangle {
+        anchors.fill: parent
+        color: Theme.rgba(Theme.overlayBackgroundColor, Theme.opacityHigh)
+    }
+
+    Column {
         anchors.centerIn: parent
-        text: qsTr("Sailfin")
-    }
-    property int rowCount: 8
-
-    J.ItemModel {
-        id: randomItems1
-        /*loader: J.UserItemsLoader {
-            apiClient: appWindow.apiClient
-            limit: cover.rowCount
-            imageTypes: ["Primary"]
-            sortBy: ["IsFavoriteOrLiked", "Random"]
-            recursive: true
-            parentId: appWindow.collectionId
-            autoReload: false
-        }*/
-        //Component.onCompleted: reload()
-    }
-
-    J.ItemModel {
-        id: randomItems2
-        /*loader: J.UserItemsLoader {
-            apiClient: appWindow.apiClient
-            limit: cover.rowCount
-            imageTypes: ["Primary"]
-            sortBy: ["IsFavoriteOrLiked", "Random"]
-            recursive: true
-            parentId: appWindow.collectionId
-            autoReload: false
-        }*/
-        //Component.onCompleted: reload()
-    }
-
-    Row {
-        id: row1
-        property bool movingRight: true
-        property int moveCount: 0
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        transform: [
-            Translate {
-                x: -row1.height// + (row1.width - row1.height) / 2;
-            },
-            Translate {
-                id: row1Translate;
-                Behavior on x { NumberAnimation { duration: 500; easing.type: Easing.InOutQuad }}
-            }
-        ]
-        height: parent.height / 2
         width: parent.width
-        Repeater {
-            model: randomItems1
-            RemoteImage {
-                clip: true
-                height: row1.height
-                width: height
-                source: model.id ? Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": row1.height})
-                                 : ""
-                fillMode: Image.PreserveAspectCrop
-            }
+        Image {
+            anchors.horizontalCenter: parent.horizontalCenter
+            source: Qt.resolvedUrl("../icon.png")
+            width: parent.width / 3
+            height: width
         }
 
-        function move() {
-            if (movingRight) {
-                row1Translate.x -= row1.height
-                moveCount++;
-            } else {
-                row1Translate.x += row1.height
-                moveCount--;
-            }
-            if (moveCount == 0) movingRight = true;
-            if (moveCount == rowCount - 3) movingRight = false;
-        }
-    }
-
-    Row {
-        id: row2
-        property bool movingRight: false
-        property int moveCount: rowCount - 3
-        anchors.bottom: parent.bottom
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-        transform: [
-            Translate {
-                x: -row2.height * (rowCount - 2) + (row2.width - row2.height);
-            },
-            Translate {
-                id: row2Translate;
-                Behavior on x { NumberAnimation { duration: 500; easing.type: Easing.InOutQuad }}
-            }
-        ]
-        height: parent.height / 2
-        width: parent.width
-        Repeater {
-            model: randomItems2
-            RemoteImage {
-                clip: true
-                height: row2.height
-                width: height
-                source: Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.id, model.imageTags.primary, "Primary", {"maxHeight": row1.height})
-                fillMode: Image.PreserveAspectCrop
-            }
-        }
-
-        function move() {
-            if (movingRight) {
-                row2Translate.x -= row1.height
-                moveCount++;
-            } else {
-                row2Translate.x += row1.height
-                moveCount--;
-            }
-            if (moveCount == 0) movingRight = true;
-            if (moveCount == rowCount - 3) movingRight = false;
+        Label {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: qsTr("Sailfin")
+            font.bold: true
         }
     }
 
     Connections {
-        target: appWindow
-        onCollectionIdChanged: {
-            randomItems1.parentId = collectionId
-            randomItems2.parentId = collectionId
-            randomItems1.reload()
-            randomItems2.reload()
+        target: appWindow.pageStack
+        onCurrentPageChanged: {
+            console.log("Reloading cover collection")
+            /*randomItems1Loader.parentId = Qt.binding(function() { return  onMainScreen ? "" : appWindow.itemData.jellyfinId; })
+            randomItems2Loader.parentId = Qt.binding(function() { return  onMainScreen ? "" : appWindow.itemData.jellyfinId; })*/
+            //randomItems1.reload()
+            //randomItems2.reload()
         }
     }
 
     Timer {
-        property bool odd: false
         running: true
         interval: 5000
         repeat: true
         onTriggered: {
-            if (odd) {
-                row1.move()
-            } else {
-                row2.move()
-            }
-            odd = !odd
+            pathView.incrementCurrentIndex()
         }
     }
 

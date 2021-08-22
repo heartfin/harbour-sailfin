@@ -38,7 +38,6 @@ PlaybackManager::PlaybackManager(QObject *parent)
     : QObject(parent),
       m_item(nullptr),
       m_mediaPlayer(new QMediaPlayer(this)),
-      m_urlFetcherThread(new ItemUrlFetcherThread(this)),
       m_queue(new Model::Playlist(this)) {
 
     m_displayQueue = new ViewModel::Playlist(m_queue, this);
@@ -48,10 +47,7 @@ PlaybackManager::PlaybackManager(QObject *parent)
 
     m_preloadTimer.setSingleShot(true);
 
-    connect(this, &QObject::destroyed, this, &PlaybackManager::onDestroyed);
     connect(&m_updateTimer, &QTimer::timeout, this, &PlaybackManager::updatePlaybackInfo);
-    connect(m_urlFetcherThread, &ItemUrlFetcherThread::itemUrlFetched, this, &PlaybackManager::onItemExtraDataReceived);
-    m_urlFetcherThread->start();
 
     connect(m_mediaPlayer, &QMediaPlayer::stateChanged, this, &PlaybackManager::mediaPlayerStateChanged);
     connect(m_mediaPlayer, &QMediaPlayer::positionChanged, this, &PlaybackManager::mediaPlayerPositionChanged);
@@ -62,10 +58,6 @@ PlaybackManager::PlaybackManager(QObject *parent)
     //                     I do not like the complicated overload cast
     connect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(mediaPlayerError(QMediaPlayer::Error)));
 
-}
-
-void PlaybackManager::onDestroyed() {
-    m_urlFetcherThread->cleanlyStop();
 }
 
 void PlaybackManager::setApiClient(ApiClient *apiClient) {
@@ -99,7 +91,7 @@ void PlaybackManager::setItem(QSharedPointer<Model::Item> newItem) {
     // Deinitialize the streamUrl
     if (shouldFetchStreamUrl) {
         setStreamUrl(QUrl());
-        m_urlFetcherThread->addItemToQueue(m_item);
+        requestItemUrl(m_item);
     }
 }
 
@@ -286,119 +278,68 @@ void PlaybackManager::componentComplete() {
     m_qmlIsParsingComponent = false;
 }
 
-// ItemUrlFetcherThread
-ItemUrlFetcherThread::ItemUrlFetcherThread(PlaybackManager *manager) :
-    QThread(manager),
-    m_parent(manager),
-    m_loader(new Jellyfin::Loader::HTTP::GetPostedPlaybackInfoLoader(manager->m_apiClient)) {
+void PlaybackManager::requestItemUrl(QSharedPointer<Model::Item> item) {
+    ItemUrlLoader *loader = new Jellyfin::Loader::HTTP::GetPostedPlaybackInfoLoader(m_apiClient);
+    Jellyfin::Loader::GetPostedPlaybackInfoParams params;
+    params.setItemId(item->jellyfinId());
+    params.setUserId(m_apiClient->userId());
+    params.setEnableDirectPlay(true);
+    params.setEnableDirectStream(true);
+    params.setEnableTranscoding(true);
 
-    connect(this, &ItemUrlFetcherThread::prepareLoaderRequested, this, &ItemUrlFetcherThread::onPrepareLoader);
+    loader->setParameters(params);
+    connect(loader, &ItemUrlLoader::ready, [this, loader, item] {
+        DTO::PlaybackInfoResponse result = loader->result();
+        handlePlaybackInfoResponse(item->jellyfinId(), item->mediaType(), result);
+        loader->deleteLater();
+    });
+    connect(loader, &ItemUrlLoader::error, [this, loader, item](QString message) {
+        onItemErrorReceived(item->jellyfinId(), message);
+        loader->deleteLater();
+    });
+    loader->load();
 }
 
-void ItemUrlFetcherThread::addItemToQueue(QSharedPointer<Model::Item> item) {
-    QMutexLocker locker(&m_queueModifyMutex);
-    m_queue.enqueue(item);
-    m_urlWaitCondition.wakeOne();
-}
-
-void ItemUrlFetcherThread::cleanlyStop() {
-    m_keepRunning = false;
-    m_urlWaitCondition.wakeAll();
-}
-
-void ItemUrlFetcherThread::onPrepareLoader() {
-    m_loader->setApiClient(m_parent->m_apiClient);
-    m_loader->prepareLoad();
-    m_loaderPrepared = true;
-    m_waitLoaderPrepared.wakeOne();
-}
-
-void ItemUrlFetcherThread::run() {
-    while (m_keepRunning) {
-        m_urlWaitConditionMutex.lock();
-        while(m_queue.isEmpty() && m_keepRunning) {
-            m_urlWaitCondition.wait(&m_urlWaitConditionMutex);
-        }
-        m_urlWaitConditionMutex.unlock();
-        if (!m_keepRunning) break;
-
-        Jellyfin::Loader::GetPostedPlaybackInfoParams params;
-        QSharedPointer<Model::Item> item = m_queue.dequeue();
-        m_queueModifyMutex.lock();
-        params.setItemId(item->jellyfinId());
-        m_queueModifyMutex.unlock();
-        params.setUserId(m_parent->m_apiClient->userId());
-        params.setEnableDirectPlay(true);
-        params.setEnableDirectStream(true);
-        params.setEnableTranscoding(true);
-
-        m_loaderPrepared = false;
-        m_loader->setParameters(params);
-
-        // We cannot call m_loader->prepareLoad() from this thread, so we must
-        // emit a signal and hope for the best
-        emit prepareLoaderRequested(QPrivateSignal());
-        m_waitLoaderPreparedMutex.lock();
-        while (!m_loaderPrepared) {
-            m_waitLoaderPrepared.wait(&m_waitLoaderPreparedMutex);
-        }
-        m_waitLoaderPreparedMutex.unlock();
-
-        DTO::PlaybackInfoResponse response;
-        try {
-            std::optional<DTO::PlaybackInfoResponse> responseOpt = m_loader->load();
-            if (responseOpt.has_value()) {
-                response = responseOpt.value();
-            } else {
-                qWarning() << "Cannot retrieve URL of " << params.itemId();
-                continue;
+void PlaybackManager::handlePlaybackInfoResponse(QString itemId, QString mediaType, DTO::PlaybackInfoResponse &response) {
+    //TODO: move the item URL fetching logic out of this function, into MediaSourceInfo?
+    QList<DTO::MediaSourceInfo> mediaSources = response.mediaSources();
+    QUrl resultingUrl;
+    QString playSession = response.playSessionId();
+    PlayMethod playMethod = PlayMethod::EnumNotSet;
+    for (int i = 0; i < mediaSources.size(); i++) {
+        const DTO::MediaSourceInfo &source = mediaSources.at(i);
+        if (source.supportsDirectPlay() && QFile::exists(source.path())) {
+            resultingUrl = QUrl::fromLocalFile(source.path());
+            playMethod = PlayMethod::DirectPlay;
+        } else if (source.supportsDirectStream()) {
+            if (mediaType == "Video") {
+                mediaType.append('s');
             }
-        }  catch (QException &e) {
-            qWarning() << "Cannot retrieve URL of " << params.itemId() << ": " << e.what();
-            continue;
-        }
-
-        //TODO: move the item URL fetching logic out of this function, into MediaSourceInfo?
-        QList<DTO::MediaSourceInfo> mediaSources = response.mediaSources();
-        QUrl resultingUrl;
-        QString playSession = response.playSessionId();
-        PlayMethod playMethod = PlayMethod::EnumNotSet;
-        for (int i = 0; i < mediaSources.size(); i++) {
-            const DTO::MediaSourceInfo &source = mediaSources.at(i);
-            if (source.supportsDirectPlay() && QFile::exists(source.path())) {
-                resultingUrl = QUrl::fromLocalFile(source.path());
-                playMethod = PlayMethod::DirectPlay;
-            } else if (source.supportsDirectStream()) {
-                QString mediaType = item->mediaType();
-                if (mediaType == "Video") {
-                    mediaType.append('s');
-                }
-                QUrlQuery query;
-                query.addQueryItem("mediaSourceId", source.jellyfinId());
-                query.addQueryItem("deviceId", m_parent->m_apiClient->deviceId());
-                query.addQueryItem("api_key", m_parent->m_apiClient->token());
-                query.addQueryItem("Static", "True");
-                resultingUrl = QUrl(this->m_parent->m_apiClient->baseUrl() + "/" + mediaType + "/" + params.itemId()
-                        + "/stream." + source.container() + "?" + query.toString(QUrl::EncodeReserved));
-                playMethod = PlayMethod::DirectStream;
-            } else if (source.supportsTranscoding()) {
-                resultingUrl = QUrl(m_parent->m_apiClient->baseUrl() + source.transcodingUrl());
-                playMethod = PlayMethod::Transcode;
-            } else {
-                qDebug() << "No suitable sources for item " << item->jellyfinId();
-            }
-            if (!resultingUrl.isEmpty()) break;
-        }
-        if (resultingUrl.isEmpty()) {
-            qWarning() << "Could not find suitable media source for item " << params.itemId();
-            emit itemUrlFetchError(item->jellyfinId(), tr("Cannot fetch stream URL"));
+            QUrlQuery query;
+            query.addQueryItem("mediaSourceId", source.jellyfinId());
+            query.addQueryItem("deviceId", m_apiClient->deviceId());
+            query.addQueryItem("api_key", m_apiClient->token());
+            query.addQueryItem("Static", "True");
+            resultingUrl = QUrl(m_apiClient->baseUrl() + "/" + mediaType + "/" + itemId
+                    + "/stream." + source.container() + "?" + query.toString(QUrl::EncodeReserved));
+            playMethod = PlayMethod::DirectStream;
+        } else if (source.supportsTranscoding()) {
+            resultingUrl = QUrl(m_apiClient->baseUrl() + source.transcodingUrl());
+            playMethod = PlayMethod::Transcode;
         } else {
-            emit itemUrlFetched(item->jellyfinId(), resultingUrl, playSession, playMethod);
+            qDebug() << "No suitable sources for item " << itemId;
         }
+        if (!resultingUrl.isEmpty()) break;
+    }
+    if (resultingUrl.isEmpty()) {
+        qWarning() << "Could not find suitable media source for item " << itemId;
+        onItemErrorReceived(itemId, tr("Cannot fetch stream URL"));
+    } else {
+        onItemUrlReceived(itemId, resultingUrl, playSession, playMethod);
     }
 }
 
-void PlaybackManager::onItemExtraDataReceived(const QString &itemId, const QUrl &url,
+void PlaybackManager::onItemUrlReceived(const QString &itemId, const QUrl &url,
                                               const QString &playSession, PlayMethod playMethod) {
     Q_UNUSED(url)
     Q_UNUSED(playSession)
@@ -413,8 +354,9 @@ void PlaybackManager::onItemExtraDataReceived(const QString &itemId, const QUrl 
     } else {
         qDebug() << "Late reply for " << itemId << " received, ignoring";
     }
-
 }
+
+
 /// Called when the fetcherThread encountered an error
 void PlaybackManager::onItemErrorReceived(const QString &itemId, const QString &errorString) {
     Q_UNUSED(itemId)

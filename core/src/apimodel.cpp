@@ -151,9 +151,4 @@ int extractTotalRecordCount(const QList<DTO::UserDto> &result) {
     return result.size();
 }
 
-void registerModels(const char *URI) {
-    Q_UNUSED(URI)
-    //qmlRegisterUncreatableType<ApiModel>(URI, 1, 0, "ApiModel", "Is enum and base class");
-    //qmlRegisterType<PublicUserModel>(URI, 1, 0, "PublicUserModel");
-}
 }

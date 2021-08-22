@@ -26,8 +26,11 @@
 
 #include <QException>
 #include <QJsonDocument>
+#include <QObject>
 #include <QUrlQuery>
 #include <QString>
+
+#include <QtConcurrent/QtConcurrent>
 
 #include "../apiclient.h"
 #include "jsonconv.h"
@@ -55,6 +58,23 @@ private:
 static const int HTTP_TIMEOUT = 30000; // 30 seconds;
 
 /**
+ * @brief Base class for loaders that defines available signals.
+ */
+class LoaderBase : public QObject {
+    Q_OBJECT
+signals:
+    /**
+     * @brief Emitted when an error has occurred during loading and no result
+     * is available.
+     */
+    void error(QString message = QString());
+    /**
+     * @brief Emitted when data was successfully loaded.
+     */
+    void ready();
+};
+
+/**
  * Interface describing a way to load items. Used to abstract away
  * the difference between loading from a cache or loading over the network.
  *
@@ -71,24 +91,35 @@ static const int HTTP_TIMEOUT = 30000; // 30 seconds;
  *           be loaded.
  */
 template <typename R, typename P>
-class Loader {
+class Loader : public LoaderBase {
 public:
     explicit Loader(ApiClient *apiClient)
         : m_apiClient(apiClient) {}
 
     /**
-     * @brief Called just before load() is called. In constrast to load,
-     * this runs on the same thread as the ApiClient object.
+     * @brief load Loads the given resource asynchronously.
      */
-    virtual void prepareLoad() {};
-
-    /**
-     * @brief load Loads the given resource. This usually run on a different thread.
-     * @return The resource if successfull.
-     */
-    virtual std::optional<R> load() {
+    virtual void load() {
         throw LoadException(QStringLiteral("Loader not set"));
     }
+
+    /**
+     * @brief Retrieves the loaded resource. Only valid after the ready signal has been emitted.
+     * @return The loaded resource
+     */
+    R result() const {
+        return m_result;
+    }
+
+    /**
+     * @returns whether this loader is already fetching a resource
+     */
+    virtual void cancel() {}
+
+    bool isRunning() const {
+        return m_isRunning;
+    }
+
     /**
      * @brief Heuristic to determine if this resource can be loaded via this loaded.
      *
@@ -103,6 +134,13 @@ public:
 protected:
     Jellyfin::ApiClient *m_apiClient;
     P m_parameters;
+    R m_result;
+    bool m_isRunning = false;
+
+    void stopWithError(QString message = QString()) {
+        m_isRunning = false;
+        emit this->error(message);
+    }
 };
 
 /**
@@ -112,41 +150,24 @@ template <typename R, typename P>
 class HttpLoader : public Loader<R, P> {
 public:
     explicit HttpLoader(Jellyfin::ApiClient *apiClient)
-        : Loader<R, P> (apiClient) {}
-
-    virtual void prepareLoad() override {
-        m_reply = this->m_apiClient->get(path(this->m_parameters), query(this->m_parameters));
-        m_requestFinishedConnection = QObject::connect(m_reply, &QNetworkReply::finished, [&]() { this->requestFinished(); });
+        : Loader<R, P> (apiClient) {
+        this->connect(&m_parsedWatcher, &QFutureWatcher<std::optional<R>>::finished, this, &HttpLoader<R, P>::onResponseParsed);
     }
 
-    virtual std::optional<R> load() override {
-        Q_ASSERT_X(m_reply != nullptr, "HttpLoader::load", "prepareLoad() must be called before load()");
-        QMutexLocker locker(&m_mutex);
-        while (!m_reply->isFinished()) {
-            m_waitCondition.wait(&m_mutex);
+    virtual void load() override {
+        if (m_reply != nullptr) {
+            this->m_reply->deleteLater();
         }
-        QByteArray array = m_reply->readAll();
-        if (m_reply->error() != QNetworkReply::NoError) {
+        this->m_isRunning = true;
+        m_reply = this->m_apiClient->get(path(this->m_parameters), query(this->m_parameters));
+        this->connect(m_reply, &QNetworkReply::finished, this, &HttpLoader<R, P>::onRequestFinished);
+    }
+
+    virtual void cancel() override {
+        if (m_reply == nullptr) return;
+        if (m_reply->isRunning()) {
+            m_reply->abort();
             m_reply->deleteLater();
-            //: An HTTP has occurred. First argument is replaced by QNetworkReply->errorString()
-            throw LoadException(QObject::tr("HTTP error: %1").arg(m_reply->errorString()));
-        }
-        m_reply->deleteLater();
-        m_reply = nullptr;
-        QJsonParseError error;
-        QJsonDocument document = QJsonDocument::fromJson(array, &error);
-        if (error.error != QJsonParseError::NoError) {
-            qWarning() << array;
-            throw LoadException(error.errorString().toLocal8Bit().constData());
-        }
-        if (document.isNull() || document.isEmpty()) {
-            return std::nullopt;
-        } else if (document.isArray()) {
-            return std::optional<R>(fromJsonValue<R>(document.array()));
-        } else if (document.isObject()){
-            return std::optional<R>(fromJsonValue<R>(document.object()));
-        } else {
-            return std::nullopt;
         }
     }
 
@@ -167,13 +188,49 @@ protected:
     virtual QUrlQuery query(const P &parameters) const = 0;
 private:
     QNetworkReply *m_reply = nullptr;
-    QWaitCondition m_waitCondition;
-    QMutex m_mutex;
-    QMetaObject::Connection m_requestFinishedConnection;
+    QFutureWatcher<std::optional<R>> m_parsedWatcher;
 
-    void requestFinished() {
-        QObject::disconnect(m_requestFinishedConnection);
-        m_waitCondition.wakeAll();
+    void onRequestFinished() {
+        if (m_reply->error() != QNetworkReply::NoError) {
+            m_reply->deleteLater();
+            //: An HTTP has occurred. First argument is replaced by QNetworkReply->errorString()
+            this->stopWithError(QStringLiteral("HTTP error: %1").arg(m_reply->errorString()));
+        }
+        QByteArray array = m_reply->readAll();
+        m_reply->deleteLater();
+        m_reply = nullptr;
+        m_parsedWatcher.setFuture(QtConcurrent::run(this, &HttpLoader<R, P>::parseResponse, array));
+    }
+
+    std::optional<R> parseResponse(QByteArray response) {
+        QJsonParseError error;
+        QJsonDocument document = QJsonDocument::fromJson(response, &error);
+        if (error.error != QJsonParseError::NoError) {
+            qWarning() << response;
+            this->stopWithError(error.errorString().toLocal8Bit().constData());
+        }
+        if (document.isNull() || document.isEmpty()) {
+            this->stopWithError(QStringLiteral("Unexpected empty JSON response"));
+            return std::nullopt;
+        } else if (document.isArray()) {
+            return std::make_optional<R>(fromJsonValue<R>(document.array()));
+        } else if (document.isObject()){
+            return std::make_optional<R>(fromJsonValue<R>(document.object()));
+        } else {
+            this->stopWithError(QStringLiteral("Unexpected JSON response"));
+            return std::nullopt;
+        }
+    }
+
+    void onResponseParsed() {
+        if (m_parsedWatcher.result().has_value()) {
+            R result = m_parsedWatcher.result().value();
+            this->m_result = result;
+            this->m_isRunning = false;
+            emit this->ready();
+        } else {
+            this->m_isRunning = false;
+        }
     }
 };
 

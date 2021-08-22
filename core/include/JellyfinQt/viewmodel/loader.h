@@ -153,24 +153,24 @@ public:
 
     Loader(ApiClient *apiClient, Support::Loader<R, P> *loaderImpl, QObject *parent = nullptr)
         : LoaderBase(apiClient, parent),
-          m_loader(loaderImpl),
-          m_futureWatcher(new QFutureWatcher<std::optional<R>>(this)) {
+          m_loader(loaderImpl) {
 
         m_dataViewModel = new T(this);
-        connect(m_futureWatcher, &RFutureWatcher::finished, this, &Loader<T, R, P>::updateData);
+        connect(m_loader.data(), &Support::LoaderBase::ready, this, &Loader<T, R, P>::onLoaderReady);
+        connect(m_loader.data(), &Support::LoaderBase::error, this, &Loader<T, R, P>::onLoaderError);
     }
 
     T *dataViewModel() const { return m_dataViewModel; }
     QObject *data() const override { return m_dataViewModel; }
 
     void reload() override {
-        if (m_futureWatcher->isRunning()) return;
+        if (m_loader->isRunning()) {
+            m_loader->cancel();
+        };
         setStatus(Loading);
-        this->m_loader->setApiClient(m_apiClient);
+        m_loader->setApiClient(m_apiClient);
         m_loader->setParameters(m_parameters);
-        m_loader->prepareLoad();
-        QFuture<std::optional<R>> future = QtConcurrent::run(this, &Loader<T, R, P>::invokeLoader);
-        m_futureWatcher->setFuture(future);
+        m_loader->load();
     }
 protected:
     T* m_dataViewModel;
@@ -180,46 +180,28 @@ protected:
      */
     QScopedPointer<Support::Loader<R, P>> m_loader = nullptr;
 private:
-    QFutureWatcher<std::optional<R>> *m_futureWatcher;
 
-    /**
-     * @brief Callback for QtConcurrent::run()
-     * @param self Pointer to this class
-     * @param parameters Parameters to forward to the loader
-     * @return empty optional if an error occured, otherwise the result.
-     */
-    std::optional<R> invokeLoader() {
-        QMutexLocker(&this->m_mutex);
-        try {
-            return this->m_loader->load();
-        }  catch (Support::LoadException &e) {
-            qWarning() << "Exception while loading an item: " << e.what();
-            this->setErrorString(QString(e.what()));
-            return std::nullopt;
-        }
-    }
     /**
      * @brief Updates the data when finished.
      */
-    void updateData() {
-        std::optional<R> newDataOpt = m_futureWatcher->result();
-        if (newDataOpt.has_value()) {
-            R newData = newDataOpt.value();
-            if (m_dataViewModel->data()->sameAs(newData)) {
-                // Replace the data the model holds
-                m_dataViewModel->data()->replaceData(newData);
-            } else {
-                // Replace the model
-                using PointerType = typename decltype(m_dataViewModel->data())::Type;
-                m_dataViewModel = new T(this, QSharedPointer<PointerType>::create(newData, m_apiClient));
-            }
-            setStatus(Ready);
-            emitDataChanged();
+    void onLoaderReady() {
+        R newData = m_loader->result();
+        if (m_dataViewModel->data()->sameAs(newData)) {
+            // Replace the data the model holds
+            m_dataViewModel->data()->replaceData(newData);
         } else {
-            setStatus(Error);
+            // Replace the model
+            using PointerType = typename decltype(m_dataViewModel->data())::Type;
+            m_dataViewModel = new T(this, QSharedPointer<PointerType>::create(newData, m_apiClient));
         }
+        setStatus(Ready);
+        emitDataChanged();
     }
-    QMutex m_mutex;
+
+    void onLoaderError(QString message) {
+        setStatus(Error);
+        setErrorString(message);
+    }
 };
 
 void registerRemoteTypes(const char *uri);

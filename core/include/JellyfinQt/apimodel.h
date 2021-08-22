@@ -108,9 +108,6 @@ signals:
      */
     void itemsLoaded();
     void reloadWanted();
-public slots:
-    virtual void futureReady() = 0;
-
 protected:
     // Is this object being parsed by the QML engine
     bool m_isBeingParsed = false;
@@ -269,13 +266,16 @@ class LoaderModelLoader : public ModelLoader<T> {
 public:
     explicit LoaderModelLoader(Support::Loader<R, P> *loader, QObject *parent = nullptr)
         : ModelLoader<T>(parent), m_loader(QScopedPointer<Support::Loader<R, P>>(loader)) {
-        QObject::connect(&m_futureWatcher, &QFutureWatcher<QList<T>>::finished, this, &BaseModelLoader::futureReady);
+        this->connect(m_loader.data(), &Support::Loader<R, P>::ready, this, &LoaderModelLoader<T, D, R, P>::loaderReady);
+        this->connect(m_loader.data(), &Support::Loader<R, P>::error, this, &LoaderModelLoader<T, D, R, P>::loaderError);
     }
 protected:
     void loadMore(int offset, int limit, ViewModel::ModelStatus suggestedModelStatus) override {
         // This method should only be callable on one thread.
         // If futureWatcher's future is running, this method should not be called again.
-        if (m_futureWatcher.isRunning()) return;
+        if (m_loader->isRunning()) {
+            m_loader->cancel();
+        }
         // Set an invalid result.
         this->m_result = { QList<T*>(), -1 };
 
@@ -286,7 +286,7 @@ protected:
             return;
         }
         if (limit > 0) {
-                setRequestLimit<P>(this->m_parameters, limit);
+            setRequestLimit<P>(this->m_parameters, limit);
         }
         this->setStatus(suggestedModelStatus);
 
@@ -294,33 +294,14 @@ protected:
         // instead when Loader::setApiClient is called.
         this->m_loader->setApiClient(this->m_apiClient);
         this->m_loader->setParameters(this->m_parameters);
-        this->m_loader->prepareLoad();
-        QFuture<std::optional<R>> future = QtConcurrent::run(this->m_loader.data(), &Support::Loader<R, P>::load);
-        this->m_futureWatcher.setFuture(future);
+        this->m_loader->load();
     }
 
     QScopedPointer<Support::Loader<R, P>> m_loader;
-    QMutex m_mutex;
     P m_parameters;
-    QFutureWatcher<std::optional<R>> m_futureWatcher;
 
-    void futureReady() override {
-        R result;
-        try {
-            std::optional<R> optResult = m_futureWatcher.result();
-            if (!optResult.has_value()) {
-                this->setStatus(ViewModel::ModelStatus::Error);
-                qWarning() << "ModelLoader returned with empty optional";
-                return;
-            }
-            result = optResult.value();
-        } catch (Support::LoadException &e) {
-            qWarning() << "Exception while loading: " << e.what();
-            this->setStatus(ViewModel::ModelStatus::Error);
-            return;
-        }
-
-
+    void loaderReady() {
+        R result = m_loader->result();
         QList<D> records = extractRecords<D, R>(result);
         int totalRecordCount = extractTotalRecordCount<R>(result);
         qDebug() << "Total record count: " << totalRecordCount << ", records in request: " << records.size();
@@ -339,6 +320,11 @@ protected:
         this->m_result = { models, this->m_startIndex};
         this->m_startIndex += totalRecordCount;
         this->emitItemsLoaded();
+    }
+
+    void loaderError(QString error) {
+        Q_UNUSED(error)
+        this->setStatus(ViewModel::ModelStatus::Error);
     }
 
 };
@@ -374,27 +360,7 @@ signals:
 };
 
 /**
- * @brief Abstract model for displaying a REST JSON collection. Role names will be based on the fields encountered in the
- * first record.
- *
- * To create a new model, extend this class and create an QObject-parent constructor.
- * Call the right super constructor with the right values, depending which path should be queried and
- * how the result should be interpreted.
- *
- * Register the model in QML and create an instance. Don't forget to set the apiClient attribute or else
- * the model you've created will be useless!
- *
- * Rolenames are based on the fields in the first object within the array of results, with the first letter
- * lowercased, to accomodate for QML style guidelines. (This ain't C# here).
- *
- * If a call to /cats/new results in
- * @code{.json}
- * [
- *   {"Name": "meow", "Id": 432},
- *   {"Name": "miew", "Id": 323}
- * ]
- * @endcode
- * The model will have roleNames for "name" and "id".
+ * @brief Abstract model for displaying collections.
  *
  * @tparam T The class of the result.
  * @tparam R The class returned by the loader.
@@ -566,25 +532,6 @@ protected:
 private:
     QMetaObject::Connection m_futureWatcherConnection;
 };
-
-
-/**
- * @brief List of the public users on the server.
- */
-/*class PublicUserModel : public ApiModel<QJsonValue> {
-public:
-    explicit PublicUserModel (QObject *parent = nullptr);
-};*/
-
-
-
-//template<>
-//void ApiModel<Item>::apiClientChanged();
-
-
-
-
-void registerModels(const char *URI);
 
 }
 #endif //JELLYFIN_API_MODEL

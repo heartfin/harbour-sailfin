@@ -86,6 +86,7 @@ PanelBackground {
         }
         Rectangle {
             id: playQueueShim
+            anchors.fill: albumArt
             color: Theme.rgba(Theme.overlayBackgroundColor, Theme.opacityLow)
             opacity: 0
         }

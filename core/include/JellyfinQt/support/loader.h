@@ -193,6 +193,7 @@ private:
     void onRequestFinished() {
         if (m_reply->error() != QNetworkReply::NoError) {
             m_reply->deleteLater();
+            m_parsedWatcher.cancel();
             //: An HTTP has occurred. First argument is replaced by QNetworkReply->errorString()
             this->stopWithError(QStringLiteral("HTTP error: %1").arg(m_reply->errorString()));
         }
@@ -223,11 +224,15 @@ private:
     }
 
     void onResponseParsed() {
+        Q_ASSERT(m_parsedWatcher.isFinished());
         if (m_parsedWatcher.result().has_value()) {
-            R result = m_parsedWatcher.result().value();
-            this->m_result = result;
-            this->m_isRunning = false;
-            emit this->ready();
+            try {
+                this->m_result = m_parsedWatcher.result().value();
+                this->m_isRunning = false;
+                emit this->ready();
+            }  catch (QException &e) {
+                this->stopWithError(e.what());
+            }
         } else {
             this->m_isRunning = false;
         }

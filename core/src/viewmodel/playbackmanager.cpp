@@ -361,6 +361,7 @@ void PlaybackManager::onItemUrlReceived(const QString &itemId, const QUrl &url,
 void PlaybackManager::onItemErrorReceived(const QString &itemId, const QString &errorString) {
     Q_UNUSED(itemId)
     Q_UNUSED(errorString)
+    qWarning() << "Error while fetching streaming url for " << itemId << ": " << errorString;
 }
 
 } // NS ViewModel

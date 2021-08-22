@@ -56,29 +56,14 @@ int main(int argc, char *argv[]) {
     //: Application display name
     app->setApplicationDisplayName(QObject::tr("Sailfin"));
 
-    bool canSanbox = QFile::exists(SANDBOX_PROGRAM);
     QCommandLineParser cmdParser;
     cmdParser.addHelpOption();
     cmdParser.addVersionOption();
-    QCommandLineOption sandboxOption("no-attempt-sandbox", app->translate("Command line argument description", "Try to not start with FireJail."));
-    if (canSanbox) {
-        cmdParser.addOption(sandboxOption);
-    }
-    cmdParser.process(*app);
-
-    if (canSanbox && !cmdParser.isSet(sandboxOption)) {
-        qDebug() << "Restarting in sandbox mode";
-        QProcess::execute(QString(SANDBOX_PROGRAM),
-                                QStringList() << "-p" << "harbour-sailfin.desktop" << "harbour-sailfin");
-        return 0;
-    }
-
 
     Jellyfin::registerTypes();
     QQuickView *view = SailfishApp::createView();
     view->setSource(SailfishApp::pathToMainQml());
     view->show();
-    qDebug() << "QML import paths: " << view->engine()->importPathList();
 
     return app->exec();
 }

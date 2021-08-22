@@ -1,10 +1,9 @@
 [Desktop Entry]
 Type=Application
 Version=1.1
-X-Nemo-Application-Type=silica-qt5
+# X-Nemo-Application-Type=silica-qt5
 Icon=harbour-sailfin
-Exec=harbour-sailfin --no-attempt-sandbox
-
+Exec=/usr/bin/sailjail -p harbour-sailfin.desktop /usr/bin/harbour-sailfin
 
 Name=Sailfin
 # translation example:

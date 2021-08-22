@@ -19,12 +19,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import QtQuick 2.6
 import Sailfish.Silica 1.0
 
-import nl.netsoj.chris.Jellyfin 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 Column {
-    property var tracks
+    property var audioTracks
+    property var videoTracks
+    property var subtitleTracks
+
+    readonly property int videoTrack: videoSelector.currentItem ? videoSelector.currentItem._index : 0
     readonly property int audioTrack: audioSelector.currentItem ? audioSelector.currentItem._index : 0
     readonly property int subtitleTrack: subitleSelector.currentItem._index
+
 
     ListModel {
         id: videoModel
@@ -40,13 +45,13 @@ Column {
     ComboBox {
         id: videoSelector
         label: qsTr("Video track")
-        enabled: videoModel.count > 1
+        enabled: videoTracks.length > 1
         menu: ContextMenu {
             Repeater {
-                model: videoModel
+                model: videoTracks
                 MenuItem {
-                    readonly property int _index: model.index
-                    text: model.displayTitle
+                    readonly property int _index: modelData.index
+                    text: modelData.displayTitle
                 }
             }
         }
@@ -55,13 +60,13 @@ Column {
     ComboBox {
         id: audioSelector
         label: qsTr("Audio track")
-        enabled: audioModel.count > 1
+        enabled: audioTracks.length > 1
         menu: ContextMenu {
             Repeater {
-                model: audioModel
+                model: audioTracks
                 MenuItem {
-                    readonly property int _index: model.index
-                    text: model.displayTitle
+                    readonly property int _index: modelData.index
+                    text: modelData.displayTitle
                 }
             }
         }
@@ -70,7 +75,7 @@ Column {
     ComboBox {
         id: subitleSelector
         label: qsTr("Subtitle track")
-        enabled: subtitleModel.count > 0
+        enabled: subtitleTracks.length> 0
         menu: ContextMenu {
             MenuItem {
                 readonly property int _index: -1
@@ -78,38 +83,11 @@ Column {
                 text: qsTr("Off")
             }
             Repeater {
-                model: subtitleModel
+                model: subtitleTracks
                 MenuItem {
-                    readonly property int _index: model.index
-                    text: model.displayTitle
+                    readonly property int _index: modelData.index
+                    text: modelData.displayTitle
                 }
-            }
-        }
-    }
-
-    onTracksChanged: {
-        audioModel.clear()
-        subtitleModel.clear()
-        if (typeof tracks === "undefined") {
-            console.log("tracks undefined")
-            return
-        }
-        console.log(tracks)
-        for(var i = 0; i < tracks.length; i++) {
-            var track = tracks[i];
-            switch(track.type) {
-            case MediaStream.Video:
-                videoModel.append(track)
-                break;
-            case MediaStream.Audio:
-                audioModel.append(track)
-                break;
-            case MediaStream.Subtitle:
-                subtitleModel.append(track)
-                break;
-            default:
-                console.log("Ignored " + track.displayTitle + "(" + track.type + ")")
-                break;
             }
         }
     }

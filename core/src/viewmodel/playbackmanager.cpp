@@ -286,6 +286,8 @@ void PlaybackManager::requestItemUrl(QSharedPointer<Model::Item> item) {
     params.setEnableDirectPlay(true);
     params.setEnableDirectStream(true);
     params.setEnableTranscoding(true);
+    params.setAudioStreamIndex(this->m_audioIndex);
+    params.setSubtitleStreamIndex(this->m_subtitleIndex);
 
     loader->setParameters(params);
     connect(loader, &ItemUrlLoader::ready, [this, loader, item] {

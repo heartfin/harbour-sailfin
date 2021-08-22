@@ -76,7 +76,13 @@ BaseDetailPage {
             VideoTrackSelector {
                 id: trackSelector
                 width: parent.width
-                tracks: itemData.mediaStreams
+                audioTracks: itemData.audioStreams
+                videoTracks: itemData.videoStreams
+                subtitleTracks: itemData.subtitleStreams
+            }
+
+            Label {
+                text:  "Video %1, audio %2, subtitle %3".arg(trackSelector.videoTrack).arg(trackSelector.audioTrack).arg(trackSelector.subtitleTrack)
             }
         }
     }

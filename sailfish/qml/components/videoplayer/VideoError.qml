@@ -26,8 +26,9 @@ Rectangle {
     id: videoError
     //FIXME: Once QTBUG-10822 is resolved, change to J.PlaybackManager
     property var player
+    property bool showError: false
     color: pal.palette.overlayBackgroundColor
-    opacity: player.error === MediaPlayer.NoError ? 0.0 : 1.0
+    opacity: showError ? 1.0 : 0.0
     Behavior on opacity { FadeAnimator {} }
 
     SilicaItem {
@@ -87,6 +88,20 @@ Rectangle {
                 //: Button to retry loading a video after a failure
                 text: qsTr("Retry")
                 onClicked: player.play()
+            }
+
+            Button {
+                text: qsTr("Hide")
+                onClicked: showError = false
+            }
+        }
+    }
+
+    Connections {
+        target: player
+        onErrorChanged: {
+            if (player.error !== MediaPlayer.NoError) {
+                showError = true
             }
         }
     }

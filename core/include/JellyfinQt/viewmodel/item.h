@@ -43,6 +43,7 @@
 #include "../loader/http/getitem.h"
 #include "../loader/requesttypes.h"
 #include "../model/item.h"
+#include "mediastream.h"
 #include "loader.h"
 
 namespace Jellyfin {
@@ -109,8 +110,11 @@ public:
     Q_PROPERTY(QString seriesId READ seriesId NOTIFY seriesIdChanged)
     Q_PROPERTY(QString seasonId READ seasonId NOTIFY seasonIdChanged)
     Q_PROPERTY(QString seasonName READ seasonName NOTIFY seasonNameChanged)
-    /*Q_PROPERTY(QList<MediaStream *> __list__mediaStreams MEMBER __list__m_mediaStreams NOTIFY mediaStreamsChanged)
-    Q_PROPERTY(QVariantList mediaStreams READ mediaStreams NOTIFY mediaStreamsChanged STORED false)*/
+    /*Q_PROPERTY(QList<MediaStream *> __list__mediaStreams MEMBER __list__m_mediaStreams NOTIFY mediaStreamsChanged)*/
+    Q_PROPERTY(QList<QObject *> mediaStreams READ mediaStreams NOTIFY mediaStreamsChanged)
+    Q_PROPERTY(QList<QObject *> audioStreams READ audioStreams NOTIFY audioStreamsChanged)
+    Q_PROPERTY(QList<QObject *> videoStreams READ videoStreams NOTIFY videoStreamsChanged)
+    Q_PROPERTY(QList<QObject *> subtitleStreams READ subtitleStreams NOTIFY subtitleStreamsChanged)
     Q_PROPERTY(QStringList artists READ artists NOTIFY artistsChanged)
     // Why is this a QJsonObject? Well, because I couldn't be bothered to implement the deserialisations of
     // a QHash at the moment.
@@ -152,6 +156,10 @@ public:
     QString seasonId() const { return m_data->seasonId(); }
     QString seasonName() const { return m_data->seasonName(); }
 
+    QObjectList mediaStreams() const { return m_allMediaStreams; }
+    QObjectList audioStreams() const { return m_audioStreams; }
+    QObjectList videoStreams() const { return m_videoStreams; }
+    QObjectList subtitleStreams() const { return m_subtitleStreams; }
     QStringList artists() const { return m_data->artists(); }
     QJsonObject imageTags() const { return m_data->imageTags(); }
     QStringList backdropImageTags() const { return m_data->backdropImageTags(); }
@@ -208,7 +216,10 @@ signals:
     void seriesIdChanged(const QString &newSeriesId);
     void seasonIdChanged(const QString &newSeasonId);
     void seasonNameChanged(const QString &newSeasonName);
-    void mediaStreamsChanged(/*const QList<MediaStream *> &newMediaStreams*/);
+    void mediaStreamsChanged(QVariantList &newMediaStreams);
+    void audioStreamsChanged(QVariantList &newAudioStreams);
+    void videoStreamsChanged(QVariantList &newVideoStreams);
+    void subtitleStreamsChanged(QVariantList &newSubtitleStreams);
     void artistsChanged(const QStringList &newArtists);
     void imageTagsChanged();
     void backdropImageTagsChanged();
@@ -219,9 +230,14 @@ signals:
 protected:
     void setUserData(DTO::UserItemDataDto &newData);
     void setUserData(QSharedPointer<DTO::UserItemDataDto> newData);
+    void updateMediaStreams();
 
     QSharedPointer<Model::Item> m_data;
     UserData *m_userData = nullptr;
+    QObjectList m_allMediaStreams;
+    QObjectList m_audioStreams;
+    QObjectList m_videoStreams;
+    QObjectList m_subtitleStreams;
 private slots:
     void onUserDataChanged(const DTO::UserItemDataDto &userData);
 };

@@ -28,6 +28,7 @@ Item::Item(QObject *parent, QSharedPointer<Model::Item> data)
       m_userData(new UserData(this)){
     connect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
     m_userData->setData(data->userData());
+    updateMediaStreams();
 }
 
 void Item::setData(QSharedPointer<Model::Item> newData) {
@@ -41,7 +42,37 @@ void Item::setData(QSharedPointer<Model::Item> newData) {
         connect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
         setUserData(m_data->userData());
     }
+
     emit userDataChanged(m_userData);
+}
+
+void Item::updateMediaStreams() {
+    m_allMediaStreams.clear();
+    m_audioStreams.clear();
+    m_videoStreams.clear();
+    m_subtitleStreams.clear();
+    const QList<DTO::MediaStream> streams = m_data->mediaStreams();
+    for (auto it = streams.cbegin(); it != streams.cend(); it++) {
+        MediaStream *stream = new MediaStream(QSharedPointer<DTO::MediaStream>::create(*it), this);
+
+        m_allMediaStreams.append(stream);
+        switch(stream->type()) {
+        case DTO::MediaStreamType::Audio:
+            m_audioStreams.append(stream);
+            break;
+        case DTO::MediaStreamType::Video:
+            m_videoStreams.append(stream);
+            break;
+        case DTO::MediaStreamType::Subtitle:
+            m_subtitleStreams.append(stream);
+            break;
+        default:
+            break;
+        }
+    }
+    qDebug() << m_audioStreams.size() << " audio streams, " << m_videoStreams.size() << " video streams, "
+             << m_subtitleStreams.size() << " subtitle streams, " << m_allMediaStreams.size() << " streams total";
+
 }
 
 void Item::setUserData(DTO::UserItemDataDto &newData) {

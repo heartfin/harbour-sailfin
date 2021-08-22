@@ -34,7 +34,17 @@
 #include "propertyhelper.h"
 
 // Jellyfin Forward Read/Write Property
-#define FWDPROP(type, propName, propSetName) JF_FWD_RW_PROP(type, propName, propSetName, this->m_parameters)
+#define FWDPROP(type, propName, propSetName) \
+    public: \
+        Q_PROPERTY(type propName READ propName WRITE set##propSetName NOTIFY propName##Changed) \
+        type propName() const { return this->m_parameters.propName(); } \
+        void set##propSetName(type newValue) { \
+            this->m_parameters.set##propSetName( newValue ); \
+            emit propName##Changed(); \
+            autoReloadIfNeeded(); \
+        } \
+    Q_SIGNALS: \
+        void propName##Changed();
 
 namespace Jellyfin {
 
@@ -161,6 +171,7 @@ public:
     FWDPROP(bool, isPlaceHolder, IsPlaceHolder)
     FWDPROP(bool, isPlayed, IsPlayed)
     FWDPROP(bool, isUnaired, IsUnaired)
+    FWDPROP(int, limit, Limit)
     FWDPROP(QList<Jellyfin::DTO::LocationTypeClass::Value>, locationTypes, LocationTypes)
     FWDPROP(qint32, maxHeight, MaxHeight)
     FWDPROP(QString, maxOfficialRating, MaxOfficialRating)

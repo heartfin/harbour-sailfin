@@ -17,6 +17,7 @@ set(JellyfinQt_SOURCES
         src/viewmodel/item.cpp
         src/viewmodel/itemmodel.cpp
         src/viewmodel/loader.cpp
+        src/viewmodel/mediastream.cpp
         src/viewmodel/modelstatus.cpp
         src/viewmodel/playbackmanager.cpp
         src/viewmodel/playlist.cpp
@@ -47,6 +48,7 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/viewmodel/item.h
         include/JellyfinQt/viewmodel/itemmodel.h
         include/JellyfinQt/viewmodel/loader.h
+        include/JellyfinQt/viewmodel/mediastream.h
         include/JellyfinQt/viewmodel/modelstatus.h
         include/JellyfinQt/viewmodel/propertyhelper.h
         include/JellyfinQt/viewmodel/playbackmanager.h

@@ -185,17 +185,22 @@ private:
      * @brief Updates the data when finished.
      */
     void onLoaderReady() {
-        R newData = m_loader->result();
-        if (m_dataViewModel->data()->sameAs(newData)) {
-            // Replace the data the model holds
-            m_dataViewModel->data()->replaceData(newData);
-        } else {
-            // Replace the model
-            using PointerType = typename decltype(m_dataViewModel->data())::Type;
-            m_dataViewModel = new T(this, QSharedPointer<PointerType>::create(newData, m_apiClient));
+        try {
+            R newData = m_loader->result();
+            if (m_dataViewModel->data()->sameAs(newData)) {
+                // Replace the data the model holds
+                m_dataViewModel->data()->replaceData(newData);
+            } else {
+                // Replace the model
+                using PointerType = typename decltype(m_dataViewModel->data())::Type;
+                m_dataViewModel = new T(this, QSharedPointer<PointerType>::create(newData, m_apiClient));
+            }
+            setStatus(Ready);
+            emitDataChanged();
+        } catch(QException &e) {
+            setErrorString(e.what());
+            setStatus(Error);
         }
-        setStatus(Ready);
-        emitDataChanged();
     }
 
     void onLoaderError(QString message) {

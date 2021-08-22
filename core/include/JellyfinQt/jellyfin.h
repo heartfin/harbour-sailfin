@@ -34,6 +34,7 @@
 #include "viewmodel/item.h"
 #include "viewmodel/itemmodel.h"
 #include "viewmodel/loader.h"
+#include "viewmodel/mediastream.h"
 #include "viewmodel/modelstatus.h"
 #include "viewmodel/playbackmanager.h"
 #include "viewmodel/playlist.h"

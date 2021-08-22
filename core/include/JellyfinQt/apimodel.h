@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define JELLYFIN_API_MODEL
 
 #include <optional>
+#include <typeinfo>
 
 #include <QAbstractListModel>
 #include <QFlags>
@@ -114,6 +115,7 @@ protected:
     ApiClient *m_apiClient = nullptr;
     bool m_autoReload = true;
     bool m_needsAuthentication = true;
+    bool m_manualLimitSet = false;
 
     // Query/record controlling properties
     int m_limit = -1;
@@ -158,7 +160,6 @@ public:
 
     void reload() override {
         if (!canReload()) {
-            qDebug() << "Cannot yet reload ApiModel: canReload() returned false.";
             return;
         }
         m_startIndex = 0;
@@ -169,7 +170,6 @@ public:
 
     void loadMore() {
         if (!canReload()) {
-            qDebug() << "Cannot yet reload ApiModel: canReload() returned false.";
             return;
         }
         loadMore(m_startIndex, m_limit, ViewModel::ModelStatus::LoadingMore);
@@ -198,10 +198,6 @@ protected:
      *        Either LOADING or LOAD_MORE.
      */
     virtual void loadMore(int offset, int limit, ViewModel::ModelStatus suggestedStatus) = 0;
-    void updatePosition(int startIndex, int totalRecordCount) {
-        m_startIndex = startIndex;
-        m_totalRecordCount = totalRecordCount;
-    }
     std::pair<QList<T*>, int> m_result;
 };
 
@@ -211,21 +207,21 @@ protected:
 template <class T, class R>
 QList<T> extractRecords(const R &result) {
     Q_UNUSED(result)
-    Q_UNIMPLEMENTED();
+    qDebug() << "extractRecords not implemented for type " << typeid(R).name();
     return QList<T>();
 }
 
 template <class R>
 int extractTotalRecordCount(const R &result) {
     Q_UNUSED(result)
-    Q_UNIMPLEMENTED();
+    qDebug() << "extractTotalRecourdCount not implemented for type " << typeid(R).name();
     return -1;
 }
-template <class R>
-void setRequestLimit(R &parameters, int limit) {
+template <class P>
+void setRequestLimit(P &parameters, int limit) {
     Q_UNUSED(parameters)
     Q_UNUSED(limit)
-    Q_UNIMPLEMENTED();
+    qDebug() << "setRequestLimit not implemented for type " << typeid(P).name();
 }
 
 /**
@@ -235,7 +231,7 @@ template <class P>
 bool setRequestStartIndex(P &parameters, int startIndex) {
     Q_UNUSED(parameters)
     Q_UNUSED(startIndex)
-    Q_UNIMPLEMENTED();
+    qDebug() << "setRequestStartIndex not implemented for type " << typeid(P).name();
     return false;
 }
 
@@ -248,6 +244,10 @@ extern template QList<DTO::BaseItemDto> extractRecords(const QList<DTO::BaseItem
 extern template int extractTotalRecordCount(const QList<DTO::BaseItemDto> &result);
 extern template void setRequestLimit(Loader::GetLatestMediaParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetLatestMediaParams &params, int offset);
+extern template void setRequestLimit(Loader::GetItemsByUserIdParams &params, int limit);
+extern template bool setRequestStartIndex(Loader::GetItemsByUserIdParams &params, int offset);
+extern template void setRequestLimit(Loader::GetResumeItemsParams &params, int limit);
+extern template bool setRequestStartIndex(Loader::GetResumeItemsParams &params, int offset);
 
 extern template QList<DTO::UserDto> extractRecords(const QList<DTO::UserDto> &result);
 extern template int extractTotalRecordCount(const QList<DTO::UserDto> &result);
@@ -285,8 +285,16 @@ protected:
             // meaning loadMore is not supported.
             return;
         }
+
         if (limit > 0) {
-            setRequestLimit<P>(this->m_parameters, limit);
+            if (suggestedModelStatus == ViewModel::ModelStatus::Loading) {
+                setRequestLimit<P>(this->m_parameters, limit);
+            } else {
+                // If an explicit limit is set, we should load no more
+                return;
+            }
+        } else {
+            setRequestLimit<P>(this->m_parameters, this->DEFAULT_LIMIT);
         }
         this->setStatus(suggestedModelStatus);
 
@@ -301,25 +309,32 @@ protected:
     P m_parameters;
 
     void loaderReady() {
-        R result = m_loader->result();
-        QList<D> records = extractRecords<D, R>(result);
-        int totalRecordCount = extractTotalRecordCount<R>(result);
-        qDebug() << "Total record count: " << totalRecordCount << ", records in request: " << records.size();
-        // If totalRecordCount < 0, it is not supported for this endpoint
-        if (totalRecordCount < 0) {
-            totalRecordCount = records.size();
-        }
-        QList<T*> models;
-        models.reserve(records.size());
+        try {
+            R result = m_loader->result();
+            QList<D> records = extractRecords<D, R>(result);
+            int totalRecordCount = extractTotalRecordCount<R>(result);
+            qDebug() << "Total record count: " << totalRecordCount << ", records in request: " << records.size();
+            // If totalRecordCount < 0, it is not supported for this endpoint
+            if (totalRecordCount < 0) {
+                totalRecordCount = records.size();
+            }
+            QList<T*> models;
+            models.reserve(records.size());
 
-        // Convert the DTOs into models
-        for (int i = 0; i < records.size(); i++) {
-            models.append(new T(records[i], m_loader->apiClient()));
+            // Convert the DTOs into models
+            for (int i = 0; i < records.size(); i++) {
+                models.append(new T(records[i], m_loader->apiClient()));
+            }
+            this->setStatus(ViewModel::ModelStatus::Ready);
+            this->m_result = { models, this->m_startIndex};
+            this->m_startIndex += records.size();
+            this->m_totalRecordCount = totalRecordCount;
+            this->emitItemsLoaded();
+
+        } catch(QException &e) {
+            qWarning() << "Error while loading data: " << e.what();
+            this->setStatus(ViewModel::ModelStatus::Error);
         }
-        this->setStatus(ViewModel::ModelStatus::Ready);
-        this->m_result = { models, this->m_startIndex};
-        this->m_startIndex += totalRecordCount;
-        this->emitItemsLoaded();
     }
 
     void loaderError(QString error) {

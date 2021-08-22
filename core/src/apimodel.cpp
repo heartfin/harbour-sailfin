@@ -142,6 +142,29 @@ bool setRequestStartIndex(Loader::GetLatestMediaParams &params, int offset) {
 }
 
 template<>
+void setRequestLimit(Loader::GetItemsByUserIdParams &params, int limit) {
+    params.setLimit(limit);
+}
+
+template<>
+bool setRequestStartIndex(Loader::GetItemsByUserIdParams &params, int index) {
+    params.setLimit(index);
+    return true;
+}
+
+template<>
+void setRequestLimit(Loader::GetResumeItemsParams &params, int limit) {
+    params.setLimit(limit);
+}
+
+template<>
+bool setRequestStartIndex(Loader::GetResumeItemsParams &params, int index) {
+    params.setLimit(index);
+    return true;
+}
+
+
+template<>
 QList<DTO::UserDto> extractRecords(const QList<DTO::UserDto> &result) {
     return result;
 }

@@ -225,16 +225,16 @@ private:
 
     void onResponseParsed() {
         Q_ASSERT(m_parsedWatcher.isFinished());
-        if (m_parsedWatcher.result().has_value()) {
-            try {
+        try {
+            if (m_parsedWatcher.result().has_value()) {
                 this->m_result = m_parsedWatcher.result().value();
                 this->m_isRunning = false;
                 emit this->ready();
-            }  catch (QException &e) {
-                this->stopWithError(e.what());
+            } else {
+                this->m_isRunning = false;
             }
-        } else {
-            this->m_isRunning = false;
+        }  catch (QException &e) {
+            this->stopWithError(e.what());
         }
     }
 };

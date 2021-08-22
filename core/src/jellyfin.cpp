@@ -27,6 +27,7 @@ void registerTypes(const char *uri) {
     qmlRegisterUncreatableType<ViewModel::User>(uri, 1, 0, "User", "Acquire one via UserLoader or exposed properties");
     qmlRegisterUncreatableType<EventBus>(uri, 1, 0, "EventBus", "Obtain one via your ApiClient");
     qmlRegisterUncreatableType<WebSocket>(uri, 1, 0, "WebSocket", "Obtain one via your ApiClient");
+    qmlRegisterUncreatableType<ViewModel::MediaStream>(uri, 1, 0, "MediaStream", "Obtain one via an Item");
     qmlRegisterUncreatableType<ViewModel::UserData>(uri, 1, 0, "UserData", "Obtain one via an Item");
 
     // AbstractItemModels
@@ -53,6 +54,7 @@ void registerTypes(const char *uri) {
     qmlRegisterUncreatableType<Jellyfin::ViewModel::ModelStatusClass>(uri, 1, 0, "ModelStatus", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::DTO::PlayMethodClass>(uri, 1, 0, "PlayMethod", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::DTO::ItemFieldsClass>(uri, 1, 0, "ItemFields", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::DTO::ImageTypeClass>(uri, 1, 0, "ImageType", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::ViewModel::NowPlayingSection>(uri, 1, 0, "NowPlayingSection", "Is an enum");
 
     qRegisterMetaType<Jellyfin::DTO::PlayMethodClass::Value>();

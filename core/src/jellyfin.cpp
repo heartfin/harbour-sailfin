@@ -23,6 +23,7 @@ void registerTypes(const char *uri) {
     qmlRegisterType<ApiClient>(uri, 1, 0, "ApiClient");
     qmlRegisterType<ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
     qmlRegisterType<ViewModel::PlaybackManager>(uri, 1, 0, "PlaybackManager");
+    qmlRegisterType<ViewModel::PlatformMediaControl>(uri, 1, 0, "PlatformMediaControl");
     qmlRegisterUncreatableType<ViewModel::Item>(uri, 1, 0, "Item", "Acquire one via ItemLoader or exposed properties");
     qmlRegisterUncreatableType<ViewModel::User>(uri, 1, 0, "User", "Acquire one via UserLoader or exposed properties");
     qmlRegisterUncreatableType<EventBus>(uri, 1, 0, "EventBus", "Obtain one via your ApiClient");

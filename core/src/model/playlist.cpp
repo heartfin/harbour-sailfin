@@ -35,6 +35,10 @@ void Playlist::clearList() {
     emit listCleared();
 }
 
+bool Playlist::hasPrevious() {
+    return  m_shuffler->hasPrevious();
+}
+
 void Playlist::previous() {
     m_shuffler->previous();
     int curItem = m_shuffler->currentItem();
@@ -52,6 +56,10 @@ void Playlist::previous() {
     m_nextItemFromQueue = !m_queue.isEmpty();
     m_currentItemFromQueue = false;
     emit currentItemChanged();
+}
+
+bool Playlist::hasNext() {
+    return  m_shuffler->hasNext();
 }
 
 void Playlist::next() {

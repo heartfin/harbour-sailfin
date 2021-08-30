@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Options
 option(PLATFORM_SAILFISHOS "Build SailfishOS version of application" OFF)
 option(PLATFORM_QTQUICK "Build QtQuick version of application" ON)
+option(FREEDESKTOP_INTEGRATION "Integration with various FreeDesktop.org standards, such as MPRIS" ON)
 option(BUILD_PRECOMPILED_HEADERS "Build with precompiled headers for faster compile times when doing a full rebuild, at the cost of slower incremental builds whenever a header file is changed" OFF)
 
 if (NOT SAILFIN_VERSION)

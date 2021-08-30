@@ -44,6 +44,14 @@ void NoShuffle::previous() {
     m_index = previousIndex();
 }
 
+bool NoShuffle::hasPrevious() const {
+    return m_index > 0;
+}
+
+bool NoShuffle::hasNext() const {
+    return m_index < m_playlist->listSize() - 1;
+}
+
 int NoShuffle::currentItem() const {
     return m_index;
 }
@@ -148,6 +156,14 @@ void RandomShuffle::next() {
     }
     m_current = m_next;
     m_next = random(m_playlist->listSize());
+}
+
+bool RandomShuffle::hasPrevious() const {
+    return true;
+}
+
+bool RandomShuffle::hasNext() const {
+    return true;
 }
 
 } // NS Model

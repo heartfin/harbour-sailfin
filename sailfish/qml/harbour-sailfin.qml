@@ -51,6 +51,15 @@ ApplicationWindow {
         supportedCommands: [GeneralCommandType.Play, GeneralCommandType.DisplayContent, GeneralCommandType.DisplayMessage]
     }
 
+    PlatformMediaControl {
+        playbackManager: appWindow.playbackManager
+        canQuit: fasle
+        desktopFile: "harbour-sailfin"
+        playerName: "Sailfin"
+        canRaise: true
+        onRaiseRequested: appWindow.raise()
+    }
+
     initialPage: Component {
         MainPage {
             Connections {

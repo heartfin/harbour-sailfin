@@ -97,8 +97,12 @@ public:
     Q_PROPERTY(QMediaPlayer::MediaStatus mediaStatus READ mediaStatus NOTIFY mediaStatusChanged)
     Q_PROPERTY(QMediaPlayer::State playbackState READ playbackState NOTIFY playbackStateChanged)
     Q_PROPERTY(qint64 position READ position NOTIFY positionChanged)
+    Q_PROPERTY(bool hasNext READ hasNext NOTIFY hasNextChanged)
+    Q_PROPERTY(bool hasPrevious READ hasPrevious NOTIFY hasPreviousChanged)
 
     ViewModel::Item *item() const { return m_displayItem; }
+    QSharedPointer<Model::Item> dataItem() const { return m_item; }
+    ApiClient *apiClient() const { return m_apiClient; }
     void setApiClient(ApiClient *apiClient);
 
     QString streamUrl() const { return m_streamUrl; }
@@ -108,6 +112,8 @@ public:
     qint64 duration() const { return m_mediaPlayer->duration(); }
     ViewModel::Playlist *queue() const { return m_displayQueue; }
     int queueIndex() const { return m_queueIndex; }
+    bool hasNext() const { return m_queue->hasNext(); }
+    bool hasPrevious() const { return m_queue->hasPrevious(); }
 
     // Current media player related property getters
     QMediaPlayer::State playbackState() const { return m_mediaPlayer->state()/*m_playbackState*/; }
@@ -138,6 +144,8 @@ signals:
     void seekableChanged(bool newSeekable);
     void errorChanged(QMediaPlayer::Error newError);
     void errorStringChanged(const QString &newErrorString);
+    void hasNextChanged(bool newHasNext);
+    void hasPreviousChanged(bool newHasPrevious);
 public slots:
     /**
      * @brief playItem Replaces the current queue and plays the item with the given id.

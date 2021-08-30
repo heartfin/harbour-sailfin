@@ -22,6 +22,7 @@
 #include <QtQml>
 
 #include "model/item.h"
+#include "dto/itemfields.h"
 #include "dto/mediastream.h"
 #include "dto/nameguidpair.h"
 #include "dto/userdto.h"
@@ -36,6 +37,7 @@
 #include "viewmodel/loader.h"
 #include "viewmodel/mediastream.h"
 #include "viewmodel/modelstatus.h"
+#include "viewmodel/platformmediacontrol.h"
 #include "viewmodel/playbackmanager.h"
 #include "viewmodel/playlist.h"
 #include "viewmodel/userdata.h"

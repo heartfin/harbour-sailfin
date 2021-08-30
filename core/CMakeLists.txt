@@ -1,5 +1,10 @@
 project(jellyfin-qt VERSION 0.1.0)
 find_package(Qt5 5.6 COMPONENTS Multimedia Network Qml WebSockets REQUIRED)
+
+if (FREEDESKTOP_INTEGRATION)
+find_package(Qt5 5.6 COMPONENTS DBus REQUIRED)
+endif()
+
 include(GNUInstallDirs)
 include(GeneratedSources.cmake)
 
@@ -52,6 +57,7 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/viewmodel/modelstatus.h
         include/JellyfinQt/viewmodel/propertyhelper.h
         include/JellyfinQt/viewmodel/playbackmanager.h
+        include/JellyfinQt/viewmodel/platformmediacontrol.h
         include/JellyfinQt/viewmodel/playlist.h
         include/JellyfinQt/viewmodel/userdata.h
         include/JellyfinQt/viewmodel/usermodel.h
@@ -64,6 +70,19 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/jsonhelper.h
         include/JellyfinQt/serverdiscoverymodel.h
         include/JellyfinQt/websocket.h)
+
+if (FREEDESKTOP_INTEGRATION)
+    list(APPEND JellyfinQt_SOURCES
+        src/platform/freedesktop/mediaplayer2.cpp
+        src/platform/freedesktop/mediaplayer2player.cpp
+        src/viewmodel/platformmediacontrol_freedesktop.cpp)
+    list(APPEND JellyfinQt_HEADERS
+        include/JellyfinQt/platform/freedesktop/mediaplayer2.h
+        include/JellyfinQt/platform/freedesktop/mediaplayer2player.h)
+else()
+    list(APPEND JellyfinQt_SOURCES
+        src/viewmodel/platformmediacontrol_stub.cpp)
+endif()
         
 list(APPEND JellyfinQt_HEADERS ${openapi_HEADERS})
 
@@ -83,6 +102,10 @@ endif()
 
 target_include_directories(JellyfinQt PUBLIC "include")
 target_link_libraries(JellyfinQt PUBLIC Qt5::Core Qt5::Multimedia Qt5::Network Qt5::Qml Qt5::WebSockets)
+
+if (FREEDESKTOP_INTEGRATION)
+    target_link_libraries(JellyfinQt PUBLIC Qt5::DBus)
+endif()
 set_target_properties(JellyfinQt PROPERTIES CXX_VISIBILITY_PRESET default)
 install(TARGETS JellyfinQt
 	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"

@@ -58,10 +58,14 @@ public:
      */
     int currentItemIndexInList() const;
 
+    bool hasPrevious();
+
     /**
      * @brief Determine the previous item to be played.
      */
     void previous();
+
+    bool hasNext();
 
     /**
      * @brief Determine the next item to be played.

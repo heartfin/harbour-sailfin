@@ -16,11 +16,21 @@ ApplicationWindow {
     height: 600
     visible: true
     property int _oldDepth: 0
-    property alias playbackManager: playbackManager
+    property alias playbackManager: _playbackManager
 
     J.PlaybackManager {
-        id: playbackManager
+        id: _playbackManager
         apiClient: ApiClient
+    }
+
+    J.PlatformMediaControl {
+        playbackManager: appWindow.playbackManager
+        canQuit: true
+        onQuitRequested: appWindow.close()
+        desktopFile: "sailfin"
+        playerName: "Sailfin"
+        canRaise: true
+        onRaiseRequested: appWindow.raise()
     }
 
     background: Background {
@@ -77,6 +87,7 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Previous"
                 onClicked: playbackManager.previous();
+                enabled: playbackManager.hasPrevious
             }
             Button {
                 readonly property bool _playing: playbackManager.playbackState === MediaPlayer.PlayingState;
@@ -88,6 +99,7 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Next"
                 onClicked: playbackManager.next();
+                enabled: playbackManager.hasNext
             }
         }
 

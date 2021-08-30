@@ -84,6 +84,9 @@ void PlaybackManager::setItem(QSharedPointer<Model::Item> newItem) {
     }
     emit itemChanged(m_displayItem);
 
+    emit hasNextChanged(m_queue->hasNext());
+    emit hasPreviousChanged(m_queue->hasPrevious());
+
     if (m_apiClient == nullptr) {
         qWarning() << "apiClient is not set on this MediaSource instance! Aborting.";
         return;

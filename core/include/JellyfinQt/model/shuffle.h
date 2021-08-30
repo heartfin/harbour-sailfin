@@ -83,6 +83,9 @@ public:
      */
     virtual int nextItem() const { return -1; }
 
+    virtual bool hasPrevious() const { return false; }
+    virtual bool hasNext() const { return false; }
+
     /**
      * @brief Sets whether the shuffler to loop over the list if all items are played.
      */
@@ -108,6 +111,8 @@ public:
     virtual void previous() override;
     virtual void next() override;
     virtual void setIndex(int i) override;
+    virtual bool hasPrevious() const override;
+    virtual bool hasNext() const override;
 protected:
     int nextIndex() const;
     int previousIndex() const;
@@ -148,6 +153,8 @@ public:
     virtual int nextItem() const override;
     virtual void previous() override;
     virtual void next() override;
+    virtual bool hasPrevious() const override;
+    virtual bool hasNext() const override;
 protected:
     int m_previous, m_current, m_next = -1;
 };

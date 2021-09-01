@@ -35,9 +35,9 @@
 
 #include "../dto/baseitemdto.h"
 #include "../dto/playbackinfodto.h"
+#include "../dto/playbackinforesponse.h"
 #include "../dto/playmethod.h"
 #include "../loader/requesttypes.h"
-#include "../loader/http/getpostedplaybackinfo.h"
 #include "../model/playlist.h"
 #include "../support/jsonconv.h"
 #include "../viewmodel/item.h"

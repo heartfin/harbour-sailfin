@@ -40,7 +40,6 @@
 #include "namedguidpair.h"
 #include "userdata.h"*/
 
-#include "../loader/http/getitem.h"
 #include "../loader/requesttypes.h"
 #include "../model/item.h"
 #include "mediastream.h"

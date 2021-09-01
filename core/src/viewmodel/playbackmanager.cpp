@@ -20,6 +20,7 @@
 #include "JellyfinQt/viewmodel/playbackmanager.h"
 
 #include "JellyfinQt/apimodel.h"
+#include "JellyfinQt/loader/http/mediainfo.h"
 
 // #include "JellyfinQt/DTO/dto.h"
 #include <JellyfinQt/dto/useritemdatadto.h>

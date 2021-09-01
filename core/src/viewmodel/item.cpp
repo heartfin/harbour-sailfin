@@ -17,6 +17,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 #include "JellyfinQt/viewmodel/item.h"
+
+
+#include "JellyfinQt/loader/http/items.h"
+#include "JellyfinQt/loader/http/userlibrary.h"
 #include "JellyfinQt/viewmodel/userdata.h"
 
 namespace Jellyfin {

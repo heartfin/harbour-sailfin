@@ -190,21 +190,39 @@ void realMain(string[] args) {
 	}
 	
 	Appender!(Endpoint[]) endpoints;
-	foreach(string path, ref const Node operations; root["paths"]) {
-		foreach (string operation, ref const Node endpoint; operations) {
-			string fileBase = endpoint["operationId"].as!string.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
-			string headerFileName = buildPath(outputDirectory, "include", INCLUDE_PREFIX, HTTP_LOADER_FOLDER, fileBase ~ ".h");
-			string implementationFileName = buildPath(outputDirectory, "src", SRC_PREFIX, HTTP_LOADER_FOLDER, fileBase ~ ".cpp");
+	Node[][string] tags;
+	foreach(string path, ref Node operations; root["paths"]) {
+		foreach (string operation, ref Node endpoint; operations) {
+			endpoint["path"] = path;
+			string tag;
+			if ("tags" in endpoint && endpoint["tags"].length > 0) {
+				tag = endpoint["tags"][0].as!string;
+			} else {
+				tag = "untagged";
+			}
 			
-			headerFiles ~= [headerFileName];
-			implementationFiles ~= [implementationFileName];
-			
-			File headerFile = File(headerFileName, "w+");
-			File implementationFile = File(implementationFileName, "w+");
-			generateFileForEndpoint(path, operation, endpoint, root["components"]["schemas"], headerFile, 
-					implementationFile, endpoints);
+			if (tag in tags) {
+				tags[tag] ~= endpoint;
+			} else {
+				tags[tag] = [endpoint];
+			}
 		}
 	}
+	
+	foreach(tag, operations; tags) {
+		string fileBase = tag.applyCasePolicy(OPENAPI_CASING, CPP_FILENAME_CASING);
+		string headerFileName = buildPath(outputDirectory, "include", INCLUDE_PREFIX, HTTP_LOADER_FOLDER, fileBase ~ ".h");
+		string implementationFileName = buildPath(outputDirectory, "src", SRC_PREFIX, HTTP_LOADER_FOLDER, fileBase ~ ".cpp");
+		
+		headerFiles ~= [headerFileName];
+		implementationFiles ~= [implementationFileName];
+		
+		File headerFile = File(headerFileName, "w+");
+		File implementationFile = File(implementationFileName, "w+");
+		generateFileForEndpoints(operations, root["components"]["schemas"], headerFile, 
+				implementationFile, endpoints, fileBase);
+	}
+	
 	string typesHeaderPath = buildPath(outputDirectory, "include", INCLUDE_PREFIX, LOADER_FOLDER, "requesttypes.h");
 	string typesImplementationPath = buildPath(outputDirectory, "src", SRC_PREFIX, LOADER_FOLDER, "requesttypes.cpp");
 	File typesHeader = File(typesHeaderPath, "w+");
@@ -347,111 +365,22 @@ void writeRequestTypesFile(R)(File headerFile, File implementationFile, R endpoi
 }
 
 /**
- * Generates files for endpoins
+ * Generates files for endpoints in a category
  * Params:
- *     path = Path of the endpoint, for example "/foo/{barId}/baz";
- *     operation = HTTP method, like "get", "post", ...
  *     endpointNode = YAML node representing the endpoint.
  *     allSchemas = YAML node containing the schemas that values in the endpointNOde could reference.
  *     headerFile = File to write the header (.h) file to
  *     implementationFile = File to write the implementation (.cpp) file to.
  *     endpoints = Appender to add any requestParameters encountered to.
+ *     categoryName = name of the category
  */
-void generateFileForEndpoint(ref const string path, ref const string operation, ref const Node endpointNode, 
+void generateFileForEndpoints(ref const Node[] endpointNodes, 
 		ref const Node allSchemas, ref scope File headerFile, ref scope File implementationFile, 
-		ref scope Appender!(Endpoint[]) endpoints) {
+		ref scope Appender!(Endpoint[]) endpoints, ref const string categoryName) {
 	
-	string name = endpointNode["operationId"].as!string;
-	
-	Endpoint endpoint = new Endpoint();
-	endpoint.name = name;
-	endpoint.parameterType = name ~ "Params";
-	endpoint.description = endpointNode.getOr!string("summary", "");
-	endpoint.path = path;
-	
-	string[] systemImports = ["optional"];
-	string[] userImports = [
-			buildPath(SUPPORT_FOLDER, "jsonconv.h"),
-			buildPath(SUPPORT_FOLDER, "loader.h"), 
-			buildPath(LOADER_FOLDER, "requesttypes.h")
-	];
-	
-	// Find the most likely result response.
-	foreach(string code, const Node response; endpointNode["responses"]) {
-		int codeNo = to!int(code);
-		if ([200, 201].canFind(codeNo)) {
-			foreach(string contentType, const Node content; response["content"]) {
-				if (contentType == "application/json") {
-					endpoint.hasSuccessResponse = true;
-					if ("$ref" in content["schema"]) {
-						string reference = content["schema"]["$ref"].as!string.chompPrefix("#/components/schemas/");
-						endpoint.resultIsReference = true;
-						endpoint.resultType = reference;
-						userImports ~= [buildPath(MODEL_FOLDER, reference.applyCasePolicy(CasePolicy.PASCAL, CasePolicy.LOWER) ~ ".h")];
-					} else if ("schema" in content){
-						endpoint.resultIsReference = false;
-						string typeName = endpoint.name ~ "Response";
-						MetaTypeInfo responseType = getType(typeName, content["schema"], allSchemas);
-						endpoint.resultType = responseType.typeName;
-						if (responseType.needsLocalImport && !responseType.isContainer) {
-							userImports ~= [buildPath(MODEL_FOLDER, endpoint.resultType)];
-						}
-						
-						MetaTypeInfo t = responseType;
-						while(t.isContainer) {
-							t = t.containerType;
-							if (t.needsLocalImport) {
-								userImports ~= [buildPath(MODEL_FOLDER, t.fileName)];
-							} else if (t.needsSystemImport && !t.isContainer){
-								systemImports ~= [t.typeName];
-							}
-						} 
-					}
-				}
-			}
-			}
-	}
-	
-	// Build the parameter structure.
-	if ("parameters" in endpointNode && endpointNode["parameters"].length > 0) {
-		foreach (ref const Node yamlParameter; endpointNode["parameters"]) {
-			RequestParameter param = new RequestParameter();
-			param.name = yamlParameter["name"].as!string;
-			param.required = yamlParameter.getOr!bool("required", false);
-			param.description = yamlParameter.getOr!string("description", "");
-			
-			param.type = getType(param.name, yamlParameter["schema"], allSchemas);
-			if (!param.type.isNullable && !param.required && !param.type.hasDefaultValue) {
-				param.type.isNullable = true;
-			}
-			switch(yamlParameter["in"].as!string.toLower) {
-			case "path":
-				param.location = ParameterLocation.PATH;
-				endpoint.requiredPathParameters ~= [param];
-				break;
-			case "query":
-				param.location = ParameterLocation.QUERY;
-				if (param.required) {
-					endpoint.requiredQueryParameters ~= [param];
-				} else {
-					endpoint.optionalQueryParameters ~= [param];
-				}
-				break;
-			default:
-				assert(false);
-			}
-			endpoint.parameters ~= [param];
-		}
-	}
-	
-	endpoints ~= [endpoint];
-	
-	// Render templates
-	class Controller {
+	class EndpointController {
 		string className;
 		//MetaTypeInfo[] properties;
-		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
-		string dtoNamespace = namespaceString!CPP_NAMESPACE_DTO;
 		string responseType = "void";
 		string parameterType = "void";
 		Endpoint endpoint;
@@ -467,17 +396,119 @@ void generateFileForEndpoint(ref const string path, ref const string operation, 
 			return result;
 		}
 	}
+	Appender!(EndpointController[]) endpointControllers = appender!(EndpointController[]);
+	endpointControllers.reserve(endpointNodes.length);
+	
+	string[] systemImports = ["optional"];
+	string[] userImports = [
+			buildPath(SUPPORT_FOLDER, "jsonconv.h"),
+			buildPath(SUPPORT_FOLDER, "loader.h"), 
+			buildPath(LOADER_FOLDER, "requesttypes.h")
+	];
+	
+	foreach(endpointNode; endpointNodes) {
+		string name = endpointNode["operationId"].as!string;
+		
+		Endpoint endpoint = new Endpoint();
+		endpoint.name = name;
+		endpoint.parameterType = name ~ "Params";
+		endpoint.description = endpointNode.getOr!string("summary", "");
+		endpoint.path = endpointNode["path"].as!string;
+		
+		// Find the most likely result response.
+		foreach(string code, const Node response; endpointNode["responses"]) {
+			int codeNo = to!int(code);
+			if ([200, 201].canFind(codeNo)) {
+				foreach(string contentType, const Node content; response["content"]) {
+					if (contentType == "application/json") {
+						endpoint.hasSuccessResponse = true;
+						if ("$ref" in content["schema"]) {
+							string reference = content["schema"]["$ref"].as!string.chompPrefix("#/components/schemas/");
+							endpoint.resultIsReference = true;
+							endpoint.resultType = reference;
+							userImports ~= [buildPath(MODEL_FOLDER, reference.applyCasePolicy(CasePolicy.PASCAL, CasePolicy.LOWER) ~ ".h")];
+						} else if ("schema" in content){
+							endpoint.resultIsReference = false;
+							string typeName = endpoint.name ~ "Response";
+							MetaTypeInfo responseType = getType(typeName, content["schema"], allSchemas);
+							endpoint.resultType = responseType.typeName;
+							if (responseType.needsLocalImport && !responseType.isContainer) {
+								userImports ~= [buildPath(MODEL_FOLDER, endpoint.resultType)];
+							}
+							
+							MetaTypeInfo t = responseType;
+							while(t.isContainer) {
+								t = t.containerType;
+								if (t.needsLocalImport) {
+									userImports ~= [buildPath(MODEL_FOLDER, t.fileName)];
+								} else if (t.needsSystemImport && !t.isContainer){
+									systemImports ~= [t.typeName];
+								}
+							} 
+						}
+					}
+				}
+				}
+		}
+		
+		// Build the parameter structure.
+		if ("parameters" in endpointNode && endpointNode["parameters"].length > 0) {
+			foreach (ref const Node yamlParameter; endpointNode["parameters"]) {
+				RequestParameter param = new RequestParameter();
+				param.name = yamlParameter["name"].as!string;
+				param.required = yamlParameter.getOr!bool("required", false);
+				param.description = yamlParameter.getOr!string("description", "");
+				
+				param.type = getType(param.name, yamlParameter["schema"], allSchemas);
+				if (!param.type.isNullable && !param.required && !param.type.hasDefaultValue) {
+					param.type.isNullable = true;
+				}
+				switch(yamlParameter["in"].as!string.toLower) {
+				case "path":
+					param.location = ParameterLocation.PATH;
+					endpoint.requiredPathParameters ~= [param];
+					break;
+				case "query":
+					param.location = ParameterLocation.QUERY;
+					if (param.required) {
+						endpoint.requiredQueryParameters ~= [param];
+					} else {
+						endpoint.optionalQueryParameters ~= [param];
+					}
+					break;
+				default:
+					assert(false);
+				}
+				endpoint.parameters ~= [param];
+			}
+		}
+		
+		endpoints ~= [endpoint];
+		
+		EndpointController endpointController = new EndpointController();
+		endpointController.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
+		endpointController.endpoint = endpoint;
+		endpointControllers ~= [endpointController];
+	}
+	
+	
+	// Render templates
+	class Controller {
+		EndpointController[] endpoints;
+		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
+		string dtoNamespace = namespaceString!CPP_NAMESPACE_DTO;
+	}
+	
 	Controller controller = new Controller();
-	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
-	controller.endpoint = endpoint;
+	controller.endpoints = endpointControllers[];
 	
-	writeHeaderPreamble(headerFile, CPP_NAMESPACE_LOADER_HTTP, name, systemImports, userImports);
+	writeHeaderPreamble(headerFile, CPP_NAMESPACE_LOADER_HTTP, categoryName, systemImports, userImports);
 	headerFile.writeln(render!(import("loader_header.hbs"), Controller)(controller));
-	writeHeaderPostamble(headerFile, CPP_NAMESPACE_LOADER_HTTP, name);
+	writeHeaderPostamble(headerFile, CPP_NAMESPACE_LOADER_HTTP, categoryName);
 	
-	writeImplementationPreamble(implementationFile, CPP_NAMESPACE_LOADER_HTTP, HTTP_LOADER_FOLDER, name);
+	writeImplementationPreamble(implementationFile, CPP_NAMESPACE_LOADER_HTTP, HTTP_LOADER_FOLDER, categoryName);
 	implementationFile.writeln(render!(import("loader_implementation.hbs"), Controller)(controller));
-	writeImplementationPostamble(implementationFile, CPP_NAMESPACE_LOADER_HTTP, name);
+	writeImplementationPostamble(implementationFile, CPP_NAMESPACE_LOADER_HTTP, categoryName);
 }
 
 /**

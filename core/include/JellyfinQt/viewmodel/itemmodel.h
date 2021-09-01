@@ -25,7 +25,6 @@
 
 #include "../dto/baseitemdto.h"
 #include "../dto/baseitemdtoqueryresult.h"
-#include "../loader/http/getuserviews.h"
 #include "../loader/requesttypes.h"
 #include "../model/item.h"
 #include "../viewmodel/item.h"

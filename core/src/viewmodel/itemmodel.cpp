@@ -18,11 +18,10 @@
  */
 #include "JellyfinQt/viewmodel/itemmodel.h"
 
-#include "JellyfinQt/loader/http/getepisodes.h"
-#include "JellyfinQt/loader/http/getlatestmedia.h"
-#include "JellyfinQt/loader/http/getitemsbyuserid.h"
-#include "JellyfinQt/loader/http/getresumeitems.h"
-#include "JellyfinQt/loader/http/getseasons.h"
+#include "JellyfinQt/loader/http/items.h"
+#include "JellyfinQt/loader/http/userlibrary.h"
+#include "JellyfinQt/loader/http/userviews.h"
+#include "JellyfinQt/loader/http/tvshows.h"
 
 #include "JellyfinQt/viewmodel/userdata.h"
 

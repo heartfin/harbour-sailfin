@@ -23,7 +23,6 @@
 #include <QSharedPointer>
 #include <QString>
 
-#include "../loader/http/getitem.h"
 #include "../loader/requesttypes.h"
 #include "../model/user.h"
 #include "loader.h"

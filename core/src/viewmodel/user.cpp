@@ -19,7 +19,7 @@
 
 #include "JellyfinQt/viewmodel/user.h"
 
-#include "JellyfinQt/loader/http/getuserbyid.h"
+#include "JellyfinQt/loader/http/user.h"
 
 namespace Jellyfin {
 namespace ViewModel {

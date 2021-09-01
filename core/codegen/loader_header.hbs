@@ -1,21 +1,23 @@
-{{#if endpoint.hasSuccessResponse}}
-
 using namespace {{dtoNamespace}};
 
-{{#if endpoint.description.length > 0}}
+{{#each endpoints as |e|}}
+{{#if e.endpoint.hasSuccessResponse}}
+
+{{#if e.endpoint.description.length > 0}}
 /**
- * @brief {{endpoint.description}}
+ * @brief {{e.endpoint.description}}
 
  */
 {{/if}}
 
 
-class {{className}}Loader : public {{supportNamespace}}::HttpLoader<{{endpoint.resultType}}, {{endpoint.parameterType}}> {
+class {{e.className}}Loader : public {{supportNamespace}}::HttpLoader<{{e.endpoint.resultType}}, {{e.endpoint.parameterType}}> {
 public:
-	explicit {{className}}Loader(ApiClient *apiClient = nullptr);
+	explicit {{e.className}}Loader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const {{endpoint.parameterType}}& parameters) const override;
-	QUrlQuery query(const {{endpoint.parameterType}}& parameters) const override;
+	QString path(const {{e.endpoint.parameterType}}& parameters) const override;
+	QUrlQuery query(const {{e.endpoint.parameterType}}& parameters) const override;
 };
 {{/if}}
+{{/each}}

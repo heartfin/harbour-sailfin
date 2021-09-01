@@ -23,7 +23,7 @@
 #include <QByteArray>
 #include <QHash>
 
-#include "../loader/http/getpublicusers.h"
+#include "../loader/http/user.h"
 #include "../loader/requesttypes.h"
 #include "../model/user.h"
 #include "../apimodel.h"

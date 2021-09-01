@@ -1,29 +1,31 @@
-{{#if endpoint.hasSuccessResponse}}
 
 using namespace {{dtoNamespace}};
 
-{{className}}Loader::{{className}}Loader(ApiClient *apiClient)
-	: {{supportNamespace}}::HttpLoader<{{endpoint.resultType}}, {{endpoint.parameterType}}>(apiClient) {}
+{{#each endpoints as |e|}}
+{{#if e.endpoint.hasSuccessResponse}}
 
-QString {{className}}Loader::path(const {{endpoint.parameterType}} &params) const {
+{{e.className}}Loader::{{e.className}}Loader(ApiClient *apiClient)
+	: {{supportNamespace}}::HttpLoader<{{e.endpoint.resultType}}, {{e.endpoint.parameterType}}>(apiClient) {}
+
+QString {{e.className}}Loader::path(const {{e.endpoint.parameterType}} &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return {{pathStringInterpolation "params"}};
+	return {{e.pathStringInterpolation "params"}};
 }
 
-QUrlQuery {{className}}Loader::query(const {{endpoint.parameterType}} &params) const {
+QUrlQuery {{e.className}}Loader::query(const {{e.endpoint.parameterType}} &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
 
-	{{#each endpoint.requiredQueryParameters as |p|}}
+	{{#each e.endpoint.requiredQueryParameters as |p|}}
 	result.addQueryItem("{{p.name}}", Support::toString<{{p.type.typeNameWithQualifiers}}>(params.{{p.type.name}}()));
 
 	{{/each}}
 
 	// Optional parameters
 
-	{{#each endpoint.optionalQueryParameters as |p|}}
+	{{#each e.endpoint.optionalQueryParameters as |p|}}
 	if (!params.{{p.type.name}}Null()) {
 		result.addQueryItem("{{p.name}}", Support::toString<{{p.type.typeNameWithQualifiers}}>(params.{{p.type.name}}()));
 	}
@@ -34,3 +36,4 @@ QUrlQuery {{className}}Loader::query(const {{endpoint.parameterType}} &params) c
 }
 
 {{/if}}
+{{/each}}

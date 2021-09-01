@@ -135,6 +135,20 @@ QVariantMap PlayerAdaptor::metadata() const
         map[QStringLiteral("xesam:contentCreated")] = item->dateCreated();
         map[QStringLiteral("xesam:genre")] = item->genres();
         map[QStringLiteral("xesam:lastUsed")] = item->userData()->lastPlayedDate();
+
+        QJsonObject providers = item->providerIds();
+        if (providers.contains(QStringLiteral("MusicBrainzTrack"))) {
+            map[QStringLiteral("xesam:musicBrainzTrackID")] = providers[QStringLiteral("MusicBrainzTrack")].toString();
+        }
+        if (providers.contains(QStringLiteral("MusicBrainzAlbum"))) {
+            map[QStringLiteral("xesam:musicBrainzAlbumID")] = providers[QStringLiteral("MusicBrainzAlbum")].toString();
+        }
+        if (providers.contains(QStringLiteral("MusicBrainzArtist"))) {
+            map[QStringLiteral("xesam:musicBrainzArtistID")] = providers[QStringLiteral("MusicBrainzArtist")].toString();
+        }
+        if (providers.contains(QStringLiteral("MusicBrainzAlbumArtist"))) {
+            map[QStringLiteral("xesam:musicBrainzAlbumArtistID")] = providers[QStringLiteral("MusicBrainzAlbumArtist")].toString();
+        }
     }
     return map;
 }

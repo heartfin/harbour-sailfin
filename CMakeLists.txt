@@ -11,6 +11,7 @@ option(PLATFORM_SAILFISHOS "Build SailfishOS version of application" OFF)
 option(PLATFORM_QTQUICK "Build QtQuick version of application" ON)
 option(FREEDESKTOP_INTEGRATION "Integration with various FreeDesktop.org standards, such as MPRIS" ON)
 option(BUILD_PRECOMPILED_HEADERS "Build with precompiled headers for faster compile times when doing a full rebuild, at the cost of slower incremental builds whenever a header file is changed" OFF)
+option(USE_MLITE "Build with mlite (MeeGo lite library), only available on Linux-based platforms. Used to store settings using DConf." OFF)
 
 if (NOT SAILFIN_VERSION)
     set(SAILFIN_VERSION "1.0.0")
@@ -19,6 +20,7 @@ endif()
 if(PLATFORM_SAILFISHOS)
 	# Hardcode this less?
 	set(CMAKE_INSTALL_LIBDIR "${CMAKE_INSTALL_PREFIX}/share/harbour-sailfin/lib")
+    set(USE_MLITE ON)
 endif()
 
 add_subdirectory(core)

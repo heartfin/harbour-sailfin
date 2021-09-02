@@ -2,14 +2,17 @@ project(jellyfin-qt VERSION 0.1.0)
 find_package(Qt5 5.6 COMPONENTS Multimedia Network Qml WebSockets REQUIRED)
 
 if (FREEDESKTOP_INTEGRATION)
-find_package(Qt5 5.6 COMPONENTS DBus REQUIRED)
+    find_package(Qt5 5.6 COMPONENTS DBus REQUIRED)
+endif()
+
+if (USE_MLITE)
+    find_package(mlite5 REQUIRED)
 endif()
 
 include(GNUInstallDirs)
 include(GeneratedSources.cmake)
 
 set(JellyfinQt_SOURCES
-        # src/DTO/dto.cpp
         src/model/deviceprofile.cpp
         src/model/item.cpp
         src/model/playlist.cpp
@@ -26,6 +29,7 @@ set(JellyfinQt_SOURCES
         src/viewmodel/modelstatus.cpp
         src/viewmodel/playbackmanager.cpp
         src/viewmodel/playlist.cpp
+        src/viewmodel/settings.cpp
         src/viewmodel/userdata.cpp
         src/viewmodel/usermodel.cpp
         src/viewmodel/user.cpp
@@ -35,6 +39,7 @@ set(JellyfinQt_SOURCES
         src/eventbus.cpp
         src/jellyfin.cpp
         src/jsonhelper.cpp
+        src/qobjectsettingswrapper.cpp
         src/serverdiscoverymodel.cpp
         src/websocket.cpp)
 
@@ -59,6 +64,7 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/viewmodel/playbackmanager.h
         include/JellyfinQt/viewmodel/platformmediacontrol.h
         include/JellyfinQt/viewmodel/playlist.h
+        include/JellyfinQt/viewmodel/settings.h
         include/JellyfinQt/viewmodel/userdata.h
         include/JellyfinQt/viewmodel/usermodel.h
         include/JellyfinQt/viewmodel/user.h
@@ -68,6 +74,7 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/eventbus.h
         include/JellyfinQt/jellyfin.h
         include/JellyfinQt/jsonhelper.h
+        include/JellyfinQt/qobjectsettingswrapper.h
         include/JellyfinQt/serverdiscoverymodel.h
         include/JellyfinQt/websocket.h)
 
@@ -92,6 +99,8 @@ if (PLATFORM_SAILFISHOS)
     add_definitions(-DPLATFORM_SAILFISHOS=1)
 endif()
 
+
+
 add_library(JellyfinQt ${JellyfinQt_SOURCES} ${JellyfinQt_HEADERS})
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0") 
@@ -106,6 +115,12 @@ target_link_libraries(JellyfinQt PUBLIC Qt5::Core Qt5::Multimedia Qt5::Network Q
 if (FREEDESKTOP_INTEGRATION)
     target_link_libraries(JellyfinQt PUBLIC Qt5::DBus)
 endif()
+
+if (USE_MLITE)
+    add_definitions(-DUSE_MLITE)
+    target_link_libraries(JellyfinQt PUBLIC mlite5::mlite5)
+endif()
+
 set_target_properties(JellyfinQt PROPERTIES CXX_VISIBILITY_PRESET default)
 install(TARGETS JellyfinQt
 	LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"

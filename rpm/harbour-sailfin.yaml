@@ -24,6 +24,7 @@ PkgConfigBR:
   - Qt5Qml
   - Qt5Quick
   - Qt5WebSockets
+  - mlite5
 
 # Build dependencies without a pkgconfig setup can be listed here
 # PkgBR:
@@ -50,7 +51,7 @@ Macros:
 ConfigOptions:
   - -DPLATFORM_SAILFISHOS=1
   - -DSAILFIN_VERSION='%{version}-%{release}'
-  
+
 # ExtraInstall: |
   # mv /home/deploy/installroot/home/deploy/installroot/usr/share/harbour-sailfin/plugins /home/deploy/installroot/usr/share/harbour-sailfin/plugins
 

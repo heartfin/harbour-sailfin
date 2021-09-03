@@ -60,6 +60,16 @@ QUrlQuery GetTasksLoader::query(const GetTasksParams &params) const {
 	return result;
 }
 
+QByteArray GetTasksLoader::body(const GetTasksParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetTasksLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetTaskLoader::GetTaskLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<TaskInfo, GetTaskParams>(apiClient) {}
 
@@ -77,6 +87,16 @@ QUrlQuery GetTaskLoader::query(const GetTaskParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetTaskLoader::body(const GetTaskParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetTaskLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

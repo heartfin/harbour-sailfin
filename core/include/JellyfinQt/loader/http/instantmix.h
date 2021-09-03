@@ -64,6 +64,8 @@ public:
 protected:
 	QString path(const GetInstantMixFromAlbumParams& parameters) const override;
 	QUrlQuery query(const GetInstantMixFromAlbumParams& parameters) const override;
+	QByteArray body(const GetInstantMixFromAlbumParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Creates an instant playlist based on a given song.
@@ -76,6 +78,8 @@ public:
 protected:
 	QString path(const GetInstantMixFromArtistsParams& parameters) const override;
 	QUrlQuery query(const GetInstantMixFromArtistsParams& parameters) const override;
+	QByteArray body(const GetInstantMixFromArtistsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Creates an instant playlist based on a given song.
@@ -88,6 +92,8 @@ public:
 protected:
 	QString path(const GetInstantMixFromItemParams& parameters) const override;
 	QUrlQuery query(const GetInstantMixFromItemParams& parameters) const override;
+	QByteArray body(const GetInstantMixFromItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Creates an instant playlist based on a given song.
@@ -100,6 +106,8 @@ public:
 protected:
 	QString path(const GetInstantMixFromMusicGenresParams& parameters) const override;
 	QUrlQuery query(const GetInstantMixFromMusicGenresParams& parameters) const override;
+	QByteArray body(const GetInstantMixFromMusicGenresParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Creates an instant playlist based on a given song.
@@ -112,6 +120,8 @@ public:
 protected:
 	QString path(const GetInstantMixFromMusicGenreParams& parameters) const override;
 	QUrlQuery query(const GetInstantMixFromMusicGenreParams& parameters) const override;
+	QByteArray body(const GetInstantMixFromMusicGenreParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Creates an instant playlist based on a given song.
@@ -124,6 +134,8 @@ public:
 protected:
 	QString path(const GetInstantMixFromPlaylistParams& parameters) const override;
 	QUrlQuery query(const GetInstantMixFromPlaylistParams& parameters) const override;
+	QByteArray body(const GetInstantMixFromPlaylistParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Creates an instant playlist based on a given song.
@@ -136,6 +148,8 @@ public:
 protected:
 	QString path(const GetInstantMixFromSongParams& parameters) const override;
 	QUrlQuery query(const GetInstantMixFromSongParams& parameters) const override;
+	QByteArray body(const GetInstantMixFromSongParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

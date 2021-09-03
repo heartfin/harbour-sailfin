@@ -144,6 +144,16 @@ QUrlQuery GetArtistsLoader::query(const GetArtistsParams &params) const {
 	return result;
 }
 
+QByteArray GetArtistsLoader::body(const GetArtistsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetArtistsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetArtistByNameLoader::GetArtistByNameLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetArtistByNameParams>(apiClient) {}
 
@@ -164,6 +174,16 @@ QUrlQuery GetArtistByNameLoader::query(const GetArtistByNameParams &params) cons
 	}
 	
 	return result;
+}
+
+QByteArray GetArtistByNameLoader::body(const GetArtistByNameParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetArtistByNameLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetAlbumArtistsLoader::GetAlbumArtistsLoader(ApiClient *apiClient)
@@ -273,6 +293,16 @@ QUrlQuery GetAlbumArtistsLoader::query(const GetAlbumArtistsParams &params) cons
 	}
 	
 	return result;
+}
+
+QByteArray GetAlbumArtistsLoader::body(const GetAlbumArtistsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetAlbumArtistsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

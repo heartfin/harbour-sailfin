@@ -62,6 +62,8 @@ public:
 protected:
 	QString path(const GetChannelsParams& parameters) const override;
 	QUrlQuery query(const GetChannelsParams& parameters) const override;
+	QByteArray body(const GetChannelsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get channel features.
@@ -74,6 +76,8 @@ public:
 protected:
 	QString path(const GetChannelFeaturesParams& parameters) const override;
 	QUrlQuery query(const GetChannelFeaturesParams& parameters) const override;
+	QByteArray body(const GetChannelFeaturesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get channel items.
@@ -86,6 +90,8 @@ public:
 protected:
 	QString path(const GetChannelItemsParams& parameters) const override;
 	QUrlQuery query(const GetChannelItemsParams& parameters) const override;
+	QByteArray body(const GetChannelItemsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get all channel features.
@@ -98,6 +104,8 @@ public:
 protected:
 	QString path(const GetAllChannelFeaturesParams& parameters) const override;
 	QUrlQuery query(const GetAllChannelFeaturesParams& parameters) const override;
+	QByteArray body(const GetAllChannelFeaturesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets latest channel items.
@@ -110,6 +118,8 @@ public:
 protected:
 	QString path(const GetLatestChannelItemsParams& parameters) const override;
 	QUrlQuery query(const GetLatestChannelItemsParams& parameters) const override;
+	QByteArray body(const GetLatestChannelItemsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

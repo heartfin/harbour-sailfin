@@ -62,6 +62,8 @@ public:
 protected:
 	QString path(const GetEndpointInfoParams& parameters) const override;
 	QUrlQuery query(const GetEndpointInfoParams& parameters) const override;
+	QByteArray body(const GetEndpointInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets information about the server.
@@ -74,6 +76,8 @@ public:
 protected:
 	QString path(const GetSystemInfoParams& parameters) const override;
 	QUrlQuery query(const GetSystemInfoParams& parameters) const override;
+	QByteArray body(const GetSystemInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets public information about the server.
@@ -86,6 +90,8 @@ public:
 protected:
 	QString path(const GetPublicSystemInfoParams& parameters) const override;
 	QUrlQuery query(const GetPublicSystemInfoParams& parameters) const override;
+	QByteArray body(const GetPublicSystemInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a list of available server log files.
@@ -98,6 +104,8 @@ public:
 protected:
 	QString path(const GetServerLogsParams& parameters) const override;
 	QUrlQuery query(const GetServerLogsParams& parameters) const override;
+	QByteArray body(const GetServerLogsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Pings the system.
@@ -110,6 +118,8 @@ public:
 protected:
 	QString path(const GetPingSystemParams& parameters) const override;
 	QUrlQuery query(const GetPingSystemParams& parameters) const override;
+	QByteArray body(const GetPingSystemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Pings the system.
@@ -122,6 +132,8 @@ public:
 protected:
 	QString path(const PostPingSystemParams& parameters) const override;
 	QUrlQuery query(const PostPingSystemParams& parameters) const override;
+	QByteArray body(const PostPingSystemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets wake on lan information.
@@ -134,6 +146,8 @@ public:
 protected:
 	QString path(const GetWakeOnLanInfoParams& parameters) const override;
 	QUrlQuery query(const GetWakeOnLanInfoParams& parameters) const override;
+	QByteArray body(const GetWakeOnLanInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

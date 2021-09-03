@@ -54,6 +54,16 @@ QUrlQuery MarkFavoriteItemLoader::query(const MarkFavoriteItemParams &params) co
 	return result;
 }
 
+QByteArray MarkFavoriteItemLoader::body(const MarkFavoriteItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation MarkFavoriteItemLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 UnmarkFavoriteItemLoader::UnmarkFavoriteItemLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<UserItemDataDto, UnmarkFavoriteItemParams>(apiClient) {}
 
@@ -71,6 +81,16 @@ QUrlQuery UnmarkFavoriteItemLoader::query(const UnmarkFavoriteItemParams &params
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray UnmarkFavoriteItemLoader::body(const UnmarkFavoriteItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation UnmarkFavoriteItemLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
 }
 
 GetItemLoader::GetItemLoader(ApiClient *apiClient)
@@ -92,6 +112,16 @@ QUrlQuery GetItemLoader::query(const GetItemParams &params) const {
 	return result;
 }
 
+QByteArray GetItemLoader::body(const GetItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetItemLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetIntrosLoader::GetIntrosLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetIntrosParams>(apiClient) {}
 
@@ -109,6 +139,16 @@ QUrlQuery GetIntrosLoader::query(const GetIntrosParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetIntrosLoader::body(const GetIntrosParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetIntrosLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetLocalTrailersLoader::GetLocalTrailersLoader(ApiClient *apiClient)
@@ -130,6 +170,16 @@ QUrlQuery GetLocalTrailersLoader::query(const GetLocalTrailersParams &params) co
 	return result;
 }
 
+QByteArray GetLocalTrailersLoader::body(const GetLocalTrailersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLocalTrailersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 DeleteUserItemRatingLoader::DeleteUserItemRatingLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<UserItemDataDto, DeleteUserItemRatingParams>(apiClient) {}
 
@@ -147,6 +197,16 @@ QUrlQuery DeleteUserItemRatingLoader::query(const DeleteUserItemRatingParams &pa
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray DeleteUserItemRatingLoader::body(const DeleteUserItemRatingParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteUserItemRatingLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
 }
 
 UpdateUserItemRatingLoader::UpdateUserItemRatingLoader(ApiClient *apiClient)
@@ -171,6 +231,16 @@ QUrlQuery UpdateUserItemRatingLoader::query(const UpdateUserItemRatingParams &pa
 	return result;
 }
 
+QByteArray UpdateUserItemRatingLoader::body(const UpdateUserItemRatingParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation UpdateUserItemRatingLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetSpecialFeaturesLoader::GetSpecialFeaturesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<BaseItemDto>, GetSpecialFeaturesParams>(apiClient) {}
 
@@ -188,6 +258,16 @@ QUrlQuery GetSpecialFeaturesLoader::query(const GetSpecialFeaturesParams &params
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetSpecialFeaturesLoader::body(const GetSpecialFeaturesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSpecialFeaturesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetLatestMediaLoader::GetLatestMediaLoader(ApiClient *apiClient)
@@ -239,6 +319,16 @@ QUrlQuery GetLatestMediaLoader::query(const GetLatestMediaParams &params) const 
 	return result;
 }
 
+QByteArray GetLatestMediaLoader::body(const GetLatestMediaParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLatestMediaLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetRootFolderLoader::GetRootFolderLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetRootFolderParams>(apiClient) {}
 
@@ -256,6 +346,16 @@ QUrlQuery GetRootFolderLoader::query(const GetRootFolderParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetRootFolderLoader::body(const GetRootFolderParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRootFolderLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

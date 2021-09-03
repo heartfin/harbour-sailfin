@@ -60,6 +60,16 @@ QUrlQuery GetConfigurationPagesLoader::query(const GetConfigurationPagesParams &
 	return result;
 }
 
+QByteArray GetConfigurationPagesLoader::body(const GetConfigurationPagesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetConfigurationPagesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

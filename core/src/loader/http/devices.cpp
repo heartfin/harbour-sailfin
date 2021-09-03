@@ -60,6 +60,16 @@ QUrlQuery GetDevicesLoader::query(const GetDevicesParams &params) const {
 	return result;
 }
 
+QByteArray GetDevicesLoader::body(const GetDevicesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDevicesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetDeviceInfoLoader::GetDeviceInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<DeviceInfo, GetDeviceInfoParams>(apiClient) {}
 
@@ -80,6 +90,16 @@ QUrlQuery GetDeviceInfoLoader::query(const GetDeviceInfoParams &params) const {
 	return result;
 }
 
+QByteArray GetDeviceInfoLoader::body(const GetDeviceInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDeviceInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetDeviceOptionsLoader::GetDeviceOptionsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<DeviceOptions, GetDeviceOptionsParams>(apiClient) {}
 
@@ -98,6 +118,16 @@ QUrlQuery GetDeviceOptionsLoader::query(const GetDeviceOptionsParams &params) co
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetDeviceOptionsLoader::body(const GetDeviceOptionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDeviceOptionsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

@@ -72,6 +72,16 @@ QUrlQuery GetChannelsLoader::query(const GetChannelsParams &params) const {
 	return result;
 }
 
+QByteArray GetChannelsLoader::body(const GetChannelsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetChannelsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetChannelFeaturesLoader::GetChannelFeaturesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<ChannelFeatures, GetChannelFeaturesParams>(apiClient) {}
 
@@ -89,6 +99,16 @@ QUrlQuery GetChannelFeaturesLoader::query(const GetChannelFeaturesParams &params
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetChannelFeaturesLoader::body(const GetChannelFeaturesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetChannelFeaturesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetChannelItemsLoader::GetChannelItemsLoader(ApiClient *apiClient)
@@ -134,6 +154,16 @@ QUrlQuery GetChannelItemsLoader::query(const GetChannelItemsParams &params) cons
 	return result;
 }
 
+QByteArray GetChannelItemsLoader::body(const GetChannelItemsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetChannelItemsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetAllChannelFeaturesLoader::GetAllChannelFeaturesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<ChannelFeatures>, GetAllChannelFeaturesParams>(apiClient) {}
 
@@ -151,6 +181,16 @@ QUrlQuery GetAllChannelFeaturesLoader::query(const GetAllChannelFeaturesParams &
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetAllChannelFeaturesLoader::body(const GetAllChannelFeaturesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetAllChannelFeaturesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetLatestChannelItemsLoader::GetLatestChannelItemsLoader(ApiClient *apiClient)
@@ -188,6 +228,16 @@ QUrlQuery GetLatestChannelItemsLoader::query(const GetLatestChannelItemsParams &
 	}
 	
 	return result;
+}
+
+QByteArray GetLatestChannelItemsLoader::body(const GetLatestChannelItemsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLatestChannelItemsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetPersonsParams& parameters) const override;
 	QUrlQuery query(const GetPersonsParams& parameters) const override;
+	QByteArray body(const GetPersonsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get person by name.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetPersonParams& parameters) const override;
 	QUrlQuery query(const GetPersonParams& parameters) const override;
+	QByteArray body(const GetPersonParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

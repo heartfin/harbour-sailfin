@@ -58,6 +58,8 @@ public:
 protected:
 	QString path(const GetVirtualFoldersParams& parameters) const override;
 	QUrlQuery query(const GetVirtualFoldersParams& parameters) const override;
+	QByteArray body(const GetVirtualFoldersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

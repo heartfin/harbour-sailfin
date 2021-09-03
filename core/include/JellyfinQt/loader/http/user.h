@@ -67,6 +67,8 @@ public:
 protected:
 	QString path(const GetUsersParams& parameters) const override;
 	QUrlQuery query(const GetUsersParams& parameters) const override;
+	QByteArray body(const GetUsersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a user by Id.
@@ -79,6 +81,8 @@ public:
 protected:
 	QString path(const GetUserByIdParams& parameters) const override;
 	QUrlQuery query(const GetUserByIdParams& parameters) const override;
+	QByteArray body(const GetUserByIdParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Authenticates a user.
@@ -91,6 +95,8 @@ public:
 protected:
 	QString path(const AuthenticateUserParams& parameters) const override;
 	QUrlQuery query(const AuthenticateUserParams& parameters) const override;
+	QByteArray body(const AuthenticateUserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Authenticates a user by name.
@@ -103,6 +109,8 @@ public:
 protected:
 	QString path(const AuthenticateUserByNameParams& parameters) const override;
 	QUrlQuery query(const AuthenticateUserByNameParams& parameters) const override;
+	QByteArray body(const AuthenticateUserByNameParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Authenticates a user with quick connect.
@@ -115,6 +123,8 @@ public:
 protected:
 	QString path(const AuthenticateWithQuickConnectParams& parameters) const override;
 	QUrlQuery query(const AuthenticateWithQuickConnectParams& parameters) const override;
+	QByteArray body(const AuthenticateWithQuickConnectParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Initiates the forgot password process for a local user.
@@ -127,6 +137,8 @@ public:
 protected:
 	QString path(const ForgotPasswordParams& parameters) const override;
 	QUrlQuery query(const ForgotPasswordParams& parameters) const override;
+	QByteArray body(const ForgotPasswordParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Redeems a forgot password pin.
@@ -139,6 +151,8 @@ public:
 protected:
 	QString path(const ForgotPasswordPinParams& parameters) const override;
 	QUrlQuery query(const ForgotPasswordPinParams& parameters) const override;
+	QByteArray body(const ForgotPasswordPinParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the user based on auth token.
@@ -151,6 +165,8 @@ public:
 protected:
 	QString path(const GetCurrentUserParams& parameters) const override;
 	QUrlQuery query(const GetCurrentUserParams& parameters) const override;
+	QByteArray body(const GetCurrentUserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Creates a user.
@@ -163,6 +179,8 @@ public:
 protected:
 	QString path(const CreateUserByNameParams& parameters) const override;
 	QUrlQuery query(const CreateUserByNameParams& parameters) const override;
+	QByteArray body(const CreateUserByNameParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a list of publicly visible users for display on a login screen.
@@ -175,6 +193,8 @@ public:
 protected:
 	QString path(const GetPublicUsersParams& parameters) const override;
 	QUrlQuery query(const GetPublicUsersParams& parameters) const override;
+	QByteArray body(const GetPublicUsersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

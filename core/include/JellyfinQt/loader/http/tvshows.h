@@ -61,6 +61,8 @@ public:
 protected:
 	QString path(const GetEpisodesParams& parameters) const override;
 	QUrlQuery query(const GetEpisodesParams& parameters) const override;
+	QByteArray body(const GetEpisodesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets seasons for a tv series.
@@ -73,6 +75,8 @@ public:
 protected:
 	QString path(const GetSeasonsParams& parameters) const override;
 	QUrlQuery query(const GetSeasonsParams& parameters) const override;
+	QByteArray body(const GetSeasonsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a list of next up episodes.
@@ -85,6 +89,8 @@ public:
 protected:
 	QString path(const GetNextUpParams& parameters) const override;
 	QUrlQuery query(const GetNextUpParams& parameters) const override;
+	QByteArray body(const GetNextUpParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a list of upcoming episodes.
@@ -97,6 +103,8 @@ public:
 protected:
 	QString path(const GetUpcomingEpisodesParams& parameters) const override;
 	QUrlQuery query(const GetUpcomingEpisodesParams& parameters) const override;
+	QByteArray body(const GetUpcomingEpisodesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

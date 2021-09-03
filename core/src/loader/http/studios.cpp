@@ -105,6 +105,16 @@ QUrlQuery GetStudiosLoader::query(const GetStudiosParams &params) const {
 	return result;
 }
 
+QByteArray GetStudiosLoader::body(const GetStudiosParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetStudiosLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetStudioLoader::GetStudioLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetStudioParams>(apiClient) {}
 
@@ -125,6 +135,16 @@ QUrlQuery GetStudioLoader::query(const GetStudioParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetStudioLoader::body(const GetStudioParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetStudioLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

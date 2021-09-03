@@ -67,6 +67,8 @@ public:
 protected:
 	QString path(const MarkFavoriteItemParams& parameters) const override;
 	QUrlQuery query(const MarkFavoriteItemParams& parameters) const override;
+	QByteArray body(const MarkFavoriteItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Unmarks item as a favorite.
@@ -79,6 +81,8 @@ public:
 protected:
 	QString path(const UnmarkFavoriteItemParams& parameters) const override;
 	QUrlQuery query(const UnmarkFavoriteItemParams& parameters) const override;
+	QByteArray body(const UnmarkFavoriteItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets an item from a user's library.
@@ -91,6 +95,8 @@ public:
 protected:
 	QString path(const GetItemParams& parameters) const override;
 	QUrlQuery query(const GetItemParams& parameters) const override;
+	QByteArray body(const GetItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets intros to play before the main media item plays.
@@ -103,6 +109,8 @@ public:
 protected:
 	QString path(const GetIntrosParams& parameters) const override;
 	QUrlQuery query(const GetIntrosParams& parameters) const override;
+	QByteArray body(const GetIntrosParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets local trailers for an item.
@@ -115,6 +123,8 @@ public:
 protected:
 	QString path(const GetLocalTrailersParams& parameters) const override;
 	QUrlQuery query(const GetLocalTrailersParams& parameters) const override;
+	QByteArray body(const GetLocalTrailersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Deletes a user's saved personal rating for an item.
@@ -127,6 +137,8 @@ public:
 protected:
 	QString path(const DeleteUserItemRatingParams& parameters) const override;
 	QUrlQuery query(const DeleteUserItemRatingParams& parameters) const override;
+	QByteArray body(const DeleteUserItemRatingParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Updates a user's rating for an item.
@@ -139,6 +151,8 @@ public:
 protected:
 	QString path(const UpdateUserItemRatingParams& parameters) const override;
 	QUrlQuery query(const UpdateUserItemRatingParams& parameters) const override;
+	QByteArray body(const UpdateUserItemRatingParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets special features for an item.
@@ -151,6 +165,8 @@ public:
 protected:
 	QString path(const GetSpecialFeaturesParams& parameters) const override;
 	QUrlQuery query(const GetSpecialFeaturesParams& parameters) const override;
+	QByteArray body(const GetSpecialFeaturesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets latest media.
@@ -163,6 +179,8 @@ public:
 protected:
 	QString path(const GetLatestMediaParams& parameters) const override;
 	QUrlQuery query(const GetLatestMediaParams& parameters) const override;
+	QByteArray body(const GetLatestMediaParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the root folder from a user's library.
@@ -175,6 +193,8 @@ public:
 protected:
 	QString path(const GetRootFolderParams& parameters) const override;
 	QUrlQuery query(const GetRootFolderParams& parameters) const override;
+	QByteArray body(const GetRootFolderParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

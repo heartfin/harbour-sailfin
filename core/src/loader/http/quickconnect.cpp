@@ -55,6 +55,16 @@ QUrlQuery AuthorizeLoader::query(const AuthorizeParams &params) const {
 	return result;
 }
 
+QByteArray AuthorizeLoader::body(const AuthorizeParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation AuthorizeLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 ConnectLoader::ConnectLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QuickConnectResult, ConnectParams>(apiClient) {}
 
@@ -73,6 +83,16 @@ QUrlQuery ConnectLoader::query(const ConnectParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray ConnectLoader::body(const ConnectParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation ConnectLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 DeauthorizeLoader::DeauthorizeLoader(ApiClient *apiClient)
@@ -94,6 +114,16 @@ QUrlQuery DeauthorizeLoader::query(const DeauthorizeParams &params) const {
 	return result;
 }
 
+QByteArray DeauthorizeLoader::body(const DeauthorizeParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeauthorizeLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 InitiateLoader::InitiateLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QuickConnectResult, InitiateParams>(apiClient) {}
 
@@ -113,6 +143,16 @@ QUrlQuery InitiateLoader::query(const InitiateParams &params) const {
 	return result;
 }
 
+QByteArray InitiateLoader::body(const InitiateParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation InitiateLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetStatusLoader::GetStatusLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QuickConnectState, GetStatusParams>(apiClient) {}
 
@@ -130,6 +170,16 @@ QUrlQuery GetStatusLoader::query(const GetStatusParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetStatusLoader::body(const GetStatusParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetStatusLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

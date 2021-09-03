@@ -54,6 +54,16 @@ QUrlQuery SyncPlayGetGroupsLoader::query(const SyncPlayGetGroupsParams &params) 
 	return result;
 }
 
+QByteArray SyncPlayGetGroupsLoader::body(const SyncPlayGetGroupsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation SyncPlayGetGroupsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

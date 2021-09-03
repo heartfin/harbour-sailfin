@@ -54,6 +54,16 @@ QUrlQuery GetStartupConfigurationLoader::query(const GetStartupConfigurationPara
 	return result;
 }
 
+QByteArray GetStartupConfigurationLoader::body(const GetStartupConfigurationParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetStartupConfigurationLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetFirstUser_2Loader::GetFirstUser_2Loader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<StartupUserDto, GetFirstUser_2Params>(apiClient) {}
 
@@ -73,6 +83,16 @@ QUrlQuery GetFirstUser_2Loader::query(const GetFirstUser_2Params &params) const 
 	return result;
 }
 
+QByteArray GetFirstUser_2Loader::body(const GetFirstUser_2Params &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetFirstUser_2Loader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetFirstUserLoader::GetFirstUserLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<StartupUserDto, GetFirstUserParams>(apiClient) {}
 
@@ -90,6 +110,16 @@ QUrlQuery GetFirstUserLoader::query(const GetFirstUserParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetFirstUserLoader::body(const GetFirstUserParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetFirstUserLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

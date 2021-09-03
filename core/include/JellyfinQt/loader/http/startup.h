@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const GetStartupConfigurationParams& parameters) const override;
 	QUrlQuery query(const GetStartupConfigurationParams& parameters) const override;
+	QByteArray body(const GetStartupConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the first user.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const GetFirstUser_2Params& parameters) const override;
 	QUrlQuery query(const GetFirstUser_2Params& parameters) const override;
+	QByteArray body(const GetFirstUser_2Params& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the first user.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const GetFirstUserParams& parameters) const override;
 	QUrlQuery query(const GetFirstUserParams& parameters) const override;
+	QByteArray body(const GetFirstUserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

@@ -102,6 +102,16 @@ QUrlQuery GetGenresLoader::query(const GetGenresParams &params) const {
 	return result;
 }
 
+QByteArray GetGenresLoader::body(const GetGenresParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetGenresLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetGenreLoader::GetGenreLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetGenreParams>(apiClient) {}
 
@@ -122,6 +132,16 @@ QUrlQuery GetGenreLoader::query(const GetGenreParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetGenreLoader::body(const GetGenreParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetGenreLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

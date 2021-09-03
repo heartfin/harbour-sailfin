@@ -61,6 +61,8 @@ public:
 protected:
 	QString path(const GetCountriesParams& parameters) const override;
 	QUrlQuery query(const GetCountriesParams& parameters) const override;
+	QByteArray body(const GetCountriesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets known cultures.
@@ -73,6 +75,8 @@ public:
 protected:
 	QString path(const GetCulturesParams& parameters) const override;
 	QUrlQuery query(const GetCulturesParams& parameters) const override;
+	QByteArray body(const GetCulturesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets localization options.
@@ -85,6 +89,8 @@ public:
 protected:
 	QString path(const GetLocalizationOptionsParams& parameters) const override;
 	QUrlQuery query(const GetLocalizationOptionsParams& parameters) const override;
+	QByteArray body(const GetLocalizationOptionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets known parental ratings.
@@ -97,6 +103,8 @@ public:
 protected:
 	QString path(const GetParentalRatingsParams& parameters) const override;
 	QUrlQuery query(const GetParentalRatingsParams& parameters) const override;
+	QByteArray body(const GetParentalRatingsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

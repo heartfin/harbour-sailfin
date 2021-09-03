@@ -291,6 +291,16 @@ QUrlQuery GetTrailersLoader::query(const GetTrailersParams &params) const {
 	return result;
 }
 
+QByteArray GetTrailersLoader::body(const GetTrailersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetTrailersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

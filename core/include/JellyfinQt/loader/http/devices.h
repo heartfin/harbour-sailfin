@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const GetDevicesParams& parameters) const override;
 	QUrlQuery query(const GetDevicesParams& parameters) const override;
+	QByteArray body(const GetDevicesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get info for a device.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const GetDeviceInfoParams& parameters) const override;
 	QUrlQuery query(const GetDeviceInfoParams& parameters) const override;
+	QByteArray body(const GetDeviceInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get options for a device.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const GetDeviceOptionsParams& parameters) const override;
 	QUrlQuery query(const GetDeviceOptionsParams& parameters) const override;
+	QByteArray body(const GetDeviceOptionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

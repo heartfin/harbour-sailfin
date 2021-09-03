@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetPluginsParams& parameters) const override;
 	QUrlQuery query(const GetPluginsParams& parameters) const override;
+	QByteArray body(const GetPluginsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets plugin configuration.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetPluginConfigurationParams& parameters) const override;
 	QUrlQuery query(const GetPluginConfigurationParams& parameters) const override;
+	QByteArray body(const GetPluginConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const GetPlaybackInfoParams& parameters) const override;
 	QUrlQuery query(const GetPlaybackInfoParams& parameters) const override;
+	QByteArray body(const GetPlaybackInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets live playback media info for an item.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const GetPostedPlaybackInfoParams& parameters) const override;
 	QUrlQuery query(const GetPostedPlaybackInfoParams& parameters) const override;
+	QByteArray body(const GetPostedPlaybackInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Opens a media source.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const OpenLiveStreamParams& parameters) const override;
 	QUrlQuery query(const OpenLiveStreamParams& parameters) const override;
+	QByteArray body(const OpenLiveStreamParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

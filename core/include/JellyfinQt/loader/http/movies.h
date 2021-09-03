@@ -58,6 +58,8 @@ public:
 protected:
 	QString path(const GetMovieRecommendationsParams& parameters) const override;
 	QUrlQuery query(const GetMovieRecommendationsParams& parameters) const override;
+	QByteArray body(const GetMovieRecommendationsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

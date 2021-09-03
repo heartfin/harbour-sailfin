@@ -54,6 +54,16 @@ QUrlQuery GetPasswordResetProvidersLoader::query(const GetPasswordResetProviders
 	return result;
 }
 
+QByteArray GetPasswordResetProvidersLoader::body(const GetPasswordResetProvidersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPasswordResetProvidersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetAuthProvidersLoader::GetAuthProvidersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<NameIdPair>, GetAuthProvidersParams>(apiClient) {}
 
@@ -71,6 +81,16 @@ QUrlQuery GetAuthProvidersLoader::query(const GetAuthProvidersParams &params) co
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetAuthProvidersLoader::body(const GetAuthProvidersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetAuthProvidersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetSessionsLoader::GetSessionsLoader(ApiClient *apiClient)
@@ -99,6 +119,16 @@ QUrlQuery GetSessionsLoader::query(const GetSessionsParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetSessionsLoader::body(const GetSessionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSessionsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

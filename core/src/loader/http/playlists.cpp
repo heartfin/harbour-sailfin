@@ -66,6 +66,16 @@ QUrlQuery CreatePlaylistLoader::query(const CreatePlaylistParams &params) const 
 	return result;
 }
 
+QByteArray CreatePlaylistLoader::body(const CreatePlaylistParams &params) const {
+	return Support::toString<QSharedPointer<CreatePlaylistDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation CreatePlaylistLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetPlaylistItemsLoader::GetPlaylistItemsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetPlaylistItemsParams>(apiClient) {}
 
@@ -105,6 +115,16 @@ QUrlQuery GetPlaylistItemsLoader::query(const GetPlaylistItemsParams &params) co
 	}
 	
 	return result;
+}
+
+QByteArray GetPlaylistItemsLoader::body(const GetPlaylistItemsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPlaylistItemsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

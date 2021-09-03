@@ -36,6 +36,7 @@ import std.functional;
 import std.path : buildPath, dirSeparator;
 import std.parallelism : parallel;
 import std.range;
+import std.regex;
 import std.string;
 import std.stdio;
 import std.uni;
@@ -134,6 +135,8 @@ bool GENERATE_PROPERTIES = true;
 string outputDirectory = "generated";
 // END CODE GENERATION SETTINGS.
 
+static immutable MimeType MIME_APPLICATION_JSON = MimeType("application", "json");
+
 // Implementation
 
 enum CasePolicy {
@@ -194,6 +197,7 @@ void realMain(string[] args) {
 	foreach(string path, ref Node operations; root["paths"]) {
 		foreach (string operation, ref Node endpoint; operations) {
 			endpoint["path"] = path;
+			endpoint["operation"] = operation;
 			string tag;
 			if ("tags" in endpoint && endpoint["tags"].length > 0) {
 				tag = endpoint["tags"][0].as!string;
@@ -329,6 +333,7 @@ void writeRequestTypesFile(R)(File headerFile, File implementationFile, R endpoi
 		RequestParameter[] requiredParameters = [];
 		RequestParameter[] optionalParameters = [];
 		RequestParameter[] parameters = [];
+		RequestParameter[] bodyParameters = [];
 	}
 	
 	struct Controller {
@@ -347,8 +352,10 @@ void writeRequestTypesFile(R)(File headerFile, File implementationFile, R endpoi
 				getParameters(endpoint.parameters, (e => e.required && e.location == ParameterLocation.QUERY));
 		endpointController.optionalQueryParameters =
 				getParameters(endpoint.parameters, (e => !e.required && e.location == ParameterLocation.QUERY));
+		endpointController.bodyParameters = 
+				getParameters(endpoint.parameters, (e => e.location == ParameterLocation.BODY));
 		with (endpointController) {
-			parameters = requiredPathParameters ~ requiredQueryParameters ~ optionalQueryParameters;
+			parameters = requiredPathParameters ~ requiredQueryParameters ~ optionalQueryParameters ~ bodyParameters;
 			
 			requiredParameters = requiredPathParameters ~ requiredQueryParameters;
 			optionalParameters = optionalQueryParameters;
@@ -384,6 +391,7 @@ void generateFileForEndpoints(ref const Node[] endpointNodes,
 		string responseType = "void";
 		string parameterType = "void";
 		Endpoint endpoint;
+		string operation;
 		
 		string pathStringInterpolation() {
 			string result = "QStringLiteral(\"" ~ endpoint.path ~ "\")";
@@ -414,6 +422,7 @@ void generateFileForEndpoints(ref const Node[] endpointNodes,
 		endpoint.parameterType = name ~ "Params";
 		endpoint.description = endpointNode.getOr!string("summary", "");
 		endpoint.path = endpointNode["path"].as!string;
+		endpoint.operation = endpointNode["operation"].as!string.toLower();
 		
 		// Find the most likely result response.
 		foreach(string code, const Node response; endpointNode["responses"]) {
@@ -449,6 +458,47 @@ void generateFileForEndpoints(ref const Node[] endpointNodes,
 					}
 				}
 				}
+		}
+		
+		if ("requestBody" in endpointNode) {
+			string description = "";
+			if ("description" in endpointNode["requestBody"]) {
+				description = endpointNode["requestBody"]["description"].as!string;
+			}
+			
+			MimeType[] similarMimeTypes = [];
+			
+			foreach(string contentType, const Node content; endpointNode["requestBody"]["content"]) {
+				MimeType mimeType = MimeType.parse(contentType);
+				// Skip if we already had a similar mime type before.
+				if (similarMimeTypes.any!((t) => t.compatible(mimeType))) continue;
+				similarMimeTypes ~= [mimeType];
+			
+				RequestParameter param = new RequestParameter();
+				param.location = ParameterLocation.BODY;
+				param.description = description;
+				param.required = true;
+				
+				// Hardcode this because the openapi description of Jellyfin seems to contain both
+				if (mimeType.type == "text" && mimeType.subtype == "json") continue;
+				
+				if (mimeType.compatible(MIME_APPLICATION_JSON)) {
+					string name = "body";
+					param.type = getType(name, content["schema"], allSchemas);
+				} else {
+					MetaTypeInfo info = new MetaTypeInfo();
+					info.name = "body";
+					info.originalName = "body";
+					info.typeName = "QByteArray";
+					info.isTypeNullable = true;
+					info.needsSystemImport = true;
+					info.typeNullableCheck = ".isEmpty()";
+					info.typeNullableSetter = ".clear()";
+					param.type = info;
+				}
+				endpoint.bodyParameters ~= [param];
+				endpoint.parameters ~= [param];
+			}
 		}
 		
 		// Build the parameter structure.
@@ -488,18 +538,19 @@ void generateFileForEndpoints(ref const Node[] endpointNodes,
 		EndpointController endpointController = new EndpointController();
 		endpointController.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
 		endpointController.endpoint = endpoint;
+		endpointController.operation = endpoint.operation.applyCasePolicy(CasePolicy.CAMEL, CasePolicy.PASCAL);
 		endpointControllers ~= [endpointController];
 	}
 	
 	
 	// Render templates
-	class Controller {
+	struct Controller {
 		EndpointController[] endpoints;
 		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
 		string dtoNamespace = namespaceString!CPP_NAMESPACE_DTO;
 	}
 	
-	Controller controller = new Controller();
+	Controller controller = Controller();
 	controller.endpoints = endpointControllers[];
 	
 	writeHeaderPreamble(headerFile, CPP_NAMESPACE_LOADER_HTTP, categoryName, systemImports, userImports);
@@ -1039,7 +1090,7 @@ class Endpoint {
 	string description;
 	
 	/// HTTP method for this endpoint
-	string method;
+	string operation;
 	
 	/// List of all parameters for this request
 	RequestParameter[] parameters = [];
@@ -1047,13 +1098,15 @@ class Endpoint {
 	RequestParameter[] requiredPathParameters;
 	RequestParameter[] requiredQueryParameters;
 	RequestParameter[] optionalQueryParameters;
+	RequestParameter[] bodyParameters;
 }
 
 enum ParameterLocation {
 	PATH,
 	QUERY,
 	COOKIE,
-	HEADER
+	HEADER,
+	BODY
 }
 
 class RequestParameter {
@@ -1062,6 +1115,8 @@ class RequestParameter {
 	bool required;
 	string description;
 	MetaTypeInfo type;
+	// Only for body parameters.
+	string mimeType;
 }
 
 /**
@@ -1109,6 +1164,82 @@ string namespaceString(immutable string[] name) {
 
 unittest {
 	assert(namespaceString!["foo", "bar"] == "foo::bar");
+}
+
+
+bool areMimesCompatible(string expectedMime, string mime) @safe nothrow {
+	try {
+		MimeType type1 = MimeType.parse(expectedMime);
+		MimeType type2 = MimeType.parse(mime);
+		return type1.compatible(type2);
+	} catch(Exception e) {
+		return false;
+	}
+}
+
+class MimeParseException : Exception {
+	mixin basicExceptionCtors;
+}
+
+/**
+ * Data structure representing a mime type.
+ */
+struct MimeType {
+public:
+	
+	this(string type, string subtype, string suffix = null, string parameter = null) @safe {
+		this.type = type;
+		this.subtype = subtype;
+		this.suffix = suffix;
+		this.parameter = parameter;
+	}
+	
+	string toString() const {
+		Appender!string result = appender!string;
+		result.reserve(type.length + subtype.length + (suffix ? suffix.length + 1 : 0) + (parameter ? parameter.length + 2 : 0));
+		result ~= type;
+		result ~= "/";
+		result ~= subtype;
+		if (suffix) {
+			result ~= "+";
+			result ~= suffix;
+		}
+		if (parameter) {
+			result ~= "; ";
+			result ~= parameter;
+		}
+		return result[];
+	}
+	
+	static MimeType parse(string mime) @safe {
+		auto parts = mime.matchFirst(mimeRegex);
+		enforce(parts, mime ~ " is not a valid mimetype");
+		return MimeType(parts["type"], parts["subtype"], parts["suffix"], parts["parameter"]);
+	}
+	
+	static auto mimeRegex = regex(`(?P<type>\w*)\/(?P<subtype>(([\w\-]+\.)+)?[\w\-\*]+)(\+(?P<suffix>[\w\-\.]+))?(; (?P<parameter>[\w+-\.=]+))?`);
+
+	string type = null;
+	string subtype = null;;
+	string suffix = null;
+	string parameter = null;
+	
+	/**
+	* Checks if two mime types are compatible. 
+	*
+	* Two mime types are considered compatible if either one of the following 
+	* conditions is true:
+	* 1. The mime types are exactly the same
+	* 2. The expected mime type is in the form "x/*" and the mime type is in the form "x/y"
+	* 3. The expected mime type is in the form "x/z+y" and the mime type is in the form "x/y"
+	* 4. The expected mime type is in the form "x/y" and the mime type is in the form "x/z+y"
+	*/
+	bool compatible(const ref MimeType other) const @safe {
+		if (type != other.type) return false;
+		if (subtype == other.subtype || subtype == "*" || other.subtype == "*") return true;
+		if (subtype == other.suffix || suffix == other.subtype) return true;
+		return false;
+	}
 }
 
 /**

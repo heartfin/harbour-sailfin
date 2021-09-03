@@ -54,6 +54,16 @@ QUrlQuery GetDefaultDirectoryBrowserLoader::query(const GetDefaultDirectoryBrows
 	return result;
 }
 
+QByteArray GetDefaultDirectoryBrowserLoader::body(const GetDefaultDirectoryBrowserParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDefaultDirectoryBrowserLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetDirectoryContentsLoader::GetDirectoryContentsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<FileSystemEntryInfo>, GetDirectoryContentsParams>(apiClient) {}
 
@@ -80,6 +90,16 @@ QUrlQuery GetDirectoryContentsLoader::query(const GetDirectoryContentsParams &pa
 	return result;
 }
 
+QByteArray GetDirectoryContentsLoader::body(const GetDirectoryContentsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDirectoryContentsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetDrivesLoader::GetDrivesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<FileSystemEntryInfo>, GetDrivesParams>(apiClient) {}
 
@@ -97,6 +117,16 @@ QUrlQuery GetDrivesLoader::query(const GetDrivesParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetDrivesLoader::body(const GetDrivesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDrivesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetNetworkSharesLoader::GetNetworkSharesLoader(ApiClient *apiClient)
@@ -118,6 +148,16 @@ QUrlQuery GetNetworkSharesLoader::query(const GetNetworkSharesParams &params) co
 	return result;
 }
 
+QByteArray GetNetworkSharesLoader::body(const GetNetworkSharesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetNetworkSharesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetParentPathLoader::GetParentPathLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QString, GetParentPathParams>(apiClient) {}
 
@@ -136,6 +176,16 @@ QUrlQuery GetParentPathLoader::query(const GetParentPathParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetParentPathLoader::body(const GetParentPathParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetParentPathLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

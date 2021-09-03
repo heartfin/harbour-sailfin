@@ -69,6 +69,16 @@ QUrlQuery GetSuggestionsLoader::query(const GetSuggestionsParams &params) const 
 	return result;
 }
 
+QByteArray GetSuggestionsLoader::body(const GetSuggestionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSuggestionsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -54,6 +54,16 @@ QUrlQuery GetMetadataEditorInfoLoader::query(const GetMetadataEditorInfoParams &
 	return result;
 }
 
+QByteArray GetMetadataEditorInfoLoader::body(const GetMetadataEditorInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetMetadataEditorInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

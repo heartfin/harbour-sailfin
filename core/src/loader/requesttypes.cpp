@@ -103,6 +103,15 @@ void AddListingProviderParams::setValidateLoginNull() {
 }
 
 
+const QSharedPointer<ListingsProviderInfo> &AddListingProviderParams::body() const {
+	return m_body;
+}
+
+void AddListingProviderParams::setBody(QSharedPointer<ListingsProviderInfo> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // AddMediaPathParams
@@ -125,6 +134,15 @@ bool AddMediaPathParams::refreshLibraryNull() const {
 
 void AddMediaPathParams::setRefreshLibraryNull() {
 	m_refreshLibrary = std::nullopt;
+}
+
+
+const QSharedPointer<MediaPathDto> &AddMediaPathParams::body() const {
+	return m_body;
+}
+
+void AddMediaPathParams::setBody(QSharedPointer<MediaPathDto> newBody) {
+	m_body = newBody;
 }
 
 
@@ -208,6 +226,15 @@ void AddToPlaylistParams::setUserIdNull() {
 
 
 // AddTunerHostParams
+
+const QSharedPointer<TunerHostInfo> &AddTunerHostParams::body() const {
+	return m_body;
+}
+
+void AddTunerHostParams::setBody(QSharedPointer<TunerHostInfo> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -319,6 +346,15 @@ void AddVirtualFolderParams::setRefreshLibraryNull() {
 }
 
 
+const QSharedPointer<AddVirtualFolderDto> &AddVirtualFolderParams::body() const {
+	return m_body;
+}
+
+void AddVirtualFolderParams::setBody(QSharedPointer<AddVirtualFolderDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // ApplySearchCriteriaParams
@@ -350,6 +386,15 @@ bool ApplySearchCriteriaParams::replaceAllImagesNull() const {
 
 void ApplySearchCriteriaParams::setReplaceAllImagesNull() {
 	m_replaceAllImages = std::nullopt;
+}
+
+
+const QSharedPointer<RemoteSearchResult> &ApplySearchCriteriaParams::body() const {
+	return m_body;
+}
+
+void ApplySearchCriteriaParams::setBody(QSharedPointer<RemoteSearchResult> newBody) {
+	m_body = newBody;
 }
 
 
@@ -400,9 +445,27 @@ void AuthenticateUserParams::setPasswordNull() {
 
 // AuthenticateUserByNameParams
 
+const QSharedPointer<AuthenticateUserByName> &AuthenticateUserByNameParams::body() const {
+	return m_body;
+}
+
+void AuthenticateUserByNameParams::setBody(QSharedPointer<AuthenticateUserByName> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // AuthenticateWithQuickConnectParams
+
+const QSharedPointer<QuickConnectDto> &AuthenticateWithQuickConnectParams::body() const {
+	return m_body;
+}
+
+void AuthenticateWithQuickConnectParams::setBody(QSharedPointer<QuickConnectDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -788,21 +851,66 @@ void CreatePlaylistParams::setUserIdNull() {
 }
 
 
+const QSharedPointer<CreatePlaylistDto> &CreatePlaylistParams::body() const {
+	return m_body;
+}
+
+void CreatePlaylistParams::setBody(QSharedPointer<CreatePlaylistDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // CreateProfileParams
+
+const QSharedPointer<DeviceProfile> &CreateProfileParams::body() const {
+	return m_body;
+}
+
+void CreateProfileParams::setBody(QSharedPointer<DeviceProfile> newBody) {
+	m_body = newBody;
+}
+
 
 
 
 // CreateSeriesTimerParams
 
+const QSharedPointer<SeriesTimerInfoDto> &CreateSeriesTimerParams::body() const {
+	return m_body;
+}
+
+void CreateSeriesTimerParams::setBody(QSharedPointer<SeriesTimerInfoDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // CreateTimerParams
 
+const QSharedPointer<TimerInfoDto> &CreateTimerParams::body() const {
+	return m_body;
+}
+
+void CreateTimerParams::setBody(QSharedPointer<TimerInfoDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // CreateUserByNameParams
+
+const QSharedPointer<CreateUserByName> &CreateUserByNameParams::body() const {
+	return m_body;
+}
+
+void CreateUserByNameParams::setBody(QSharedPointer<CreateUserByName> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -1356,9 +1464,27 @@ void EnablePluginParams::setVersion(QSharedPointer<Version> newVersion) {
 
 // ForgotPasswordParams
 
+const QSharedPointer<ForgotPasswordDto> &ForgotPasswordParams::body() const {
+	return m_body;
+}
+
+void ForgotPasswordParams::setBody(QSharedPointer<ForgotPasswordDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // ForgotPasswordPinParams
+
+const QString &ForgotPasswordPinParams::body() const {
+	return m_body;
+}
+
+void ForgotPasswordPinParams::setBody(QString newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -5523,9 +5649,27 @@ void GetBitrateTestBytesParams::setSizeNull() {
 
 // GetBookRemoteSearchResultsParams
 
+const QSharedPointer<BookInfoRemoteSearchQuery> &GetBookRemoteSearchResultsParams::body() const {
+	return m_body;
+}
+
+void GetBookRemoteSearchResultsParams::setBody(QSharedPointer<BookInfoRemoteSearchQuery> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // GetBoxSetRemoteSearchResultsParams
+
+const QSharedPointer<BoxSetInfoRemoteSearchQuery> &GetBoxSetRemoteSearchResultsParams::body() const {
+	return m_body;
+}
+
+void GetBoxSetRemoteSearchResultsParams::setBody(QSharedPointer<BoxSetInfoRemoteSearchQuery> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -20505,13 +20649,40 @@ void GetMovieRecommendationsParams::setUserIdNull() {
 
 // GetMovieRemoteSearchResultsParams
 
+const QSharedPointer<MovieInfoRemoteSearchQuery> &GetMovieRemoteSearchResultsParams::body() const {
+	return m_body;
+}
+
+void GetMovieRemoteSearchResultsParams::setBody(QSharedPointer<MovieInfoRemoteSearchQuery> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // GetMusicAlbumRemoteSearchResultsParams
 
+const QSharedPointer<AlbumInfoRemoteSearchQuery> &GetMusicAlbumRemoteSearchResultsParams::body() const {
+	return m_body;
+}
+
+void GetMusicAlbumRemoteSearchResultsParams::setBody(QSharedPointer<AlbumInfoRemoteSearchQuery> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // GetMusicArtistRemoteSearchResultsParams
+
+const QSharedPointer<ArtistInfoRemoteSearchQuery> &GetMusicArtistRemoteSearchResultsParams::body() const {
+	return m_body;
+}
+
+void GetMusicArtistRemoteSearchResultsParams::setBody(QSharedPointer<ArtistInfoRemoteSearchQuery> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -21552,6 +21723,15 @@ void GetMusicGenresParams::setUserIdNull() {
 
 
 // GetMusicVideoRemoteSearchResultsParams
+
+const QSharedPointer<MusicVideoInfoRemoteSearchQuery> &GetMusicVideoRemoteSearchResultsParams::body() const {
+	return m_body;
+}
+
+void GetMusicVideoRemoteSearchResultsParams::setBody(QSharedPointer<MusicVideoInfoRemoteSearchQuery> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -22619,6 +22799,15 @@ void GetPersonImageByIndexParams::setWidthNull() {
 
 // GetPersonRemoteSearchResultsParams
 
+const QSharedPointer<PersonLookupInfoRemoteSearchQuery> &GetPersonRemoteSearchResultsParams::body() const {
+	return m_body;
+}
+
+void GetPersonRemoteSearchResultsParams::setBody(QSharedPointer<PersonLookupInfoRemoteSearchQuery> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // GetPersonsParams
@@ -23454,6 +23643,15 @@ void GetPostedPlaybackInfoParams::setUserIdNull() {
 }
 
 
+const QSharedPointer<PlaybackInfoDto> &GetPostedPlaybackInfoParams::body() const {
+	return m_body;
+}
+
+void GetPostedPlaybackInfoParams::setBody(QSharedPointer<PlaybackInfoDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // GetProfileParams
@@ -23508,6 +23706,15 @@ void GetProgramParams::setUserIdNull() {
 
 
 // GetProgramsParams
+
+const QSharedPointer<GetProgramsDto> &GetProgramsParams::body() const {
+	return m_body;
+}
+
+void GetProgramsParams::setBody(QSharedPointer<GetProgramsDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -25674,6 +25881,15 @@ void GetSeasonsParams::setUserIdNull() {
 
 
 // GetSeriesRemoteSearchResultsParams
+
+const QSharedPointer<SeriesInfoRemoteSearchQuery> &GetSeriesRemoteSearchResultsParams::body() const {
+	return m_body;
+}
+
+void GetSeriesRemoteSearchResultsParams::setBody(QSharedPointer<SeriesInfoRemoteSearchQuery> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -28200,6 +28416,15 @@ void GetTimersParams::setSeriesTimerIdNull() {
 
 
 // GetTrailerRemoteSearchResultsParams
+
+const QSharedPointer<TrailerInfoRemoteSearchQuery> &GetTrailerRemoteSearchResultsParams::body() const {
+	return m_body;
+}
+
+void GetTrailerRemoteSearchResultsParams::setBody(QSharedPointer<TrailerInfoRemoteSearchQuery> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -47676,6 +47901,15 @@ void OpenLiveStreamParams::setUserIdNull() {
 }
 
 
+const QSharedPointer<OpenLiveStreamDto> &OpenLiveStreamParams::body() const {
+	return m_body;
+}
+
+void OpenLiveStreamParams::setBody(QSharedPointer<OpenLiveStreamDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // PingPlaybackSessionParams
@@ -48076,6 +48310,15 @@ void PostFullCapabilitiesParams::setJellyfinIdNull() {
 }
 
 
+const QSharedPointer<ClientCapabilitiesDto> &PostFullCapabilitiesParams::body() const {
+	return m_body;
+}
+
+void PostFullCapabilitiesParams::setBody(QSharedPointer<ClientCapabilitiesDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // PostPingSystemParams
@@ -48083,6 +48326,15 @@ void PostFullCapabilitiesParams::setJellyfinIdNull() {
 
 
 // PostUpdatedMediaParams
+
+const QList<MediaUpdateInfoDto> &PostUpdatedMediaParams::body() const {
+	return m_body;
+}
+
+void PostUpdatedMediaParams::setBody(QList<MediaUpdateInfoDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -48534,13 +48786,40 @@ void RenameVirtualFolderParams::setRefreshLibraryNull() {
 
 // ReportPlaybackProgressParams
 
+const QSharedPointer<PlaybackProgressInfo> &ReportPlaybackProgressParams::body() const {
+	return m_body;
+}
+
+void ReportPlaybackProgressParams::setBody(QSharedPointer<PlaybackProgressInfo> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // ReportPlaybackStartParams
 
+const QSharedPointer<PlaybackStartInfo> &ReportPlaybackStartParams::body() const {
+	return m_body;
+}
+
+void ReportPlaybackStartParams::setBody(QSharedPointer<PlaybackStartInfo> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // ReportPlaybackStoppedParams
+
+const QSharedPointer<PlaybackStopInfo> &ReportPlaybackStoppedParams::body() const {
+	return m_body;
+}
+
+void ReportPlaybackStoppedParams::setBody(QSharedPointer<PlaybackStopInfo> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -48663,6 +48942,15 @@ const QString &SendFullGeneralCommandParams::sessionId() const {
 
 void SendFullGeneralCommandParams::setSessionId(QString newSessionId) {
 	m_sessionId = newSessionId;
+}
+
+
+const QSharedPointer<GeneralCommand> &SendFullGeneralCommandParams::body() const {
+	return m_body;
+}
+
+void SendFullGeneralCommandParams::setBody(QSharedPointer<GeneralCommand> newBody) {
+	m_body = newBody;
 }
 
 
@@ -48842,6 +49130,15 @@ void SendSystemCommandParams::setSessionId(QString newSessionId) {
 
 // SetChannelMappingParams
 
+const QSharedPointer<SetChannelMappingDto> &SetChannelMappingParams::body() const {
+	return m_body;
+}
+
+void SetChannelMappingParams::setBody(QSharedPointer<SetChannelMappingDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SetItemImageParams
@@ -48912,9 +49209,27 @@ void SetReadParams::setUserId(QString newUserId) {
 
 // SetRemoteAccessParams
 
+const QSharedPointer<StartupRemoteAccessDto> &SetRemoteAccessParams::body() const {
+	return m_body;
+}
+
+void SetRemoteAccessParams::setBody(QSharedPointer<StartupRemoteAccessDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SetRepositoriesParams
+
+const QList<RepositoryInfo> &SetRepositoriesParams::body() const {
+	return m_body;
+}
+
+void SetRepositoriesParams::setBody(QList<RepositoryInfo> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -49009,9 +49324,27 @@ void StopTaskParams::setTaskId(QString newTaskId) {
 
 // SyncPlayBufferingParams
 
+const QSharedPointer<BufferRequestDto> &SyncPlayBufferingParams::body() const {
+	return m_body;
+}
+
+void SyncPlayBufferingParams::setBody(QSharedPointer<BufferRequestDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SyncPlayCreateGroupParams
+
+const QSharedPointer<NewGroupRequestDto> &SyncPlayCreateGroupParams::body() const {
+	return m_body;
+}
+
+void SyncPlayCreateGroupParams::setBody(QSharedPointer<NewGroupRequestDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -49021,6 +49354,15 @@ void StopTaskParams::setTaskId(QString newTaskId) {
 
 // SyncPlayJoinGroupParams
 
+const QSharedPointer<JoinGroupRequestDto> &SyncPlayJoinGroupParams::body() const {
+	return m_body;
+}
+
+void SyncPlayJoinGroupParams::setBody(QSharedPointer<JoinGroupRequestDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SyncPlayLeaveGroupParams
@@ -49029,9 +49371,27 @@ void StopTaskParams::setTaskId(QString newTaskId) {
 
 // SyncPlayMovePlaylistItemParams
 
+const QSharedPointer<MovePlaylistItemRequestDto> &SyncPlayMovePlaylistItemParams::body() const {
+	return m_body;
+}
+
+void SyncPlayMovePlaylistItemParams::setBody(QSharedPointer<MovePlaylistItemRequestDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SyncPlayNextItemParams
+
+const QSharedPointer<NextItemRequestDto> &SyncPlayNextItemParams::body() const {
+	return m_body;
+}
+
+void SyncPlayNextItemParams::setBody(QSharedPointer<NextItemRequestDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -49041,45 +49401,144 @@ void StopTaskParams::setTaskId(QString newTaskId) {
 
 // SyncPlayPingParams
 
+const QSharedPointer<PingRequestDto> &SyncPlayPingParams::body() const {
+	return m_body;
+}
+
+void SyncPlayPingParams::setBody(QSharedPointer<PingRequestDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SyncPlayPreviousItemParams
+
+const QSharedPointer<PreviousItemRequestDto> &SyncPlayPreviousItemParams::body() const {
+	return m_body;
+}
+
+void SyncPlayPreviousItemParams::setBody(QSharedPointer<PreviousItemRequestDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
 // SyncPlayQueueParams
 
+const QSharedPointer<QueueRequestDto> &SyncPlayQueueParams::body() const {
+	return m_body;
+}
+
+void SyncPlayQueueParams::setBody(QSharedPointer<QueueRequestDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SyncPlayReadyParams
+
+const QSharedPointer<ReadyRequestDto> &SyncPlayReadyParams::body() const {
+	return m_body;
+}
+
+void SyncPlayReadyParams::setBody(QSharedPointer<ReadyRequestDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
 // SyncPlayRemoveFromPlaylistParams
 
+const QSharedPointer<RemoveFromPlaylistRequestDto> &SyncPlayRemoveFromPlaylistParams::body() const {
+	return m_body;
+}
+
+void SyncPlayRemoveFromPlaylistParams::setBody(QSharedPointer<RemoveFromPlaylistRequestDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SyncPlaySeekParams
+
+const QSharedPointer<SeekRequestDto> &SyncPlaySeekParams::body() const {
+	return m_body;
+}
+
+void SyncPlaySeekParams::setBody(QSharedPointer<SeekRequestDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
 // SyncPlaySetIgnoreWaitParams
 
+const QSharedPointer<IgnoreWaitRequestDto> &SyncPlaySetIgnoreWaitParams::body() const {
+	return m_body;
+}
+
+void SyncPlaySetIgnoreWaitParams::setBody(QSharedPointer<IgnoreWaitRequestDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SyncPlaySetNewQueueParams
+
+const QSharedPointer<PlayRequestDto> &SyncPlaySetNewQueueParams::body() const {
+	return m_body;
+}
+
+void SyncPlaySetNewQueueParams::setBody(QSharedPointer<PlayRequestDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
 // SyncPlaySetPlaylistItemParams
 
+const QSharedPointer<SetPlaylistItemRequestDto> &SyncPlaySetPlaylistItemParams::body() const {
+	return m_body;
+}
+
+void SyncPlaySetPlaylistItemParams::setBody(QSharedPointer<SetPlaylistItemRequestDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SyncPlaySetRepeatModeParams
 
+const QSharedPointer<SetRepeatModeRequestDto> &SyncPlaySetRepeatModeParams::body() const {
+	return m_body;
+}
+
+void SyncPlaySetRepeatModeParams::setBody(QSharedPointer<SetRepeatModeRequestDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SyncPlaySetShuffleModeParams
+
+const QSharedPointer<SetShuffleModeRequestDto> &SyncPlaySetShuffleModeParams::body() const {
+	return m_body;
+}
+
+void SyncPlaySetShuffleModeParams::setBody(QSharedPointer<SetShuffleModeRequestDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -49150,6 +49609,15 @@ void UnmarkFavoriteItemParams::setUserId(QString newUserId) {
 
 // UpdateConfigurationParams
 
+const QSharedPointer<ServerConfiguration> &UpdateConfigurationParams::body() const {
+	return m_body;
+}
+
+void UpdateConfigurationParams::setBody(QSharedPointer<ServerConfiguration> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // UpdateDeviceOptionsParams
@@ -49160,6 +49628,15 @@ const QString &UpdateDeviceOptionsParams::jellyfinId() const {
 
 void UpdateDeviceOptionsParams::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
+}
+
+
+const QSharedPointer<DeviceOptions> &UpdateDeviceOptionsParams::body() const {
+	return m_body;
+}
+
+void UpdateDeviceOptionsParams::setBody(QSharedPointer<DeviceOptions> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49194,9 +49671,27 @@ void UpdateDisplayPreferencesParams::setUserId(QString newUserId) {
 }
 
 
+const QSharedPointer<DisplayPreferencesDto> &UpdateDisplayPreferencesParams::body() const {
+	return m_body;
+}
+
+void UpdateDisplayPreferencesParams::setBody(QSharedPointer<DisplayPreferencesDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // UpdateInitialConfigurationParams
+
+const QSharedPointer<StartupConfigurationDto> &UpdateInitialConfigurationParams::body() const {
+	return m_body;
+}
+
+void UpdateInitialConfigurationParams::setBody(QSharedPointer<StartupConfigurationDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -49208,6 +49703,15 @@ const QString &UpdateItemParams::itemId() const {
 
 void UpdateItemParams::setItemId(QString newItemId) {
 	m_itemId = newItemId;
+}
+
+
+const QSharedPointer<BaseItemDto> &UpdateItemParams::body() const {
+	return m_body;
+}
+
+void UpdateItemParams::setBody(QSharedPointer<BaseItemDto> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49301,9 +49805,27 @@ void UpdateItemImageIndexParams::setNewIndexNull() {
 
 // UpdateLibraryOptionsParams
 
+const QSharedPointer<UpdateLibraryOptionsDto> &UpdateLibraryOptionsParams::body() const {
+	return m_body;
+}
+
+void UpdateLibraryOptionsParams::setBody(QSharedPointer<UpdateLibraryOptionsDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // UpdateMediaEncoderPathParams
+
+const QSharedPointer<MediaEncoderPathDto> &UpdateMediaEncoderPathParams::body() const {
+	return m_body;
+}
+
+void UpdateMediaEncoderPathParams::setBody(QSharedPointer<MediaEncoderPathDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -49327,6 +49849,15 @@ bool UpdateMediaPathParams::nameNull() const {
 
 void UpdateMediaPathParams::setNameNull() {
 	m_name.clear();
+}
+
+
+const QSharedPointer<MediaPathInfo> &UpdateMediaPathParams::body() const {
+	return m_body;
+}
+
+void UpdateMediaPathParams::setBody(QSharedPointer<MediaPathInfo> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49360,6 +49891,15 @@ void UpdatePluginConfigurationParams::setPluginId(QString newPluginId) {
 
 // UpdatePluginSecurityInfoParams
 
+const QSharedPointer<PluginSecurityInfo> &UpdatePluginSecurityInfoParams::body() const {
+	return m_body;
+}
+
+void UpdatePluginSecurityInfoParams::setBody(QSharedPointer<PluginSecurityInfo> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // UpdateProfileParams
@@ -49370,6 +49910,15 @@ const QString &UpdateProfileParams::profileId() const {
 
 void UpdateProfileParams::setProfileId(QString newProfileId) {
 	m_profileId = newProfileId;
+}
+
+
+const QSharedPointer<DeviceProfile> &UpdateProfileParams::body() const {
+	return m_body;
+}
+
+void UpdateProfileParams::setBody(QSharedPointer<DeviceProfile> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49386,9 +49935,27 @@ void UpdateSeriesTimerParams::setTimerId(QString newTimerId) {
 }
 
 
+const QSharedPointer<SeriesTimerInfoDto> &UpdateSeriesTimerParams::body() const {
+	return m_body;
+}
+
+void UpdateSeriesTimerParams::setBody(QSharedPointer<SeriesTimerInfoDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // UpdateStartupUserParams
+
+const QSharedPointer<StartupUserDto> &UpdateStartupUserParams::body() const {
+	return m_body;
+}
+
+void UpdateStartupUserParams::setBody(QSharedPointer<StartupUserDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 
@@ -49400,6 +49967,15 @@ const QString &UpdateTaskParams::taskId() const {
 
 void UpdateTaskParams::setTaskId(QString newTaskId) {
 	m_taskId = newTaskId;
+}
+
+
+const QList<TaskTriggerInfo> &UpdateTaskParams::body() const {
+	return m_body;
+}
+
+void UpdateTaskParams::setBody(QList<TaskTriggerInfo> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49416,6 +49992,15 @@ void UpdateTimerParams::setTimerId(QString newTimerId) {
 }
 
 
+const QSharedPointer<TimerInfoDto> &UpdateTimerParams::body() const {
+	return m_body;
+}
+
+void UpdateTimerParams::setBody(QSharedPointer<TimerInfoDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // UpdateUserParams
@@ -49426,6 +50011,15 @@ const QString &UpdateUserParams::userId() const {
 
 void UpdateUserParams::setUserId(QString newUserId) {
 	m_userId = newUserId;
+}
+
+
+const QSharedPointer<UserDto> &UpdateUserParams::body() const {
+	return m_body;
+}
+
+void UpdateUserParams::setBody(QSharedPointer<UserDto> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49442,6 +50036,15 @@ void UpdateUserConfigurationParams::setUserId(QString newUserId) {
 }
 
 
+const QSharedPointer<UserConfiguration> &UpdateUserConfigurationParams::body() const {
+	return m_body;
+}
+
+void UpdateUserConfigurationParams::setBody(QSharedPointer<UserConfiguration> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // UpdateUserEasyPasswordParams
@@ -49452,6 +50055,15 @@ const QString &UpdateUserEasyPasswordParams::userId() const {
 
 void UpdateUserEasyPasswordParams::setUserId(QString newUserId) {
 	m_userId = newUserId;
+}
+
+
+const QSharedPointer<UpdateUserEasyPassword> &UpdateUserEasyPasswordParams::body() const {
+	return m_body;
+}
+
+void UpdateUserEasyPasswordParams::setBody(QSharedPointer<UpdateUserEasyPassword> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49511,6 +50123,15 @@ void UpdateUserPasswordParams::setUserId(QString newUserId) {
 }
 
 
+const QSharedPointer<UpdateUserPassword> &UpdateUserPasswordParams::body() const {
+	return m_body;
+}
+
+void UpdateUserPasswordParams::setBody(QSharedPointer<UpdateUserPassword> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // UpdateUserPolicyParams
@@ -49521,6 +50142,15 @@ const QString &UpdateUserPolicyParams::userId() const {
 
 void UpdateUserPolicyParams::setUserId(QString newUserId) {
 	m_userId = newUserId;
+}
+
+
+const QSharedPointer<UserPolicy> &UpdateUserPolicyParams::body() const {
+	return m_body;
+}
+
+void UpdateUserPolicyParams::setBody(QSharedPointer<UserPolicy> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49537,9 +50167,27 @@ void UploadSubtitleParams::setItemId(QString newItemId) {
 }
 
 
+const QSharedPointer<UploadSubtitleDto> &UploadSubtitleParams::body() const {
+	return m_body;
+}
+
+void UploadSubtitleParams::setBody(QSharedPointer<UploadSubtitleDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // ValidatePathParams
+
+const QSharedPointer<ValidatePathDto> &ValidatePathParams::body() const {
+	return m_body;
+}
+
+void ValidatePathParams::setBody(QSharedPointer<ValidatePathDto> newBody) {
+	m_body = newBody;
+}
+
 
 
 

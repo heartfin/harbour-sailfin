@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const MarkPlayedItemParams& parameters) const override;
 	QUrlQuery query(const MarkPlayedItemParams& parameters) const override;
+	QByteArray body(const MarkPlayedItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Marks an item as unplayed for user.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const MarkUnplayedItemParams& parameters) const override;
 	QUrlQuery query(const MarkUnplayedItemParams& parameters) const override;
+	QByteArray body(const MarkUnplayedItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

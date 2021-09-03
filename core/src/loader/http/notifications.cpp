@@ -54,6 +54,16 @@ QUrlQuery GetNotificationsLoader::query(const GetNotificationsParams &params) co
 	return result;
 }
 
+QByteArray GetNotificationsLoader::body(const GetNotificationsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetNotificationsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetNotificationsSummaryLoader::GetNotificationsSummaryLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<NotificationsSummaryDto, GetNotificationsSummaryParams>(apiClient) {}
 
@@ -71,6 +81,16 @@ QUrlQuery GetNotificationsSummaryLoader::query(const GetNotificationsSummaryPara
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetNotificationsSummaryLoader::body(const GetNotificationsSummaryParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetNotificationsSummaryLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetNotificationServicesLoader::GetNotificationServicesLoader(ApiClient *apiClient)
@@ -92,6 +112,16 @@ QUrlQuery GetNotificationServicesLoader::query(const GetNotificationServicesPara
 	return result;
 }
 
+QByteArray GetNotificationServicesLoader::body(const GetNotificationServicesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetNotificationServicesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetNotificationTypesLoader::GetNotificationTypesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<NotificationTypeInfo>, GetNotificationTypesParams>(apiClient) {}
 
@@ -109,6 +139,16 @@ QUrlQuery GetNotificationTypesLoader::query(const GetNotificationTypesParams &pa
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetNotificationTypesLoader::body(const GetNotificationTypesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetNotificationTypesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

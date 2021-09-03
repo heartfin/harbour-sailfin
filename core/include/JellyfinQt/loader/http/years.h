@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetYearsParams& parameters) const override;
 	QUrlQuery query(const GetYearsParams& parameters) const override;
+	QByteArray body(const GetYearsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a year.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetYearParams& parameters) const override;
 	QUrlQuery query(const GetYearParams& parameters) const override;
+	QByteArray body(const GetYearParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

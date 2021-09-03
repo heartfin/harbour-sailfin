@@ -54,6 +54,16 @@ QUrlQuery GetConfigurationLoader::query(const GetConfigurationParams &params) co
 	return result;
 }
 
+QByteArray GetConfigurationLoader::body(const GetConfigurationParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetConfigurationLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetNamedConfigurationLoader::GetNamedConfigurationLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QString, GetNamedConfigurationParams>(apiClient) {}
 
@@ -73,6 +83,16 @@ QUrlQuery GetNamedConfigurationLoader::query(const GetNamedConfigurationParams &
 	return result;
 }
 
+QByteArray GetNamedConfigurationLoader::body(const GetNamedConfigurationParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetNamedConfigurationLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetDefaultMetadataOptionsLoader::GetDefaultMetadataOptionsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<MetadataOptions, GetDefaultMetadataOptionsParams>(apiClient) {}
 
@@ -90,6 +110,16 @@ QUrlQuery GetDefaultMetadataOptionsLoader::query(const GetDefaultMetadataOptions
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetDefaultMetadataOptionsLoader::body(const GetDefaultMetadataOptionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDefaultMetadataOptionsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

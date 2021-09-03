@@ -61,6 +61,8 @@ public:
 protected:
 	QString path(const GetDefaultDirectoryBrowserParams& parameters) const override;
 	QUrlQuery query(const GetDefaultDirectoryBrowserParams& parameters) const override;
+	QByteArray body(const GetDefaultDirectoryBrowserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the contents of a given directory in the file system.
@@ -73,6 +75,8 @@ public:
 protected:
 	QString path(const GetDirectoryContentsParams& parameters) const override;
 	QUrlQuery query(const GetDirectoryContentsParams& parameters) const override;
+	QByteArray body(const GetDirectoryContentsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets available drives from the server's file system.
@@ -85,6 +89,8 @@ public:
 protected:
 	QString path(const GetDrivesParams& parameters) const override;
 	QUrlQuery query(const GetDrivesParams& parameters) const override;
+	QByteArray body(const GetDrivesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets network paths.
@@ -97,6 +103,8 @@ public:
 protected:
 	QString path(const GetNetworkSharesParams& parameters) const override;
 	QUrlQuery query(const GetNetworkSharesParams& parameters) const override;
+	QByteArray body(const GetNetworkSharesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the parent path of a given path.
@@ -109,6 +117,8 @@ public:
 protected:
 	QString path(const GetParentPathParams& parameters) const override;
 	QUrlQuery query(const GetParentPathParams& parameters) const override;
+	QByteArray body(const GetParentPathParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

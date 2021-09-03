@@ -54,6 +54,16 @@ QUrlQuery GetPluginsLoader::query(const GetPluginsParams &params) const {
 	return result;
 }
 
+QByteArray GetPluginsLoader::body(const GetPluginsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPluginsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetPluginConfigurationLoader::GetPluginConfigurationLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BasePluginConfiguration, GetPluginConfigurationParams>(apiClient) {}
 
@@ -71,6 +81,16 @@ QUrlQuery GetPluginConfigurationLoader::query(const GetPluginConfigurationParams
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetPluginConfigurationLoader::body(const GetPluginConfigurationParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPluginConfigurationLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

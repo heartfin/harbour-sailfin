@@ -54,6 +54,16 @@ QUrlQuery GetFallbackFontListLoader::query(const GetFallbackFontListParams &para
 	return result;
 }
 
+QByteArray GetFallbackFontListLoader::body(const GetFallbackFontListParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetFallbackFontListLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 SearchRemoteSubtitlesLoader::SearchRemoteSubtitlesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<RemoteSubtitleInfo>, SearchRemoteSubtitlesParams>(apiClient) {}
 
@@ -74,6 +84,16 @@ QUrlQuery SearchRemoteSubtitlesLoader::query(const SearchRemoteSubtitlesParams &
 	}
 	
 	return result;
+}
+
+QByteArray SearchRemoteSubtitlesLoader::body(const SearchRemoteSubtitlesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation SearchRemoteSubtitlesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

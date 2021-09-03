@@ -40,6 +40,7 @@
 #include "viewmodel/platformmediacontrol.h"
 #include "viewmodel/playbackmanager.h"
 #include "viewmodel/playlist.h"
+#include "viewmodel/settings.h"
 #include "viewmodel/userdata.h"
 #include "viewmodel/usermodel.h"
 #include "viewmodel/user.h"

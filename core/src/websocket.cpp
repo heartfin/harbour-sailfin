@@ -41,7 +41,7 @@ WebSocket::WebSocket(ApiClient *client)
 void WebSocket::open() {
     QUrlQuery query;
     query.addQueryItem("api_key", m_apiClient->token());
-    query.addQueryItem("deviceId", m_apiClient->m_deviceId);
+    query.addQueryItem("deviceId", m_apiClient->deviceId());
     QUrl connectionUrl(m_apiClient->baseUrl());
     connectionUrl.setScheme(connectionUrl.scheme() == "http" ? "ws" : "wss");
     connectionUrl.setPath("/socket");

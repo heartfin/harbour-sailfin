@@ -84,6 +84,8 @@ public:
 protected:
 	QString path(const GetChannelMappingOptionsParams& parameters) const override;
 	QUrlQuery query(const GetChannelMappingOptionsParams& parameters) const override;
+	QByteArray body(const GetChannelMappingOptionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Set channel mappings.
@@ -96,6 +98,8 @@ public:
 protected:
 	QString path(const SetChannelMappingParams& parameters) const override;
 	QUrlQuery query(const SetChannelMappingParams& parameters) const override;
+	QByteArray body(const SetChannelMappingParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets available live tv channels.
@@ -108,6 +112,8 @@ public:
 protected:
 	QString path(const GetLiveTvChannelsParams& parameters) const override;
 	QUrlQuery query(const GetLiveTvChannelsParams& parameters) const override;
+	QByteArray body(const GetLiveTvChannelsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a live tv channel.
@@ -120,6 +126,8 @@ public:
 protected:
 	QString path(const GetChannelParams& parameters) const override;
 	QUrlQuery query(const GetChannelParams& parameters) const override;
+	QByteArray body(const GetChannelParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get guid info.
@@ -132,6 +140,8 @@ public:
 protected:
 	QString path(const GetGuideInfoParams& parameters) const override;
 	QUrlQuery query(const GetGuideInfoParams& parameters) const override;
+	QByteArray body(const GetGuideInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets available live tv services.
@@ -144,6 +154,8 @@ public:
 protected:
 	QString path(const GetLiveTvInfoParams& parameters) const override;
 	QUrlQuery query(const GetLiveTvInfoParams& parameters) const override;
+	QByteArray body(const GetLiveTvInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Adds a listings provider.
@@ -156,6 +168,8 @@ public:
 protected:
 	QString path(const AddListingProviderParams& parameters) const override;
 	QUrlQuery query(const AddListingProviderParams& parameters) const override;
+	QByteArray body(const AddListingProviderParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets default listings provider info.
@@ -168,6 +182,8 @@ public:
 protected:
 	QString path(const GetDefaultListingProviderParams& parameters) const override;
 	QUrlQuery query(const GetDefaultListingProviderParams& parameters) const override;
+	QByteArray body(const GetDefaultListingProviderParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets available lineups.
@@ -180,6 +196,8 @@ public:
 protected:
 	QString path(const GetLineupsParams& parameters) const override;
 	QUrlQuery query(const GetLineupsParams& parameters) const override;
+	QByteArray body(const GetLineupsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets available countries.
@@ -192,6 +210,8 @@ public:
 protected:
 	QString path(const GetSchedulesDirectCountriesParams& parameters) const override;
 	QUrlQuery query(const GetSchedulesDirectCountriesParams& parameters) const override;
+	QByteArray body(const GetSchedulesDirectCountriesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets available live tv epgs.
@@ -204,6 +224,8 @@ public:
 protected:
 	QString path(const GetLiveTvProgramsParams& parameters) const override;
 	QUrlQuery query(const GetLiveTvProgramsParams& parameters) const override;
+	QByteArray body(const GetLiveTvProgramsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets available live tv epgs.
@@ -216,6 +238,8 @@ public:
 protected:
 	QString path(const GetProgramsParams& parameters) const override;
 	QUrlQuery query(const GetProgramsParams& parameters) const override;
+	QByteArray body(const GetProgramsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a live tv program.
@@ -228,6 +252,8 @@ public:
 protected:
 	QString path(const GetProgramParams& parameters) const override;
 	QUrlQuery query(const GetProgramParams& parameters) const override;
+	QByteArray body(const GetProgramParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets recommended live tv epgs.
@@ -240,6 +266,8 @@ public:
 protected:
 	QString path(const GetRecommendedProgramsParams& parameters) const override;
 	QUrlQuery query(const GetRecommendedProgramsParams& parameters) const override;
+	QByteArray body(const GetRecommendedProgramsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets live tv recordings.
@@ -252,6 +280,8 @@ public:
 protected:
 	QString path(const GetRecordingsParams& parameters) const override;
 	QUrlQuery query(const GetRecordingsParams& parameters) const override;
+	QByteArray body(const GetRecordingsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a live tv recording.
@@ -264,6 +294,8 @@ public:
 protected:
 	QString path(const GetRecordingParams& parameters) const override;
 	QUrlQuery query(const GetRecordingParams& parameters) const override;
+	QByteArray body(const GetRecordingParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets recording folders.
@@ -276,6 +308,8 @@ public:
 protected:
 	QString path(const GetRecordingFoldersParams& parameters) const override;
 	QUrlQuery query(const GetRecordingFoldersParams& parameters) const override;
+	QByteArray body(const GetRecordingFoldersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets live tv recording groups.
@@ -288,6 +322,8 @@ public:
 protected:
 	QString path(const GetRecordingGroupsParams& parameters) const override;
 	QUrlQuery query(const GetRecordingGroupsParams& parameters) const override;
+	QByteArray body(const GetRecordingGroupsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets live tv recording series.
@@ -300,6 +336,8 @@ public:
 protected:
 	QString path(const GetRecordingsSeriesParams& parameters) const override;
 	QUrlQuery query(const GetRecordingsSeriesParams& parameters) const override;
+	QByteArray body(const GetRecordingsSeriesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets live tv series timers.
@@ -312,6 +350,8 @@ public:
 protected:
 	QString path(const GetSeriesTimersParams& parameters) const override;
 	QUrlQuery query(const GetSeriesTimersParams& parameters) const override;
+	QByteArray body(const GetSeriesTimersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a live tv series timer.
@@ -324,6 +364,8 @@ public:
 protected:
 	QString path(const GetSeriesTimerParams& parameters) const override;
 	QUrlQuery query(const GetSeriesTimerParams& parameters) const override;
+	QByteArray body(const GetSeriesTimerParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the live tv timers.
@@ -336,6 +378,8 @@ public:
 protected:
 	QString path(const GetTimersParams& parameters) const override;
 	QUrlQuery query(const GetTimersParams& parameters) const override;
+	QByteArray body(const GetTimersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a timer.
@@ -348,6 +392,8 @@ public:
 protected:
 	QString path(const GetTimerParams& parameters) const override;
 	QUrlQuery query(const GetTimerParams& parameters) const override;
+	QByteArray body(const GetTimerParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the default values for a new timer.
@@ -360,6 +406,8 @@ public:
 protected:
 	QString path(const GetDefaultTimerParams& parameters) const override;
 	QUrlQuery query(const GetDefaultTimerParams& parameters) const override;
+	QByteArray body(const GetDefaultTimerParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Adds a tuner host.
@@ -372,6 +420,8 @@ public:
 protected:
 	QString path(const AddTunerHostParams& parameters) const override;
 	QUrlQuery query(const AddTunerHostParams& parameters) const override;
+	QByteArray body(const AddTunerHostParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get tuner host types.
@@ -384,6 +434,8 @@ public:
 protected:
 	QString path(const GetTunerHostTypesParams& parameters) const override;
 	QUrlQuery query(const GetTunerHostTypesParams& parameters) const override;
+	QByteArray body(const GetTunerHostTypesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Discover tuners.
@@ -396,6 +448,8 @@ public:
 protected:
 	QString path(const DiscoverTunersParams& parameters) const override;
 	QUrlQuery query(const DiscoverTunersParams& parameters) const override;
+	QByteArray body(const DiscoverTunersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Discover tuners.
@@ -408,6 +462,8 @@ public:
 protected:
 	QString path(const DiscvoverTunersParams& parameters) const override;
 	QUrlQuery query(const DiscvoverTunersParams& parameters) const override;
+	QByteArray body(const DiscvoverTunersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

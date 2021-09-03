@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const GetGeneralImagesParams& parameters) const override;
 	QUrlQuery query(const GetGeneralImagesParams& parameters) const override;
+	QByteArray body(const GetGeneralImagesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get all media info images.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const GetMediaInfoImagesParams& parameters) const override;
 	QUrlQuery query(const GetMediaInfoImagesParams& parameters) const override;
+	QByteArray body(const GetMediaInfoImagesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get all general images.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const GetRatingImagesParams& parameters) const override;
 	QUrlQuery query(const GetRatingImagesParams& parameters) const override;
+	QByteArray body(const GetRatingImagesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

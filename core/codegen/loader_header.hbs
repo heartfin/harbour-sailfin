@@ -18,6 +18,8 @@ public:
 protected:
 	QString path(const {{e.endpoint.parameterType}}& parameters) const override;
 	QUrlQuery query(const {{e.endpoint.parameterType}}& parameters) const override;
+	QByteArray body(const {{e.endpoint.parameterType}}& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 {{/if}}
 {{/each}}

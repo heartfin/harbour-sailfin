@@ -54,6 +54,16 @@ QUrlQuery GetUtcTimeLoader::query(const GetUtcTimeParams &params) const {
 	return result;
 }
 
+QByteArray GetUtcTimeLoader::body(const GetUtcTimeParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetUtcTimeLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

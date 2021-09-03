@@ -61,6 +61,8 @@ public:
 protected:
 	QString path(const GetNotificationsParams& parameters) const override;
 	QUrlQuery query(const GetNotificationsParams& parameters) const override;
+	QByteArray body(const GetNotificationsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a user's notification summary.
@@ -73,6 +75,8 @@ public:
 protected:
 	QString path(const GetNotificationsSummaryParams& parameters) const override;
 	QUrlQuery query(const GetNotificationsSummaryParams& parameters) const override;
+	QByteArray body(const GetNotificationsSummaryParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets notification services.
@@ -85,6 +89,8 @@ public:
 protected:
 	QString path(const GetNotificationServicesParams& parameters) const override;
 	QUrlQuery query(const GetNotificationServicesParams& parameters) const override;
+	QByteArray body(const GetNotificationServicesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets notification types.
@@ -97,6 +103,8 @@ public:
 protected:
 	QString path(const GetNotificationTypesParams& parameters) const override;
 	QUrlQuery query(const GetNotificationTypesParams& parameters) const override;
+	QByteArray body(const GetNotificationTypesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

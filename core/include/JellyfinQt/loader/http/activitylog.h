@@ -58,6 +58,8 @@ public:
 protected:
 	QString path(const GetLogEntriesParams& parameters) const override;
 	QUrlQuery query(const GetLogEntriesParams& parameters) const override;
+	QByteArray body(const GetLogEntriesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

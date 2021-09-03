@@ -58,6 +58,8 @@ public:
 protected:
 	QString path(const SyncPlayGetGroupsParams& parameters) const override;
 	QUrlQuery query(const SyncPlayGetGroupsParams& parameters) const override;
+	QByteArray body(const SyncPlayGetGroupsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

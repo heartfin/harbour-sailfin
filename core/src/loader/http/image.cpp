@@ -54,6 +54,16 @@ QUrlQuery GetItemImageInfosLoader::query(const GetItemImageInfosParams &params) 
 	return result;
 }
 
+QByteArray GetItemImageInfosLoader::body(const GetItemImageInfosParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetItemImageInfosLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

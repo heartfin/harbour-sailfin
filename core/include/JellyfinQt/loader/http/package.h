@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const GetPackagesParams& parameters) const override;
 	QUrlQuery query(const GetPackagesParams& parameters) const override;
+	QByteArray body(const GetPackagesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a package by name or assembly GUID.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const GetPackageInfoParams& parameters) const override;
 	QUrlQuery query(const GetPackageInfoParams& parameters) const override;
+	QByteArray body(const GetPackageInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets all package repositories.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const GetRepositoriesParams& parameters) const override;
 	QUrlQuery query(const GetRepositoriesParams& parameters) const override;
+	QByteArray body(const GetRepositoriesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

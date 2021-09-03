@@ -106,6 +106,16 @@ QUrlQuery GetLoader::query(const GetParams &params) const {
 	return result;
 }
 
+QByteArray GetLoader::body(const GetParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

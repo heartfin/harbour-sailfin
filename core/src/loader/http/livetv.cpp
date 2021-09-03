@@ -57,6 +57,16 @@ QUrlQuery GetChannelMappingOptionsLoader::query(const GetChannelMappingOptionsPa
 	return result;
 }
 
+QByteArray GetChannelMappingOptionsLoader::body(const GetChannelMappingOptionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetChannelMappingOptionsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 SetChannelMappingLoader::SetChannelMappingLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<TunerChannelMapping, SetChannelMappingParams>(apiClient) {}
 
@@ -74,6 +84,16 @@ QUrlQuery SetChannelMappingLoader::query(const SetChannelMappingParams &params) 
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray SetChannelMappingLoader::body(const SetChannelMappingParams &params) const {
+	return Support::toString<QSharedPointer<SetChannelMappingDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation SetChannelMappingLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 GetLiveTvChannelsLoader::GetLiveTvChannelsLoader(ApiClient *apiClient)
@@ -158,6 +178,16 @@ QUrlQuery GetLiveTvChannelsLoader::query(const GetLiveTvChannelsParams &params) 
 	return result;
 }
 
+QByteArray GetLiveTvChannelsLoader::body(const GetLiveTvChannelsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLiveTvChannelsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetChannelLoader::GetChannelLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetChannelParams>(apiClient) {}
 
@@ -180,6 +210,16 @@ QUrlQuery GetChannelLoader::query(const GetChannelParams &params) const {
 	return result;
 }
 
+QByteArray GetChannelLoader::body(const GetChannelParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetChannelLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetGuideInfoLoader::GetGuideInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<GuideInfo, GetGuideInfoParams>(apiClient) {}
 
@@ -199,6 +239,16 @@ QUrlQuery GetGuideInfoLoader::query(const GetGuideInfoParams &params) const {
 	return result;
 }
 
+QByteArray GetGuideInfoLoader::body(const GetGuideInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetGuideInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetLiveTvInfoLoader::GetLiveTvInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<LiveTvInfo, GetLiveTvInfoParams>(apiClient) {}
 
@@ -216,6 +266,16 @@ QUrlQuery GetLiveTvInfoLoader::query(const GetLiveTvInfoParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetLiveTvInfoLoader::body(const GetLiveTvInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLiveTvInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 AddListingProviderLoader::AddListingProviderLoader(ApiClient *apiClient)
@@ -246,6 +306,16 @@ QUrlQuery AddListingProviderLoader::query(const AddListingProviderParams &params
 	return result;
 }
 
+QByteArray AddListingProviderLoader::body(const AddListingProviderParams &params) const {
+	return Support::toString<QSharedPointer<ListingsProviderInfo>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation AddListingProviderLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetDefaultListingProviderLoader::GetDefaultListingProviderLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<ListingsProviderInfo, GetDefaultListingProviderParams>(apiClient) {}
 
@@ -263,6 +333,16 @@ QUrlQuery GetDefaultListingProviderLoader::query(const GetDefaultListingProvider
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetDefaultListingProviderLoader::body(const GetDefaultListingProviderParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDefaultListingProviderLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetLineupsLoader::GetLineupsLoader(ApiClient *apiClient)
@@ -296,6 +376,16 @@ QUrlQuery GetLineupsLoader::query(const GetLineupsParams &params) const {
 	return result;
 }
 
+QByteArray GetLineupsLoader::body(const GetLineupsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLineupsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetSchedulesDirectCountriesLoader::GetSchedulesDirectCountriesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QString, GetSchedulesDirectCountriesParams>(apiClient) {}
 
@@ -313,6 +403,16 @@ QUrlQuery GetSchedulesDirectCountriesLoader::query(const GetSchedulesDirectCount
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetSchedulesDirectCountriesLoader::body(const GetSchedulesDirectCountriesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSchedulesDirectCountriesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetLiveTvProgramsLoader::GetLiveTvProgramsLoader(ApiClient *apiClient)
@@ -415,6 +515,16 @@ QUrlQuery GetLiveTvProgramsLoader::query(const GetLiveTvProgramsParams &params) 
 	return result;
 }
 
+QByteArray GetLiveTvProgramsLoader::body(const GetLiveTvProgramsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLiveTvProgramsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetProgramsLoader::GetProgramsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetProgramsParams>(apiClient) {}
 
@@ -432,6 +542,16 @@ QUrlQuery GetProgramsLoader::query(const GetProgramsParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetProgramsLoader::body(const GetProgramsParams &params) const {
+	return Support::toString<QSharedPointer<GetProgramsDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetProgramsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 GetProgramLoader::GetProgramLoader(ApiClient *apiClient)
@@ -454,6 +574,16 @@ QUrlQuery GetProgramLoader::query(const GetProgramParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetProgramLoader::body(const GetProgramParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetProgramLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetRecommendedProgramsLoader::GetRecommendedProgramsLoader(ApiClient *apiClient)
@@ -521,6 +651,16 @@ QUrlQuery GetRecommendedProgramsLoader::query(const GetRecommendedProgramsParams
 	}
 	
 	return result;
+}
+
+QByteArray GetRecommendedProgramsLoader::body(const GetRecommendedProgramsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRecommendedProgramsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetRecordingsLoader::GetRecordingsLoader(ApiClient *apiClient)
@@ -599,6 +739,16 @@ QUrlQuery GetRecordingsLoader::query(const GetRecordingsParams &params) const {
 	return result;
 }
 
+QByteArray GetRecordingsLoader::body(const GetRecordingsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRecordingsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetRecordingLoader::GetRecordingLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetRecordingParams>(apiClient) {}
 
@@ -619,6 +769,16 @@ QUrlQuery GetRecordingLoader::query(const GetRecordingParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetRecordingLoader::body(const GetRecordingParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRecordingLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetRecordingFoldersLoader::GetRecordingFoldersLoader(ApiClient *apiClient)
@@ -643,6 +803,16 @@ QUrlQuery GetRecordingFoldersLoader::query(const GetRecordingFoldersParams &para
 	return result;
 }
 
+QByteArray GetRecordingFoldersLoader::body(const GetRecordingFoldersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRecordingFoldersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetRecordingGroupsLoader::GetRecordingGroupsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetRecordingGroupsParams>(apiClient) {}
 
@@ -663,6 +833,16 @@ QUrlQuery GetRecordingGroupsLoader::query(const GetRecordingGroupsParams &params
 	}
 	
 	return result;
+}
+
+QByteArray GetRecordingGroupsLoader::body(const GetRecordingGroupsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRecordingGroupsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetRecordingsSeriesLoader::GetRecordingsSeriesLoader(ApiClient *apiClient)
@@ -726,6 +906,16 @@ QUrlQuery GetRecordingsSeriesLoader::query(const GetRecordingsSeriesParams &para
 	return result;
 }
 
+QByteArray GetRecordingsSeriesLoader::body(const GetRecordingsSeriesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRecordingsSeriesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetSeriesTimersLoader::GetSeriesTimersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<SeriesTimerInfoDtoQueryResult, GetSeriesTimersParams>(apiClient) {}
 
@@ -751,6 +941,16 @@ QUrlQuery GetSeriesTimersLoader::query(const GetSeriesTimersParams &params) cons
 	return result;
 }
 
+QByteArray GetSeriesTimersLoader::body(const GetSeriesTimersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSeriesTimersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetSeriesTimerLoader::GetSeriesTimerLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<SeriesTimerInfoDto, GetSeriesTimerParams>(apiClient) {}
 
@@ -768,6 +968,16 @@ QUrlQuery GetSeriesTimerLoader::query(const GetSeriesTimerParams &params) const 
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetSeriesTimerLoader::body(const GetSeriesTimerParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSeriesTimerLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetTimersLoader::GetTimersLoader(ApiClient *apiClient)
@@ -801,6 +1011,16 @@ QUrlQuery GetTimersLoader::query(const GetTimersParams &params) const {
 	return result;
 }
 
+QByteArray GetTimersLoader::body(const GetTimersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetTimersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetTimerLoader::GetTimerLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<TimerInfoDto, GetTimerParams>(apiClient) {}
 
@@ -818,6 +1038,16 @@ QUrlQuery GetTimerLoader::query(const GetTimerParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetTimerLoader::body(const GetTimerParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetTimerLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetDefaultTimerLoader::GetDefaultTimerLoader(ApiClient *apiClient)
@@ -842,6 +1072,16 @@ QUrlQuery GetDefaultTimerLoader::query(const GetDefaultTimerParams &params) cons
 	return result;
 }
 
+QByteArray GetDefaultTimerLoader::body(const GetDefaultTimerParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDefaultTimerLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 AddTunerHostLoader::AddTunerHostLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<TunerHostInfo, AddTunerHostParams>(apiClient) {}
 
@@ -861,6 +1101,16 @@ QUrlQuery AddTunerHostLoader::query(const AddTunerHostParams &params) const {
 	return result;
 }
 
+QByteArray AddTunerHostLoader::body(const AddTunerHostParams &params) const {
+	return Support::toString<QSharedPointer<TunerHostInfo>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation AddTunerHostLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetTunerHostTypesLoader::GetTunerHostTypesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<NameIdPair>, GetTunerHostTypesParams>(apiClient) {}
 
@@ -878,6 +1128,16 @@ QUrlQuery GetTunerHostTypesLoader::query(const GetTunerHostTypesParams &params) 
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetTunerHostTypesLoader::body(const GetTunerHostTypesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetTunerHostTypesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 DiscoverTunersLoader::DiscoverTunersLoader(ApiClient *apiClient)
@@ -902,6 +1162,16 @@ QUrlQuery DiscoverTunersLoader::query(const DiscoverTunersParams &params) const 
 	return result;
 }
 
+QByteArray DiscoverTunersLoader::body(const DiscoverTunersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DiscoverTunersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 DiscvoverTunersLoader::DiscvoverTunersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<TunerHostInfo>, DiscvoverTunersParams>(apiClient) {}
 
@@ -922,6 +1192,16 @@ QUrlQuery DiscvoverTunersLoader::query(const DiscvoverTunersParams &params) cons
 	}
 	
 	return result;
+}
+
+QByteArray DiscvoverTunersLoader::body(const DiscvoverTunersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DiscvoverTunersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

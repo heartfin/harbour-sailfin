@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const CreatePlaylistParams& parameters) const override;
 	QUrlQuery query(const CreatePlaylistParams& parameters) const override;
+	QByteArray body(const CreatePlaylistParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the original items of a playlist.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetPlaylistItemsParams& parameters) const override;
 	QUrlQuery query(const GetPlaylistItemsParams& parameters) const override;
+	QByteArray body(const GetPlaylistItemsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

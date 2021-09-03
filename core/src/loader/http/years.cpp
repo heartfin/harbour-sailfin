@@ -99,6 +99,16 @@ QUrlQuery GetYearsLoader::query(const GetYearsParams &params) const {
 	return result;
 }
 
+QByteArray GetYearsLoader::body(const GetYearsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetYearsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetYearLoader::GetYearLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetYearParams>(apiClient) {}
 
@@ -119,6 +129,16 @@ QUrlQuery GetYearLoader::query(const GetYearParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetYearLoader::body(const GetYearParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetYearLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

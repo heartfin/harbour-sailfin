@@ -51,6 +51,18 @@ private:
 
 {{/each}}
 
+{{#if e.bodyParameters.length > 0}}
+	// Body parameters
+
+	{{#if e.bodyParameters.length == 1}}
+	{{e.bodyParameters[0].type.typeNameWithQualifiers}} m_body;
+
+	{{else}}
+	//FIXME: Multiple body options not implemented.
+
+	{{/if}}
+{{/if}}
+
 };
 
 

@@ -54,6 +54,16 @@ QUrlQuery GetKeysLoader::query(const GetKeysParams &params) const {
 	return result;
 }
 
+QByteArray GetKeysLoader::body(const GetKeysParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetKeysLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

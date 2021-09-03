@@ -36,26 +36,94 @@
 #include <QStringList>
 #include <optional>
 
+#include "JellyfinQt/dto/addvirtualfolderdto.h"
+#include "JellyfinQt/dto/albuminforemotesearchquery.h"
+#include "JellyfinQt/dto/artistinforemotesearchquery.h"
+#include "JellyfinQt/dto/authenticateuserbyname.h"
+#include "JellyfinQt/dto/baseitemdto.h"
+#include "JellyfinQt/dto/bookinforemotesearchquery.h"
+#include "JellyfinQt/dto/boxsetinforemotesearchquery.h"
+#include "JellyfinQt/dto/bufferrequestdto.h"
 #include "JellyfinQt/dto/channeltype.h"
+#include "JellyfinQt/dto/clientcapabilitiesdto.h"
 #include "JellyfinQt/dto/configurationpagetype.h"
+#include "JellyfinQt/dto/createplaylistdto.h"
+#include "JellyfinQt/dto/createuserbyname.h"
+#include "JellyfinQt/dto/deviceoptions.h"
+#include "JellyfinQt/dto/deviceprofile.h"
+#include "JellyfinQt/dto/displaypreferencesdto.h"
 #include "JellyfinQt/dto/encodingcontext.h"
+#include "JellyfinQt/dto/forgotpassworddto.h"
+#include "JellyfinQt/dto/generalcommand.h"
 #include "JellyfinQt/dto/generalcommandtype.h"
+#include "JellyfinQt/dto/getprogramsdto.h"
+#include "JellyfinQt/dto/ignorewaitrequestdto.h"
 #include "JellyfinQt/dto/imageformat.h"
 #include "JellyfinQt/dto/imagetype.h"
 #include "JellyfinQt/dto/itemfields.h"
 #include "JellyfinQt/dto/itemfilter.h"
+#include "JellyfinQt/dto/joingrouprequestdto.h"
+#include "JellyfinQt/dto/listingsproviderinfo.h"
 #include "JellyfinQt/dto/locationtype.h"
+#include "JellyfinQt/dto/mediaencoderpathdto.h"
+#include "JellyfinQt/dto/mediapathdto.h"
+#include "JellyfinQt/dto/mediapathinfo.h"
+#include "JellyfinQt/dto/mediaupdateinfodto.h"
 #include "JellyfinQt/dto/metadatarefreshmode.h"
+#include "JellyfinQt/dto/moveplaylistitemrequestdto.h"
+#include "JellyfinQt/dto/movieinforemotesearchquery.h"
+#include "JellyfinQt/dto/musicvideoinforemotesearchquery.h"
+#include "JellyfinQt/dto/newgrouprequestdto.h"
+#include "JellyfinQt/dto/nextitemrequestdto.h"
 #include "JellyfinQt/dto/notificationlevel.h"
+#include "JellyfinQt/dto/openlivestreamdto.h"
+#include "JellyfinQt/dto/personlookupinforemotesearchquery.h"
+#include "JellyfinQt/dto/pingrequestdto.h"
 #include "JellyfinQt/dto/playcommand.h"
 #include "JellyfinQt/dto/playmethod.h"
+#include "JellyfinQt/dto/playrequestdto.h"
+#include "JellyfinQt/dto/playbackinfodto.h"
+#include "JellyfinQt/dto/playbackprogressinfo.h"
+#include "JellyfinQt/dto/playbackstartinfo.h"
+#include "JellyfinQt/dto/playbackstopinfo.h"
 #include "JellyfinQt/dto/playstatecommand.h"
+#include "JellyfinQt/dto/pluginsecurityinfo.h"
+#include "JellyfinQt/dto/previousitemrequestdto.h"
+#include "JellyfinQt/dto/queuerequestdto.h"
+#include "JellyfinQt/dto/quickconnectdto.h"
 #include "JellyfinQt/dto/quickconnectstate.h"
+#include "JellyfinQt/dto/readyrequestdto.h"
 #include "JellyfinQt/dto/recordingstatus.h"
+#include "JellyfinQt/dto/remotesearchresult.h"
+#include "JellyfinQt/dto/removefromplaylistrequestdto.h"
 #include "JellyfinQt/dto/repeatmode.h"
+#include "JellyfinQt/dto/repositoryinfo.h"
+#include "JellyfinQt/dto/seekrequestdto.h"
+#include "JellyfinQt/dto/seriesinforemotesearchquery.h"
 #include "JellyfinQt/dto/seriesstatus.h"
+#include "JellyfinQt/dto/seriestimerinfodto.h"
+#include "JellyfinQt/dto/serverconfiguration.h"
+#include "JellyfinQt/dto/setchannelmappingdto.h"
+#include "JellyfinQt/dto/setplaylistitemrequestdto.h"
+#include "JellyfinQt/dto/setrepeatmoderequestdto.h"
+#include "JellyfinQt/dto/setshufflemoderequestdto.h"
 #include "JellyfinQt/dto/sortorder.h"
+#include "JellyfinQt/dto/startupconfigurationdto.h"
+#include "JellyfinQt/dto/startupremoteaccessdto.h"
+#include "JellyfinQt/dto/startupuserdto.h"
 #include "JellyfinQt/dto/subtitledeliverymethod.h"
+#include "JellyfinQt/dto/tasktriggerinfo.h"
+#include "JellyfinQt/dto/timerinfodto.h"
+#include "JellyfinQt/dto/trailerinforemotesearchquery.h"
+#include "JellyfinQt/dto/tunerhostinfo.h"
+#include "JellyfinQt/dto/updatelibraryoptionsdto.h"
+#include "JellyfinQt/dto/updateusereasypassword.h"
+#include "JellyfinQt/dto/updateuserpassword.h"
+#include "JellyfinQt/dto/uploadsubtitledto.h"
+#include "JellyfinQt/dto/userconfiguration.h"
+#include "JellyfinQt/dto/userdto.h"
+#include "JellyfinQt/dto/userpolicy.h"
+#include "JellyfinQt/dto/validatepathdto.h"
 #include "JellyfinQt/dto/version.h"
 #include "JellyfinQt/dto/videotype.h"
 
@@ -76,6 +144,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -109,6 +178,13 @@ public:
 	void setValidateLoginNull();
 	
 	
+	/**
+	 * @brief New listings info.	
+	 */
+	const QSharedPointer<ListingsProviderInfo> &body() const;
+	void setBody(QSharedPointer<ListingsProviderInfo> newBody);
+
+	
 private:
 	// Required path parameters
 	
@@ -118,6 +194,9 @@ private:
 	QString m_pw;
 	std::optional<bool> m_validateListings = std::nullopt;
 	std::optional<bool> m_validateLogin = std::nullopt;
+
+	// Body parameters
+	QSharedPointer<ListingsProviderInfo> m_body;
 
 };
 
@@ -133,6 +212,13 @@ public:
 	void setRefreshLibraryNull();
 	
 	
+	/**
+	 * @brief The media path dto.	
+	 */
+	const QSharedPointer<MediaPathDto> &body() const;
+	void setBody(QSharedPointer<MediaPathDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
@@ -140,6 +226,9 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_refreshLibrary = std::nullopt;
+
+	// Body parameters
+	QSharedPointer<MediaPathDto> m_body;
 
 };
 
@@ -168,6 +257,7 @@ private:
 	QStringList m_ids;
 
 	// Optional query parameters
+
 
 };
 
@@ -209,17 +299,28 @@ private:
 	QStringList m_ids;
 	QString m_userId;
 
+
 };
 
 class AddTunerHostParams {
 public:
 
+	/**
+	 * @brief New tuner host.	
+	 */
+	const QSharedPointer<TunerHostInfo> &body() const;
+	void setBody(QSharedPointer<TunerHostInfo> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<TunerHostInfo> m_body;
 
 };
 
@@ -248,6 +349,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -290,6 +392,13 @@ public:
 	void setRefreshLibraryNull();
 	
 	
+	/**
+	 * @brief The library options.	
+	 */
+	const QSharedPointer<AddVirtualFolderDto> &body() const;
+	void setBody(QSharedPointer<AddVirtualFolderDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
@@ -300,6 +409,9 @@ private:
 	QString m_name;
 	QStringList m_paths;
 	std::optional<bool> m_refreshLibrary = std::nullopt;
+
+	// Body parameters
+	QSharedPointer<AddVirtualFolderDto> m_body;
 
 };
 
@@ -322,6 +434,13 @@ public:
 	void setReplaceAllImagesNull();
 	
 	
+	/**
+	 * @brief The remote search result.	
+	 */
+	const QSharedPointer<RemoteSearchResult> &body() const;
+	void setBody(QSharedPointer<RemoteSearchResult> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_itemId;
@@ -330,6 +449,9 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_replaceAllImages = std::nullopt;
+
+	// Body parameters
+	QSharedPointer<RemoteSearchResult> m_body;
 
 };
 
@@ -369,29 +491,50 @@ private:
 	// Optional query parameters
 	QString m_password;
 
+
 };
 
 class AuthenticateUserByNameParams {
 public:
 
+	/**
+	 * @brief The M:Jellyfin.Api.Controllers.UserController.AuthenticateUserByName(Jellyfin.Api.Models.UserDtos.AuthenticateUserByName) request.	
+	 */
+	const QSharedPointer<AuthenticateUserByName> &body() const;
+	void setBody(QSharedPointer<AuthenticateUserByName> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<AuthenticateUserByName> m_body;
 
 };
 
 class AuthenticateWithQuickConnectParams {
 public:
 
+	/**
+	 * @brief The Jellyfin.Api.Models.UserDtos.QuickConnectDto request.	
+	 */
+	const QSharedPointer<QuickConnectDto> &body() const;
+	void setBody(QSharedPointer<QuickConnectDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<QuickConnectDto> m_body;
 
 };
 
@@ -412,6 +555,7 @@ private:
 	QString m_code;
 
 	// Optional query parameters
+
 
 };
 
@@ -435,6 +579,7 @@ private:
 	// Optional query parameters
 	QuickConnectState m_status;
 
+
 };
 
 class CancelPackageInstallationParams {
@@ -454,6 +599,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -475,6 +621,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class CancelTimerParams {
@@ -494,6 +641,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -515,6 +663,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class CompleteWizardParams {
@@ -526,6 +675,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -546,6 +696,7 @@ private:
 	QString m_secret;
 
 	// Optional query parameters
+
 
 };
 
@@ -599,6 +750,7 @@ private:
 	QString m_name;
 	QString m_url;
 
+
 };
 
 class CreateCollectionParams {
@@ -651,6 +803,7 @@ private:
 	QString m_name;
 	QString m_parentId;
 
+
 };
 
 class CreateKeyParams {
@@ -670,6 +823,7 @@ private:
 	QString m_app;
 
 	// Optional query parameters
+
 
 };
 
@@ -712,6 +866,13 @@ public:
 	void setUserIdNull();
 	
 	
+	/**
+	 * @brief The create playlist payload.	
+	 */
+	const QSharedPointer<CreatePlaylistDto> &body() const;
+	void setBody(QSharedPointer<CreatePlaylistDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
@@ -723,53 +884,96 @@ private:
 	QString m_name;
 	QString m_userId;
 
+	// Body parameters
+	QSharedPointer<CreatePlaylistDto> m_body;
+
 };
 
 class CreateProfileParams {
 public:
 
+	/**
+	 * @brief Device profile.	
+	 */
+	const QSharedPointer<DeviceProfile> &body() const;
+	void setBody(QSharedPointer<DeviceProfile> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<DeviceProfile> m_body;
 
 };
 
 class CreateSeriesTimerParams {
 public:
 
+	/**
+	 * @brief New series timer info.	
+	 */
+	const QSharedPointer<SeriesTimerInfoDto> &body() const;
+	void setBody(QSharedPointer<SeriesTimerInfoDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<SeriesTimerInfoDto> m_body;
 
 };
 
 class CreateTimerParams {
 public:
 
+	/**
+	 * @brief New timer info.	
+	 */
+	const QSharedPointer<TimerInfoDto> &body() const;
+	void setBody(QSharedPointer<TimerInfoDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<TimerInfoDto> m_body;
 
 };
 
 class CreateUserByNameParams {
 public:
 
+	/**
+	 * @brief The create user by name request body.	
+	 */
+	const QSharedPointer<CreateUserByName> &body() const;
+	void setBody(QSharedPointer<CreateUserByName> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<CreateUserByName> m_body;
 
 };
 
@@ -782,6 +986,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -803,6 +1008,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class DeleteDeviceParams {
@@ -823,6 +1029,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class DeleteItemParams {
@@ -842,6 +1049,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -881,6 +1089,7 @@ private:
 	// Optional query parameters
 	std::optional<qint32> m_imageIndex = std::nullopt;
 
+
 };
 
 class DeleteItemImageByIndexParams {
@@ -917,6 +1126,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class DeleteItemsParams {
@@ -938,6 +1148,7 @@ private:
 
 	// Optional query parameters
 	QStringList m_ids;
+
 
 };
 
@@ -961,6 +1172,7 @@ private:
 	// Optional query parameters
 	QString m_jellyfinId;
 
+
 };
 
 class DeleteProfileParams {
@@ -981,6 +1193,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class DeleteRecordingParams {
@@ -1000,6 +1213,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -1029,6 +1243,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class DeleteTunerHostParams {
@@ -1051,6 +1266,7 @@ private:
 	// Optional query parameters
 	QString m_jellyfinId;
 
+
 };
 
 class DeleteUserParams {
@@ -1070,6 +1286,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -1109,6 +1326,7 @@ private:
 	// Optional query parameters
 	std::optional<qint32> m_index = std::nullopt;
 
+
 };
 
 class DeleteUserImageByIndexParams {
@@ -1145,6 +1363,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class DeleteUserItemRatingParams {
@@ -1172,6 +1391,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -1201,6 +1421,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class DiscoverTunersParams {
@@ -1223,6 +1444,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_newDevicesOnly = std::nullopt;
 
+
 };
 
 class DiscvoverTunersParams {
@@ -1244,6 +1466,7 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_newDevicesOnly = std::nullopt;
+
 
 };
 
@@ -1289,6 +1512,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class DownloadRemoteImageParams {
@@ -1327,6 +1551,7 @@ private:
 	// Optional query parameters
 	QString m_imageUrl;
 
+
 };
 
 class DownloadRemoteSubtitlesParams {
@@ -1354,6 +1579,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -1383,29 +1609,50 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class ForgotPasswordParams {
 public:
 
+	/**
+	 * @brief The forgot password request containing the entered username.	
+	 */
+	const QSharedPointer<ForgotPasswordDto> &body() const;
+	void setBody(QSharedPointer<ForgotPasswordDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<ForgotPasswordDto> m_body;
 
 };
 
 class ForgotPasswordPinParams {
 public:
 
+	/**
+	 * @brief The pin.	
+	 */
+	const QString &body() const;
+	void setBody(QString newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QString m_body;
 
 };
 
@@ -1597,6 +1844,7 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetAdditionalPartParams {
@@ -1626,6 +1874,7 @@ private:
 
 	// Optional query parameters
 	QString m_userId;
+
 
 };
 
@@ -1939,6 +2188,7 @@ private:
 	QString m_userId;
 	QList<qint32> m_years;
 
+
 };
 
 class GetAllChannelFeaturesParams {
@@ -1950,6 +2200,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -1981,6 +2232,7 @@ private:
 	// Optional query parameters
 	QString m_userId;
 
+
 };
 
 class GetArtistByNameParams {
@@ -2010,6 +2262,7 @@ private:
 
 	// Optional query parameters
 	QString m_userId;
+
 
 };
 
@@ -2186,6 +2439,7 @@ private:
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -2499,6 +2753,7 @@ private:
 	QString m_userId;
 	QList<qint32> m_years;
 
+
 };
 
 class GetAttachmentParams {
@@ -2534,6 +2789,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -3035,6 +3291,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetAudioStreamByContainerParams {
@@ -3533,6 +3790,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetAuthProvidersParams {
@@ -3544,6 +3802,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -3567,29 +3826,50 @@ private:
 	// Optional query parameters
 	std::optional<qint32> m_size = std::nullopt;
 
+
 };
 
 class GetBookRemoteSearchResultsParams {
 public:
 
+	/**
+	 * @brief Remote search query.	
+	 */
+	const QSharedPointer<BookInfoRemoteSearchQuery> &body() const;
+	void setBody(QSharedPointer<BookInfoRemoteSearchQuery> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<BookInfoRemoteSearchQuery> m_body;
 
 };
 
 class GetBoxSetRemoteSearchResultsParams {
 public:
 
+	/**
+	 * @brief Remote search query.	
+	 */
+	const QSharedPointer<BoxSetInfoRemoteSearchQuery> &body() const;
+	void setBody(QSharedPointer<BoxSetInfoRemoteSearchQuery> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<BoxSetInfoRemoteSearchQuery> m_body;
 
 };
 
@@ -3603,6 +3883,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetBrandingCss_2Params {
@@ -3615,6 +3896,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetBrandingOptionsParams {
@@ -3626,6 +3908,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -3657,6 +3940,7 @@ private:
 	// Optional query parameters
 	QString m_userId;
 
+
 };
 
 class GetChannelFeaturesParams {
@@ -3676,6 +3960,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -3777,6 +4062,7 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetChannelMappingOptionsParams {
@@ -3798,6 +4084,7 @@ private:
 
 	// Optional query parameters
 	QString m_providerId;
+
 
 };
 
@@ -3871,6 +4158,7 @@ private:
 	std::optional<bool> m_supportsMediaDeletion = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetConfigurationParams {
@@ -3882,6 +4170,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -3915,6 +4204,7 @@ private:
 	std::optional<bool> m_enableInMainMenu = std::nullopt;
 	ConfigurationPageType m_pageType;
 
+
 };
 
 class GetConnectionManagerParams {
@@ -3934,6 +4224,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -3955,6 +4246,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetConnectionManager_3Params {
@@ -3974,6 +4266,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -3995,6 +4288,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetContentDirectory_2Params {
@@ -4014,6 +4308,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4035,6 +4330,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetCountriesParams {
@@ -4046,6 +4342,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4067,6 +4364,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetCulturesParams {
@@ -4079,6 +4377,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetCurrentUserParams {
@@ -4090,6 +4389,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4113,6 +4413,7 @@ private:
 	// Optional query parameters
 	QString m_name;
 
+
 };
 
 class GetDefaultDirectoryBrowserParams {
@@ -4124,6 +4425,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4137,6 +4439,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetDefaultMetadataOptionsParams {
@@ -4149,6 +4452,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetDefaultProfileParams {
@@ -4160,6 +4464,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4183,6 +4488,7 @@ private:
 	// Optional query parameters
 	QString m_programId;
 
+
 };
 
 class GetDescriptionXmlParams {
@@ -4202,6 +4508,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4223,6 +4530,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetDeviceInfoParams {
@@ -4243,6 +4551,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetDeviceOptionsParams {
@@ -4262,6 +4571,7 @@ private:
 	QString m_jellyfinId;
 
 	// Optional query parameters
+
 
 };
 
@@ -4294,6 +4604,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_supportsSync = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -4335,6 +4646,7 @@ private:
 	std::optional<bool> m_includeDirectories = std::nullopt;
 	std::optional<bool> m_includeFiles = std::nullopt;
 
+
 };
 
 class GetDisplayPreferencesParams {
@@ -4371,6 +4683,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetDownloadParams {
@@ -4391,6 +4704,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetDrivesParams {
@@ -4403,6 +4717,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetEndpointInfoParams {
@@ -4414,6 +4729,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4575,6 +4891,7 @@ private:
 	QString m_startItemId;
 	QString m_userId;
 
+
 };
 
 class GetExternalIdInfosParams {
@@ -4594,6 +4911,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4615,6 +4933,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetFallbackFontListParams {
@@ -4626,6 +4945,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4647,6 +4967,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetFirstUserParams {
@@ -4659,6 +4980,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetFirstUser_2Params {
@@ -4670,6 +4992,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4699,6 +5022,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetGeneralImagesParams {
@@ -4710,6 +5034,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -4740,6 +5065,7 @@ private:
 
 	// Optional query parameters
 	QString m_userId;
+
 
 };
 
@@ -4919,6 +5245,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetGenreImageByIndexParams {
@@ -5095,6 +5422,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetGenresParams {
@@ -5267,6 +5595,7 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetGroupingOptionsParams {
@@ -5287,6 +5616,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetGuideInfoParams {
@@ -5298,6 +5628,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -5823,6 +6154,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetHlsAudioSegmentLegacyAacParams {
@@ -5850,6 +6182,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -5879,6 +6212,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetHlsPlaylistLegacyParams {
@@ -5906,6 +6240,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -6421,6 +6756,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetHlsVideoSegmentLegacyParams {
@@ -6465,6 +6801,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetIconParams {
@@ -6484,6 +6821,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -6512,6 +6850,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -6603,6 +6942,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetInstantMixFromArtistsParams {
@@ -6692,6 +7032,7 @@ private:
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -6783,6 +7124,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetInstantMixFromMusicGenreParams {
@@ -6872,6 +7214,7 @@ private:
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -6963,6 +7306,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetInstantMixFromPlaylistParams {
@@ -7052,6 +7396,7 @@ private:
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -7143,6 +7488,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetIntrosParams {
@@ -7171,6 +7517,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetItemParams {
@@ -7198,6 +7545,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -7230,6 +7578,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_isFavorite = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -7409,6 +7758,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetItemImage2Params {
@@ -7572,6 +7922,7 @@ private:
 	std::optional<qint32> m_height = std::nullopt;
 	std::optional<qint32> m_quality = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -7749,6 +8100,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetItemImageInfosParams {
@@ -7768,6 +8120,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -8581,6 +8934,7 @@ private:
 	QList<VideoType> m_videoTypes;
 	QList<qint32> m_years;
 
+
 };
 
 class GetItemsByUserIdParams {
@@ -9391,6 +9745,7 @@ private:
 	QList<VideoType> m_videoTypes;
 	QList<qint32> m_years;
 
+
 };
 
 class GetKeysParams {
@@ -9402,6 +9757,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -9474,6 +9830,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -9595,6 +9952,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_parentId;
 
+
 };
 
 class GetLibraryOptionsInfoParams {
@@ -9626,6 +9984,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_isNewLibrary = std::nullopt;
 	QString m_libraryContentType;
+
 
 };
 
@@ -9678,6 +10037,7 @@ private:
 	QString m_jellyfinId;
 	QString m_location;
 	QString m_type;
+
 
 };
 
@@ -10209,6 +10569,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetLiveRecordingFileParams {
@@ -10228,6 +10589,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -10256,6 +10618,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -10479,6 +10842,7 @@ private:
 	ChannelType m_type;
 	QString m_userId;
 
+
 };
 
 class GetLiveTvInfoParams {
@@ -10490,6 +10854,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -10773,6 +11138,7 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetLocalTrailersParams {
@@ -10801,6 +11167,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetLocalizationOptionsParams {
@@ -10812,6 +11179,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -10865,6 +11233,7 @@ private:
 	QDateTime m_minDate;
 	std::optional<qint32> m_startIndex = std::nullopt;
 
+
 };
 
 class GetLogFileParams {
@@ -10884,6 +11253,7 @@ private:
 	QString m_name;
 
 	// Optional query parameters
+
 
 };
 
@@ -11393,6 +11763,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetMasterHlsVideoPlaylistParams {
@@ -11891,6 +12262,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetMediaFoldersParams {
@@ -11912,6 +12284,7 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_isHidden = std::nullopt;
+
 
 };
 
@@ -11941,6 +12314,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetMediaInfoImagesParams {
@@ -11952,6 +12326,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -11973,6 +12348,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetMediaReceiverRegistrar_2Params {
@@ -11992,6 +12368,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -12013,6 +12390,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetMetadataEditorInfoParams {
@@ -12032,6 +12410,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -12095,41 +12474,72 @@ private:
 	QString m_parentId;
 	QString m_userId;
 
+
 };
 
 class GetMovieRemoteSearchResultsParams {
 public:
 
+	/**
+	 * @brief Remote search query.	
+	 */
+	const QSharedPointer<MovieInfoRemoteSearchQuery> &body() const;
+	void setBody(QSharedPointer<MovieInfoRemoteSearchQuery> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<MovieInfoRemoteSearchQuery> m_body;
 
 };
 
 class GetMusicAlbumRemoteSearchResultsParams {
 public:
 
+	/**
+	 * @brief Remote search query.	
+	 */
+	const QSharedPointer<AlbumInfoRemoteSearchQuery> &body() const;
+	void setBody(QSharedPointer<AlbumInfoRemoteSearchQuery> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<AlbumInfoRemoteSearchQuery> m_body;
 
 };
 
 class GetMusicArtistRemoteSearchResultsParams {
 public:
 
+	/**
+	 * @brief Remote search query.	
+	 */
+	const QSharedPointer<ArtistInfoRemoteSearchQuery> &body() const;
+	void setBody(QSharedPointer<ArtistInfoRemoteSearchQuery> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<ArtistInfoRemoteSearchQuery> m_body;
 
 };
 
@@ -12160,6 +12570,7 @@ private:
 
 	// Optional query parameters
 	QString m_userId;
+
 
 };
 
@@ -12339,6 +12750,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetMusicGenreImageByIndexParams {
@@ -12515,6 +12927,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetMusicGenresParams {
@@ -12687,17 +13100,28 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetMusicVideoRemoteSearchResultsParams {
 public:
 
+	/**
+	 * @brief Remote search query.	
+	 */
+	const QSharedPointer<MusicVideoInfoRemoteSearchQuery> &body() const;
+	void setBody(QSharedPointer<MusicVideoInfoRemoteSearchQuery> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<MusicVideoInfoRemoteSearchQuery> m_body;
 
 };
 
@@ -12719,6 +13143,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetNetworkSharesParams {
@@ -12730,6 +13155,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -12863,6 +13289,7 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetNotificationServicesParams {
@@ -12875,6 +13302,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetNotificationTypesParams {
@@ -12886,6 +13314,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -12907,6 +13336,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetNotificationsSummaryParams {
@@ -12926,6 +13356,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -12957,6 +13388,7 @@ private:
 	// Optional query parameters
 	QString m_assemblyGuid;
 
+
 };
 
 class GetPackagesParams {
@@ -12968,6 +13400,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -12989,6 +13422,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetParentalRatingsParams {
@@ -13001,6 +13435,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetPasswordResetProvidersParams {
@@ -13012,6 +13447,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -13042,6 +13478,7 @@ private:
 
 	// Optional query parameters
 	QString m_userId;
+
 
 };
 
@@ -13221,6 +13658,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetPersonImageByIndexParams {
@@ -13397,17 +13835,28 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetPersonRemoteSearchResultsParams {
 public:
 
+	/**
+	 * @brief Remote search query.	
+	 */
+	const QSharedPointer<PersonLookupInfoRemoteSearchQuery> &body() const;
+	void setBody(QSharedPointer<PersonLookupInfoRemoteSearchQuery> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<PersonLookupInfoRemoteSearchQuery> m_body;
 
 };
 
@@ -13551,6 +14000,7 @@ private:
 	QString m_searchTerm;
 	QString m_userId;
 
+
 };
 
 class GetPhysicalPathsParams {
@@ -13563,6 +14013,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetPingSystemParams {
@@ -13574,6 +14025,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -13602,6 +14054,7 @@ private:
 	QString m_userId;
 
 	// Optional query parameters
+
 
 };
 
@@ -13701,6 +14154,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	std::optional<qint32> m_startIndex = std::nullopt;
 
+
 };
 
 class GetPluginConfigurationParams {
@@ -13720,6 +14174,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -13749,6 +14204,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetPluginManifestParams {
@@ -13769,6 +14225,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetPluginsParams {
@@ -13780,6 +14237,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -13919,6 +14377,13 @@ public:
 	void setUserIdNull();
 	
 	
+	/**
+	 * @brief The playback info.	
+	 */
+	const QSharedPointer<PlaybackInfoDto> &body() const;
+	void setBody(QSharedPointer<PlaybackInfoDto> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_itemId;
@@ -13941,6 +14406,9 @@ private:
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
 	QString m_userId;
 
+	// Body parameters
+	QSharedPointer<PlaybackInfoDto> m_body;
+
 };
 
 class GetProfileParams {
@@ -13961,6 +14429,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetProfileInfosParams {
@@ -13972,6 +14441,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -14003,17 +14473,28 @@ private:
 	// Optional query parameters
 	QString m_userId;
 
+
 };
 
 class GetProgramsParams {
 public:
 
+	/**
+	 * @brief Request body.	
+	 */
+	const QSharedPointer<GetProgramsDto> &body() const;
+	void setBody(QSharedPointer<GetProgramsDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<GetProgramsDto> m_body;
 
 };
 
@@ -14027,6 +14508,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetPublicUsersParams {
@@ -14038,6 +14520,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -14151,6 +14634,7 @@ private:
 	std::optional<bool> m_recursive = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetQueryFiltersLegacyParams {
@@ -14203,6 +14687,7 @@ private:
 	QString m_parentId;
 	QString m_userId;
 
+
 };
 
 class GetRatingImageParams {
@@ -14231,6 +14716,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetRatingImagesParams {
@@ -14242,6 +14728,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -14415,6 +14902,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetRecordingParams {
@@ -14445,6 +14933,7 @@ private:
 	// Optional query parameters
 	QString m_userId;
 
+
 };
 
 class GetRecordingFoldersParams {
@@ -14467,6 +14956,7 @@ private:
 	// Optional query parameters
 	QString m_userId;
 
+
 };
 
 class GetRecordingGroupParams {
@@ -14486,6 +14976,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -14508,6 +14999,7 @@ private:
 
 	// Optional query parameters
 	QString m_userId;
+
 
 };
 
@@ -14711,6 +15203,7 @@ private:
 	RecordingStatus m_status;
 	QString m_userId;
 
+
 };
 
 class GetRecordingsSeriesParams {
@@ -14863,6 +15356,7 @@ private:
 	RecordingStatus m_status;
 	QString m_userId;
 
+
 };
 
 class GetRemoteImageParams {
@@ -14883,6 +15377,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetRemoteImageProvidersParams {
@@ -14902,6 +15397,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -14973,6 +15469,7 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	ImageType m_type;
 
+
 };
 
 class GetRemoteSearchImageParams {
@@ -15001,6 +15498,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetRemoteSubtitlesParams {
@@ -15021,6 +15519,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetRepositoriesParams {
@@ -15032,6 +15531,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -15183,6 +15683,7 @@ private:
 	QString m_searchTerm;
 	std::optional<qint32> m_startIndex = std::nullopt;
 
+
 };
 
 class GetRootFolderParams {
@@ -15203,6 +15704,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetSchedulesDirectCountriesParams {
@@ -15214,6 +15716,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -15325,17 +15828,28 @@ private:
 	std::optional<bool> m_isSpecialSeason = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetSeriesRemoteSearchResultsParams {
 public:
 
+	/**
+	 * @brief Remote search query.	
+	 */
+	const QSharedPointer<SeriesInfoRemoteSearchQuery> &body() const;
+	void setBody(QSharedPointer<SeriesInfoRemoteSearchQuery> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<SeriesInfoRemoteSearchQuery> m_body;
 
 };
 
@@ -15356,6 +15870,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -15389,6 +15904,7 @@ private:
 	QString m_sortBy;
 	SortOrder m_sortOrder;
 
+
 };
 
 class GetServerLogsParams {
@@ -15400,6 +15916,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -15442,6 +15959,7 @@ private:
 	std::optional<qint32> m_activeWithinSeconds = std::nullopt;
 	QString m_controllableByUserId;
 	QString m_deviceId;
+
 
 };
 
@@ -15503,6 +16021,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetSimilarArtistsParams {
@@ -15562,6 +16081,7 @@ private:
 	QList<ItemFields> m_fields;
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -15623,6 +16143,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetSimilarMoviesParams {
@@ -15682,6 +16203,7 @@ private:
 	QList<ItemFields> m_fields;
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -15743,6 +16265,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetSimilarTrailersParams {
@@ -15803,6 +16326,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetSpecialFeaturesParams {
@@ -15831,6 +16355,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetStartupConfigurationParams {
@@ -15843,6 +16368,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetStatusParams {
@@ -15854,6 +16380,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -15884,6 +16411,7 @@ private:
 
 	// Optional query parameters
 	QString m_userId;
+
 
 };
 
@@ -16063,6 +16591,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetStudioImageByIndexParams {
@@ -16238,6 +16767,7 @@ private:
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -16421,6 +16951,7 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetSubtitleParams {
@@ -16505,6 +17036,7 @@ private:
 	std::optional<qint64> m_endPositionTicks = std::nullopt;
 	std::optional<qint64> m_startPositionTicks = std::nullopt;
 
+
 };
 
 class GetSubtitlePlaylistParams {
@@ -16548,6 +17080,7 @@ private:
 	qint32 m_segmentLength;
 
 	// Optional query parameters
+
 
 };
 
@@ -16631,6 +17164,7 @@ private:
 	std::optional<bool> m_copyTimestamps = std::nullopt;
 	std::optional<qint64> m_endPositionTicks = std::nullopt;
 
+
 };
 
 class GetSuggestionsParams {
@@ -16701,6 +17235,7 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QStringList m_type;
 
+
 };
 
 class GetSystemInfoParams {
@@ -16712,6 +17247,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -16732,6 +17268,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -16764,6 +17301,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_isEnabled = std::nullopt;
 	std::optional<bool> m_isHidden = std::nullopt;
+
 
 };
 
@@ -16805,6 +17343,7 @@ private:
 	std::optional<bool> m_inheritFromParent = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetThemeSongsParams {
@@ -16844,6 +17383,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_inheritFromParent = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -16885,6 +17425,7 @@ private:
 	std::optional<bool> m_inheritFromParent = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetTimerParams {
@@ -16904,6 +17445,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -16957,17 +17499,28 @@ private:
 	std::optional<bool> m_isScheduled = std::nullopt;
 	QString m_seriesTimerId;
 
+
 };
 
 class GetTrailerRemoteSearchResultsParams {
 public:
 
+	/**
+	 * @brief Remote search query.	
+	 */
+	const QSharedPointer<TrailerInfoRemoteSearchQuery> &body() const;
+	void setBody(QSharedPointer<TrailerInfoRemoteSearchQuery> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<TrailerInfoRemoteSearchQuery> m_body;
 
 };
 
@@ -17771,6 +18324,7 @@ private:
 	QList<VideoType> m_videoTypes;
 	QList<qint32> m_years;
 
+
 };
 
 class GetTunerHostTypesParams {
@@ -17782,6 +18336,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -17973,6 +18528,7 @@ private:
 	QString m_transcodingProtocol;
 	QString m_userId;
 
+
 };
 
 class GetUpcomingEpisodesParams {
@@ -18075,6 +18631,7 @@ private:
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
+
 };
 
 class GetUserByIdParams {
@@ -18094,6 +18651,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -18273,6 +18831,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetUserImageByIndexParams {
@@ -18449,6 +19008,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetUserViewsParams {
@@ -18499,6 +19059,7 @@ private:
 	std::optional<bool> m_includeHidden = std::nullopt;
 	QStringList m_presetViews;
 
+
 };
 
 class GetUsersParams {
@@ -18531,6 +19092,7 @@ private:
 	std::optional<bool> m_isDisabled = std::nullopt;
 	std::optional<bool> m_isHidden = std::nullopt;
 
+
 };
 
 class GetUtcTimeParams {
@@ -18542,6 +19104,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -19043,6 +19606,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetVariantHlsVideoPlaylistParams {
@@ -19532,6 +20096,7 @@ private:
 	QString m_videoCodec;
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -20032,6 +20597,7 @@ private:
 	QString m_videoCodec;
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -20539,6 +21105,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class GetVirtualFoldersParams {
@@ -20551,6 +21118,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class GetWakeOnLanInfoParams {
@@ -20562,6 +21130,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -20592,6 +21161,7 @@ private:
 
 	// Optional query parameters
 	QString m_userId;
+
 
 };
 
@@ -20754,6 +21324,7 @@ private:
 	QString m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
+
 
 };
 
@@ -20930,6 +21501,7 @@ private:
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -21431,6 +22003,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadAudioStreamByContainerParams {
@@ -21929,6 +22502,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadGenreImageParams {
@@ -22107,6 +22681,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadGenreImageByIndexParams {
@@ -22282,6 +22857,7 @@ private:
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -22461,6 +23037,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadItemImage2Params {
@@ -22624,6 +23201,7 @@ private:
 	std::optional<qint32> m_height = std::nullopt;
 	std::optional<qint32> m_quality = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -22800,6 +23378,7 @@ private:
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -23309,6 +23888,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadMasterHlsVideoPlaylistParams {
@@ -23807,6 +24387,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadMusicGenreImageParams {
@@ -23985,6 +24566,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadMusicGenreImageByIndexParams {
@@ -24160,6 +24742,7 @@ private:
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -24339,6 +24922,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadPersonImageByIndexParams {
@@ -24514,6 +25098,7 @@ private:
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -24693,6 +25278,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadStudioImageByIndexParams {
@@ -24868,6 +25454,7 @@ private:
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -25059,6 +25646,7 @@ private:
 	QString m_transcodingProtocol;
 	QString m_userId;
 
+
 };
 
 class HeadUserImageParams {
@@ -25237,6 +25825,7 @@ private:
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class HeadUserImageByIndexParams {
@@ -25412,6 +26001,7 @@ private:
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -25912,6 +26502,7 @@ private:
 	QString m_videoCodec;
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
+
 
 };
 
@@ -26419,6 +27010,7 @@ private:
 	std::optional<qint32> m_videoStreamIndex = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
+
 };
 
 class InitiateParams {
@@ -26430,6 +27022,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -26481,6 +27074,7 @@ private:
 	QString m_repositoryUrl;
 	QString m_version;
 
+
 };
 
 class MarkFavoriteItemParams {
@@ -26508,6 +27102,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -26547,6 +27142,7 @@ private:
 	// Optional query parameters
 	QDateTime m_datePlayed;
 
+
 };
 
 class MarkUnplayedItemParams {
@@ -26575,6 +27171,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class MergeVersionsParams {
@@ -26594,6 +27191,7 @@ private:
 	QStringList m_ids;
 
 	// Optional query parameters
+
 
 };
 
@@ -26630,6 +27228,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -26769,6 +27368,7 @@ private:
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
 	std::optional<qint32> m_volumeLevel = std::nullopt;
 
+
 };
 
 class OnPlaybackStartParams {
@@ -26867,6 +27467,7 @@ private:
 	QString m_playSessionId;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
 
+
 };
 
 class OnPlaybackStoppedParams {
@@ -26944,6 +27545,7 @@ private:
 	QString m_nextMediaType;
 	QString m_playSessionId;
 	std::optional<qint64> m_positionTicks = std::nullopt;
+
 
 };
 
@@ -27049,6 +27651,13 @@ public:
 	void setUserIdNull();
 	
 	
+	/**
+	 * @brief The open live stream dto.	
+	 */
+	const QSharedPointer<OpenLiveStreamDto> &body() const;
+	void setBody(QSharedPointer<OpenLiveStreamDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
@@ -27066,6 +27675,9 @@ private:
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
 	QString m_userId;
+
+	// Body parameters
+	QSharedPointer<OpenLiveStreamDto> m_body;
 
 };
 
@@ -27088,6 +27700,7 @@ private:
 
 	// Optional query parameters
 	QString m_playSessionId;
+
 
 };
 
@@ -27134,6 +27747,7 @@ private:
 
 	// Optional query parameters
 	std::optional<qint64> m_startPositionTicks = std::nullopt;
+
 
 };
 
@@ -27195,6 +27809,7 @@ private:
 	std::optional<bool> m_replaceAllImages = std::nullopt;
 	std::optional<bool> m_replaceAllMetadata = std::nullopt;
 
+
 };
 
 class PostAddedMoviesParams {
@@ -27227,6 +27842,7 @@ private:
 	QString m_imdbId;
 	QString m_tmdbId;
 
+
 };
 
 class PostAddedSeriesParams {
@@ -27248,6 +27864,7 @@ private:
 
 	// Optional query parameters
 	QString m_tvdbId;
+
 
 };
 
@@ -27321,6 +27938,7 @@ private:
 	std::optional<bool> m_supportsPersistentIdentifier = std::nullopt;
 	std::optional<bool> m_supportsSync = std::nullopt;
 
+
 };
 
 class PostFullCapabilitiesParams {
@@ -27335,6 +27953,13 @@ public:
 	void setJellyfinIdNull();
 	
 	
+	/**
+	 * @brief The MediaBrowser.Model.Session.ClientCapabilities.	
+	 */
+	const QSharedPointer<ClientCapabilitiesDto> &body() const;
+	void setBody(QSharedPointer<ClientCapabilitiesDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
@@ -27342,6 +27967,9 @@ private:
 
 	// Optional query parameters
 	QString m_jellyfinId;
+
+	// Body parameters
+	QSharedPointer<ClientCapabilitiesDto> m_body;
 
 };
 
@@ -27355,17 +27983,28 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class PostUpdatedMediaParams {
 public:
 
+	/**
+	 * @brief A list of updated media paths.	
+	 */
+	const QList<MediaUpdateInfoDto> &body() const;
+	void setBody(QList<MediaUpdateInfoDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QList<MediaUpdateInfoDto> m_body;
 
 };
 
@@ -27399,6 +28038,7 @@ private:
 	QString m_imdbId;
 	QString m_tmdbId;
 
+
 };
 
 class PostUpdatedSeriesParams {
@@ -27420,6 +28060,7 @@ private:
 
 	// Optional query parameters
 	QString m_tvdbId;
+
 
 };
 
@@ -27459,6 +28100,7 @@ private:
 	// Optional query parameters
 	std::optional<qint32> m_index = std::nullopt;
 
+
 };
 
 class PostUserImageByIndexParams {
@@ -27495,6 +28137,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class ProcessConnectionManagerControlRequestParams {
@@ -27514,6 +28157,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -27535,6 +28179,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class ProcessMediaReceiverRegistrarControlRequestParams {
@@ -27555,6 +28200,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class RefreshLibraryParams {
@@ -27566,6 +28212,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -27594,6 +28241,7 @@ private:
 	QStringList m_ids;
 
 	// Optional query parameters
+
 
 };
 
@@ -27624,6 +28272,7 @@ private:
 
 	// Optional query parameters
 	QStringList m_entryIds;
+
 
 };
 
@@ -27667,6 +28316,7 @@ private:
 	QString m_path;
 	std::optional<bool> m_refreshLibrary = std::nullopt;
 
+
 };
 
 class RemoveUserFromSessionParams {
@@ -27694,6 +28344,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -27726,6 +28377,7 @@ private:
 	// Optional query parameters
 	QString m_name;
 	std::optional<bool> m_refreshLibrary = std::nullopt;
+
 
 };
 
@@ -27769,41 +28421,72 @@ private:
 	QString m_newName;
 	std::optional<bool> m_refreshLibrary = std::nullopt;
 
+
 };
 
 class ReportPlaybackProgressParams {
 public:
 
+	/**
+	 * @brief The playback progress info.	
+	 */
+	const QSharedPointer<PlaybackProgressInfo> &body() const;
+	void setBody(QSharedPointer<PlaybackProgressInfo> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<PlaybackProgressInfo> m_body;
 
 };
 
 class ReportPlaybackStartParams {
 public:
 
+	/**
+	 * @brief The playback start info.	
+	 */
+	const QSharedPointer<PlaybackStartInfo> &body() const;
+	void setBody(QSharedPointer<PlaybackStartInfo> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<PlaybackStartInfo> m_body;
 
 };
 
 class ReportPlaybackStoppedParams {
 public:
 
+	/**
+	 * @brief The playback stop info.	
+	 */
+	const QSharedPointer<PlaybackStopInfo> &body() const;
+	void setBody(QSharedPointer<PlaybackStopInfo> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<PlaybackStopInfo> m_body;
 
 };
 
@@ -27816,6 +28499,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -27847,6 +28531,7 @@ private:
 	// Optional query parameters
 	QString m_sessionId;
 
+
 };
 
 class ResetTunerParams {
@@ -27867,6 +28552,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class RestartApplicationParams {
@@ -27878,6 +28564,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -27898,6 +28585,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -27937,6 +28625,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_isPerfectMatch = std::nullopt;
 
+
 };
 
 class SendFullGeneralCommandParams {
@@ -27949,6 +28638,13 @@ public:
 	void setSessionId(QString newSessionId);
 
 	
+	/**
+	 * @brief The MediaBrowser.Model.Session.GeneralCommand.	
+	 */
+	const QSharedPointer<GeneralCommand> &body() const;
+	void setBody(QSharedPointer<GeneralCommand> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_sessionId;
@@ -27956,6 +28652,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<GeneralCommand> m_body;
 
 };
 
@@ -27984,6 +28683,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -28033,6 +28733,7 @@ private:
 	QString m_header;
 	std::optional<qint64> m_timeoutMs = std::nullopt;
 
+
 };
 
 class SendPlaystateCommandParams {
@@ -28081,6 +28782,7 @@ private:
 	QString m_controllingUserId;
 	std::optional<qint64> m_seekPositionTicks = std::nullopt;
 
+
 };
 
 class SendSystemCommandParams {
@@ -28109,17 +28811,28 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class SetChannelMappingParams {
 public:
 
+	/**
+	 * @brief The set channel mapping dto.	
+	 */
+	const QSharedPointer<SetChannelMappingDto> &body() const;
+	void setBody(QSharedPointer<SetChannelMappingDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<SetChannelMappingDto> m_body;
 
 };
 
@@ -28148,6 +28861,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -28185,6 +28899,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class SetReadParams {
@@ -28205,29 +28920,50 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class SetRemoteAccessParams {
 public:
 
+	/**
+	 * @brief The startup remote access dto.	
+	 */
+	const QSharedPointer<StartupRemoteAccessDto> &body() const;
+	void setBody(QSharedPointer<StartupRemoteAccessDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<StartupRemoteAccessDto> m_body;
 
 };
 
 class SetRepositoriesParams {
 public:
 
+	/**
+	 * @brief The list of package repositories.	
+	 */
+	const QList<RepositoryInfo> &body() const;
+	void setBody(QList<RepositoryInfo> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QList<RepositoryInfo> m_body;
 
 };
 
@@ -28249,6 +28985,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class ShutdownApplicationParams {
@@ -28260,6 +28997,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -28280,6 +29018,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -28313,6 +29052,7 @@ private:
 	QString m_deviceId;
 	QString m_playSessionId;
 
+
 };
 
 class StopTaskParams {
@@ -28333,29 +29073,50 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class SyncPlayBufferingParams {
 public:
 
+	/**
+	 * @brief The player status.	
+	 */
+	const QSharedPointer<BufferRequestDto> &body() const;
+	void setBody(QSharedPointer<BufferRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<BufferRequestDto> m_body;
 
 };
 
 class SyncPlayCreateGroupParams {
 public:
 
+	/**
+	 * @brief The settings of the new group.	
+	 */
+	const QSharedPointer<NewGroupRequestDto> &body() const;
+	void setBody(QSharedPointer<NewGroupRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<NewGroupRequestDto> m_body;
 
 };
 
@@ -28369,17 +29130,28 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class SyncPlayJoinGroupParams {
 public:
 
+	/**
+	 * @brief The group to join.	
+	 */
+	const QSharedPointer<JoinGroupRequestDto> &body() const;
+	void setBody(QSharedPointer<JoinGroupRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<JoinGroupRequestDto> m_body;
 
 };
 
@@ -28393,29 +29165,50 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class SyncPlayMovePlaylistItemParams {
 public:
 
+	/**
+	 * @brief The new position for the item.	
+	 */
+	const QSharedPointer<MovePlaylistItemRequestDto> &body() const;
+	void setBody(QSharedPointer<MovePlaylistItemRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<MovePlaylistItemRequestDto> m_body;
 
 };
 
 class SyncPlayNextItemParams {
 public:
 
+	/**
+	 * @brief The current item information.	
+	 */
+	const QSharedPointer<NextItemRequestDto> &body() const;
+	void setBody(QSharedPointer<NextItemRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<NextItemRequestDto> m_body;
 
 };
 
@@ -28429,137 +29222,248 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class SyncPlayPingParams {
 public:
 
+	/**
+	 * @brief The new ping.	
+	 */
+	const QSharedPointer<PingRequestDto> &body() const;
+	void setBody(QSharedPointer<PingRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<PingRequestDto> m_body;
 
 };
 
 class SyncPlayPreviousItemParams {
 public:
 
+	/**
+	 * @brief The current item information.	
+	 */
+	const QSharedPointer<PreviousItemRequestDto> &body() const;
+	void setBody(QSharedPointer<PreviousItemRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<PreviousItemRequestDto> m_body;
 
 };
 
 class SyncPlayQueueParams {
 public:
 
+	/**
+	 * @brief The items to add.	
+	 */
+	const QSharedPointer<QueueRequestDto> &body() const;
+	void setBody(QSharedPointer<QueueRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<QueueRequestDto> m_body;
 
 };
 
 class SyncPlayReadyParams {
 public:
 
+	/**
+	 * @brief The player status.	
+	 */
+	const QSharedPointer<ReadyRequestDto> &body() const;
+	void setBody(QSharedPointer<ReadyRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<ReadyRequestDto> m_body;
 
 };
 
 class SyncPlayRemoveFromPlaylistParams {
 public:
 
+	/**
+	 * @brief The items to remove.	
+	 */
+	const QSharedPointer<RemoveFromPlaylistRequestDto> &body() const;
+	void setBody(QSharedPointer<RemoveFromPlaylistRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<RemoveFromPlaylistRequestDto> m_body;
 
 };
 
 class SyncPlaySeekParams {
 public:
 
+	/**
+	 * @brief The new playback position.	
+	 */
+	const QSharedPointer<SeekRequestDto> &body() const;
+	void setBody(QSharedPointer<SeekRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<SeekRequestDto> m_body;
 
 };
 
 class SyncPlaySetIgnoreWaitParams {
 public:
 
+	/**
+	 * @brief The settings to set.	
+	 */
+	const QSharedPointer<IgnoreWaitRequestDto> &body() const;
+	void setBody(QSharedPointer<IgnoreWaitRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<IgnoreWaitRequestDto> m_body;
 
 };
 
 class SyncPlaySetNewQueueParams {
 public:
 
+	/**
+	 * @brief The new playlist to play in the group.	
+	 */
+	const QSharedPointer<PlayRequestDto> &body() const;
+	void setBody(QSharedPointer<PlayRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<PlayRequestDto> m_body;
 
 };
 
 class SyncPlaySetPlaylistItemParams {
 public:
 
+	/**
+	 * @brief The new item to play.	
+	 */
+	const QSharedPointer<SetPlaylistItemRequestDto> &body() const;
+	void setBody(QSharedPointer<SetPlaylistItemRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<SetPlaylistItemRequestDto> m_body;
 
 };
 
 class SyncPlaySetRepeatModeParams {
 public:
 
+	/**
+	 * @brief The new repeat mode.	
+	 */
+	const QSharedPointer<SetRepeatModeRequestDto> &body() const;
+	void setBody(QSharedPointer<SetRepeatModeRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<SetRepeatModeRequestDto> m_body;
 
 };
 
 class SyncPlaySetShuffleModeParams {
 public:
 
+	/**
+	 * @brief The new shuffle mode.	
+	 */
+	const QSharedPointer<SetShuffleModeRequestDto> &body() const;
+	void setBody(QSharedPointer<SetShuffleModeRequestDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<SetShuffleModeRequestDto> m_body;
 
 };
 
@@ -28573,6 +29477,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class SyncPlayUnpauseParams {
@@ -28584,6 +29489,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -28604,6 +29510,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
 
 };
 
@@ -28633,6 +29540,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class UnmarkFavoriteItemParams {
@@ -28661,17 +29569,28 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class UpdateConfigurationParams {
 public:
 
+	/**
+	 * @brief Configuration.	
+	 */
+	const QSharedPointer<ServerConfiguration> &body() const;
+	void setBody(QSharedPointer<ServerConfiguration> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<ServerConfiguration> m_body;
 
 };
 
@@ -28685,6 +29604,13 @@ public:
 	void setJellyfinId(QString newJellyfinId);
 
 	
+	/**
+	 * @brief Device Options.	
+	 */
+	const QSharedPointer<DeviceOptions> &body() const;
+	void setBody(QSharedPointer<DeviceOptions> newBody);
+
+	
 private:
 	// Required path parameters
 	
@@ -28692,6 +29618,9 @@ private:
 	QString m_jellyfinId;
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<DeviceOptions> m_body;
 
 };
 
@@ -28719,6 +29648,13 @@ public:
 	void setUserId(QString newUserId);
 
 	
+	/**
+	 * @brief New Display Preferences object.	
+	 */
+	const QSharedPointer<DisplayPreferencesDto> &body() const;
+	void setBody(QSharedPointer<DisplayPreferencesDto> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_displayPreferencesId;
@@ -28729,17 +29665,30 @@ private:
 
 	// Optional query parameters
 
+	// Body parameters
+	QSharedPointer<DisplayPreferencesDto> m_body;
+
 };
 
 class UpdateInitialConfigurationParams {
 public:
 
+	/**
+	 * @brief The updated startup configuration.	
+	 */
+	const QSharedPointer<StartupConfigurationDto> &body() const;
+	void setBody(QSharedPointer<StartupConfigurationDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<StartupConfigurationDto> m_body;
 
 };
 
@@ -28753,6 +29702,13 @@ public:
 	void setItemId(QString newItemId);
 
 	
+	/**
+	 * @brief The new item properties.	
+	 */
+	const QSharedPointer<BaseItemDto> &body() const;
+	void setBody(QSharedPointer<BaseItemDto> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_itemId;
@@ -28760,6 +29716,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<BaseItemDto> m_body;
 
 };
 
@@ -28790,6 +29749,7 @@ private:
 
 	// Optional query parameters
 	QString m_contentType;
+
 
 };
 
@@ -28837,29 +29797,50 @@ private:
 	// Optional query parameters
 	std::optional<qint32> m_newIndex = std::nullopt;
 
+
 };
 
 class UpdateLibraryOptionsParams {
 public:
 
+	/**
+	 * @brief The library name and options.	
+	 */
+	const QSharedPointer<UpdateLibraryOptionsDto> &body() const;
+	void setBody(QSharedPointer<UpdateLibraryOptionsDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<UpdateLibraryOptionsDto> m_body;
 
 };
 
 class UpdateMediaEncoderPathParams {
 public:
 
+	/**
+	 * @brief Media encoder path form body.	
+	 */
+	const QSharedPointer<MediaEncoderPathDto> &body() const;
+	void setBody(QSharedPointer<MediaEncoderPathDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<MediaEncoderPathDto> m_body;
 
 };
 
@@ -28875,6 +29856,13 @@ public:
 	void setNameNull();
 	
 	
+	/**
+	 * @brief The path info.	
+	 */
+	const QSharedPointer<MediaPathInfo> &body() const;
+	void setBody(QSharedPointer<MediaPathInfo> newBody);
+
+	
 private:
 	// Required path parameters
 	
@@ -28882,6 +29870,9 @@ private:
 
 	// Optional query parameters
 	QString m_name;
+
+	// Body parameters
+	QSharedPointer<MediaPathInfo> m_body;
 
 };
 
@@ -28903,6 +29894,7 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class UpdatePluginConfigurationParams {
@@ -28923,17 +29915,28 @@ private:
 
 	// Optional query parameters
 
+
 };
 
 class UpdatePluginSecurityInfoParams {
 public:
 
+	/**
+	 * @brief Plugin security info.	
+	 */
+	const QSharedPointer<PluginSecurityInfo> &body() const;
+	void setBody(QSharedPointer<PluginSecurityInfo> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<PluginSecurityInfo> m_body;
 
 };
 
@@ -28947,6 +29950,13 @@ public:
 	void setProfileId(QString newProfileId);
 
 	
+	/**
+	 * @brief Device profile.	
+	 */
+	const QSharedPointer<DeviceProfile> &body() const;
+	void setBody(QSharedPointer<DeviceProfile> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_profileId;
@@ -28954,6 +29964,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<DeviceProfile> m_body;
 
 };
 
@@ -28967,6 +29980,13 @@ public:
 	void setTimerId(QString newTimerId);
 
 	
+	/**
+	 * @brief New series timer info.	
+	 */
+	const QSharedPointer<SeriesTimerInfoDto> &body() const;
+	void setBody(QSharedPointer<SeriesTimerInfoDto> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_timerId;
@@ -28975,17 +29995,30 @@ private:
 
 	// Optional query parameters
 
+	// Body parameters
+	QSharedPointer<SeriesTimerInfoDto> m_body;
+
 };
 
 class UpdateStartupUserParams {
 public:
 
+	/**
+	 * @brief The DTO containing username and password.	
+	 */
+	const QSharedPointer<StartupUserDto> &body() const;
+	void setBody(QSharedPointer<StartupUserDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<StartupUserDto> m_body;
 
 };
 
@@ -28999,6 +30032,13 @@ public:
 	void setTaskId(QString newTaskId);
 
 	
+	/**
+	 * @brief Triggers.	
+	 */
+	const QList<TaskTriggerInfo> &body() const;
+	void setBody(QList<TaskTriggerInfo> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_taskId;
@@ -29006,6 +30046,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QList<TaskTriggerInfo> m_body;
 
 };
 
@@ -29019,6 +30062,13 @@ public:
 	void setTimerId(QString newTimerId);
 
 	
+	/**
+	 * @brief New timer info.	
+	 */
+	const QSharedPointer<TimerInfoDto> &body() const;
+	void setBody(QSharedPointer<TimerInfoDto> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_timerId;
@@ -29026,6 +30076,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<TimerInfoDto> m_body;
 
 };
 
@@ -29039,6 +30092,13 @@ public:
 	void setUserId(QString newUserId);
 
 	
+	/**
+	 * @brief The updated user model.	
+	 */
+	const QSharedPointer<UserDto> &body() const;
+	void setBody(QSharedPointer<UserDto> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_userId;
@@ -29046,6 +30106,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<UserDto> m_body;
 
 };
 
@@ -29059,6 +30122,13 @@ public:
 	void setUserId(QString newUserId);
 
 	
+	/**
+	 * @brief The new user configuration.	
+	 */
+	const QSharedPointer<UserConfiguration> &body() const;
+	void setBody(QSharedPointer<UserConfiguration> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_userId;
@@ -29066,6 +30136,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<UserConfiguration> m_body;
 
 };
 
@@ -29079,6 +30152,13 @@ public:
 	void setUserId(QString newUserId);
 
 	
+	/**
+	 * @brief The M:Jellyfin.Api.Controllers.UserController.UpdateUserEasyPassword(System.Guid,Jellyfin.Api.Models.UserDtos.UpdateUserEasyPassword) request.	
+	 */
+	const QSharedPointer<UpdateUserEasyPassword> &body() const;
+	void setBody(QSharedPointer<UpdateUserEasyPassword> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_userId;
@@ -29086,6 +30166,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<UpdateUserEasyPassword> m_body;
 
 };
 
@@ -29125,6 +30208,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_likes = std::nullopt;
 
+
 };
 
 class UpdateUserPasswordParams {
@@ -29137,6 +30221,13 @@ public:
 	void setUserId(QString newUserId);
 
 	
+	/**
+	 * @brief The M:Jellyfin.Api.Controllers.UserController.UpdateUserPassword(System.Guid,Jellyfin.Api.Models.UserDtos.UpdateUserPassword) request.	
+	 */
+	const QSharedPointer<UpdateUserPassword> &body() const;
+	void setBody(QSharedPointer<UpdateUserPassword> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_userId;
@@ -29144,6 +30235,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<UpdateUserPassword> m_body;
 
 };
 
@@ -29157,6 +30251,13 @@ public:
 	void setUserId(QString newUserId);
 
 	
+	/**
+	 * @brief The new user policy.	
+	 */
+	const QSharedPointer<UserPolicy> &body() const;
+	void setBody(QSharedPointer<UserPolicy> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_userId;
@@ -29164,6 +30265,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<UserPolicy> m_body;
 
 };
 
@@ -29177,6 +30281,13 @@ public:
 	void setItemId(QString newItemId);
 
 	
+	/**
+	 * @brief The request body.	
+	 */
+	const QSharedPointer<UploadSubtitleDto> &body() const;
+	void setBody(QSharedPointer<UploadSubtitleDto> newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_itemId;
@@ -29185,17 +30296,30 @@ private:
 
 	// Optional query parameters
 
+	// Body parameters
+	QSharedPointer<UploadSubtitleDto> m_body;
+
 };
 
 class ValidatePathParams {
 public:
 
+	/**
+	 * @brief Validate request object.	
+	 */
+	const QSharedPointer<ValidatePathDto> &body() const;
+	void setBody(QSharedPointer<ValidatePathDto> newBody);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
 
 	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<ValidatePathDto> m_body;
 
 };
 

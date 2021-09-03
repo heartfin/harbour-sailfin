@@ -159,7 +159,19 @@ public:
             this->m_reply->deleteLater();
         }
         this->m_isRunning = true;
-        m_reply = this->m_apiClient->get(path(this->m_parameters), query(this->m_parameters));
+        switch(operation()) {
+        case QNetworkAccessManager::GetOperation:
+            m_reply = this->m_apiClient->get(path(this->m_parameters), query(this->m_parameters));
+            break;
+        case QNetworkAccessManager::PostOperation:
+            m_reply = this->m_apiClient->post(path(this->m_parameters), body(this->m_parameters), query(this->m_parameters));
+            break;
+        default:
+            this->stopWithError(QStringLiteral("Unsupported network okperation %1").arg(operation()));
+            return;
+
+        }
+
         this->connect(m_reply, &QNetworkReply::finished, this, &HttpLoader<R, P>::onRequestFinished);
     }
 
@@ -186,6 +198,8 @@ protected:
      */
     virtual QString path(const P &parameters) const = 0;
     virtual QUrlQuery query(const P &parameters) const = 0;
+    virtual QByteArray body(const P &parameters) const = 0;
+    virtual QNetworkAccessManager::Operation operation() const = 0;
 private:
     QNetworkReply *m_reply = nullptr;
     QFutureWatcher<std::optional<R>> m_parsedWatcher;

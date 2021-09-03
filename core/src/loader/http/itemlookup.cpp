@@ -54,6 +54,16 @@ QUrlQuery GetExternalIdInfosLoader::query(const GetExternalIdInfosParams &params
 	return result;
 }
 
+QByteArray GetExternalIdInfosLoader::body(const GetExternalIdInfosParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetExternalIdInfosLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetBookRemoteSearchResultsLoader::GetBookRemoteSearchResultsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<RemoteSearchResult>, GetBookRemoteSearchResultsParams>(apiClient) {}
 
@@ -71,6 +81,16 @@ QUrlQuery GetBookRemoteSearchResultsLoader::query(const GetBookRemoteSearchResul
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetBookRemoteSearchResultsLoader::body(const GetBookRemoteSearchResultsParams &params) const {
+	return Support::toString<QSharedPointer<BookInfoRemoteSearchQuery>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetBookRemoteSearchResultsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 GetBoxSetRemoteSearchResultsLoader::GetBoxSetRemoteSearchResultsLoader(ApiClient *apiClient)
@@ -92,6 +112,16 @@ QUrlQuery GetBoxSetRemoteSearchResultsLoader::query(const GetBoxSetRemoteSearchR
 	return result;
 }
 
+QByteArray GetBoxSetRemoteSearchResultsLoader::body(const GetBoxSetRemoteSearchResultsParams &params) const {
+	return Support::toString<QSharedPointer<BoxSetInfoRemoteSearchQuery>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetBoxSetRemoteSearchResultsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetMovieRemoteSearchResultsLoader::GetMovieRemoteSearchResultsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<RemoteSearchResult>, GetMovieRemoteSearchResultsParams>(apiClient) {}
 
@@ -109,6 +139,16 @@ QUrlQuery GetMovieRemoteSearchResultsLoader::query(const GetMovieRemoteSearchRes
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetMovieRemoteSearchResultsLoader::body(const GetMovieRemoteSearchResultsParams &params) const {
+	return Support::toString<QSharedPointer<MovieInfoRemoteSearchQuery>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetMovieRemoteSearchResultsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 GetMusicAlbumRemoteSearchResultsLoader::GetMusicAlbumRemoteSearchResultsLoader(ApiClient *apiClient)
@@ -130,6 +170,16 @@ QUrlQuery GetMusicAlbumRemoteSearchResultsLoader::query(const GetMusicAlbumRemot
 	return result;
 }
 
+QByteArray GetMusicAlbumRemoteSearchResultsLoader::body(const GetMusicAlbumRemoteSearchResultsParams &params) const {
+	return Support::toString<QSharedPointer<AlbumInfoRemoteSearchQuery>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetMusicAlbumRemoteSearchResultsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetMusicArtistRemoteSearchResultsLoader::GetMusicArtistRemoteSearchResultsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<RemoteSearchResult>, GetMusicArtistRemoteSearchResultsParams>(apiClient) {}
 
@@ -147,6 +197,16 @@ QUrlQuery GetMusicArtistRemoteSearchResultsLoader::query(const GetMusicArtistRem
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetMusicArtistRemoteSearchResultsLoader::body(const GetMusicArtistRemoteSearchResultsParams &params) const {
+	return Support::toString<QSharedPointer<ArtistInfoRemoteSearchQuery>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetMusicArtistRemoteSearchResultsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 GetMusicVideoRemoteSearchResultsLoader::GetMusicVideoRemoteSearchResultsLoader(ApiClient *apiClient)
@@ -168,6 +228,16 @@ QUrlQuery GetMusicVideoRemoteSearchResultsLoader::query(const GetMusicVideoRemot
 	return result;
 }
 
+QByteArray GetMusicVideoRemoteSearchResultsLoader::body(const GetMusicVideoRemoteSearchResultsParams &params) const {
+	return Support::toString<QSharedPointer<MusicVideoInfoRemoteSearchQuery>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetMusicVideoRemoteSearchResultsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetPersonRemoteSearchResultsLoader::GetPersonRemoteSearchResultsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<RemoteSearchResult>, GetPersonRemoteSearchResultsParams>(apiClient) {}
 
@@ -185,6 +255,16 @@ QUrlQuery GetPersonRemoteSearchResultsLoader::query(const GetPersonRemoteSearchR
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetPersonRemoteSearchResultsLoader::body(const GetPersonRemoteSearchResultsParams &params) const {
+	return Support::toString<QSharedPointer<PersonLookupInfoRemoteSearchQuery>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetPersonRemoteSearchResultsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 GetSeriesRemoteSearchResultsLoader::GetSeriesRemoteSearchResultsLoader(ApiClient *apiClient)
@@ -206,6 +286,16 @@ QUrlQuery GetSeriesRemoteSearchResultsLoader::query(const GetSeriesRemoteSearchR
 	return result;
 }
 
+QByteArray GetSeriesRemoteSearchResultsLoader::body(const GetSeriesRemoteSearchResultsParams &params) const {
+	return Support::toString<QSharedPointer<SeriesInfoRemoteSearchQuery>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetSeriesRemoteSearchResultsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetTrailerRemoteSearchResultsLoader::GetTrailerRemoteSearchResultsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<RemoteSearchResult>, GetTrailerRemoteSearchResultsParams>(apiClient) {}
 
@@ -223,6 +313,16 @@ QUrlQuery GetTrailerRemoteSearchResultsLoader::query(const GetTrailerRemoteSearc
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetTrailerRemoteSearchResultsLoader::body(const GetTrailerRemoteSearchResultsParams &params) const {
+	return Support::toString<QSharedPointer<TrailerInfoRemoteSearchQuery>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetTrailerRemoteSearchResultsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 

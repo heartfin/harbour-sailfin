@@ -54,6 +54,16 @@ QUrlQuery GetGeneralImagesLoader::query(const GetGeneralImagesParams &params) co
 	return result;
 }
 
+QByteArray GetGeneralImagesLoader::body(const GetGeneralImagesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetGeneralImagesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetMediaInfoImagesLoader::GetMediaInfoImagesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<ImageByNameInfo>, GetMediaInfoImagesParams>(apiClient) {}
 
@@ -73,6 +83,16 @@ QUrlQuery GetMediaInfoImagesLoader::query(const GetMediaInfoImagesParams &params
 	return result;
 }
 
+QByteArray GetMediaInfoImagesLoader::body(const GetMediaInfoImagesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetMediaInfoImagesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetRatingImagesLoader::GetRatingImagesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<ImageByNameInfo>, GetRatingImagesParams>(apiClient) {}
 
@@ -90,6 +110,16 @@ QUrlQuery GetRatingImagesLoader::query(const GetRatingImagesParams &params) cons
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetRatingImagesLoader::body(const GetRatingImagesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRatingImagesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

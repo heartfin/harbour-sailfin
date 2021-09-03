@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetMusicGenresParams& parameters) const override;
 	QUrlQuery query(const GetMusicGenresParams& parameters) const override;
+	QByteArray body(const GetMusicGenresParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a music genre, by name.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetMusicGenreParams& parameters) const override;
 	QUrlQuery query(const GetMusicGenreParams& parameters) const override;
+	QByteArray body(const GetMusicGenreParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

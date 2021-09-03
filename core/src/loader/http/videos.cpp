@@ -57,6 +57,16 @@ QUrlQuery GetAdditionalPartLoader::query(const GetAdditionalPartParams &params) 
 	return result;
 }
 
+QByteArray GetAdditionalPartLoader::body(const GetAdditionalPartParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetAdditionalPartLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

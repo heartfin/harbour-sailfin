@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetGroupingOptionsParams& parameters) const override;
 	QUrlQuery query(const GetGroupingOptionsParams& parameters) const override;
+	QByteArray body(const GetGroupingOptionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get user views.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetUserViewsParams& parameters) const override;
 	QUrlQuery query(const GetUserViewsParams& parameters) const override;
+	QByteArray body(const GetUserViewsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QHostInfo>
 #include <QObject>
 #include <QQmlListProperty>
+#include <QScopedPointer>
 #include <QString>
 #include <QSysInfo>
 #include <QtQml>
@@ -46,12 +47,18 @@ namespace Jellyfin {
 class PlaybackManager;
 class WebSocket;
 
+namespace ViewModel {
+class Settings;
+}
+
 namespace DTO {
     class UserItemDataDto; // Keep it as an opaque pointer
     using UserData = UserItemDataDto;
 }
 
 using namespace DTO;
+
+class ApiClientPrivate;
 
 /**
  * @brief An Api client for Jellyfin. Handles requests and authentication.
@@ -82,16 +89,19 @@ class ApiClient : public QObject {
     friend class WebSocket;
     friend class PlaybackManager;
     Q_OBJECT
+    Q_DECLARE_PRIVATE(ApiClient);
 public:
     explicit ApiClient(QObject *parent = nullptr);
-    Q_PROPERTY(QString baseUrl MEMBER m_baseUrl READ baseUrl NOTIFY baseUrlChanged)
+    virtual ~ApiClient();
+    Q_PROPERTY(QString baseUrl READ baseUrl WRITE setBaseUrl NOTIFY baseUrlChanged)
     Q_PROPERTY(bool authenticated READ authenticated WRITE setAuthenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString userId READ userId NOTIFY userIdChanged)
     Q_PROPERTY(QJsonObject deviceProfile READ deviceProfile NOTIFY deviceProfileChanged)
     Q_PROPERTY(QString version READ version)
     Q_PROPERTY(EventBus *eventbus READ eventbus FINAL)
-    Q_PROPERTY(WebSocket *websocket READ websocket FINAL)
+    Q_PROPERTY(Jellyfin::WebSocket *websocket READ websocket FINAL)
     Q_PROPERTY(QVariantList supportedCommands READ supportedCommands WRITE setSupportedCommands NOTIFY supportedCommandsChanged)
+    Q_PROPERTY(Jellyfin::ViewModel::Settings *settings READ settings NOTIFY settingsChanged)
     /**
      * Wether this ApiClient operates in "online mode".
      *
@@ -100,20 +110,11 @@ public:
      */
     Q_PROPERTY(bool online READ online NOTIFY onlineChanged)
 
-    /*QNetworkReply *handleRequest(QString path, QStringList sort, Pagination *pagination,
-                                 QVariantMap filters, QStringList fields, QStringList expand, QString id);*/
-
-    bool authenticated() const { return m_authenticated; }
-    void setBaseUrl(QString url) {
-        this->m_baseUrl = url;
-        if (this->m_baseUrl.endsWith("/")) {
-            this->m_baseUrl.chop(1);
-        }
-        emit this->baseUrlChanged(m_baseUrl);
-    }
-
+    bool authenticated() const;
+    void setBaseUrl(const QString &url);
     QNetworkReply *get(const QString &path, const QUrlQuery &params = QUrlQuery());
-    QNetworkReply *post(const QString &path, const QJsonDocument &data = QJsonDocument(), const QUrlQuery &params = QUrlQuery());
+    QNetworkReply *post(const QString &path, const QJsonDocument &data, const QUrlQuery &params = QUrlQuery());
+    QNetworkReply *post(const QString &path, const QByteArray &data = QByteArray(), const QUrlQuery &params = QUrlQuery());
 
     enum ApiError {
         JSON_ERROR,
@@ -123,9 +124,9 @@ public:
     };
     Q_ENUM(ApiError)
 
-    const QString &baseUrl() const { return this->m_baseUrl; }
-    const QString userId() const { return m_userId; }
-    const QString &deviceId() const { return m_deviceId; }
+    const QString &baseUrl() const;
+    const QString &userId() const;
+    const QString &deviceId() const;
     /**
      * @brief QML applications can set this type to indicate which commands they support.
      *
@@ -136,19 +137,21 @@ public:
      * The list support commands will be sent to the Jellyfin server. QML applications should listen to
      * the events emitted by the eventBus and act accordingly.
      */
-    QVariantList supportedCommands() const { return m_supportedCommands; }
-    void setSupportedCommands(QVariantList newSupportedCommands) { m_supportedCommands = newSupportedCommands; emit supportedCommandsChanged(); }
-    QJsonObject &deviceProfile() { return m_deviceProfile; }
-    QJsonObject &playbackDeviceProfile() { return m_playbackDeviceProfile; }
+    QVariantList supportedCommands() const ;
+    void setSupportedCommands(QVariantList newSupportedCommands);
+    const QJsonObject &deviceProfile() const;
+    const QJsonObject &playbackDeviceProfile() const;
     /**
      * @brief Retrieves the authentication token. Null QString if not authenticated.
      * @note This is not the full authentication header, just the token.
      */
-    QString &token() { return m_token; }
+    const QString &token() const;
     QString version() const;
-    EventBus *eventbus() const { return m_eventbus; }
-    WebSocket *websocket() const { return m_webSocket; }
-    bool online() const { return m_online; }
+    bool online() const;
+
+    EventBus *eventbus() const;
+    WebSocket *websocket() const;
+    ViewModel::Settings * settings() const;
 
     /**
      * @brief Sets the error handler of a reply to this classes default error handler
@@ -179,6 +182,7 @@ signals:
 
     void authenticatedChanged(bool authenticated);
     void baseUrlChanged(const QString &baseUrl);
+    void settingsChanged();
 
     /**
      * @brief Set-up is required. You'll need to manually set up the baseUrl-property, call setupConnection
@@ -241,13 +245,13 @@ protected:
      * @param request The request to add headers to
      * @param path The path to which the request is being made
      */
-    void addBaseRequestHeaders(QNetworkRequest &request, const QString &path, const QUrlQuery &params = QUrlQuery());
+    void addBaseRequestHeaders(QNetworkRequest &request, const QString &path, const QUrlQuery &params = QUrlQuery()) const;
 
     /**
      * @brief Adds the authorization to the header
      * @param The request to add the header to
      */
-    void addTokenHeader(QNetworkRequest &request);
+    void addTokenHeader(QNetworkRequest &request) const;
 
     /**
      * @brief getBrandingConfiguration Gets the login message and custom CSS (which we ignore)
@@ -265,47 +269,16 @@ protected:
 
 
 private:
+    QScopedPointer<ApiClientPrivate> d_ptr;
     QNetworkAccessManager m_naManager;
     /*
      * State information
      */
-    WebSocket *m_webSocket;
-    EventBus *m_eventbus;
-    CredentialsManager * m_credManager;
-    QString m_token;
-    QString m_deviceName;
-    QString m_deviceId;
-    QString m_userId;
-    QJsonObject m_deviceProfile;
-    QJsonObject m_playbackDeviceProfile;
-    bool m_online = true;
-    QVariantList m_supportedCommands;
-
-    bool m_authenticated = false;
-    /**
-     * @brief The base url of the request.
-     */
-    QString m_baseUrl;
-
     /*
      * Setters
      */
-
     void setAuthenticated(bool authenticated);
-
-    void setUserId(QString userId) {
-        this->m_userId = userId;
-        emit userIdChanged(userId);
-    }
-
-    /*
-     * Utilities
-     */
-
-    /**
-     * @brief Retreives the device ID or generates a random one.
-     */
-    QUuid retrieveDeviceId();
+    void setUserId(const QString &userId);
 
     /**
      * @brief Returns the statusCode of a QNetworkReply

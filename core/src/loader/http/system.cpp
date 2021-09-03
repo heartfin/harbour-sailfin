@@ -54,6 +54,16 @@ QUrlQuery GetEndpointInfoLoader::query(const GetEndpointInfoParams &params) cons
 	return result;
 }
 
+QByteArray GetEndpointInfoLoader::body(const GetEndpointInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetEndpointInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetSystemInfoLoader::GetSystemInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<SystemInfo, GetSystemInfoParams>(apiClient) {}
 
@@ -71,6 +81,16 @@ QUrlQuery GetSystemInfoLoader::query(const GetSystemInfoParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetSystemInfoLoader::body(const GetSystemInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSystemInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetPublicSystemInfoLoader::GetPublicSystemInfoLoader(ApiClient *apiClient)
@@ -92,6 +112,16 @@ QUrlQuery GetPublicSystemInfoLoader::query(const GetPublicSystemInfoParams &para
 	return result;
 }
 
+QByteArray GetPublicSystemInfoLoader::body(const GetPublicSystemInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPublicSystemInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetServerLogsLoader::GetServerLogsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<LogFile>, GetServerLogsParams>(apiClient) {}
 
@@ -109,6 +139,16 @@ QUrlQuery GetServerLogsLoader::query(const GetServerLogsParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetServerLogsLoader::body(const GetServerLogsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetServerLogsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetPingSystemLoader::GetPingSystemLoader(ApiClient *apiClient)
@@ -130,6 +170,16 @@ QUrlQuery GetPingSystemLoader::query(const GetPingSystemParams &params) const {
 	return result;
 }
 
+QByteArray GetPingSystemLoader::body(const GetPingSystemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPingSystemLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 PostPingSystemLoader::PostPingSystemLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QString, PostPingSystemParams>(apiClient) {}
 
@@ -149,6 +199,16 @@ QUrlQuery PostPingSystemLoader::query(const PostPingSystemParams &params) const 
 	return result;
 }
 
+QByteArray PostPingSystemLoader::body(const PostPingSystemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation PostPingSystemLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetWakeOnLanInfoLoader::GetWakeOnLanInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<WakeOnLanInfo>, GetWakeOnLanInfoParams>(apiClient) {}
 
@@ -166,6 +226,16 @@ QUrlQuery GetWakeOnLanInfoLoader::query(const GetWakeOnLanInfoParams &params) co
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetWakeOnLanInfoLoader::body(const GetWakeOnLanInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetWakeOnLanInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

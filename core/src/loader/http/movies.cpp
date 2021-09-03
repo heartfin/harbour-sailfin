@@ -69,6 +69,16 @@ QUrlQuery GetMovieRecommendationsLoader::query(const GetMovieRecommendationsPara
 	return result;
 }
 
+QByteArray GetMovieRecommendationsLoader::body(const GetMovieRecommendationsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetMovieRecommendationsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

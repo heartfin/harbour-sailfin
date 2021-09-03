@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetStudiosParams& parameters) const override;
 	QUrlQuery query(const GetStudiosParams& parameters) const override;
+	QByteArray body(const GetStudiosParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a studio by name.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetStudioParams& parameters) const override;
 	QUrlQuery query(const GetStudioParams& parameters) const override;
+	QByteArray body(const GetStudioParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

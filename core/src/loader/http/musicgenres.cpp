@@ -102,6 +102,16 @@ QUrlQuery GetMusicGenresLoader::query(const GetMusicGenresParams &params) const 
 	return result;
 }
 
+QByteArray GetMusicGenresLoader::body(const GetMusicGenresParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetMusicGenresLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetMusicGenreLoader::GetMusicGenreLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetMusicGenreParams>(apiClient) {}
 
@@ -122,6 +132,16 @@ QUrlQuery GetMusicGenreLoader::query(const GetMusicGenreParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetMusicGenreLoader::body(const GetMusicGenreParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetMusicGenreLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

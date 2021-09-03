@@ -66,6 +66,16 @@ QUrlQuery GetQueryFiltersLegacyLoader::query(const GetQueryFiltersLegacyParams &
 	return result;
 }
 
+QByteArray GetQueryFiltersLegacyLoader::body(const GetQueryFiltersLegacyParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetQueryFiltersLegacyLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetQueryFiltersLoader::GetQueryFiltersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QueryFilters, GetQueryFiltersParams>(apiClient) {}
 
@@ -113,6 +123,16 @@ QUrlQuery GetQueryFiltersLoader::query(const GetQueryFiltersParams &params) cons
 	}
 	
 	return result;
+}
+
+QByteArray GetQueryFiltersLoader::body(const GetQueryFiltersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetQueryFiltersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

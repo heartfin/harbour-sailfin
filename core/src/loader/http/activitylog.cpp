@@ -66,6 +66,16 @@ QUrlQuery GetLogEntriesLoader::query(const GetLogEntriesParams &params) const {
 	return result;
 }
 
+QByteArray GetLogEntriesLoader::body(const GetLogEntriesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLogEntriesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

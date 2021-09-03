@@ -93,6 +93,16 @@ QUrlQuery GetPersonsLoader::query(const GetPersonsParams &params) const {
 	return result;
 }
 
+QByteArray GetPersonsLoader::body(const GetPersonsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPersonsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetPersonLoader::GetPersonLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetPersonParams>(apiClient) {}
 
@@ -113,6 +123,16 @@ QUrlQuery GetPersonLoader::query(const GetPersonParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetPersonLoader::body(const GetPersonParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPersonLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

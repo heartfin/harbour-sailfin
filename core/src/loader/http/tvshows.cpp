@@ -96,6 +96,16 @@ QUrlQuery GetEpisodesLoader::query(const GetEpisodesParams &params) const {
 	return result;
 }
 
+QByteArray GetEpisodesLoader::body(const GetEpisodesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetEpisodesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetSeasonsLoader::GetSeasonsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetSeasonsParams>(apiClient) {}
 
@@ -140,6 +150,16 @@ QUrlQuery GetSeasonsLoader::query(const GetSeasonsParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetSeasonsLoader::body(const GetSeasonsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSeasonsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetNextUpLoader::GetNextUpLoader(ApiClient *apiClient)
@@ -197,6 +217,16 @@ QUrlQuery GetNextUpLoader::query(const GetNextUpParams &params) const {
 	return result;
 }
 
+QByteArray GetNextUpLoader::body(const GetNextUpParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetNextUpLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetUpcomingEpisodesLoader::GetUpcomingEpisodesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetUpcomingEpisodesParams>(apiClient) {}
 
@@ -241,6 +271,16 @@ QUrlQuery GetUpcomingEpisodesLoader::query(const GetUpcomingEpisodesParams &para
 	}
 	
 	return result;
+}
+
+QByteArray GetUpcomingEpisodesLoader::body(const GetUpcomingEpisodesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetUpcomingEpisodesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

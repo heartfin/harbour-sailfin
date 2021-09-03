@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetConfigurationParams& parameters) const override;
 	QUrlQuery query(const GetConfigurationParams& parameters) const override;
+	QByteArray body(const GetConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a named configuration.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetNamedConfigurationParams& parameters) const override;
 	QUrlQuery query(const GetNamedConfigurationParams& parameters) const override;
+	QByteArray body(const GetNamedConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a default MetadataOptions object.
@@ -83,6 +87,8 @@ public:
 protected:
 	QString path(const GetDefaultMetadataOptionsParams& parameters) const override;
 	QUrlQuery query(const GetDefaultMetadataOptionsParams& parameters) const override;
+	QByteArray body(const GetDefaultMetadataOptionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

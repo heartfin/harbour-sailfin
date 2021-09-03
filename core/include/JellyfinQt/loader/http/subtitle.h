@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetFallbackFontListParams& parameters) const override;
 	QUrlQuery query(const GetFallbackFontListParams& parameters) const override;
+	QByteArray body(const GetFallbackFontListParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Search remote subtitles.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const SearchRemoteSubtitlesParams& parameters) const override;
 	QUrlQuery query(const SearchRemoteSubtitlesParams& parameters) const override;
+	QByteArray body(const SearchRemoteSubtitlesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

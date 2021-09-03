@@ -54,6 +54,16 @@ QUrlQuery GetBrandingOptionsLoader::query(const GetBrandingOptionsParams &params
 	return result;
 }
 
+QByteArray GetBrandingOptionsLoader::body(const GetBrandingOptionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetBrandingOptionsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetBrandingCssLoader::GetBrandingCssLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QString, GetBrandingCssParams>(apiClient) {}
 
@@ -73,6 +83,16 @@ QUrlQuery GetBrandingCssLoader::query(const GetBrandingCssParams &params) const 
 	return result;
 }
 
+QByteArray GetBrandingCssLoader::body(const GetBrandingCssParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetBrandingCssLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetBrandingCss_2Loader::GetBrandingCss_2Loader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QString, GetBrandingCss_2Params>(apiClient) {}
 
@@ -90,6 +110,16 @@ QUrlQuery GetBrandingCss_2Loader::query(const GetBrandingCss_2Params &params) co
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetBrandingCss_2Loader::body(const GetBrandingCss_2Params &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetBrandingCss_2Loader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

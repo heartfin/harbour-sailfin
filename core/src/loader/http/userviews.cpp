@@ -54,6 +54,16 @@ QUrlQuery GetGroupingOptionsLoader::query(const GetGroupingOptionsParams &params
 	return result;
 }
 
+QByteArray GetGroupingOptionsLoader::body(const GetGroupingOptionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetGroupingOptionsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetUserViewsLoader::GetUserViewsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetUserViewsParams>(apiClient) {}
 
@@ -80,6 +90,16 @@ QUrlQuery GetUserViewsLoader::query(const GetUserViewsParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetUserViewsLoader::body(const GetUserViewsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetUserViewsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

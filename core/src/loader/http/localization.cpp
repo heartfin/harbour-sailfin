@@ -54,6 +54,16 @@ QUrlQuery GetCountriesLoader::query(const GetCountriesParams &params) const {
 	return result;
 }
 
+QByteArray GetCountriesLoader::body(const GetCountriesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetCountriesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetCulturesLoader::GetCulturesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<CultureDto>, GetCulturesParams>(apiClient) {}
 
@@ -71,6 +81,16 @@ QUrlQuery GetCulturesLoader::query(const GetCulturesParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetCulturesLoader::body(const GetCulturesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetCulturesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetLocalizationOptionsLoader::GetLocalizationOptionsLoader(ApiClient *apiClient)
@@ -92,6 +112,16 @@ QUrlQuery GetLocalizationOptionsLoader::query(const GetLocalizationOptionsParams
 	return result;
 }
 
+QByteArray GetLocalizationOptionsLoader::body(const GetLocalizationOptionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLocalizationOptionsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetParentalRatingsLoader::GetParentalRatingsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<ParentalRating>, GetParentalRatingsParams>(apiClient) {}
 
@@ -109,6 +139,16 @@ QUrlQuery GetParentalRatingsLoader::query(const GetParentalRatingsParams &params
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetParentalRatingsLoader::body(const GetParentalRatingsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetParentalRatingsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

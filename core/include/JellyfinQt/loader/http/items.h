@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const GetItemsParams& parameters) const override;
 	QUrlQuery query(const GetItemsParams& parameters) const override;
+	QByteArray body(const GetItemsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets items based on a query.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const GetItemsByUserIdParams& parameters) const override;
 	QUrlQuery query(const GetItemsByUserIdParams& parameters) const override;
+	QByteArray body(const GetItemsByUserIdParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets items based on a query.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const GetResumeItemsParams& parameters) const override;
 	QUrlQuery query(const GetResumeItemsParams& parameters) const override;
+	QByteArray body(const GetResumeItemsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

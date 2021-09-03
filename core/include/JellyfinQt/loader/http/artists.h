@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const GetArtistsParams& parameters) const override;
 	QUrlQuery query(const GetArtistsParams& parameters) const override;
+	QByteArray body(const GetArtistsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets an artist by name.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const GetArtistByNameParams& parameters) const override;
 	QUrlQuery query(const GetArtistByNameParams& parameters) const override;
+	QByteArray body(const GetArtistByNameParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets all album artists from a given item, folder, or the entire library.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const GetAlbumArtistsParams& parameters) const override;
 	QUrlQuery query(const GetAlbumArtistsParams& parameters) const override;
+	QByteArray body(const GetAlbumArtistsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

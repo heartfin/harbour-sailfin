@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetRemoteImagesParams& parameters) const override;
 	QUrlQuery query(const GetRemoteImagesParams& parameters) const override;
+	QByteArray body(const GetRemoteImagesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets available remote image providers for an item.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetRemoteImageProvidersParams& parameters) const override;
 	QUrlQuery query(const GetRemoteImageProvidersParams& parameters) const override;
+	QByteArray body(const GetRemoteImageProvidersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

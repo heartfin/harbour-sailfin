@@ -54,6 +54,16 @@ QUrlQuery GetPackagesLoader::query(const GetPackagesParams &params) const {
 	return result;
 }
 
+QByteArray GetPackagesLoader::body(const GetPackagesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPackagesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetPackageInfoLoader::GetPackageInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<PackageInfo, GetPackageInfoParams>(apiClient) {}
 
@@ -76,6 +86,16 @@ QUrlQuery GetPackageInfoLoader::query(const GetPackageInfoParams &params) const 
 	return result;
 }
 
+QByteArray GetPackageInfoLoader::body(const GetPackageInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPackageInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetRepositoriesLoader::GetRepositoriesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<RepositoryInfo>, GetRepositoriesParams>(apiClient) {}
 
@@ -93,6 +113,16 @@ QUrlQuery GetRepositoriesLoader::query(const GetRepositoriesParams &params) cons
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetRepositoriesLoader::body(const GetRepositoriesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRepositoriesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

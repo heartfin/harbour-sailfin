@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const GetPasswordResetProvidersParams& parameters) const override;
 	QUrlQuery query(const GetPasswordResetProvidersParams& parameters) const override;
+	QByteArray body(const GetPasswordResetProvidersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get all auth providers.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const GetAuthProvidersParams& parameters) const override;
 	QUrlQuery query(const GetAuthProvidersParams& parameters) const override;
+	QByteArray body(const GetAuthProvidersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a list of sessions.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const GetSessionsParams& parameters) const override;
 	QUrlQuery query(const GetSessionsParams& parameters) const override;
+	QByteArray body(const GetSessionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

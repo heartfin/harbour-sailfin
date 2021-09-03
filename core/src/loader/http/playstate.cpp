@@ -57,6 +57,16 @@ QUrlQuery MarkPlayedItemLoader::query(const MarkPlayedItemParams &params) const 
 	return result;
 }
 
+QByteArray MarkPlayedItemLoader::body(const MarkPlayedItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation MarkPlayedItemLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 MarkUnplayedItemLoader::MarkUnplayedItemLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<UserItemDataDto, MarkUnplayedItemParams>(apiClient) {}
 
@@ -74,6 +84,16 @@ QUrlQuery MarkUnplayedItemLoader::query(const MarkUnplayedItemParams &params) co
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray MarkUnplayedItemLoader::body(const MarkUnplayedItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation MarkUnplayedItemLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
 }
 
 

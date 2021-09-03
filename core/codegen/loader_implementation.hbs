@@ -35,5 +35,23 @@ QUrlQuery {{e.className}}Loader::query(const {{e.endpoint.parameterType}} &param
 	return result;
 }
 
+QByteArray {{e.className}}Loader::body(const {{e.endpoint.parameterType}} &params) const {
+
+	{{#if e.endpoint.bodyParameters.length == 1}}
+	return Support::toString<{{e.endpoint.bodyParameters[0].type.typeNameWithQualifiers}}>(params.body()).toUtf8();
+
+	{{else}}
+	return QByteArray();
+
+	{{/if}}
+}
+
+QNetworkAccessManager::Operation {{e.className}}Loader::operation() const {
+	// HTTP method {{e.operation}}
+
+	return QNetworkAccessManager::{{e.operation}}Operation;
+
+}
+
 {{/if}}
 {{/each}}

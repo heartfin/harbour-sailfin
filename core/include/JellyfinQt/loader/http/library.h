@@ -72,6 +72,8 @@ public:
 protected:
 	QString path(const GetSimilarAlbumsParams& parameters) const override;
 	QUrlQuery query(const GetSimilarAlbumsParams& parameters) const override;
+	QByteArray body(const GetSimilarAlbumsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets similar items.
@@ -84,6 +86,8 @@ public:
 protected:
 	QString path(const GetSimilarArtistsParams& parameters) const override;
 	QUrlQuery query(const GetSimilarArtistsParams& parameters) const override;
+	QByteArray body(const GetSimilarArtistsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets all parents of an item.
@@ -96,6 +100,8 @@ public:
 protected:
 	QString path(const GetAncestorsParams& parameters) const override;
 	QUrlQuery query(const GetAncestorsParams& parameters) const override;
+	QByteArray body(const GetAncestorsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets critic review for an item.
@@ -108,6 +114,8 @@ public:
 protected:
 	QString path(const GetCriticReviewsParams& parameters) const override;
 	QUrlQuery query(const GetCriticReviewsParams& parameters) const override;
+	QByteArray body(const GetCriticReviewsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets similar items.
@@ -120,6 +128,8 @@ public:
 protected:
 	QString path(const GetSimilarItemsParams& parameters) const override;
 	QUrlQuery query(const GetSimilarItemsParams& parameters) const override;
+	QByteArray body(const GetSimilarItemsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get theme songs and videos for an item.
@@ -132,6 +142,8 @@ public:
 protected:
 	QString path(const GetThemeMediaParams& parameters) const override;
 	QUrlQuery query(const GetThemeMediaParams& parameters) const override;
+	QByteArray body(const GetThemeMediaParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get theme songs for an item.
@@ -144,6 +156,8 @@ public:
 protected:
 	QString path(const GetThemeSongsParams& parameters) const override;
 	QUrlQuery query(const GetThemeSongsParams& parameters) const override;
+	QByteArray body(const GetThemeSongsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get theme videos for an item.
@@ -156,6 +170,8 @@ public:
 protected:
 	QString path(const GetThemeVideosParams& parameters) const override;
 	QUrlQuery query(const GetThemeVideosParams& parameters) const override;
+	QByteArray body(const GetThemeVideosParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get item counts.
@@ -168,6 +184,8 @@ public:
 protected:
 	QString path(const GetItemCountsParams& parameters) const override;
 	QUrlQuery query(const GetItemCountsParams& parameters) const override;
+	QByteArray body(const GetItemCountsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the library options info.
@@ -180,6 +198,8 @@ public:
 protected:
 	QString path(const GetLibraryOptionsInfoParams& parameters) const override;
 	QUrlQuery query(const GetLibraryOptionsInfoParams& parameters) const override;
+	QByteArray body(const GetLibraryOptionsInfoParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets all user media folders.
@@ -192,6 +212,8 @@ public:
 protected:
 	QString path(const GetMediaFoldersParams& parameters) const override;
 	QUrlQuery query(const GetMediaFoldersParams& parameters) const override;
+	QByteArray body(const GetMediaFoldersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a list of physical paths from virtual folders.
@@ -204,6 +226,8 @@ public:
 protected:
 	QString path(const GetPhysicalPathsParams& parameters) const override;
 	QUrlQuery query(const GetPhysicalPathsParams& parameters) const override;
+	QByteArray body(const GetPhysicalPathsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets similar items.
@@ -216,6 +240,8 @@ public:
 protected:
 	QString path(const GetSimilarMoviesParams& parameters) const override;
 	QUrlQuery query(const GetSimilarMoviesParams& parameters) const override;
+	QByteArray body(const GetSimilarMoviesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets similar items.
@@ -228,6 +254,8 @@ public:
 protected:
 	QString path(const GetSimilarShowsParams& parameters) const override;
 	QUrlQuery query(const GetSimilarShowsParams& parameters) const override;
+	QByteArray body(const GetSimilarShowsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets similar items.
@@ -240,6 +268,8 @@ public:
 protected:
 	QString path(const GetSimilarTrailersParams& parameters) const override;
 	QUrlQuery query(const GetSimilarTrailersParams& parameters) const override;
+	QByteArray body(const GetSimilarTrailersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

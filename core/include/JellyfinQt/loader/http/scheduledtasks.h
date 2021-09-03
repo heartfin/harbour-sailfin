@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetTasksParams& parameters) const override;
 	QUrlQuery query(const GetTasksParams& parameters) const override;
+	QByteArray body(const GetTasksParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get task by id.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetTaskParams& parameters) const override;
 	QUrlQuery query(const GetTaskParams& parameters) const override;
+	QByteArray body(const GetTaskParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

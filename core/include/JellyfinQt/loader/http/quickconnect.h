@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const AuthorizeParams& parameters) const override;
 	QUrlQuery query(const AuthorizeParams& parameters) const override;
+	QByteArray body(const AuthorizeParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Attempts to retrieve authentication information.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const ConnectParams& parameters) const override;
 	QUrlQuery query(const ConnectParams& parameters) const override;
+	QByteArray body(const ConnectParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Deauthorize all quick connect devices for the current user.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const DeauthorizeParams& parameters) const override;
 	QUrlQuery query(const DeauthorizeParams& parameters) const override;
+	QByteArray body(const DeauthorizeParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Initiate a new quick connect request.
@@ -96,6 +102,8 @@ public:
 protected:
 	QString path(const InitiateParams& parameters) const override;
 	QUrlQuery query(const InitiateParams& parameters) const override;
+	QByteArray body(const InitiateParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the current quick connect state.
@@ -108,6 +116,8 @@ public:
 protected:
 	QString path(const GetStatusParams& parameters) const override;
 	QUrlQuery query(const GetStatusParams& parameters) const override;
+	QByteArray body(const GetStatusParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

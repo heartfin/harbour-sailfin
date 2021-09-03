@@ -66,6 +66,16 @@ QUrlQuery CreateCollectionLoader::query(const CreateCollectionParams &params) co
 	return result;
 }
 
+QByteArray CreateCollectionLoader::body(const CreateCollectionParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation CreateCollectionLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -66,6 +66,16 @@ QUrlQuery GetSimilarAlbumsLoader::query(const GetSimilarAlbumsParams &params) co
 	return result;
 }
 
+QByteArray GetSimilarAlbumsLoader::body(const GetSimilarAlbumsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSimilarAlbumsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetSimilarArtistsLoader::GetSimilarArtistsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetSimilarArtistsParams>(apiClient) {}
 
@@ -97,6 +107,16 @@ QUrlQuery GetSimilarArtistsLoader::query(const GetSimilarArtistsParams &params) 
 	return result;
 }
 
+QByteArray GetSimilarArtistsLoader::body(const GetSimilarArtistsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSimilarArtistsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetAncestorsLoader::GetAncestorsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<BaseItemDto>, GetAncestorsParams>(apiClient) {}
 
@@ -119,6 +139,16 @@ QUrlQuery GetAncestorsLoader::query(const GetAncestorsParams &params) const {
 	return result;
 }
 
+QByteArray GetAncestorsLoader::body(const GetAncestorsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetAncestorsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetCriticReviewsLoader::GetCriticReviewsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetCriticReviewsParams>(apiClient) {}
 
@@ -136,6 +166,16 @@ QUrlQuery GetCriticReviewsLoader::query(const GetCriticReviewsParams &params) co
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetCriticReviewsLoader::body(const GetCriticReviewsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetCriticReviewsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetSimilarItemsLoader::GetSimilarItemsLoader(ApiClient *apiClient)
@@ -169,6 +209,16 @@ QUrlQuery GetSimilarItemsLoader::query(const GetSimilarItemsParams &params) cons
 	return result;
 }
 
+QByteArray GetSimilarItemsLoader::body(const GetSimilarItemsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSimilarItemsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetThemeMediaLoader::GetThemeMediaLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<AllThemeMediaResult, GetThemeMediaParams>(apiClient) {}
 
@@ -192,6 +242,16 @@ QUrlQuery GetThemeMediaLoader::query(const GetThemeMediaParams &params) const {
 	}
 	
 	return result;
+}
+
+QByteArray GetThemeMediaLoader::body(const GetThemeMediaParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetThemeMediaLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetThemeSongsLoader::GetThemeSongsLoader(ApiClient *apiClient)
@@ -219,6 +279,16 @@ QUrlQuery GetThemeSongsLoader::query(const GetThemeSongsParams &params) const {
 	return result;
 }
 
+QByteArray GetThemeSongsLoader::body(const GetThemeSongsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetThemeSongsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetThemeVideosLoader::GetThemeVideosLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<ThemeMediaResult, GetThemeVideosParams>(apiClient) {}
 
@@ -242,6 +312,16 @@ QUrlQuery GetThemeVideosLoader::query(const GetThemeVideosParams &params) const 
 	}
 	
 	return result;
+}
+
+QByteArray GetThemeVideosLoader::body(const GetThemeVideosParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetThemeVideosLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetItemCountsLoader::GetItemCountsLoader(ApiClient *apiClient)
@@ -269,6 +349,16 @@ QUrlQuery GetItemCountsLoader::query(const GetItemCountsParams &params) const {
 	return result;
 }
 
+QByteArray GetItemCountsLoader::body(const GetItemCountsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetItemCountsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetLibraryOptionsInfoLoader::GetLibraryOptionsInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<LibraryOptionsResultDto, GetLibraryOptionsInfoParams>(apiClient) {}
 
@@ -294,6 +384,16 @@ QUrlQuery GetLibraryOptionsInfoLoader::query(const GetLibraryOptionsInfoParams &
 	return result;
 }
 
+QByteArray GetLibraryOptionsInfoLoader::body(const GetLibraryOptionsInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetLibraryOptionsInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetMediaFoldersLoader::GetMediaFoldersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetMediaFoldersParams>(apiClient) {}
 
@@ -316,6 +416,16 @@ QUrlQuery GetMediaFoldersLoader::query(const GetMediaFoldersParams &params) cons
 	return result;
 }
 
+QByteArray GetMediaFoldersLoader::body(const GetMediaFoldersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetMediaFoldersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetPhysicalPathsLoader::GetPhysicalPathsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QStringList, GetPhysicalPathsParams>(apiClient) {}
 
@@ -333,6 +443,16 @@ QUrlQuery GetPhysicalPathsLoader::query(const GetPhysicalPathsParams &params) co
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetPhysicalPathsLoader::body(const GetPhysicalPathsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPhysicalPathsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetSimilarMoviesLoader::GetSimilarMoviesLoader(ApiClient *apiClient)
@@ -366,6 +486,16 @@ QUrlQuery GetSimilarMoviesLoader::query(const GetSimilarMoviesParams &params) co
 	return result;
 }
 
+QByteArray GetSimilarMoviesLoader::body(const GetSimilarMoviesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSimilarMoviesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetSimilarShowsLoader::GetSimilarShowsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetSimilarShowsParams>(apiClient) {}
 
@@ -397,6 +527,16 @@ QUrlQuery GetSimilarShowsLoader::query(const GetSimilarShowsParams &params) cons
 	return result;
 }
 
+QByteArray GetSimilarShowsLoader::body(const GetSimilarShowsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSimilarShowsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetSimilarTrailersLoader::GetSimilarTrailersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetSimilarTrailersParams>(apiClient) {}
 
@@ -426,6 +566,16 @@ QUrlQuery GetSimilarTrailersLoader::query(const GetSimilarTrailersParams &params
 	}
 	
 	return result;
+}
+
+QByteArray GetSimilarTrailersLoader::body(const GetSimilarTrailersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetSimilarTrailersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

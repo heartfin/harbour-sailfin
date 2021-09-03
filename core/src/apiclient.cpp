@@ -20,51 +20,167 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "JellyfinQt/apiclient.h"
 
 #include "JellyfinQt/support/jsonconv.h"
+#include "JellyfinQt/viewmodel/settings.h"
 #include "JellyfinQt/websocket.h"
 
 
 namespace Jellyfin {
 
+class ApiClientPrivate {
+public:
+    ApiClientPrivate(ApiClient *parent);
+    virtual ~ApiClientPrivate() {}
+
+    // Exposed properties
+    ViewModel::Settings *settings;
+    WebSocket *webSocket;
+    EventBus *eventbus;
+    CredentialsManager *credManager;
+
+    // Authentication-related variables
+    QString token;
+    QString baseUrl;
+    QString deviceName;
+    QString deviceId;
+    QString userId;
+
+    bool online = true;
+    QJsonObject deviceProfile;
+    QJsonObject playbackDeviceProfile;
+    QVariantList supportedCommands;
+
+    bool authenticated = false;
+
+    /**
+     * @brief Retrieves the device ID or generates a random one.
+     */
+    QUuid retrieveDeviceId() const;
+
+};
+
 ApiClient::ApiClient(QObject *parent)
     : QObject(parent),
-      m_webSocket(new WebSocket(this)),
-      m_eventbus(new EventBus(this)),
-      m_deviceName(QHostInfo::localHostName()) {
+      d_ptr(new ApiClientPrivate(this)) {
+    Q_D(ApiClient);
 
-    m_deviceId = Support::toString(retrieveDeviceId());
-    m_credManager = CredentialsManager::newInstance(this);
-    connect(m_credManager, &CredentialsManager::serversListed, this, &ApiClient::credManagerServersListed);
-    connect(m_credManager, &CredentialsManager::usersListed, this, &ApiClient::credManagerUsersListed);
-    connect(m_credManager, &CredentialsManager::tokenRetrieved, this, &ApiClient::credManagerTokenRetrieved);
+    d->deviceId = Support::toString(d->retrieveDeviceId());
+    d->deviceName = QHostInfo::localHostName();
+    d->credManager = CredentialsManager::newInstance(this);
+    connect(d->credManager, &CredentialsManager::serversListed, this, &ApiClient::credManagerServersListed);
+    connect(d->credManager, &CredentialsManager::usersListed, this, &ApiClient::credManagerUsersListed);
+    connect(d->credManager, &CredentialsManager::tokenRetrieved, this, &ApiClient::credManagerTokenRetrieved);
     generateDeviceProfile();
+}
+
+ApiClient::~ApiClient() {
+
+}
+
+bool ApiClient::authenticated() const {
+    Q_D(const ApiClient);
+    return d->authenticated;
+}
+
+const QString &ApiClient::baseUrl() const {
+    Q_D(const ApiClient);
+    return d->baseUrl;
+}
+
+void ApiClient::setBaseUrl(const QString &url) {
+    Q_D(ApiClient);
+    d->baseUrl = url;
+    if (d->baseUrl.endsWith("/")) {
+        d->baseUrl.chop(1);
+    }
+    emit this->baseUrlChanged(d->baseUrl);
+}
+
+const QString &ApiClient::userId() const {
+    Q_D(const ApiClient);
+    return d->userId;
+}
+
+void ApiClient::setUserId(const QString &userId) {
+    Q_D(ApiClient);
+    d->userId = userId;
+    emit userIdChanged(userId);
+}
+
+const QString &ApiClient::deviceId() const {
+    Q_D(const ApiClient);
+    return d->deviceId;
+}
+
+EventBus *ApiClient::eventbus() const {
+    Q_D(const ApiClient);
+    return d->eventbus;
+}
+WebSocket *ApiClient::websocket() const {
+    Q_D(const ApiClient);
+    return d->webSocket;
 }
 
 QString ApiClient::version() const {
     return QString(SAILFIN_VERSION);
 }
 
+bool ApiClient::online() const {
+    Q_D(const ApiClient);
+    return d->online;
+}
+
+const QString &ApiClient::token() const {
+    Q_D(const ApiClient);
+    return d->token;
+}
+
+ViewModel::Settings *ApiClient::settings() const {
+    Q_D(const ApiClient);
+    return d->settings;
+}
+
+QVariantList ApiClient::supportedCommands() const {
+    Q_D(const ApiClient);
+    return d->supportedCommands;
+}
+
+void ApiClient::setSupportedCommands(QVariantList newSupportedCommands) {
+    Q_D(ApiClient);
+    d->supportedCommands = newSupportedCommands;
+    emit supportedCommandsChanged();
+}
+const QJsonObject &ApiClient::deviceProfile() const {
+    Q_D(const ApiClient);
+    return d->deviceProfile;
+}
+const QJsonObject &ApiClient::playbackDeviceProfile() const {
+    Q_D(const ApiClient);
+    return d->playbackDeviceProfile;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // BASE HTTP METHODS                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void ApiClient::addBaseRequestHeaders(QNetworkRequest &request, const QString &path, const QUrlQuery &params) {
+void ApiClient::addBaseRequestHeaders(QNetworkRequest &request, const QString &path, const QUrlQuery &params) const {
+    Q_D(const ApiClient);
     addTokenHeader(request);
     request.setRawHeader("Accept", "application/json;"); // profile=\"CamelCase\"");
     request.setHeader(QNetworkRequest::UserAgentHeader, QString("Sailfin/%1").arg(version()));
-    QString url = this->m_baseUrl + path;
+    QString url = d->baseUrl + path;
     if (!params.isEmpty()) url += "?" + params.toString(QUrl::EncodeReserved);
     request.setUrl(url);
 }
 
-void ApiClient::addTokenHeader(QNetworkRequest &request) {
+void ApiClient::addTokenHeader(QNetworkRequest &request) const {
+    Q_D(const ApiClient);
     QString authentication =   "MediaBrowser ";
     authentication        +=   "Client=\"Sailfin\"";
-    authentication        += ", Device=\"" + m_deviceName + "\"";
-    authentication        += ", DeviceId=\"" + m_deviceId + "\"";
+    authentication        += ", Device=\"" + d->deviceName + "\"";
+    authentication        += ", DeviceId=\"" + d->deviceId + "\"";
     authentication        += ", Version=\"" + version() + "\"";
-    if (m_authenticated) {
-        authentication    += ", token=\"" + m_token + "\"";
+    if (d->authenticated) {
+        authentication    += ", token=\"" + d->token + "\"";
     }
     request.setRawHeader("X-Emby-Authorization", authentication.toUtf8());
 }
@@ -88,15 +204,29 @@ QNetworkReply *ApiClient::post(const QString &path, const QJsonDocument &data, c
     }
 }
 
+QNetworkReply *ApiClient::post(const QString &path, const QByteArray &data, const QUrlQuery &params) {
+    QNetworkRequest req;
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    addBaseRequestHeaders(req, path, params);
+    qDebug() << "POST " << req.url();
+    if (data.isEmpty())
+        return m_naManager.post(req, QByteArray());
+    else {
+        return m_naManager.post(req, data);
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Nice to have methods                                                                           //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void ApiClient::restoreSavedSession(){
-    m_credManager->listServers();
+    Q_D(ApiClient);
+    d->credManager->listServers();
 }
 
 void ApiClient::credManagerServersListed(QStringList servers) {
+    Q_D(ApiClient);
     qDebug() << "Servers listed: " << servers;
     if (servers.size() == 0) {
         emit this->setupRequired();
@@ -105,12 +235,13 @@ void ApiClient::credManagerServersListed(QStringList servers) {
 
     //FIXME: support multiple servers
     QString server = servers[0];
-    this->m_baseUrl = server;
+    d->baseUrl = server;
     qDebug() << "Chosen server: " << server;
-    m_credManager->listUsers(server);
+    d->credManager->listUsers(server);
 }
 
 void ApiClient::credManagerUsersListed(const QString &server, QStringList users) {
+    Q_D(ApiClient);
     if (users.size() == 0) {
         emit this->setupRequired();
         return;
@@ -119,10 +250,11 @@ void ApiClient::credManagerUsersListed(const QString &server, QStringList users)
     QString user = users[0];
     qDebug() << "Chosen user: " << user;
 
-    m_credManager->get(server, user);
+    d->credManager->get(server, user);
 }
 void ApiClient::credManagerTokenRetrieved(const QString &server, const QString &user, const QString &token) {
-    this->m_token = token;
+    Q_D(ApiClient);
+    d->token = token;
     qDebug() << "Token retreived, logged in as user " << user;
     this->setUserId(user);
     this->setAuthenticated(true);
@@ -130,10 +262,11 @@ void ApiClient::credManagerTokenRetrieved(const QString &server, const QString &
 }
 
 void ApiClient::setupConnection() {
+    Q_D(ApiClient);
     // First detect redirects:
     // Note that this is done without calling JellyfinApiClient::get since that automatically includes the base_url,
     // which is something we want to avoid here.
-    QNetworkRequest req = QNetworkRequest(m_baseUrl);
+    QNetworkRequest req = QNetworkRequest(d->baseUrl);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 9, 0)
     req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
 #else
@@ -185,27 +318,29 @@ void ApiClient::getBrandingConfiguration() {
 }
 
 void ApiClient::authenticate(QString username, QString password, bool storeCredentials) {
+    Q_D(ApiClient);
     QJsonObject requestData;
 
     requestData["Username"] = username;
     requestData["Pw"] = password;
     QNetworkReply *rep = post("/Users/authenticatebyname", QJsonDocument(requestData));
     connect(rep, &QNetworkReply::finished, this, [rep, username, storeCredentials, this]() {
+        Q_D(ApiClient);
         int status = rep->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         qDebug() << "Got reply with status code " << status;
         if (status >= 200 && status < 300) {
             QJsonObject authInfo = QJsonDocument::fromJson(rep->readAll()).object();
-            this->m_token = authInfo["AccessToken"].toString();
+            d->token = authInfo["AccessToken"].toString();
 
             // Fool this class's addRequestheaders to add the token, without
             // notifying QML that we're authenticated, to prevent other requests going first.
-            this->m_authenticated = true;
+            d->authenticated = true;
             this->setUserId(authInfo["User"].toObject()["Id"].toString());
             this->postCapabilities();
             this->setAuthenticated(true);
 
             if (storeCredentials) {
-                m_credManager->store(this->m_baseUrl, this->m_userId, this->m_token);
+                d->credManager->store(d->baseUrl, d->userId, d->token);
             }
         } else if(status >= 400 && status < 500) {
             if (status == 401) {
@@ -222,7 +357,8 @@ void ApiClient::authenticate(QString username, QString password, bool storeCrede
 void ApiClient::deleteSession() {
     QNetworkReply *rep = post("/Sessions/Logout");
     connect(rep, &QNetworkReply::finished, this, [rep, this] {
-        m_credManager->remove(m_baseUrl, m_userId);
+        Q_D(ApiClient);
+        d->credManager->remove(d->baseUrl, d->userId);
         this->setAuthenticated(false);
         emit this->setupRequired();
         rep->deleteLater();
@@ -230,12 +366,13 @@ void ApiClient::deleteSession() {
 }
 
 void ApiClient::postCapabilities() {
+    Q_D(const ApiClient);
     QJsonObject capabilities;
     QList<DTO::GeneralCommandType> supportedCommands;
-    supportedCommands.reserve(m_supportedCommands.size());
-    for (int i = 0; i < m_supportedCommands.size(); i++) {
-        if (m_supportedCommands[i].canConvert<DTO::GeneralCommandType>()) {
-            supportedCommands.append(m_supportedCommands[i].value<DTO::GeneralCommandType>());
+    supportedCommands.reserve(d->supportedCommands.size());
+    for (int i = 0; i < d->supportedCommands.size(); i++) {
+        if (d->supportedCommands[i].canConvert<DTO::GeneralCommandType>()) {
+            supportedCommands.append(d->supportedCommands[i].value<DTO::GeneralCommandType>());
         }
     }
     QList<int> foo = {1, 2, 3};
@@ -248,20 +385,22 @@ void ApiClient::postCapabilities() {
     capabilities["SupportsContentUploading"] = false;
     capabilities["AppStoreUrl"] = "https://chris.netsoj.nl/projects/harbour-sailfin";
     capabilities["IconUrl"] = "https://chris.netsoj.nl/static/img/logo.png";
-    capabilities["DeviceProfile"] = m_deviceProfile;
+    capabilities["DeviceProfile"] = d->deviceProfile;
     QNetworkReply *rep = post("/Sessions/Capabilities/Full", QJsonDocument(capabilities));
     setDefaultErrorHandler(rep);
 }
 
 QString ApiClient::downloadUrl(const QString &itemId) const {
-    return m_baseUrl + "/Items/" + itemId + "/Download?api_key=" + this->m_token;
+    Q_D(const ApiClient);
+    return d->baseUrl + "/Items/" + itemId + "/Download?api_key=" + d->token;
 }
 
 void ApiClient::generateDeviceProfile() {
+    Q_D(ApiClient);
     QJsonObject root = Model::DeviceProfile::generateProfile();
-    m_playbackDeviceProfile = QJsonObject(root);
-    root["Name"] = m_deviceName;
-    root["Id"] = m_deviceId;
+    d->playbackDeviceProfile = QJsonObject(root);
+    root["Name"] = d->deviceName;
+    root["Id"] = d->deviceId;
     root["FriendlyName"] = QSysInfo::prettyProductName();
     QJsonArray playableMediaTypes;
     playableMediaTypes.append("Audio");
@@ -269,7 +408,7 @@ void ApiClient::generateDeviceProfile() {
     playableMediaTypes.append("Photo");
     root["PlayableMediaTypes"] = playableMediaTypes;
 
-    m_deviceProfile = root;
+    d->deviceProfile = root;
     emit deviceProfileChanged();
 }
 
@@ -291,12 +430,13 @@ void ApiClient::onUserDataChanged(const QString &itemId, UserData *userData) {
 }
 
 void ApiClient::setAuthenticated(bool authenticated) {
-    this->m_authenticated = authenticated;
-    if (authenticated) m_webSocket->open();
+    Q_D(ApiClient);
+    d->authenticated = authenticated;
+    if (authenticated) d->webSocket->open();
     emit authenticatedChanged(authenticated);
 }
 
-QUuid ApiClient::retrieveDeviceId() {
+QUuid ApiClientPrivate::retrieveDeviceId() const {
     // This should probably not block the main thread, but on the other side,
     // the file is not too big.
     QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
@@ -334,6 +474,17 @@ QUuid ApiClient::retrieveDeviceId() {
             return QUuid::createUuid();
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// PRIVATE                                                                                        //
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ApiClientPrivate::ApiClientPrivate(ApiClient *apiClient)
+    : settings(new ViewModel::Settings(apiClient)),
+      webSocket(new WebSocket(apiClient)),
+      eventbus(new EventBus(apiClient)) {
+
 }
 
 }

@@ -75,6 +75,16 @@ QUrlQuery GetInstantMixFromAlbumLoader::query(const GetInstantMixFromAlbumParams
 	return result;
 }
 
+QByteArray GetInstantMixFromAlbumLoader::body(const GetInstantMixFromAlbumParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetInstantMixFromAlbumLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetInstantMixFromArtistsLoader::GetInstantMixFromArtistsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromArtistsParams>(apiClient) {}
 
@@ -113,6 +123,16 @@ QUrlQuery GetInstantMixFromArtistsLoader::query(const GetInstantMixFromArtistsPa
 	}
 	
 	return result;
+}
+
+QByteArray GetInstantMixFromArtistsLoader::body(const GetInstantMixFromArtistsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetInstantMixFromArtistsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetInstantMixFromItemLoader::GetInstantMixFromItemLoader(ApiClient *apiClient)
@@ -155,6 +175,16 @@ QUrlQuery GetInstantMixFromItemLoader::query(const GetInstantMixFromItemParams &
 	return result;
 }
 
+QByteArray GetInstantMixFromItemLoader::body(const GetInstantMixFromItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetInstantMixFromItemLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetInstantMixFromMusicGenresLoader::GetInstantMixFromMusicGenresLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromMusicGenresParams>(apiClient) {}
 
@@ -193,6 +223,16 @@ QUrlQuery GetInstantMixFromMusicGenresLoader::query(const GetInstantMixFromMusic
 	}
 	
 	return result;
+}
+
+QByteArray GetInstantMixFromMusicGenresLoader::body(const GetInstantMixFromMusicGenresParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetInstantMixFromMusicGenresLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 GetInstantMixFromMusicGenreLoader::GetInstantMixFromMusicGenreLoader(ApiClient *apiClient)
@@ -235,6 +275,16 @@ QUrlQuery GetInstantMixFromMusicGenreLoader::query(const GetInstantMixFromMusicG
 	return result;
 }
 
+QByteArray GetInstantMixFromMusicGenreLoader::body(const GetInstantMixFromMusicGenreParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetInstantMixFromMusicGenreLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetInstantMixFromPlaylistLoader::GetInstantMixFromPlaylistLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromPlaylistParams>(apiClient) {}
 
@@ -275,6 +325,16 @@ QUrlQuery GetInstantMixFromPlaylistLoader::query(const GetInstantMixFromPlaylist
 	return result;
 }
 
+QByteArray GetInstantMixFromPlaylistLoader::body(const GetInstantMixFromPlaylistParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetInstantMixFromPlaylistLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetInstantMixFromSongLoader::GetInstantMixFromSongLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromSongParams>(apiClient) {}
 
@@ -313,6 +373,16 @@ QUrlQuery GetInstantMixFromSongLoader::query(const GetInstantMixFromSongParams &
 	}
 	
 	return result;
+}
+
+QByteArray GetInstantMixFromSongLoader::body(const GetInstantMixFromSongParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetInstantMixFromSongLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

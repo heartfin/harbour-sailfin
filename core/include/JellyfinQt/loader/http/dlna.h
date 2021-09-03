@@ -60,6 +60,8 @@ public:
 protected:
 	QString path(const GetProfileInfosParams& parameters) const override;
 	QUrlQuery query(const GetProfileInfosParams& parameters) const override;
+	QByteArray body(const GetProfileInfosParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a single profile.
@@ -72,6 +74,8 @@ public:
 protected:
 	QString path(const GetProfileParams& parameters) const override;
 	QUrlQuery query(const GetProfileParams& parameters) const override;
+	QByteArray body(const GetProfileParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the default profile.
@@ -84,6 +88,8 @@ public:
 protected:
 	QString path(const GetDefaultProfileParams& parameters) const override;
 	QUrlQuery query(const GetDefaultProfileParams& parameters) const override;
+	QByteArray body(const GetDefaultProfileParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

@@ -58,6 +58,8 @@ public:
 protected:
 	QString path(const GetBrandingOptionsParams& parameters) const override;
 	QUrlQuery query(const GetBrandingOptionsParams& parameters) const override;
+	QByteArray body(const GetBrandingOptionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets branding css.
@@ -70,6 +72,8 @@ public:
 protected:
 	QString path(const GetBrandingCssParams& parameters) const override;
 	QUrlQuery query(const GetBrandingCssParams& parameters) const override;
+	QByteArray body(const GetBrandingCssParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets branding css.
@@ -82,6 +86,8 @@ public:
 protected:
 	QString path(const GetBrandingCss_2Params& parameters) const override;
 	QUrlQuery query(const GetBrandingCss_2Params& parameters) const override;
+	QByteArray body(const GetBrandingCss_2Params& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

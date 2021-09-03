@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetGenresParams& parameters) const override;
 	QUrlQuery query(const GetGenresParams& parameters) const override;
+	QByteArray body(const GetGenresParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets a genre, by name.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetGenreParams& parameters) const override;
 	QUrlQuery query(const GetGenreParams& parameters) const override;
+	QByteArray body(const GetGenreParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

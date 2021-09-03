@@ -69,6 +69,16 @@ QUrlQuery GetRemoteImagesLoader::query(const GetRemoteImagesParams &params) cons
 	return result;
 }
 
+QByteArray GetRemoteImagesLoader::body(const GetRemoteImagesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRemoteImagesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetRemoteImageProvidersLoader::GetRemoteImageProvidersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<ImageProviderInfo>, GetRemoteImageProvidersParams>(apiClient) {}
 
@@ -86,6 +96,16 @@ QUrlQuery GetRemoteImageProvidersLoader::query(const GetRemoteImageProvidersPara
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetRemoteImageProvidersLoader::body(const GetRemoteImageProvidersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetRemoteImageProvidersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

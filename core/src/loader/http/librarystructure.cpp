@@ -54,6 +54,16 @@ QUrlQuery GetVirtualFoldersLoader::query(const GetVirtualFoldersParams &params) 
 	return result;
 }
 
+QByteArray GetVirtualFoldersLoader::body(const GetVirtualFoldersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetVirtualFoldersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

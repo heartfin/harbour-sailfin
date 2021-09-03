@@ -294,6 +294,16 @@ QUrlQuery GetItemsLoader::query(const GetItemsParams &params) const {
 	return result;
 }
 
+QByteArray GetItemsLoader::body(const GetItemsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetItemsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetItemsByUserIdLoader::GetItemsByUserIdLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetItemsByUserIdParams>(apiClient) {}
 
@@ -550,6 +560,16 @@ QUrlQuery GetItemsByUserIdLoader::query(const GetItemsByUserIdParams &params) co
 	return result;
 }
 
+QByteArray GetItemsByUserIdLoader::body(const GetItemsByUserIdParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetItemsByUserIdLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetResumeItemsLoader::GetResumeItemsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetResumeItemsParams>(apiClient) {}
 
@@ -606,6 +626,16 @@ QUrlQuery GetResumeItemsLoader::query(const GetResumeItemsParams &params) const 
 	}
 	
 	return result;
+}
+
+QByteArray GetResumeItemsLoader::body(const GetResumeItemsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetResumeItemsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

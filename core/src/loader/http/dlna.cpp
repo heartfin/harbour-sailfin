@@ -54,6 +54,16 @@ QUrlQuery GetProfileInfosLoader::query(const GetProfileInfosParams &params) cons
 	return result;
 }
 
+QByteArray GetProfileInfosLoader::body(const GetProfileInfosParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetProfileInfosLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetProfileLoader::GetProfileLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<DeviceProfile, GetProfileParams>(apiClient) {}
 
@@ -73,6 +83,16 @@ QUrlQuery GetProfileLoader::query(const GetProfileParams &params) const {
 	return result;
 }
 
+QByteArray GetProfileLoader::body(const GetProfileParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetProfileLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetDefaultProfileLoader::GetDefaultProfileLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<DeviceProfile, GetDefaultProfileParams>(apiClient) {}
 
@@ -90,6 +110,16 @@ QUrlQuery GetDefaultProfileLoader::query(const GetDefaultProfileParams &params) 
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetDefaultProfileLoader::body(const GetDefaultProfileParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDefaultProfileLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

@@ -67,6 +67,8 @@ public:
 protected:
 	QString path(const GetExternalIdInfosParams& parameters) const override;
 	QUrlQuery query(const GetExternalIdInfosParams& parameters) const override;
+	QByteArray body(const GetExternalIdInfosParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get book remote search.
@@ -79,6 +81,8 @@ public:
 protected:
 	QString path(const GetBookRemoteSearchResultsParams& parameters) const override;
 	QUrlQuery query(const GetBookRemoteSearchResultsParams& parameters) const override;
+	QByteArray body(const GetBookRemoteSearchResultsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get box set remote search.
@@ -91,6 +95,8 @@ public:
 protected:
 	QString path(const GetBoxSetRemoteSearchResultsParams& parameters) const override;
 	QUrlQuery query(const GetBoxSetRemoteSearchResultsParams& parameters) const override;
+	QByteArray body(const GetBoxSetRemoteSearchResultsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get movie remote search.
@@ -103,6 +109,8 @@ public:
 protected:
 	QString path(const GetMovieRemoteSearchResultsParams& parameters) const override;
 	QUrlQuery query(const GetMovieRemoteSearchResultsParams& parameters) const override;
+	QByteArray body(const GetMovieRemoteSearchResultsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get music album remote search.
@@ -115,6 +123,8 @@ public:
 protected:
 	QString path(const GetMusicAlbumRemoteSearchResultsParams& parameters) const override;
 	QUrlQuery query(const GetMusicAlbumRemoteSearchResultsParams& parameters) const override;
+	QByteArray body(const GetMusicAlbumRemoteSearchResultsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get music artist remote search.
@@ -127,6 +137,8 @@ public:
 protected:
 	QString path(const GetMusicArtistRemoteSearchResultsParams& parameters) const override;
 	QUrlQuery query(const GetMusicArtistRemoteSearchResultsParams& parameters) const override;
+	QByteArray body(const GetMusicArtistRemoteSearchResultsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get music video remote search.
@@ -139,6 +151,8 @@ public:
 protected:
 	QString path(const GetMusicVideoRemoteSearchResultsParams& parameters) const override;
 	QUrlQuery query(const GetMusicVideoRemoteSearchResultsParams& parameters) const override;
+	QByteArray body(const GetMusicVideoRemoteSearchResultsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get person remote search.
@@ -151,6 +165,8 @@ public:
 protected:
 	QString path(const GetPersonRemoteSearchResultsParams& parameters) const override;
 	QUrlQuery query(const GetPersonRemoteSearchResultsParams& parameters) const override;
+	QByteArray body(const GetPersonRemoteSearchResultsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get series remote search.
@@ -163,6 +179,8 @@ public:
 protected:
 	QString path(const GetSeriesRemoteSearchResultsParams& parameters) const override;
 	QUrlQuery query(const GetSeriesRemoteSearchResultsParams& parameters) const override;
+	QByteArray body(const GetSeriesRemoteSearchResultsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Get trailer remote search.
@@ -175,6 +193,8 @@ public:
 protected:
 	QString path(const GetTrailerRemoteSearchResultsParams& parameters) const override;
 	QUrlQuery query(const GetTrailerRemoteSearchResultsParams& parameters) const override;
+	QByteArray body(const GetTrailerRemoteSearchResultsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

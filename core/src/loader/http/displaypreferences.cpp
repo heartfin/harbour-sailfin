@@ -56,6 +56,16 @@ QUrlQuery GetDisplayPreferencesLoader::query(const GetDisplayPreferencesParams &
 	return result;
 }
 
+QByteArray GetDisplayPreferencesLoader::body(const GetDisplayPreferencesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetDisplayPreferencesLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

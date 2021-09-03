@@ -58,6 +58,8 @@ public:
 protected:
 	QString path(const GetDisplayPreferencesParams& parameters) const override;
 	QUrlQuery query(const GetDisplayPreferencesParams& parameters) const override;
+	QByteArray body(const GetDisplayPreferencesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

@@ -59,6 +59,8 @@ public:
 protected:
 	QString path(const GetQueryFiltersLegacyParams& parameters) const override;
 	QUrlQuery query(const GetQueryFiltersLegacyParams& parameters) const override;
+	QByteArray body(const GetQueryFiltersLegacyParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets query filters.
@@ -71,6 +73,8 @@ public:
 protected:
 	QString path(const GetQueryFiltersParams& parameters) const override;
 	QUrlQuery query(const GetQueryFiltersParams& parameters) const override;
+	QByteArray body(const GetQueryFiltersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

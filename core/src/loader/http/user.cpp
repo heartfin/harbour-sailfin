@@ -60,6 +60,16 @@ QUrlQuery GetUsersLoader::query(const GetUsersParams &params) const {
 	return result;
 }
 
+QByteArray GetUsersLoader::body(const GetUsersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetUsersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetUserByIdLoader::GetUserByIdLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<UserDto, GetUserByIdParams>(apiClient) {}
 
@@ -77,6 +87,16 @@ QUrlQuery GetUserByIdLoader::query(const GetUserByIdParams &params) const {
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetUserByIdLoader::body(const GetUserByIdParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetUserByIdLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 AuthenticateUserLoader::AuthenticateUserLoader(ApiClient *apiClient)
@@ -102,6 +122,16 @@ QUrlQuery AuthenticateUserLoader::query(const AuthenticateUserParams &params) co
 	return result;
 }
 
+QByteArray AuthenticateUserLoader::body(const AuthenticateUserParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation AuthenticateUserLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 AuthenticateUserByNameLoader::AuthenticateUserByNameLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<AuthenticationResult, AuthenticateUserByNameParams>(apiClient) {}
 
@@ -119,6 +149,16 @@ QUrlQuery AuthenticateUserByNameLoader::query(const AuthenticateUserByNameParams
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray AuthenticateUserByNameLoader::body(const AuthenticateUserByNameParams &params) const {
+	return Support::toString<QSharedPointer<AuthenticateUserByName>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation AuthenticateUserByNameLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 AuthenticateWithQuickConnectLoader::AuthenticateWithQuickConnectLoader(ApiClient *apiClient)
@@ -140,6 +180,16 @@ QUrlQuery AuthenticateWithQuickConnectLoader::query(const AuthenticateWithQuickC
 	return result;
 }
 
+QByteArray AuthenticateWithQuickConnectLoader::body(const AuthenticateWithQuickConnectParams &params) const {
+	return Support::toString<QSharedPointer<QuickConnectDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation AuthenticateWithQuickConnectLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 ForgotPasswordLoader::ForgotPasswordLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<ForgotPasswordResult, ForgotPasswordParams>(apiClient) {}
 
@@ -157,6 +207,16 @@ QUrlQuery ForgotPasswordLoader::query(const ForgotPasswordParams &params) const 
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray ForgotPasswordLoader::body(const ForgotPasswordParams &params) const {
+	return Support::toString<QSharedPointer<ForgotPasswordDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation ForgotPasswordLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 ForgotPasswordPinLoader::ForgotPasswordPinLoader(ApiClient *apiClient)
@@ -178,6 +238,16 @@ QUrlQuery ForgotPasswordPinLoader::query(const ForgotPasswordPinParams &params) 
 	return result;
 }
 
+QByteArray ForgotPasswordPinLoader::body(const ForgotPasswordPinParams &params) const {
+	return Support::toString<QString>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation ForgotPasswordPinLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetCurrentUserLoader::GetCurrentUserLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<UserDto, GetCurrentUserParams>(apiClient) {}
 
@@ -195,6 +265,16 @@ QUrlQuery GetCurrentUserLoader::query(const GetCurrentUserParams &params) const 
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetCurrentUserLoader::body(const GetCurrentUserParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetCurrentUserLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 CreateUserByNameLoader::CreateUserByNameLoader(ApiClient *apiClient)
@@ -216,6 +296,16 @@ QUrlQuery CreateUserByNameLoader::query(const CreateUserByNameParams &params) co
 	return result;
 }
 
+QByteArray CreateUserByNameLoader::body(const CreateUserByNameParams &params) const {
+	return Support::toString<QSharedPointer<CreateUserByName>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation CreateUserByNameLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetPublicUsersLoader::GetPublicUsersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<UserDto>, GetPublicUsersParams>(apiClient) {}
 
@@ -233,6 +323,16 @@ QUrlQuery GetPublicUsersLoader::query(const GetPublicUsersParams &params) const 
 	// Optional parameters
 	
 	return result;
+}
+
+QByteArray GetPublicUsersLoader::body(const GetPublicUsersParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPublicUsersLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
 }
 
 

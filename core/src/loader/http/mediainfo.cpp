@@ -55,6 +55,16 @@ QUrlQuery GetPlaybackInfoLoader::query(const GetPlaybackInfoParams &params) cons
 	return result;
 }
 
+QByteArray GetPlaybackInfoLoader::body(const GetPlaybackInfoParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPlaybackInfoLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetPostedPlaybackInfoLoader::GetPostedPlaybackInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<PlaybackInfoResponse, GetPostedPlaybackInfoParams>(apiClient) {}
 
@@ -116,6 +126,16 @@ QUrlQuery GetPostedPlaybackInfoLoader::query(const GetPostedPlaybackInfoParams &
 	return result;
 }
 
+QByteArray GetPostedPlaybackInfoLoader::body(const GetPostedPlaybackInfoParams &params) const {
+	return Support::toString<QSharedPointer<PlaybackInfoDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation GetPostedPlaybackInfoLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 OpenLiveStreamLoader::OpenLiveStreamLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<LiveStreamResponse, OpenLiveStreamParams>(apiClient) {}
 
@@ -166,6 +186,16 @@ QUrlQuery OpenLiveStreamLoader::query(const OpenLiveStreamParams &params) const 
 	}
 	
 	return result;
+}
+
+QByteArray OpenLiveStreamLoader::body(const OpenLiveStreamParams &params) const {
+	return Support::toString<QSharedPointer<OpenLiveStreamDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation OpenLiveStreamLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
 }
 
 

@@ -58,6 +58,8 @@ public:
 protected:
 	QString path(const GetAdditionalPartParams& parameters) const override;
 	QUrlQuery query(const GetAdditionalPartParams& parameters) const override;
+	QByteArray body(const GetAdditionalPartParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
 };
 
 } // NS HTTP

@@ -33,10 +33,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <sailfishapp.h>
 
-#include <JellyfinQt/jellyfin.h>
-
-static const char *SANDBOX_PROGRAM = "/usr/bin/sailjail";
-
 int main(int argc, char *argv[]) {
     //QQmlDebuggingEnabler enabler;
     //enabler.startTcpDebugServer(9999);
@@ -60,7 +56,6 @@ int main(int argc, char *argv[]) {
     cmdParser.addHelpOption();
     cmdParser.addVersionOption();
 
-    Jellyfin::registerTypes();
     QQuickView *view = SailfishApp::createView();
     view->setSource(SailfishApp::pathToMainQml());
     view->show();

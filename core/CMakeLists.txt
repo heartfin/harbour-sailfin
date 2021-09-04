@@ -101,7 +101,7 @@ endif()
 
 
 
-add_library(JellyfinQt ${JellyfinQt_SOURCES} ${JellyfinQt_HEADERS})
+add_library(JellyfinQt ${JellyfinQt_SOURCES} ${JellyfinQt_HEADERS} qmldir JellyfinQt.qmltypes)
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0") 
     if(BUILD_PRECOMPILED_HEADERS)
@@ -127,5 +127,30 @@ install(TARGETS JellyfinQt
 	ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
 	INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 	RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+
+add_custom_target(qmltypes
+	COMMAND qmlplugindump -nonrelocatable nl.netsoj.chris.Jellyfin 1.0 > $$PWD/JellyfinQt.qmltypes)
+
+add_custom_command(
+    TARGET JellyfinQt
+    POST_BUILD
+    COMMAND
+        ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_LIST_DIR}/qmldir
+        $<TARGET_FILE_DIR:JellyfinQt>/qmldir
+)
+
+add_custom_command(
+    TARGET JellyfinQt
+    POST_BUILD
+    COMMAND
+        ${CMAKE_COMMAND} -E copy
+        ${CMAKE_CURRENT_LIST_DIR}/JellyfinQt.qmltypes
+        $<TARGET_FILE_DIR:JellyfinQt>/JellyfinQt.qmltypes
+)
+
+
+set(QML_IMPORT_PATH $<TARGET_FILE_DIR:JellyfinQt> CACHE PATH "")
+install(FILES $<TARGET_FILE_DIR:JellyfinQt>/qmldir DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 export(TARGETS JellyfinQt FILE JellyfinQtConfig.cmake)

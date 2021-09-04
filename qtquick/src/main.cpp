@@ -14,6 +14,9 @@
 int main(int argc, char** argv) {
     QGuiApplication app(argc, argv);
     app.setApplicationDisplayName(QStringLiteral("Sailfin QtQuick"));
+    app.setApplicationName("Sailfin QtQuick");
+    app.setOrganizationDomain("nl.netsoj.chris");
+    app.setOrganizationName("Chris Josten");
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     // Disable Qt nagging about "implicitly defined onFoo properties in connections are deprecated",
@@ -25,7 +28,8 @@ int main(int argc, char** argv) {
     QQmlApplicationEngine engine;
 
     qDebug() << "Registering types";
-    Jellyfin::registerTypes();
+    Jellyfin::JellyfinPlugin plugin;
+    plugin.registerTypes("nl.netsoj.chris.Jellyfin");
 
     qDebug() << "Loading file";
     engine.load(QStringLiteral("qrc:/qml/main.qml"));

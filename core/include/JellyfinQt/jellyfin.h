@@ -19,35 +19,18 @@
 #ifndef JELLYFIN_H
 #define JELLYFIN_H
 
+#include <QQmlExtensionPlugin>
 #include <QtQml>
-
-#include "model/item.h"
-#include "dto/itemfields.h"
-#include "dto/mediastream.h"
-#include "dto/nameguidpair.h"
-#include "dto/userdto.h"
-#include "dto/useritemdatadto.h"
-
-#include "apiclient.h"
-#include "apimodel.h"
-#include "serverdiscoverymodel.h"
-#include "websocket.h"
-#include "viewmodel/item.h"
-#include "viewmodel/itemmodel.h"
-#include "viewmodel/loader.h"
-#include "viewmodel/mediastream.h"
-#include "viewmodel/modelstatus.h"
-#include "viewmodel/platformmediacontrol.h"
-#include "viewmodel/playbackmanager.h"
-#include "viewmodel/playlist.h"
-#include "viewmodel/settings.h"
-#include "viewmodel/userdata.h"
-#include "viewmodel/usermodel.h"
-#include "viewmodel/user.h"
 
 namespace Jellyfin {
 
-void registerTypes(const char *uri = "nl.netsoj.chris.Jellyfin");
+class JellyfinPlugin : public QQmlExtensionPlugin {
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
+public:
+    void registerTypes(const char *uri) override;
+
+};
 
 }
 

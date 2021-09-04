@@ -14,16 +14,20 @@ option(BUILD_PRECOMPILED_HEADERS "Build with precompiled headers for faster comp
 option(USE_MLITE "Build with mlite (MeeGo lite library), only available on Linux-based platforms. Used to store settings using DConf." OFF)
 
 if (NOT SAILFIN_VERSION)
-    set(SAILFIN_VERSION "1.0.0")
+	set(SAILFIN_VERSION "1.0.0")
 endif()
 
 if(PLATFORM_SAILFISHOS)
 	# Hardcode this less?
-	set(CMAKE_INSTALL_LIBDIR "${CMAKE_INSTALL_PREFIX}/share/harbour-sailfin/lib")
-    set(USE_MLITE ON)
+	set(CMAKE_INSTALL_LIBDIR "${CMAKE_INSTALL_PREFIX}/share/harbour-sailfin/nl/netsoj/chris/Jellyfin")
+	set(USE_MLITE ON)
 endif()
 
+if (PLATFORM_SAILFISHOS)
+	set(CMAKE_BUILD_SHARED_LIBS NO)
+endif()
 add_subdirectory(core)
+
 if(PLATFORM_SAILFISHOS)
 	add_subdirectory(sailfish)
 elseif(PLATFORM_QTQUICK)

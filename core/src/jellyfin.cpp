@@ -17,9 +17,34 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 #include "JellyfinQt/jellyfin.h"
+
+#include "JellyfinQt/model/item.h"
+#include "JellyfinQt/dto/itemfields.h"
+#include "JellyfinQt/dto/mediastream.h"
+#include "JellyfinQt/dto/nameguidpair.h"
+#include "JellyfinQt/dto/userdto.h"
+#include "JellyfinQt/dto/useritemdatadto.h"
+
+#include "JellyfinQt/apiclient.h"
+#include "JellyfinQt/apimodel.h"
+#include "JellyfinQt/serverdiscoverymodel.h"
+#include "JellyfinQt/websocket.h"
+#include "JellyfinQt/viewmodel/item.h"
+#include "JellyfinQt/viewmodel/itemmodel.h"
+#include "JellyfinQt/viewmodel/loader.h"
+#include "JellyfinQt/viewmodel/mediastream.h"
+#include "JellyfinQt/viewmodel/modelstatus.h"
+#include "JellyfinQt/viewmodel/platformmediacontrol.h"
+#include "JellyfinQt/viewmodel/playbackmanager.h"
+#include "JellyfinQt/viewmodel/playlist.h"
+#include "JellyfinQt/viewmodel/settings.h"
+#include "JellyfinQt/viewmodel/userdata.h"
+#include "JellyfinQt/viewmodel/usermodel.h"
+#include "JellyfinQt/viewmodel/user.h"
+
 namespace Jellyfin {
 
-void registerTypes(const char *uri) {
+void JellyfinPlugin::registerTypes(const char *uri) {
     qmlRegisterType<ApiClient>(uri, 1, 0, "ApiClient");
     qmlRegisterType<ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");
     qmlRegisterType<ViewModel::PlaybackManager>(uri, 1, 0, "PlaybackManager");

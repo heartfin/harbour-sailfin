@@ -1,0 +1,27 @@
+variables: &variables
+  SFOS_VERSION: 4.1.0.24
+
+stages:
+  - build
+
+image: coderus/sailfishos-platform-sdk:$SFOS_VERSION
+
+.build: &build
+  stage: build
+  artifacts:
+    paths:
+      - RPMS/*
+  script:
+    - mb2 -t SailfishOS-$SFOS_VERSION-$MER_ARCH build
+
+build:armv7hl:
+  variables:
+    <<: *variables
+    MER_ARCH: armv7hl
+  <<: *build
+
+build:aarch64:
+  variables:
+    <<: *variables
+    MER_ARCH: aarch64
+  <<: *build

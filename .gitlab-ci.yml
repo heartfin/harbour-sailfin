@@ -10,8 +10,9 @@ image: coderus/sailfishos-platform-sdk:$SFOS_VERSION
   stage: build
   artifacts:
     paths:
-      - RPMS/*
+      - /home/nemo/harbour-sailfin/RPMS/*
   script:
+    - cp -a . /home/nemo/harbour-sailfin && cd /home/nemo/harbour-sailfin
     - mb2 -t SailfishOS-$SFOS_VERSION-$MER_ARCH build
 
 build:armv7hl:

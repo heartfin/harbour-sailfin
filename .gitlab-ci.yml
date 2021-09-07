@@ -17,7 +17,7 @@ lint:sfos:qmllint:
     - sudo zypper --non-interactive install qt5-qtdeclarative-devel-tools
     - cd sailfish/qml
       # Find all files ending in .qml or .js and pass them as arguments to qmllint
-    - find -type f \( -name \*.qml -o -name \*.js \) -exec /usr/lib/qt5/bin/qmllint -U \{\} + 
+    - find -type f \( -name \*.qml -o -name \*.js \) -exec /usr/lib/qt5/bin/qmllint \{\} + 
   allow_failure: true
 
 .build:sfos: &build

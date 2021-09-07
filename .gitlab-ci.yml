@@ -1,27 +1,40 @@
 variables: &variables
   SFOS_VERSION: 4.1.0.24
+  BUILD_PATH: /home/mersdk/harbour-sailfin
 
 stages:
+  - lint
   - build
 
 image: coderus/sailfishos-platform-sdk:$SFOS_VERSION
+default:
+  before_script:
+    - cp -a . $BUILD_PATH && cd $BUILD_PATH
 
-.build: &build
+lint:sfos:qmllint:
+  stage: lint
+  script:
+    - sudo zypper --non-interactive install qt5-qtdeclarative-devel-tools
+    - cd sailfish/qml
+      # Find all files ending in .qml or .js and pass them as arguments to qmllint
+    - find -type f \( -name \*.qml -o -name \*.js \) -exec /usr/lib/qt5/bin/qmllint -U \{\} + 
+  allow_failure: true
+
+.build:sfos: &build
   stage: build
   artifacts:
     paths:
-      - /home/mersdk/harbour-sailfin/RPMS/*
+      - $BUILD_PATH/RPMS/
   script:
-    - cp -a . /home/mersdk/harbour-sailfin && cd /home/mersdk/harbour-sailfin
     - mb2 -t SailfishOS-$SFOS_VERSION-$MER_ARCH build
 
-build:armv7hl:
+build:sfos:armv7hl:
   variables:
     <<: *variables
     MER_ARCH: armv7hl
   <<: *build
 
-build:aarch64:
+build:sfos:aarch64:
   variables:
     <<: *variables
     MER_ARCH: aarch64

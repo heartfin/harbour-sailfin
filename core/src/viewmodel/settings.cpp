@@ -43,13 +43,13 @@ void Settings::setAllowTranscoding(bool allowTranscoding) {
     emit allowTranscodingChanged(allowTranscoding);
 }
 
-int Settings::maxBitRate() const {
-    return m_maxBitRate;
+int Settings::maxStreamingBitRate() const {
+    return m_maxStreamingBitRate;
 }
 
-void Settings::setMaxBitRate(int newMaxBitRate) {
-    m_maxBitRate = newMaxBitRate;
-    emit maxBitRateChanged(newMaxBitRate);
+void Settings::setMaxStreamingBitRate(int newMaxBitRate) {
+    m_maxStreamingBitRate = newMaxBitRate;
+    emit maxStreamingBitRateChanged(newMaxBitRate);
 }
 
 } // NS ViewModel

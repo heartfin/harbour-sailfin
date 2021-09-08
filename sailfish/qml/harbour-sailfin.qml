@@ -22,6 +22,7 @@ import Sailfish.Silica 1.0
 import QtMultimedia 5.6
 import nl.netsoj.chris.Jellyfin 1.0
 
+import Nemo.Configuration 1.0
 import Nemo.Notifications 1.0
 import Nemo.KeepAlive 1.2
 
@@ -41,8 +42,9 @@ ApplicationWindow {
     property var itemData: pageStack.currentPage.itemData
 
     // Bad way to implement settings, but it'll do for now.
-    property bool showDebugInfo: true
+    property alias showDebugInfo: config.showDebugInfo
     property bool _hidePlaybackBar: false
+
 
     bottomMargin: playbackBar.visibleSize
     ApiClient {
@@ -130,6 +132,12 @@ ApplicationWindow {
         manager: _playbackManager
         // CTMBWSIU: Code That Might Break When Silica Is Updated
         Component.onCompleted: playbackBar.parent = __silica_applicationwindow_instance._rotatingItem
+    }
+
+    ConfigurationGroup {
+        id: config
+        path: "/nl/netsoj/chris/Sailfin"
+        property bool showDebugInfo: false
     }
 
     //FIXME: proper error handling

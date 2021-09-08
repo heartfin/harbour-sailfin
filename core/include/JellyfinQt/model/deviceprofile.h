@@ -30,10 +30,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <QtMultimedia/QMediaPlayer>
 
+#include "../dto/deviceprofile.h"
+
 namespace Jellyfin {
 namespace Model {
 namespace DeviceProfile {
-    QJsonObject generateProfile();
+    DTO::DeviceProfile generateProfile();
     // Transport
     bool supportsHls();
 

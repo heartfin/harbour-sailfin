@@ -34,6 +34,11 @@ Page {
         Column {
             id: content
             width: parent.width
+            CheckBox {
+                checked: ApiClient.settings.allowTranscoding
+                text: "allow transcoding"
+                onCheckedChanged: ApiClient.settings.allowTranscoding = checked
+            }
             Repeater {
                 model: mediaLibraryModel
                 Column {

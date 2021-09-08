@@ -34,7 +34,7 @@ namespace ViewModel {
 class Settings : public QObjectSettingsWrapper {
     Q_OBJECT
     Q_PROPERTY(bool allowTranscoding READ allowTranscoding WRITE setAllowTranscoding NOTIFY allowTranscodingChanged)
-    Q_PROPERTY(int maxBitRate READ maxBitRate WRITE setMaxBitRate NOTIFY maxBitRateChanged)
+    Q_PROPERTY(int maxStreamingBitRate READ maxStreamingBitRate WRITE setMaxStreamingBitRate NOTIFY maxStreamingBitRateChanged)
 public:
     explicit Settings(ApiClient *apiClient);
     virtual ~Settings();
@@ -42,14 +42,14 @@ public:
     bool allowTranscoding() const;
     void setAllowTranscoding(bool allowTranscoding);
 
-    int maxBitRate() const;
-    void setMaxBitRate(int newMaxBitRate);
+    int maxStreamingBitRate() const;
+    void setMaxStreamingBitRate(int newMaxBitRate);
 signals:
     void allowTranscodingChanged(bool newAllowTranscoding);
-    void maxBitRateChanged(int newMaxBitRate);
+    void maxStreamingBitRateChanged(int newMaxBitRate);
 private:
     bool m_allowTranscoding = true;
-    int m_maxBitRate = 5000000;
+    int m_maxStreamingBitRate = 5000000;
 };
 
 

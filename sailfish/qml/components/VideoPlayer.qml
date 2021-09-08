@@ -69,12 +69,23 @@ SilicaItem {
     }
 
     Label {
+        readonly property string _playbackMethod: {
+            switch(manager.playMethod) {
+            case J.PlaybackManager.DirectPlay:
+                return"Direct Play"
+            case J.PlaybackManager.Transcoding:
+                return "Transcoding"
+            case J.PlaybackManager.DirectStream:
+                return "Direct Stream"
+            default:
+                return "Unknown playback method"
+            }
+        }
         anchors.fill: parent
         anchors.margins: Theme.horizontalPageMargin
         text: item.jellyfinId + "\n" + appWindow.playbackManager.streamUrl + "\n"
-          + (manager.playMethod === J.PlaybackManager.DirectPlay ? "Direct Play" : "Transcoding") + "\n"
-          + manager.position + "\n"
-          + manager.mediaStatus + "\n"
+          + "Playback method: " + _playbackMethod + "\n"
+          + "Media status: " + manager.mediaStatus + "\n"
           // + player.bufferProgress + "\n"
           // + player.metaData.videoCodec + "@" + player.metaData.videoFrameRate + "(" + player.metaData.videoBitRate + ")" + "\n"
           // + player.metaData.audioCodec + "(" + player.metaData.audioBitRate + ")" + "\n"

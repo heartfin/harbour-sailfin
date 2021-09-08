@@ -19,9 +19,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "JellyfinQt/apiclient.h"
 
+#include <QSharedPointer>
+
+#include "JellyfinQt/dto/clientcapabilitiesdto.h"
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/viewmodel/settings.h"
 #include "JellyfinQt/websocket.h"
+
 
 
 namespace Jellyfin {
@@ -45,8 +49,8 @@ public:
     QString userId;
 
     bool online = true;
-    QJsonObject deviceProfile;
-    QJsonObject playbackDeviceProfile;
+    QSharedPointer<DTO::DeviceProfile> deviceProfile;
+    QSharedPointer<DTO::ClientCapabilitiesDto> clientCapabilities;
     QVariantList supportedCommands;
 
     bool authenticated = false;
@@ -70,6 +74,9 @@ ApiClient::ApiClient(QObject *parent)
     connect(d->credManager, &CredentialsManager::usersListed, this, &ApiClient::credManagerUsersListed);
     connect(d->credManager, &CredentialsManager::tokenRetrieved, this, &ApiClient::credManagerTokenRetrieved);
     generateDeviceProfile();
+    connect(d->settings, &ViewModel::Settings::maxStreamingBitRateChanged, this, [d](qint32 newBitrate){
+        d->deviceProfile->setMaxStreamingBitrate(newBitrate);
+    });
 }
 
 ApiClient::~ApiClient() {
@@ -149,13 +156,18 @@ void ApiClient::setSupportedCommands(QVariantList newSupportedCommands) {
     d->supportedCommands = newSupportedCommands;
     emit supportedCommandsChanged();
 }
-const QJsonObject &ApiClient::deviceProfile() const {
+QSharedPointer<DTO::DeviceProfile> ApiClient::deviceProfile() const {
     Q_D(const ApiClient);
     return d->deviceProfile;
 }
-const QJsonObject &ApiClient::playbackDeviceProfile() const {
+
+const QJsonObject ApiClient::deviceProfileJson() const {
     Q_D(const ApiClient);
-    return d->playbackDeviceProfile;
+    return d->deviceProfile->toJson();
+}
+const QJsonObject ApiClient::clientCapabilities() const {
+    Q_D(const ApiClient);
+    return d->clientCapabilities->toJson();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // BASE HTTP METHODS                                                                              //
@@ -367,26 +379,7 @@ void ApiClient::deleteSession() {
 
 void ApiClient::postCapabilities() {
     Q_D(const ApiClient);
-    QJsonObject capabilities;
-    QList<DTO::GeneralCommandType> supportedCommands;
-    supportedCommands.reserve(d->supportedCommands.size());
-    for (int i = 0; i < d->supportedCommands.size(); i++) {
-        if (d->supportedCommands[i].canConvert<DTO::GeneralCommandType>()) {
-            supportedCommands.append(d->supportedCommands[i].value<DTO::GeneralCommandType>());
-        }
-    }
-    QList<int> foo = {1, 2, 3};
-    qDebug() << Support::toJsonValue<int>(3713);
-    qDebug() << Support::toJsonValue<QList<int>>(foo);
-    capabilities["SupportedCommands"] = Support::toJsonValue<QList<DTO::GeneralCommandType>>(supportedCommands);
-    capabilities["SupportsPersistentIdentifier"] = true;
-    capabilities["SupportsMediaControl"] = false;
-    capabilities["SupportsSync"] = false;
-    capabilities["SupportsContentUploading"] = false;
-    capabilities["AppStoreUrl"] = "https://chris.netsoj.nl/projects/harbour-sailfin";
-    capabilities["IconUrl"] = "https://chris.netsoj.nl/static/img/logo.png";
-    capabilities["DeviceProfile"] = d->deviceProfile;
-    QNetworkReply *rep = post("/Sessions/Capabilities/Full", QJsonDocument(capabilities));
+    QNetworkReply *rep = post("/Sessions/Capabilities/Full", QJsonDocument(d->clientCapabilities->toJson()));
     setDefaultErrorHandler(rep);
 }
 
@@ -397,18 +390,33 @@ QString ApiClient::downloadUrl(const QString &itemId) const {
 
 void ApiClient::generateDeviceProfile() {
     Q_D(ApiClient);
-    QJsonObject root = Model::DeviceProfile::generateProfile();
-    d->playbackDeviceProfile = QJsonObject(root);
-    root["Name"] = d->deviceName;
-    root["Id"] = d->deviceId;
-    root["FriendlyName"] = QSysInfo::prettyProductName();
-    QJsonArray playableMediaTypes;
-    playableMediaTypes.append("Audio");
-    playableMediaTypes.append("Video");
-    playableMediaTypes.append("Photo");
-    root["PlayableMediaTypes"] = playableMediaTypes;
+    QSharedPointer<DTO::DeviceProfile> deviceProfile = QSharedPointer<DTO::DeviceProfile>::create(Model::DeviceProfile::generateProfile());
+    deviceProfile->setName(d->deviceName);
+    deviceProfile->setJellyfinId(d->deviceId);
+    deviceProfile->setFriendlyName(QSysInfo::prettyProductName());
+    deviceProfile->setMaxStreamingBitrate(d->settings->maxStreamingBitRate());
+    d->deviceProfile = deviceProfile;
 
-    d->deviceProfile = root;
+    QList<DTO::GeneralCommandType> supportedCommands;
+    supportedCommands.reserve(d->supportedCommands.size());
+    for (int i = 0; i < d->supportedCommands.size(); i++) {
+        if (d->supportedCommands[i].canConvert<DTO::GeneralCommandType>()) {
+            supportedCommands.append(d->supportedCommands[i].value<DTO::GeneralCommandType>());
+        }
+    }
+
+    QSharedPointer<DTO::ClientCapabilitiesDto> clientCapabilities = QSharedPointer<DTO::ClientCapabilitiesDto>::create();
+    clientCapabilities->setPlayableMediaTypes({"Audio", "Video", "Photo"});
+    clientCapabilities->setDeviceProfile(deviceProfile);
+    clientCapabilities->setSupportedCommands(supportedCommands);
+    clientCapabilities->setAppStoreUrl("https://chris.netsoj.nl/projects/harbour-sailfin");
+    clientCapabilities->setIconUrl("https://chris.netsoj.nl/static/img/logo.png");
+    clientCapabilities->setSupportsPersistentIdentifier(true);
+    clientCapabilities->setSupportsSync(false);
+    clientCapabilities->setSupportsMediaControl(false);
+    clientCapabilities->setSupportsContentUploading(false);
+
+    d->clientCapabilities = clientCapabilities;
     emit deviceProfileChanged();
 }
 

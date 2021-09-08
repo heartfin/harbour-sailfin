@@ -24,6 +24,7 @@
 
 // #include "JellyfinQt/DTO/dto.h"
 #include <JellyfinQt/dto/useritemdatadto.h>
+#include <JellyfinQt/viewmodel/settings.h>
 #include <utility>
 
 namespace Jellyfin {
@@ -89,6 +90,7 @@ void PlaybackManager::setItem(QSharedPointer<Model::Item> newItem) {
     emit hasPreviousChanged(m_queue->hasPrevious());
 
     if (m_apiClient == nullptr) {
+
         qWarning() << "apiClient is not set on this MediaSource instance! Aborting.";
         return;
     }
@@ -177,6 +179,8 @@ void PlaybackManager::updatePlaybackInfo() {
 
 void PlaybackManager::playItem(Item *item) {
     setItem(item->data());
+    emit hasNextChanged(m_queue->hasNext());
+    emit hasPreviousChanged(m_queue->hasPrevious());
 }
 
 void PlaybackManager::playItemInList(ItemModel *playlist, int index) {
@@ -186,6 +190,8 @@ void PlaybackManager::playItemInList(ItemModel *playlist, int index) {
     m_queueIndex = index;
     emit queueIndexChanged(m_queueIndex);
     setItem(playlist->itemAt(index));
+    emit hasNextChanged(m_queue->hasNext());
+    emit hasPreviousChanged(m_queue->hasPrevious());
 }
 
 void PlaybackManager::skipToItemIndex(int index) {
@@ -200,6 +206,8 @@ void PlaybackManager::skipToItemIndex(int index) {
         m_queue->play(index);
     }
     setItem(m_queue->currentItem());
+    emit hasNextChanged(m_queue->hasNext());
+    emit hasPreviousChanged(m_queue->hasPrevious());
 }
 
 void PlaybackManager::next() {
@@ -215,6 +223,8 @@ void PlaybackManager::next() {
         setItem(m_nextItem);
     }
     m_mediaPlayer->play();
+    emit hasNextChanged(m_queue->hasNext());
+    emit hasPreviousChanged(m_queue->hasPrevious());
 }
 
 void PlaybackManager::previous() {
@@ -227,6 +237,8 @@ void PlaybackManager::previous() {
     m_queue->previous();
     setItem(m_queue->currentItem());
     m_mediaPlayer->play();
+    emit hasNextChanged(m_queue->hasNext());
+    emit hasPreviousChanged(m_queue->hasPrevious());
 }
 
 void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
@@ -285,21 +297,45 @@ void PlaybackManager::componentComplete() {
 void PlaybackManager::requestItemUrl(QSharedPointer<Model::Item> item) {
     ItemUrlLoader *loader = new Jellyfin::Loader::HTTP::GetPostedPlaybackInfoLoader(m_apiClient);
     Jellyfin::Loader::GetPostedPlaybackInfoParams params;
+
+
+    // Check if we'd prefer to transcode if the video file contains multiple audio tracks
+    // or if a subtitle track was selected.
+    // This has to be done due to the lack of support of selecting audio tracks within QtMultimedia
+    bool allowTranscoding = m_apiClient->settings()->allowTranscoding();
+    bool transcodePreferred = m_subtitleIndex > 0;
+    int audioTracks = 0;
+    const QList<DTO::MediaStream> &streams = item->mediaStreams();
+    for(int i = 0; i < streams.size(); i++) {
+        const DTO::MediaStream &stream = streams[i];
+        if (stream.type() == MediaStreamType::Audio) {
+            audioTracks++;
+        }
+    }
+    if (audioTracks > 1) {
+        transcodePreferred = true;
+    }
+
+    bool forceTranscoding = allowTranscoding && transcodePreferred;
+
+    QSharedPointer<DTO::PlaybackInfoDto> playbackInfo = QSharedPointer<DTO::PlaybackInfoDto>::create();
     params.setItemId(item->jellyfinId());
     params.setUserId(m_apiClient->userId());
-    params.setEnableDirectPlay(true);
-    params.setEnableDirectStream(true);
-    params.setEnableTranscoding(true);
-    params.setAudioStreamIndex(this->m_audioIndex);
-    params.setSubtitleStreamIndex(this->m_subtitleIndex);
+    playbackInfo->setEnableDirectPlay(true);
+    playbackInfo->setEnableDirectStream(!forceTranscoding);
+    playbackInfo->setEnableTranscoding(forceTranscoding || allowTranscoding);
+    playbackInfo->setAudioStreamIndex(this->m_audioIndex);
+    playbackInfo->setSubtitleStreamIndex(this->m_subtitleIndex);
+    playbackInfo->setDeviceProfile(m_apiClient->deviceProfile());
+    params.setBody(playbackInfo);
 
     loader->setParameters(params);
-    connect(loader, &ItemUrlLoader::ready, [this, loader, item] {
+    connect(loader, &ItemUrlLoader::ready, this, [this, loader, item] {
         DTO::PlaybackInfoResponse result = loader->result();
         handlePlaybackInfoResponse(item->jellyfinId(), item->mediaType(), result);
         loader->deleteLater();
     });
-    connect(loader, &ItemUrlLoader::error, [this, loader, item](QString message) {
+    connect(loader, &ItemUrlLoader::error, this, [this, loader, item](QString message) {
         onItemErrorReceived(item->jellyfinId(), message);
         loader->deleteLater();
     });
@@ -312,12 +348,43 @@ void PlaybackManager::handlePlaybackInfoResponse(QString itemId, QString mediaTy
     QUrl resultingUrl;
     QString playSession = response.playSessionId();
     PlayMethod playMethod = PlayMethod::EnumNotSet;
+    bool transcodingAllowed = m_apiClient->settings()->allowTranscoding();
+
+
+
     for (int i = 0; i < mediaSources.size(); i++) {
         const DTO::MediaSourceInfo &source = mediaSources.at(i);
+
+        // Check if we'd prefer to transcode if the video file contains multiple audio tracks
+        // or if a subtitle track was selected.
+        // This has to be done due to the lack of support of selecting audio tracks within QtMultimedia
+        bool transcodePreferred = false;
+        if (transcodingAllowed) {
+            transcodePreferred = m_subtitleIndex > 0;
+            int audioTracks = 0;
+            const QList<DTO::MediaStream> &streams = source.mediaStreams();
+            for (int i = 0; i < streams.size(); i++) {
+                DTO::MediaStream stream = streams[i];
+                if (stream.type() == MediaStreamType::Audio) {
+                    audioTracks++;
+                }
+            }
+            if (audioTracks > 1) {
+                transcodePreferred = true;
+            }
+        }
+
+
+        qDebug() << "Media source: " << source.name() << "\n"
+                 << "Prefer transcoding: " << transcodePreferred << "\n"
+                 << "DirectPlay supported: " << source.supportsDirectPlay() << "\n"
+                 << "DirectStream supported: " << source.supportsDirectStream() << "\n"
+                 << "Transcode supported: " << source.supportsTranscoding();
+
         if (source.supportsDirectPlay() && QFile::exists(source.path())) {
             resultingUrl = QUrl::fromLocalFile(source.path());
             playMethod = PlayMethod::DirectPlay;
-        } else if (source.supportsDirectStream()) {
+        } else if (source.supportsDirectStream() && !transcodePreferred) {
             if (mediaType == "Video") {
                 mediaType.append('s');
             }
@@ -329,7 +396,8 @@ void PlaybackManager::handlePlaybackInfoResponse(QString itemId, QString mediaTy
             resultingUrl = QUrl(m_apiClient->baseUrl() + "/" + mediaType + "/" + itemId
                     + "/stream." + source.container() + "?" + query.toString(QUrl::EncodeReserved));
             playMethod = PlayMethod::DirectStream;
-        } else if (source.supportsTranscoding()) {
+        } else if (source.supportsTranscoding() && !source.transcodingUrlNull() && transcodingAllowed) {
+            qDebug() << "Transcoding url: " << source.transcodingUrl();
             resultingUrl = QUrl(m_apiClient->baseUrl() + source.transcodingUrl());
             playMethod = PlayMethod::Transcode;
         } else {
@@ -341,6 +409,7 @@ void PlaybackManager::handlePlaybackInfoResponse(QString itemId, QString mediaTy
         qWarning() << "Could not find suitable media source for item " << itemId;
         onItemErrorReceived(itemId, tr("Cannot fetch stream URL"));
     } else {
+        emit playMethodChanged(playMethod);
         onItemUrlReceived(itemId, resultingUrl, playSession, playMethod);
     }
 }

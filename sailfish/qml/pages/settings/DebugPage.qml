@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import Nemo.Configuration 1.0
 
 import nl.netsoj.chris.Jellyfin 1.0 as J
 
@@ -29,6 +30,12 @@ Page {
 
     // The effective value will be restricted by ApplicationWindow.allowedOrientations
     allowedOrientations: Orientation.All
+
+    ConfigurationGroup {
+        id: config
+        path: "/nl/netsoj/chris/Sailfin"
+        property bool showDebugInfo: false
+    }
 
     SilicaFlickable {
         anchors.fill: parent
@@ -42,8 +49,8 @@ Page {
 
             TextSwitch {
                 text: qsTr("Show debug information")
-                checked: appWindow.showDebugInfo
-                onCheckedChanged: appWindow.showDebugInfo = checked
+                checked: config.showDebugInfo
+                onCheckedChanged: config.showDebugInfo = checked
             }
 
             SectionHeader {

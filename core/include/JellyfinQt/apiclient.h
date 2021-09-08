@@ -96,7 +96,7 @@ public:
     Q_PROPERTY(QString baseUrl READ baseUrl WRITE setBaseUrl NOTIFY baseUrlChanged)
     Q_PROPERTY(bool authenticated READ authenticated WRITE setAuthenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString userId READ userId NOTIFY userIdChanged)
-    Q_PROPERTY(QJsonObject deviceProfile READ deviceProfile NOTIFY deviceProfileChanged)
+    Q_PROPERTY(QJsonObject deviceProfile READ deviceProfileJson NOTIFY deviceProfileChanged)
     Q_PROPERTY(QString version READ version)
     Q_PROPERTY(EventBus *eventbus READ eventbus FINAL)
     Q_PROPERTY(Jellyfin::WebSocket *websocket READ websocket FINAL)
@@ -139,8 +139,9 @@ public:
      */
     QVariantList supportedCommands() const ;
     void setSupportedCommands(QVariantList newSupportedCommands);
-    const QJsonObject &deviceProfile() const;
-    const QJsonObject &playbackDeviceProfile() const;
+    const QJsonObject deviceProfileJson() const;
+    QSharedPointer<DTO::DeviceProfile> deviceProfile() const;
+    const QJsonObject clientCapabilities() const;
     /**
      * @brief Retrieves the authentication token. Null QString if not authenticated.
      * @note This is not the full authentication header, just the token.

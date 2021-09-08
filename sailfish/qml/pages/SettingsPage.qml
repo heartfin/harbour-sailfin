@@ -118,6 +118,13 @@ Page {
             }
 
             IconListItem {
+                //: Settings list item for settings related to streaming
+                text: qsTr("Streaming settings")
+                iconSource: "image://theme/icon-m-cloud-download"
+                onClicked: pageStack.push(Qt.resolvedUrl("settings/StreamingPage.qml"))
+            }
+
+            IconListItem {
                 //: Debug information settings menu itemy
                 text: qsTr("Debug information")
                 iconSource: "image://theme/icon-s-developer"

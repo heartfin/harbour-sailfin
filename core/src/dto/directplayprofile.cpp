@@ -66,11 +66,23 @@ void DirectPlayProfile::setFromJson(QJsonObject source) {
 	
 QJsonObject DirectPlayProfile::toJson() const {
 	QJsonObject result;
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
-	result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
-	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
-
+	
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+			
+	
+	if (!(m_audioCodec.isNull())) {
+		result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
+	}
+			
+	
+	if (!(m_videoCodec.isNull())) {
+		result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
+	}
+			
+	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);	
 	return result;
 }
 

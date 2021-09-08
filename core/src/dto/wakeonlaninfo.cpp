@@ -60,9 +60,13 @@ void WakeOnLanInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject WakeOnLanInfo::toJson() const {
 	QJsonObject result;
-	result["MacAddress"] = Jellyfin::Support::toJsonValue<QString>(m_macAddress);
-	result["Port"] = Jellyfin::Support::toJsonValue<qint32>(m_port);
-
+	
+	
+	if (!(m_macAddress.isNull())) {
+		result["MacAddress"] = Jellyfin::Support::toJsonValue<QString>(m_macAddress);
+	}
+			
+	result["Port"] = Jellyfin::Support::toJsonValue<qint32>(m_port);	
 	return result;
 }
 

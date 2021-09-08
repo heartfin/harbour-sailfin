@@ -63,10 +63,18 @@ void HttpHeaderInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject HttpHeaderInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
-	result["Match"] = Jellyfin::Support::toJsonValue<HeaderMatchType>(m_match);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_value.isNull())) {
+		result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
+	}
+			
+	result["Match"] = Jellyfin::Support::toJsonValue<HeaderMatchType>(m_match);	
 	return result;
 }
 

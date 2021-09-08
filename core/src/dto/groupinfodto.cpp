@@ -69,12 +69,20 @@ void GroupInfoDto::setFromJson(QJsonObject source) {
 	
 QJsonObject GroupInfoDto::toJson() const {
 	QJsonObject result;
-	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);
-	result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);
-	result["State"] = Jellyfin::Support::toJsonValue<GroupStateType>(m_state);
-	result["Participants"] = Jellyfin::Support::toJsonValue<QStringList>(m_participants);
-	result["LastUpdatedAt"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastUpdatedAt);
-
+	
+	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);		
+	
+	if (!(m_groupName.isNull())) {
+		result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);
+	}
+			
+	result["State"] = Jellyfin::Support::toJsonValue<GroupStateType>(m_state);		
+	
+	if (!(m_participants.size() == 0)) {
+		result["Participants"] = Jellyfin::Support::toJsonValue<QStringList>(m_participants);
+	}
+			
+	result["LastUpdatedAt"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastUpdatedAt);	
 	return result;
 }
 

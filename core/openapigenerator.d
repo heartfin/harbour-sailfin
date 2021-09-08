@@ -686,18 +686,27 @@ MetaTypeInfo getType(ref const string name, const ref Node node, const ref Node 
 		info.needsLocalImport = true;
 		info.typeName = type;
 		if (type in allSchemas) {
-			if ("type" in allSchemas[type] 
-				&& allSchemas[type]["type"].as!string == "object") {
+			if ("enum" in allSchemas[type]) {
+				info.isTypeNullable = true;
+				info.typeNullableCheck = "== " ~ info.typeName ~ "::EnumNotSet";
+				info.typeNullableSetter = "= " ~ info.typeName ~ "::EnumNotSet";
+			} else if ("type" in allSchemas[type] 
+					&& allSchemas[type]["type"].as!string == "object") {
+				writefln("Type %s is an object", type);
 				info.needsPointer = true;
 				info.isTypeNullable = true;
 				info.typeNullableCheck = ".isNull()";
 				info.typeNullableSetter = ".clear()";
-			} else if ("enum" in allSchemas[type]) {
-				info.isTypeNullable = true;
-				info.typeNullableCheck = "== " ~ info.typeName ~ "::EnumNotSet";
-				info.typeNullableSetter = "= " ~ info.typeName ~ "::EnumNotSet";
 			}
 		}
+		return info;
+	}
+	
+	// Type is an enumeration
+	if ("enum" in node) {
+		info.isTypeNullable = true;
+		info.typeNullableCheck = "== " ~ info.typeName ~ "::EnumNotSet";
+		info.typeNullableSetter = "= " ~ info.typeName ~ "::EnumNotSet";
 		return info;
 	}
 	

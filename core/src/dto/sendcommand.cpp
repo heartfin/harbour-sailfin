@@ -72,13 +72,17 @@ void SendCommand::setFromJson(QJsonObject source) {
 	
 QJsonObject SendCommand::toJson() const {
 	QJsonObject result;
-	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);
-	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-	result["When"] = Jellyfin::Support::toJsonValue<QDateTime>(m_when);
-	result["PositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_positionTicks);
-	result["Command"] = Jellyfin::Support::toJsonValue<SendCommandType>(m_command);
-	result["EmittedAt"] = Jellyfin::Support::toJsonValue<QDateTime>(m_emittedAt);
-
+	
+	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);		
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);		
+	result["When"] = Jellyfin::Support::toJsonValue<QDateTime>(m_when);		
+	
+	if (!(!m_positionTicks.has_value())) {
+		result["PositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_positionTicks);
+	}
+			
+	result["Command"] = Jellyfin::Support::toJsonValue<SendCommandType>(m_command);		
+	result["EmittedAt"] = Jellyfin::Support::toJsonValue<QDateTime>(m_emittedAt);	
 	return result;
 }
 

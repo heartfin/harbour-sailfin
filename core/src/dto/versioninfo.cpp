@@ -81,16 +81,48 @@ void VersionInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject VersionInfo::toJson() const {
 	QJsonObject result;
-	result["version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
-	result["VersionNumber"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_versionNumber);
-	result["changelog"] = Jellyfin::Support::toJsonValue<QString>(m_changelog);
-	result["targetAbi"] = Jellyfin::Support::toJsonValue<QString>(m_targetAbi);
-	result["sourceUrl"] = Jellyfin::Support::toJsonValue<QString>(m_sourceUrl);
-	result["checksum"] = Jellyfin::Support::toJsonValue<QString>(m_checksum);
-	result["timestamp"] = Jellyfin::Support::toJsonValue<QString>(m_timestamp);
-	result["repositoryName"] = Jellyfin::Support::toJsonValue<QString>(m_repositoryName);
-	result["repositoryUrl"] = Jellyfin::Support::toJsonValue<QString>(m_repositoryUrl);
-
+	
+	
+	if (!(m_version.isNull())) {
+		result["version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	}
+			
+	result["VersionNumber"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_versionNumber);		
+	
+	if (!(m_changelog.isNull())) {
+		result["changelog"] = Jellyfin::Support::toJsonValue<QString>(m_changelog);
+	}
+			
+	
+	if (!(m_targetAbi.isNull())) {
+		result["targetAbi"] = Jellyfin::Support::toJsonValue<QString>(m_targetAbi);
+	}
+			
+	
+	if (!(m_sourceUrl.isNull())) {
+		result["sourceUrl"] = Jellyfin::Support::toJsonValue<QString>(m_sourceUrl);
+	}
+			
+	
+	if (!(m_checksum.isNull())) {
+		result["checksum"] = Jellyfin::Support::toJsonValue<QString>(m_checksum);
+	}
+			
+	
+	if (!(m_timestamp.isNull())) {
+		result["timestamp"] = Jellyfin::Support::toJsonValue<QString>(m_timestamp);
+	}
+			
+	
+	if (!(m_repositoryName.isNull())) {
+		result["repositoryName"] = Jellyfin::Support::toJsonValue<QString>(m_repositoryName);
+	}
+			
+	
+	if (!(m_repositoryUrl.isNull())) {
+		result["repositoryUrl"] = Jellyfin::Support::toJsonValue<QString>(m_repositoryUrl);
+	}
+		
 	return result;
 }
 

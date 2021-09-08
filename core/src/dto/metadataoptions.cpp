@@ -75,14 +75,42 @@ void MetadataOptions::setFromJson(QJsonObject source) {
 	
 QJsonObject MetadataOptions::toJson() const {
 	QJsonObject result;
-	result["ItemType"] = Jellyfin::Support::toJsonValue<QString>(m_itemType);
-	result["DisabledMetadataSavers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledMetadataSavers);
-	result["LocalMetadataReaderOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_localMetadataReaderOrder);
-	result["DisabledMetadataFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledMetadataFetchers);
-	result["MetadataFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetcherOrder);
-	result["DisabledImageFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledImageFetchers);
-	result["ImageFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetcherOrder);
-
+	
+	
+	if (!(m_itemType.isNull())) {
+		result["ItemType"] = Jellyfin::Support::toJsonValue<QString>(m_itemType);
+	}
+			
+	
+	if (!(m_disabledMetadataSavers.size() == 0)) {
+		result["DisabledMetadataSavers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledMetadataSavers);
+	}
+			
+	
+	if (!(m_localMetadataReaderOrder.size() == 0)) {
+		result["LocalMetadataReaderOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_localMetadataReaderOrder);
+	}
+			
+	
+	if (!(m_disabledMetadataFetchers.size() == 0)) {
+		result["DisabledMetadataFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledMetadataFetchers);
+	}
+			
+	
+	if (!(m_metadataFetcherOrder.size() == 0)) {
+		result["MetadataFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetcherOrder);
+	}
+			
+	
+	if (!(m_disabledImageFetchers.size() == 0)) {
+		result["DisabledImageFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledImageFetchers);
+	}
+			
+	
+	if (!(m_imageFetcherOrder.size() == 0)) {
+		result["ImageFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetcherOrder);
+	}
+		
 	return result;
 }
 

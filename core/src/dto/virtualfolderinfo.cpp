@@ -78,15 +78,43 @@ void VirtualFolderInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject VirtualFolderInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Locations"] = Jellyfin::Support::toJsonValue<QStringList>(m_locations);
-	result["CollectionType"] = Jellyfin::Support::toJsonValue<QString>(m_collectionType);
-	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
-	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
-	result["PrimaryImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageItemId);
-	result["RefreshProgress"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_refreshProgress);
-	result["RefreshStatus"] = Jellyfin::Support::toJsonValue<QString>(m_refreshStatus);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_locations.size() == 0)) {
+		result["Locations"] = Jellyfin::Support::toJsonValue<QStringList>(m_locations);
+	}
+			
+	
+	if (!(m_collectionType.isNull())) {
+		result["CollectionType"] = Jellyfin::Support::toJsonValue<QString>(m_collectionType);
+	}
+			
+	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);		
+	
+	if (!(m_itemId.isNull())) {
+		result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
+	}
+			
+	
+	if (!(m_primaryImageItemId.isNull())) {
+		result["PrimaryImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageItemId);
+	}
+			
+	
+	if (!(!m_refreshProgress.has_value())) {
+		result["RefreshProgress"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_refreshProgress);
+	}
+			
+	
+	if (!(m_refreshStatus.isNull())) {
+		result["RefreshStatus"] = Jellyfin::Support::toJsonValue<QString>(m_refreshStatus);
+	}
+		
 	return result;
 }
 

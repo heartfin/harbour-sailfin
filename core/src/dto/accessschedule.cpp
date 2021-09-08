@@ -69,12 +69,12 @@ void AccessSchedule::setFromJson(QJsonObject source) {
 	
 QJsonObject AccessSchedule::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<qint32>(m_jellyfinId);
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["DayOfWeek"] = Jellyfin::Support::toJsonValue<DynamicDayOfWeek>(m_dayOfWeek);
-	result["StartHour"] = Jellyfin::Support::toJsonValue<double>(m_startHour);
-	result["EndHour"] = Jellyfin::Support::toJsonValue<double>(m_endHour);
-
+	
+	result["Id"] = Jellyfin::Support::toJsonValue<qint32>(m_jellyfinId);		
+	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);		
+	result["DayOfWeek"] = Jellyfin::Support::toJsonValue<DynamicDayOfWeek>(m_dayOfWeek);		
+	result["StartHour"] = Jellyfin::Support::toJsonValue<double>(m_startHour);		
+	result["EndHour"] = Jellyfin::Support::toJsonValue<double>(m_endHour);	
 	return result;
 }
 

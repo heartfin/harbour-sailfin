@@ -114,27 +114,79 @@ void PlaybackProgressInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject PlaybackProgressInfo::toJson() const {
 	QJsonObject result;
-	result["CanSeek"] = Jellyfin::Support::toJsonValue<bool>(m_canSeek);
-	result["Item"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_item);
-	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
-	result["SessionId"] = Jellyfin::Support::toJsonValue<QString>(m_sessionId);
-	result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
-	result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioStreamIndex);
-	result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_subtitleStreamIndex);
-	result["IsPaused"] = Jellyfin::Support::toJsonValue<bool>(m_isPaused);
-	result["IsMuted"] = Jellyfin::Support::toJsonValue<bool>(m_isMuted);
-	result["PositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_positionTicks);
-	result["PlaybackStartTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_playbackStartTimeTicks);
-	result["VolumeLevel"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_volumeLevel);
-	result["Brightness"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_brightness);
-	result["AspectRatio"] = Jellyfin::Support::toJsonValue<QString>(m_aspectRatio);
-	result["PlayMethod"] = Jellyfin::Support::toJsonValue<PlayMethod>(m_playMethod);
-	result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
-	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
-	result["RepeatMode"] = Jellyfin::Support::toJsonValue<RepeatMode>(m_repeatMode);
-	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QueueItem>>(m_nowPlayingQueue);
-	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-
+	
+	result["CanSeek"] = Jellyfin::Support::toJsonValue<bool>(m_canSeek);		
+	result["Item"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_item);		
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);		
+	
+	if (!(m_sessionId.isNull())) {
+		result["SessionId"] = Jellyfin::Support::toJsonValue<QString>(m_sessionId);
+	}
+			
+	
+	if (!(m_mediaSourceId.isNull())) {
+		result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
+	}
+			
+	
+	if (!(!m_audioStreamIndex.has_value())) {
+		result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioStreamIndex);
+	}
+			
+	
+	if (!(!m_subtitleStreamIndex.has_value())) {
+		result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_subtitleStreamIndex);
+	}
+			
+	result["IsPaused"] = Jellyfin::Support::toJsonValue<bool>(m_isPaused);		
+	result["IsMuted"] = Jellyfin::Support::toJsonValue<bool>(m_isMuted);		
+	
+	if (!(!m_positionTicks.has_value())) {
+		result["PositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_positionTicks);
+	}
+			
+	
+	if (!(!m_playbackStartTimeTicks.has_value())) {
+		result["PlaybackStartTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_playbackStartTimeTicks);
+	}
+			
+	
+	if (!(!m_volumeLevel.has_value())) {
+		result["VolumeLevel"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_volumeLevel);
+	}
+			
+	
+	if (!(!m_brightness.has_value())) {
+		result["Brightness"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_brightness);
+	}
+			
+	
+	if (!(m_aspectRatio.isNull())) {
+		result["AspectRatio"] = Jellyfin::Support::toJsonValue<QString>(m_aspectRatio);
+	}
+			
+	result["PlayMethod"] = Jellyfin::Support::toJsonValue<PlayMethod>(m_playMethod);		
+	
+	if (!(m_liveStreamId.isNull())) {
+		result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
+	}
+			
+	
+	if (!(m_playSessionId.isNull())) {
+		result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
+	}
+			
+	result["RepeatMode"] = Jellyfin::Support::toJsonValue<RepeatMode>(m_repeatMode);		
+	
+	if (!(m_nowPlayingQueue.size() == 0)) {
+		result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QueueItem>>(m_nowPlayingQueue);
+	}
+			
+	
+	if (!(m_playlistItemId.isNull())) {
+		result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
+	}
+		
 	return result;
 }
 

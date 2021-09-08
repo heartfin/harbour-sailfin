@@ -60,9 +60,9 @@ void NotificationsSummaryDto::setFromJson(QJsonObject source) {
 	
 QJsonObject NotificationsSummaryDto::toJson() const {
 	QJsonObject result;
-	result["UnreadCount"] = Jellyfin::Support::toJsonValue<qint32>(m_unreadCount);
-	result["MaxUnreadNotificationLevel"] = Jellyfin::Support::toJsonValue<NotificationLevel>(m_maxUnreadNotificationLevel);
-
+	
+	result["UnreadCount"] = Jellyfin::Support::toJsonValue<qint32>(m_unreadCount);		
+	result["MaxUnreadNotificationLevel"] = Jellyfin::Support::toJsonValue<NotificationLevel>(m_maxUnreadNotificationLevel);	
 	return result;
 }
 

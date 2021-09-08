@@ -57,8 +57,8 @@ void JoinGroupRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject JoinGroupRequestDto::toJson() const {
 	QJsonObject result;
-	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);
-
+	
+	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);	
 	return result;
 }
 

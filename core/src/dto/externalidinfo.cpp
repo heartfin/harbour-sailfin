@@ -66,11 +66,23 @@ void ExternalIdInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject ExternalIdInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
-	result["Type"] = Jellyfin::Support::toJsonValue<ExternalIdMediaType>(m_type);
-	result["UrlFormatString"] = Jellyfin::Support::toJsonValue<QString>(m_urlFormatString);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_key.isNull())) {
+		result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
+	}
+			
+	result["Type"] = Jellyfin::Support::toJsonValue<ExternalIdMediaType>(m_type);		
+	
+	if (!(m_urlFormatString.isNull())) {
+		result["UrlFormatString"] = Jellyfin::Support::toJsonValue<QString>(m_urlFormatString);
+	}
+		
 	return result;
 }
 

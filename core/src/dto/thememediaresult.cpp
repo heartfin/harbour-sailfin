@@ -66,11 +66,15 @@ void ThemeMediaResult::setFromJson(QJsonObject source) {
 	
 QJsonObject ThemeMediaResult::toJson() const {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
-	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
-	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
-	result["OwnerId"] = Jellyfin::Support::toJsonValue<QString>(m_ownerId);
-
+	
+	
+	if (!(m_items.size() == 0)) {
+		result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
+	}
+			
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);		
+	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);		
+	result["OwnerId"] = Jellyfin::Support::toJsonValue<QString>(m_ownerId);	
 	return result;
 }
 

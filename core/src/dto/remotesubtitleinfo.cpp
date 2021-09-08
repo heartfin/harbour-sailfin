@@ -87,18 +87,62 @@ void RemoteSubtitleInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject RemoteSubtitleInfo::toJson() const {
 	QJsonObject result;
-	result["ThreeLetterISOLanguageName"] = Jellyfin::Support::toJsonValue<QString>(m_threeLetterISOLanguageName);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
-	result["Author"] = Jellyfin::Support::toJsonValue<QString>(m_author);
-	result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
-	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
-	result["CommunityRating"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_communityRating);
-	result["DownloadCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_downloadCount);
-	result["IsHashMatch"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isHashMatch);
-
+	
+	
+	if (!(m_threeLetterISOLanguageName.isNull())) {
+		result["ThreeLetterISOLanguageName"] = Jellyfin::Support::toJsonValue<QString>(m_threeLetterISOLanguageName);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_providerName.isNull())) {
+		result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
+	}
+			
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_format.isNull())) {
+		result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
+	}
+			
+	
+	if (!(m_author.isNull())) {
+		result["Author"] = Jellyfin::Support::toJsonValue<QString>(m_author);
+	}
+			
+	
+	if (!(m_comment.isNull())) {
+		result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
+	}
+			
+	
+	if (!(m_dateCreated.isNull())) {
+		result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
+	}
+			
+	
+	if (!(!m_communityRating.has_value())) {
+		result["CommunityRating"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_communityRating);
+	}
+			
+	
+	if (!(!m_downloadCount.has_value())) {
+		result["DownloadCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_downloadCount);
+	}
+			
+	
+	if (!(!m_isHashMatch.has_value())) {
+		result["IsHashMatch"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isHashMatch);
+	}
+		
 	return result;
 }
 

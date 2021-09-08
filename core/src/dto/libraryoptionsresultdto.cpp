@@ -66,11 +66,27 @@ void LibraryOptionsResultDto::setFromJson(QJsonObject source) {
 	
 QJsonObject LibraryOptionsResultDto::toJson() const {
 	QJsonObject result;
-	result["MetadataSavers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataSavers);
-	result["MetadataReaders"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataReaders);
-	result["SubtitleFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_subtitleFetchers);
-	result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<LibraryTypeOptionsDto>>(m_typeOptions);
-
+	
+	
+	if (!(m_metadataSavers.size() == 0)) {
+		result["MetadataSavers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataSavers);
+	}
+			
+	
+	if (!(m_metadataReaders.size() == 0)) {
+		result["MetadataReaders"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataReaders);
+	}
+			
+	
+	if (!(m_subtitleFetchers.size() == 0)) {
+		result["SubtitleFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_subtitleFetchers);
+	}
+			
+	
+	if (!(m_typeOptions.size() == 0)) {
+		result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<LibraryTypeOptionsDto>>(m_typeOptions);
+	}
+		
 	return result;
 }
 

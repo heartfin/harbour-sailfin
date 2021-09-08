@@ -63,10 +63,22 @@ void StartupConfigurationDto::setFromJson(QJsonObject source) {
 	
 QJsonObject StartupConfigurationDto::toJson() const {
 	QJsonObject result;
-	result["UICulture"] = Jellyfin::Support::toJsonValue<QString>(m_uICulture);
-	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
-	result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
-
+	
+	
+	if (!(m_uICulture.isNull())) {
+		result["UICulture"] = Jellyfin::Support::toJsonValue<QString>(m_uICulture);
+	}
+			
+	
+	if (!(m_metadataCountryCode.isNull())) {
+		result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
+	}
+			
+	
+	if (!(m_preferredMetadataLanguage.isNull())) {
+		result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
+	}
+		
 	return result;
 }
 

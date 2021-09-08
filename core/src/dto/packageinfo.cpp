@@ -78,15 +78,47 @@ void PackageInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject PackageInfo::toJson() const {
 	QJsonObject result;
-	result["name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
-	result["overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
-	result["owner"] = Jellyfin::Support::toJsonValue<QString>(m_owner);
-	result["category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
-	result["guid"] = Jellyfin::Support::toJsonValue<QString>(m_guid);
-	result["versions"] = Jellyfin::Support::toJsonValue<QList<VersionInfo>>(m_versions);
-	result["imageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_imageUrl);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_description.isNull())) {
+		result["description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
+	}
+			
+	
+	if (!(m_overview.isNull())) {
+		result["overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	}
+			
+	
+	if (!(m_owner.isNull())) {
+		result["owner"] = Jellyfin::Support::toJsonValue<QString>(m_owner);
+	}
+			
+	
+	if (!(m_category.isNull())) {
+		result["category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
+	}
+			
+	
+	if (!(m_guid.isNull())) {
+		result["guid"] = Jellyfin::Support::toJsonValue<QString>(m_guid);
+	}
+			
+	
+	if (!(m_versions.size() == 0)) {
+		result["versions"] = Jellyfin::Support::toJsonValue<QList<VersionInfo>>(m_versions);
+	}
+			
+	
+	if (!(m_imageUrl.isNull())) {
+		result["imageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_imageUrl);
+	}
+		
 	return result;
 }
 

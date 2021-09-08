@@ -90,19 +90,59 @@ void TranscodingInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject TranscodingInfo::toJson() const {
 	QJsonObject result;
-	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
-	result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-	result["IsVideoDirect"] = Jellyfin::Support::toJsonValue<bool>(m_isVideoDirect);
-	result["IsAudioDirect"] = Jellyfin::Support::toJsonValue<bool>(m_isAudioDirect);
-	result["Bitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitrate);
-	result["Framerate"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_framerate);
-	result["CompletionPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_completionPercentage);
-	result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
-	result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
-	result["AudioChannels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioChannels);
-	result["TranscodeReasons"] = Jellyfin::Support::toJsonValue<QList<TranscodeReason>>(m_transcodeReasons);
-
+	
+	
+	if (!(m_audioCodec.isNull())) {
+		result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
+	}
+			
+	
+	if (!(m_videoCodec.isNull())) {
+		result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
+	}
+			
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+			
+	result["IsVideoDirect"] = Jellyfin::Support::toJsonValue<bool>(m_isVideoDirect);		
+	result["IsAudioDirect"] = Jellyfin::Support::toJsonValue<bool>(m_isAudioDirect);		
+	
+	if (!(!m_bitrate.has_value())) {
+		result["Bitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitrate);
+	}
+			
+	
+	if (!(!m_framerate.has_value())) {
+		result["Framerate"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_framerate);
+	}
+			
+	
+	if (!(!m_completionPercentage.has_value())) {
+		result["CompletionPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_completionPercentage);
+	}
+			
+	
+	if (!(!m_width.has_value())) {
+		result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
+	}
+			
+	
+	if (!(!m_height.has_value())) {
+		result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
+	}
+			
+	
+	if (!(!m_audioChannels.has_value())) {
+		result["AudioChannels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioChannels);
+	}
+			
+	
+	if (!(m_transcodeReasons.size() == 0)) {
+		result["TranscodeReasons"] = Jellyfin::Support::toJsonValue<QList<TranscodeReason>>(m_transcodeReasons);
+	}
+		
 	return result;
 }
 

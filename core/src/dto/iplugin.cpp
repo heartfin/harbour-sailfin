@@ -75,14 +75,30 @@ void IPlugin::setFromJson(QJsonObject source) {
 	
 QJsonObject IPlugin::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);
-	result["AssemblyFilePath"] = Jellyfin::Support::toJsonValue<QString>(m_assemblyFilePath);
-	result["CanUninstall"] = Jellyfin::Support::toJsonValue<bool>(m_canUninstall);
-	result["DataFolderPath"] = Jellyfin::Support::toJsonValue<QString>(m_dataFolderPath);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_description.isNull())) {
+		result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
+	}
+			
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
+	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);		
+	
+	if (!(m_assemblyFilePath.isNull())) {
+		result["AssemblyFilePath"] = Jellyfin::Support::toJsonValue<QString>(m_assemblyFilePath);
+	}
+			
+	result["CanUninstall"] = Jellyfin::Support::toJsonValue<bool>(m_canUninstall);		
+	
+	if (!(m_dataFolderPath.isNull())) {
+		result["DataFolderPath"] = Jellyfin::Support::toJsonValue<QString>(m_dataFolderPath);
+	}
+		
 	return result;
 }
 

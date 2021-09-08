@@ -57,8 +57,8 @@ void SetRepeatModeRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject SetRepeatModeRequestDto::toJson() const {
 	QJsonObject result;
-	result["Mode"] = Jellyfin::Support::toJsonValue<GroupRepeatMode>(m_mode);
-
+	
+	result["Mode"] = Jellyfin::Support::toJsonValue<GroupRepeatMode>(m_mode);	
 	return result;
 }
 

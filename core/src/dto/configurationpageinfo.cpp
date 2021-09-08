@@ -75,14 +75,34 @@ void ConfigurationPageInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject ConfigurationPageInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["EnableInMainMenu"] = Jellyfin::Support::toJsonValue<bool>(m_enableInMainMenu);
-	result["MenuSection"] = Jellyfin::Support::toJsonValue<QString>(m_menuSection);
-	result["MenuIcon"] = Jellyfin::Support::toJsonValue<QString>(m_menuIcon);
-	result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
-	result["ConfigurationPageType"] = Jellyfin::Support::toJsonValue<ConfigurationPageType>(m_configurationPageType);
-	result["PluginId"] = Jellyfin::Support::toJsonValue<QString>(m_pluginId);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	result["EnableInMainMenu"] = Jellyfin::Support::toJsonValue<bool>(m_enableInMainMenu);		
+	
+	if (!(m_menuSection.isNull())) {
+		result["MenuSection"] = Jellyfin::Support::toJsonValue<QString>(m_menuSection);
+	}
+			
+	
+	if (!(m_menuIcon.isNull())) {
+		result["MenuIcon"] = Jellyfin::Support::toJsonValue<QString>(m_menuIcon);
+	}
+			
+	
+	if (!(m_displayName.isNull())) {
+		result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
+	}
+			
+	result["ConfigurationPageType"] = Jellyfin::Support::toJsonValue<ConfigurationPageType>(m_configurationPageType);		
+	
+	if (!(m_pluginId.isNull())) {
+		result["PluginId"] = Jellyfin::Support::toJsonValue<QString>(m_pluginId);
+	}
+		
 	return result;
 }
 

@@ -69,12 +69,32 @@ void ProblemDetails::setFromJson(QJsonObject source) {
 	
 QJsonObject ProblemDetails::toJson() const {
 	QJsonObject result;
-	result["type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["title"] = Jellyfin::Support::toJsonValue<QString>(m_title);
-	result["status"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_status);
-	result["detail"] = Jellyfin::Support::toJsonValue<QString>(m_detail);
-	result["instance"] = Jellyfin::Support::toJsonValue<QString>(m_instance);
-
+	
+	
+	if (!(m_type.isNull())) {
+		result["type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_title.isNull())) {
+		result["title"] = Jellyfin::Support::toJsonValue<QString>(m_title);
+	}
+			
+	
+	if (!(!m_status.has_value())) {
+		result["status"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_status);
+	}
+			
+	
+	if (!(m_detail.isNull())) {
+		result["detail"] = Jellyfin::Support::toJsonValue<QString>(m_detail);
+	}
+			
+	
+	if (!(m_instance.isNull())) {
+		result["instance"] = Jellyfin::Support::toJsonValue<QString>(m_instance);
+	}
+		
 	return result;
 }
 

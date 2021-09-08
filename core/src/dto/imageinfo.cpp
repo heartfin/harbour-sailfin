@@ -78,15 +78,39 @@ void ImageInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject ImageInfo::toJson() const {
 	QJsonObject result;
-	result["ImageType"] = Jellyfin::Support::toJsonValue<ImageType>(m_imageType);
-	result["ImageIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_imageIndex);
-	result["ImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_imageTag);
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["BlurHash"] = Jellyfin::Support::toJsonValue<QString>(m_blurHash);
-	result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
-	result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
-	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);
-
+	
+	result["ImageType"] = Jellyfin::Support::toJsonValue<ImageType>(m_imageType);		
+	
+	if (!(!m_imageIndex.has_value())) {
+		result["ImageIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_imageIndex);
+	}
+			
+	
+	if (!(m_imageTag.isNull())) {
+		result["ImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_imageTag);
+	}
+			
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(m_blurHash.isNull())) {
+		result["BlurHash"] = Jellyfin::Support::toJsonValue<QString>(m_blurHash);
+	}
+			
+	
+	if (!(!m_height.has_value())) {
+		result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
+	}
+			
+	
+	if (!(!m_width.has_value())) {
+		result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
+	}
+			
+	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);	
 	return result;
 }
 

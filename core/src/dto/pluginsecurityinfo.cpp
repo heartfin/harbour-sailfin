@@ -60,9 +60,13 @@ void PluginSecurityInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject PluginSecurityInfo::toJson() const {
 	QJsonObject result;
-	result["SupporterKey"] = Jellyfin::Support::toJsonValue<QString>(m_supporterKey);
-	result["IsMbSupporter"] = Jellyfin::Support::toJsonValue<bool>(m_isMbSupporter);
-
+	
+	
+	if (!(m_supporterKey.isNull())) {
+		result["SupporterKey"] = Jellyfin::Support::toJsonValue<QString>(m_supporterKey);
+	}
+			
+	result["IsMbSupporter"] = Jellyfin::Support::toJsonValue<bool>(m_isMbSupporter);	
 	return result;
 }
 

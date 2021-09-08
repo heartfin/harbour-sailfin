@@ -60,9 +60,9 @@ void GuideInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject GuideInfo::toJson() const {
 	QJsonObject result;
-	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
-	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
-
+	
+	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);		
+	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);	
 	return result;
 }
 

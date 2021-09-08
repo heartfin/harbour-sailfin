@@ -60,9 +60,17 @@ void CreateUserByName::setFromJson(QJsonObject source) {
 	
 QJsonObject CreateUserByName::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_password.isNull())) {
+		result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
+	}
+		
 	return result;
 }
 

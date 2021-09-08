@@ -60,9 +60,17 @@ void TimerEventInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject TimerEventInfo::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
-
+	
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_programId.isNull())) {
+		result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
+	}
+		
 	return result;
 }
 

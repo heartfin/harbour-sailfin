@@ -60,9 +60,13 @@ void NotificationResultDto::setFromJson(QJsonObject source) {
 	
 QJsonObject NotificationResultDto::toJson() const {
 	QJsonObject result;
-	result["Notifications"] = Jellyfin::Support::toJsonValue<QList<NotificationDto>>(m_notifications);
-	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
-
+	
+	
+	if (!(m_notifications.size() == 0)) {
+		result["Notifications"] = Jellyfin::Support::toJsonValue<QList<NotificationDto>>(m_notifications);
+	}
+			
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);	
 	return result;
 }
 

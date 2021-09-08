@@ -63,10 +63,22 @@ void AuthenticateUserByName::setFromJson(QJsonObject source) {
 	
 QJsonObject AuthenticateUserByName::toJson() const {
 	QJsonObject result;
-	result["Username"] = Jellyfin::Support::toJsonValue<QString>(m_username);
-	result["Pw"] = Jellyfin::Support::toJsonValue<QString>(m_pw);
-	result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
-
+	
+	
+	if (!(m_username.isNull())) {
+		result["Username"] = Jellyfin::Support::toJsonValue<QString>(m_username);
+	}
+			
+	
+	if (!(m_pw.isNull())) {
+		result["Pw"] = Jellyfin::Support::toJsonValue<QString>(m_pw);
+	}
+			
+	
+	if (!(m_password.isNull())) {
+		result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
+	}
+		
 	return result;
 }
 

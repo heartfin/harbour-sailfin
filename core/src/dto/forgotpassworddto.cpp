@@ -57,8 +57,8 @@ void ForgotPasswordDto::setFromJson(QJsonObject source) {
 	
 QJsonObject ForgotPasswordDto::toJson() const {
 	QJsonObject result;
-	result["EnteredUsername"] = Jellyfin::Support::toJsonValue<QString>(m_enteredUsername);
-
+	
+	result["EnteredUsername"] = Jellyfin::Support::toJsonValue<QString>(m_enteredUsername);	
 	return result;
 }
 

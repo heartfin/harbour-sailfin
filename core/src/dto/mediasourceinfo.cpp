@@ -180,49 +180,137 @@ void MediaSourceInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject MediaSourceInfo::toJson() const {
 	QJsonObject result;
-	result["Protocol"] = Jellyfin::Support::toJsonValue<MediaProtocol>(m_protocol);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["EncoderPath"] = Jellyfin::Support::toJsonValue<QString>(m_encoderPath);
-	result["EncoderProtocol"] = Jellyfin::Support::toJsonValue<MediaProtocol>(m_encoderProtocol);
-	result["Type"] = Jellyfin::Support::toJsonValue<MediaSourceType>(m_type);
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-	result["Size"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_size);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["IsRemote"] = Jellyfin::Support::toJsonValue<bool>(m_isRemote);
-	result["ETag"] = Jellyfin::Support::toJsonValue<QString>(m_eTag);
-	result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_runTimeTicks);
-	result["ReadAtNativeFramerate"] = Jellyfin::Support::toJsonValue<bool>(m_readAtNativeFramerate);
-	result["IgnoreDts"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreDts);
-	result["IgnoreIndex"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreIndex);
-	result["GenPtsInput"] = Jellyfin::Support::toJsonValue<bool>(m_genPtsInput);
-	result["SupportsTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_supportsTranscoding);
-	result["SupportsDirectStream"] = Jellyfin::Support::toJsonValue<bool>(m_supportsDirectStream);
-	result["SupportsDirectPlay"] = Jellyfin::Support::toJsonValue<bool>(m_supportsDirectPlay);
-	result["IsInfiniteStream"] = Jellyfin::Support::toJsonValue<bool>(m_isInfiniteStream);
-	result["RequiresOpening"] = Jellyfin::Support::toJsonValue<bool>(m_requiresOpening);
-	result["OpenToken"] = Jellyfin::Support::toJsonValue<QString>(m_openToken);
-	result["RequiresClosing"] = Jellyfin::Support::toJsonValue<bool>(m_requiresClosing);
-	result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
-	result["BufferMs"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bufferMs);
-	result["RequiresLooping"] = Jellyfin::Support::toJsonValue<bool>(m_requiresLooping);
-	result["SupportsProbing"] = Jellyfin::Support::toJsonValue<bool>(m_supportsProbing);
-	result["VideoType"] = Jellyfin::Support::toJsonValue<VideoType>(m_videoType);
-	result["IsoType"] = Jellyfin::Support::toJsonValue<IsoType>(m_isoType);
-	result["Video3DFormat"] = Jellyfin::Support::toJsonValue<Video3DFormat>(m_video3DFormat);
-	result["MediaStreams"] = Jellyfin::Support::toJsonValue<QList<MediaStream>>(m_mediaStreams);
-	result["MediaAttachments"] = Jellyfin::Support::toJsonValue<QList<MediaAttachment>>(m_mediaAttachments);
-	result["Formats"] = Jellyfin::Support::toJsonValue<QStringList>(m_formats);
-	result["Bitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitrate);
-	result["Timestamp"] = Jellyfin::Support::toJsonValue<TransportStreamTimestamp>(m_timestamp);
-	result["RequiredHttpHeaders"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_requiredHttpHeaders);
-	result["TranscodingUrl"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingUrl);
-	result["TranscodingSubProtocol"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingSubProtocol);
-	result["TranscodingContainer"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingContainer);
-	result["AnalyzeDurationMs"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_analyzeDurationMs);
-	result["DefaultAudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_defaultAudioStreamIndex);
-	result["DefaultSubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_defaultSubtitleStreamIndex);
-
+	
+	result["Protocol"] = Jellyfin::Support::toJsonValue<MediaProtocol>(m_protocol);		
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(m_encoderPath.isNull())) {
+		result["EncoderPath"] = Jellyfin::Support::toJsonValue<QString>(m_encoderPath);
+	}
+			
+	result["EncoderProtocol"] = Jellyfin::Support::toJsonValue<MediaProtocol>(m_encoderProtocol);		
+	result["Type"] = Jellyfin::Support::toJsonValue<MediaSourceType>(m_type);		
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+			
+	
+	if (!(!m_size.has_value())) {
+		result["Size"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_size);
+	}
+			
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	result["IsRemote"] = Jellyfin::Support::toJsonValue<bool>(m_isRemote);		
+	
+	if (!(m_eTag.isNull())) {
+		result["ETag"] = Jellyfin::Support::toJsonValue<QString>(m_eTag);
+	}
+			
+	
+	if (!(!m_runTimeTicks.has_value())) {
+		result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_runTimeTicks);
+	}
+			
+	result["ReadAtNativeFramerate"] = Jellyfin::Support::toJsonValue<bool>(m_readAtNativeFramerate);		
+	result["IgnoreDts"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreDts);		
+	result["IgnoreIndex"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreIndex);		
+	result["GenPtsInput"] = Jellyfin::Support::toJsonValue<bool>(m_genPtsInput);		
+	result["SupportsTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_supportsTranscoding);		
+	result["SupportsDirectStream"] = Jellyfin::Support::toJsonValue<bool>(m_supportsDirectStream);		
+	result["SupportsDirectPlay"] = Jellyfin::Support::toJsonValue<bool>(m_supportsDirectPlay);		
+	result["IsInfiniteStream"] = Jellyfin::Support::toJsonValue<bool>(m_isInfiniteStream);		
+	result["RequiresOpening"] = Jellyfin::Support::toJsonValue<bool>(m_requiresOpening);		
+	
+	if (!(m_openToken.isNull())) {
+		result["OpenToken"] = Jellyfin::Support::toJsonValue<QString>(m_openToken);
+	}
+			
+	result["RequiresClosing"] = Jellyfin::Support::toJsonValue<bool>(m_requiresClosing);		
+	
+	if (!(m_liveStreamId.isNull())) {
+		result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
+	}
+			
+	
+	if (!(!m_bufferMs.has_value())) {
+		result["BufferMs"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bufferMs);
+	}
+			
+	result["RequiresLooping"] = Jellyfin::Support::toJsonValue<bool>(m_requiresLooping);		
+	result["SupportsProbing"] = Jellyfin::Support::toJsonValue<bool>(m_supportsProbing);		
+	result["VideoType"] = Jellyfin::Support::toJsonValue<VideoType>(m_videoType);		
+	result["IsoType"] = Jellyfin::Support::toJsonValue<IsoType>(m_isoType);		
+	result["Video3DFormat"] = Jellyfin::Support::toJsonValue<Video3DFormat>(m_video3DFormat);		
+	
+	if (!(m_mediaStreams.size() == 0)) {
+		result["MediaStreams"] = Jellyfin::Support::toJsonValue<QList<MediaStream>>(m_mediaStreams);
+	}
+			
+	
+	if (!(m_mediaAttachments.size() == 0)) {
+		result["MediaAttachments"] = Jellyfin::Support::toJsonValue<QList<MediaAttachment>>(m_mediaAttachments);
+	}
+			
+	
+	if (!(m_formats.size() == 0)) {
+		result["Formats"] = Jellyfin::Support::toJsonValue<QStringList>(m_formats);
+	}
+			
+	
+	if (!(!m_bitrate.has_value())) {
+		result["Bitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitrate);
+	}
+			
+	result["Timestamp"] = Jellyfin::Support::toJsonValue<TransportStreamTimestamp>(m_timestamp);		
+	
+	if (!(m_requiredHttpHeaders.isEmpty())) {
+		result["RequiredHttpHeaders"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_requiredHttpHeaders);
+	}
+			
+	
+	if (!(m_transcodingUrl.isNull())) {
+		result["TranscodingUrl"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingUrl);
+	}
+			
+	
+	if (!(m_transcodingSubProtocol.isNull())) {
+		result["TranscodingSubProtocol"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingSubProtocol);
+	}
+			
+	
+	if (!(m_transcodingContainer.isNull())) {
+		result["TranscodingContainer"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingContainer);
+	}
+			
+	
+	if (!(!m_analyzeDurationMs.has_value())) {
+		result["AnalyzeDurationMs"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_analyzeDurationMs);
+	}
+			
+	
+	if (!(!m_defaultAudioStreamIndex.has_value())) {
+		result["DefaultAudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_defaultAudioStreamIndex);
+	}
+			
+	
+	if (!(!m_defaultSubtitleStreamIndex.has_value())) {
+		result["DefaultSubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_defaultSubtitleStreamIndex);
+	}
+		
 	return result;
 }
 

@@ -75,14 +75,38 @@ void ResponseProfile::setFromJson(QJsonObject source) {
 	
 QJsonObject ResponseProfile::toJson() const {
 	QJsonObject result;
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
-	result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
-	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
-	result["OrgPn"] = Jellyfin::Support::toJsonValue<QString>(m_orgPn);
-	result["MimeType"] = Jellyfin::Support::toJsonValue<QString>(m_mimeType);
-	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
-
+	
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+			
+	
+	if (!(m_audioCodec.isNull())) {
+		result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
+	}
+			
+	
+	if (!(m_videoCodec.isNull())) {
+		result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
+	}
+			
+	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);		
+	
+	if (!(m_orgPn.isNull())) {
+		result["OrgPn"] = Jellyfin::Support::toJsonValue<QString>(m_orgPn);
+	}
+			
+	
+	if (!(m_mimeType.isNull())) {
+		result["MimeType"] = Jellyfin::Support::toJsonValue<QString>(m_mimeType);
+	}
+			
+	
+	if (!(m_conditions.size() == 0)) {
+		result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
+	}
+		
 	return result;
 }
 

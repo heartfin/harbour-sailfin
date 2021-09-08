@@ -72,13 +72,37 @@ void MetadataEditorInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject MetadataEditorInfo::toJson() const {
 	QJsonObject result;
-	result["ParentalRatingOptions"] = Jellyfin::Support::toJsonValue<QList<ParentalRating>>(m_parentalRatingOptions);
-	result["Countries"] = Jellyfin::Support::toJsonValue<QList<CountryInfo>>(m_countries);
-	result["Cultures"] = Jellyfin::Support::toJsonValue<QList<CultureDto>>(m_cultures);
-	result["ExternalIdInfos"] = Jellyfin::Support::toJsonValue<QList<ExternalIdInfo>>(m_externalIdInfos);
-	result["ContentType"] = Jellyfin::Support::toJsonValue<QString>(m_contentType);
-	result["ContentTypeOptions"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_contentTypeOptions);
-
+	
+	
+	if (!(m_parentalRatingOptions.size() == 0)) {
+		result["ParentalRatingOptions"] = Jellyfin::Support::toJsonValue<QList<ParentalRating>>(m_parentalRatingOptions);
+	}
+			
+	
+	if (!(m_countries.size() == 0)) {
+		result["Countries"] = Jellyfin::Support::toJsonValue<QList<CountryInfo>>(m_countries);
+	}
+			
+	
+	if (!(m_cultures.size() == 0)) {
+		result["Cultures"] = Jellyfin::Support::toJsonValue<QList<CultureDto>>(m_cultures);
+	}
+			
+	
+	if (!(m_externalIdInfos.size() == 0)) {
+		result["ExternalIdInfos"] = Jellyfin::Support::toJsonValue<QList<ExternalIdInfo>>(m_externalIdInfos);
+	}
+			
+	
+	if (!(m_contentType.isNull())) {
+		result["ContentType"] = Jellyfin::Support::toJsonValue<QString>(m_contentType);
+	}
+			
+	
+	if (!(m_contentTypeOptions.size() == 0)) {
+		result["ContentTypeOptions"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_contentTypeOptions);
+	}
+		
 	return result;
 }
 

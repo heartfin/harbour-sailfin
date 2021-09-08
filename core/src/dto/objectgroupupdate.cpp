@@ -63,10 +63,10 @@ void ObjectGroupUpdate::setFromJson(QJsonObject source) {
 	
 QJsonObject ObjectGroupUpdate::toJson() const {
 	QJsonObject result;
-	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);
-	result["Type"] = Jellyfin::Support::toJsonValue<GroupUpdateType>(m_type);
-	result["Data"] = Jellyfin::Support::toJsonValue<QVariant>(m_data);
-
+	
+	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);		
+	result["Type"] = Jellyfin::Support::toJsonValue<GroupUpdateType>(m_type);		
+	result["Data"] = Jellyfin::Support::toJsonValue<QVariant>(m_data);	
 	return result;
 }
 

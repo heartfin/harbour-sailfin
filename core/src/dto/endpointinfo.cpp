@@ -60,9 +60,9 @@ void EndPointInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject EndPointInfo::toJson() const {
 	QJsonObject result;
-	result["IsLocal"] = Jellyfin::Support::toJsonValue<bool>(m_isLocal);
-	result["IsInNetwork"] = Jellyfin::Support::toJsonValue<bool>(m_isInNetwork);
-
+	
+	result["IsLocal"] = Jellyfin::Support::toJsonValue<bool>(m_isLocal);		
+	result["IsInNetwork"] = Jellyfin::Support::toJsonValue<bool>(m_isInNetwork);	
 	return result;
 }
 

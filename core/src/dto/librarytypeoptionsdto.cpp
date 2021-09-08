@@ -69,12 +69,32 @@ void LibraryTypeOptionsDto::setFromJson(QJsonObject source) {
 	
 QJsonObject LibraryTypeOptionsDto::toJson() const {
 	QJsonObject result;
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["MetadataFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataFetchers);
-	result["ImageFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_imageFetchers);
-	result["SupportedImageTypes"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImageTypes);
-	result["DefaultImageOptions"] = Jellyfin::Support::toJsonValue<QList<ImageOption>>(m_defaultImageOptions);
-
+	
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_metadataFetchers.size() == 0)) {
+		result["MetadataFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataFetchers);
+	}
+			
+	
+	if (!(m_imageFetchers.size() == 0)) {
+		result["ImageFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_imageFetchers);
+	}
+			
+	
+	if (!(m_supportedImageTypes.size() == 0)) {
+		result["SupportedImageTypes"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImageTypes);
+	}
+			
+	
+	if (!(m_defaultImageOptions.size() == 0)) {
+		result["DefaultImageOptions"] = Jellyfin::Support::toJsonValue<QList<ImageOption>>(m_defaultImageOptions);
+	}
+		
 	return result;
 }
 

@@ -84,17 +84,49 @@ void RemoteImageInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject RemoteImageInfo::toJson() const {
 	QJsonObject result;
-	result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
-	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
-	result["ThumbnailUrl"] = Jellyfin::Support::toJsonValue<QString>(m_thumbnailUrl);
-	result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
-	result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
-	result["CommunityRating"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_communityRating);
-	result["VoteCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_voteCount);
-	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
-	result["Type"] = Jellyfin::Support::toJsonValue<ImageType>(m_type);
-	result["RatingType"] = Jellyfin::Support::toJsonValue<RatingType>(m_ratingType);
-
+	
+	
+	if (!(m_providerName.isNull())) {
+		result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
+	}
+			
+	
+	if (!(m_url.isNull())) {
+		result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	}
+			
+	
+	if (!(m_thumbnailUrl.isNull())) {
+		result["ThumbnailUrl"] = Jellyfin::Support::toJsonValue<QString>(m_thumbnailUrl);
+	}
+			
+	
+	if (!(!m_height.has_value())) {
+		result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
+	}
+			
+	
+	if (!(!m_width.has_value())) {
+		result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
+	}
+			
+	
+	if (!(!m_communityRating.has_value())) {
+		result["CommunityRating"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_communityRating);
+	}
+			
+	
+	if (!(!m_voteCount.has_value())) {
+		result["VoteCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_voteCount);
+	}
+			
+	
+	if (!(m_language.isNull())) {
+		result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
+	}
+			
+	result["Type"] = Jellyfin::Support::toJsonValue<ImageType>(m_type);		
+	result["RatingType"] = Jellyfin::Support::toJsonValue<RatingType>(m_ratingType);	
 	return result;
 }
 

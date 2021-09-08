@@ -66,11 +66,11 @@ void UploadSubtitleDto::setFromJson(QJsonObject source) {
 	
 QJsonObject UploadSubtitleDto::toJson() const {
 	QJsonObject result;
-	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
-	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
-	result["IsForced"] = Jellyfin::Support::toJsonValue<bool>(m_isForced);
-	result["Data"] = Jellyfin::Support::toJsonValue<QString>(m_data);
-
+	
+	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);		
+	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);		
+	result["IsForced"] = Jellyfin::Support::toJsonValue<bool>(m_isForced);		
+	result["Data"] = Jellyfin::Support::toJsonValue<QString>(m_data);	
 	return result;
 }
 

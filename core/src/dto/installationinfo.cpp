@@ -72,13 +72,29 @@ void InstallationInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject InstallationInfo::toJson() const {
 	QJsonObject result;
-	result["Guid"] = Jellyfin::Support::toJsonValue<QString>(m_guid);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);
-	result["Changelog"] = Jellyfin::Support::toJsonValue<QString>(m_changelog);
-	result["SourceUrl"] = Jellyfin::Support::toJsonValue<QString>(m_sourceUrl);
-	result["Checksum"] = Jellyfin::Support::toJsonValue<QString>(m_checksum);
-
+	
+	result["Guid"] = Jellyfin::Support::toJsonValue<QString>(m_guid);		
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);		
+	
+	if (!(m_changelog.isNull())) {
+		result["Changelog"] = Jellyfin::Support::toJsonValue<QString>(m_changelog);
+	}
+			
+	
+	if (!(m_sourceUrl.isNull())) {
+		result["SourceUrl"] = Jellyfin::Support::toJsonValue<QString>(m_sourceUrl);
+	}
+			
+	
+	if (!(m_checksum.isNull())) {
+		result["Checksum"] = Jellyfin::Support::toJsonValue<QString>(m_checksum);
+	}
+		
 	return result;
 }
 

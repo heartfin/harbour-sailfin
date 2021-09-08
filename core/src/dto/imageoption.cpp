@@ -63,10 +63,10 @@ void ImageOption::setFromJson(QJsonObject source) {
 	
 QJsonObject ImageOption::toJson() const {
 	QJsonObject result;
-	result["Type"] = Jellyfin::Support::toJsonValue<ImageType>(m_type);
-	result["Limit"] = Jellyfin::Support::toJsonValue<qint32>(m_limit);
-	result["MinWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_minWidth);
-
+	
+	result["Type"] = Jellyfin::Support::toJsonValue<ImageType>(m_type);		
+	result["Limit"] = Jellyfin::Support::toJsonValue<qint32>(m_limit);		
+	result["MinWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_minWidth);	
 	return result;
 }
 

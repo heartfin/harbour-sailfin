@@ -57,8 +57,12 @@ void RemoveFromPlaylistRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject RemoveFromPlaylistRequestDto::toJson() const {
 	QJsonObject result;
-	result["PlaylistItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_playlistItemIds);
-
+	
+	
+	if (!(m_playlistItemIds.size() == 0)) {
+		result["PlaylistItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_playlistItemIds);
+	}
+		
 	return result;
 }
 

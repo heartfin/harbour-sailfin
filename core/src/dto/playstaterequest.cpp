@@ -63,10 +63,18 @@ void PlaystateRequest::setFromJson(QJsonObject source) {
 	
 QJsonObject PlaystateRequest::toJson() const {
 	QJsonObject result;
-	result["Command"] = Jellyfin::Support::toJsonValue<PlaystateCommand>(m_command);
-	result["SeekPositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_seekPositionTicks);
-	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QString>(m_controllingUserId);
-
+	
+	result["Command"] = Jellyfin::Support::toJsonValue<PlaystateCommand>(m_command);		
+	
+	if (!(!m_seekPositionTicks.has_value())) {
+		result["SeekPositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_seekPositionTicks);
+	}
+			
+	
+	if (!(m_controllingUserId.isNull())) {
+		result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QString>(m_controllingUserId);
+	}
+		
 	return result;
 }
 

@@ -57,8 +57,8 @@ void IgnoreWaitRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject IgnoreWaitRequestDto::toJson() const {
 	QJsonObject result;
-	result["IgnoreWait"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreWait);
-
+	
+	result["IgnoreWait"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreWait);	
 	return result;
 }
 

@@ -135,34 +135,130 @@ void GetProgramsDto::setFromJson(QJsonObject source) {
 	
 QJsonObject GetProgramsDto::toJson() const {
 	QJsonObject result;
-	result["ChannelIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_channelIds);
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["MinStartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_minStartDate);
-	result["HasAired"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_hasAired);
-	result["IsAiring"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isAiring);
-	result["MaxStartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_maxStartDate);
-	result["MinEndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_minEndDate);
-	result["MaxEndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_maxEndDate);
-	result["IsMovie"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isMovie);
-	result["IsSeries"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isSeries);
-	result["IsNews"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isNews);
-	result["IsKids"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isKids);
-	result["IsSports"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isSports);
-	result["StartIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_startIndex);
-	result["Limit"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_limit);
-	result["SortBy"] = Jellyfin::Support::toJsonValue<QString>(m_sortBy);
-	result["SortOrder"] = Jellyfin::Support::toJsonValue<QString>(m_sortOrder);
-	result["Genres"] = Jellyfin::Support::toJsonValue<QStringList>(m_genres);
-	result["GenreIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_genreIds);
-	result["EnableImages"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableImages);
-	result["EnableTotalRecordCount"] = Jellyfin::Support::toJsonValue<bool>(m_enableTotalRecordCount);
-	result["ImageTypeLimit"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_imageTypeLimit);
-	result["EnableImageTypes"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_enableImageTypes);
-	result["EnableUserData"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableUserData);
-	result["SeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesTimerId);
-	result["LibrarySeriesId"] = Jellyfin::Support::toJsonValue<QString>(m_librarySeriesId);
-	result["Fields"] = Jellyfin::Support::toJsonValue<QList<ItemFields>>(m_fields);
-
+	
+	
+	if (!(m_channelIds.size() == 0)) {
+		result["ChannelIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_channelIds);
+	}
+			
+	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);		
+	
+	if (!(m_minStartDate.isNull())) {
+		result["MinStartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_minStartDate);
+	}
+			
+	
+	if (!(!m_hasAired.has_value())) {
+		result["HasAired"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_hasAired);
+	}
+			
+	
+	if (!(!m_isAiring.has_value())) {
+		result["IsAiring"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isAiring);
+	}
+			
+	
+	if (!(m_maxStartDate.isNull())) {
+		result["MaxStartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_maxStartDate);
+	}
+			
+	
+	if (!(m_minEndDate.isNull())) {
+		result["MinEndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_minEndDate);
+	}
+			
+	
+	if (!(m_maxEndDate.isNull())) {
+		result["MaxEndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_maxEndDate);
+	}
+			
+	
+	if (!(!m_isMovie.has_value())) {
+		result["IsMovie"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isMovie);
+	}
+			
+	
+	if (!(!m_isSeries.has_value())) {
+		result["IsSeries"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isSeries);
+	}
+			
+	
+	if (!(!m_isNews.has_value())) {
+		result["IsNews"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isNews);
+	}
+			
+	
+	if (!(!m_isKids.has_value())) {
+		result["IsKids"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isKids);
+	}
+			
+	
+	if (!(!m_isSports.has_value())) {
+		result["IsSports"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isSports);
+	}
+			
+	
+	if (!(!m_startIndex.has_value())) {
+		result["StartIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_startIndex);
+	}
+			
+	
+	if (!(!m_limit.has_value())) {
+		result["Limit"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_limit);
+	}
+			
+	
+	if (!(m_sortBy.isNull())) {
+		result["SortBy"] = Jellyfin::Support::toJsonValue<QString>(m_sortBy);
+	}
+			
+	
+	if (!(m_sortOrder.isNull())) {
+		result["SortOrder"] = Jellyfin::Support::toJsonValue<QString>(m_sortOrder);
+	}
+			
+	
+	if (!(m_genres.size() == 0)) {
+		result["Genres"] = Jellyfin::Support::toJsonValue<QStringList>(m_genres);
+	}
+			
+	
+	if (!(m_genreIds.size() == 0)) {
+		result["GenreIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_genreIds);
+	}
+			
+	
+	if (!(!m_enableImages.has_value())) {
+		result["EnableImages"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableImages);
+	}
+			
+	result["EnableTotalRecordCount"] = Jellyfin::Support::toJsonValue<bool>(m_enableTotalRecordCount);		
+	
+	if (!(!m_imageTypeLimit.has_value())) {
+		result["ImageTypeLimit"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_imageTypeLimit);
+	}
+			
+	
+	if (!(m_enableImageTypes.size() == 0)) {
+		result["EnableImageTypes"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_enableImageTypes);
+	}
+			
+	
+	if (!(!m_enableUserData.has_value())) {
+		result["EnableUserData"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableUserData);
+	}
+			
+	
+	if (!(m_seriesTimerId.isNull())) {
+		result["SeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesTimerId);
+	}
+			
+	result["LibrarySeriesId"] = Jellyfin::Support::toJsonValue<QString>(m_librarySeriesId);		
+	
+	if (!(m_fields.size() == 0)) {
+		result["Fields"] = Jellyfin::Support::toJsonValue<QList<ItemFields>>(m_fields);
+	}
+		
 	return result;
 }
 

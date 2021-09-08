@@ -60,9 +60,17 @@ void QueryFilters::setFromJson(QJsonObject source) {
 	
 QJsonObject QueryFilters::toJson() const {
 	QJsonObject result;
-	result["Genres"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_genres);
-	result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
-
+	
+	
+	if (!(m_genres.size() == 0)) {
+		result["Genres"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_genres);
+	}
+			
+	
+	if (!(m_tags.size() == 0)) {
+		result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
+	}
+		
 	return result;
 }
 

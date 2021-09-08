@@ -66,11 +66,15 @@ void ProfileCondition::setFromJson(QJsonObject source) {
 	
 QJsonObject ProfileCondition::toJson() const {
 	QJsonObject result;
-	result["Condition"] = Jellyfin::Support::toJsonValue<ProfileConditionType>(m_condition);
-	result["Property"] = Jellyfin::Support::toJsonValue<ProfileConditionValue>(m_property);
-	result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
-	result["IsRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isRequired);
-
+	
+	result["Condition"] = Jellyfin::Support::toJsonValue<ProfileConditionType>(m_condition);		
+	result["Property"] = Jellyfin::Support::toJsonValue<ProfileConditionValue>(m_property);		
+	
+	if (!(m_value.isNull())) {
+		result["Value"] = Jellyfin::Support::toJsonValue<QString>(m_value);
+	}
+			
+	result["IsRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isRequired);	
 	return result;
 }
 

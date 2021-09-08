@@ -60,9 +60,13 @@ void SessionUserInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject SessionUserInfo::toJson() const {
 	QJsonObject result;
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["UserName"] = Jellyfin::Support::toJsonValue<QString>(m_userName);
-
+	
+	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);		
+	
+	if (!(m_userName.isNull())) {
+		result["UserName"] = Jellyfin::Support::toJsonValue<QString>(m_userName);
+	}
+		
 	return result;
 }
 

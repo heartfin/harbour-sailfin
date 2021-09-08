@@ -96,21 +96,45 @@ void DisplayPreferencesDto::setFromJson(QJsonObject source) {
 	
 QJsonObject DisplayPreferencesDto::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["ViewType"] = Jellyfin::Support::toJsonValue<QString>(m_viewType);
-	result["SortBy"] = Jellyfin::Support::toJsonValue<QString>(m_sortBy);
-	result["IndexBy"] = Jellyfin::Support::toJsonValue<QString>(m_indexBy);
-	result["RememberIndexing"] = Jellyfin::Support::toJsonValue<bool>(m_rememberIndexing);
-	result["PrimaryImageHeight"] = Jellyfin::Support::toJsonValue<qint32>(m_primaryImageHeight);
-	result["PrimaryImageWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_primaryImageWidth);
-	result["CustomPrefs"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_customPrefs);
-	result["ScrollDirection"] = Jellyfin::Support::toJsonValue<ScrollDirection>(m_scrollDirection);
-	result["ShowBackdrop"] = Jellyfin::Support::toJsonValue<bool>(m_showBackdrop);
-	result["RememberSorting"] = Jellyfin::Support::toJsonValue<bool>(m_rememberSorting);
-	result["SortOrder"] = Jellyfin::Support::toJsonValue<SortOrder>(m_sortOrder);
-	result["ShowSidebar"] = Jellyfin::Support::toJsonValue<bool>(m_showSidebar);
-	result["Client"] = Jellyfin::Support::toJsonValue<QString>(m_client);
-
+	
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_viewType.isNull())) {
+		result["ViewType"] = Jellyfin::Support::toJsonValue<QString>(m_viewType);
+	}
+			
+	
+	if (!(m_sortBy.isNull())) {
+		result["SortBy"] = Jellyfin::Support::toJsonValue<QString>(m_sortBy);
+	}
+			
+	
+	if (!(m_indexBy.isNull())) {
+		result["IndexBy"] = Jellyfin::Support::toJsonValue<QString>(m_indexBy);
+	}
+			
+	result["RememberIndexing"] = Jellyfin::Support::toJsonValue<bool>(m_rememberIndexing);		
+	result["PrimaryImageHeight"] = Jellyfin::Support::toJsonValue<qint32>(m_primaryImageHeight);		
+	result["PrimaryImageWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_primaryImageWidth);		
+	
+	if (!(m_customPrefs.isEmpty())) {
+		result["CustomPrefs"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_customPrefs);
+	}
+			
+	result["ScrollDirection"] = Jellyfin::Support::toJsonValue<ScrollDirection>(m_scrollDirection);		
+	result["ShowBackdrop"] = Jellyfin::Support::toJsonValue<bool>(m_showBackdrop);		
+	result["RememberSorting"] = Jellyfin::Support::toJsonValue<bool>(m_rememberSorting);		
+	result["SortOrder"] = Jellyfin::Support::toJsonValue<SortOrder>(m_sortOrder);		
+	result["ShowSidebar"] = Jellyfin::Support::toJsonValue<bool>(m_showSidebar);		
+	
+	if (!(m_client.isNull())) {
+		result["Client"] = Jellyfin::Support::toJsonValue<QString>(m_client);
+	}
+		
 	return result;
 }
 

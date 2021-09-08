@@ -87,18 +87,38 @@ void BaseItem::setFromJson(QJsonObject source) {
 	
 QJsonObject BaseItem::toJson() const {
 	QJsonObject result;
-	result["Size"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_size);
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-	result["DateLastSaved"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastSaved);
-	result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<MediaUrl>>(m_remoteTrailers);
-	result["IsHD"] = Jellyfin::Support::toJsonValue<bool>(m_isHD);
-	result["IsShortcut"] = Jellyfin::Support::toJsonValue<bool>(m_isShortcut);
-	result["ShortcutPath"] = Jellyfin::Support::toJsonValue<QString>(m_shortcutPath);
-	result["Width"] = Jellyfin::Support::toJsonValue<qint32>(m_width);
-	result["Height"] = Jellyfin::Support::toJsonValue<qint32>(m_height);
-	result["ExtraIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_extraIds);
-	result["SupportsExternalTransfer"] = Jellyfin::Support::toJsonValue<bool>(m_supportsExternalTransfer);
-
+	
+	
+	if (!(!m_size.has_value())) {
+		result["Size"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_size);
+	}
+			
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+			
+	result["DateLastSaved"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastSaved);		
+	
+	if (!(m_remoteTrailers.size() == 0)) {
+		result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<MediaUrl>>(m_remoteTrailers);
+	}
+			
+	result["IsHD"] = Jellyfin::Support::toJsonValue<bool>(m_isHD);		
+	result["IsShortcut"] = Jellyfin::Support::toJsonValue<bool>(m_isShortcut);		
+	
+	if (!(m_shortcutPath.isNull())) {
+		result["ShortcutPath"] = Jellyfin::Support::toJsonValue<QString>(m_shortcutPath);
+	}
+			
+	result["Width"] = Jellyfin::Support::toJsonValue<qint32>(m_width);		
+	result["Height"] = Jellyfin::Support::toJsonValue<qint32>(m_height);		
+	
+	if (!(m_extraIds.size() == 0)) {
+		result["ExtraIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_extraIds);
+	}
+			
+	result["SupportsExternalTransfer"] = Jellyfin::Support::toJsonValue<bool>(m_supportsExternalTransfer);	
 	return result;
 }
 

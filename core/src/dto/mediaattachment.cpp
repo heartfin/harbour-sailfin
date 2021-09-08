@@ -75,14 +75,38 @@ void MediaAttachment::setFromJson(QJsonObject source) {
 	
 QJsonObject MediaAttachment::toJson() const {
 	QJsonObject result;
-	result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
-	result["CodecTag"] = Jellyfin::Support::toJsonValue<QString>(m_codecTag);
-	result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
-	result["Index"] = Jellyfin::Support::toJsonValue<qint32>(m_index);
-	result["FileName"] = Jellyfin::Support::toJsonValue<QString>(m_fileName);
-	result["MimeType"] = Jellyfin::Support::toJsonValue<QString>(m_mimeType);
-	result["DeliveryUrl"] = Jellyfin::Support::toJsonValue<QString>(m_deliveryUrl);
-
+	
+	
+	if (!(m_codec.isNull())) {
+		result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
+	}
+			
+	
+	if (!(m_codecTag.isNull())) {
+		result["CodecTag"] = Jellyfin::Support::toJsonValue<QString>(m_codecTag);
+	}
+			
+	
+	if (!(m_comment.isNull())) {
+		result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
+	}
+			
+	result["Index"] = Jellyfin::Support::toJsonValue<qint32>(m_index);		
+	
+	if (!(m_fileName.isNull())) {
+		result["FileName"] = Jellyfin::Support::toJsonValue<QString>(m_fileName);
+	}
+			
+	
+	if (!(m_mimeType.isNull())) {
+		result["MimeType"] = Jellyfin::Support::toJsonValue<QString>(m_mimeType);
+	}
+			
+	
+	if (!(m_deliveryUrl.isNull())) {
+		result["DeliveryUrl"] = Jellyfin::Support::toJsonValue<QString>(m_deliveryUrl);
+	}
+		
 	return result;
 }
 

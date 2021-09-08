@@ -84,17 +84,45 @@ void TaskInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject TaskInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["State"] = Jellyfin::Support::toJsonValue<TaskState>(m_state);
-	result["CurrentProgressPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_currentProgressPercentage);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["LastExecutionResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<TaskResult>>(m_lastExecutionResult);
-	result["Triggers"] = Jellyfin::Support::toJsonValue<QList<TaskTriggerInfo>>(m_triggers);
-	result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
-	result["Category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
-	result["IsHidden"] = Jellyfin::Support::toJsonValue<bool>(m_isHidden);
-	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	result["State"] = Jellyfin::Support::toJsonValue<TaskState>(m_state);		
+	
+	if (!(!m_currentProgressPercentage.has_value())) {
+		result["CurrentProgressPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_currentProgressPercentage);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	result["LastExecutionResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<TaskResult>>(m_lastExecutionResult);		
+	
+	if (!(m_triggers.size() == 0)) {
+		result["Triggers"] = Jellyfin::Support::toJsonValue<QList<TaskTriggerInfo>>(m_triggers);
+	}
+			
+	
+	if (!(m_description.isNull())) {
+		result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
+	}
+			
+	
+	if (!(m_category.isNull())) {
+		result["Category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
+	}
+			
+	result["IsHidden"] = Jellyfin::Support::toJsonValue<bool>(m_isHidden);		
+	
+	if (!(m_key.isNull())) {
+		result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
+	}
+		
 	return result;
 }
 

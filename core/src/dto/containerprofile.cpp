@@ -63,10 +63,18 @@ void ContainerProfile::setFromJson(QJsonObject source) {
 	
 QJsonObject ContainerProfile::toJson() const {
 	QJsonObject result;
-	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
-	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-
+	
+	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);		
+	
+	if (!(m_conditions.size() == 0)) {
+		result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
+	}
+			
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+		
 	return result;
 }
 

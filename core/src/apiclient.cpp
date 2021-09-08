@@ -51,7 +51,7 @@ public:
     bool online = true;
     QSharedPointer<DTO::DeviceProfile> deviceProfile;
     QSharedPointer<DTO::ClientCapabilitiesDto> clientCapabilities;
-    QVariantList supportedCommands;
+    QList<DTO::GeneralCommandType> supportedCommands;
 
     bool authenticated = false;
 
@@ -59,6 +59,8 @@ public:
      * @brief Retrieves the device ID or generates a random one.
      */
     QUuid retrieveDeviceId() const;
+
+    bool componentBeingParsed = false;
 
 };
 
@@ -73,7 +75,6 @@ ApiClient::ApiClient(QObject *parent)
     connect(d->credManager, &CredentialsManager::serversListed, this, &ApiClient::credManagerServersListed);
     connect(d->credManager, &CredentialsManager::usersListed, this, &ApiClient::credManagerUsersListed);
     connect(d->credManager, &CredentialsManager::tokenRetrieved, this, &ApiClient::credManagerTokenRetrieved);
-    generateDeviceProfile();
     connect(d->settings, &ViewModel::Settings::maxStreamingBitRateChanged, this, [d](qint32 newBitrate){
         d->deviceProfile->setMaxStreamingBitrate(newBitrate);
     });
@@ -148,13 +149,29 @@ ViewModel::Settings *ApiClient::settings() const {
 
 QVariantList ApiClient::supportedCommands() const {
     Q_D(const ApiClient);
-    return d->supportedCommands;
+    QVariantList result;
+    result.reserve(d->supportedCommands.size());
+    for(auto it = d->supportedCommands.begin(); it != d->supportedCommands.end(); it++) {
+        result.append(QVariant::fromValue<DTO::GeneralCommandType>(*it));
+    }
+    return result;
 }
 
 void ApiClient::setSupportedCommands(QVariantList newSupportedCommands) {
     Q_D(ApiClient);
-    d->supportedCommands = newSupportedCommands;
+    d->supportedCommands.clear();
+    d->supportedCommands.reserve(newSupportedCommands.size());
+    for (int i = 0; i < newSupportedCommands.size(); i++) {
+        if (newSupportedCommands[i].canConvert<DTO::GeneralCommandType>()) {
+            d->supportedCommands.append(newSupportedCommands[i].value<DTO::GeneralCommandType>());
+        }
+    }
+    qDebug() << "Supported commands changed: " << d->supportedCommands;
     emit supportedCommandsChanged();
+
+    if (!d->componentBeingParsed) {
+        this->generateDeviceProfile();
+    }
 }
 QSharedPointer<DTO::DeviceProfile> ApiClient::deviceProfile() const {
     Q_D(const ApiClient);
@@ -169,6 +186,22 @@ const QJsonObject ApiClient::clientCapabilities() const {
     Q_D(const ApiClient);
     return d->clientCapabilities->toJson();
 }
+
+// QQMLParserStatus implementation
+void ApiClient::classBegin() {
+    Q_D(ApiClient);
+    d->componentBeingParsed = true;
+}
+
+void ApiClient::componentComplete() {
+    Q_D(ApiClient);
+    d->componentBeingParsed = false;
+
+    // Generate the device profile after all properties have been parsed.
+    generateDeviceProfile();
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // BASE HTTP METHODS                                                                              //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -397,18 +430,10 @@ void ApiClient::generateDeviceProfile() {
     deviceProfile->setMaxStreamingBitrate(d->settings->maxStreamingBitRate());
     d->deviceProfile = deviceProfile;
 
-    QList<DTO::GeneralCommandType> supportedCommands;
-    supportedCommands.reserve(d->supportedCommands.size());
-    for (int i = 0; i < d->supportedCommands.size(); i++) {
-        if (d->supportedCommands[i].canConvert<DTO::GeneralCommandType>()) {
-            supportedCommands.append(d->supportedCommands[i].value<DTO::GeneralCommandType>());
-        }
-    }
-
     QSharedPointer<DTO::ClientCapabilitiesDto> clientCapabilities = QSharedPointer<DTO::ClientCapabilitiesDto>::create();
     clientCapabilities->setPlayableMediaTypes({"Audio", "Video", "Photo"});
     clientCapabilities->setDeviceProfile(deviceProfile);
-    clientCapabilities->setSupportedCommands(supportedCommands);
+    clientCapabilities->setSupportedCommands(d->supportedCommands);
     clientCapabilities->setAppStoreUrl("https://chris.netsoj.nl/projects/harbour-sailfin");
     clientCapabilities->setIconUrl("https://chris.netsoj.nl/static/img/logo.png");
     clientCapabilities->setSupportsPersistentIdentifier(true);

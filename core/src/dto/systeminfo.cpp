@@ -132,33 +132,101 @@ void SystemInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject SystemInfo::toJson() const {
 	QJsonObject result;
-	result["LocalAddress"] = Jellyfin::Support::toJsonValue<QString>(m_localAddress);
-	result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
-	result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
-	result["ProductName"] = Jellyfin::Support::toJsonValue<QString>(m_productName);
-	result["OperatingSystem"] = Jellyfin::Support::toJsonValue<QString>(m_operatingSystem);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["StartupWizardCompleted"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_startupWizardCompleted);
-	result["OperatingSystemDisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_operatingSystemDisplayName);
-	result["PackageName"] = Jellyfin::Support::toJsonValue<QString>(m_packageName);
-	result["HasPendingRestart"] = Jellyfin::Support::toJsonValue<bool>(m_hasPendingRestart);
-	result["IsShuttingDown"] = Jellyfin::Support::toJsonValue<bool>(m_isShuttingDown);
-	result["SupportsLibraryMonitor"] = Jellyfin::Support::toJsonValue<bool>(m_supportsLibraryMonitor);
-	result["WebSocketPortNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_webSocketPortNumber);
-	result["CompletedInstallations"] = Jellyfin::Support::toJsonValue<QList<InstallationInfo>>(m_completedInstallations);
-	result["CanSelfRestart"] = Jellyfin::Support::toJsonValue<bool>(m_canSelfRestart);
-	result["CanLaunchWebBrowser"] = Jellyfin::Support::toJsonValue<bool>(m_canLaunchWebBrowser);
-	result["ProgramDataPath"] = Jellyfin::Support::toJsonValue<QString>(m_programDataPath);
-	result["WebPath"] = Jellyfin::Support::toJsonValue<QString>(m_webPath);
-	result["ItemsByNamePath"] = Jellyfin::Support::toJsonValue<QString>(m_itemsByNamePath);
-	result["CachePath"] = Jellyfin::Support::toJsonValue<QString>(m_cachePath);
-	result["LogPath"] = Jellyfin::Support::toJsonValue<QString>(m_logPath);
-	result["InternalMetadataPath"] = Jellyfin::Support::toJsonValue<QString>(m_internalMetadataPath);
-	result["TranscodingTempPath"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingTempPath);
-	result["HasUpdateAvailable"] = Jellyfin::Support::toJsonValue<bool>(m_hasUpdateAvailable);
-	result["EncoderLocation"] = Jellyfin::Support::toJsonValue<FFmpegLocation>(m_encoderLocation);
-	result["SystemArchitecture"] = Jellyfin::Support::toJsonValue<Architecture>(m_systemArchitecture);
-
+	
+	
+	if (!(m_localAddress.isNull())) {
+		result["LocalAddress"] = Jellyfin::Support::toJsonValue<QString>(m_localAddress);
+	}
+			
+	
+	if (!(m_serverName.isNull())) {
+		result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
+	}
+			
+	
+	if (!(m_version.isNull())) {
+		result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	}
+			
+	
+	if (!(m_productName.isNull())) {
+		result["ProductName"] = Jellyfin::Support::toJsonValue<QString>(m_productName);
+	}
+			
+	
+	if (!(m_operatingSystem.isNull())) {
+		result["OperatingSystem"] = Jellyfin::Support::toJsonValue<QString>(m_operatingSystem);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(!m_startupWizardCompleted.has_value())) {
+		result["StartupWizardCompleted"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_startupWizardCompleted);
+	}
+			
+	
+	if (!(m_operatingSystemDisplayName.isNull())) {
+		result["OperatingSystemDisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_operatingSystemDisplayName);
+	}
+			
+	
+	if (!(m_packageName.isNull())) {
+		result["PackageName"] = Jellyfin::Support::toJsonValue<QString>(m_packageName);
+	}
+			
+	result["HasPendingRestart"] = Jellyfin::Support::toJsonValue<bool>(m_hasPendingRestart);		
+	result["IsShuttingDown"] = Jellyfin::Support::toJsonValue<bool>(m_isShuttingDown);		
+	result["SupportsLibraryMonitor"] = Jellyfin::Support::toJsonValue<bool>(m_supportsLibraryMonitor);		
+	result["WebSocketPortNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_webSocketPortNumber);		
+	
+	if (!(m_completedInstallations.size() == 0)) {
+		result["CompletedInstallations"] = Jellyfin::Support::toJsonValue<QList<InstallationInfo>>(m_completedInstallations);
+	}
+			
+	result["CanSelfRestart"] = Jellyfin::Support::toJsonValue<bool>(m_canSelfRestart);		
+	result["CanLaunchWebBrowser"] = Jellyfin::Support::toJsonValue<bool>(m_canLaunchWebBrowser);		
+	
+	if (!(m_programDataPath.isNull())) {
+		result["ProgramDataPath"] = Jellyfin::Support::toJsonValue<QString>(m_programDataPath);
+	}
+			
+	
+	if (!(m_webPath.isNull())) {
+		result["WebPath"] = Jellyfin::Support::toJsonValue<QString>(m_webPath);
+	}
+			
+	
+	if (!(m_itemsByNamePath.isNull())) {
+		result["ItemsByNamePath"] = Jellyfin::Support::toJsonValue<QString>(m_itemsByNamePath);
+	}
+			
+	
+	if (!(m_cachePath.isNull())) {
+		result["CachePath"] = Jellyfin::Support::toJsonValue<QString>(m_cachePath);
+	}
+			
+	
+	if (!(m_logPath.isNull())) {
+		result["LogPath"] = Jellyfin::Support::toJsonValue<QString>(m_logPath);
+	}
+			
+	
+	if (!(m_internalMetadataPath.isNull())) {
+		result["InternalMetadataPath"] = Jellyfin::Support::toJsonValue<QString>(m_internalMetadataPath);
+	}
+			
+	
+	if (!(m_transcodingTempPath.isNull())) {
+		result["TranscodingTempPath"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingTempPath);
+	}
+			
+	result["HasUpdateAvailable"] = Jellyfin::Support::toJsonValue<bool>(m_hasUpdateAvailable);		
+	result["EncoderLocation"] = Jellyfin::Support::toJsonValue<FFmpegLocation>(m_encoderLocation);		
+	result["SystemArchitecture"] = Jellyfin::Support::toJsonValue<Architecture>(m_systemArchitecture);	
 	return result;
 }
 

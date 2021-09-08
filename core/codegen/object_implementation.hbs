@@ -45,8 +45,17 @@ QJsonObject {{className}}::toJson() const {
 	QJsonObject result;
 
 	{{#each properties as |property|}}
-	result["{{property.originalName}}"] = {{supportNamespace}}::toJsonValue<{{property.typeNameWithQualifiers}}>({{property.memberName}});
+	{{#if property.isNullable}}
 
+	
+	if (!({{property.nullableCheck}})) {
+		result["{{property.originalName}}"] = {{supportNamespace}}::toJsonValue<{{property.typeNameWithQualifiers}}>({{property.memberName}});
+	}
+	
+	{{#else}}
+
+	result["{{property.originalName}}"] = {{supportNamespace}}::toJsonValue<{{property.typeNameWithQualifiers}}>({{property.memberName}});
+	{{/if}}
 	{{/each}}
 
 	return result;

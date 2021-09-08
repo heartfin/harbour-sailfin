@@ -81,16 +81,40 @@ void DeviceInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject DeviceInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["LastUserName"] = Jellyfin::Support::toJsonValue<QString>(m_lastUserName);
-	result["AppName"] = Jellyfin::Support::toJsonValue<QString>(m_appName);
-	result["AppVersion"] = Jellyfin::Support::toJsonValue<QString>(m_appVersion);
-	result["LastUserId"] = Jellyfin::Support::toJsonValue<QString>(m_lastUserId);
-	result["DateLastActivity"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastActivity);
-	result["Capabilities"] = Jellyfin::Support::toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);
-	result["IconUrl"] = Jellyfin::Support::toJsonValue<QString>(m_iconUrl);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_lastUserName.isNull())) {
+		result["LastUserName"] = Jellyfin::Support::toJsonValue<QString>(m_lastUserName);
+	}
+			
+	
+	if (!(m_appName.isNull())) {
+		result["AppName"] = Jellyfin::Support::toJsonValue<QString>(m_appName);
+	}
+			
+	
+	if (!(m_appVersion.isNull())) {
+		result["AppVersion"] = Jellyfin::Support::toJsonValue<QString>(m_appVersion);
+	}
+			
+	result["LastUserId"] = Jellyfin::Support::toJsonValue<QString>(m_lastUserId);		
+	result["DateLastActivity"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastActivity);		
+	result["Capabilities"] = Jellyfin::Support::toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);		
+	
+	if (!(m_iconUrl.isNull())) {
+		result["IconUrl"] = Jellyfin::Support::toJsonValue<QString>(m_iconUrl);
+	}
+		
 	return result;
 }
 

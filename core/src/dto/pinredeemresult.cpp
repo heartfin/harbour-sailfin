@@ -60,9 +60,13 @@ void PinRedeemResult::setFromJson(QJsonObject source) {
 	
 QJsonObject PinRedeemResult::toJson() const {
 	QJsonObject result;
-	result["Success"] = Jellyfin::Support::toJsonValue<bool>(m_success);
-	result["UsersReset"] = Jellyfin::Support::toJsonValue<QStringList>(m_usersReset);
-
+	
+	result["Success"] = Jellyfin::Support::toJsonValue<bool>(m_success);		
+	
+	if (!(m_usersReset.size() == 0)) {
+		result["UsersReset"] = Jellyfin::Support::toJsonValue<QStringList>(m_usersReset);
+	}
+		
 	return result;
 }
 

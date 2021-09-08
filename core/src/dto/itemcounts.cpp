@@ -90,19 +90,19 @@ void ItemCounts::setFromJson(QJsonObject source) {
 	
 QJsonObject ItemCounts::toJson() const {
 	QJsonObject result;
-	result["MovieCount"] = Jellyfin::Support::toJsonValue<qint32>(m_movieCount);
-	result["SeriesCount"] = Jellyfin::Support::toJsonValue<qint32>(m_seriesCount);
-	result["EpisodeCount"] = Jellyfin::Support::toJsonValue<qint32>(m_episodeCount);
-	result["ArtistCount"] = Jellyfin::Support::toJsonValue<qint32>(m_artistCount);
-	result["ProgramCount"] = Jellyfin::Support::toJsonValue<qint32>(m_programCount);
-	result["TrailerCount"] = Jellyfin::Support::toJsonValue<qint32>(m_trailerCount);
-	result["SongCount"] = Jellyfin::Support::toJsonValue<qint32>(m_songCount);
-	result["AlbumCount"] = Jellyfin::Support::toJsonValue<qint32>(m_albumCount);
-	result["MusicVideoCount"] = Jellyfin::Support::toJsonValue<qint32>(m_musicVideoCount);
-	result["BoxSetCount"] = Jellyfin::Support::toJsonValue<qint32>(m_boxSetCount);
-	result["BookCount"] = Jellyfin::Support::toJsonValue<qint32>(m_bookCount);
-	result["ItemCount"] = Jellyfin::Support::toJsonValue<qint32>(m_itemCount);
-
+	
+	result["MovieCount"] = Jellyfin::Support::toJsonValue<qint32>(m_movieCount);		
+	result["SeriesCount"] = Jellyfin::Support::toJsonValue<qint32>(m_seriesCount);		
+	result["EpisodeCount"] = Jellyfin::Support::toJsonValue<qint32>(m_episodeCount);		
+	result["ArtistCount"] = Jellyfin::Support::toJsonValue<qint32>(m_artistCount);		
+	result["ProgramCount"] = Jellyfin::Support::toJsonValue<qint32>(m_programCount);		
+	result["TrailerCount"] = Jellyfin::Support::toJsonValue<qint32>(m_trailerCount);		
+	result["SongCount"] = Jellyfin::Support::toJsonValue<qint32>(m_songCount);		
+	result["AlbumCount"] = Jellyfin::Support::toJsonValue<qint32>(m_albumCount);		
+	result["MusicVideoCount"] = Jellyfin::Support::toJsonValue<qint32>(m_musicVideoCount);		
+	result["BoxSetCount"] = Jellyfin::Support::toJsonValue<qint32>(m_boxSetCount);		
+	result["BookCount"] = Jellyfin::Support::toJsonValue<qint32>(m_bookCount);		
+	result["ItemCount"] = Jellyfin::Support::toJsonValue<qint32>(m_itemCount);	
 	return result;
 }
 

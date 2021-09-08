@@ -69,12 +69,28 @@ void SubtitleProfile::setFromJson(QJsonObject source) {
 	
 QJsonObject SubtitleProfile::toJson() const {
 	QJsonObject result;
-	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
-	result["Method"] = Jellyfin::Support::toJsonValue<SubtitleDeliveryMethod>(m_method);
-	result["DidlMode"] = Jellyfin::Support::toJsonValue<QString>(m_didlMode);
-	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-
+	
+	
+	if (!(m_format.isNull())) {
+		result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
+	}
+			
+	result["Method"] = Jellyfin::Support::toJsonValue<SubtitleDeliveryMethod>(m_method);		
+	
+	if (!(m_didlMode.isNull())) {
+		result["DidlMode"] = Jellyfin::Support::toJsonValue<QString>(m_didlMode);
+	}
+			
+	
+	if (!(m_language.isNull())) {
+		result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
+	}
+			
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+		
 	return result;
 }
 

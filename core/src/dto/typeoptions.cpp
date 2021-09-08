@@ -72,13 +72,37 @@ void TypeOptions::setFromJson(QJsonObject source) {
 	
 QJsonObject TypeOptions::toJson() const {
 	QJsonObject result;
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["MetadataFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetchers);
-	result["MetadataFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetcherOrder);
-	result["ImageFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetchers);
-	result["ImageFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetcherOrder);
-	result["ImageOptions"] = Jellyfin::Support::toJsonValue<QList<ImageOption>>(m_imageOptions);
-
+	
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_metadataFetchers.size() == 0)) {
+		result["MetadataFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetchers);
+	}
+			
+	
+	if (!(m_metadataFetcherOrder.size() == 0)) {
+		result["MetadataFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataFetcherOrder);
+	}
+			
+	
+	if (!(m_imageFetchers.size() == 0)) {
+		result["ImageFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetchers);
+	}
+			
+	
+	if (!(m_imageFetcherOrder.size() == 0)) {
+		result["ImageFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_imageFetcherOrder);
+	}
+			
+	
+	if (!(m_imageOptions.size() == 0)) {
+		result["ImageOptions"] = Jellyfin::Support::toJsonValue<QList<ImageOption>>(m_imageOptions);
+	}
+		
 	return result;
 }
 

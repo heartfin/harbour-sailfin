@@ -63,10 +63,18 @@ void PlaybackInfoResponse::setFromJson(QJsonObject source) {
 	
 QJsonObject PlaybackInfoResponse::toJson() const {
 	QJsonObject result;
-	result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<MediaSourceInfo>>(m_mediaSources);
-	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
-	result["ErrorCode"] = Jellyfin::Support::toJsonValue<PlaybackErrorCode>(m_errorCode);
-
+	
+	
+	if (!(m_mediaSources.size() == 0)) {
+		result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<MediaSourceInfo>>(m_mediaSources);
+	}
+			
+	
+	if (!(m_playSessionId.isNull())) {
+		result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
+	}
+			
+	result["ErrorCode"] = Jellyfin::Support::toJsonValue<PlaybackErrorCode>(m_errorCode);	
 	return result;
 }
 

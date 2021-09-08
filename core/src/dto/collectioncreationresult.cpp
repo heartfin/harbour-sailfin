@@ -57,8 +57,8 @@ void CollectionCreationResult::setFromJson(QJsonObject source) {
 	
 QJsonObject CollectionCreationResult::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-
+	
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);	
 	return result;
 }
 

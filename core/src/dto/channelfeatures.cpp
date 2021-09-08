@@ -90,19 +90,47 @@ void ChannelFeatures::setFromJson(QJsonObject source) {
 	
 QJsonObject ChannelFeatures::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["CanSearch"] = Jellyfin::Support::toJsonValue<bool>(m_canSearch);
-	result["MediaTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaType>>(m_mediaTypes);
-	result["ContentTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaContentType>>(m_contentTypes);
-	result["MaxPageSize"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxPageSize);
-	result["AutoRefreshLevels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_autoRefreshLevels);
-	result["DefaultSortFields"] = Jellyfin::Support::toJsonValue<QList<ChannelItemSortField>>(m_defaultSortFields);
-	result["SupportsSortOrderToggle"] = Jellyfin::Support::toJsonValue<bool>(m_supportsSortOrderToggle);
-	result["SupportsLatestMedia"] = Jellyfin::Support::toJsonValue<bool>(m_supportsLatestMedia);
-	result["CanFilter"] = Jellyfin::Support::toJsonValue<bool>(m_canFilter);
-	result["SupportsContentDownloading"] = Jellyfin::Support::toJsonValue<bool>(m_supportsContentDownloading);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	result["CanSearch"] = Jellyfin::Support::toJsonValue<bool>(m_canSearch);		
+	
+	if (!(m_mediaTypes.size() == 0)) {
+		result["MediaTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaType>>(m_mediaTypes);
+	}
+			
+	
+	if (!(m_contentTypes.size() == 0)) {
+		result["ContentTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaContentType>>(m_contentTypes);
+	}
+			
+	
+	if (!(!m_maxPageSize.has_value())) {
+		result["MaxPageSize"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxPageSize);
+	}
+			
+	
+	if (!(!m_autoRefreshLevels.has_value())) {
+		result["AutoRefreshLevels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_autoRefreshLevels);
+	}
+			
+	
+	if (!(m_defaultSortFields.size() == 0)) {
+		result["DefaultSortFields"] = Jellyfin::Support::toJsonValue<QList<ChannelItemSortField>>(m_defaultSortFields);
+	}
+			
+	result["SupportsSortOrderToggle"] = Jellyfin::Support::toJsonValue<bool>(m_supportsSortOrderToggle);		
+	result["SupportsLatestMedia"] = Jellyfin::Support::toJsonValue<bool>(m_supportsLatestMedia);		
+	result["CanFilter"] = Jellyfin::Support::toJsonValue<bool>(m_canFilter);		
+	result["SupportsContentDownloading"] = Jellyfin::Support::toJsonValue<bool>(m_supportsContentDownloading);	
 	return result;
 }
 

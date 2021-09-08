@@ -60,9 +60,17 @@ void ImageProviderInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject ImageProviderInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["SupportedImages"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImages);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_supportedImages.size() == 0)) {
+		result["SupportedImages"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImages);
+	}
+		
 	return result;
 }
 

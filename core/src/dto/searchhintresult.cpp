@@ -60,9 +60,13 @@ void SearchHintResult::setFromJson(QJsonObject source) {
 	
 QJsonObject SearchHintResult::toJson() const {
 	QJsonObject result;
-	result["SearchHints"] = Jellyfin::Support::toJsonValue<QList<SearchHint>>(m_searchHints);
-	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
-
+	
+	
+	if (!(m_searchHints.size() == 0)) {
+		result["SearchHints"] = Jellyfin::Support::toJsonValue<QList<SearchHint>>(m_searchHints);
+	}
+			
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);	
 	return result;
 }
 

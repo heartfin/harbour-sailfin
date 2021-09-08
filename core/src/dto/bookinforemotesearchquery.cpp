@@ -66,11 +66,15 @@ void BookInfoRemoteSearchQuery::setFromJson(QJsonObject source) {
 	
 QJsonObject BookInfoRemoteSearchQuery::toJson() const {
 	QJsonObject result;
-	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<BookInfo>>(m_searchInfo);
-	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
-	result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
-	result["IncludeDisabledProviders"] = Jellyfin::Support::toJsonValue<bool>(m_includeDisabledProviders);
-
+	
+	result["SearchInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<BookInfo>>(m_searchInfo);		
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);		
+	
+	if (!(m_searchProviderName.isNull())) {
+		result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
+	}
+			
+	result["IncludeDisabledProviders"] = Jellyfin::Support::toJsonValue<bool>(m_includeDisabledProviders);	
 	return result;
 }
 

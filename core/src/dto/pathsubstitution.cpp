@@ -60,9 +60,17 @@ void PathSubstitution::setFromJson(QJsonObject source) {
 	
 QJsonObject PathSubstitution::toJson() const {
 	QJsonObject result;
-	result["From"] = Jellyfin::Support::toJsonValue<QString>(m_from);
-	result["To"] = Jellyfin::Support::toJsonValue<QString>(m_to);
-
+	
+	
+	if (!(m_from.isNull())) {
+		result["From"] = Jellyfin::Support::toJsonValue<QString>(m_from);
+	}
+			
+	
+	if (!(m_to.isNull())) {
+		result["To"] = Jellyfin::Support::toJsonValue<QString>(m_to);
+	}
+		
 	return result;
 }
 

@@ -66,11 +66,19 @@ void RecommendationDto::setFromJson(QJsonObject source) {
 	
 QJsonObject RecommendationDto::toJson() const {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
-	result["RecommendationType"] = Jellyfin::Support::toJsonValue<RecommendationType>(m_recommendationType);
-	result["BaselineItemName"] = Jellyfin::Support::toJsonValue<QString>(m_baselineItemName);
-	result["CategoryId"] = Jellyfin::Support::toJsonValue<QString>(m_categoryId);
-
+	
+	
+	if (!(m_items.size() == 0)) {
+		result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
+	}
+			
+	result["RecommendationType"] = Jellyfin::Support::toJsonValue<RecommendationType>(m_recommendationType);		
+	
+	if (!(m_baselineItemName.isNull())) {
+		result["BaselineItemName"] = Jellyfin::Support::toJsonValue<QString>(m_baselineItemName);
+	}
+			
+	result["CategoryId"] = Jellyfin::Support::toJsonValue<QString>(m_categoryId);	
 	return result;
 }
 

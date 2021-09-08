@@ -60,9 +60,13 @@ void QueueRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject QueueRequestDto::toJson() const {
 	QJsonObject result;
-	result["ItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemIds);
-	result["Mode"] = Jellyfin::Support::toJsonValue<GroupQueueMode>(m_mode);
-
+	
+	
+	if (!(m_itemIds.size() == 0)) {
+		result["ItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemIds);
+	}
+			
+	result["Mode"] = Jellyfin::Support::toJsonValue<GroupQueueMode>(m_mode);	
 	return result;
 }
 

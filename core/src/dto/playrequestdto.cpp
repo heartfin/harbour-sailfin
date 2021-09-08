@@ -63,10 +63,14 @@ void PlayRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject PlayRequestDto::toJson() const {
 	QJsonObject result;
-	result["PlayingQueue"] = Jellyfin::Support::toJsonValue<QStringList>(m_playingQueue);
-	result["PlayingItemPosition"] = Jellyfin::Support::toJsonValue<qint32>(m_playingItemPosition);
-	result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_startPositionTicks);
-
+	
+	
+	if (!(m_playingQueue.size() == 0)) {
+		result["PlayingQueue"] = Jellyfin::Support::toJsonValue<QStringList>(m_playingQueue);
+	}
+			
+	result["PlayingItemPosition"] = Jellyfin::Support::toJsonValue<qint32>(m_playingItemPosition);		
+	result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_startPositionTicks);	
 	return result;
 }
 

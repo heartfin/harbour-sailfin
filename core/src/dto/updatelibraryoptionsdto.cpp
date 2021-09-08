@@ -60,9 +60,9 @@ void UpdateLibraryOptionsDto::setFromJson(QJsonObject source) {
 	
 QJsonObject UpdateLibraryOptionsDto::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
-
+	
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
+	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);	
 	return result;
 }
 

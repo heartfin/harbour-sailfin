@@ -57,8 +57,12 @@ void DeviceOptions::setFromJson(QJsonObject source) {
 	
 QJsonObject DeviceOptions::toJson() const {
 	QJsonObject result;
-	result["CustomName"] = Jellyfin::Support::toJsonValue<QString>(m_customName);
-
+	
+	
+	if (!(m_customName.isNull())) {
+		result["CustomName"] = Jellyfin::Support::toJsonValue<QString>(m_customName);
+	}
+		
 	return result;
 }
 

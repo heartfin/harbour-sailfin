@@ -69,12 +69,28 @@ void TaskTriggerInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject TaskTriggerInfo::toJson() const {
 	QJsonObject result;
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["TimeOfDayTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_timeOfDayTicks);
-	result["IntervalTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_intervalTicks);
-	result["DayOfWeek"] = Jellyfin::Support::toJsonValue<DayOfWeek>(m_dayOfWeek);
-	result["MaxRuntimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_maxRuntimeTicks);
-
+	
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(!m_timeOfDayTicks.has_value())) {
+		result["TimeOfDayTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_timeOfDayTicks);
+	}
+			
+	
+	if (!(!m_intervalTicks.has_value())) {
+		result["IntervalTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_intervalTicks);
+	}
+			
+	result["DayOfWeek"] = Jellyfin::Support::toJsonValue<DayOfWeek>(m_dayOfWeek);		
+	
+	if (!(!m_maxRuntimeTicks.has_value())) {
+		result["MaxRuntimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_maxRuntimeTicks);
+	}
+		
 	return result;
 }
 

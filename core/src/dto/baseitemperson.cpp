@@ -72,13 +72,37 @@ void BaseItemPerson::setFromJson(QJsonObject source) {
 	
 QJsonObject BaseItemPerson::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Role"] = Jellyfin::Support::toJsonValue<QString>(m_role);
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
-	result["ImageBlurHashes"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageBlurHashes);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_role.isNull())) {
+		result["Role"] = Jellyfin::Support::toJsonValue<QString>(m_role);
+	}
+			
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_primaryImageTag.isNull())) {
+		result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
+	}
+			
+	
+	if (!(m_imageBlurHashes.isEmpty())) {
+		result["ImageBlurHashes"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageBlurHashes);
+	}
+		
 	return result;
 }
 

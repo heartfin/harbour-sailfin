@@ -60,9 +60,9 @@ void StartupRemoteAccessDto::setFromJson(QJsonObject source) {
 	
 QJsonObject StartupRemoteAccessDto::toJson() const {
 	QJsonObject result;
-	result["EnableRemoteAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteAccess);
-	result["EnableAutomaticPortMapping"] = Jellyfin::Support::toJsonValue<bool>(m_enableAutomaticPortMapping);
-
+	
+	result["EnableRemoteAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteAccess);		
+	result["EnableAutomaticPortMapping"] = Jellyfin::Support::toJsonValue<bool>(m_enableAutomaticPortMapping);	
 	return result;
 }
 

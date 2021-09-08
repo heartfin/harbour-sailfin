@@ -66,11 +66,15 @@ void LogFile::setFromJson(QJsonObject source) {
 	
 QJsonObject LogFile::toJson() const {
 	QJsonObject result;
-	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
-	result["DateModified"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateModified);
-	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-
+	
+	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);		
+	result["DateModified"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateModified);		
+	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);		
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+		
 	return result;
 }
 

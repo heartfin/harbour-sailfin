@@ -63,10 +63,18 @@ void ControlResponse::setFromJson(QJsonObject source) {
 	
 QJsonObject ControlResponse::toJson() const {
 	QJsonObject result;
-	result["Headers"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_headers);
-	result["Xml"] = Jellyfin::Support::toJsonValue<QString>(m_xml);
-	result["IsSuccessful"] = Jellyfin::Support::toJsonValue<bool>(m_isSuccessful);
-
+	
+	
+	if (!(m_headers.isEmpty())) {
+		result["Headers"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_headers);
+	}
+			
+	
+	if (!(m_xml.isNull())) {
+		result["Xml"] = Jellyfin::Support::toJsonValue<QString>(m_xml);
+	}
+			
+	result["IsSuccessful"] = Jellyfin::Support::toJsonValue<bool>(m_isSuccessful);	
 	return result;
 }
 

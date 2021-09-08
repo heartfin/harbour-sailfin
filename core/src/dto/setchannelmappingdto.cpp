@@ -63,10 +63,10 @@ void SetChannelMappingDto::setFromJson(QJsonObject source) {
 	
 QJsonObject SetChannelMappingDto::toJson() const {
 	QJsonObject result;
-	result["ProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_providerId);
-	result["TunerChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_tunerChannelId);
-	result["ProviderChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_providerChannelId);
-
+	
+	result["ProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_providerId);		
+	result["TunerChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_tunerChannelId);		
+	result["ProviderChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_providerChannelId);	
 	return result;
 }
 

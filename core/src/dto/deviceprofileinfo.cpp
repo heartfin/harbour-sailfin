@@ -63,10 +63,18 @@ void DeviceProfileInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject DeviceProfileInfo::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Type"] = Jellyfin::Support::toJsonValue<DeviceProfileType>(m_type);
-
+	
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	result["Type"] = Jellyfin::Support::toJsonValue<DeviceProfileType>(m_type);	
 	return result;
 }
 

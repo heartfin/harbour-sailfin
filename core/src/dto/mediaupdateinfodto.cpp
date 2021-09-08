@@ -60,9 +60,17 @@ void MediaUpdateInfoDto::setFromJson(QJsonObject source) {
 	
 QJsonObject MediaUpdateInfoDto::toJson() const {
 	QJsonObject result;
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["UpdateType"] = Jellyfin::Support::toJsonValue<QString>(m_updateType);
-
+	
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(m_updateType.isNull())) {
+		result["UpdateType"] = Jellyfin::Support::toJsonValue<QString>(m_updateType);
+	}
+		
 	return result;
 }
 

@@ -69,12 +69,28 @@ void CodecProfile::setFromJson(QJsonObject source) {
 	
 QJsonObject CodecProfile::toJson() const {
 	QJsonObject result;
-	result["Type"] = Jellyfin::Support::toJsonValue<CodecType>(m_type);
-	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
-	result["ApplyConditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_applyConditions);
-	result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-
+	
+	result["Type"] = Jellyfin::Support::toJsonValue<CodecType>(m_type);		
+	
+	if (!(m_conditions.size() == 0)) {
+		result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
+	}
+			
+	
+	if (!(m_applyConditions.size() == 0)) {
+		result["ApplyConditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_applyConditions);
+	}
+			
+	
+	if (!(m_codec.isNull())) {
+		result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
+	}
+			
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+		
 	return result;
 }
 

@@ -141,36 +141,136 @@ void SearchHint::setFromJson(QJsonObject source) {
 	
 QJsonObject SearchHint::toJson() const {
 	QJsonObject result;
-	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["MatchedTerm"] = Jellyfin::Support::toJsonValue<QString>(m_matchedTerm);
-	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
-	result["ProductionYear"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_productionYear);
-	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
-	result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
-	result["ThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_thumbImageTag);
-	result["ThumbImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_thumbImageItemId);
-	result["BackdropImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_backdropImageTag);
-	result["BackdropImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_backdropImageItemId);
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["IsFolder"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isFolder);
-	result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_runTimeTicks);
-	result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
-	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
-	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
-	result["Series"] = Jellyfin::Support::toJsonValue<QString>(m_series);
-	result["Status"] = Jellyfin::Support::toJsonValue<QString>(m_status);
-	result["Album"] = Jellyfin::Support::toJsonValue<QString>(m_album);
-	result["AlbumId"] = Jellyfin::Support::toJsonValue<QString>(m_albumId);
-	result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtist);
-	result["Artists"] = Jellyfin::Support::toJsonValue<QStringList>(m_artists);
-	result["SongCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_songCount);
-	result["EpisodeCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_episodeCount);
-	result["ChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_channelId);
-	result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
-	result["PrimaryImageAspectRatio"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_primaryImageAspectRatio);
-
+	
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);		
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_matchedTerm.isNull())) {
+		result["MatchedTerm"] = Jellyfin::Support::toJsonValue<QString>(m_matchedTerm);
+	}
+			
+	
+	if (!(!m_indexNumber.has_value())) {
+		result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
+	}
+			
+	
+	if (!(!m_productionYear.has_value())) {
+		result["ProductionYear"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_productionYear);
+	}
+			
+	
+	if (!(!m_parentIndexNumber.has_value())) {
+		result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
+	}
+			
+	
+	if (!(m_primaryImageTag.isNull())) {
+		result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
+	}
+			
+	
+	if (!(m_thumbImageTag.isNull())) {
+		result["ThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_thumbImageTag);
+	}
+			
+	
+	if (!(m_thumbImageItemId.isNull())) {
+		result["ThumbImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_thumbImageItemId);
+	}
+			
+	
+	if (!(m_backdropImageTag.isNull())) {
+		result["BackdropImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_backdropImageTag);
+	}
+			
+	
+	if (!(m_backdropImageItemId.isNull())) {
+		result["BackdropImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_backdropImageItemId);
+	}
+			
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(!m_isFolder.has_value())) {
+		result["IsFolder"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isFolder);
+	}
+			
+	
+	if (!(!m_runTimeTicks.has_value())) {
+		result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_runTimeTicks);
+	}
+			
+	
+	if (!(m_mediaType.isNull())) {
+		result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
+	}
+			
+	
+	if (!(m_startDate.isNull())) {
+		result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
+	}
+			
+	
+	if (!(m_endDate.isNull())) {
+		result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
+	}
+			
+	
+	if (!(m_series.isNull())) {
+		result["Series"] = Jellyfin::Support::toJsonValue<QString>(m_series);
+	}
+			
+	
+	if (!(m_status.isNull())) {
+		result["Status"] = Jellyfin::Support::toJsonValue<QString>(m_status);
+	}
+			
+	
+	if (!(m_album.isNull())) {
+		result["Album"] = Jellyfin::Support::toJsonValue<QString>(m_album);
+	}
+			
+	result["AlbumId"] = Jellyfin::Support::toJsonValue<QString>(m_albumId);		
+	
+	if (!(m_albumArtist.isNull())) {
+		result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtist);
+	}
+			
+	
+	if (!(m_artists.size() == 0)) {
+		result["Artists"] = Jellyfin::Support::toJsonValue<QStringList>(m_artists);
+	}
+			
+	
+	if (!(!m_songCount.has_value())) {
+		result["SongCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_songCount);
+	}
+			
+	
+	if (!(!m_episodeCount.has_value())) {
+		result["EpisodeCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_episodeCount);
+	}
+			
+	result["ChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_channelId);		
+	
+	if (!(m_channelName.isNull())) {
+		result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
+	}
+			
+	
+	if (!(!m_primaryImageAspectRatio.has_value())) {
+		result["PrimaryImageAspectRatio"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_primaryImageAspectRatio);
+	}
+		
 	return result;
 }
 

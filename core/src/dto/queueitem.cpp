@@ -60,9 +60,13 @@ void QueueItem::setFromJson(QJsonObject source) {
 	
 QJsonObject QueueItem::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-
+	
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
+	
+	if (!(m_playlistItemId.isNull())) {
+		result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
+	}
+		
 	return result;
 }
 

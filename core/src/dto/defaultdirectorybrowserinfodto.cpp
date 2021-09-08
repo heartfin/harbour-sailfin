@@ -57,8 +57,12 @@ void DefaultDirectoryBrowserInfoDto::setFromJson(QJsonObject source) {
 	
 QJsonObject DefaultDirectoryBrowserInfoDto::toJson() const {
 	QJsonObject result;
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-
+	
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+		
 	return result;
 }
 

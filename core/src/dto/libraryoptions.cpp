@@ -129,32 +129,76 @@ void LibraryOptions::setFromJson(QJsonObject source) {
 	
 QJsonObject LibraryOptions::toJson() const {
 	QJsonObject result;
-	result["EnablePhotos"] = Jellyfin::Support::toJsonValue<bool>(m_enablePhotos);
-	result["EnableRealtimeMonitor"] = Jellyfin::Support::toJsonValue<bool>(m_enableRealtimeMonitor);
-	result["EnableChapterImageExtraction"] = Jellyfin::Support::toJsonValue<bool>(m_enableChapterImageExtraction);
-	result["ExtractChapterImagesDuringLibraryScan"] = Jellyfin::Support::toJsonValue<bool>(m_extractChapterImagesDuringLibraryScan);
-	result["PathInfos"] = Jellyfin::Support::toJsonValue<QList<MediaPathInfo>>(m_pathInfos);
-	result["SaveLocalMetadata"] = Jellyfin::Support::toJsonValue<bool>(m_saveLocalMetadata);
-	result["EnableInternetProviders"] = Jellyfin::Support::toJsonValue<bool>(m_enableInternetProviders);
-	result["EnableAutomaticSeriesGrouping"] = Jellyfin::Support::toJsonValue<bool>(m_enableAutomaticSeriesGrouping);
-	result["EnableEmbeddedTitles"] = Jellyfin::Support::toJsonValue<bool>(m_enableEmbeddedTitles);
-	result["EnableEmbeddedEpisodeInfos"] = Jellyfin::Support::toJsonValue<bool>(m_enableEmbeddedEpisodeInfos);
-	result["AutomaticRefreshIntervalDays"] = Jellyfin::Support::toJsonValue<qint32>(m_automaticRefreshIntervalDays);
-	result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
-	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
-	result["SeasonZeroDisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_seasonZeroDisplayName);
-	result["MetadataSavers"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataSavers);
-	result["DisabledLocalMetadataReaders"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledLocalMetadataReaders);
-	result["LocalMetadataReaderOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_localMetadataReaderOrder);
-	result["DisabledSubtitleFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledSubtitleFetchers);
-	result["SubtitleFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_subtitleFetcherOrder);
-	result["SkipSubtitlesIfEmbeddedSubtitlesPresent"] = Jellyfin::Support::toJsonValue<bool>(m_skipSubtitlesIfEmbeddedSubtitlesPresent);
-	result["SkipSubtitlesIfAudioTrackMatches"] = Jellyfin::Support::toJsonValue<bool>(m_skipSubtitlesIfAudioTrackMatches);
-	result["SubtitleDownloadLanguages"] = Jellyfin::Support::toJsonValue<QStringList>(m_subtitleDownloadLanguages);
-	result["RequirePerfectSubtitleMatch"] = Jellyfin::Support::toJsonValue<bool>(m_requirePerfectSubtitleMatch);
-	result["SaveSubtitlesWithMedia"] = Jellyfin::Support::toJsonValue<bool>(m_saveSubtitlesWithMedia);
-	result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<TypeOptions>>(m_typeOptions);
-
+	
+	result["EnablePhotos"] = Jellyfin::Support::toJsonValue<bool>(m_enablePhotos);		
+	result["EnableRealtimeMonitor"] = Jellyfin::Support::toJsonValue<bool>(m_enableRealtimeMonitor);		
+	result["EnableChapterImageExtraction"] = Jellyfin::Support::toJsonValue<bool>(m_enableChapterImageExtraction);		
+	result["ExtractChapterImagesDuringLibraryScan"] = Jellyfin::Support::toJsonValue<bool>(m_extractChapterImagesDuringLibraryScan);		
+	
+	if (!(m_pathInfos.size() == 0)) {
+		result["PathInfos"] = Jellyfin::Support::toJsonValue<QList<MediaPathInfo>>(m_pathInfos);
+	}
+			
+	result["SaveLocalMetadata"] = Jellyfin::Support::toJsonValue<bool>(m_saveLocalMetadata);		
+	result["EnableInternetProviders"] = Jellyfin::Support::toJsonValue<bool>(m_enableInternetProviders);		
+	result["EnableAutomaticSeriesGrouping"] = Jellyfin::Support::toJsonValue<bool>(m_enableAutomaticSeriesGrouping);		
+	result["EnableEmbeddedTitles"] = Jellyfin::Support::toJsonValue<bool>(m_enableEmbeddedTitles);		
+	result["EnableEmbeddedEpisodeInfos"] = Jellyfin::Support::toJsonValue<bool>(m_enableEmbeddedEpisodeInfos);		
+	result["AutomaticRefreshIntervalDays"] = Jellyfin::Support::toJsonValue<qint32>(m_automaticRefreshIntervalDays);		
+	
+	if (!(m_preferredMetadataLanguage.isNull())) {
+		result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
+	}
+			
+	
+	if (!(m_metadataCountryCode.isNull())) {
+		result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
+	}
+			
+	
+	if (!(m_seasonZeroDisplayName.isNull())) {
+		result["SeasonZeroDisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_seasonZeroDisplayName);
+	}
+			
+	
+	if (!(m_metadataSavers.size() == 0)) {
+		result["MetadataSavers"] = Jellyfin::Support::toJsonValue<QStringList>(m_metadataSavers);
+	}
+			
+	
+	if (!(m_disabledLocalMetadataReaders.size() == 0)) {
+		result["DisabledLocalMetadataReaders"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledLocalMetadataReaders);
+	}
+			
+	
+	if (!(m_localMetadataReaderOrder.size() == 0)) {
+		result["LocalMetadataReaderOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_localMetadataReaderOrder);
+	}
+			
+	
+	if (!(m_disabledSubtitleFetchers.size() == 0)) {
+		result["DisabledSubtitleFetchers"] = Jellyfin::Support::toJsonValue<QStringList>(m_disabledSubtitleFetchers);
+	}
+			
+	
+	if (!(m_subtitleFetcherOrder.size() == 0)) {
+		result["SubtitleFetcherOrder"] = Jellyfin::Support::toJsonValue<QStringList>(m_subtitleFetcherOrder);
+	}
+			
+	result["SkipSubtitlesIfEmbeddedSubtitlesPresent"] = Jellyfin::Support::toJsonValue<bool>(m_skipSubtitlesIfEmbeddedSubtitlesPresent);		
+	result["SkipSubtitlesIfAudioTrackMatches"] = Jellyfin::Support::toJsonValue<bool>(m_skipSubtitlesIfAudioTrackMatches);		
+	
+	if (!(m_subtitleDownloadLanguages.size() == 0)) {
+		result["SubtitleDownloadLanguages"] = Jellyfin::Support::toJsonValue<QStringList>(m_subtitleDownloadLanguages);
+	}
+			
+	result["RequirePerfectSubtitleMatch"] = Jellyfin::Support::toJsonValue<bool>(m_requirePerfectSubtitleMatch);		
+	result["SaveSubtitlesWithMedia"] = Jellyfin::Support::toJsonValue<bool>(m_saveSubtitlesWithMedia);		
+	
+	if (!(m_typeOptions.size() == 0)) {
+		result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<TypeOptions>>(m_typeOptions);
+	}
+		
 	return result;
 }
 

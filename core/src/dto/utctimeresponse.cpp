@@ -60,9 +60,9 @@ void UtcTimeResponse::setFromJson(QJsonObject source) {
 	
 QJsonObject UtcTimeResponse::toJson() const {
 	QJsonObject result;
-	result["RequestReceptionTime"] = Jellyfin::Support::toJsonValue<QDateTime>(m_requestReceptionTime);
-	result["ResponseTransmissionTime"] = Jellyfin::Support::toJsonValue<QDateTime>(m_responseTransmissionTime);
-
+	
+	result["RequestReceptionTime"] = Jellyfin::Support::toJsonValue<QDateTime>(m_requestReceptionTime);		
+	result["ResponseTransmissionTime"] = Jellyfin::Support::toJsonValue<QDateTime>(m_responseTransmissionTime);	
 	return result;
 }
 

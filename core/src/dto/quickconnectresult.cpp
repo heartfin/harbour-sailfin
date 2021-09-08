@@ -72,13 +72,33 @@ void QuickConnectResult::setFromJson(QJsonObject source) {
 	
 QJsonObject QuickConnectResult::toJson() const {
 	QJsonObject result;
-	result["Authenticated"] = Jellyfin::Support::toJsonValue<bool>(m_authenticated);
-	result["Secret"] = Jellyfin::Support::toJsonValue<QString>(m_secret);
-	result["Code"] = Jellyfin::Support::toJsonValue<QString>(m_code);
-	result["Authentication"] = Jellyfin::Support::toJsonValue<QString>(m_authentication);
-	result["Error"] = Jellyfin::Support::toJsonValue<QString>(m_error);
-	result["DateAdded"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateAdded);
-
+	
+	result["Authenticated"] = Jellyfin::Support::toJsonValue<bool>(m_authenticated);		
+	
+	if (!(m_secret.isNull())) {
+		result["Secret"] = Jellyfin::Support::toJsonValue<QString>(m_secret);
+	}
+			
+	
+	if (!(m_code.isNull())) {
+		result["Code"] = Jellyfin::Support::toJsonValue<QString>(m_code);
+	}
+			
+	
+	if (!(m_authentication.isNull())) {
+		result["Authentication"] = Jellyfin::Support::toJsonValue<QString>(m_authentication);
+	}
+			
+	
+	if (!(m_error.isNull())) {
+		result["Error"] = Jellyfin::Support::toJsonValue<QString>(m_error);
+	}
+			
+	
+	if (!(m_dateAdded.isNull())) {
+		result["DateAdded"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateAdded);
+	}
+		
 	return result;
 }
 

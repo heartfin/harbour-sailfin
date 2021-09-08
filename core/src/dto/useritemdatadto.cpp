@@ -87,18 +87,46 @@ void UserItemDataDto::setFromJson(QJsonObject source) {
 	
 QJsonObject UserItemDataDto::toJson() const {
 	QJsonObject result;
-	result["Rating"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_rating);
-	result["PlayedPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_playedPercentage);
-	result["UnplayedItemCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_unplayedItemCount);
-	result["PlaybackPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_playbackPositionTicks);
-	result["PlayCount"] = Jellyfin::Support::toJsonValue<qint32>(m_playCount);
-	result["IsFavorite"] = Jellyfin::Support::toJsonValue<bool>(m_isFavorite);
-	result["Likes"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_likes);
-	result["LastPlayedDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastPlayedDate);
-	result["Played"] = Jellyfin::Support::toJsonValue<bool>(m_played);
-	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
-	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
-
+	
+	
+	if (!(!m_rating.has_value())) {
+		result["Rating"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_rating);
+	}
+			
+	
+	if (!(!m_playedPercentage.has_value())) {
+		result["PlayedPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_playedPercentage);
+	}
+			
+	
+	if (!(!m_unplayedItemCount.has_value())) {
+		result["UnplayedItemCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_unplayedItemCount);
+	}
+			
+	result["PlaybackPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_playbackPositionTicks);		
+	result["PlayCount"] = Jellyfin::Support::toJsonValue<qint32>(m_playCount);		
+	result["IsFavorite"] = Jellyfin::Support::toJsonValue<bool>(m_isFavorite);		
+	
+	if (!(!m_likes.has_value())) {
+		result["Likes"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_likes);
+	}
+			
+	
+	if (!(m_lastPlayedDate.isNull())) {
+		result["LastPlayedDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastPlayedDate);
+	}
+			
+	result["Played"] = Jellyfin::Support::toJsonValue<bool>(m_played);		
+	
+	if (!(m_key.isNull())) {
+		result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
+	}
+			
+	
+	if (!(m_itemId.isNull())) {
+		result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
+	}
+		
 	return result;
 }
 

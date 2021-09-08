@@ -84,17 +84,37 @@ void PlayerStateInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject PlayerStateInfo::toJson() const {
 	QJsonObject result;
-	result["PositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_positionTicks);
-	result["CanSeek"] = Jellyfin::Support::toJsonValue<bool>(m_canSeek);
-	result["IsPaused"] = Jellyfin::Support::toJsonValue<bool>(m_isPaused);
-	result["IsMuted"] = Jellyfin::Support::toJsonValue<bool>(m_isMuted);
-	result["VolumeLevel"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_volumeLevel);
-	result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioStreamIndex);
-	result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_subtitleStreamIndex);
-	result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
-	result["PlayMethod"] = Jellyfin::Support::toJsonValue<PlayMethod>(m_playMethod);
-	result["RepeatMode"] = Jellyfin::Support::toJsonValue<RepeatMode>(m_repeatMode);
-
+	
+	
+	if (!(!m_positionTicks.has_value())) {
+		result["PositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_positionTicks);
+	}
+			
+	result["CanSeek"] = Jellyfin::Support::toJsonValue<bool>(m_canSeek);		
+	result["IsPaused"] = Jellyfin::Support::toJsonValue<bool>(m_isPaused);		
+	result["IsMuted"] = Jellyfin::Support::toJsonValue<bool>(m_isMuted);		
+	
+	if (!(!m_volumeLevel.has_value())) {
+		result["VolumeLevel"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_volumeLevel);
+	}
+			
+	
+	if (!(!m_audioStreamIndex.has_value())) {
+		result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioStreamIndex);
+	}
+			
+	
+	if (!(!m_subtitleStreamIndex.has_value())) {
+		result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_subtitleStreamIndex);
+	}
+			
+	
+	if (!(m_mediaSourceId.isNull())) {
+		result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
+	}
+			
+	result["PlayMethod"] = Jellyfin::Support::toJsonValue<PlayMethod>(m_playMethod);		
+	result["RepeatMode"] = Jellyfin::Support::toJsonValue<RepeatMode>(m_repeatMode);	
 	return result;
 }
 

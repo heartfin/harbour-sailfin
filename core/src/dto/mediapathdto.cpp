@@ -63,10 +63,14 @@ void MediaPathDto::setFromJson(QJsonObject source) {
 	
 QJsonObject MediaPathDto::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["PathInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<MediaPathInfo>>(m_pathInfo);
-
+	
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	result["PathInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<MediaPathInfo>>(m_pathInfo);	
 	return result;
 }
 

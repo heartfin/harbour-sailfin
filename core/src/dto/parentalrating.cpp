@@ -60,9 +60,13 @@ void ParentalRating::setFromJson(QJsonObject source) {
 	
 QJsonObject ParentalRating::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Value"] = Jellyfin::Support::toJsonValue<qint32>(m_value);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	result["Value"] = Jellyfin::Support::toJsonValue<qint32>(m_value);	
 	return result;
 }
 

@@ -63,10 +63,14 @@ void GeneralCommand::setFromJson(QJsonObject source) {
 	
 QJsonObject GeneralCommand::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<GeneralCommandType>(m_name);
-	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QString>(m_controllingUserId);
-	result["Arguments"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_arguments);
-
+	
+	result["Name"] = Jellyfin::Support::toJsonValue<GeneralCommandType>(m_name);		
+	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QString>(m_controllingUserId);		
+	
+	if (!(m_arguments.isEmpty())) {
+		result["Arguments"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_arguments);
+	}
+		
 	return result;
 }
 

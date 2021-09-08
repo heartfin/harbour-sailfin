@@ -138,35 +138,95 @@ void SessionInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject SessionInfo::toJson() const {
 	QJsonObject result;
-	result["PlayState"] = Jellyfin::Support::toJsonValue<QSharedPointer<PlayerStateInfo>>(m_playState);
-	result["AdditionalUsers"] = Jellyfin::Support::toJsonValue<QList<SessionUserInfo>>(m_additionalUsers);
-	result["Capabilities"] = Jellyfin::Support::toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);
-	result["RemoteEndPoint"] = Jellyfin::Support::toJsonValue<QString>(m_remoteEndPoint);
-	result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QStringList>(m_playableMediaTypes);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["UserName"] = Jellyfin::Support::toJsonValue<QString>(m_userName);
-	result["Client"] = Jellyfin::Support::toJsonValue<QString>(m_client);
-	result["LastActivityDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastActivityDate);
-	result["LastPlaybackCheckIn"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastPlaybackCheckIn);
-	result["DeviceName"] = Jellyfin::Support::toJsonValue<QString>(m_deviceName);
-	result["DeviceType"] = Jellyfin::Support::toJsonValue<QString>(m_deviceType);
-	result["NowPlayingItem"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_nowPlayingItem);
-	result["FullNowPlayingItem"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItem>>(m_fullNowPlayingItem);
-	result["NowViewingItem"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_nowViewingItem);
-	result["DeviceId"] = Jellyfin::Support::toJsonValue<QString>(m_deviceId);
-	result["ApplicationVersion"] = Jellyfin::Support::toJsonValue<QString>(m_applicationVersion);
-	result["TranscodingInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<TranscodingInfo>>(m_transcodingInfo);
-	result["IsActive"] = Jellyfin::Support::toJsonValue<bool>(m_isActive);
-	result["SupportsMediaControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsMediaControl);
-	result["SupportsRemoteControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsRemoteControl);
-	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QueueItem>>(m_nowPlayingQueue);
-	result["HasCustomDeviceName"] = Jellyfin::Support::toJsonValue<bool>(m_hasCustomDeviceName);
-	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
-	result["UserPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_userPrimaryImageTag);
-	result["SupportedCommands"] = Jellyfin::Support::toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
-
+	
+	result["PlayState"] = Jellyfin::Support::toJsonValue<QSharedPointer<PlayerStateInfo>>(m_playState);		
+	
+	if (!(m_additionalUsers.size() == 0)) {
+		result["AdditionalUsers"] = Jellyfin::Support::toJsonValue<QList<SessionUserInfo>>(m_additionalUsers);
+	}
+			
+	result["Capabilities"] = Jellyfin::Support::toJsonValue<QSharedPointer<ClientCapabilities>>(m_capabilities);		
+	
+	if (!(m_remoteEndPoint.isNull())) {
+		result["RemoteEndPoint"] = Jellyfin::Support::toJsonValue<QString>(m_remoteEndPoint);
+	}
+			
+	
+	if (!(m_playableMediaTypes.size() == 0)) {
+		result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QStringList>(m_playableMediaTypes);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);		
+	
+	if (!(m_userName.isNull())) {
+		result["UserName"] = Jellyfin::Support::toJsonValue<QString>(m_userName);
+	}
+			
+	
+	if (!(m_client.isNull())) {
+		result["Client"] = Jellyfin::Support::toJsonValue<QString>(m_client);
+	}
+			
+	result["LastActivityDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastActivityDate);		
+	result["LastPlaybackCheckIn"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastPlaybackCheckIn);		
+	
+	if (!(m_deviceName.isNull())) {
+		result["DeviceName"] = Jellyfin::Support::toJsonValue<QString>(m_deviceName);
+	}
+			
+	
+	if (!(m_deviceType.isNull())) {
+		result["DeviceType"] = Jellyfin::Support::toJsonValue<QString>(m_deviceType);
+	}
+			
+	result["NowPlayingItem"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_nowPlayingItem);		
+	result["FullNowPlayingItem"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItem>>(m_fullNowPlayingItem);		
+	result["NowViewingItem"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_nowViewingItem);		
+	
+	if (!(m_deviceId.isNull())) {
+		result["DeviceId"] = Jellyfin::Support::toJsonValue<QString>(m_deviceId);
+	}
+			
+	
+	if (!(m_applicationVersion.isNull())) {
+		result["ApplicationVersion"] = Jellyfin::Support::toJsonValue<QString>(m_applicationVersion);
+	}
+			
+	result["TranscodingInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<TranscodingInfo>>(m_transcodingInfo);		
+	result["IsActive"] = Jellyfin::Support::toJsonValue<bool>(m_isActive);		
+	result["SupportsMediaControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsMediaControl);		
+	result["SupportsRemoteControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsRemoteControl);		
+	
+	if (!(m_nowPlayingQueue.size() == 0)) {
+		result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QueueItem>>(m_nowPlayingQueue);
+	}
+			
+	result["HasCustomDeviceName"] = Jellyfin::Support::toJsonValue<bool>(m_hasCustomDeviceName);		
+	
+	if (!(m_playlistItemId.isNull())) {
+		result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
+	}
+			
+	
+	if (!(m_serverId.isNull())) {
+		result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
+	}
+			
+	
+	if (!(m_userPrimaryImageTag.isNull())) {
+		result["UserPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_userPrimaryImageTag);
+	}
+			
+	
+	if (!(m_supportedCommands.size() == 0)) {
+		result["SupportedCommands"] = Jellyfin::Support::toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
+	}
+		
 	return result;
 }
 

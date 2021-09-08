@@ -81,16 +81,52 @@ void DeviceIdentification::setFromJson(QJsonObject source) {
 	
 QJsonObject DeviceIdentification::toJson() const {
 	QJsonObject result;
-	result["FriendlyName"] = Jellyfin::Support::toJsonValue<QString>(m_friendlyName);
-	result["ModelNumber"] = Jellyfin::Support::toJsonValue<QString>(m_modelNumber);
-	result["SerialNumber"] = Jellyfin::Support::toJsonValue<QString>(m_serialNumber);
-	result["ModelName"] = Jellyfin::Support::toJsonValue<QString>(m_modelName);
-	result["ModelDescription"] = Jellyfin::Support::toJsonValue<QString>(m_modelDescription);
-	result["ModelUrl"] = Jellyfin::Support::toJsonValue<QString>(m_modelUrl);
-	result["Manufacturer"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturer);
-	result["ManufacturerUrl"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturerUrl);
-	result["Headers"] = Jellyfin::Support::toJsonValue<QList<HttpHeaderInfo>>(m_headers);
-
+	
+	
+	if (!(m_friendlyName.isNull())) {
+		result["FriendlyName"] = Jellyfin::Support::toJsonValue<QString>(m_friendlyName);
+	}
+			
+	
+	if (!(m_modelNumber.isNull())) {
+		result["ModelNumber"] = Jellyfin::Support::toJsonValue<QString>(m_modelNumber);
+	}
+			
+	
+	if (!(m_serialNumber.isNull())) {
+		result["SerialNumber"] = Jellyfin::Support::toJsonValue<QString>(m_serialNumber);
+	}
+			
+	
+	if (!(m_modelName.isNull())) {
+		result["ModelName"] = Jellyfin::Support::toJsonValue<QString>(m_modelName);
+	}
+			
+	
+	if (!(m_modelDescription.isNull())) {
+		result["ModelDescription"] = Jellyfin::Support::toJsonValue<QString>(m_modelDescription);
+	}
+			
+	
+	if (!(m_modelUrl.isNull())) {
+		result["ModelUrl"] = Jellyfin::Support::toJsonValue<QString>(m_modelUrl);
+	}
+			
+	
+	if (!(m_manufacturer.isNull())) {
+		result["Manufacturer"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturer);
+	}
+			
+	
+	if (!(m_manufacturerUrl.isNull())) {
+		result["ManufacturerUrl"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturerUrl);
+	}
+			
+	
+	if (!(m_headers.size() == 0)) {
+		result["Headers"] = Jellyfin::Support::toJsonValue<QList<HttpHeaderInfo>>(m_headers);
+	}
+		
 	return result;
 }
 

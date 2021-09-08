@@ -69,12 +69,24 @@ void NotificationTypeInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject NotificationTypeInfo::toJson() const {
 	QJsonObject result;
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Enabled"] = Jellyfin::Support::toJsonValue<bool>(m_enabled);
-	result["Category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
-	result["IsBasedOnUserEvent"] = Jellyfin::Support::toJsonValue<bool>(m_isBasedOnUserEvent);
-
+	
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	result["Enabled"] = Jellyfin::Support::toJsonValue<bool>(m_enabled);		
+	
+	if (!(m_category.isNull())) {
+		result["Category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
+	}
+			
+	result["IsBasedOnUserEvent"] = Jellyfin::Support::toJsonValue<bool>(m_isBasedOnUserEvent);	
 	return result;
 }
 

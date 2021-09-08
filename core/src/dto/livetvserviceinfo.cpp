@@ -78,15 +78,35 @@ void LiveTvServiceInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject LiveTvServiceInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["HomePageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_homePageUrl);
-	result["Status"] = Jellyfin::Support::toJsonValue<LiveTvServiceStatus>(m_status);
-	result["StatusMessage"] = Jellyfin::Support::toJsonValue<QString>(m_statusMessage);
-	result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
-	result["HasUpdateAvailable"] = Jellyfin::Support::toJsonValue<bool>(m_hasUpdateAvailable);
-	result["IsVisible"] = Jellyfin::Support::toJsonValue<bool>(m_isVisible);
-	result["Tuners"] = Jellyfin::Support::toJsonValue<QStringList>(m_tuners);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_homePageUrl.isNull())) {
+		result["HomePageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_homePageUrl);
+	}
+			
+	result["Status"] = Jellyfin::Support::toJsonValue<LiveTvServiceStatus>(m_status);		
+	
+	if (!(m_statusMessage.isNull())) {
+		result["StatusMessage"] = Jellyfin::Support::toJsonValue<QString>(m_statusMessage);
+	}
+			
+	
+	if (!(m_version.isNull())) {
+		result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	}
+			
+	result["HasUpdateAvailable"] = Jellyfin::Support::toJsonValue<bool>(m_hasUpdateAvailable);		
+	result["IsVisible"] = Jellyfin::Support::toJsonValue<bool>(m_isVisible);		
+	
+	if (!(m_tuners.size() == 0)) {
+		result["Tuners"] = Jellyfin::Support::toJsonValue<QStringList>(m_tuners);
+	}
+		
 	return result;
 }
 

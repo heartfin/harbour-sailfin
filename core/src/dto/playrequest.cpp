@@ -78,15 +78,39 @@ void PlayRequest::setFromJson(QJsonObject source) {
 	
 QJsonObject PlayRequest::toJson() const {
 	QJsonObject result;
-	result["ItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemIds);
-	result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_startPositionTicks);
-	result["PlayCommand"] = Jellyfin::Support::toJsonValue<PlayCommand>(m_playCommand);
-	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QString>(m_controllingUserId);
-	result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_subtitleStreamIndex);
-	result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioStreamIndex);
-	result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
-	result["StartIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_startIndex);
-
+	
+	
+	if (!(m_itemIds.size() == 0)) {
+		result["ItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemIds);
+	}
+			
+	
+	if (!(!m_startPositionTicks.has_value())) {
+		result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_startPositionTicks);
+	}
+			
+	result["PlayCommand"] = Jellyfin::Support::toJsonValue<PlayCommand>(m_playCommand);		
+	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QString>(m_controllingUserId);		
+	
+	if (!(!m_subtitleStreamIndex.has_value())) {
+		result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_subtitleStreamIndex);
+	}
+			
+	
+	if (!(!m_audioStreamIndex.has_value())) {
+		result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioStreamIndex);
+	}
+			
+	
+	if (!(m_mediaSourceId.isNull())) {
+		result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
+	}
+			
+	
+	if (!(!m_startIndex.has_value())) {
+		result["StartIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_startIndex);
+	}
+		
 	return result;
 }
 

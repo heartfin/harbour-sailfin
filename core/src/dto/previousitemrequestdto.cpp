@@ -57,8 +57,8 @@ void PreviousItemRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject PreviousItemRequestDto::toJson() const {
 	QJsonObject result;
-	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-
+	
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);	
 	return result;
 }
 

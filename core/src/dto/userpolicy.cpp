@@ -171,46 +171,94 @@ void UserPolicy::setFromJson(QJsonObject source) {
 	
 QJsonObject UserPolicy::toJson() const {
 	QJsonObject result;
-	result["IsAdministrator"] = Jellyfin::Support::toJsonValue<bool>(m_isAdministrator);
-	result["IsHidden"] = Jellyfin::Support::toJsonValue<bool>(m_isHidden);
-	result["IsDisabled"] = Jellyfin::Support::toJsonValue<bool>(m_isDisabled);
-	result["MaxParentalRating"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxParentalRating);
-	result["BlockedTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_blockedTags);
-	result["EnableUserPreferenceAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableUserPreferenceAccess);
-	result["AccessSchedules"] = Jellyfin::Support::toJsonValue<QList<AccessSchedule>>(m_accessSchedules);
-	result["BlockUnratedItems"] = Jellyfin::Support::toJsonValue<QList<UnratedItem>>(m_blockUnratedItems);
-	result["EnableRemoteControlOfOtherUsers"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteControlOfOtherUsers);
-	result["EnableSharedDeviceControl"] = Jellyfin::Support::toJsonValue<bool>(m_enableSharedDeviceControl);
-	result["EnableRemoteAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteAccess);
-	result["EnableLiveTvManagement"] = Jellyfin::Support::toJsonValue<bool>(m_enableLiveTvManagement);
-	result["EnableLiveTvAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableLiveTvAccess);
-	result["EnableMediaPlayback"] = Jellyfin::Support::toJsonValue<bool>(m_enableMediaPlayback);
-	result["EnableAudioPlaybackTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_enableAudioPlaybackTranscoding);
-	result["EnableVideoPlaybackTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_enableVideoPlaybackTranscoding);
-	result["EnablePlaybackRemuxing"] = Jellyfin::Support::toJsonValue<bool>(m_enablePlaybackRemuxing);
-	result["ForceRemoteSourceTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_forceRemoteSourceTranscoding);
-	result["EnableContentDeletion"] = Jellyfin::Support::toJsonValue<bool>(m_enableContentDeletion);
-	result["EnableContentDeletionFromFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_enableContentDeletionFromFolders);
-	result["EnableContentDownloading"] = Jellyfin::Support::toJsonValue<bool>(m_enableContentDownloading);
-	result["EnableSyncTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_enableSyncTranscoding);
-	result["EnableMediaConversion"] = Jellyfin::Support::toJsonValue<bool>(m_enableMediaConversion);
-	result["EnabledDevices"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledDevices);
-	result["EnableAllDevices"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllDevices);
-	result["EnabledChannels"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledChannels);
-	result["EnableAllChannels"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllChannels);
-	result["EnabledFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledFolders);
-	result["EnableAllFolders"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllFolders);
-	result["InvalidLoginAttemptCount"] = Jellyfin::Support::toJsonValue<qint32>(m_invalidLoginAttemptCount);
-	result["LoginAttemptsBeforeLockout"] = Jellyfin::Support::toJsonValue<qint32>(m_loginAttemptsBeforeLockout);
-	result["MaxActiveSessions"] = Jellyfin::Support::toJsonValue<qint32>(m_maxActiveSessions);
-	result["EnablePublicSharing"] = Jellyfin::Support::toJsonValue<bool>(m_enablePublicSharing);
-	result["BlockedMediaFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_blockedMediaFolders);
-	result["BlockedChannels"] = Jellyfin::Support::toJsonValue<QStringList>(m_blockedChannels);
-	result["RemoteClientBitrateLimit"] = Jellyfin::Support::toJsonValue<qint32>(m_remoteClientBitrateLimit);
-	result["AuthenticationProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_authenticationProviderId);
-	result["PasswordResetProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_passwordResetProviderId);
-	result["SyncPlayAccess"] = Jellyfin::Support::toJsonValue<SyncPlayUserAccessType>(m_syncPlayAccess);
-
+	
+	result["IsAdministrator"] = Jellyfin::Support::toJsonValue<bool>(m_isAdministrator);		
+	result["IsHidden"] = Jellyfin::Support::toJsonValue<bool>(m_isHidden);		
+	result["IsDisabled"] = Jellyfin::Support::toJsonValue<bool>(m_isDisabled);		
+	
+	if (!(!m_maxParentalRating.has_value())) {
+		result["MaxParentalRating"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxParentalRating);
+	}
+			
+	
+	if (!(m_blockedTags.size() == 0)) {
+		result["BlockedTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_blockedTags);
+	}
+			
+	result["EnableUserPreferenceAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableUserPreferenceAccess);		
+	
+	if (!(m_accessSchedules.size() == 0)) {
+		result["AccessSchedules"] = Jellyfin::Support::toJsonValue<QList<AccessSchedule>>(m_accessSchedules);
+	}
+			
+	
+	if (!(m_blockUnratedItems.size() == 0)) {
+		result["BlockUnratedItems"] = Jellyfin::Support::toJsonValue<QList<UnratedItem>>(m_blockUnratedItems);
+	}
+			
+	result["EnableRemoteControlOfOtherUsers"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteControlOfOtherUsers);		
+	result["EnableSharedDeviceControl"] = Jellyfin::Support::toJsonValue<bool>(m_enableSharedDeviceControl);		
+	result["EnableRemoteAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteAccess);		
+	result["EnableLiveTvManagement"] = Jellyfin::Support::toJsonValue<bool>(m_enableLiveTvManagement);		
+	result["EnableLiveTvAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableLiveTvAccess);		
+	result["EnableMediaPlayback"] = Jellyfin::Support::toJsonValue<bool>(m_enableMediaPlayback);		
+	result["EnableAudioPlaybackTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_enableAudioPlaybackTranscoding);		
+	result["EnableVideoPlaybackTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_enableVideoPlaybackTranscoding);		
+	result["EnablePlaybackRemuxing"] = Jellyfin::Support::toJsonValue<bool>(m_enablePlaybackRemuxing);		
+	result["ForceRemoteSourceTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_forceRemoteSourceTranscoding);		
+	result["EnableContentDeletion"] = Jellyfin::Support::toJsonValue<bool>(m_enableContentDeletion);		
+	
+	if (!(m_enableContentDeletionFromFolders.size() == 0)) {
+		result["EnableContentDeletionFromFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_enableContentDeletionFromFolders);
+	}
+			
+	result["EnableContentDownloading"] = Jellyfin::Support::toJsonValue<bool>(m_enableContentDownloading);		
+	result["EnableSyncTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_enableSyncTranscoding);		
+	result["EnableMediaConversion"] = Jellyfin::Support::toJsonValue<bool>(m_enableMediaConversion);		
+	
+	if (!(m_enabledDevices.size() == 0)) {
+		result["EnabledDevices"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledDevices);
+	}
+			
+	result["EnableAllDevices"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllDevices);		
+	
+	if (!(m_enabledChannels.size() == 0)) {
+		result["EnabledChannels"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledChannels);
+	}
+			
+	result["EnableAllChannels"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllChannels);		
+	
+	if (!(m_enabledFolders.size() == 0)) {
+		result["EnabledFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledFolders);
+	}
+			
+	result["EnableAllFolders"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllFolders);		
+	result["InvalidLoginAttemptCount"] = Jellyfin::Support::toJsonValue<qint32>(m_invalidLoginAttemptCount);		
+	result["LoginAttemptsBeforeLockout"] = Jellyfin::Support::toJsonValue<qint32>(m_loginAttemptsBeforeLockout);		
+	result["MaxActiveSessions"] = Jellyfin::Support::toJsonValue<qint32>(m_maxActiveSessions);		
+	result["EnablePublicSharing"] = Jellyfin::Support::toJsonValue<bool>(m_enablePublicSharing);		
+	
+	if (!(m_blockedMediaFolders.size() == 0)) {
+		result["BlockedMediaFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_blockedMediaFolders);
+	}
+			
+	
+	if (!(m_blockedChannels.size() == 0)) {
+		result["BlockedChannels"] = Jellyfin::Support::toJsonValue<QStringList>(m_blockedChannels);
+	}
+			
+	result["RemoteClientBitrateLimit"] = Jellyfin::Support::toJsonValue<qint32>(m_remoteClientBitrateLimit);		
+	
+	if (!(m_authenticationProviderId.isNull())) {
+		result["AuthenticationProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_authenticationProviderId);
+	}
+			
+	
+	if (!(m_passwordResetProviderId.isNull())) {
+		result["PasswordResetProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_passwordResetProviderId);
+	}
+			
+	result["SyncPlayAccess"] = Jellyfin::Support::toJsonValue<SyncPlayUserAccessType>(m_syncPlayAccess);	
 	return result;
 }
 

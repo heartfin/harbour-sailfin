@@ -99,22 +99,42 @@ void TranscodingProfile::setFromJson(QJsonObject source) {
 	
 QJsonObject TranscodingProfile::toJson() const {
 	QJsonObject result;
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);
-	result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
-	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
-	result["Protocol"] = Jellyfin::Support::toJsonValue<QString>(m_protocol);
-	result["EstimateContentLength"] = Jellyfin::Support::toJsonValue<bool>(m_estimateContentLength);
-	result["EnableMpegtsM2TsMode"] = Jellyfin::Support::toJsonValue<bool>(m_enableMpegtsM2TsMode);
-	result["TranscodeSeekInfo"] = Jellyfin::Support::toJsonValue<TranscodeSeekInfo>(m_transcodeSeekInfo);
-	result["CopyTimestamps"] = Jellyfin::Support::toJsonValue<bool>(m_copyTimestamps);
-	result["Context"] = Jellyfin::Support::toJsonValue<EncodingContext>(m_context);
-	result["EnableSubtitlesInManifest"] = Jellyfin::Support::toJsonValue<bool>(m_enableSubtitlesInManifest);
-	result["MaxAudioChannels"] = Jellyfin::Support::toJsonValue<QString>(m_maxAudioChannels);
-	result["MinSegments"] = Jellyfin::Support::toJsonValue<qint32>(m_minSegments);
-	result["SegmentLength"] = Jellyfin::Support::toJsonValue<qint32>(m_segmentLength);
-	result["BreakOnNonKeyFrames"] = Jellyfin::Support::toJsonValue<bool>(m_breakOnNonKeyFrames);
-
+	
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+			
+	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);		
+	
+	if (!(m_videoCodec.isNull())) {
+		result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
+	}
+			
+	
+	if (!(m_audioCodec.isNull())) {
+		result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
+	}
+			
+	
+	if (!(m_protocol.isNull())) {
+		result["Protocol"] = Jellyfin::Support::toJsonValue<QString>(m_protocol);
+	}
+			
+	result["EstimateContentLength"] = Jellyfin::Support::toJsonValue<bool>(m_estimateContentLength);		
+	result["EnableMpegtsM2TsMode"] = Jellyfin::Support::toJsonValue<bool>(m_enableMpegtsM2TsMode);		
+	result["TranscodeSeekInfo"] = Jellyfin::Support::toJsonValue<TranscodeSeekInfo>(m_transcodeSeekInfo);		
+	result["CopyTimestamps"] = Jellyfin::Support::toJsonValue<bool>(m_copyTimestamps);		
+	result["Context"] = Jellyfin::Support::toJsonValue<EncodingContext>(m_context);		
+	result["EnableSubtitlesInManifest"] = Jellyfin::Support::toJsonValue<bool>(m_enableSubtitlesInManifest);		
+	
+	if (!(m_maxAudioChannels.isNull())) {
+		result["MaxAudioChannels"] = Jellyfin::Support::toJsonValue<QString>(m_maxAudioChannels);
+	}
+			
+	result["MinSegments"] = Jellyfin::Support::toJsonValue<qint32>(m_minSegments);		
+	result["SegmentLength"] = Jellyfin::Support::toJsonValue<qint32>(m_segmentLength);		
+	result["BreakOnNonKeyFrames"] = Jellyfin::Support::toJsonValue<bool>(m_breakOnNonKeyFrames);	
 	return result;
 }
 

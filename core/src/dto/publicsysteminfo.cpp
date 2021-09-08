@@ -75,14 +75,42 @@ void PublicSystemInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject PublicSystemInfo::toJson() const {
 	QJsonObject result;
-	result["LocalAddress"] = Jellyfin::Support::toJsonValue<QString>(m_localAddress);
-	result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
-	result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
-	result["ProductName"] = Jellyfin::Support::toJsonValue<QString>(m_productName);
-	result["OperatingSystem"] = Jellyfin::Support::toJsonValue<QString>(m_operatingSystem);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["StartupWizardCompleted"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_startupWizardCompleted);
-
+	
+	
+	if (!(m_localAddress.isNull())) {
+		result["LocalAddress"] = Jellyfin::Support::toJsonValue<QString>(m_localAddress);
+	}
+			
+	
+	if (!(m_serverName.isNull())) {
+		result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
+	}
+			
+	
+	if (!(m_version.isNull())) {
+		result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	}
+			
+	
+	if (!(m_productName.isNull())) {
+		result["ProductName"] = Jellyfin::Support::toJsonValue<QString>(m_productName);
+	}
+			
+	
+	if (!(m_operatingSystem.isNull())) {
+		result["OperatingSystem"] = Jellyfin::Support::toJsonValue<QString>(m_operatingSystem);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(!m_startupWizardCompleted.has_value())) {
+		result["StartupWizardCompleted"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_startupWizardCompleted);
+	}
+		
 	return result;
 }
 

@@ -57,8 +57,8 @@ void LiveStreamResponse::setFromJson(QJsonObject source) {
 	
 QJsonObject LiveStreamResponse::toJson() const {
 	QJsonObject result;
-	result["MediaSource"] = Jellyfin::Support::toJsonValue<QSharedPointer<MediaSourceInfo>>(m_mediaSource);
-
+	
+	result["MediaSource"] = Jellyfin::Support::toJsonValue<QSharedPointer<MediaSourceInfo>>(m_mediaSource);	
 	return result;
 }
 

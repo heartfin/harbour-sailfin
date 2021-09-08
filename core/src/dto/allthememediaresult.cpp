@@ -63,10 +63,10 @@ void AllThemeMediaResult::setFromJson(QJsonObject source) {
 	
 QJsonObject AllThemeMediaResult::toJson() const {
 	QJsonObject result;
-	result["ThemeVideosResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeVideosResult);
-	result["ThemeSongsResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeSongsResult);
-	result["SoundtrackSongsResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_soundtrackSongsResult);
-
+	
+	result["ThemeVideosResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeVideosResult);		
+	result["ThemeSongsResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_themeSongsResult);		
+	result["SoundtrackSongsResult"] = Jellyfin::Support::toJsonValue<QSharedPointer<ThemeMediaResult>>(m_soundtrackSongsResult);	
 	return result;
 }
 

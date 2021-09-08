@@ -57,8 +57,12 @@ void NewGroupRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject NewGroupRequestDto::toJson() const {
 	QJsonObject result;
-	result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);
-
+	
+	
+	if (!(m_groupName.isNull())) {
+		result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);
+	}
+		
 	return result;
 }
 

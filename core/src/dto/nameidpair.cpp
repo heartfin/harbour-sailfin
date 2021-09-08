@@ -60,9 +60,17 @@ void NameIdPair::setFromJson(QJsonObject source) {
 	
 QJsonObject NameIdPair::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+		
 	return result;
 }
 

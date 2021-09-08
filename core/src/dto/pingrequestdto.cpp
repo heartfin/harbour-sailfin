@@ -57,8 +57,8 @@ void PingRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject PingRequestDto::toJson() const {
 	QJsonObject result;
-	result["Ping"] = Jellyfin::Support::toJsonValue<qint64>(m_ping);
-
+	
+	result["Ping"] = Jellyfin::Support::toJsonValue<qint64>(m_ping);	
 	return result;
 }
 

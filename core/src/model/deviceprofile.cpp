@@ -140,6 +140,7 @@ DTO::DeviceProfile DeviceProfile::generateProfile() {
     transcoding1.setMaxAudioChannels("2");
     transcoding1.setMinSegments(1);
     transcoding1.setProtocol("hls");
+    transcoding1.setTranscodeSeekInfo(DTO::TranscodeSeekInfo::Auto);
     transcoding1.setType(DTO::DlnaProfileType::Audio);
     // Hard code nr 2
     DTO::TranscodingProfile transcoding2;
@@ -150,6 +151,7 @@ DTO::DeviceProfile DeviceProfile::generateProfile() {
     transcoding2.setMaxAudioChannels("2");
     transcoding2.setMinSegments(1);
     transcoding2.setProtocol("hls");
+    transcoding2.setTranscodeSeekInfo(DTO::TranscodeSeekInfo::Auto);
     transcoding2.setType(DTO::DlnaProfileType::Video);
     transcoding2.setVideoCodec("h264");
 
@@ -161,6 +163,7 @@ DTO::DeviceProfile DeviceProfile::generateProfile() {
     transcoding3.setVideoCodec("h264");
     transcoding3.setContext(DTO::EncodingContext::Static);
     transcoding3.setProtocol("http");
+    transcoding3.setTranscodeSeekInfo(DTO::TranscodeSeekInfo::Auto);
 
     QList<DTO::TranscodingProfile> transcodingProfiles = {
         transcoding1, transcoding2, transcoding3
@@ -177,6 +180,7 @@ DTO::DeviceProfile DeviceProfile::generateProfile() {
         transcoding4.setMaxAudioChannels("2");
         transcoding4.setMinSegments(1);
         transcoding4.setBreakOnNonKeyFrames(true);
+        transcoding4.setTranscodeSeekInfo(DTO::TranscodeSeekInfo::Auto);
         transcodingProfiles.append(transcoding4);
     }
 

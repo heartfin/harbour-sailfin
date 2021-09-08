@@ -66,11 +66,11 @@ void BufferRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject BufferRequestDto::toJson() const {
 	QJsonObject result;
-	result["When"] = Jellyfin::Support::toJsonValue<QDateTime>(m_when);
-	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
-	result["IsPlaying"] = Jellyfin::Support::toJsonValue<bool>(m_isPlaying);
-	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-
+	
+	result["When"] = Jellyfin::Support::toJsonValue<QDateTime>(m_when);		
+	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);		
+	result["IsPlaying"] = Jellyfin::Support::toJsonValue<bool>(m_isPlaying);		
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);	
 	return result;
 }
 

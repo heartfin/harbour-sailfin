@@ -309,92 +309,216 @@ void ServerConfiguration::setFromJson(QJsonObject source) {
 	
 QJsonObject ServerConfiguration::toJson() const {
 	QJsonObject result;
-	result["LogFileRetentionDays"] = Jellyfin::Support::toJsonValue<qint32>(m_logFileRetentionDays);
-	result["IsStartupWizardCompleted"] = Jellyfin::Support::toJsonValue<bool>(m_isStartupWizardCompleted);
-	result["CachePath"] = Jellyfin::Support::toJsonValue<QString>(m_cachePath);
-	result["PreviousVersion"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_previousVersion);
-	result["PreviousVersionStr"] = Jellyfin::Support::toJsonValue<QString>(m_previousVersionStr);
-	result["EnableUPnP"] = Jellyfin::Support::toJsonValue<bool>(m_enableUPnP);
-	result["EnableMetrics"] = Jellyfin::Support::toJsonValue<bool>(m_enableMetrics);
-	result["PublicPort"] = Jellyfin::Support::toJsonValue<qint32>(m_publicPort);
-	result["UPnPCreateHttpPortMap"] = Jellyfin::Support::toJsonValue<bool>(m_uPnPCreateHttpPortMap);
-	result["UDPPortRange"] = Jellyfin::Support::toJsonValue<QString>(m_uDPPortRange);
-	result["EnableIPV6"] = Jellyfin::Support::toJsonValue<bool>(m_enableIPV6);
-	result["EnableIPV4"] = Jellyfin::Support::toJsonValue<bool>(m_enableIPV4);
-	result["EnableSSDPTracing"] = Jellyfin::Support::toJsonValue<bool>(m_enableSSDPTracing);
-	result["SSDPTracingFilter"] = Jellyfin::Support::toJsonValue<QString>(m_sSDPTracingFilter);
-	result["UDPSendCount"] = Jellyfin::Support::toJsonValue<qint32>(m_uDPSendCount);
-	result["UDPSendDelay"] = Jellyfin::Support::toJsonValue<qint32>(m_uDPSendDelay);
-	result["IgnoreVirtualInterfaces"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreVirtualInterfaces);
-	result["VirtualInterfaceNames"] = Jellyfin::Support::toJsonValue<QString>(m_virtualInterfaceNames);
-	result["GatewayMonitorPeriod"] = Jellyfin::Support::toJsonValue<qint32>(m_gatewayMonitorPeriod);
-	result["EnableMultiSocketBinding"] = Jellyfin::Support::toJsonValue<bool>(m_enableMultiSocketBinding);
-	result["TrustAllIP6Interfaces"] = Jellyfin::Support::toJsonValue<bool>(m_trustAllIP6Interfaces);
-	result["HDHomerunPortRange"] = Jellyfin::Support::toJsonValue<QString>(m_hDHomerunPortRange);
-	result["PublishedServerUriBySubnet"] = Jellyfin::Support::toJsonValue<QStringList>(m_publishedServerUriBySubnet);
-	result["AutoDiscoveryTracing"] = Jellyfin::Support::toJsonValue<bool>(m_autoDiscoveryTracing);
-	result["AutoDiscovery"] = Jellyfin::Support::toJsonValue<bool>(m_autoDiscovery);
-	result["PublicHttpsPort"] = Jellyfin::Support::toJsonValue<qint32>(m_publicHttpsPort);
-	result["HttpServerPortNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_httpServerPortNumber);
-	result["HttpsPortNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_httpsPortNumber);
-	result["EnableHttps"] = Jellyfin::Support::toJsonValue<bool>(m_enableHttps);
-	result["EnableNormalizedItemByNameIds"] = Jellyfin::Support::toJsonValue<bool>(m_enableNormalizedItemByNameIds);
-	result["CertificatePath"] = Jellyfin::Support::toJsonValue<QString>(m_certificatePath);
-	result["CertificatePassword"] = Jellyfin::Support::toJsonValue<QString>(m_certificatePassword);
-	result["IsPortAuthorized"] = Jellyfin::Support::toJsonValue<bool>(m_isPortAuthorized);
-	result["QuickConnectAvailable"] = Jellyfin::Support::toJsonValue<bool>(m_quickConnectAvailable);
-	result["EnableRemoteAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteAccess);
-	result["EnableCaseSensitiveItemIds"] = Jellyfin::Support::toJsonValue<bool>(m_enableCaseSensitiveItemIds);
-	result["DisableLiveTvChannelUserDataName"] = Jellyfin::Support::toJsonValue<bool>(m_disableLiveTvChannelUserDataName);
-	result["MetadataPath"] = Jellyfin::Support::toJsonValue<QString>(m_metadataPath);
-	result["MetadataNetworkPath"] = Jellyfin::Support::toJsonValue<QString>(m_metadataNetworkPath);
-	result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
-	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
-	result["SortReplaceCharacters"] = Jellyfin::Support::toJsonValue<QStringList>(m_sortReplaceCharacters);
-	result["SortRemoveCharacters"] = Jellyfin::Support::toJsonValue<QStringList>(m_sortRemoveCharacters);
-	result["SortRemoveWords"] = Jellyfin::Support::toJsonValue<QStringList>(m_sortRemoveWords);
-	result["MinResumePct"] = Jellyfin::Support::toJsonValue<qint32>(m_minResumePct);
-	result["MaxResumePct"] = Jellyfin::Support::toJsonValue<qint32>(m_maxResumePct);
-	result["MinResumeDurationSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_minResumeDurationSeconds);
-	result["MinAudiobookResume"] = Jellyfin::Support::toJsonValue<qint32>(m_minAudiobookResume);
-	result["MaxAudiobookResume"] = Jellyfin::Support::toJsonValue<qint32>(m_maxAudiobookResume);
-	result["LibraryMonitorDelay"] = Jellyfin::Support::toJsonValue<qint32>(m_libraryMonitorDelay);
-	result["EnableDashboardResponseCaching"] = Jellyfin::Support::toJsonValue<bool>(m_enableDashboardResponseCaching);
-	result["ImageSavingConvention"] = Jellyfin::Support::toJsonValue<ImageSavingConvention>(m_imageSavingConvention);
-	result["MetadataOptions"] = Jellyfin::Support::toJsonValue<QList<MetadataOptions>>(m_metadataOptions);
-	result["SkipDeserializationForBasicTypes"] = Jellyfin::Support::toJsonValue<bool>(m_skipDeserializationForBasicTypes);
-	result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
-	result["BaseUrl"] = Jellyfin::Support::toJsonValue<QString>(m_baseUrl);
-	result["UICulture"] = Jellyfin::Support::toJsonValue<QString>(m_uICulture);
-	result["SaveMetadataHidden"] = Jellyfin::Support::toJsonValue<bool>(m_saveMetadataHidden);
-	result["ContentTypes"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_contentTypes);
-	result["RemoteClientBitrateLimit"] = Jellyfin::Support::toJsonValue<qint32>(m_remoteClientBitrateLimit);
-	result["EnableFolderView"] = Jellyfin::Support::toJsonValue<bool>(m_enableFolderView);
-	result["EnableGroupingIntoCollections"] = Jellyfin::Support::toJsonValue<bool>(m_enableGroupingIntoCollections);
-	result["DisplaySpecialsWithinSeasons"] = Jellyfin::Support::toJsonValue<bool>(m_displaySpecialsWithinSeasons);
-	result["LocalNetworkSubnets"] = Jellyfin::Support::toJsonValue<QStringList>(m_localNetworkSubnets);
-	result["LocalNetworkAddresses"] = Jellyfin::Support::toJsonValue<QStringList>(m_localNetworkAddresses);
-	result["CodecsUsed"] = Jellyfin::Support::toJsonValue<QStringList>(m_codecsUsed);
-	result["PluginRepositories"] = Jellyfin::Support::toJsonValue<QList<RepositoryInfo>>(m_pluginRepositories);
-	result["EnableExternalContentInSuggestions"] = Jellyfin::Support::toJsonValue<bool>(m_enableExternalContentInSuggestions);
-	result["RequireHttps"] = Jellyfin::Support::toJsonValue<bool>(m_requireHttps);
-	result["EnableNewOmdbSupport"] = Jellyfin::Support::toJsonValue<bool>(m_enableNewOmdbSupport);
-	result["RemoteIPFilter"] = Jellyfin::Support::toJsonValue<QStringList>(m_remoteIPFilter);
-	result["IsRemoteIPFilterBlacklist"] = Jellyfin::Support::toJsonValue<bool>(m_isRemoteIPFilterBlacklist);
-	result["ImageExtractionTimeoutMs"] = Jellyfin::Support::toJsonValue<qint32>(m_imageExtractionTimeoutMs);
-	result["PathSubstitutions"] = Jellyfin::Support::toJsonValue<QList<PathSubstitution>>(m_pathSubstitutions);
-	result["EnableSimpleArtistDetection"] = Jellyfin::Support::toJsonValue<bool>(m_enableSimpleArtistDetection);
-	result["UninstalledPlugins"] = Jellyfin::Support::toJsonValue<QStringList>(m_uninstalledPlugins);
-	result["EnableSlowResponseWarning"] = Jellyfin::Support::toJsonValue<bool>(m_enableSlowResponseWarning);
-	result["SlowResponseThresholdMs"] = Jellyfin::Support::toJsonValue<qint64>(m_slowResponseThresholdMs);
-	result["CorsHosts"] = Jellyfin::Support::toJsonValue<QStringList>(m_corsHosts);
-	result["KnownProxies"] = Jellyfin::Support::toJsonValue<QStringList>(m_knownProxies);
-	result["ActivityLogRetentionDays"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_activityLogRetentionDays);
-	result["LibraryScanFanoutConcurrency"] = Jellyfin::Support::toJsonValue<qint32>(m_libraryScanFanoutConcurrency);
-	result["LibraryMetadataRefreshConcurrency"] = Jellyfin::Support::toJsonValue<qint32>(m_libraryMetadataRefreshConcurrency);
-	result["RemoveOldPlugins"] = Jellyfin::Support::toJsonValue<bool>(m_removeOldPlugins);
-	result["DisablePluginImages"] = Jellyfin::Support::toJsonValue<bool>(m_disablePluginImages);
-
+	
+	result["LogFileRetentionDays"] = Jellyfin::Support::toJsonValue<qint32>(m_logFileRetentionDays);		
+	result["IsStartupWizardCompleted"] = Jellyfin::Support::toJsonValue<bool>(m_isStartupWizardCompleted);		
+	
+	if (!(m_cachePath.isNull())) {
+		result["CachePath"] = Jellyfin::Support::toJsonValue<QString>(m_cachePath);
+	}
+			
+	result["PreviousVersion"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_previousVersion);		
+	
+	if (!(m_previousVersionStr.isNull())) {
+		result["PreviousVersionStr"] = Jellyfin::Support::toJsonValue<QString>(m_previousVersionStr);
+	}
+			
+	result["EnableUPnP"] = Jellyfin::Support::toJsonValue<bool>(m_enableUPnP);		
+	result["EnableMetrics"] = Jellyfin::Support::toJsonValue<bool>(m_enableMetrics);		
+	result["PublicPort"] = Jellyfin::Support::toJsonValue<qint32>(m_publicPort);		
+	result["UPnPCreateHttpPortMap"] = Jellyfin::Support::toJsonValue<bool>(m_uPnPCreateHttpPortMap);		
+	
+	if (!(m_uDPPortRange.isNull())) {
+		result["UDPPortRange"] = Jellyfin::Support::toJsonValue<QString>(m_uDPPortRange);
+	}
+			
+	result["EnableIPV6"] = Jellyfin::Support::toJsonValue<bool>(m_enableIPV6);		
+	result["EnableIPV4"] = Jellyfin::Support::toJsonValue<bool>(m_enableIPV4);		
+	result["EnableSSDPTracing"] = Jellyfin::Support::toJsonValue<bool>(m_enableSSDPTracing);		
+	
+	if (!(m_sSDPTracingFilter.isNull())) {
+		result["SSDPTracingFilter"] = Jellyfin::Support::toJsonValue<QString>(m_sSDPTracingFilter);
+	}
+			
+	result["UDPSendCount"] = Jellyfin::Support::toJsonValue<qint32>(m_uDPSendCount);		
+	result["UDPSendDelay"] = Jellyfin::Support::toJsonValue<qint32>(m_uDPSendDelay);		
+	result["IgnoreVirtualInterfaces"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreVirtualInterfaces);		
+	
+	if (!(m_virtualInterfaceNames.isNull())) {
+		result["VirtualInterfaceNames"] = Jellyfin::Support::toJsonValue<QString>(m_virtualInterfaceNames);
+	}
+			
+	result["GatewayMonitorPeriod"] = Jellyfin::Support::toJsonValue<qint32>(m_gatewayMonitorPeriod);		
+	result["EnableMultiSocketBinding"] = Jellyfin::Support::toJsonValue<bool>(m_enableMultiSocketBinding);		
+	result["TrustAllIP6Interfaces"] = Jellyfin::Support::toJsonValue<bool>(m_trustAllIP6Interfaces);		
+	
+	if (!(m_hDHomerunPortRange.isNull())) {
+		result["HDHomerunPortRange"] = Jellyfin::Support::toJsonValue<QString>(m_hDHomerunPortRange);
+	}
+			
+	
+	if (!(m_publishedServerUriBySubnet.size() == 0)) {
+		result["PublishedServerUriBySubnet"] = Jellyfin::Support::toJsonValue<QStringList>(m_publishedServerUriBySubnet);
+	}
+			
+	result["AutoDiscoveryTracing"] = Jellyfin::Support::toJsonValue<bool>(m_autoDiscoveryTracing);		
+	result["AutoDiscovery"] = Jellyfin::Support::toJsonValue<bool>(m_autoDiscovery);		
+	result["PublicHttpsPort"] = Jellyfin::Support::toJsonValue<qint32>(m_publicHttpsPort);		
+	result["HttpServerPortNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_httpServerPortNumber);		
+	result["HttpsPortNumber"] = Jellyfin::Support::toJsonValue<qint32>(m_httpsPortNumber);		
+	result["EnableHttps"] = Jellyfin::Support::toJsonValue<bool>(m_enableHttps);		
+	result["EnableNormalizedItemByNameIds"] = Jellyfin::Support::toJsonValue<bool>(m_enableNormalizedItemByNameIds);		
+	
+	if (!(m_certificatePath.isNull())) {
+		result["CertificatePath"] = Jellyfin::Support::toJsonValue<QString>(m_certificatePath);
+	}
+			
+	
+	if (!(m_certificatePassword.isNull())) {
+		result["CertificatePassword"] = Jellyfin::Support::toJsonValue<QString>(m_certificatePassword);
+	}
+			
+	result["IsPortAuthorized"] = Jellyfin::Support::toJsonValue<bool>(m_isPortAuthorized);		
+	result["QuickConnectAvailable"] = Jellyfin::Support::toJsonValue<bool>(m_quickConnectAvailable);		
+	result["EnableRemoteAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableRemoteAccess);		
+	result["EnableCaseSensitiveItemIds"] = Jellyfin::Support::toJsonValue<bool>(m_enableCaseSensitiveItemIds);		
+	result["DisableLiveTvChannelUserDataName"] = Jellyfin::Support::toJsonValue<bool>(m_disableLiveTvChannelUserDataName);		
+	
+	if (!(m_metadataPath.isNull())) {
+		result["MetadataPath"] = Jellyfin::Support::toJsonValue<QString>(m_metadataPath);
+	}
+			
+	
+	if (!(m_metadataNetworkPath.isNull())) {
+		result["MetadataNetworkPath"] = Jellyfin::Support::toJsonValue<QString>(m_metadataNetworkPath);
+	}
+			
+	
+	if (!(m_preferredMetadataLanguage.isNull())) {
+		result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
+	}
+			
+	
+	if (!(m_metadataCountryCode.isNull())) {
+		result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
+	}
+			
+	
+	if (!(m_sortReplaceCharacters.size() == 0)) {
+		result["SortReplaceCharacters"] = Jellyfin::Support::toJsonValue<QStringList>(m_sortReplaceCharacters);
+	}
+			
+	
+	if (!(m_sortRemoveCharacters.size() == 0)) {
+		result["SortRemoveCharacters"] = Jellyfin::Support::toJsonValue<QStringList>(m_sortRemoveCharacters);
+	}
+			
+	
+	if (!(m_sortRemoveWords.size() == 0)) {
+		result["SortRemoveWords"] = Jellyfin::Support::toJsonValue<QStringList>(m_sortRemoveWords);
+	}
+			
+	result["MinResumePct"] = Jellyfin::Support::toJsonValue<qint32>(m_minResumePct);		
+	result["MaxResumePct"] = Jellyfin::Support::toJsonValue<qint32>(m_maxResumePct);		
+	result["MinResumeDurationSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_minResumeDurationSeconds);		
+	result["MinAudiobookResume"] = Jellyfin::Support::toJsonValue<qint32>(m_minAudiobookResume);		
+	result["MaxAudiobookResume"] = Jellyfin::Support::toJsonValue<qint32>(m_maxAudiobookResume);		
+	result["LibraryMonitorDelay"] = Jellyfin::Support::toJsonValue<qint32>(m_libraryMonitorDelay);		
+	result["EnableDashboardResponseCaching"] = Jellyfin::Support::toJsonValue<bool>(m_enableDashboardResponseCaching);		
+	result["ImageSavingConvention"] = Jellyfin::Support::toJsonValue<ImageSavingConvention>(m_imageSavingConvention);		
+	
+	if (!(m_metadataOptions.size() == 0)) {
+		result["MetadataOptions"] = Jellyfin::Support::toJsonValue<QList<MetadataOptions>>(m_metadataOptions);
+	}
+			
+	result["SkipDeserializationForBasicTypes"] = Jellyfin::Support::toJsonValue<bool>(m_skipDeserializationForBasicTypes);		
+	
+	if (!(m_serverName.isNull())) {
+		result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
+	}
+			
+	
+	if (!(m_baseUrl.isNull())) {
+		result["BaseUrl"] = Jellyfin::Support::toJsonValue<QString>(m_baseUrl);
+	}
+			
+	
+	if (!(m_uICulture.isNull())) {
+		result["UICulture"] = Jellyfin::Support::toJsonValue<QString>(m_uICulture);
+	}
+			
+	result["SaveMetadataHidden"] = Jellyfin::Support::toJsonValue<bool>(m_saveMetadataHidden);		
+	
+	if (!(m_contentTypes.size() == 0)) {
+		result["ContentTypes"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_contentTypes);
+	}
+			
+	result["RemoteClientBitrateLimit"] = Jellyfin::Support::toJsonValue<qint32>(m_remoteClientBitrateLimit);		
+	result["EnableFolderView"] = Jellyfin::Support::toJsonValue<bool>(m_enableFolderView);		
+	result["EnableGroupingIntoCollections"] = Jellyfin::Support::toJsonValue<bool>(m_enableGroupingIntoCollections);		
+	result["DisplaySpecialsWithinSeasons"] = Jellyfin::Support::toJsonValue<bool>(m_displaySpecialsWithinSeasons);		
+	
+	if (!(m_localNetworkSubnets.size() == 0)) {
+		result["LocalNetworkSubnets"] = Jellyfin::Support::toJsonValue<QStringList>(m_localNetworkSubnets);
+	}
+			
+	
+	if (!(m_localNetworkAddresses.size() == 0)) {
+		result["LocalNetworkAddresses"] = Jellyfin::Support::toJsonValue<QStringList>(m_localNetworkAddresses);
+	}
+			
+	
+	if (!(m_codecsUsed.size() == 0)) {
+		result["CodecsUsed"] = Jellyfin::Support::toJsonValue<QStringList>(m_codecsUsed);
+	}
+			
+	
+	if (!(m_pluginRepositories.size() == 0)) {
+		result["PluginRepositories"] = Jellyfin::Support::toJsonValue<QList<RepositoryInfo>>(m_pluginRepositories);
+	}
+			
+	result["EnableExternalContentInSuggestions"] = Jellyfin::Support::toJsonValue<bool>(m_enableExternalContentInSuggestions);		
+	result["RequireHttps"] = Jellyfin::Support::toJsonValue<bool>(m_requireHttps);		
+	result["EnableNewOmdbSupport"] = Jellyfin::Support::toJsonValue<bool>(m_enableNewOmdbSupport);		
+	
+	if (!(m_remoteIPFilter.size() == 0)) {
+		result["RemoteIPFilter"] = Jellyfin::Support::toJsonValue<QStringList>(m_remoteIPFilter);
+	}
+			
+	result["IsRemoteIPFilterBlacklist"] = Jellyfin::Support::toJsonValue<bool>(m_isRemoteIPFilterBlacklist);		
+	result["ImageExtractionTimeoutMs"] = Jellyfin::Support::toJsonValue<qint32>(m_imageExtractionTimeoutMs);		
+	
+	if (!(m_pathSubstitutions.size() == 0)) {
+		result["PathSubstitutions"] = Jellyfin::Support::toJsonValue<QList<PathSubstitution>>(m_pathSubstitutions);
+	}
+			
+	result["EnableSimpleArtistDetection"] = Jellyfin::Support::toJsonValue<bool>(m_enableSimpleArtistDetection);		
+	
+	if (!(m_uninstalledPlugins.size() == 0)) {
+		result["UninstalledPlugins"] = Jellyfin::Support::toJsonValue<QStringList>(m_uninstalledPlugins);
+	}
+			
+	result["EnableSlowResponseWarning"] = Jellyfin::Support::toJsonValue<bool>(m_enableSlowResponseWarning);		
+	result["SlowResponseThresholdMs"] = Jellyfin::Support::toJsonValue<qint64>(m_slowResponseThresholdMs);		
+	
+	if (!(m_corsHosts.size() == 0)) {
+		result["CorsHosts"] = Jellyfin::Support::toJsonValue<QStringList>(m_corsHosts);
+	}
+			
+	
+	if (!(m_knownProxies.size() == 0)) {
+		result["KnownProxies"] = Jellyfin::Support::toJsonValue<QStringList>(m_knownProxies);
+	}
+			
+	
+	if (!(!m_activityLogRetentionDays.has_value())) {
+		result["ActivityLogRetentionDays"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_activityLogRetentionDays);
+	}
+			
+	result["LibraryScanFanoutConcurrency"] = Jellyfin::Support::toJsonValue<qint32>(m_libraryScanFanoutConcurrency);		
+	result["LibraryMetadataRefreshConcurrency"] = Jellyfin::Support::toJsonValue<qint32>(m_libraryMetadataRefreshConcurrency);		
+	result["RemoveOldPlugins"] = Jellyfin::Support::toJsonValue<bool>(m_removeOldPlugins);		
+	result["DisablePluginImages"] = Jellyfin::Support::toJsonValue<bool>(m_disablePluginImages);	
 	return result;
 }
 

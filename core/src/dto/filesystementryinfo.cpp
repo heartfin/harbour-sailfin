@@ -63,10 +63,18 @@ void FileSystemEntryInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject FileSystemEntryInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["Type"] = Jellyfin::Support::toJsonValue<FileSystemEntryType>(m_type);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	result["Type"] = Jellyfin::Support::toJsonValue<FileSystemEntryType>(m_type);	
 	return result;
 }
 

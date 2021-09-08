@@ -60,9 +60,13 @@ void LibraryOptionInfoDto::setFromJson(QJsonObject source) {
 	
 QJsonObject LibraryOptionInfoDto::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["DefaultEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_defaultEnabled);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	result["DefaultEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_defaultEnabled);	
 	return result;
 }
 

@@ -66,11 +66,23 @@ void UpdateUserPassword::setFromJson(QJsonObject source) {
 	
 QJsonObject UpdateUserPassword::toJson() const {
 	QJsonObject result;
-	result["CurrentPassword"] = Jellyfin::Support::toJsonValue<QString>(m_currentPassword);
-	result["CurrentPw"] = Jellyfin::Support::toJsonValue<QString>(m_currentPw);
-	result["NewPw"] = Jellyfin::Support::toJsonValue<QString>(m_newPw);
-	result["ResetPassword"] = Jellyfin::Support::toJsonValue<bool>(m_resetPassword);
-
+	
+	
+	if (!(m_currentPassword.isNull())) {
+		result["CurrentPassword"] = Jellyfin::Support::toJsonValue<QString>(m_currentPassword);
+	}
+			
+	
+	if (!(m_currentPw.isNull())) {
+		result["CurrentPw"] = Jellyfin::Support::toJsonValue<QString>(m_currentPw);
+	}
+			
+	
+	if (!(m_newPw.isNull())) {
+		result["NewPw"] = Jellyfin::Support::toJsonValue<QString>(m_newPw);
+	}
+			
+	result["ResetPassword"] = Jellyfin::Support::toJsonValue<bool>(m_resetPassword);	
 	return result;
 }
 

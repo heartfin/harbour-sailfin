@@ -57,8 +57,12 @@ void PlaylistCreationResult::setFromJson(QJsonObject source) {
 	
 QJsonObject PlaylistCreationResult::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-
+	
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+		
 	return result;
 }
 

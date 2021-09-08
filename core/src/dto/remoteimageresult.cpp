@@ -63,10 +63,18 @@ void RemoteImageResult::setFromJson(QJsonObject source) {
 	
 QJsonObject RemoteImageResult::toJson() const {
 	QJsonObject result;
-	result["Images"] = Jellyfin::Support::toJsonValue<QList<RemoteImageInfo>>(m_images);
-	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
-	result["Providers"] = Jellyfin::Support::toJsonValue<QStringList>(m_providers);
-
+	
+	
+	if (!(m_images.size() == 0)) {
+		result["Images"] = Jellyfin::Support::toJsonValue<QList<RemoteImageInfo>>(m_images);
+	}
+			
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);		
+	
+	if (!(m_providers.size() == 0)) {
+		result["Providers"] = Jellyfin::Support::toJsonValue<QStringList>(m_providers);
+	}
+		
 	return result;
 }
 

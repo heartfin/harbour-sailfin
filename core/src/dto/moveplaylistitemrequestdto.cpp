@@ -60,9 +60,9 @@ void MovePlaylistItemRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject MovePlaylistItemRequestDto::toJson() const {
 	QJsonObject result;
-	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-	result["NewIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_newIndex);
-
+	
+	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);		
+	result["NewIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_newIndex);	
 	return result;
 }
 

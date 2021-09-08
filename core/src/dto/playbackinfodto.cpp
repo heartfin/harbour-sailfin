@@ -99,22 +99,78 @@ void PlaybackInfoDto::setFromJson(QJsonObject source) {
 	
 QJsonObject PlaybackInfoDto::toJson() const {
 	QJsonObject result;
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["MaxStreamingBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxStreamingBitrate);
-	result["StartTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_startTimeTicks);
-	result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioStreamIndex);
-	result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_subtitleStreamIndex);
-	result["MaxAudioChannels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxAudioChannels);
-	result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
-	result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
-	result["DeviceProfile"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);
-	result["EnableDirectPlay"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableDirectPlay);
-	result["EnableDirectStream"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableDirectStream);
-	result["EnableTranscoding"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableTranscoding);
-	result["AllowVideoStreamCopy"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_allowVideoStreamCopy);
-	result["AllowAudioStreamCopy"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_allowAudioStreamCopy);
-	result["AutoOpenLiveStream"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_autoOpenLiveStream);
-
+	
+	
+	if (!(m_userId.isNull())) {
+		result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
+	}
+			
+	
+	if (!(!m_maxStreamingBitrate.has_value())) {
+		result["MaxStreamingBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxStreamingBitrate);
+	}
+			
+	
+	if (!(!m_startTimeTicks.has_value())) {
+		result["StartTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_startTimeTicks);
+	}
+			
+	
+	if (!(!m_audioStreamIndex.has_value())) {
+		result["AudioStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioStreamIndex);
+	}
+			
+	
+	if (!(!m_subtitleStreamIndex.has_value())) {
+		result["SubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_subtitleStreamIndex);
+	}
+			
+	
+	if (!(!m_maxAudioChannels.has_value())) {
+		result["MaxAudioChannels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxAudioChannels);
+	}
+			
+	
+	if (!(m_mediaSourceId.isNull())) {
+		result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
+	}
+			
+	
+	if (!(m_liveStreamId.isNull())) {
+		result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
+	}
+			
+	result["DeviceProfile"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);		
+	
+	if (!(!m_enableDirectPlay.has_value())) {
+		result["EnableDirectPlay"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableDirectPlay);
+	}
+			
+	
+	if (!(!m_enableDirectStream.has_value())) {
+		result["EnableDirectStream"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableDirectStream);
+	}
+			
+	
+	if (!(!m_enableTranscoding.has_value())) {
+		result["EnableTranscoding"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableTranscoding);
+	}
+			
+	
+	if (!(!m_allowVideoStreamCopy.has_value())) {
+		result["AllowVideoStreamCopy"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_allowVideoStreamCopy);
+	}
+			
+	
+	if (!(!m_allowAudioStreamCopy.has_value())) {
+		result["AllowAudioStreamCopy"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_allowAudioStreamCopy);
+	}
+			
+	
+	if (!(!m_autoOpenLiveStream.has_value())) {
+		result["AutoOpenLiveStream"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_autoOpenLiveStream);
+	}
+		
 	return result;
 }
 

@@ -93,20 +93,68 @@ void AlbumInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject AlbumInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["MetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_metadataLanguage);
-	result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
-	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
-	result["Year"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_year);
-	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
-	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
-	result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
-	result["IsAutomated"] = Jellyfin::Support::toJsonValue<bool>(m_isAutomated);
-	result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QStringList>(m_albumArtists);
-	result["ArtistProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_artistProviderIds);
-	result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<SongInfo>>(m_songInfos);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(m_metadataLanguage.isNull())) {
+		result["MetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_metadataLanguage);
+	}
+			
+	
+	if (!(m_metadataCountryCode.isNull())) {
+		result["MetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_metadataCountryCode);
+	}
+			
+	
+	if (!(m_providerIds.isEmpty())) {
+		result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
+	}
+			
+	
+	if (!(!m_year.has_value())) {
+		result["Year"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_year);
+	}
+			
+	
+	if (!(!m_indexNumber.has_value())) {
+		result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
+	}
+			
+	
+	if (!(!m_parentIndexNumber.has_value())) {
+		result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
+	}
+			
+	
+	if (!(m_premiereDate.isNull())) {
+		result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
+	}
+			
+	result["IsAutomated"] = Jellyfin::Support::toJsonValue<bool>(m_isAutomated);		
+	
+	if (!(m_albumArtists.size() == 0)) {
+		result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QStringList>(m_albumArtists);
+	}
+			
+	
+	if (!(m_artistProviderIds.isEmpty())) {
+		result["ArtistProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_artistProviderIds);
+	}
+			
+	
+	if (!(m_songInfos.size() == 0)) {
+		result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<SongInfo>>(m_songInfos);
+	}
+		
 	return result;
 }
 

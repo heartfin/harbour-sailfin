@@ -171,46 +171,158 @@ void DeviceProfile::setFromJson(QJsonObject source) {
 	
 QJsonObject DeviceProfile::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Identification"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceIdentification>>(m_identification);
-	result["FriendlyName"] = Jellyfin::Support::toJsonValue<QString>(m_friendlyName);
-	result["Manufacturer"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturer);
-	result["ManufacturerUrl"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturerUrl);
-	result["ModelName"] = Jellyfin::Support::toJsonValue<QString>(m_modelName);
-	result["ModelDescription"] = Jellyfin::Support::toJsonValue<QString>(m_modelDescription);
-	result["ModelNumber"] = Jellyfin::Support::toJsonValue<QString>(m_modelNumber);
-	result["ModelUrl"] = Jellyfin::Support::toJsonValue<QString>(m_modelUrl);
-	result["SerialNumber"] = Jellyfin::Support::toJsonValue<QString>(m_serialNumber);
-	result["EnableAlbumArtInDidl"] = Jellyfin::Support::toJsonValue<bool>(m_enableAlbumArtInDidl);
-	result["EnableSingleAlbumArtLimit"] = Jellyfin::Support::toJsonValue<bool>(m_enableSingleAlbumArtLimit);
-	result["EnableSingleSubtitleLimit"] = Jellyfin::Support::toJsonValue<bool>(m_enableSingleSubtitleLimit);
-	result["SupportedMediaTypes"] = Jellyfin::Support::toJsonValue<QString>(m_supportedMediaTypes);
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["AlbumArtPn"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtPn);
-	result["MaxAlbumArtWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_maxAlbumArtWidth);
-	result["MaxAlbumArtHeight"] = Jellyfin::Support::toJsonValue<qint32>(m_maxAlbumArtHeight);
-	result["MaxIconWidth"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxIconWidth);
-	result["MaxIconHeight"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxIconHeight);
-	result["MaxStreamingBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxStreamingBitrate);
-	result["MaxStaticBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxStaticBitrate);
-	result["MusicStreamingTranscodingBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_musicStreamingTranscodingBitrate);
-	result["MaxStaticMusicBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxStaticMusicBitrate);
-	result["SonyAggregationFlags"] = Jellyfin::Support::toJsonValue<QString>(m_sonyAggregationFlags);
-	result["ProtocolInfo"] = Jellyfin::Support::toJsonValue<QString>(m_protocolInfo);
-	result["TimelineOffsetSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_timelineOffsetSeconds);
-	result["RequiresPlainVideoItems"] = Jellyfin::Support::toJsonValue<bool>(m_requiresPlainVideoItems);
-	result["RequiresPlainFolders"] = Jellyfin::Support::toJsonValue<bool>(m_requiresPlainFolders);
-	result["EnableMSMediaReceiverRegistrar"] = Jellyfin::Support::toJsonValue<bool>(m_enableMSMediaReceiverRegistrar);
-	result["IgnoreTranscodeByteRangeRequests"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreTranscodeByteRangeRequests);
-	result["XmlRootAttributes"] = Jellyfin::Support::toJsonValue<QList<XmlAttribute>>(m_xmlRootAttributes);
-	result["DirectPlayProfiles"] = Jellyfin::Support::toJsonValue<QList<DirectPlayProfile>>(m_directPlayProfiles);
-	result["TranscodingProfiles"] = Jellyfin::Support::toJsonValue<QList<TranscodingProfile>>(m_transcodingProfiles);
-	result["ContainerProfiles"] = Jellyfin::Support::toJsonValue<QList<ContainerProfile>>(m_containerProfiles);
-	result["CodecProfiles"] = Jellyfin::Support::toJsonValue<QList<CodecProfile>>(m_codecProfiles);
-	result["ResponseProfiles"] = Jellyfin::Support::toJsonValue<QList<ResponseProfile>>(m_responseProfiles);
-	result["SubtitleProfiles"] = Jellyfin::Support::toJsonValue<QList<SubtitleProfile>>(m_subtitleProfiles);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	result["Identification"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceIdentification>>(m_identification);		
+	
+	if (!(m_friendlyName.isNull())) {
+		result["FriendlyName"] = Jellyfin::Support::toJsonValue<QString>(m_friendlyName);
+	}
+			
+	
+	if (!(m_manufacturer.isNull())) {
+		result["Manufacturer"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturer);
+	}
+			
+	
+	if (!(m_manufacturerUrl.isNull())) {
+		result["ManufacturerUrl"] = Jellyfin::Support::toJsonValue<QString>(m_manufacturerUrl);
+	}
+			
+	
+	if (!(m_modelName.isNull())) {
+		result["ModelName"] = Jellyfin::Support::toJsonValue<QString>(m_modelName);
+	}
+			
+	
+	if (!(m_modelDescription.isNull())) {
+		result["ModelDescription"] = Jellyfin::Support::toJsonValue<QString>(m_modelDescription);
+	}
+			
+	
+	if (!(m_modelNumber.isNull())) {
+		result["ModelNumber"] = Jellyfin::Support::toJsonValue<QString>(m_modelNumber);
+	}
+			
+	
+	if (!(m_modelUrl.isNull())) {
+		result["ModelUrl"] = Jellyfin::Support::toJsonValue<QString>(m_modelUrl);
+	}
+			
+	
+	if (!(m_serialNumber.isNull())) {
+		result["SerialNumber"] = Jellyfin::Support::toJsonValue<QString>(m_serialNumber);
+	}
+			
+	result["EnableAlbumArtInDidl"] = Jellyfin::Support::toJsonValue<bool>(m_enableAlbumArtInDidl);		
+	result["EnableSingleAlbumArtLimit"] = Jellyfin::Support::toJsonValue<bool>(m_enableSingleAlbumArtLimit);		
+	result["EnableSingleSubtitleLimit"] = Jellyfin::Support::toJsonValue<bool>(m_enableSingleSubtitleLimit);		
+	
+	if (!(m_supportedMediaTypes.isNull())) {
+		result["SupportedMediaTypes"] = Jellyfin::Support::toJsonValue<QString>(m_supportedMediaTypes);
+	}
+			
+	
+	if (!(m_userId.isNull())) {
+		result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
+	}
+			
+	
+	if (!(m_albumArtPn.isNull())) {
+		result["AlbumArtPn"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtPn);
+	}
+			
+	result["MaxAlbumArtWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_maxAlbumArtWidth);		
+	result["MaxAlbumArtHeight"] = Jellyfin::Support::toJsonValue<qint32>(m_maxAlbumArtHeight);		
+	
+	if (!(!m_maxIconWidth.has_value())) {
+		result["MaxIconWidth"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxIconWidth);
+	}
+			
+	
+	if (!(!m_maxIconHeight.has_value())) {
+		result["MaxIconHeight"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxIconHeight);
+	}
+			
+	
+	if (!(!m_maxStreamingBitrate.has_value())) {
+		result["MaxStreamingBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxStreamingBitrate);
+	}
+			
+	
+	if (!(!m_maxStaticBitrate.has_value())) {
+		result["MaxStaticBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxStaticBitrate);
+	}
+			
+	
+	if (!(!m_musicStreamingTranscodingBitrate.has_value())) {
+		result["MusicStreamingTranscodingBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_musicStreamingTranscodingBitrate);
+	}
+			
+	
+	if (!(!m_maxStaticMusicBitrate.has_value())) {
+		result["MaxStaticMusicBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxStaticMusicBitrate);
+	}
+			
+	
+	if (!(m_sonyAggregationFlags.isNull())) {
+		result["SonyAggregationFlags"] = Jellyfin::Support::toJsonValue<QString>(m_sonyAggregationFlags);
+	}
+			
+	
+	if (!(m_protocolInfo.isNull())) {
+		result["ProtocolInfo"] = Jellyfin::Support::toJsonValue<QString>(m_protocolInfo);
+	}
+			
+	result["TimelineOffsetSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_timelineOffsetSeconds);		
+	result["RequiresPlainVideoItems"] = Jellyfin::Support::toJsonValue<bool>(m_requiresPlainVideoItems);		
+	result["RequiresPlainFolders"] = Jellyfin::Support::toJsonValue<bool>(m_requiresPlainFolders);		
+	result["EnableMSMediaReceiverRegistrar"] = Jellyfin::Support::toJsonValue<bool>(m_enableMSMediaReceiverRegistrar);		
+	result["IgnoreTranscodeByteRangeRequests"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreTranscodeByteRangeRequests);		
+	
+	if (!(m_xmlRootAttributes.size() == 0)) {
+		result["XmlRootAttributes"] = Jellyfin::Support::toJsonValue<QList<XmlAttribute>>(m_xmlRootAttributes);
+	}
+			
+	
+	if (!(m_directPlayProfiles.size() == 0)) {
+		result["DirectPlayProfiles"] = Jellyfin::Support::toJsonValue<QList<DirectPlayProfile>>(m_directPlayProfiles);
+	}
+			
+	
+	if (!(m_transcodingProfiles.size() == 0)) {
+		result["TranscodingProfiles"] = Jellyfin::Support::toJsonValue<QList<TranscodingProfile>>(m_transcodingProfiles);
+	}
+			
+	
+	if (!(m_containerProfiles.size() == 0)) {
+		result["ContainerProfiles"] = Jellyfin::Support::toJsonValue<QList<ContainerProfile>>(m_containerProfiles);
+	}
+			
+	
+	if (!(m_codecProfiles.size() == 0)) {
+		result["CodecProfiles"] = Jellyfin::Support::toJsonValue<QList<CodecProfile>>(m_codecProfiles);
+	}
+			
+	
+	if (!(m_responseProfiles.size() == 0)) {
+		result["ResponseProfiles"] = Jellyfin::Support::toJsonValue<QList<ResponseProfile>>(m_responseProfiles);
+	}
+			
+	
+	if (!(m_subtitleProfiles.size() == 0)) {
+		result["SubtitleProfiles"] = Jellyfin::Support::toJsonValue<QList<SubtitleProfile>>(m_subtitleProfiles);
+	}
+		
 	return result;
 }
 

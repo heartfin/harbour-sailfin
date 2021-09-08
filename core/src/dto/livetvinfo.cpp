@@ -63,10 +63,18 @@ void LiveTvInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject LiveTvInfo::toJson() const {
 	QJsonObject result;
-	result["Services"] = Jellyfin::Support::toJsonValue<QList<LiveTvServiceInfo>>(m_services);
-	result["IsEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_isEnabled);
-	result["EnabledUsers"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledUsers);
-
+	
+	
+	if (!(m_services.size() == 0)) {
+		result["Services"] = Jellyfin::Support::toJsonValue<QList<LiveTvServiceInfo>>(m_services);
+	}
+			
+	result["IsEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_isEnabled);		
+	
+	if (!(m_enabledUsers.size() == 0)) {
+		result["EnabledUsers"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledUsers);
+	}
+		
 	return result;
 }
 

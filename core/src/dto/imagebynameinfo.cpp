@@ -69,12 +69,28 @@ void ImageByNameInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject ImageByNameInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Theme"] = Jellyfin::Support::toJsonValue<QString>(m_theme);
-	result["Context"] = Jellyfin::Support::toJsonValue<QString>(m_context);
-	result["FileLength"] = Jellyfin::Support::toJsonValue<qint64>(m_fileLength);
-	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_theme.isNull())) {
+		result["Theme"] = Jellyfin::Support::toJsonValue<QString>(m_theme);
+	}
+			
+	
+	if (!(m_context.isNull())) {
+		result["Context"] = Jellyfin::Support::toJsonValue<QString>(m_context);
+	}
+			
+	result["FileLength"] = Jellyfin::Support::toJsonValue<qint64>(m_fileLength);		
+	
+	if (!(m_format.isNull())) {
+		result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);
+	}
+		
 	return result;
 }
 

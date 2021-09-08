@@ -87,18 +87,46 @@ void TunerHostInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject TunerHostInfo::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["DeviceId"] = Jellyfin::Support::toJsonValue<QString>(m_deviceId);
-	result["FriendlyName"] = Jellyfin::Support::toJsonValue<QString>(m_friendlyName);
-	result["ImportFavoritesOnly"] = Jellyfin::Support::toJsonValue<bool>(m_importFavoritesOnly);
-	result["AllowHWTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_allowHWTranscoding);
-	result["EnableStreamLooping"] = Jellyfin::Support::toJsonValue<bool>(m_enableStreamLooping);
-	result["Source"] = Jellyfin::Support::toJsonValue<QString>(m_source);
-	result["TunerCount"] = Jellyfin::Support::toJsonValue<qint32>(m_tunerCount);
-	result["UserAgent"] = Jellyfin::Support::toJsonValue<QString>(m_userAgent);
-
+	
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_url.isNull())) {
+		result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	}
+			
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_deviceId.isNull())) {
+		result["DeviceId"] = Jellyfin::Support::toJsonValue<QString>(m_deviceId);
+	}
+			
+	
+	if (!(m_friendlyName.isNull())) {
+		result["FriendlyName"] = Jellyfin::Support::toJsonValue<QString>(m_friendlyName);
+	}
+			
+	result["ImportFavoritesOnly"] = Jellyfin::Support::toJsonValue<bool>(m_importFavoritesOnly);		
+	result["AllowHWTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_allowHWTranscoding);		
+	result["EnableStreamLooping"] = Jellyfin::Support::toJsonValue<bool>(m_enableStreamLooping);		
+	
+	if (!(m_source.isNull())) {
+		result["Source"] = Jellyfin::Support::toJsonValue<QString>(m_source);
+	}
+			
+	result["TunerCount"] = Jellyfin::Support::toJsonValue<qint32>(m_tunerCount);		
+	
+	if (!(m_userAgent.isNull())) {
+		result["UserAgent"] = Jellyfin::Support::toJsonValue<QString>(m_userAgent);
+	}
+		
 	return result;
 }
 

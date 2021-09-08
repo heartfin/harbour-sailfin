@@ -66,11 +66,27 @@ void QueryFiltersLegacy::setFromJson(QJsonObject source) {
 	
 QJsonObject QueryFiltersLegacy::toJson() const {
 	QJsonObject result;
-	result["Genres"] = Jellyfin::Support::toJsonValue<QStringList>(m_genres);
-	result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
-	result["OfficialRatings"] = Jellyfin::Support::toJsonValue<QStringList>(m_officialRatings);
-	result["Years"] = Jellyfin::Support::toJsonValue<QList<qint32>>(m_years);
-
+	
+	
+	if (!(m_genres.size() == 0)) {
+		result["Genres"] = Jellyfin::Support::toJsonValue<QStringList>(m_genres);
+	}
+			
+	
+	if (!(m_tags.size() == 0)) {
+		result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
+	}
+			
+	
+	if (!(m_officialRatings.size() == 0)) {
+		result["OfficialRatings"] = Jellyfin::Support::toJsonValue<QStringList>(m_officialRatings);
+	}
+			
+	
+	if (!(m_years.size() == 0)) {
+		result["Years"] = Jellyfin::Support::toJsonValue<QList<qint32>>(m_years);
+	}
+		
 	return result;
 }
 

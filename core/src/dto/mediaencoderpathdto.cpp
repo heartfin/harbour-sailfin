@@ -60,9 +60,17 @@ void MediaEncoderPathDto::setFromJson(QJsonObject source) {
 	
 QJsonObject MediaEncoderPathDto::toJson() const {
 	QJsonObject result;
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["PathType"] = Jellyfin::Support::toJsonValue<QString>(m_pathType);
-
+	
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(m_pathType.isNull())) {
+		result["PathType"] = Jellyfin::Support::toJsonValue<QString>(m_pathType);
+	}
+		
 	return result;
 }
 

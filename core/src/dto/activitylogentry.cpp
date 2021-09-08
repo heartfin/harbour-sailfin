@@ -84,17 +84,41 @@ void ActivityLogEntry::setFromJson(QJsonObject source) {
 	
 QJsonObject ActivityLogEntry::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<qint64>(m_jellyfinId);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
-	result["ShortOverview"] = Jellyfin::Support::toJsonValue<QString>(m_shortOverview);
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
-	result["Date"] = Jellyfin::Support::toJsonValue<QDateTime>(m_date);
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["UserPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_userPrimaryImageTag);
-	result["Severity"] = Jellyfin::Support::toJsonValue<LogLevel>(m_severity);
-
+	
+	result["Id"] = Jellyfin::Support::toJsonValue<qint64>(m_jellyfinId);		
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_overview.isNull())) {
+		result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	}
+			
+	
+	if (!(m_shortOverview.isNull())) {
+		result["ShortOverview"] = Jellyfin::Support::toJsonValue<QString>(m_shortOverview);
+	}
+			
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_itemId.isNull())) {
+		result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
+	}
+			
+	result["Date"] = Jellyfin::Support::toJsonValue<QDateTime>(m_date);		
+	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);		
+	
+	if (!(m_userPrimaryImageTag.isNull())) {
+		result["UserPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_userPrimaryImageTag);
+	}
+			
+	result["Severity"] = Jellyfin::Support::toJsonValue<LogLevel>(m_severity);	
 	return result;
 }
 

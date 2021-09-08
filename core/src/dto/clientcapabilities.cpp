@@ -84,17 +84,37 @@ void ClientCapabilities::setFromJson(QJsonObject source) {
 	
 QJsonObject ClientCapabilities::toJson() const {
 	QJsonObject result;
-	result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QStringList>(m_playableMediaTypes);
-	result["SupportedCommands"] = Jellyfin::Support::toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
-	result["SupportsMediaControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsMediaControl);
-	result["SupportsContentUploading"] = Jellyfin::Support::toJsonValue<bool>(m_supportsContentUploading);
-	result["MessageCallbackUrl"] = Jellyfin::Support::toJsonValue<QString>(m_messageCallbackUrl);
-	result["SupportsPersistentIdentifier"] = Jellyfin::Support::toJsonValue<bool>(m_supportsPersistentIdentifier);
-	result["SupportsSync"] = Jellyfin::Support::toJsonValue<bool>(m_supportsSync);
-	result["DeviceProfile"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);
-	result["AppStoreUrl"] = Jellyfin::Support::toJsonValue<QString>(m_appStoreUrl);
-	result["IconUrl"] = Jellyfin::Support::toJsonValue<QString>(m_iconUrl);
-
+	
+	
+	if (!(m_playableMediaTypes.size() == 0)) {
+		result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QStringList>(m_playableMediaTypes);
+	}
+			
+	
+	if (!(m_supportedCommands.size() == 0)) {
+		result["SupportedCommands"] = Jellyfin::Support::toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
+	}
+			
+	result["SupportsMediaControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsMediaControl);		
+	result["SupportsContentUploading"] = Jellyfin::Support::toJsonValue<bool>(m_supportsContentUploading);		
+	
+	if (!(m_messageCallbackUrl.isNull())) {
+		result["MessageCallbackUrl"] = Jellyfin::Support::toJsonValue<QString>(m_messageCallbackUrl);
+	}
+			
+	result["SupportsPersistentIdentifier"] = Jellyfin::Support::toJsonValue<bool>(m_supportsPersistentIdentifier);		
+	result["SupportsSync"] = Jellyfin::Support::toJsonValue<bool>(m_supportsSync);		
+	result["DeviceProfile"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);		
+	
+	if (!(m_appStoreUrl.isNull())) {
+		result["AppStoreUrl"] = Jellyfin::Support::toJsonValue<QString>(m_appStoreUrl);
+	}
+			
+	
+	if (!(m_iconUrl.isNull())) {
+		result["IconUrl"] = Jellyfin::Support::toJsonValue<QString>(m_iconUrl);
+	}
+		
 	return result;
 }
 

@@ -60,9 +60,17 @@ void BrandingOptions::setFromJson(QJsonObject source) {
 	
 QJsonObject BrandingOptions::toJson() const {
 	QJsonObject result;
-	result["LoginDisclaimer"] = Jellyfin::Support::toJsonValue<QString>(m_loginDisclaimer);
-	result["CustomCss"] = Jellyfin::Support::toJsonValue<QString>(m_customCss);
-
+	
+	
+	if (!(m_loginDisclaimer.isNull())) {
+		result["LoginDisclaimer"] = Jellyfin::Support::toJsonValue<QString>(m_loginDisclaimer);
+	}
+			
+	
+	if (!(m_customCss.isNull())) {
+		result["CustomCss"] = Jellyfin::Support::toJsonValue<QString>(m_customCss);
+	}
+		
 	return result;
 }
 

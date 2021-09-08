@@ -57,8 +57,8 @@ void SetShuffleModeRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject SetShuffleModeRequestDto::toJson() const {
 	QJsonObject result;
-	result["Mode"] = Jellyfin::Support::toJsonValue<GroupShuffleMode>(m_mode);
-
+	
+	result["Mode"] = Jellyfin::Support::toJsonValue<GroupShuffleMode>(m_mode);	
 	return result;
 }
 

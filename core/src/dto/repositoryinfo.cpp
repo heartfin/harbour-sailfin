@@ -63,10 +63,18 @@ void RepositoryInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject RepositoryInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
-	result["Enabled"] = Jellyfin::Support::toJsonValue<bool>(m_enabled);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_url.isNull())) {
+		result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	}
+			
+	result["Enabled"] = Jellyfin::Support::toJsonValue<bool>(m_enabled);	
 	return result;
 }
 

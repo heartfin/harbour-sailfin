@@ -90,19 +90,47 @@ void AuthenticationInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject AuthenticationInfo::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<qint64>(m_jellyfinId);
-	result["AccessToken"] = Jellyfin::Support::toJsonValue<QString>(m_accessToken);
-	result["DeviceId"] = Jellyfin::Support::toJsonValue<QString>(m_deviceId);
-	result["AppName"] = Jellyfin::Support::toJsonValue<QString>(m_appName);
-	result["AppVersion"] = Jellyfin::Support::toJsonValue<QString>(m_appVersion);
-	result["DeviceName"] = Jellyfin::Support::toJsonValue<QString>(m_deviceName);
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["IsActive"] = Jellyfin::Support::toJsonValue<bool>(m_isActive);
-	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
-	result["DateRevoked"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateRevoked);
-	result["DateLastActivity"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastActivity);
-	result["UserName"] = Jellyfin::Support::toJsonValue<QString>(m_userName);
-
+	
+	result["Id"] = Jellyfin::Support::toJsonValue<qint64>(m_jellyfinId);		
+	
+	if (!(m_accessToken.isNull())) {
+		result["AccessToken"] = Jellyfin::Support::toJsonValue<QString>(m_accessToken);
+	}
+			
+	
+	if (!(m_deviceId.isNull())) {
+		result["DeviceId"] = Jellyfin::Support::toJsonValue<QString>(m_deviceId);
+	}
+			
+	
+	if (!(m_appName.isNull())) {
+		result["AppName"] = Jellyfin::Support::toJsonValue<QString>(m_appName);
+	}
+			
+	
+	if (!(m_appVersion.isNull())) {
+		result["AppVersion"] = Jellyfin::Support::toJsonValue<QString>(m_appVersion);
+	}
+			
+	
+	if (!(m_deviceName.isNull())) {
+		result["DeviceName"] = Jellyfin::Support::toJsonValue<QString>(m_deviceName);
+	}
+			
+	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);		
+	result["IsActive"] = Jellyfin::Support::toJsonValue<bool>(m_isActive);		
+	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);		
+	
+	if (!(m_dateRevoked.isNull())) {
+		result["DateRevoked"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateRevoked);
+	}
+			
+	result["DateLastActivity"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastActivity);		
+	
+	if (!(m_userName.isNull())) {
+		result["UserName"] = Jellyfin::Support::toJsonValue<QString>(m_userName);
+	}
+		
 	return result;
 }
 

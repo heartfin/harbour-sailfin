@@ -66,11 +66,27 @@ void CreatePlaylistDto::setFromJson(QJsonObject source) {
 	
 QJsonObject CreatePlaylistDto::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Ids"] = Jellyfin::Support::toJsonValue<QStringList>(m_ids);
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_ids.size() == 0)) {
+		result["Ids"] = Jellyfin::Support::toJsonValue<QStringList>(m_ids);
+	}
+			
+	
+	if (!(m_userId.isNull())) {
+		result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
+	}
+			
+	
+	if (!(m_mediaType.isNull())) {
+		result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
+	}
+		
 	return result;
 }
 

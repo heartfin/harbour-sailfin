@@ -57,8 +57,8 @@ void AddVirtualFolderDto::setFromJson(QJsonObject source) {
 	
 QJsonObject AddVirtualFolderDto::toJson() const {
 	QJsonObject result;
-	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);
-
+	
+	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);	
 	return result;
 }
 

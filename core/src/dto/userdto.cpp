@@ -96,21 +96,53 @@ void UserDto::setFromJson(QJsonObject source) {
 	
 QJsonObject UserDto::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
-	result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
-	result["HasPassword"] = Jellyfin::Support::toJsonValue<bool>(m_hasPassword);
-	result["HasConfiguredPassword"] = Jellyfin::Support::toJsonValue<bool>(m_hasConfiguredPassword);
-	result["HasConfiguredEasyPassword"] = Jellyfin::Support::toJsonValue<bool>(m_hasConfiguredEasyPassword);
-	result["EnableAutoLogin"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableAutoLogin);
-	result["LastLoginDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastLoginDate);
-	result["LastActivityDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastActivityDate);
-	result["Configuration"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserConfiguration>>(m_configuration);
-	result["Policy"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserPolicy>>(m_policy);
-	result["PrimaryImageAspectRatio"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_primaryImageAspectRatio);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_serverId.isNull())) {
+		result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
+	}
+			
+	
+	if (!(m_serverName.isNull())) {
+		result["ServerName"] = Jellyfin::Support::toJsonValue<QString>(m_serverName);
+	}
+			
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
+	
+	if (!(m_primaryImageTag.isNull())) {
+		result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
+	}
+			
+	result["HasPassword"] = Jellyfin::Support::toJsonValue<bool>(m_hasPassword);		
+	result["HasConfiguredPassword"] = Jellyfin::Support::toJsonValue<bool>(m_hasConfiguredPassword);		
+	result["HasConfiguredEasyPassword"] = Jellyfin::Support::toJsonValue<bool>(m_hasConfiguredEasyPassword);		
+	
+	if (!(!m_enableAutoLogin.has_value())) {
+		result["EnableAutoLogin"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableAutoLogin);
+	}
+			
+	
+	if (!(m_lastLoginDate.isNull())) {
+		result["LastLoginDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastLoginDate);
+	}
+			
+	
+	if (!(m_lastActivityDate.isNull())) {
+		result["LastActivityDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastActivityDate);
+	}
+			
+	result["Configuration"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserConfiguration>>(m_configuration);		
+	result["Policy"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserPolicy>>(m_policy);		
+	
+	if (!(!m_primaryImageAspectRatio.has_value())) {
+		result["PrimaryImageAspectRatio"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_primaryImageAspectRatio);
+	}
+		
 	return result;
 }
 

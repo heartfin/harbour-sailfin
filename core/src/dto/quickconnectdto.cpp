@@ -57,8 +57,8 @@ void QuickConnectDto::setFromJson(QJsonObject source) {
 	
 QJsonObject QuickConnectDto::toJson() const {
 	QJsonObject result;
-	result["Token"] = Jellyfin::Support::toJsonValue<QString>(m_token);
-
+	
+	result["Token"] = Jellyfin::Support::toJsonValue<QString>(m_token);	
 	return result;
 }
 

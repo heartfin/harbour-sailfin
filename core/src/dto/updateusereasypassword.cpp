@@ -63,10 +63,18 @@ void UpdateUserEasyPassword::setFromJson(QJsonObject source) {
 	
 QJsonObject UpdateUserEasyPassword::toJson() const {
 	QJsonObject result;
-	result["NewPassword"] = Jellyfin::Support::toJsonValue<QString>(m_newPassword);
-	result["NewPw"] = Jellyfin::Support::toJsonValue<QString>(m_newPw);
-	result["ResetPassword"] = Jellyfin::Support::toJsonValue<bool>(m_resetPassword);
-
+	
+	
+	if (!(m_newPassword.isNull())) {
+		result["NewPassword"] = Jellyfin::Support::toJsonValue<QString>(m_newPassword);
+	}
+			
+	
+	if (!(m_newPw.isNull())) {
+		result["NewPw"] = Jellyfin::Support::toJsonValue<QString>(m_newPw);
+	}
+			
+	result["ResetPassword"] = Jellyfin::Support::toJsonValue<bool>(m_resetPassword);	
 	return result;
 }
 

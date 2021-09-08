@@ -60,9 +60,17 @@ void MediaUrl::setFromJson(QJsonObject source) {
 	
 QJsonObject MediaUrl::toJson() const {
 	QJsonObject result;
-	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-
+	
+	
+	if (!(m_url.isNull())) {
+		result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	}
+			
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+		
 	return result;
 }
 

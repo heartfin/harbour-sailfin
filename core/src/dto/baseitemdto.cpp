@@ -507,158 +507,718 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	
 QJsonObject BaseItemDto::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
-	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Etag"] = Jellyfin::Support::toJsonValue<QString>(m_etag);
-	result["SourceType"] = Jellyfin::Support::toJsonValue<QString>(m_sourceType);
-	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
-	result["DateLastMediaAdded"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastMediaAdded);
-	result["ExtraType"] = Jellyfin::Support::toJsonValue<QString>(m_extraType);
-	result["AirsBeforeSeasonNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_airsBeforeSeasonNumber);
-	result["AirsAfterSeasonNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_airsAfterSeasonNumber);
-	result["AirsBeforeEpisodeNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_airsBeforeEpisodeNumber);
-	result["CanDelete"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_canDelete);
-	result["CanDownload"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_canDownload);
-	result["HasSubtitles"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_hasSubtitles);
-	result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
-	result["PreferredMetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataCountryCode);
-	result["SupportsSync"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_supportsSync);
-	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-	result["SortName"] = Jellyfin::Support::toJsonValue<QString>(m_sortName);
-	result["ForcedSortName"] = Jellyfin::Support::toJsonValue<QString>(m_forcedSortName);
-	result["Video3DFormat"] = Jellyfin::Support::toJsonValue<Video3DFormat>(m_video3DFormat);
-	result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
-	result["ExternalUrls"] = Jellyfin::Support::toJsonValue<QList<ExternalUrl>>(m_externalUrls);
-	result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<MediaSourceInfo>>(m_mediaSources);
-	result["CriticRating"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_criticRating);
-	result["ProductionLocations"] = Jellyfin::Support::toJsonValue<QStringList>(m_productionLocations);
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["EnableMediaSourceDisplay"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableMediaSourceDisplay);
-	result["OfficialRating"] = Jellyfin::Support::toJsonValue<QString>(m_officialRating);
-	result["CustomRating"] = Jellyfin::Support::toJsonValue<QString>(m_customRating);
-	result["ChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_channelId);
-	result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
-	result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
-	result["Taglines"] = Jellyfin::Support::toJsonValue<QStringList>(m_taglines);
-	result["Genres"] = Jellyfin::Support::toJsonValue<QStringList>(m_genres);
-	result["CommunityRating"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_communityRating);
-	result["CumulativeRunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_cumulativeRunTimeTicks);
-	result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_runTimeTicks);
-	result["PlayAccess"] = Jellyfin::Support::toJsonValue<PlayAccess>(m_playAccess);
-	result["AspectRatio"] = Jellyfin::Support::toJsonValue<QString>(m_aspectRatio);
-	result["ProductionYear"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_productionYear);
-	result["IsPlaceHolder"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isPlaceHolder);
-	result["Number"] = Jellyfin::Support::toJsonValue<QString>(m_number);
-	result["ChannelNumber"] = Jellyfin::Support::toJsonValue<QString>(m_channelNumber);
-	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
-	result["IndexNumberEnd"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumberEnd);
-	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
-	result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<MediaUrl>>(m_remoteTrailers);
-	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
-	result["IsHD"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isHD);
-	result["IsFolder"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isFolder);
-	result["ParentId"] = Jellyfin::Support::toJsonValue<QString>(m_parentId);
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["People"] = Jellyfin::Support::toJsonValue<QList<BaseItemPerson>>(m_people);
-	result["Studios"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_studios);
-	result["GenreItems"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_genreItems);
-	result["ParentLogoItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentLogoItemId);
-	result["ParentBackdropItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentBackdropItemId);
-	result["ParentBackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_parentBackdropImageTags);
-	result["LocalTrailerCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_localTrailerCount);
-	result["UserData"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserItemDataDto>>(m_userData);
-	result["RecursiveItemCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_recursiveItemCount);
-	result["ChildCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_childCount);
-	result["SeriesName"] = Jellyfin::Support::toJsonValue<QString>(m_seriesName);
-	result["SeriesId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesId);
-	result["SeasonId"] = Jellyfin::Support::toJsonValue<QString>(m_seasonId);
-	result["SpecialFeatureCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_specialFeatureCount);
-	result["DisplayPreferencesId"] = Jellyfin::Support::toJsonValue<QString>(m_displayPreferencesId);
-	result["Status"] = Jellyfin::Support::toJsonValue<QString>(m_status);
-	result["AirTime"] = Jellyfin::Support::toJsonValue<QString>(m_airTime);
-	result["AirDays"] = Jellyfin::Support::toJsonValue<QList<DayOfWeek>>(m_airDays);
-	result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
-	result["PrimaryImageAspectRatio"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_primaryImageAspectRatio);
-	result["Artists"] = Jellyfin::Support::toJsonValue<QStringList>(m_artists);
-	result["ArtistItems"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_artistItems);
-	result["Album"] = Jellyfin::Support::toJsonValue<QString>(m_album);
-	result["CollectionType"] = Jellyfin::Support::toJsonValue<QString>(m_collectionType);
-	result["DisplayOrder"] = Jellyfin::Support::toJsonValue<QString>(m_displayOrder);
-	result["AlbumId"] = Jellyfin::Support::toJsonValue<QString>(m_albumId);
-	result["AlbumPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_albumPrimaryImageTag);
-	result["SeriesPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_seriesPrimaryImageTag);
-	result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtist);
-	result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_albumArtists);
-	result["SeasonName"] = Jellyfin::Support::toJsonValue<QString>(m_seasonName);
-	result["MediaStreams"] = Jellyfin::Support::toJsonValue<QList<MediaStream>>(m_mediaStreams);
-	result["VideoType"] = Jellyfin::Support::toJsonValue<VideoType>(m_videoType);
-	result["PartCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_partCount);
-	result["MediaSourceCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_mediaSourceCount);
-	result["ImageTags"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageTags);
-	result["BackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_backdropImageTags);
-	result["ScreenshotImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_screenshotImageTags);
-	result["ParentLogoImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentLogoImageTag);
-	result["ParentArtItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentArtItemId);
-	result["ParentArtImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentArtImageTag);
-	result["SeriesThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_seriesThumbImageTag);
-	result["ImageBlurHashes"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageBlurHashes);
-	result["SeriesStudio"] = Jellyfin::Support::toJsonValue<QString>(m_seriesStudio);
-	result["ParentThumbItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbItemId);
-	result["ParentThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbImageTag);
-	result["ParentPrimaryImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentPrimaryImageItemId);
-	result["ParentPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentPrimaryImageTag);
-	result["Chapters"] = Jellyfin::Support::toJsonValue<QList<ChapterInfo>>(m_chapters);
-	result["LocationType"] = Jellyfin::Support::toJsonValue<LocationType>(m_locationType);
-	result["IsoType"] = Jellyfin::Support::toJsonValue<IsoType>(m_isoType);
-	result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
-	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
-	result["LockedFields"] = Jellyfin::Support::toJsonValue<QList<MetadataField>>(m_lockedFields);
-	result["TrailerCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_trailerCount);
-	result["MovieCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_movieCount);
-	result["SeriesCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_seriesCount);
-	result["ProgramCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_programCount);
-	result["EpisodeCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_episodeCount);
-	result["SongCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_songCount);
-	result["AlbumCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_albumCount);
-	result["ArtistCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_artistCount);
-	result["MusicVideoCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_musicVideoCount);
-	result["LockData"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_lockData);
-	result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
-	result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
-	result["CameraMake"] = Jellyfin::Support::toJsonValue<QString>(m_cameraMake);
-	result["CameraModel"] = Jellyfin::Support::toJsonValue<QString>(m_cameraModel);
-	result["Software"] = Jellyfin::Support::toJsonValue<QString>(m_software);
-	result["ExposureTime"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_exposureTime);
-	result["FocalLength"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_focalLength);
-	result["ImageOrientation"] = Jellyfin::Support::toJsonValue<ImageOrientation>(m_imageOrientation);
-	result["Aperture"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_aperture);
-	result["ShutterSpeed"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_shutterSpeed);
-	result["Latitude"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_latitude);
-	result["Longitude"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_longitude);
-	result["Altitude"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_altitude);
-	result["IsoSpeedRating"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_isoSpeedRating);
-	result["SeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesTimerId);
-	result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
-	result["ChannelPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_channelPrimaryImageTag);
-	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
-	result["CompletionPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_completionPercentage);
-	result["IsRepeat"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isRepeat);
-	result["EpisodeTitle"] = Jellyfin::Support::toJsonValue<QString>(m_episodeTitle);
-	result["ChannelType"] = Jellyfin::Support::toJsonValue<ChannelType>(m_channelType);
-	result["Audio"] = Jellyfin::Support::toJsonValue<ProgramAudio>(m_audio);
-	result["IsMovie"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isMovie);
-	result["IsSports"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isSports);
-	result["IsSeries"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isSeries);
-	result["IsLive"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isLive);
-	result["IsNews"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isNews);
-	result["IsKids"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isKids);
-	result["IsPremiere"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isPremiere);
-	result["TimerId"] = Jellyfin::Support::toJsonValue<QString>(m_timerId);
-	result["CurrentProgram"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_currentProgram);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_originalTitle.isNull())) {
+		result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
+	}
+			
+	
+	if (!(m_serverId.isNull())) {
+		result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
+	}
+			
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
+	
+	if (!(m_etag.isNull())) {
+		result["Etag"] = Jellyfin::Support::toJsonValue<QString>(m_etag);
+	}
+			
+	
+	if (!(m_sourceType.isNull())) {
+		result["SourceType"] = Jellyfin::Support::toJsonValue<QString>(m_sourceType);
+	}
+			
+	
+	if (!(m_playlistItemId.isNull())) {
+		result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
+	}
+			
+	
+	if (!(m_dateCreated.isNull())) {
+		result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);
+	}
+			
+	
+	if (!(m_dateLastMediaAdded.isNull())) {
+		result["DateLastMediaAdded"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastMediaAdded);
+	}
+			
+	
+	if (!(m_extraType.isNull())) {
+		result["ExtraType"] = Jellyfin::Support::toJsonValue<QString>(m_extraType);
+	}
+			
+	
+	if (!(!m_airsBeforeSeasonNumber.has_value())) {
+		result["AirsBeforeSeasonNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_airsBeforeSeasonNumber);
+	}
+			
+	
+	if (!(!m_airsAfterSeasonNumber.has_value())) {
+		result["AirsAfterSeasonNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_airsAfterSeasonNumber);
+	}
+			
+	
+	if (!(!m_airsBeforeEpisodeNumber.has_value())) {
+		result["AirsBeforeEpisodeNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_airsBeforeEpisodeNumber);
+	}
+			
+	
+	if (!(!m_canDelete.has_value())) {
+		result["CanDelete"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_canDelete);
+	}
+			
+	
+	if (!(!m_canDownload.has_value())) {
+		result["CanDownload"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_canDownload);
+	}
+			
+	
+	if (!(!m_hasSubtitles.has_value())) {
+		result["HasSubtitles"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_hasSubtitles);
+	}
+			
+	
+	if (!(m_preferredMetadataLanguage.isNull())) {
+		result["PreferredMetadataLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataLanguage);
+	}
+			
+	
+	if (!(m_preferredMetadataCountryCode.isNull())) {
+		result["PreferredMetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataCountryCode);
+	}
+			
+	
+	if (!(!m_supportsSync.has_value())) {
+		result["SupportsSync"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_supportsSync);
+	}
+			
+	
+	if (!(m_container.isNull())) {
+		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+			
+	
+	if (!(m_sortName.isNull())) {
+		result["SortName"] = Jellyfin::Support::toJsonValue<QString>(m_sortName);
+	}
+			
+	
+	if (!(m_forcedSortName.isNull())) {
+		result["ForcedSortName"] = Jellyfin::Support::toJsonValue<QString>(m_forcedSortName);
+	}
+			
+	result["Video3DFormat"] = Jellyfin::Support::toJsonValue<Video3DFormat>(m_video3DFormat);		
+	
+	if (!(m_premiereDate.isNull())) {
+		result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
+	}
+			
+	
+	if (!(m_externalUrls.size() == 0)) {
+		result["ExternalUrls"] = Jellyfin::Support::toJsonValue<QList<ExternalUrl>>(m_externalUrls);
+	}
+			
+	
+	if (!(m_mediaSources.size() == 0)) {
+		result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<MediaSourceInfo>>(m_mediaSources);
+	}
+			
+	
+	if (!(!m_criticRating.has_value())) {
+		result["CriticRating"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_criticRating);
+	}
+			
+	
+	if (!(m_productionLocations.size() == 0)) {
+		result["ProductionLocations"] = Jellyfin::Support::toJsonValue<QStringList>(m_productionLocations);
+	}
+			
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(!m_enableMediaSourceDisplay.has_value())) {
+		result["EnableMediaSourceDisplay"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableMediaSourceDisplay);
+	}
+			
+	
+	if (!(m_officialRating.isNull())) {
+		result["OfficialRating"] = Jellyfin::Support::toJsonValue<QString>(m_officialRating);
+	}
+			
+	
+	if (!(m_customRating.isNull())) {
+		result["CustomRating"] = Jellyfin::Support::toJsonValue<QString>(m_customRating);
+	}
+			
+	
+	if (!(m_channelId.isNull())) {
+		result["ChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_channelId);
+	}
+			
+	
+	if (!(m_channelName.isNull())) {
+		result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
+	}
+			
+	
+	if (!(m_overview.isNull())) {
+		result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	}
+			
+	
+	if (!(m_taglines.size() == 0)) {
+		result["Taglines"] = Jellyfin::Support::toJsonValue<QStringList>(m_taglines);
+	}
+			
+	
+	if (!(m_genres.size() == 0)) {
+		result["Genres"] = Jellyfin::Support::toJsonValue<QStringList>(m_genres);
+	}
+			
+	
+	if (!(!m_communityRating.has_value())) {
+		result["CommunityRating"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_communityRating);
+	}
+			
+	
+	if (!(!m_cumulativeRunTimeTicks.has_value())) {
+		result["CumulativeRunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_cumulativeRunTimeTicks);
+	}
+			
+	
+	if (!(!m_runTimeTicks.has_value())) {
+		result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_runTimeTicks);
+	}
+			
+	result["PlayAccess"] = Jellyfin::Support::toJsonValue<PlayAccess>(m_playAccess);		
+	
+	if (!(m_aspectRatio.isNull())) {
+		result["AspectRatio"] = Jellyfin::Support::toJsonValue<QString>(m_aspectRatio);
+	}
+			
+	
+	if (!(!m_productionYear.has_value())) {
+		result["ProductionYear"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_productionYear);
+	}
+			
+	
+	if (!(!m_isPlaceHolder.has_value())) {
+		result["IsPlaceHolder"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isPlaceHolder);
+	}
+			
+	
+	if (!(m_number.isNull())) {
+		result["Number"] = Jellyfin::Support::toJsonValue<QString>(m_number);
+	}
+			
+	
+	if (!(m_channelNumber.isNull())) {
+		result["ChannelNumber"] = Jellyfin::Support::toJsonValue<QString>(m_channelNumber);
+	}
+			
+	
+	if (!(!m_indexNumber.has_value())) {
+		result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
+	}
+			
+	
+	if (!(!m_indexNumberEnd.has_value())) {
+		result["IndexNumberEnd"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumberEnd);
+	}
+			
+	
+	if (!(!m_parentIndexNumber.has_value())) {
+		result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
+	}
+			
+	
+	if (!(m_remoteTrailers.size() == 0)) {
+		result["RemoteTrailers"] = Jellyfin::Support::toJsonValue<QList<MediaUrl>>(m_remoteTrailers);
+	}
+			
+	
+	if (!(m_providerIds.isEmpty())) {
+		result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
+	}
+			
+	
+	if (!(!m_isHD.has_value())) {
+		result["IsHD"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isHD);
+	}
+			
+	
+	if (!(!m_isFolder.has_value())) {
+		result["IsFolder"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isFolder);
+	}
+			
+	
+	if (!(m_parentId.isNull())) {
+		result["ParentId"] = Jellyfin::Support::toJsonValue<QString>(m_parentId);
+	}
+			
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_people.size() == 0)) {
+		result["People"] = Jellyfin::Support::toJsonValue<QList<BaseItemPerson>>(m_people);
+	}
+			
+	
+	if (!(m_studios.size() == 0)) {
+		result["Studios"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_studios);
+	}
+			
+	
+	if (!(m_genreItems.size() == 0)) {
+		result["GenreItems"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_genreItems);
+	}
+			
+	
+	if (!(m_parentLogoItemId.isNull())) {
+		result["ParentLogoItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentLogoItemId);
+	}
+			
+	
+	if (!(m_parentBackdropItemId.isNull())) {
+		result["ParentBackdropItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentBackdropItemId);
+	}
+			
+	
+	if (!(m_parentBackdropImageTags.size() == 0)) {
+		result["ParentBackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_parentBackdropImageTags);
+	}
+			
+	
+	if (!(!m_localTrailerCount.has_value())) {
+		result["LocalTrailerCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_localTrailerCount);
+	}
+			
+	result["UserData"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserItemDataDto>>(m_userData);		
+	
+	if (!(!m_recursiveItemCount.has_value())) {
+		result["RecursiveItemCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_recursiveItemCount);
+	}
+			
+	
+	if (!(!m_childCount.has_value())) {
+		result["ChildCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_childCount);
+	}
+			
+	
+	if (!(m_seriesName.isNull())) {
+		result["SeriesName"] = Jellyfin::Support::toJsonValue<QString>(m_seriesName);
+	}
+			
+	
+	if (!(m_seriesId.isNull())) {
+		result["SeriesId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesId);
+	}
+			
+	
+	if (!(m_seasonId.isNull())) {
+		result["SeasonId"] = Jellyfin::Support::toJsonValue<QString>(m_seasonId);
+	}
+			
+	
+	if (!(!m_specialFeatureCount.has_value())) {
+		result["SpecialFeatureCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_specialFeatureCount);
+	}
+			
+	
+	if (!(m_displayPreferencesId.isNull())) {
+		result["DisplayPreferencesId"] = Jellyfin::Support::toJsonValue<QString>(m_displayPreferencesId);
+	}
+			
+	
+	if (!(m_status.isNull())) {
+		result["Status"] = Jellyfin::Support::toJsonValue<QString>(m_status);
+	}
+			
+	
+	if (!(m_airTime.isNull())) {
+		result["AirTime"] = Jellyfin::Support::toJsonValue<QString>(m_airTime);
+	}
+			
+	
+	if (!(m_airDays.size() == 0)) {
+		result["AirDays"] = Jellyfin::Support::toJsonValue<QList<DayOfWeek>>(m_airDays);
+	}
+			
+	
+	if (!(m_tags.size() == 0)) {
+		result["Tags"] = Jellyfin::Support::toJsonValue<QStringList>(m_tags);
+	}
+			
+	
+	if (!(!m_primaryImageAspectRatio.has_value())) {
+		result["PrimaryImageAspectRatio"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_primaryImageAspectRatio);
+	}
+			
+	
+	if (!(m_artists.size() == 0)) {
+		result["Artists"] = Jellyfin::Support::toJsonValue<QStringList>(m_artists);
+	}
+			
+	
+	if (!(m_artistItems.size() == 0)) {
+		result["ArtistItems"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_artistItems);
+	}
+			
+	
+	if (!(m_album.isNull())) {
+		result["Album"] = Jellyfin::Support::toJsonValue<QString>(m_album);
+	}
+			
+	
+	if (!(m_collectionType.isNull())) {
+		result["CollectionType"] = Jellyfin::Support::toJsonValue<QString>(m_collectionType);
+	}
+			
+	
+	if (!(m_displayOrder.isNull())) {
+		result["DisplayOrder"] = Jellyfin::Support::toJsonValue<QString>(m_displayOrder);
+	}
+			
+	
+	if (!(m_albumId.isNull())) {
+		result["AlbumId"] = Jellyfin::Support::toJsonValue<QString>(m_albumId);
+	}
+			
+	
+	if (!(m_albumPrimaryImageTag.isNull())) {
+		result["AlbumPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_albumPrimaryImageTag);
+	}
+			
+	
+	if (!(m_seriesPrimaryImageTag.isNull())) {
+		result["SeriesPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_seriesPrimaryImageTag);
+	}
+			
+	
+	if (!(m_albumArtist.isNull())) {
+		result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtist);
+	}
+			
+	
+	if (!(m_albumArtists.size() == 0)) {
+		result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QList<NameGuidPair>>(m_albumArtists);
+	}
+			
+	
+	if (!(m_seasonName.isNull())) {
+		result["SeasonName"] = Jellyfin::Support::toJsonValue<QString>(m_seasonName);
+	}
+			
+	
+	if (!(m_mediaStreams.size() == 0)) {
+		result["MediaStreams"] = Jellyfin::Support::toJsonValue<QList<MediaStream>>(m_mediaStreams);
+	}
+			
+	result["VideoType"] = Jellyfin::Support::toJsonValue<VideoType>(m_videoType);		
+	
+	if (!(!m_partCount.has_value())) {
+		result["PartCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_partCount);
+	}
+			
+	
+	if (!(!m_mediaSourceCount.has_value())) {
+		result["MediaSourceCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_mediaSourceCount);
+	}
+			
+	
+	if (!(m_imageTags.isEmpty())) {
+		result["ImageTags"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageTags);
+	}
+			
+	
+	if (!(m_backdropImageTags.size() == 0)) {
+		result["BackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_backdropImageTags);
+	}
+			
+	
+	if (!(m_screenshotImageTags.size() == 0)) {
+		result["ScreenshotImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_screenshotImageTags);
+	}
+			
+	
+	if (!(m_parentLogoImageTag.isNull())) {
+		result["ParentLogoImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentLogoImageTag);
+	}
+			
+	
+	if (!(m_parentArtItemId.isNull())) {
+		result["ParentArtItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentArtItemId);
+	}
+			
+	
+	if (!(m_parentArtImageTag.isNull())) {
+		result["ParentArtImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentArtImageTag);
+	}
+			
+	
+	if (!(m_seriesThumbImageTag.isNull())) {
+		result["SeriesThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_seriesThumbImageTag);
+	}
+			
+	
+	if (!(m_imageBlurHashes.isEmpty())) {
+		result["ImageBlurHashes"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_imageBlurHashes);
+	}
+			
+	
+	if (!(m_seriesStudio.isNull())) {
+		result["SeriesStudio"] = Jellyfin::Support::toJsonValue<QString>(m_seriesStudio);
+	}
+			
+	
+	if (!(m_parentThumbItemId.isNull())) {
+		result["ParentThumbItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbItemId);
+	}
+			
+	
+	if (!(m_parentThumbImageTag.isNull())) {
+		result["ParentThumbImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentThumbImageTag);
+	}
+			
+	
+	if (!(m_parentPrimaryImageItemId.isNull())) {
+		result["ParentPrimaryImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentPrimaryImageItemId);
+	}
+			
+	
+	if (!(m_parentPrimaryImageTag.isNull())) {
+		result["ParentPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_parentPrimaryImageTag);
+	}
+			
+	
+	if (!(m_chapters.size() == 0)) {
+		result["Chapters"] = Jellyfin::Support::toJsonValue<QList<ChapterInfo>>(m_chapters);
+	}
+			
+	result["LocationType"] = Jellyfin::Support::toJsonValue<LocationType>(m_locationType);		
+	result["IsoType"] = Jellyfin::Support::toJsonValue<IsoType>(m_isoType);		
+	
+	if (!(m_mediaType.isNull())) {
+		result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
+	}
+			
+	
+	if (!(m_endDate.isNull())) {
+		result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
+	}
+			
+	
+	if (!(m_lockedFields.size() == 0)) {
+		result["LockedFields"] = Jellyfin::Support::toJsonValue<QList<MetadataField>>(m_lockedFields);
+	}
+			
+	
+	if (!(!m_trailerCount.has_value())) {
+		result["TrailerCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_trailerCount);
+	}
+			
+	
+	if (!(!m_movieCount.has_value())) {
+		result["MovieCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_movieCount);
+	}
+			
+	
+	if (!(!m_seriesCount.has_value())) {
+		result["SeriesCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_seriesCount);
+	}
+			
+	
+	if (!(!m_programCount.has_value())) {
+		result["ProgramCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_programCount);
+	}
+			
+	
+	if (!(!m_episodeCount.has_value())) {
+		result["EpisodeCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_episodeCount);
+	}
+			
+	
+	if (!(!m_songCount.has_value())) {
+		result["SongCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_songCount);
+	}
+			
+	
+	if (!(!m_albumCount.has_value())) {
+		result["AlbumCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_albumCount);
+	}
+			
+	
+	if (!(!m_artistCount.has_value())) {
+		result["ArtistCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_artistCount);
+	}
+			
+	
+	if (!(!m_musicVideoCount.has_value())) {
+		result["MusicVideoCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_musicVideoCount);
+	}
+			
+	
+	if (!(!m_lockData.has_value())) {
+		result["LockData"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_lockData);
+	}
+			
+	
+	if (!(!m_width.has_value())) {
+		result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
+	}
+			
+	
+	if (!(!m_height.has_value())) {
+		result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
+	}
+			
+	
+	if (!(m_cameraMake.isNull())) {
+		result["CameraMake"] = Jellyfin::Support::toJsonValue<QString>(m_cameraMake);
+	}
+			
+	
+	if (!(m_cameraModel.isNull())) {
+		result["CameraModel"] = Jellyfin::Support::toJsonValue<QString>(m_cameraModel);
+	}
+			
+	
+	if (!(m_software.isNull())) {
+		result["Software"] = Jellyfin::Support::toJsonValue<QString>(m_software);
+	}
+			
+	
+	if (!(!m_exposureTime.has_value())) {
+		result["ExposureTime"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_exposureTime);
+	}
+			
+	
+	if (!(!m_focalLength.has_value())) {
+		result["FocalLength"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_focalLength);
+	}
+			
+	result["ImageOrientation"] = Jellyfin::Support::toJsonValue<ImageOrientation>(m_imageOrientation);		
+	
+	if (!(!m_aperture.has_value())) {
+		result["Aperture"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_aperture);
+	}
+			
+	
+	if (!(!m_shutterSpeed.has_value())) {
+		result["ShutterSpeed"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_shutterSpeed);
+	}
+			
+	
+	if (!(!m_latitude.has_value())) {
+		result["Latitude"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_latitude);
+	}
+			
+	
+	if (!(!m_longitude.has_value())) {
+		result["Longitude"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_longitude);
+	}
+			
+	
+	if (!(!m_altitude.has_value())) {
+		result["Altitude"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_altitude);
+	}
+			
+	
+	if (!(!m_isoSpeedRating.has_value())) {
+		result["IsoSpeedRating"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_isoSpeedRating);
+	}
+			
+	
+	if (!(m_seriesTimerId.isNull())) {
+		result["SeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesTimerId);
+	}
+			
+	
+	if (!(m_programId.isNull())) {
+		result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
+	}
+			
+	
+	if (!(m_channelPrimaryImageTag.isNull())) {
+		result["ChannelPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_channelPrimaryImageTag);
+	}
+			
+	
+	if (!(m_startDate.isNull())) {
+		result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
+	}
+			
+	
+	if (!(!m_completionPercentage.has_value())) {
+		result["CompletionPercentage"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_completionPercentage);
+	}
+			
+	
+	if (!(!m_isRepeat.has_value())) {
+		result["IsRepeat"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isRepeat);
+	}
+			
+	
+	if (!(m_episodeTitle.isNull())) {
+		result["EpisodeTitle"] = Jellyfin::Support::toJsonValue<QString>(m_episodeTitle);
+	}
+			
+	result["ChannelType"] = Jellyfin::Support::toJsonValue<ChannelType>(m_channelType);		
+	result["Audio"] = Jellyfin::Support::toJsonValue<ProgramAudio>(m_audio);		
+	
+	if (!(!m_isMovie.has_value())) {
+		result["IsMovie"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isMovie);
+	}
+			
+	
+	if (!(!m_isSports.has_value())) {
+		result["IsSports"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isSports);
+	}
+			
+	
+	if (!(!m_isSeries.has_value())) {
+		result["IsSeries"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isSeries);
+	}
+			
+	
+	if (!(!m_isLive.has_value())) {
+		result["IsLive"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isLive);
+	}
+			
+	
+	if (!(!m_isNews.has_value())) {
+		result["IsNews"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isNews);
+	}
+			
+	
+	if (!(!m_isKids.has_value())) {
+		result["IsKids"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isKids);
+	}
+			
+	
+	if (!(!m_isPremiere.has_value())) {
+		result["IsPremiere"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isPremiere);
+	}
+			
+	
+	if (!(m_timerId.isNull())) {
+		result["TimerId"] = Jellyfin::Support::toJsonValue<QString>(m_timerId);
+	}
+			
+	result["CurrentProgram"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_currentProgram);	
 	return result;
 }
 

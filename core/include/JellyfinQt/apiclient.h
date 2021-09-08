@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QHostInfo>
 #include <QObject>
 #include <QQmlListProperty>
+#include <QQmlParserStatus>
 #include <QScopedPointer>
 #include <QString>
 #include <QSysInfo>
@@ -85,10 +86,11 @@ class ApiClientPrivate;
  *
  * These steps might change. I'm considering decoupling CredentialsManager from this class to clean some code up.
  */
-class ApiClient : public QObject {
+class ApiClient : public QObject, public QQmlParserStatus {
     friend class WebSocket;
     friend class PlaybackManager;
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
     Q_DECLARE_PRIVATE(ApiClient);
 public:
     explicit ApiClient(QObject *parent = nullptr);
@@ -239,6 +241,9 @@ protected slots:
     void credManagerServersListed(QStringList users);
     void credManagerUsersListed(const QString &server, QStringList users);
     void credManagerTokenRetrieved(const QString &server, const QString &user, const QString &token);
+
+    void classBegin() override;
+    void componentComplete() override;
 
 protected:
     /**

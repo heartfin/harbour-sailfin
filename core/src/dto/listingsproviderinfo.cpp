@@ -108,25 +108,93 @@ void ListingsProviderInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject ListingsProviderInfo::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["Username"] = Jellyfin::Support::toJsonValue<QString>(m_username);
-	result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
-	result["ListingsId"] = Jellyfin::Support::toJsonValue<QString>(m_listingsId);
-	result["ZipCode"] = Jellyfin::Support::toJsonValue<QString>(m_zipCode);
-	result["Country"] = Jellyfin::Support::toJsonValue<QString>(m_country);
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["EnabledTuners"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledTuners);
-	result["EnableAllTuners"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllTuners);
-	result["NewsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_newsCategories);
-	result["SportsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_sportsCategories);
-	result["KidsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_kidsCategories);
-	result["MovieCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_movieCategories);
-	result["ChannelMappings"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_channelMappings);
-	result["MoviePrefix"] = Jellyfin::Support::toJsonValue<QString>(m_moviePrefix);
-	result["PreferredLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredLanguage);
-	result["UserAgent"] = Jellyfin::Support::toJsonValue<QString>(m_userAgent);
-
+	
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_username.isNull())) {
+		result["Username"] = Jellyfin::Support::toJsonValue<QString>(m_username);
+	}
+			
+	
+	if (!(m_password.isNull())) {
+		result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
+	}
+			
+	
+	if (!(m_listingsId.isNull())) {
+		result["ListingsId"] = Jellyfin::Support::toJsonValue<QString>(m_listingsId);
+	}
+			
+	
+	if (!(m_zipCode.isNull())) {
+		result["ZipCode"] = Jellyfin::Support::toJsonValue<QString>(m_zipCode);
+	}
+			
+	
+	if (!(m_country.isNull())) {
+		result["Country"] = Jellyfin::Support::toJsonValue<QString>(m_country);
+	}
+			
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(m_enabledTuners.size() == 0)) {
+		result["EnabledTuners"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledTuners);
+	}
+			
+	result["EnableAllTuners"] = Jellyfin::Support::toJsonValue<bool>(m_enableAllTuners);		
+	
+	if (!(m_newsCategories.size() == 0)) {
+		result["NewsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_newsCategories);
+	}
+			
+	
+	if (!(m_sportsCategories.size() == 0)) {
+		result["SportsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_sportsCategories);
+	}
+			
+	
+	if (!(m_kidsCategories.size() == 0)) {
+		result["KidsCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_kidsCategories);
+	}
+			
+	
+	if (!(m_movieCategories.size() == 0)) {
+		result["MovieCategories"] = Jellyfin::Support::toJsonValue<QStringList>(m_movieCategories);
+	}
+			
+	
+	if (!(m_channelMappings.size() == 0)) {
+		result["ChannelMappings"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_channelMappings);
+	}
+			
+	
+	if (!(m_moviePrefix.isNull())) {
+		result["MoviePrefix"] = Jellyfin::Support::toJsonValue<QString>(m_moviePrefix);
+	}
+			
+	
+	if (!(m_preferredLanguage.isNull())) {
+		result["PreferredLanguage"] = Jellyfin::Support::toJsonValue<QString>(m_preferredLanguage);
+	}
+			
+	
+	if (!(m_userAgent.isNull())) {
+		result["UserAgent"] = Jellyfin::Support::toJsonValue<QString>(m_userAgent);
+	}
+		
 	return result;
 }
 

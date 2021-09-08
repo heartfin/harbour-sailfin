@@ -195,54 +195,206 @@ void MediaStream::setFromJson(QJsonObject source) {
 	
 QJsonObject MediaStream::toJson() const {
 	QJsonObject result;
-	result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
-	result["CodecTag"] = Jellyfin::Support::toJsonValue<QString>(m_codecTag);
-	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
-	result["ColorRange"] = Jellyfin::Support::toJsonValue<QString>(m_colorRange);
-	result["ColorSpace"] = Jellyfin::Support::toJsonValue<QString>(m_colorSpace);
-	result["ColorTransfer"] = Jellyfin::Support::toJsonValue<QString>(m_colorTransfer);
-	result["ColorPrimaries"] = Jellyfin::Support::toJsonValue<QString>(m_colorPrimaries);
-	result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
-	result["TimeBase"] = Jellyfin::Support::toJsonValue<QString>(m_timeBase);
-	result["CodecTimeBase"] = Jellyfin::Support::toJsonValue<QString>(m_codecTimeBase);
-	result["Title"] = Jellyfin::Support::toJsonValue<QString>(m_title);
-	result["VideoRange"] = Jellyfin::Support::toJsonValue<QString>(m_videoRange);
-	result["localizedUndefined"] = Jellyfin::Support::toJsonValue<QString>(m_localizedUndefined);
-	result["localizedDefault"] = Jellyfin::Support::toJsonValue<QString>(m_localizedDefault);
-	result["localizedForced"] = Jellyfin::Support::toJsonValue<QString>(m_localizedForced);
-	result["DisplayTitle"] = Jellyfin::Support::toJsonValue<QString>(m_displayTitle);
-	result["NalLengthSize"] = Jellyfin::Support::toJsonValue<QString>(m_nalLengthSize);
-	result["IsInterlaced"] = Jellyfin::Support::toJsonValue<bool>(m_isInterlaced);
-	result["IsAVC"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isAVC);
-	result["ChannelLayout"] = Jellyfin::Support::toJsonValue<QString>(m_channelLayout);
-	result["BitRate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitRate);
-	result["BitDepth"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitDepth);
-	result["RefFrames"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_refFrames);
-	result["PacketLength"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_packetLength);
-	result["Channels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_channels);
-	result["SampleRate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_sampleRate);
-	result["IsDefault"] = Jellyfin::Support::toJsonValue<bool>(m_isDefault);
-	result["IsForced"] = Jellyfin::Support::toJsonValue<bool>(m_isForced);
-	result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
-	result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
-	result["AverageFrameRate"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_averageFrameRate);
-	result["RealFrameRate"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_realFrameRate);
-	result["Profile"] = Jellyfin::Support::toJsonValue<QString>(m_profile);
-	result["Type"] = Jellyfin::Support::toJsonValue<MediaStreamType>(m_type);
-	result["AspectRatio"] = Jellyfin::Support::toJsonValue<QString>(m_aspectRatio);
-	result["Index"] = Jellyfin::Support::toJsonValue<qint32>(m_index);
-	result["Score"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_score);
-	result["IsExternal"] = Jellyfin::Support::toJsonValue<bool>(m_isExternal);
-	result["DeliveryMethod"] = Jellyfin::Support::toJsonValue<SubtitleDeliveryMethod>(m_deliveryMethod);
-	result["DeliveryUrl"] = Jellyfin::Support::toJsonValue<QString>(m_deliveryUrl);
-	result["IsExternalUrl"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isExternalUrl);
-	result["IsTextSubtitleStream"] = Jellyfin::Support::toJsonValue<bool>(m_isTextSubtitleStream);
-	result["SupportsExternalStream"] = Jellyfin::Support::toJsonValue<bool>(m_supportsExternalStream);
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["PixelFormat"] = Jellyfin::Support::toJsonValue<QString>(m_pixelFormat);
-	result["Level"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_level);
-	result["IsAnamorphic"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isAnamorphic);
-
+	
+	
+	if (!(m_codec.isNull())) {
+		result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
+	}
+			
+	
+	if (!(m_codecTag.isNull())) {
+		result["CodecTag"] = Jellyfin::Support::toJsonValue<QString>(m_codecTag);
+	}
+			
+	
+	if (!(m_language.isNull())) {
+		result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);
+	}
+			
+	
+	if (!(m_colorRange.isNull())) {
+		result["ColorRange"] = Jellyfin::Support::toJsonValue<QString>(m_colorRange);
+	}
+			
+	
+	if (!(m_colorSpace.isNull())) {
+		result["ColorSpace"] = Jellyfin::Support::toJsonValue<QString>(m_colorSpace);
+	}
+			
+	
+	if (!(m_colorTransfer.isNull())) {
+		result["ColorTransfer"] = Jellyfin::Support::toJsonValue<QString>(m_colorTransfer);
+	}
+			
+	
+	if (!(m_colorPrimaries.isNull())) {
+		result["ColorPrimaries"] = Jellyfin::Support::toJsonValue<QString>(m_colorPrimaries);
+	}
+			
+	
+	if (!(m_comment.isNull())) {
+		result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
+	}
+			
+	
+	if (!(m_timeBase.isNull())) {
+		result["TimeBase"] = Jellyfin::Support::toJsonValue<QString>(m_timeBase);
+	}
+			
+	
+	if (!(m_codecTimeBase.isNull())) {
+		result["CodecTimeBase"] = Jellyfin::Support::toJsonValue<QString>(m_codecTimeBase);
+	}
+			
+	
+	if (!(m_title.isNull())) {
+		result["Title"] = Jellyfin::Support::toJsonValue<QString>(m_title);
+	}
+			
+	
+	if (!(m_videoRange.isNull())) {
+		result["VideoRange"] = Jellyfin::Support::toJsonValue<QString>(m_videoRange);
+	}
+			
+	
+	if (!(m_localizedUndefined.isNull())) {
+		result["localizedUndefined"] = Jellyfin::Support::toJsonValue<QString>(m_localizedUndefined);
+	}
+			
+	
+	if (!(m_localizedDefault.isNull())) {
+		result["localizedDefault"] = Jellyfin::Support::toJsonValue<QString>(m_localizedDefault);
+	}
+			
+	
+	if (!(m_localizedForced.isNull())) {
+		result["localizedForced"] = Jellyfin::Support::toJsonValue<QString>(m_localizedForced);
+	}
+			
+	
+	if (!(m_displayTitle.isNull())) {
+		result["DisplayTitle"] = Jellyfin::Support::toJsonValue<QString>(m_displayTitle);
+	}
+			
+	
+	if (!(m_nalLengthSize.isNull())) {
+		result["NalLengthSize"] = Jellyfin::Support::toJsonValue<QString>(m_nalLengthSize);
+	}
+			
+	result["IsInterlaced"] = Jellyfin::Support::toJsonValue<bool>(m_isInterlaced);		
+	
+	if (!(!m_isAVC.has_value())) {
+		result["IsAVC"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isAVC);
+	}
+			
+	
+	if (!(m_channelLayout.isNull())) {
+		result["ChannelLayout"] = Jellyfin::Support::toJsonValue<QString>(m_channelLayout);
+	}
+			
+	
+	if (!(!m_bitRate.has_value())) {
+		result["BitRate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitRate);
+	}
+			
+	
+	if (!(!m_bitDepth.has_value())) {
+		result["BitDepth"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitDepth);
+	}
+			
+	
+	if (!(!m_refFrames.has_value())) {
+		result["RefFrames"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_refFrames);
+	}
+			
+	
+	if (!(!m_packetLength.has_value())) {
+		result["PacketLength"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_packetLength);
+	}
+			
+	
+	if (!(!m_channels.has_value())) {
+		result["Channels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_channels);
+	}
+			
+	
+	if (!(!m_sampleRate.has_value())) {
+		result["SampleRate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_sampleRate);
+	}
+			
+	result["IsDefault"] = Jellyfin::Support::toJsonValue<bool>(m_isDefault);		
+	result["IsForced"] = Jellyfin::Support::toJsonValue<bool>(m_isForced);		
+	
+	if (!(!m_height.has_value())) {
+		result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
+	}
+			
+	
+	if (!(!m_width.has_value())) {
+		result["Width"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_width);
+	}
+			
+	
+	if (!(!m_averageFrameRate.has_value())) {
+		result["AverageFrameRate"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_averageFrameRate);
+	}
+			
+	
+	if (!(!m_realFrameRate.has_value())) {
+		result["RealFrameRate"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_realFrameRate);
+	}
+			
+	
+	if (!(m_profile.isNull())) {
+		result["Profile"] = Jellyfin::Support::toJsonValue<QString>(m_profile);
+	}
+			
+	result["Type"] = Jellyfin::Support::toJsonValue<MediaStreamType>(m_type);		
+	
+	if (!(m_aspectRatio.isNull())) {
+		result["AspectRatio"] = Jellyfin::Support::toJsonValue<QString>(m_aspectRatio);
+	}
+			
+	result["Index"] = Jellyfin::Support::toJsonValue<qint32>(m_index);		
+	
+	if (!(!m_score.has_value())) {
+		result["Score"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_score);
+	}
+			
+	result["IsExternal"] = Jellyfin::Support::toJsonValue<bool>(m_isExternal);		
+	result["DeliveryMethod"] = Jellyfin::Support::toJsonValue<SubtitleDeliveryMethod>(m_deliveryMethod);		
+	
+	if (!(m_deliveryUrl.isNull())) {
+		result["DeliveryUrl"] = Jellyfin::Support::toJsonValue<QString>(m_deliveryUrl);
+	}
+			
+	
+	if (!(!m_isExternalUrl.has_value())) {
+		result["IsExternalUrl"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isExternalUrl);
+	}
+			
+	result["IsTextSubtitleStream"] = Jellyfin::Support::toJsonValue<bool>(m_isTextSubtitleStream);		
+	result["SupportsExternalStream"] = Jellyfin::Support::toJsonValue<bool>(m_supportsExternalStream);		
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(m_pixelFormat.isNull())) {
+		result["PixelFormat"] = Jellyfin::Support::toJsonValue<QString>(m_pixelFormat);
+	}
+			
+	
+	if (!(!m_level.has_value())) {
+		result["Level"] = Jellyfin::Support::toJsonValue<std::optional<double>>(m_level);
+	}
+			
+	
+	if (!(!m_isAnamorphic.has_value())) {
+		result["IsAnamorphic"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isAnamorphic);
+	}
+		
 	return result;
 }
 

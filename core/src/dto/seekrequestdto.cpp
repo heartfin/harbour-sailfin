@@ -57,8 +57,8 @@ void SeekRequestDto::setFromJson(QJsonObject source) {
 	
 QJsonObject SeekRequestDto::toJson() const {
 	QJsonObject result;
-	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);
-
+	
+	result["PositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_positionTicks);	
 	return result;
 }
 

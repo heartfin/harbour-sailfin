@@ -63,10 +63,14 @@ void AuthenticationInfoQueryResult::setFromJson(QJsonObject source) {
 	
 QJsonObject AuthenticationInfoQueryResult::toJson() const {
 	QJsonObject result;
-	result["Items"] = Jellyfin::Support::toJsonValue<QList<AuthenticationInfo>>(m_items);
-	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);
-	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);
-
+	
+	
+	if (!(m_items.size() == 0)) {
+		result["Items"] = Jellyfin::Support::toJsonValue<QList<AuthenticationInfo>>(m_items);
+	}
+			
+	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);		
+	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);	
 	return result;
 }
 

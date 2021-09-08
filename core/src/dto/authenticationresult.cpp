@@ -66,11 +66,19 @@ void AuthenticationResult::setFromJson(QJsonObject source) {
 	
 QJsonObject AuthenticationResult::toJson() const {
 	QJsonObject result;
-	result["User"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserDto>>(m_user);
-	result["SessionInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<SessionInfo>>(m_sessionInfo);
-	result["AccessToken"] = Jellyfin::Support::toJsonValue<QString>(m_accessToken);
-	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
-
+	
+	result["User"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserDto>>(m_user);		
+	result["SessionInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<SessionInfo>>(m_sessionInfo);		
+	
+	if (!(m_accessToken.isNull())) {
+		result["AccessToken"] = Jellyfin::Support::toJsonValue<QString>(m_accessToken);
+	}
+			
+	
+	if (!(m_serverId.isNull())) {
+		result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
+	}
+		
 	return result;
 }
 

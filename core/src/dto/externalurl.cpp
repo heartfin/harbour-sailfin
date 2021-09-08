@@ -60,9 +60,17 @@ void ExternalUrl::setFromJson(QJsonObject source) {
 	
 QJsonObject ExternalUrl::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_url.isNull())) {
+		result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	}
+		
 	return result;
 }
 

@@ -138,35 +138,103 @@ void TimerInfoDto::setFromJson(QJsonObject source) {
 	
 QJsonObject TimerInfoDto::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
-	result["ExternalId"] = Jellyfin::Support::toJsonValue<QString>(m_externalId);
-	result["ChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_channelId);
-	result["ExternalChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_externalChannelId);
-	result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
-	result["ChannelPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_channelPrimaryImageTag);
-	result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
-	result["ExternalProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_externalProgramId);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
-	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
-	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
-	result["ServiceName"] = Jellyfin::Support::toJsonValue<QString>(m_serviceName);
-	result["Priority"] = Jellyfin::Support::toJsonValue<qint32>(m_priority);
-	result["PrePaddingSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_prePaddingSeconds);
-	result["PostPaddingSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_postPaddingSeconds);
-	result["IsPrePaddingRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isPrePaddingRequired);
-	result["ParentBackdropItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentBackdropItemId);
-	result["ParentBackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_parentBackdropImageTags);
-	result["IsPostPaddingRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isPostPaddingRequired);
-	result["KeepUntil"] = Jellyfin::Support::toJsonValue<KeepUntil>(m_keepUntil);
-	result["Status"] = Jellyfin::Support::toJsonValue<RecordingStatus>(m_status);
-	result["SeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesTimerId);
-	result["ExternalSeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_externalSeriesTimerId);
-	result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_runTimeTicks);
-	result["ProgramInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_programInfo);
-
+	
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_type.isNull())) {
+		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
+	}
+			
+	
+	if (!(m_serverId.isNull())) {
+		result["ServerId"] = Jellyfin::Support::toJsonValue<QString>(m_serverId);
+	}
+			
+	
+	if (!(m_externalId.isNull())) {
+		result["ExternalId"] = Jellyfin::Support::toJsonValue<QString>(m_externalId);
+	}
+			
+	result["ChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_channelId);		
+	
+	if (!(m_externalChannelId.isNull())) {
+		result["ExternalChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_externalChannelId);
+	}
+			
+	
+	if (!(m_channelName.isNull())) {
+		result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
+	}
+			
+	
+	if (!(m_channelPrimaryImageTag.isNull())) {
+		result["ChannelPrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_channelPrimaryImageTag);
+	}
+			
+	
+	if (!(m_programId.isNull())) {
+		result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
+	}
+			
+	
+	if (!(m_externalProgramId.isNull())) {
+		result["ExternalProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_externalProgramId);
+	}
+			
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_overview.isNull())) {
+		result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	}
+			
+	result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);		
+	result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);		
+	
+	if (!(m_serviceName.isNull())) {
+		result["ServiceName"] = Jellyfin::Support::toJsonValue<QString>(m_serviceName);
+	}
+			
+	result["Priority"] = Jellyfin::Support::toJsonValue<qint32>(m_priority);		
+	result["PrePaddingSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_prePaddingSeconds);		
+	result["PostPaddingSeconds"] = Jellyfin::Support::toJsonValue<qint32>(m_postPaddingSeconds);		
+	result["IsPrePaddingRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isPrePaddingRequired);		
+	
+	if (!(m_parentBackdropItemId.isNull())) {
+		result["ParentBackdropItemId"] = Jellyfin::Support::toJsonValue<QString>(m_parentBackdropItemId);
+	}
+			
+	
+	if (!(m_parentBackdropImageTags.size() == 0)) {
+		result["ParentBackdropImageTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_parentBackdropImageTags);
+	}
+			
+	result["IsPostPaddingRequired"] = Jellyfin::Support::toJsonValue<bool>(m_isPostPaddingRequired);		
+	result["KeepUntil"] = Jellyfin::Support::toJsonValue<KeepUntil>(m_keepUntil);		
+	result["Status"] = Jellyfin::Support::toJsonValue<RecordingStatus>(m_status);		
+	
+	if (!(m_seriesTimerId.isNull())) {
+		result["SeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesTimerId);
+	}
+			
+	
+	if (!(m_externalSeriesTimerId.isNull())) {
+		result["ExternalSeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_externalSeriesTimerId);
+	}
+			
+	
+	if (!(!m_runTimeTicks.has_value())) {
+		result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_runTimeTicks);
+	}
+			
+	result["ProgramInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_programInfo);	
 	return result;
 }
 

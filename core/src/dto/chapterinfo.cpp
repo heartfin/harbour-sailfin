@@ -69,12 +69,24 @@ void ChapterInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject ChapterInfo::toJson() const {
 	QJsonObject result;
-	result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_startPositionTicks);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["ImagePath"] = Jellyfin::Support::toJsonValue<QString>(m_imagePath);
-	result["ImageDateModified"] = Jellyfin::Support::toJsonValue<QDateTime>(m_imageDateModified);
-	result["ImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_imageTag);
-
+	
+	result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_startPositionTicks);		
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_imagePath.isNull())) {
+		result["ImagePath"] = Jellyfin::Support::toJsonValue<QString>(m_imagePath);
+	}
+			
+	result["ImageDateModified"] = Jellyfin::Support::toJsonValue<QDateTime>(m_imageDateModified);		
+	
+	if (!(m_imageTag.isNull())) {
+		result["ImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_imageTag);
+	}
+		
 	return result;
 }
 

@@ -63,10 +63,18 @@ void ForgotPasswordResult::setFromJson(QJsonObject source) {
 	
 QJsonObject ForgotPasswordResult::toJson() const {
 	QJsonObject result;
-	result["Action"] = Jellyfin::Support::toJsonValue<ForgotPasswordAction>(m_action);
-	result["PinFile"] = Jellyfin::Support::toJsonValue<QString>(m_pinFile);
-	result["PinExpirationDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_pinExpirationDate);
-
+	
+	result["Action"] = Jellyfin::Support::toJsonValue<ForgotPasswordAction>(m_action);		
+	
+	if (!(m_pinFile.isNull())) {
+		result["PinFile"] = Jellyfin::Support::toJsonValue<QString>(m_pinFile);
+	}
+			
+	
+	if (!(m_pinExpirationDate.isNull())) {
+		result["PinExpirationDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_pinExpirationDate);
+	}
+		
 	return result;
 }
 

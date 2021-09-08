@@ -60,9 +60,17 @@ void MediaPathInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject MediaPathInfo::toJson() const {
 	QJsonObject result;
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["NetworkPath"] = Jellyfin::Support::toJsonValue<QString>(m_networkPath);
-
+	
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(m_networkPath.isNull())) {
+		result["NetworkPath"] = Jellyfin::Support::toJsonValue<QString>(m_networkPath);
+	}
+		
 	return result;
 }
 

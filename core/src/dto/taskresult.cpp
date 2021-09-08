@@ -78,15 +78,35 @@ void TaskResult::setFromJson(QJsonObject source) {
 	
 QJsonObject TaskResult::toJson() const {
 	QJsonObject result;
-	result["StartTimeUtc"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startTimeUtc);
-	result["EndTimeUtc"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endTimeUtc);
-	result["Status"] = Jellyfin::Support::toJsonValue<TaskCompletionStatus>(m_status);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["ErrorMessage"] = Jellyfin::Support::toJsonValue<QString>(m_errorMessage);
-	result["LongErrorMessage"] = Jellyfin::Support::toJsonValue<QString>(m_longErrorMessage);
-
+	
+	result["StartTimeUtc"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startTimeUtc);		
+	result["EndTimeUtc"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endTimeUtc);		
+	result["Status"] = Jellyfin::Support::toJsonValue<TaskCompletionStatus>(m_status);		
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_key.isNull())) {
+		result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
+	}
+			
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_errorMessage.isNull())) {
+		result["ErrorMessage"] = Jellyfin::Support::toJsonValue<QString>(m_errorMessage);
+	}
+			
+	
+	if (!(m_longErrorMessage.isNull())) {
+		result["LongErrorMessage"] = Jellyfin::Support::toJsonValue<QString>(m_longErrorMessage);
+	}
+		
 	return result;
 }
 

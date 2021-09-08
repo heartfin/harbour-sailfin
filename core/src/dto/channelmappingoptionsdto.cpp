@@ -66,11 +66,27 @@ void ChannelMappingOptionsDto::setFromJson(QJsonObject source) {
 	
 QJsonObject ChannelMappingOptionsDto::toJson() const {
 	QJsonObject result;
-	result["TunerChannels"] = Jellyfin::Support::toJsonValue<QList<TunerChannelMapping>>(m_tunerChannels);
-	result["ProviderChannels"] = Jellyfin::Support::toJsonValue<QList<NameIdPair>>(m_providerChannels);
-	result["Mappings"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_mappings);
-	result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
-
+	
+	
+	if (!(m_tunerChannels.size() == 0)) {
+		result["TunerChannels"] = Jellyfin::Support::toJsonValue<QList<TunerChannelMapping>>(m_tunerChannels);
+	}
+			
+	
+	if (!(m_providerChannels.size() == 0)) {
+		result["ProviderChannels"] = Jellyfin::Support::toJsonValue<QList<NameIdPair>>(m_providerChannels);
+	}
+			
+	
+	if (!(m_mappings.size() == 0)) {
+		result["Mappings"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_mappings);
+	}
+			
+	
+	if (!(m_providerName.isNull())) {
+		result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
+	}
+		
 	return result;
 }
 

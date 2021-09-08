@@ -66,11 +66,27 @@ void CountryInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject CountryInfo::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
-	result["TwoLetterISORegionName"] = Jellyfin::Support::toJsonValue<QString>(m_twoLetterISORegionName);
-	result["ThreeLetterISORegionName"] = Jellyfin::Support::toJsonValue<QString>(m_threeLetterISORegionName);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_displayName.isNull())) {
+		result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
+	}
+			
+	
+	if (!(m_twoLetterISORegionName.isNull())) {
+		result["TwoLetterISORegionName"] = Jellyfin::Support::toJsonValue<QString>(m_twoLetterISORegionName);
+	}
+			
+	
+	if (!(m_threeLetterISORegionName.isNull())) {
+		result["ThreeLetterISORegionName"] = Jellyfin::Support::toJsonValue<QString>(m_threeLetterISORegionName);
+	}
+		
 	return result;
 }
 

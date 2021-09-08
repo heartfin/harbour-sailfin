@@ -87,18 +87,50 @@ void PlaybackStopInfo::setFromJson(QJsonObject source) {
 	
 QJsonObject PlaybackStopInfo::toJson() const {
 	QJsonObject result;
-	result["Item"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_item);
-	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
-	result["SessionId"] = Jellyfin::Support::toJsonValue<QString>(m_sessionId);
-	result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
-	result["PositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_positionTicks);
-	result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
-	result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
-	result["Failed"] = Jellyfin::Support::toJsonValue<bool>(m_failed);
-	result["NextMediaType"] = Jellyfin::Support::toJsonValue<QString>(m_nextMediaType);
-	result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
-	result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QueueItem>>(m_nowPlayingQueue);
-
+	
+	result["Item"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_item);		
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);		
+	
+	if (!(m_sessionId.isNull())) {
+		result["SessionId"] = Jellyfin::Support::toJsonValue<QString>(m_sessionId);
+	}
+			
+	
+	if (!(m_mediaSourceId.isNull())) {
+		result["MediaSourceId"] = Jellyfin::Support::toJsonValue<QString>(m_mediaSourceId);
+	}
+			
+	
+	if (!(!m_positionTicks.has_value())) {
+		result["PositionTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_positionTicks);
+	}
+			
+	
+	if (!(m_liveStreamId.isNull())) {
+		result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
+	}
+			
+	
+	if (!(m_playSessionId.isNull())) {
+		result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
+	}
+			
+	result["Failed"] = Jellyfin::Support::toJsonValue<bool>(m_failed);		
+	
+	if (!(m_nextMediaType.isNull())) {
+		result["NextMediaType"] = Jellyfin::Support::toJsonValue<QString>(m_nextMediaType);
+	}
+			
+	
+	if (!(m_playlistItemId.isNull())) {
+		result["PlaylistItemId"] = Jellyfin::Support::toJsonValue<QString>(m_playlistItemId);
+	}
+			
+	
+	if (!(m_nowPlayingQueue.size() == 0)) {
+		result["NowPlayingQueue"] = Jellyfin::Support::toJsonValue<QList<QueueItem>>(m_nowPlayingQueue);
+	}
+		
 	return result;
 }
 

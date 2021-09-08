@@ -63,10 +63,18 @@ void ValidatePathDto::setFromJson(QJsonObject source) {
 	
 QJsonObject ValidatePathDto::toJson() const {
 	QJsonObject result;
-	result["ValidateWritable"] = Jellyfin::Support::toJsonValue<bool>(m_validateWritable);
-	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	result["IsFile"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isFile);
-
+	
+	result["ValidateWritable"] = Jellyfin::Support::toJsonValue<bool>(m_validateWritable);		
+	
+	if (!(m_path.isNull())) {
+		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
+	}
+			
+	
+	if (!(!m_isFile.has_value())) {
+		result["IsFile"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isFile);
+	}
+		
 	return result;
 }
 

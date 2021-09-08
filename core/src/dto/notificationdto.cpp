@@ -78,15 +78,35 @@ void NotificationDto::setFromJson(QJsonObject source) {
 	
 QJsonObject NotificationDto::toJson() const {
 	QJsonObject result;
-	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
-	result["Date"] = Jellyfin::Support::toJsonValue<QDateTime>(m_date);
-	result["IsRead"] = Jellyfin::Support::toJsonValue<bool>(m_isRead);
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
-	result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
-	result["Level"] = Jellyfin::Support::toJsonValue<NotificationLevel>(m_level);
-
+	
+	
+	if (!(m_jellyfinId.isNull())) {
+		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
+	}
+			
+	
+	if (!(m_userId.isNull())) {
+		result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
+	}
+			
+	result["Date"] = Jellyfin::Support::toJsonValue<QDateTime>(m_date);		
+	result["IsRead"] = Jellyfin::Support::toJsonValue<bool>(m_isRead);		
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_description.isNull())) {
+		result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
+	}
+			
+	
+	if (!(m_url.isNull())) {
+		result["Url"] = Jellyfin::Support::toJsonValue<QString>(m_url);
+	}
+			
+	result["Level"] = Jellyfin::Support::toJsonValue<NotificationLevel>(m_level);	
 	return result;
 }
 

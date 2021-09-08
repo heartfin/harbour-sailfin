@@ -90,19 +90,63 @@ void RemoteSearchResult::setFromJson(QJsonObject source) {
 	
 QJsonObject RemoteSearchResult::toJson() const {
 	QJsonObject result;
-	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
-	result["ProductionYear"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_productionYear);
-	result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
-	result["IndexNumberEnd"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumberEnd);
-	result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
-	result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
-	result["ImageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_imageUrl);
-	result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
-	result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
-	result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QSharedPointer<RemoteSearchResult>>(m_albumArtist);
-	result["Artists"] = Jellyfin::Support::toJsonValue<QList<RemoteSearchResult>>(m_artists);
-
+	
+	
+	if (!(m_name.isNull())) {
+		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_providerIds.isEmpty())) {
+		result["ProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_providerIds);
+	}
+			
+	
+	if (!(!m_productionYear.has_value())) {
+		result["ProductionYear"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_productionYear);
+	}
+			
+	
+	if (!(!m_indexNumber.has_value())) {
+		result["IndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumber);
+	}
+			
+	
+	if (!(!m_indexNumberEnd.has_value())) {
+		result["IndexNumberEnd"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_indexNumberEnd);
+	}
+			
+	
+	if (!(!m_parentIndexNumber.has_value())) {
+		result["ParentIndexNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_parentIndexNumber);
+	}
+			
+	
+	if (!(m_premiereDate.isNull())) {
+		result["PremiereDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_premiereDate);
+	}
+			
+	
+	if (!(m_imageUrl.isNull())) {
+		result["ImageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_imageUrl);
+	}
+			
+	
+	if (!(m_searchProviderName.isNull())) {
+		result["SearchProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_searchProviderName);
+	}
+			
+	
+	if (!(m_overview.isNull())) {
+		result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
+	}
+			
+	result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QSharedPointer<RemoteSearchResult>>(m_albumArtist);		
+	
+	if (!(m_artists.size() == 0)) {
+		result["Artists"] = Jellyfin::Support::toJsonValue<QList<RemoteSearchResult>>(m_artists);
+	}
+		
 	return result;
 }
 

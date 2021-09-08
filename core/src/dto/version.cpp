@@ -72,13 +72,13 @@ void Version::setFromJson(QJsonObject source) {
 	
 QJsonObject Version::toJson() const {
 	QJsonObject result;
-	result["Major"] = Jellyfin::Support::toJsonValue<qint32>(m_major);
-	result["Minor"] = Jellyfin::Support::toJsonValue<qint32>(m_minor);
-	result["Build"] = Jellyfin::Support::toJsonValue<qint32>(m_build);
-	result["Revision"] = Jellyfin::Support::toJsonValue<qint32>(m_revision);
-	result["MajorRevision"] = Jellyfin::Support::toJsonValue<qint32>(m_majorRevision);
-	result["MinorRevision"] = Jellyfin::Support::toJsonValue<qint32>(m_minorRevision);
-
+	
+	result["Major"] = Jellyfin::Support::toJsonValue<qint32>(m_major);		
+	result["Minor"] = Jellyfin::Support::toJsonValue<qint32>(m_minor);		
+	result["Build"] = Jellyfin::Support::toJsonValue<qint32>(m_build);		
+	result["Revision"] = Jellyfin::Support::toJsonValue<qint32>(m_revision);		
+	result["MajorRevision"] = Jellyfin::Support::toJsonValue<qint32>(m_majorRevision);		
+	result["MinorRevision"] = Jellyfin::Support::toJsonValue<qint32>(m_minorRevision);	
 	return result;
 }
 

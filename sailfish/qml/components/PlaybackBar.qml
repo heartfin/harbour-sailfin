@@ -158,8 +158,8 @@ PanelBackground {
                 verticalCenter: playButton.verticalCenter
             }
             icon.source: "image://theme/icon-m-shuffle"
-            enabled: false
             opacity: 0
+            onClicked: Notices.show(qsTr("Shuffle not yet implemented"))
         }
 
         IconButton {

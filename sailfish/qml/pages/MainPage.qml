@@ -167,7 +167,6 @@ Page {
     onStatusChanged: {
         if (status == PageStatus.Active) {
             appWindow.itemData = null
-            loadModels(false)
         }
     }
 

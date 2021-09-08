@@ -62,20 +62,40 @@ Dialog {
                 description: qsTr("Sailfin will try to search for Jellyfin servers on your local network automatically")
 
                 menu: ContextMenu {
-                MenuItem {
-                    // Special values are cool, aren't they?
-                    readonly property string _address: manualAddress.text
-                    readonly property string _name: manualAddress.text
-                    text: qsTr("enter address manually")
-                }
-                Repeater {
-                    model: serverModel
-                    delegate: MenuItem {
-                        readonly property string _address: address
-                        readonly property string _name: name
-                        text: qsTr("%1 - %2").arg(name).arg(address)
+                    MenuItem {
+                        // Special values are cool, aren't they?
+                        readonly property string _address: manualAddress.text
+                        readonly property string _name: manualAddress.text
+                        text: qsTr("enter address manually")
                     }
-                }
+                    Repeater {
+                        model: serverModel
+                        delegate: MenuItem {
+                            readonly property string _address: address
+                            readonly property string _name: name
+                            // No, this isn't a clever hack that depends on how ComboBox is
+                            // implemented. It really isn't, trust me!
+                            readonly property string description: address
+                            height: Theme.itemSizeSmall + Theme.paddingSmall * 2
+                            text: name
+                            topPadding: -description.implicitHeight
+
+                            Label {
+                                id: description
+                                text: parent.description
+                                anchors {
+                                    verticalCenter: parent.verticalCenter
+                                    verticalCenterOffset: parent.implicitHeight + Theme.paddingSmall
+                                }
+                                width: parent.width
+                                horizontalAlignment: parent.horizontalAlignment
+                                verticalAlignment: parent.verticalAlignment
+                                font.pixelSize: Theme.fontSizeExtraSmall
+                                truncationMode: parent.truncationMode
+                                color: Theme.rgba(parent.color, Theme.opacityHigh)
+                            }
+                        }
+                    }
             }
         }
 

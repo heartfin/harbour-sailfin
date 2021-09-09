@@ -53,6 +53,24 @@ ApplicationWindow {
         Keys.onEscapePressed: pop()
     }
 
+    NotificationList {
+        id: notifList
+        anchors {
+            right: parent.right
+            bottom: parent.bottom
+        }
+        width: Math.min(parent.width, 400)
+        height: parent.height
+
+        Connections {
+            target: ApiClient.eventbus
+            onDisplayMessage: {
+                console.log("Displaying message: ", header, ": ", message)
+                notifList.addNotification(header, message, timeout)
+            }
+        }
+    }
+
     Connections {
         target: ApiClient
         onSetupRequired:  { pageStack.replace(Qt.resolvedUrl("pages/setup/ServerSelectPage.qml")); }

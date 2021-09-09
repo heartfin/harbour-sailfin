@@ -28,7 +28,7 @@ QString uuidToString(const QUuid &source) {
     QString str = source.toString();
     // Convert {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx} (length: 38)
     //      to xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx       (lenght: 32)
-    return QString(str.mid(1, 8) + str.mid(10, 4) + str.mid(15, 4) + str.mid(20, 4) + str.mid(25 + 12));
+    return QString(str.mid(1, 8) + str.mid(10, 4) + str.mid(15, 4) + str.mid(20, 4) + str.mid(25, 12));
 }
 QUuid stringToUuid(const QString &source) {
     if (source.size() != 32) throw ParseException("Error while trying to parse JSON value as QUid: invalid length");

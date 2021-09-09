@@ -37,6 +37,19 @@ extern template QDateTime fromJsonValue<QDateTime>(const QJsonValue &source, con
 extern template QVariant fromJsonValue<QVariant>(const QJsonValue &source, convertType<QVariant>);
 extern template QUuid fromJsonValue<QUuid>(const QJsonValue &source, convertType<QUuid>);
 
+extern template QJsonValue toJsonValue<int>(const int &source, convertType<int>);
+extern template QJsonValue toJsonValue<qint64>(const qint64 &source, convertType<qint64>);
+extern template QJsonValue toJsonValue<bool>(const bool &source, convertType<bool>);
+extern template QJsonValue toJsonValue<QString>(const QString &source, convertType<QString>);
+extern template QJsonValue toJsonValue<QStringList>(const QStringList &source, convertType<QStringList>);
+extern template QJsonValue toJsonValue<QJsonObject>(const QJsonObject &source, convertType<QJsonObject>);
+extern template QJsonValue toJsonValue<double>(const double &source, convertType<double>);
+extern template QJsonValue toJsonValue<float>(const float &source, convertType<float>);
+extern template QJsonValue toJsonValue<QDateTime>(const QDateTime &source, convertType<QDateTime>);
+extern template QJsonValue toJsonValue<QVariant>(const QVariant &source, convertType<QVariant>);
+extern template QJsonValue toJsonValue<QUuid>(const QUuid &source, convertType<QUuid>);
+
+
 extern template QString toString(const QUuid &source, convertType<QUuid>);
 extern template QString toString(const qint32 &source, convertType<qint32>);
 extern template QString toString(const qint64 &source, convertType<qint64>);

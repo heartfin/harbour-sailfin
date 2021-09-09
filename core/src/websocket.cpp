@@ -23,7 +23,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <JellyfinQt/dto/generalcommandtype.h>
 #include <JellyfinQt/dto/useritemdatadto.h>
 
+Q_LOGGING_CATEGORY(jellyfinWebSocket, "jellyfin.websocket");
+
 namespace Jellyfin {
+
 WebSocket::WebSocket(ApiClient *client)
     : QObject (client), m_apiClient(client){
     connect(&m_webSocket, &QWebSocket::connected, this, &WebSocket::onConnected);
@@ -31,11 +34,17 @@ WebSocket::WebSocket(ApiClient *client)
     connect(&m_webSocket, static_cast<void (QWebSocket::*)(QAbstractSocket::SocketError)>(&QWebSocket::error),
             this, [this](QAbstractSocket::SocketError error) {
         Q_UNUSED(error)
-        qDebug() << "Connection error: " <<  m_webSocket.errorString();
+        qCDebug(jellyfinWebSocket) << "Connection error: " <<  m_webSocket.errorString();
     });
     connect(&m_webSocket, &QWebSocket::stateChanged, this, &WebSocket::onWebsocketStateChanged);
     connect(&m_keepAliveTimer, &QTimer::timeout, this, &WebSocket::sendKeepAlive);
     connect(&m_retryTimer, &QTimer::timeout, this, &WebSocket::open);
+    connect(client, &ApiClient::authenticatedChanged, this, [this](bool isAuthenticated) {
+        if (isAuthenticated) {
+            this->m_reconnectAttempt = 0;
+            this->open();
+        }
+    });
 }
 
 void WebSocket::open() {
@@ -48,7 +57,7 @@ void WebSocket::open() {
     connectionUrl.setQuery(query);
     m_webSocket.open(connectionUrl);
     m_reconnectAttempt++;
-    qDebug() << "Opening WebSocket connection to " << m_webSocket.requestUrl() << ", connect attempt " << m_reconnectAttempt;
+    qCDebug(jellyfinWebSocket) << "Opening WebSocket connection to " << m_webSocket.requestUrl() << ", connect attempt " << m_reconnectAttempt;
 }
 
 void WebSocket::onConnected() {
@@ -66,25 +75,47 @@ void WebSocket::onDisconnected() {
 }
 
 void WebSocket::textMessageReceived(const QString &message) {
-    qDebug() << "WebSocket: message received: " << message;
+    qCDebug(jellyfinWebSocket) << "message received: " << message;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
     if (doc.isNull() || !doc.isObject()) {
-        qWarning() << "Malformed message received over WebSocket: parse error or root not an object.";
+        qCWarning(jellyfinWebSocket()) << "Malformed message received over WebSocket: parse error or root not an object.";
         return;
     }
     QJsonObject messageRoot = doc.object();
     if (!messageRoot.contains("MessageType")) {
-        qWarning() << "Malformed message received over WebSocket: no MessageType set.";
+        qCWarning(jellyfinWebSocket) << "Malformed message received over WebSocket: no MessageType set.";
         return;
     }
 
     // Convert the type so we can use it in our enums.
-    QString messageTypeStr = messageRoot["MessageType"].toString();
+    QString messageType = messageRoot["MessageType"].toString();
     QJsonValue data = messageRoot["Data"];
-    if (messageTypeStr == QStringLiteral("ForceKeepAlive")) {
+    if (messageType == QStringLiteral("ForceKeepAlive")) {
         setupKeepAlive(data.toInt());
+    } else if (messageType == QStringLiteral("GeneralCommand")) {
+        try {
+        DTO::GeneralCommand command = DTO::GeneralCommand::fromJson(messageRoot["Data"].toObject());
+
+        // TODO: move command handling out of here
+        switch(command.name()) {
+        case DTO::GeneralCommandType::DisplayMessage:
+        {
+            QString header = command.arguments()["Header"].toString("Message from server");
+            QString text = command.arguments()["Text"].toString("<Empty message>");
+            int timeout = command.arguments()["TimeoutMs"].toInt(-1);
+            emit m_apiClient->eventbus()->displayMessage(header, text, timeout);
+        }
+            break;
+        default:
+            qCDebug(jellyfinWebSocket) << "Unhandled command: " << messageRoot["Data"];
+            break;
+        }
+
+        } catch(QException &e) {
+            qCWarning(jellyfinWebSocket()) << "Error while deserializing command: " << e.what();
+        }
     } else {
-        qDebug() << messageTypeStr;
+        qCDebug(jellyfinWebSocket) << messageType;
     }
     bool ok;
     /*MessageType messageType = static_cast<MessageType>(QMetaEnum::fromType<WebSocket::MessageType>().keyToValue(messageTypeStr.toLatin1(), &ok));
@@ -145,6 +176,6 @@ void WebSocket::sendMessage(MessageType type, QJsonValue data) {
     root["Data"] = data;
     QString message = QJsonDocument(root).toJson(QJsonDocument::Compact);
     m_webSocket.sendTextMessage(message);
-    qDebug() << "Sent message: " << message;
+    qCDebug(jellyfinWebSocket) << "Sent message: " << message;
 }
 }

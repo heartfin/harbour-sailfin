@@ -465,7 +465,6 @@ void ApiClient::onUserDataChanged(const QString &itemId, UserData *userData) {
 void ApiClient::setAuthenticated(bool authenticated) {
     Q_D(ApiClient);
     d->authenticated = authenticated;
-    if (authenticated) d->webSocket->open();
     emit authenticatedChanged(authenticated);
 }
 

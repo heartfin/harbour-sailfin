@@ -55,7 +55,7 @@ ApplicationWindow {
 
     PlatformMediaControl {
         playbackManager: appWindow.playbackManager
-        canQuit: fasle
+        canQuit: false
         desktopFile: "harbour-sailfin"
         playerName: "Sailfin"
         canRaise: true
@@ -97,6 +97,23 @@ ApplicationWindow {
         function show(data) {
             previewSummary = data;
             publish();
+        }
+    }
+
+    Notification {
+        id: serverNotification
+        //: The application name for the notification
+        appName: qsTr("Sailfin")
+        appIcon: "harbour-sailfin"
+        isTransient: true
+    }
+
+    Connections {
+        target: apiClient.eventbus
+        onDisplayMessage: {
+            serverNotification.summary = header
+            serverNotification.body = message
+            serverNotification.publish()
         }
     }
 

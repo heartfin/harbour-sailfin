@@ -100,7 +100,7 @@ public:
     Q_PROPERTY(QString userId READ userId NOTIFY userIdChanged)
     Q_PROPERTY(QJsonObject deviceProfile READ deviceProfileJson NOTIFY deviceProfileChanged)
     Q_PROPERTY(QString version READ version)
-    Q_PROPERTY(EventBus *eventbus READ eventbus FINAL)
+    Q_PROPERTY(Jellyfin::EventBus *eventbus READ eventbus FINAL)
     Q_PROPERTY(Jellyfin::WebSocket *websocket READ websocket FINAL)
     Q_PROPERTY(QVariantList supportedCommands READ supportedCommands WRITE setSupportedCommands NOTIFY supportedCommandsChanged)
     Q_PROPERTY(Jellyfin::ViewModel::Settings *settings READ settings NOTIFY settingsChanged)

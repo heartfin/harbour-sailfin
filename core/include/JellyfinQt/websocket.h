@@ -33,8 +33,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "apiclient.h"
 
+Q_DECLARE_LOGGING_CATEGORY(jellyfinWebSocket);
+
 namespace Jellyfin {
 class ApiClient;
+
 
 namespace DTO {
     class UserItemDataDto;

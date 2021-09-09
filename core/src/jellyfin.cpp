@@ -27,6 +27,7 @@
 
 #include "JellyfinQt/apiclient.h"
 #include "JellyfinQt/apimodel.h"
+#include "JellyfinQt/eventbus.h"
 #include "JellyfinQt/serverdiscoverymodel.h"
 #include "JellyfinQt/websocket.h"
 #include "JellyfinQt/viewmodel/item.h"

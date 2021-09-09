@@ -18,5 +18,7 @@
         <file>qml/pages/DetailPage.qml</file>
         <file>qml/ApiClient.qml</file>
         <file>qml/qmldir</file>
+        <file>qml/components/NotificationList.qml</file>
+        <file>qml/components/Notification.qml</file>
     </qresource>
 </RCC>

@@ -45,9 +45,11 @@ signals:
 
     /**
      * @brief The server has requested to display an message to the user
+     * @param header The header of the message.
      * @param message The message to show.
+     * @param timeout Timeout in MS to show the message. -1: no timeout supplied.
      */
-    void displayMessage(const QString &message);
+    void displayMessage(const QString &header, const QString &message, int timeout = -1);
 };
 
 }

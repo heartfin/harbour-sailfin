@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <JellyfinQt/dto/generalcommand.h>
 #include <JellyfinQt/dto/generalcommandtype.h>
+#include <JellyfinQt/dto/playstaterequest.h>
 #include <JellyfinQt/dto/useritemdatadto.h>
 
 Q_LOGGING_CATEGORY(jellyfinWebSocket, "jellyfin.websocket");
@@ -113,6 +114,13 @@ void WebSocket::textMessageReceived(const QString &message) {
 
         } catch(QException &e) {
             qCWarning(jellyfinWebSocket()) << "Error while deserializing command: " << e.what();
+        }
+    } else if (messageType == QStringLiteral("Playstate")) {
+        try {
+            DTO::PlaystateRequest request = PlaystateRequest::fromJson(messageRoot["Data"].toObject());
+            emit m_apiClient->eventbus()->playstateCommandReceived(request);
+        } catch (QException &e) {
+            qCWarning(jellyfinWebSocket()) << "Error while deserialzing PlaystateRequest " << e.what();
         }
     } else {
         qCDebug(jellyfinWebSocket) << messageType;

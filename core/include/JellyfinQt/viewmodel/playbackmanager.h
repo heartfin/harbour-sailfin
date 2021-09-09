@@ -22,6 +22,7 @@
 #include <QAbstractItemModel>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QLoggingCategory>
 #include <QFuture>
 #include <QObject>
 #include <QtGlobal>
@@ -51,9 +52,13 @@ namespace Jellyfin {
 // Forward declaration of Jellyfin::ApiClient found in jellyfinapiclient.h
 class ApiClient;
 class ItemModel;
-class RemoteItem;
+
+namespace DTO {
+class PlaystateRequest;
+}
 
 namespace ViewModel {
+Q_DECLARE_LOGGING_CATEGORY(playbackManager);
 
 // Later defined in this file
 class ItemUrlFetcherThread;
@@ -99,6 +104,8 @@ public:
     Q_PROPERTY(qint64 position READ position NOTIFY positionChanged)
     Q_PROPERTY(bool hasNext READ hasNext NOTIFY hasNextChanged)
     Q_PROPERTY(bool hasPrevious READ hasPrevious NOTIFY hasPreviousChanged)
+    /// Whether playstate commands received over the websocket should be handled
+    Q_PROPERTY(bool handlePlaystateCommands READ handlePlaystateCommands WRITE setHandlePlaystateCommands NOTIFY handlePlaystateCommandsChanged)
 
     ViewModel::Item *item() const { return m_displayItem; }
     QSharedPointer<Model::Item> dataItem() const { return m_item; }
@@ -122,6 +129,9 @@ public:
     bool seekable() const { return m_mediaPlayer->isSeekable(); }
     QMediaPlayer::Error error () const;
     QString errorString() const;
+
+    bool handlePlaystateCommands() const { return m_handlePlaystateCommands; }
+    void setHandlePlaystateCommands(bool newHandlePlaystateCommands) { m_handlePlaystateCommands = newHandlePlaystateCommands; emit handlePlaystateCommandsChanged(m_handlePlaystateCommands); }
 signals:
     void itemChanged(ViewModel::Item *newItemId);
     void streamUrlChanged(const QString &newStreamUrl);
@@ -131,6 +141,9 @@ signals:
     void mediaPlayerChanged(QObject *newMediaPlayer);
     void resumePlaybackChanged(bool newResumePlayback);
     void playMethodChanged(PlayMethod newPlayMethod);
+
+    // Emitted when seek has been called.
+    void seeked(qint64 newPosition);
 
     // Current media player related property signals
     void mediaObjectChanged(QObject *newMediaObject);
@@ -146,6 +159,7 @@ signals:
     void errorStringChanged(const QString &newErrorString);
     void hasNextChanged(bool newHasNext);
     void hasPreviousChanged(bool newHasPrevious);
+    void handlePlaystateCommandsChanged(bool newHandlePlaystateCommands);
 public slots:
     /**
      * @brief playItem Replaces the current queue and plays the given item.
@@ -186,6 +200,8 @@ public slots:
      * @brief next Play the next track in the current playlist.
      */
     void next();
+
+    void handlePlaystateRequest(const DTO::PlaystateRequest &request);
 
 private slots:
     void mediaPlayerStateChanged(QMediaPlayer::State newState);
@@ -259,6 +275,8 @@ private:
     Model::Playlist *m_queue = nullptr;
     int m_queueIndex = 0;
     bool m_resumePlayback = true;
+
+    bool m_handlePlaystateCommands = true;
 
     // Helper methods
     void setItem(QSharedPointer<Model::Item> newItem);

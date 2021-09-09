@@ -25,6 +25,7 @@
 namespace Jellyfin {
 namespace DTO {
     class UserItemDataDto;
+    class PlaystateRequest;
 }
 
 /**
@@ -50,6 +51,8 @@ signals:
      * @param timeout Timeout in MS to show the message. -1: no timeout supplied.
      */
     void displayMessage(const QString &header, const QString &message, int timeout = -1);
+
+    void playstateCommandReceived(const Jellyfin::DTO::PlaystateRequest &request);
 };
 
 }

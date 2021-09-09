@@ -318,6 +318,11 @@ void PlayerAdaptor::onPositionChanged(qint64 position) {
     properties << "Position";
     notifyPropertiesChanged(properties);*/
 }
+
+void PlayerAdaptor::onSeeked(qint64 position) {
+    notifyPropertiesChanged(QStringList("Position"));
+}
+
 void PlayerAdaptor::onSeekableChanged(bool seekable) {
     QStringList properties;
     properties << "CanSeek";
@@ -330,6 +335,7 @@ void PlayerAdaptor::onPlaybackManagerChanged(ViewModel::PlaybackManager *newPlay
         connect(newPlaybackManager, &ViewModel::PlaybackManager::playbackStateChanged, this, &PlayerAdaptor::onPlaybackStateChanged);
         connect(newPlaybackManager, &ViewModel::PlaybackManager::mediaStatusChanged, this, &PlayerAdaptor::onMediaStatusChanged);
         connect(newPlaybackManager, &ViewModel::PlaybackManager::positionChanged, this, &PlayerAdaptor::onPositionChanged);
+        connect(newPlaybackManager, &ViewModel::PlaybackManager::seeked, this, &PlayerAdaptor::onSeeked);
         connect(newPlaybackManager, &ViewModel::PlaybackManager::seekableChanged, this, &PlayerAdaptor::onSeekableChanged);
     }
 }

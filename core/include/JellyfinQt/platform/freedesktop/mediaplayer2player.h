@@ -196,6 +196,7 @@ private slots:
     void onPositionChanged(qint64 position);
     void onSeekableChanged(bool seekable);
     void onPlaybackManagerChanged(ViewModel::PlaybackManager *newPlaybackManager);
+    void onSeeked(qint64 newPosition);
 };
 
 } // NS FreeDesktop

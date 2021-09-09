@@ -21,6 +21,8 @@
 
 #include "JellyfinQt/apimodel.h"
 #include "JellyfinQt/loader/http/mediainfo.h"
+#include <JellyfinQt/dto/playstatecommand.h>
+#include <JellyfinQt/dto/playstaterequest.h>
 
 // #include "JellyfinQt/DTO/dto.h"
 #include <JellyfinQt/loader/http/userlibrary.h>
@@ -36,6 +38,8 @@ namespace DTO {
 }
 
 namespace ViewModel {
+
+Q_LOGGING_CATEGORY(playbackManager, "jellyfin.viewmodel.playbackmanager")
 
 PlaybackManager::PlaybackManager(QObject *parent)
     : QObject(parent),
@@ -64,10 +68,18 @@ PlaybackManager::PlaybackManager(QObject *parent)
 }
 
 void PlaybackManager::setApiClient(ApiClient *apiClient) {
+    if (m_apiClient != nullptr) {
+        disconnect(m_apiClient->eventbus(), &EventBus::playstateCommandReceived, this, &PlaybackManager::handlePlaystateRequest);
+    }
+
     if (!m_item.isNull()) {
         m_item->setApiClient(apiClient);
     }
     m_apiClient = apiClient;
+
+    if (m_apiClient != nullptr) {
+        connect(m_apiClient->eventbus(), &EventBus::playstateCommandReceived, this, &PlaybackManager::handlePlaystateRequest);
+    }
 }
 
 void PlaybackManager::setItem(QSharedPointer<Model::Item> newItem) {
@@ -92,7 +104,7 @@ void PlaybackManager::setItem(QSharedPointer<Model::Item> newItem) {
 
     if (m_apiClient == nullptr) {
 
-        qWarning() << "apiClient is not set on this MediaSource instance! Aborting.";
+        qCWarning(playbackManager) << "apiClient is not set on this MediaSource instance! Aborting.";
         return;
     }
     // Deinitialize the streamUrl
@@ -171,7 +183,7 @@ void PlaybackManager::mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus ne
     if (newStatus == QMediaPlayer::LoadedMedia) {
         m_mediaPlayer->play();
         if (m_resumePlayback) {
-            qDebug() << "Resuming playback by seeking to " << (m_resumePosition / MS_TICK_FACTOR);
+            qCDebug(playbackManager) << "Resuming playback by seeking to " << (m_resumePosition / MS_TICK_FACTOR);
             m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
         }
     } else if (newStatus == QMediaPlayer::EndOfMedia) {
@@ -316,33 +328,82 @@ void PlaybackManager::stop() {
 void PlaybackManager::seek(qint64 pos) {
     m_mediaPlayer->setPosition(pos);
     postPlaybackInfo(Progress);
+    emit seeked(pos);
+}
+
+void PlaybackManager::handlePlaystateRequest(const DTO::PlaystateRequest &request) {
+    if (!m_handlePlaystateCommands) return;
+    switch(request.command()) {
+    case DTO::PlaystateCommand::Pause:
+        pause();
+        break;
+    case DTO::PlaystateCommand::PlayPause:
+        if (playbackState() != QMediaPlayer::PlayingState) {
+            play();
+        } else {
+            pause();
+        }
+        break;
+    case DTO::PlaystateCommand::Unpause:
+        play();
+        break;
+    case DTO::PlaystateCommand::Stop:
+        stop();
+        break;
+    case DTO::PlaystateCommand::NextTrack:
+        next();
+        break;
+    case DTO::PlaystateCommand::PreviousTrack:
+        previous();
+        break;
+    case DTO::PlaystateCommand::Seek:
+        if (request.seekPositionTicksNull()) {
+            qCWarning(playbackManager) << "Received seek command without position argument";
+        } else {
+            seek(request.seekPositionTicks().value() / MS_TICK_FACTOR);
+        }
+        break;
+    default:
+        qCDebug(playbackManager) << "Unhandled PlaystateCommand: " << request.command();
+        break;
+    }
 }
 
 void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
-    QJsonObject root;
+    DTO::PlaybackProgressInfo progress;
 
     if (m_item == nullptr) {
         qWarning() << "Item is null. Not posting playback info";
         return;
     }
-    root["ItemId"] = Support::toString(m_item->jellyfinId());
-    root["SessionId"] = m_playSessionId;
+    progress.setItemId(Support::toString(m_item->jellyfinId()));
+    progress.setSessionId(m_playSessionId);
+    progress.setRepeatMode(DTO::RepeatMode::RepeatNone);
 
     switch(type) {
     case Started: // FALLTHROUGH
-    case Progress:
+    case Progress: {
+        progress.setCanSeek(seekable());
+        progress.setIsPaused(m_mediaPlayer->state() == QMediaPlayer::PausedState);
+        progress.setIsMuted(false);
 
-        root["IsPaused"] = m_mediaPlayer->state() != QMediaPlayer::PlayingState;
-        root["IsMuted"] = false;
+        progress.setAudioStreamIndex(m_audioIndex);
+        progress.setSubtitleStreamIndex(m_subtitleIndex);
 
-        root["AudioStreamIndex"] = m_audioIndex;
-        root["SubtitleStreamIndex"] = m_subtitleIndex;
+        progress.setPlayMethod(m_playMethod);
+        progress.setPositionTicks(m_mediaPlayer->position() * MS_TICK_FACTOR);
 
-        root["PlayMethod"] = QVariant::fromValue(m_playMethod).toString();
-        root["PositionTicks"] = m_mediaPlayer->position() * MS_TICK_FACTOR;
+        QList<DTO::QueueItem> queue;
+        for (int i = 0; i < m_queue->listSize(); i++) {
+            DTO::QueueItem queueItem;
+            queueItem.setJellyfinId(m_queue->listAt(i)->jellyfinId());
+            queue.append(queueItem);
+        }
+        progress.setNowPlayingQueue(queue);
         break;
+    }
     case Stopped:
-        root["PositionTicks"] = m_stopPosition * MS_TICK_FACTOR;
+        progress.setPositionTicks(m_mediaPlayer->position() * MS_TICK_FACTOR);
         break;
     }
 
@@ -359,7 +420,7 @@ void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
         break;
     }
 
-    QNetworkReply *rep = m_apiClient->post(path, QJsonDocument(root));
+    QNetworkReply *rep = m_apiClient->post(path, QJsonDocument(progress.toJson()));
     connect(rep, &QNetworkReply::finished, this, [rep](){
         rep->deleteLater();
     });

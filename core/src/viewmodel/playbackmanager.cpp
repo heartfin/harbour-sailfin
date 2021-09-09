@@ -23,6 +23,7 @@
 #include "JellyfinQt/loader/http/mediainfo.h"
 
 // #include "JellyfinQt/DTO/dto.h"
+#include <JellyfinQt/loader/http/userlibrary.h>
 #include <JellyfinQt/dto/useritemdatadto.h>
 #include <JellyfinQt/viewmodel/settings.h>
 #include <utility>
@@ -98,6 +99,25 @@ void PlaybackManager::setItem(QSharedPointer<Model::Item> newItem) {
     if (shouldFetchStreamUrl) {
         setStreamUrl(QUrl());
         requestItemUrl(m_item);
+    } else {
+        setStreamUrl(m_nextStreamUrl);
+        m_mediaPlayer->play();
+    }
+}
+
+QMediaPlayer::Error PlaybackManager::error() const {
+    if (m_error != QMediaPlayer::NoError) {
+        return m_error;
+    } else {
+        return m_mediaPlayer->error();
+    }
+}
+
+QString PlaybackManager::errorString() const {
+    if (!m_errorString.isEmpty()) {
+        return m_errorString;
+    } else {
+        return m_mediaPlayer->errorString();
     }
 }
 
@@ -138,7 +158,6 @@ void PlaybackManager::mediaPlayerStateChanged(QMediaPlayer::State newState) {
         // We've stopped playing the media. Post a stop signal.
         m_updateTimer.stop();
         postPlaybackInfo(Stopped);
-        setPlaybackState(QMediaPlayer::StoppedState);
     } else {
         postPlaybackInfo(Progress);
     }
@@ -148,9 +167,9 @@ void PlaybackManager::mediaPlayerStateChanged(QMediaPlayer::State newState) {
 
 void PlaybackManager::mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus newStatus) {
     emit mediaStatusChanged(newStatus);
+    if (m_playbackState == QMediaPlayer::StoppedState) return;
     if (newStatus == QMediaPlayer::LoadedMedia) {
         m_mediaPlayer->play();
-        setPlaybackState(playbackState());
         if (m_resumePlayback) {
             qDebug() << "Resuming playback by seeking to " << (m_resumePosition / MS_TICK_FACTOR);
             m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
@@ -158,6 +177,9 @@ void PlaybackManager::mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus ne
     } else if (newStatus == QMediaPlayer::EndOfMedia) {
         if (m_queue->hasNext() && m_queue->totalSize() > 1) {
             next();
+        } else {
+            // End of the playlist
+            setPlaybackState(QMediaPlayer::StoppedState);
         }
     }
 }
@@ -180,11 +202,34 @@ void PlaybackManager::updatePlaybackInfo() {
 }
 
 void PlaybackManager::playItem(Item *item) {
+    this->playItem(item->data());
+}
+
+
+void PlaybackManager::playItem(QSharedPointer<Model::Item> item) {
     m_queue->clearList();
-    m_queue->appendToList(item->data());
-    setItem(item->data());
+    m_queue->appendToList(item);
+    setItem(item);
     emit hasNextChanged(m_queue->hasNext());
     emit hasPreviousChanged(m_queue->hasPrevious());
+    setPlaybackState(QMediaPlayer::PlayingState);
+}
+
+void PlaybackManager::playItemId(const QString &id) {
+    Jellyfin::Loader::HTTP::GetItemLoader *loader = new Jellyfin::Loader::HTTP::GetItemLoader(m_apiClient);
+    connect(loader, &Support::LoaderBase::error, this, [loader]() {
+        // TODO: error handling
+        loader->deleteLater();
+    });
+    connect(loader, &Support::LoaderBase::ready, this, [this, loader](){
+        this->playItem(QSharedPointer<Model::Item>::create(loader->result()));
+        loader->deleteLater();
+    });
+    Jellyfin::Loader::GetItemParams params;
+    params.setUserId(m_apiClient->userId());
+    params.setItemId(id);
+    loader->setParameters(params);
+    loader->load();
 }
 
 void PlaybackManager::playItemInList(ItemModel *playlist, int index) {
@@ -196,6 +241,7 @@ void PlaybackManager::playItemInList(ItemModel *playlist, int index) {
     setItem(playlist->itemAt(index));
     emit hasNextChanged(m_queue->hasNext());
     emit hasPreviousChanged(m_queue->hasPrevious());
+    setPlaybackState(QMediaPlayer::PlayingState);
 }
 
 void PlaybackManager::skipToItemIndex(int index) {
@@ -214,19 +260,32 @@ void PlaybackManager::skipToItemIndex(int index) {
     emit hasPreviousChanged(m_queue->hasPrevious());
 }
 
+void PlaybackManager::play() {
+    m_mediaPlayer->play();
+    if (m_queue->totalSize() != 0) {
+        setPlaybackState(QMediaPlayer::PlayingState);
+    }
+}
+
 void PlaybackManager::next() {
     m_mediaPlayer->stop();
     m_mediaPlayer->setMedia(QMediaContent());
 
-    if (m_nextItem.isNull()) {
+    if (m_nextItem.isNull() || !m_queue->nextItem()->sameAs(*m_nextItem)) {
         setItem(m_queue->nextItem());
+        m_nextStreamUrl = QString();
         m_queue->next();
         m_nextItem.clear();
     } else {
         m_item = m_nextItem;
+        m_streamUrl = m_nextStreamUrl;
+
+        m_nextItem.clear();
+        m_nextStreamUrl = QString();
+
+        m_queue->next();
         setItem(m_nextItem);
     }
-    m_mediaPlayer->play();
     emit hasNextChanged(m_queue->hasNext());
     emit hasPreviousChanged(m_queue->hasPrevious());
 }
@@ -234,15 +293,29 @@ void PlaybackManager::next() {
 void PlaybackManager::previous() {
     m_mediaPlayer->stop();
     m_mediaPlayer->setPosition(0);
-    m_nextStreamUrl = m_streamUrl;
+
+    m_item.clear();
     m_streamUrl = QString();
-    m_nextItem = m_item;
+
+    m_nextStreamUrl = m_streamUrl;
+    m_nextItem = m_queue->nextItem();
 
     m_queue->previous();
     setItem(m_queue->currentItem());
-    m_mediaPlayer->play();
+
     emit hasNextChanged(m_queue->hasNext());
     emit hasPreviousChanged(m_queue->hasPrevious());
+}
+
+void PlaybackManager::stop() {
+    setPlaybackState(QMediaPlayer::StoppedState);
+    m_queue->clearList();
+    m_mediaPlayer->stop();
+}
+
+void PlaybackManager::seek(qint64 pos) {
+    m_mediaPlayer->setPosition(pos);
+    postPlaybackInfo(Progress);
 }
 
 void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
@@ -411,7 +484,7 @@ void PlaybackManager::handlePlaybackInfoResponse(QString itemId, QString mediaTy
     }
     if (resultingUrl.isEmpty()) {
         qWarning() << "Could not find suitable media source for item " << itemId;
-        onItemErrorReceived(itemId, tr("Cannot fetch stream URL"));
+        onItemErrorReceived(itemId, tr("Could not find a suitable media source."));
     } else {
         emit playMethodChanged(playMethod);
         onItemUrlReceived(itemId, resultingUrl, playSession, playMethod);
@@ -428,6 +501,18 @@ void PlaybackManager::onItemUrlReceived(const QString &itemId, const QUrl &url,
         m_playMethod = playMethod;
         setStreamUrl(url);
         emit playMethodChanged(m_playMethod);
+
+        // Clear the error string if it is currently set
+        if (!m_errorString.isEmpty()) {
+            m_errorString.clear();
+            emit errorStringChanged(m_errorString);
+        }
+
+        if (m_error != QMediaPlayer::NoError) {
+            m_error = QMediaPlayer::NoError;
+            emit errorChanged(error());
+        }
+
         m_mediaPlayer->setMedia(QMediaContent(url));
         m_mediaPlayer->play();
     } else {
@@ -441,6 +526,13 @@ void PlaybackManager::onItemErrorReceived(const QString &itemId, const QString &
     Q_UNUSED(itemId)
     Q_UNUSED(errorString)
     qWarning() << "Error while fetching streaming url for " << itemId << ": " << errorString;
+    if (!m_item.isNull() && m_item->jellyfinId() == itemId) {
+        setStreamUrl(QUrl());
+        m_error = QMediaPlayer::ResourceError;
+        emit errorChanged(error());
+        m_errorString = errorString;
+        emit errorStringChanged(errorString);
+    }
 }
 
 } // NS ViewModel

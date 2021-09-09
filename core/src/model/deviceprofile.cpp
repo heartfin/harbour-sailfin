@@ -53,7 +53,7 @@ bool DeviceProfile::supportsMp3VideoAudio() {
 }
 
 int DeviceProfile::maxStreamingBitrate() {
-    return 5000000;
+    return 10 * 1024 * 1024;
 }
 
 DTO::DeviceProfile DeviceProfile::generateProfile() {

@@ -80,7 +80,7 @@ int NoShuffle::nextIndex() const {
         return (m_index + 1) % m_playlist->listSize();
     } else {
         if (m_index + 1 >= m_playlist->listSize()) {
-            return -1;
+            return 0;
         } else {
             return m_index + 1;
         }

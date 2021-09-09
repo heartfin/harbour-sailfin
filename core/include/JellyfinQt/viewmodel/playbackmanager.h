@@ -116,12 +116,12 @@ public:
     bool hasPrevious() const { return m_queue->hasPrevious(); }
 
     // Current media player related property getters
-    QMediaPlayer::State playbackState() const { return m_mediaPlayer->state()/*m_playbackState*/; }
+    QMediaPlayer::State playbackState() const { return m_playbackState; }
     QMediaPlayer::MediaStatus mediaStatus() const { return m_mediaPlayer->mediaStatus(); }
     bool hasVideo() const { return m_mediaPlayer->isVideoAvailable(); }
     bool seekable() const { return m_mediaPlayer->isSeekable(); }
-    QMediaPlayer::Error error () const { return m_mediaPlayer->error(); }
-    QString errorString() const { return m_mediaPlayer->errorString(); }
+    QMediaPlayer::Error error () const;
+    QString errorString() const;
 signals:
     void itemChanged(ViewModel::Item *newItemId);
     void streamUrlChanged(const QString &newStreamUrl);
@@ -148,23 +148,34 @@ signals:
     void hasPreviousChanged(bool newHasPrevious);
 public slots:
     /**
-     * @brief playItem Replaces the current queue and plays the item with the given id.
+     * @brief playItem Replaces the current queue and plays the given item.
      *
      * This will construct the Jellyfin::Item internally
      * and delete it later.
      * @param item The item to play.
      */
     void playItem(Item *item);
+
+    void playItem(QSharedPointer<Model::Item> item);
+    /**
+     * @brief playItem Replaces the current queue and plays the item with the given id.
+     *
+     * This will construct the Jellyfin::Item internally
+     * and delete it later.
+     * @param item The itemId to play.
+     */
+
+    void playItemId(const QString &itemId);
     void playItemInList(ItemModel *itemList, int index);
     /**
      * @brief skipToItemIndex Skips to an item in the current playlist
      * @param index The index to skip to
      */
     void skipToItemIndex(int index);
-    void play() { m_mediaPlayer->play(); }
-    void pause() { m_mediaPlayer->pause(); }
-    void seek(qint64 pos) { m_mediaPlayer->setPosition(pos); }
-    void stop() { m_mediaPlayer->stop(); }
+    void play();
+    void pause() { m_mediaPlayer->pause(); setPlaybackState(QMediaPlayer::PausedState); }
+    void seek(qint64 pos);
+    void stop();
 
     /**
      * @brief previous Play the previous track in the current playlist.
@@ -219,6 +230,8 @@ private:
     QString m_nextStreamUrl;
     QString m_playSessionId;
     QString m_nextPlaySessionId;
+    QString m_errorString;
+    QMediaPlayer::Error m_error = QMediaPlayer::NoError;
     /// The index of the mediastreams of the to-be-played item containing the audio
     int m_audioIndex = 0;
     /// The index of the mediastreams of the to-be-played item containing subtitles
@@ -236,8 +249,10 @@ private:
     bool m_autoOpen = false;
 
     QMediaPlayer::State m_oldState = QMediaPlayer::StoppedState;
-    PlayMethod m_playMethod = PlayMethod::Transcode;
+    /// State of the playbackManager. While the internal media player stops after a
+    /// song has ended, this will not do so.
     QMediaPlayer::State m_playbackState = QMediaPlayer::StoppedState;
+    PlayMethod m_playMethod = PlayMethod::Transcode;
     /// Pointer to the current media player.
     QMediaPlayer *m_mediaPlayer = nullptr;
 

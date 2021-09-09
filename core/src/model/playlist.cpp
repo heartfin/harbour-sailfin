@@ -48,7 +48,7 @@ void Playlist::previous() {
         m_currentItem.clear();
     }
     int nextItem = m_shuffler->nextItem();
-    if (nextItem) {
+    if (nextItem >= 0) {
         m_nextItem = m_list[m_shuffler->nextItem()];
     } else {
         m_nextItem.clear();

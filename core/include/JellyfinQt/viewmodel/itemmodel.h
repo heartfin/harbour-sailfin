@@ -22,6 +22,7 @@
 #include <QAbstractListModel>
 #include <QObject>
 #include <QScopedPointer>
+#include <QVariantList>
 
 #include "../dto/baseitemdto.h"
 #include "../dto/baseitemdtoqueryresult.h"
@@ -39,6 +40,31 @@
         type propName() const { return this->m_parameters.propName(); } \
         void set##propSetName(type newValue) { \
             this->m_parameters.set##propSetName( newValue ); \
+            emit propName##Changed(); \
+            autoReloadIfNeeded(); \
+        } \
+    Q_SIGNALS: \
+        void propName##Changed();
+
+#define FWDLISTPROP(type, propName, propSetName) \
+    public: \
+        Q_PROPERTY(QVariantList propName READ propName WRITE set##propSetName NOTIFY propName##Changed) \
+        QVariantList propName() const { \
+            QVariantList result; \
+            QList<type> list; \
+            result.reserve(list.size()); \
+            for (auto it = list.cbegin(); it != list.cend(); it++) { \
+                result.append(QVariant::fromValue<type>(*it)); \
+            } \
+            return result; \
+        } \
+        void set##propSetName(const QVariantList &newValue) { \
+            QList<type> list;\
+            list.reserve(newValue.size()); \
+            for(auto it = newValue.cbegin(); it != newValue.cend(); it++) { \
+                list.append(it->value<type>()); \
+            } \
+            this->m_parameters.set##propSetName(list); \
             emit propName##Changed(); \
             autoReloadIfNeeded(); \
         } \
@@ -112,7 +138,7 @@ public:
     FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, enableImageTypes, EnableImageTypes)
     FWDPROP(bool, enableImages, EnableImages)
     FWDPROP(bool, enableUserData, EnableUserData)
-    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
+    FWDLISTPROP(Jellyfin::DTO::ItemFieldsClass::Value, fields, Fields)
     FWDPROP(bool, groupItems, GroupItems)
     FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
     FWDPROP(QStringList, includeItemTypes, IncludeItemTypes)
@@ -134,7 +160,7 @@ public:
     FWDPROP(QStringList, artists, Artists)
     FWDPROP(bool, collapseBoxSetItems, CollapseBoxSetItems)
     FWDPROP(QStringList, contributingArtistIds, ContributingArtistIds)
-    FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, enableImageTypes, EnableImageTypes);
+    FWDLISTPROP(Jellyfin::DTO::ImageTypeClass::Value, enableImageTypes, EnableImageTypes);
     FWDPROP(bool, enableImages, EnableImages)
     FWDPROP(bool, enableTotalRecordCount, EnableTotalRecordCount)
     FWDPROP(bool, enableUserData, EnableUserData)
@@ -142,8 +168,8 @@ public:
     FWDPROP(QStringList, excludeItemIds, ExcludeItemIds)
     FWDPROP(QStringList, excludeItemTypes, ExcludeItemTypes)
     FWDPROP(QList<Jellyfin::DTO::LocationTypeClass::Value>, excludeLocationTypes, ExcludeLocationTypes)
-    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
-    FWDPROP(QList<Jellyfin::DTO::ItemFilterClass::Value>, filters, Filters)
+    FWDLISTPROP(Jellyfin::DTO::ItemFieldsClass::Value, fields, Fields)
+    FWDLISTPROP(Jellyfin::DTO::ItemFilterClass::Value, filters, Filters)
     FWDPROP(QStringList, genreIds, GenreIds)
     FWDPROP(QStringList, genres, Genres)
     FWDPROP(bool, hasImdbId, HasImdbId)
@@ -159,7 +185,7 @@ public:
     FWDPROP(bool, hasTvdbId, HasTvdbId)
     FWDPROP(QStringList, ids, Ids)
     FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
-    FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, imageTypes, ImageTypes)
+    FWDLISTPROP(Jellyfin::DTO::ImageTypeClass::Value, imageTypes, ImageTypes)
     FWDPROP(QStringList, includeItemTypes, IncludeItemTypes)
     FWDPROP(bool, is3D, Is3D)
     FWDPROP(bool, is4K, Is4K)
@@ -170,8 +196,7 @@ public:
     FWDPROP(bool, isPlaceHolder, IsPlaceHolder)
     FWDPROP(bool, isPlayed, IsPlayed)
     FWDPROP(bool, isUnaired, IsUnaired)
-    FWDPROP(int, limit, Limit)
-    FWDPROP(QList<Jellyfin::DTO::LocationTypeClass::Value>, locationTypes, LocationTypes)
+    FWDLISTPROP(Jellyfin::DTO::LocationTypeClass::Value, locationTypes, LocationTypes)
     FWDPROP(qint32, maxHeight, MaxHeight)
     FWDPROP(QString, maxOfficialRating, MaxOfficialRating)
     FWDPROP(QDateTime, maxPremiereDate, MaxPremiereDate)
@@ -198,12 +223,12 @@ class ResumeItemsLoader : public ResumeItemsLoaderBase {
 public:
     explicit ResumeItemsLoader(QObject *parent = nullptr);
 
-    FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, enableImageTypes, EnableImageTypes);
+    FWDLISTPROP(Jellyfin::DTO::ImageTypeClass::Value, enableImageTypes, EnableImageTypes);
     FWDPROP(bool, enableImages, EnableImages)
     FWDPROP(bool, enableTotalRecordCount, EnableTotalRecordCount)
     FWDPROP(bool, enableUserData, EnableUserData)
     FWDPROP(QStringList, excludeItemTypes, ExcludeItemTypes)
-    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
+    FWDLISTPROP(Jellyfin::DTO::ItemFieldsClass::Value, fields, Fields)
     FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
     FWDPROP(QStringList, includeItemTypes, IncludeItemTypes)
     FWDPROP(QStringList, mediaTypes, MediaTypes)
@@ -219,10 +244,10 @@ public:
 
     FWDPROP(QString, seriesId, SeriesId)
     FWDPROP(QString, adjacentTo, AdjacentTo)
-    FWDPROP(QList<Jellyfin::DTO::ImageTypeClass::Value>, enableImageTypes, EnableImageTypes)
+    FWDLISTPROP(Jellyfin::DTO::ImageTypeClass::Value, enableImageTypes, EnableImageTypes)
     FWDPROP(bool, enableImages, EnableImages)
     FWDPROP(bool, enableUserData, EnableUserData)
-    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
+    FWDLISTPROP(Jellyfin::DTO::ItemFieldsClass::Value, fields, Fields)
     FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
     FWDPROP(bool, isMissing, IsMissing)
     FWDPROP(bool, isSpecialSeason, IsSpecialSeason)
@@ -239,13 +264,30 @@ public:
     FWDPROP(QString, adjacentTo, AdjacentTo)
     FWDPROP(bool, enableImages, EnableImages)
     FWDPROP(bool, enableUserData, EnableUserData)
-    FWDPROP(QList<Jellyfin::DTO::ItemFieldsClass::Value>, fields, Fields)
+    FWDLISTPROP(Jellyfin::DTO::ItemFieldsClass::Value, fields, Fields)
     FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
     FWDPROP(bool, isMissing, IsMissing)
     FWDPROP(qint32, season, Season)
     FWDPROP(QString, seasonId, SeasonId)
     FWDPROP(QString, sortBy, SortBy)
     FWDPROP(QString, startItemId, StartItemId)
+};
+
+using NextUpLoaderBase = AbstractUserParameterLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetNextUpParams>;
+class NextUpLoader : public NextUpLoaderBase {
+    Q_OBJECT
+public:
+    explicit NextUpLoader(QObject *parent = nullptr);
+
+    FWDPROP(bool, disableFirstEpisode, DisableFirstEpisode)
+    FWDLISTPROP(Jellyfin::DTO::ImageTypeClass::Value, enableImageTypes, EnableImageTypes);
+    FWDPROP(bool, enableImges, EnableImges)
+    FWDPROP(bool, enableTotalRecordCount, EnableTotalRecordCount)
+    FWDPROP(bool, enableUserData, EnableUserData)
+    FWDLISTPROP(Jellyfin::DTO::ItemFieldsClass::Value, fields, Fields)
+    FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
+    FWDPROP(QString, parentId, ParentId)
+    FWDPROP(QString, seriesId, SeriesId)
 };
 
 
@@ -278,6 +320,7 @@ public:
         runTimeTicks,
         artists,
         isFolder,
+        overview,
         parentIndexNumber,
         userDataRating,
         userDataPlayedPercentage,
@@ -317,6 +360,7 @@ public:
             JFRN(runTimeTicks),
             JFRN(artists),
             JFRN(isFolder),
+            JFRN(overview),
             JFRN(parentIndexNumber),
             JFRN(userDataRating),
             JFRN(userDataPlayedPercentage),

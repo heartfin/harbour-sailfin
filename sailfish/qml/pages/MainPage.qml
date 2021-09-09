@@ -30,6 +30,8 @@ import "../"
 Page {
     /// True if the models on this page already have been loaded and don't necessarily need a refresh
     property bool _modelsLoaded: false
+    // Only for cover page
+    readonly property string itemId: ""
 
     id: mainPage
     allowedOrientations: Orientation.All
@@ -48,7 +50,7 @@ Page {
                 text: qsTr("Reload")
                 onClicked: loadModels(true)
             }
-            busy: mediaLibraryLoader.status === J.UsersViewsLoader.Loading
+            busy: mediaLibraryLoader.status === J.ModelStatus.Loading
         }
     }
 
@@ -80,7 +82,7 @@ Page {
                 //- Section header for films and TV shows that an user hasn't completed yet.
                 text: qsTr("Resume watching")
                 clickable: false
-                busy: userResumeLoader.status === J.UsersViewsLoader.Loading
+                busy: userResumeLoader.status === J.ModelStatus.Loading
                 Loader {
                     width: parent.width
                     sourceComponent: carrouselView
@@ -102,7 +104,7 @@ Page {
                 //- Section header for next episodes in a TV show that an user was watching.
                 text: qsTr("Next up")
                 clickable: false
-                //busy: showNextUpModel.status === .Loading
+                busy: showNextUpLoader.status === J.ModelStatus.Loading
 
                 Loader {
                     width: parent.width
@@ -112,8 +114,11 @@ Page {
 
                     J.ItemModel {
                         id: showNextUpModel
-                        /*apiClient: appWindow.apiClient
-                        limit: 12*/
+                        loader: J.NextUpLoader {
+                            id: showNextUpLoader
+                            apiClient: appWindow.apiClient
+                            enableUserData: true
+                        }
                     }
                 }
             }

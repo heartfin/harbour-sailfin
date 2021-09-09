@@ -28,19 +28,6 @@ import "../components"
 PosterCover {
     readonly property var player: appWindow.playbackManager
 
-    // Wanted to display the currently running move on here, but it's hard :/
-    /*Rectangle {
-        anchors.fill: parent
-        color: "black"
-
-        VideoOutput {
-            id: coverOutput
-            anchors.fill: parent
-            source: player
-        }
-
-    }*/
-
     Shim {
         anchors {
             left: parent.left
@@ -51,8 +38,27 @@ PosterCover {
     }
 
     CoverActionList {
+        enabled: player.hasNext
         CoverAction {
-            id: playPause
+            iconSource: player.playbackState === MediaPlayer.PlayingState ? "image://theme/icon-cover-pause"
+                                                                         : "image://theme/icon-cover-play"
+            onTriggered: {
+                if (player.playbackState === MediaPlayer.PlayingState) {
+                    player.pause()
+                } else {
+                    player.play()
+                }
+            }
+        }
+        CoverAction {
+            iconSource: "image://theme/icon-cover-next-song"
+            onTriggered: player.next();
+        }
+    }
+
+    CoverActionList {
+        enabled: !player.hasNext
+        CoverAction {
             iconSource: player.playbackState === MediaPlayer.PlayingState ? "image://theme/icon-cover-pause"
                                                                          : "image://theme/icon-cover-play"
             onTriggered: {

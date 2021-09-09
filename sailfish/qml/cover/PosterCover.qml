@@ -27,7 +27,7 @@ import ".."
 
 CoverBackground {
     // Due QTBUG-10822, declarartions such as `property J.Item foo` are not possible.
-    property var mData: appWindow.itemData
+    property var mData: appWindow.playbackManager.item
     RemoteImage {
         anchors.fill: parent
         source: mData === null ? "" : Utils.itemImageUrl(appWindow.apiClient.baseUrl, mData, "Primary", {"maxWidth": parent.width})
@@ -78,7 +78,7 @@ CoverBackground {
             Label {
                 visible: typeof mData.runTimeTicks !== "undefined"
                 color: Theme.secondaryColor
-                text: Utils.ticksToText(mData.runTimeTicks)
+                text: qsTr("%1/%2").arg(Utils.timeToText(appWindow.playbackManager.position)).arg(Utils.ticksToText(mData.runTimeTicks))
             }
         }
     }

@@ -87,7 +87,7 @@ PanelBackground {
         Rectangle {
             id: playQueueShim
             anchors.fill: albumArt
-            color: Theme.rgba(Theme.overlayBackgroundColor, Theme.opacityLow)
+            color: Theme.rgba(Theme.overlayBackgroundColor, Theme.opacityOverlay)
             opacity: 0
         }
         Loader {
@@ -159,6 +159,7 @@ PanelBackground {
             }
             icon.source: "image://theme/icon-m-shuffle"
             opacity: 0
+            enabled: false
             onClicked: Notices.show(qsTr("Shuffle not yet implemented"))
         }
 
@@ -330,7 +331,7 @@ PanelBackground {
                 target: nextButton; opacity: 1; enabled: true;
             }
             PropertyChanges {
-                target: playModeButton; opacity: 1; //enabled: true;
+                target: playModeButton; opacity: 1; enabled: true;
             }
             PropertyChanges {
                 target: queueButton; opacity: 1; enabled: true;

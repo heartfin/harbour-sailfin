@@ -60,7 +60,7 @@ public:
         : QObject(parent), m_apiClient(apiClient) {}
 
     Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient WRITE setApiClient NOTIFY apiClientChanged STORED false)
-    Q_PROPERTY(Status status READ status NOTIFY statusChanged STORED false)
+    Q_PROPERTY(Jellyfin::ViewModel::LoaderBase::Status status READ status NOTIFY statusChanged STORED false)
     Q_PROPERTY(QString errorString READ errorString NOTIFY errorStringChanged STORED false)
     Q_PROPERTY(bool autoReload MEMBER m_autoReload NOTIFY autoReloadChanged)
     Q_PROPERTY(QObject *data READ data NOTIFY dataChanged STORED false)
@@ -73,7 +73,7 @@ public:
     void setApiClient(ApiClient *newApiClient);
     void setExtraFields(const QStringList &extraFields);
 signals:
-    void statusChanged(Status newStatus);
+    void statusChanged(Jellyfin::ViewModel::LoaderBase::Status newStatus);
     void apiClientChanged(ApiClient *newApiClient);
     void errorStringChanged(QString newErrorString);
     void autoReloadChanged(bool newAutoReload);

@@ -156,7 +156,9 @@ void PlaybackManager::mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus ne
             m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
         }
     } else if (newStatus == QMediaPlayer::EndOfMedia) {
-        next();
+        if (m_queue->hasNext() && m_queue->totalSize() > 1) {
+            next();
+        }
     }
 }
 
@@ -178,6 +180,8 @@ void PlaybackManager::updatePlaybackInfo() {
 }
 
 void PlaybackManager::playItem(Item *item) {
+    m_queue->clearList();
+    m_queue->appendToList(item->data());
     setItem(item->data());
     emit hasNextChanged(m_queue->hasNext());
     emit hasPreviousChanged(m_queue->hasPrevious());

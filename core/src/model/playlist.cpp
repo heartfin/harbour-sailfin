@@ -144,6 +144,14 @@ void Playlist::appendToList(ViewModel::ItemModel &model) {
     reshuffle();
 }
 
+void Playlist::appendToList(QSharedPointer<Model::Item> item) {
+    int start = m_list.size();
+    emit beforeItemsAddedToList(start, 1);
+    m_list.append(item);
+    emit itemsAddedToList();
+    reshuffle();
+}
+
 void Playlist::reshuffle() {
     if (m_shuffler->canShuffleInAdvance()) {
         m_shuffler->shuffleInAdvance();

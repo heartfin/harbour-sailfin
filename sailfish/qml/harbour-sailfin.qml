@@ -81,11 +81,9 @@ ApplicationWindow {
     cover: {
         // Disabled due to buggy Loader behaviour
         if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(_playbackManager.mediaStatus) >= 0) {
-            return Qt.resolvedUrl("cover/CoverPage.qml")
-        } else if (playbackManager.hasVideo){
-            return Qt.resolvedUrl("cover/VideoCover.qml")
+            return Qt.resolvedUrl("cover/CollectionPage.qml")
         } else {
-            return Qt.resolvedUrl("cover/CoverPage.qml")
+            return Qt.resolvedUrl("cover/NowPlayingCover.qml")
         }
     }
 

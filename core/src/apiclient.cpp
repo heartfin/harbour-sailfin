@@ -438,7 +438,7 @@ void ApiClient::generateDeviceProfile() {
     clientCapabilities->setIconUrl("https://chris.netsoj.nl/static/img/logo.png");
     clientCapabilities->setSupportsPersistentIdentifier(true);
     clientCapabilities->setSupportsSync(false);
-    clientCapabilities->setSupportsMediaControl(false);
+    clientCapabilities->setSupportsMediaControl(true);
     clientCapabilities->setSupportsContentUploading(false);
 
     d->clientCapabilities = clientCapabilities;

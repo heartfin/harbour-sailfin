@@ -31,7 +31,7 @@ CoverBackground {
     readonly property real rowHeight: height / 2
     readonly property real bottomOffset: width - rowHeight
     readonly property bool onMainScreen: appWindow.itemData === null
-    readonly property bool itemId: appWindow.itemData.jellyfinId || appWindow.pageStack.currentPage.itemId
+    readonly property string itemId: appWindow.pageStack.currentPage.itemId
     readonly property bool hasParent: !appWindow.itemData !== null && appWindow.itemData.jellyfinId.length !== 0
 
     J.ItemModel {
@@ -39,14 +39,14 @@ CoverBackground {
         loader: J.UserItemsLoader {
             id: randomItemsLoader
             apiClient: appWindow.apiClient
-            limit: cover.rowCount * 2
+            limit: cover.rowCount * 2 - 2
             imageTypes: [J.ImageType.Primary]
             sortBy: "IsFavoriteOrLiked,Random"
             recursive: false
-            parentId: hasParent ? itemId : ""
+            parentId: itemId
             autoReload:  false
             onParentIdChanged: {
-                if (parentId.length > 0) reload()
+                reload()
             }
         }
     }
@@ -82,12 +82,15 @@ CoverBackground {
                 x: -rowHeight * rowOffset
                 y: rowHeight * 0.5
             }
+            PathPercent {
+                value: 1
+            }
         }
         delegate: RemoteImage {
                 height: rowHeight
                 width: height
                 source: model.jellyfinId
-                            ? Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"maxHeight": row1.height})
+                            ? Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"maxHeight": rowHeight})
                             : ""
                 blurhash: model.jellyfinId
                             ? model.imageBlurHashes["Primary"][model.imageTags["Primary"]]
@@ -96,14 +99,18 @@ CoverBackground {
             }
     }
 
-     Rectangle {
+    /*Rectangle {
         anchors.fill: parent
         color: Theme.rgba(Theme.overlayBackgroundColor, Theme.opacityHigh)
-    }
+    }*/
 
     Column {
         anchors.centerIn: parent
         width: parent.width
+        opacity: randomItemsLoader.status === J.ModelStatus.Ready ? 0.0 : 1.0
+        Behavior on opacity {
+            NumberAnimation {}
+        }
         Image {
             anchors.horizontalCenter: parent.horizontalCenter
             source: Qt.resolvedUrl("../icon.png")
@@ -122,12 +129,11 @@ CoverBackground {
         target: appWindow.pageStack
         onCurrentPageChanged: {
             console.log("Reloading cover collection")
-            /*randomItems1Loader.parentId = Qt.binding(function() { return  onMainScreen ? "" : appWindow.itemData.jellyfinId; })
-            randomItems2Loader.parentId = Qt.binding(function() { return  onMainScreen ? "" : appWindow.itemData.jellyfinId; })*/
-            //randomItems1.reload()
-            //randomItems2.reload()
         }
     }
+
+
+    Component.onCompleted: randomItems.reload()
 
     Timer {
         running: true

@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "JellyfinQt/dto/useritemdatadto.h"
 #include "JellyfinQt/dto/userdto.h"
 
+Q_LOGGING_CATEGORY(jellyfinApiModel, "jellyfin.apimodel")
+
 namespace Jellyfin {
 
 // BaseApiModel
@@ -46,7 +48,7 @@ void BaseModelLoader::componentComplete() {
 
 void BaseModelLoader::autoReloadIfNeeded() {
     if (m_autoReload && canReload()) {
-        qDebug() << "reloading due to 'autoReloadIfNeeded()'";
+        qCDebug(jellyfinApiModel) << "reloading due to 'autoReloadIfNeeded()'";
         emit reloadWanted();
     }
 }
@@ -57,14 +59,14 @@ void BaseModelLoader::setApiClient(ApiClient *newApiClient) {
     if (changed) {
         emit apiClientChanged(newApiClient);
     }
+    autoReloadIfNeeded();
 }
 
 void BaseModelLoader::setLimit(int newLimit) {
-    int oldLimit = this->m_limit;
-    m_limit = newLimit;
-    if (oldLimit != newLimit) {
-        emit limitChanged(this->m_limit);
-    }
+    m_explicitLimitSet = newLimit >= 0;
+    qCDebug(jellyfinApiModel) << "Limit explicitly set to " << newLimit;
+    this->m_limit = newLimit;
+    emit limitChanged(newLimit);
 }
 
 void BaseModelLoader::setAutoReload(bool newAutoReload) {
@@ -90,7 +92,7 @@ bool BaseModelLoader::canReload() const {
 }
 
 void BaseApiModel::reload() {
-    qWarning() << " BaseApiModel slot called instead of overloaded method";
+    qCWarning(jellyfinApiModel) << " BaseApiModel slot called instead of overloaded method";
 }
 
 // Parameters injectors and result extractors

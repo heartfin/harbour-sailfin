@@ -139,6 +139,12 @@ QJsonValue toJsonValue(const QSharedPointer<T> &source, convertType<QSharedPoint
  * Templates for string conversion.
  */
 
+
+template <typename T>
+QString toString(const T &source) {
+    return toString(source, convertType<T>{});
+}
+
 template <typename T>
 QString toString(const T &source, convertType<T>) {
     return toJsonValue(source).toString();
@@ -154,10 +160,14 @@ QString toString(const std::optional<T> &source, convertType<std::optional<T>>) 
 }
 
 template <typename T>
-QString toString(const T &source) {
-    return toString(source, convertType<T>{});
+QString toString(const QList<T> &source, convertType<QList<T>>) {
+    QStringList tmp;
+    tmp.reserve(source.size());
+    for (auto it = source.cbegin(); it != source.cend(); it++) {
+        tmp.append(toString<T>(*it, convertType<T>{}));
+    }
+    return tmp.join(',');
 }
-
 
 } // NS Support
 } // NS Jellyfin

@@ -101,6 +101,12 @@ public:
     void appendToList(ViewModel::ItemModel &model);
 
     /**
+     * @brief appendToList Appends a single item to the current list
+     * @param item The item to append
+     */
+    void appendToList(QSharedPointer<Model::Item> item);
+
+    /**
      * @brief Start playing this playlist
      * @param index The index to start from.
      */

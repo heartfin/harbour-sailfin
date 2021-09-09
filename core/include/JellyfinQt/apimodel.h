@@ -47,6 +47,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include "support/loader.h"
 #include "viewmodel/modelstatus.h"
 
+Q_DECLARE_LOGGING_CATEGORY(jellyfinApiModel)
+
 namespace Jellyfin {
 
 /*
@@ -121,6 +123,7 @@ protected:
     int m_limit = -1;
     int m_startIndex = 0;
     int m_totalRecordCount = 0;
+    bool m_explicitLimitSet = false;
     const int DEFAULT_LIMIT = 100;
     void emitModelShouldClear() { emit modelShouldClear(); }
     void emitItemsLoaded() { emit itemsLoaded(); }
@@ -165,14 +168,14 @@ public:
         m_startIndex = 0;
         m_totalRecordCount = -1;
         emitModelShouldClear();
-        loadMore(0, m_limit, ViewModel::ModelStatus::Loading);
+        loadMore(ViewModel::ModelStatus::Loading);
     }
 
     void loadMore() {
         if (!canReload()) {
             return;
         }
-        loadMore(m_startIndex, m_limit, ViewModel::ModelStatus::LoadingMore);
+        loadMore(ViewModel::ModelStatus::LoadingMore);
     }
 
     virtual bool canLoadMore() const {
@@ -192,12 +195,10 @@ protected:
      * The itemsLoaded() signal is emitted when new data is ready. Call
      * getLoadedItems to retrieve the loaded items.
      *
-     * @param offset The offset to start loading items from
-     * @param limit The maximum amount of items to load.
      * @param suggestedStatus The suggested status this model should take on if it is able to load (more).
      *        Either LOADING or LOAD_MORE.
      */
-    virtual void loadMore(int offset, int limit, ViewModel::ModelStatus suggestedStatus) = 0;
+    virtual void loadMore(ViewModel::ModelStatus suggestedStatus) = 0;
     std::pair<QList<T*>, int> m_result;
 };
 
@@ -270,7 +271,7 @@ public:
         this->connect(m_loader.data(), &Support::Loader<R, P>::error, this, &LoaderModelLoader<T, D, R, P>::loaderError);
     }
 protected:
-    void loadMore(int offset, int limit, ViewModel::ModelStatus suggestedModelStatus) override {
+    void loadMore(ViewModel::ModelStatus suggestedModelStatus) override {
         // This method should only be callable on one thread.
         // If futureWatcher's future is running, this method should not be called again.
         if (m_loader->isRunning()) {
@@ -279,20 +280,22 @@ protected:
         // Set an invalid result.
         this->m_result = { QList<T*>(), -1 };
 
-        if (!setRequestStartIndex<P>(this->m_parameters, offset)
+        if (!setRequestStartIndex<P>(this->m_parameters, this->m_startIndex)
                 && suggestedModelStatus == ViewModel::ModelStatus::LoadingMore) {
             // This loader's parameters does not setting a starting index,
             // meaning loadMore is not supported.
             return;
         }
+        setRequestStartIndex<P>(this->m_parameters, this->m_startIndex);
 
-        if (limit > 0) {
-            if (suggestedModelStatus == ViewModel::ModelStatus::Loading) {
-                setRequestLimit<P>(this->m_parameters, limit);
-            } else {
-                // If an explicit limit is set, we should load no more
-                return;
-            }
+        if (suggestedModelStatus == ViewModel::ModelStatus::LoadingMore && this->m_explicitLimitSet) {
+            // If an explicit limit is set, we should load no more
+            return;
+        }
+
+        qCDebug(jellyfinApiModel) << "Explicit limit set: " << this->m_explicitLimitSet << ", " << this->m_limit;
+        if (this->m_explicitLimitSet) {
+            setRequestLimit<P>(this->m_parameters, this->m_limit);
         } else {
             setRequestLimit<P>(this->m_parameters, this->DEFAULT_LIMIT);
         }

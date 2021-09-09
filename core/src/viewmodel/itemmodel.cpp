@@ -54,6 +54,9 @@ ShowSeasonsLoader::ShowSeasonsLoader(QObject *parent)
 ShowEpisodesLoader::ShowEpisodesLoader(QObject *parent)
     : ShowEpisodesLoaderBase(new Jellyfin::Loader::HTTP::GetEpisodesLoader(), parent) {}
 
+NextUpLoader::NextUpLoader(QObject *parent)
+    : NextUpLoaderBase(new Jellyfin::Loader::HTTP::GetNextUpLoader(), parent) {}
+
 ItemModel::ItemModel(QObject *parent)
     : ApiModel<Model::Item>(parent) { }
 
@@ -86,6 +89,7 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
     JF_CASE(artists)
     case RoleNames::isFolder:
         return QVariant(item->isFolder().value_or(false));
+    JF_CASE(overview)
     case RoleNames::parentIndexNumber:
         return QVariant(item->parentIndexNumber().value_or(1));
     // UserData

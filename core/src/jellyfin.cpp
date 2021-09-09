@@ -75,6 +75,7 @@ void JellyfinPlugin::registerTypes(const char *uri) {
     qmlRegisterType<ViewModel::ResumeItemsLoader>(uri, 1, 0, "ResumeItemsLoader");
     qmlRegisterType<ViewModel::ShowSeasonsLoader>(uri, 1, 0, "ShowSeasonsLoader");
     qmlRegisterType<ViewModel::ShowEpisodesLoader>(uri, 1, 0, "ShowEpisodesLoader");
+    qmlRegisterType<ViewModel::NextUpLoader>(uri, 1, 0, "NextUpLoader");
     qmlRegisterType<ViewModel::PublicUsersLoader>(uri, 1, 0, "PublicUsersLoader");
 
     // Enumerations

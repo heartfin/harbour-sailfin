@@ -38,9 +38,9 @@ set(sailfin_QML_SOURCES
 	qml/components/UserGridDelegate.qml
 	qml/components/VideoPlayer.qml
 	qml/components/VideoTrackSelector.qml
-	qml/cover/CoverPage.qml
+        qml/cover/CollectionPage.qml
 	qml/cover/PosterCover.qml
-	qml/cover/VideoCover.qml
+        qml/cover/NowPlayingCover.qml
 	qml/pages/LegalPage.qml
 	qml/pages/MainPage.qml
 	qml/pages/AboutPage.qml

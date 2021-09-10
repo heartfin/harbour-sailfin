@@ -42,7 +42,7 @@ CoverBackground {
             limit: cover.rowCount * 2 - 2
             imageTypes: [J.ImageType.Primary]
             sortBy: "IsFavoriteOrLiked,Random"
-            recursive: false
+            recursive: true
             parentId: itemId
             autoReload:  false
             onParentIdChanged: {
@@ -53,6 +53,7 @@ CoverBackground {
     PathView {
         id: pathView
         model: randomItems
+        visible: count === randomItemsLoader.limit
         path: Path {
             startX: -rowHeight * rowOffset
             startY: rowHeight * 0.5
@@ -107,7 +108,7 @@ CoverBackground {
     Column {
         anchors.centerIn: parent
         width: parent.width
-        opacity: randomItemsLoader.status === J.ModelStatus.Ready ? 0.0 : 1.0
+        opacity: randomItemsLoader.status === J.ModelStatus.Ready && pathView.visible ? 0.0 : 1.0
         Behavior on opacity {
             NumberAnimation {}
         }
@@ -137,7 +138,7 @@ CoverBackground {
 
     Timer {
         running: true
-        interval: 5000
+        interval: 10000
         repeat: true
         onTriggered: {
             pathView.incrementCurrentIndex()

@@ -82,6 +82,10 @@ BaseDetailPage {
             }
 
             Label {
+                visible: appWindow.showDebugInfo
+                leftPadding: Theme.horizontalPageMargin
+                rightPadding: Theme.horizontalPageMargin
+                width: parent.width
                 text:  "Video %1, audio %2, subtitle %3".arg(trackSelector.videoTrack).arg(trackSelector.audioTrack).arg(trackSelector.subtitleTrack)
             }
         }

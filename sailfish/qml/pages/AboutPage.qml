@@ -51,10 +51,11 @@ Page {
                 anchors.rightMargin: Theme.horizontalPageMargin
                 wrapMode: Text.WordWrap
                 text: qsTr("<p><b>Sailfin version %1</b><br/>" +
-                      "Copyright © Chris Josten 2020</p>" +
+                      "Copyright © Chris Josten 2020–%2</p>" +
                       "<p>Sailfin is Free Software licensed under the <a href='lgpl'>LGPL-v2.1</a> or later, at your choice. " +
                       "Parts of the code of Sailfin are from other libraries. <a href='3rdparty'>View their licenses here</a>.</p>")
                         .arg(apiClient.version)
+                        .arg(2021)
                 textFormat: Text.StyledText
                 color: Theme.secondaryHighlightColor
                 linkColor: Theme.primaryColor

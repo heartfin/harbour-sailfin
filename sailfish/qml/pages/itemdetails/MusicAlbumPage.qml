@@ -31,6 +31,7 @@ BaseDetailPage {
     readonly property int _songIndexWidth: 100
     width: 800 * Theme.pixelRatio
 
+    property bool _collectionModelLoaded: false
     readonly property bool _twoColumns: albumPageRoot.width / Theme.pixelRatio >= 800
 
     J.ItemModel {
@@ -38,10 +39,10 @@ BaseDetailPage {
         loader: J.UserItemsLoader {
             apiClient: appWindow.apiClient
             sortBy: "SortName"
-            //fields: ["ItemCounts","PrimaryImageAspectRatio","BasicSyncInfo","CanDelete","MediaSourceCount"]
+            fields: [J.ItemFields.ItemCounts, J.ItemFields.PrimaryImageAspectRatio]
             parentId: itemData.jellyfinId
             autoReload: itemData.jellyfinId.length > 0
-            onParentIdChanged: if (parentId.length > 0) reload()
+            //onParentIdChanged: if (parentId.length > 0) reload()
         }
     }
     RowLayout {
@@ -95,6 +96,7 @@ BaseDetailPage {
         item.duration = Qt.binding(function() { return itemData.runTimeTicks})
         item.songCount = Qt.binding(function() { return itemData.childCount})
         item.listview = Qt.binding(function() { return list})
+        item.aspectRatio = Qt.binding(function() { return itemData.primaryImageAspectRatio})
         item.blurhash = Qt.binding(function() { return itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]; })
         item.twoColumns = Qt.binding(function() { return _twoColumns })
     }

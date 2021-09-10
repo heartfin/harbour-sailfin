@@ -36,9 +36,10 @@ Item {
     property string name
     property alias blurhash : albumArtImage.blurhash
     property bool twoColumns
+    property real aspectRatio
 
     readonly property real smallSize: albumHeader.height
-    readonly property real bigSize: listHeader.width
+    readonly property real bigSize: listHeader.width / aspectRatio
     id: listHeader
     width: parent.width
     //spacing: Theme.paddingLarge

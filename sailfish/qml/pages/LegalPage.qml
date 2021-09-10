@@ -110,7 +110,6 @@ Page {
                                 xhr.onreadystatechange = function () {
                                     if (xhr.readyState === XMLHttpRequest.DONE){ // if request_status == DONE
                                         var response = model.copyright + "\n\n" + xhr.responseText;
-                                        console.log(response);
                                         licenseLabel.text = response
                                     }
                                 }

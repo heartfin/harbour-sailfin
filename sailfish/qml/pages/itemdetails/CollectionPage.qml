@@ -27,15 +27,22 @@ import "../../components"
 BaseDetailPage {
     id: pageRoot
 
+    property bool _collectionModelLoaded: false
+
     J.ItemModel {
         id: collectionModel
         loader: J.UserItemsLoader {
             id: collectionLoader
             apiClient: appWindow.apiClient
             parentId: itemData.jellyfinId
-            autoReload: itemData.jellyfinId.length > 0
-            onParentIdChanged: if (parentId.length > 0) reload()
+            autoReload: itemData.jellyfinId.length > 0 && (pageRoot.status == PageStatus.Active || _collectionModelLoaded)
+            //onParentIdChanged: if (parentId.length > 0) reload()
             sortBy: "SortName"
+            onStatusChanged: {
+                if (status === J.ModelStatus.Ready) {
+                    _collectionModelLoaded = true
+                }
+            }
         }
     }
 
@@ -58,7 +65,17 @@ BaseDetailPage {
                 text: qsTr("Sort by")
                 onClicked: pageStack.push(sortPageComponent)
             }
-            busy: collectionModel.status === J.ModelStatus.Loading
+            busy: collectionLoader.status === J.ModelStatus.Loading
+        }
+        add: Transition {
+            id: trans
+            SequentialAnimation {
+
+                PropertyAction {
+                    property: "opacity"; value: 0 }
+                PauseAnimation { duration: trans.ViewTransition.index * 3;}
+                NumberAnimation { properties: "opacity"; from: 0; to: 1.0; }
+            } // properties: "opacity"; from: 0; to: 1.0; }
         }
         delegate: GridItem {
             RemoteImage {
@@ -98,7 +115,7 @@ BaseDetailPage {
         }
 
         ViewPlaceholder {
-            enabled: gridView.count == 0 && !pageRoot._loading
+            enabled: gridView.count == 0 && !pageRoot._loading && collectionModel.status === J.ModelStatus.Ready
             text: qsTr("Empty collection")
             hintText: qsTr("Add some items to this collection!")
         }

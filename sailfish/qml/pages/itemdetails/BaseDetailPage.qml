@@ -41,7 +41,7 @@ Page {
     readonly property string parentId: itemData.parentId || ""
 
     function updateBackdrop() {
-        var rand = 0;
+        /*var rand = 0;
         if (itemData.backdropImageTags.length > 0) {
             rand = Math.floor(Math.random() * (itemData.backdropImageTags.length - 0.001))
             console.log("Random: ", rand)
@@ -49,7 +49,7 @@ Page {
         } else if (itemData.parentBackdropImageTags.length > 0) {
             rand = Math.floor(Math.random() * (itemData.parentBackdropImageTags.length - 0.001))
             _chosenBackdropImage = apiClient.baseUrl + "/Items/" + itemData.parentBackdropItemId + "/Images/Backdrop/" + rand + "?tag=" + itemData.parentBackdropImageTags[0]
-        }
+        }*/
     }
 
     allowedOrientations: Orientation.All
@@ -89,7 +89,6 @@ Page {
         itemId: pageRoot.itemId
         autoReload: false
         onStatusChanged: {
-            console.log("Status changed: " + newStatus, JSON.stringify(jItemLoader.data))
             if (status === J.ItemLoader.Ready) {
                 updateBackdrop()
             }
@@ -101,7 +100,6 @@ Page {
             //appWindow.itemData = ({})
         }
         if (status === PageStatus.Active) {
-            console.log("Page ready, ItemID: ", itemId, ", UserID: ", apiClient.userId)
             jItemLoader.autoReload = true
             appWindow.itemData = Qt.binding(function() { return jItemLoader.data; })
         }

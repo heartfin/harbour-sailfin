@@ -376,6 +376,9 @@ public:
     }
     QVariant data(const QModelIndex &index, int role) const override;
     QSharedPointer<Model::Item> itemAt(int index);
+private slots:
+    void onInsertItems(const QModelIndex &parent, int start, int end);
+    void onUserDataUpdated(const DTO::UserItemDataDto &newUserData);
 };
 #undef JFRN
 

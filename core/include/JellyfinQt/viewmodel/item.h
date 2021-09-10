@@ -114,6 +114,7 @@ public:
     Q_PROPERTY(QList<QObject *> audioStreams READ audioStreams NOTIFY audioStreamsChanged)
     Q_PROPERTY(QList<QObject *> videoStreams READ videoStreams NOTIFY videoStreamsChanged)
     Q_PROPERTY(QList<QObject *> subtitleStreams READ subtitleStreams NOTIFY subtitleStreamsChanged)
+    Q_PROPERTY(double primaryImageAspectRatio READ primaryImageAspectRatio NOTIFY primaryImageAspectRatioChanged)
     Q_PROPERTY(QStringList artists READ artists NOTIFY artistsChanged)
     // Why is this a QJsonObject? Well, because I couldn't be bothered to implement the deserialisations of
     // a QHash at the moment.
@@ -159,6 +160,7 @@ public:
     QObjectList audioStreams() const { return m_audioStreams; }
     QObjectList videoStreams() const { return m_videoStreams; }
     QObjectList subtitleStreams() const { return m_subtitleStreams; }
+    double primaryImageAspectRatio() const { return m_data->primaryImageAspectRatio().value_or(1.0); }
     QStringList artists() const { return m_data->artists(); }
     QJsonObject imageTags() const { return m_data->imageTags(); }
     QStringList backdropImageTags() const { return m_data->backdropImageTags(); }
@@ -219,6 +221,7 @@ signals:
     void audioStreamsChanged(QVariantList &newAudioStreams);
     void videoStreamsChanged(QVariantList &newVideoStreams);
     void subtitleStreamsChanged(QVariantList &newSubtitleStreams);
+    void primaryImageAspectRatioChanged(double newPrimaryImageAspectRatio);
     void artistsChanged(const QStringList &newArtists);
     void imageTagsChanged();
     void backdropImageTagsChanged();

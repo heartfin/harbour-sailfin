@@ -51,6 +51,7 @@ void Item::setApiClient(ApiClient *apiClient) {
 
 void Item::updateUserData(const QString &itemId, const DTO::UserItemDataDto &userData) {
     if (itemId == this->jellyfinId()) {
+        this->m_userData = QSharedPointer<DTO::UserItemDataDto>::create(userData);
         emit userDataChanged(userData);
     }
 }

@@ -95,7 +95,7 @@ void WebSocket::textMessageReceived(const QString &message) {
         setupKeepAlive(data.toInt());
     } else if (messageType == QStringLiteral("GeneralCommand")) {
         try {
-        DTO::GeneralCommand command = DTO::GeneralCommand::fromJson(messageRoot["Data"].toObject());
+        DTO::GeneralCommand command = DTO::GeneralCommand::fromJson(data.toObject());
 
         // TODO: move command handling out of here
         switch(command.name()) {
@@ -108,7 +108,7 @@ void WebSocket::textMessageReceived(const QString &message) {
         }
             break;
         default:
-            qCDebug(jellyfinWebSocket) << "Unhandled command: " << messageRoot["Data"];
+            qCDebug(jellyfinWebSocket) << "Unhandled command: " << data;
             break;
         }
 
@@ -117,49 +117,28 @@ void WebSocket::textMessageReceived(const QString &message) {
         }
     } else if (messageType == QStringLiteral("Playstate")) {
         try {
-            DTO::PlaystateRequest request = PlaystateRequest::fromJson(messageRoot["Data"].toObject());
+            DTO::PlaystateRequest request = PlaystateRequest::fromJson(data.toObject());
             emit m_apiClient->eventbus()->playstateCommandReceived(request);
         } catch (QException &e) {
-            qCWarning(jellyfinWebSocket()) << "Error while deserialzing PlaystateRequest " << e.what();
+            qCWarning(jellyfinWebSocket) << "Error while deserialzing PlaystateRequest " << e.what();
+        }
+    } else if(messageType == QStringLiteral("UserDataChanged")) {
+        QString userId = data.toObject()["UserId"].toString();
+        if (userId != m_apiClient->userId()) {
+            qCDebug(jellyfinWebSocket) << "Received UserDataCHanged for other user";
+        } else {
+            try {
+                QList<DTO::UserItemDataDto> userDataList = Support::fromJsonValue<QList<DTO::UserItemDataDto>>(data.toObject()["UserDataList"]);
+                for (auto it = userDataList.cbegin(); it != userDataList.cend(); it++) {
+                    emit m_apiClient->eventbus()->itemUserDataUpdated(it->itemId(), *it);
+                }
+            } catch (QException *e) {
+                qCWarning(jellyfinWebSocket) << "Unparseable UserData list received: " << e->what();
+            }
         }
     } else {
         qCDebug(jellyfinWebSocket) << messageType;
     }
-    bool ok;
-    /*MessageType messageType = static_cast<MessageType>(QMetaEnum::fromType<WebSocket::MessageType>().keyToValue(messageTypeStr.toLatin1(), &ok));
-    if (!ok) {
-        qWarning() << "Unknown message arrived: " << messageTypeStr;
-        if (messageRoot.contains("Data")) {
-            qDebug() << "with data: " << QJsonDocument(messageRoot["Data"].toObject()).toJson();
-        }
-        return;
-    }
-
-    qDebug() << "Received message: " << messageTypeStr;
-
-    switch (messageType) {
-    case ForceKeepAlive:
-        setupKeepAlive(data.toInt(-1));
-        break;
-    case KeepAlive:
-        //TODO: do something?
-        break;
-    case UserDataChanged: {
-        QJsonObject data2 = data.toObject();
-        if (data2["UserId"] != m_apiClient->userId()) {
-            qDebug() << "Received UserDataCHanged for other user";
-            break;
-        }
-        QJsonArray userDataList = data2["UserDataList"].toArray();
-        for (QJsonValue val: userDataList) {
-            UserItemDataDto userData = UserItemDataDto::fromJson(val.toObject());
-            //m_apiClient->onUserDataChanged(userData->itemId(), userData);
-        }
-
-    }
-        break;
-    }*/
-
 }
 
 void WebSocket::sendKeepAlive() {

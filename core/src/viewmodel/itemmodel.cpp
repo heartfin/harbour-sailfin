@@ -58,7 +58,9 @@ NextUpLoader::NextUpLoader(QObject *parent)
     : NextUpLoaderBase(new Jellyfin::Loader::HTTP::GetNextUpLoader(), parent) {}
 
 ItemModel::ItemModel(QObject *parent)
-    : ApiModel<Model::Item>(parent) { }
+    : ApiModel<Model::Item>(parent) {
+    connect(this, &QAbstractItemModel::rowsInserted, this, &ItemModel::onInsertItems);
+}
 
 QVariant ItemModel::data(const QModelIndex &index, int role) const {
     if (role <= Qt::UserRole || !index.isValid()) return QVariant();
@@ -121,6 +123,26 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
 
 QSharedPointer<Model::Item> ItemModel::itemAt(int index) {
     return m_array[index];
+}
+
+
+void ItemModel::onInsertItems(const QModelIndex &parent, int start, int end) {
+    if (parent.isValid()) return;
+    qDebug() << "Connecting " << (end - start + 1) << "items!";
+    for (int i = start; i <= end; i++) {
+        connect(itemAt(i).data(), &Model::Item::userDataChanged, this, &ItemModel::onUserDataUpdated);
+    }
+}
+
+void ItemModel::onUserDataUpdated(const DTO::UserItemDataDto &newUserData) {
+    const QString &itemId = newUserData.itemId();
+    qDebug() << "ApiModel: item updated: " << itemId;
+    for (int i = 0; i < rowCount(QModelIndex()); i++) {
+        if (itemAt(i)->jellyfinId() == itemId) {
+            QModelIndex index = this->index(i);
+            emit this->dataChanged(index, index);
+        }
+    }
 }
 
 } // NS ViewModel

@@ -1,0 +1,37 @@
+# Rename this file as harbour-sailfin.changes to include changelog
+# entries in your RPM file.
+#
+# Add new changelog entries following the format below.
+# Add newest entries to the top of the list.
+# Separate entries from eachother with a blank line.
+#
+# Alternatively, if your changelog is automatically generated (e.g. with
+# the git-change-log command provided with Sailfish OS SDK), create a
+# harbour-sailfin.changes.run script to let mb2 run the required commands for you.
+
+# * date Author's Name <author's email> version-release
+# - Summary of changes
+
+* Fri Sep 10 2021 Chris Josten <chris@netsoj.nl> 0.4.0-1
+- Note: Jellyfin 1.7.0 or later is now required for use with Sailfin.
+- AARCH64 support
+- Added a simple music player, that is able to play simple playlists. Nothing fancy
+  yet, things like shuffle and dynamically adding items are not supported yet.
+- If possible, media is streamed as-is. In previous versions, media was always being
+  transcoded, putting extra strain on the server. Due limitations of QtMultiMedia, any
+  video with more than 1 audio tracks is currently still being transcode.
+- Settings have been added to customize streaming behaviour. Transcoding can be disabled
+  and the maximum bitrate can be chosen by the user.
+- Some, but far from all pages, have been optimised for landscape mode.
+- Images now show a blurry version of themselves (based on blurhash) before they are 
+  fully loaded.
+- MPRIS support has been added, allowing the playback to be controlled from the lockscreen
+  and in SailfishOS 4.2, also via headset buttons.
+- A start has been made to allow for Sailfin to be remotely controlled by other Jellyfin clients.
+  As for now, only basic playback controls such as play/pause/next/previous are implemented.
+- The C++-side has been thoroughly rewritten! Most application logic has been moved 
+  from QML to C++, parts of the code are generated based on OpenAPI descriptions. This
+  should make future additions, such as better caching and offline synchronization, 
+  easier to implement. This is also why this update took so long, I feel like I've learned 
+  (read: been frustrated) about a lot of the quirks of C++ and Qt :). This probably has taken most
+  of the development time, so I expect now this is done that future updates won't take yet another year.

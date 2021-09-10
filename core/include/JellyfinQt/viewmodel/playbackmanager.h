@@ -209,6 +209,7 @@ private slots:
     void mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus newStatus);
     void mediaPlayerError(QMediaPlayer::Error error);
     void mediaPlayerDurationChanged(qint64 newDuration);
+    void mediaPlayerSeekableChanged(bool seekable);
     /**
      * @brief updatePlaybackInfo Updates the Jellyfin server with the current playback progress etc.
      */
@@ -264,6 +265,8 @@ private:
      */
     bool m_autoOpen = false;
 
+    bool m_seekToResumedPosition = false;
+
     QMediaPlayer::State m_oldState = QMediaPlayer::StoppedState;
     /// State of the playbackManager. While the internal media player stops after a
     /// song has ended, this will not do so.
@@ -274,8 +277,7 @@ private:
 
     Model::Playlist *m_queue = nullptr;
     int m_queueIndex = 0;
-    bool m_resumePlayback = true;
-
+    bool m_resumePlayback = false;
     bool m_handlePlaystateCommands = true;
 
     // Helper methods
@@ -300,6 +302,7 @@ private:
 
     /// Time in ms at what moment this playbackmanager should start loading the next item.
     const qint64 PRELOAD_DURATION = 15 * 1000;
+    QTimer m_forceSeekTimer;
 };
 
 } // NS ViewModel

@@ -61,9 +61,26 @@ PlaybackManager::PlaybackManager(QObject *parent)
     connect(m_mediaPlayer, &QMediaPlayer::durationChanged, this, &PlaybackManager::mediaPlayerDurationChanged);
     connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &PlaybackManager::mediaPlayerMediaStatusChanged);
     connect(m_mediaPlayer, &QMediaPlayer::videoAvailableChanged, this, &PlaybackManager::hasVideoChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::seekableChanged, this, &PlaybackManager::seekableChanged);
+    connect(m_mediaPlayer, &QMediaPlayer::seekableChanged, this, &PlaybackManager::mediaPlayerSeekableChanged);
     //                     I do not like the complicated overload cast
     connect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(mediaPlayerError(QMediaPlayer::Error)));
+
+    m_forceSeekTimer.setInterval(500);
+    m_forceSeekTimer.setSingleShot(false);
+
+    // Yes, this is a very ugly way of forcing the video player to seek to the resume position
+    connect(&m_forceSeekTimer, &QTimer::timeout, this, [this]() {
+        if (m_seekToResumedPosition && m_mediaPlayer->isSeekable()) {
+            qCDebug(playbackManager) << "Trying to seek to the resume position" << (m_resumePosition / MS_TICK_FACTOR);
+            if (m_mediaPlayer->position() > m_resumePosition / MS_TICK_FACTOR - 500) {
+                m_seekToResumedPosition = false;
+                m_forceSeekTimer.stop();
+            } else {
+                m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
+            }
+        }
+
+    });
 
 }
 
@@ -96,11 +113,16 @@ void PlaybackManager::setItem(QSharedPointer<Model::Item> newItem) {
         m_displayItem->setData(QSharedPointer<Model::Item>::create());
     } else {
         m_displayItem->setData(newItem);
+        if (!newItem->userData().isNull()) {
+            this->m_resumePosition = newItem->userData()->playbackPositionTicks();
+        }
     }
     emit itemChanged(m_displayItem);
 
     emit hasNextChanged(m_queue->hasNext());
     emit hasPreviousChanged(m_queue->hasPrevious());
+
+    this->m_seekToResumedPosition = m_resumePlayback;
 
     if (m_apiClient == nullptr) {
 
@@ -161,12 +183,23 @@ void PlaybackManager::mediaPlayerPositionChanged(qint64 position) {
 
 void PlaybackManager::mediaPlayerStateChanged(QMediaPlayer::State newState) {
     if (m_oldState == newState) return;
+
+    if (newState == QMediaPlayer::PlayingState) {
+        if (m_seekToResumedPosition) {
+            if (m_mediaPlayer->isSeekable()) {
+                qCDebug(playbackManager) << "Resuming playback by seeking to " << (m_resumePosition / MS_TICK_FACTOR);
+                m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
+                m_seekToResumedPosition = false;
+            }
+        }
+    }
+
     if (m_oldState == QMediaPlayer::StoppedState) {
         // We're transitioning from stopped to either playing or paused.
         // Set up the recurring timer
         m_updateTimer.start();
         postPlaybackInfo(Started);
-    } else if (newState == QMediaPlayer::StoppedState) {
+    } else if (newState == QMediaPlayer::StoppedState && m_playbackState == QMediaPlayer::StoppedState) {
         // We've stopped playing the media. Post a stop signal.
         m_updateTimer.stop();
         postPlaybackInfo(Stopped);
@@ -181,11 +214,7 @@ void PlaybackManager::mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus ne
     emit mediaStatusChanged(newStatus);
     if (m_playbackState == QMediaPlayer::StoppedState) return;
     if (newStatus == QMediaPlayer::LoadedMedia) {
-        m_mediaPlayer->play();
-        if (m_resumePlayback) {
-            qCDebug(playbackManager) << "Resuming playback by seeking to " << (m_resumePosition / MS_TICK_FACTOR);
-            m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
-        }
+               m_mediaPlayer->play();
     } else if (newStatus == QMediaPlayer::EndOfMedia) {
         if (m_queue->hasNext() && m_queue->totalSize() > 1) {
             next();
@@ -202,6 +231,21 @@ void PlaybackManager::mediaPlayerDurationChanged(qint64 newDuration) {
         m_preloadTimer.stop();
         m_preloadTimer.start(std::max(static_cast<int>(newDuration - PRELOAD_DURATION), 0));
     }
+}
+
+void PlaybackManager::mediaPlayerSeekableChanged(bool newSeekable) {
+    emit seekableChanged(newSeekable);
+    if (m_seekToResumedPosition) {
+        m_forceSeekTimer.start();
+    }
+    /*if (m_seekToResumedPosition && newSeekable) {
+        qCDebug(playbackManager) << "Trying to seek to the resume position";
+
+        m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
+        if (m_mediaPlayer->position() > 1000) {
+            m_seekToResumedPosition = false;
+        }
+    }*/
 }
 
 void PlaybackManager::mediaPlayerError(QMediaPlayer::Error error) {
@@ -403,7 +447,7 @@ void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
         break;
     }
     case Stopped:
-        progress.setPositionTicks(m_mediaPlayer->position() * MS_TICK_FACTOR);
+        progress.setPositionTicks(m_stopPosition * MS_TICK_FACTOR);
         break;
     }
 
@@ -428,7 +472,7 @@ void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
 }
 
 void PlaybackManager::componentComplete() {
-    if (m_apiClient == nullptr) qWarning() << "No ApiClient set for PlaybackManager";
+    if (m_apiClient == nullptr) qCWarning(playbackManager) << "No ApiClient set for PlaybackManager";
     m_qmlIsParsingComponent = false;
 }
 
@@ -513,11 +557,11 @@ void PlaybackManager::handlePlaybackInfoResponse(QString itemId, QString mediaTy
         }
 
 
-        qDebug() << "Media source: " << source.name() << "\n"
-                 << "Prefer transcoding: " << transcodePreferred << "\n"
-                 << "DirectPlay supported: " << source.supportsDirectPlay() << "\n"
-                 << "DirectStream supported: " << source.supportsDirectStream() << "\n"
-                 << "Transcode supported: " << source.supportsTranscoding();
+        qCDebug(playbackManager()) << "Media source: " << source.name() << "\n"
+                                   << "Prefer transcoding: " << transcodePreferred << "\n"
+                                   << "DirectPlay supported: " << source.supportsDirectPlay() << "\n"
+                                   << "DirectStream supported: " << source.supportsDirectStream() << "\n"
+                                   << "Transcode supported: " << source.supportsTranscoding();
 
         if (source.supportsDirectPlay() && QFile::exists(source.path())) {
             resultingUrl = QUrl::fromLocalFile(source.path());
@@ -535,16 +579,16 @@ void PlaybackManager::handlePlaybackInfoResponse(QString itemId, QString mediaTy
                     + "/stream." + source.container() + "?" + query.toString(QUrl::EncodeReserved));
             playMethod = PlayMethod::DirectStream;
         } else if (source.supportsTranscoding() && !source.transcodingUrlNull() && transcodingAllowed) {
-            qDebug() << "Transcoding url: " << source.transcodingUrl();
+            qCDebug(playbackManager) << "Transcoding url: " << source.transcodingUrl();
             resultingUrl = QUrl(m_apiClient->baseUrl() + source.transcodingUrl());
             playMethod = PlayMethod::Transcode;
         } else {
-            qDebug() << "No suitable sources for item " << itemId;
+            qCDebug(playbackManager) << "No suitable sources for item " << itemId;
         }
         if (!resultingUrl.isEmpty()) break;
     }
     if (resultingUrl.isEmpty()) {
-        qWarning() << "Could not find suitable media source for item " << itemId;
+        qCWarning(playbackManager) << "Could not find suitable media source for item " << itemId;
         onItemErrorReceived(itemId, tr("Could not find a suitable media source."));
     } else {
         emit playMethodChanged(playMethod);

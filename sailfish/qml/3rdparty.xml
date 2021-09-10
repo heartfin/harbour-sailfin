@@ -1,22 +1,22 @@
 <includes>
     <include>
         <name>Storeman</name>
-		<url>https://github.com/mentaljam/harbour-storeman/tree/f64314e7f72550faf35f95f046b52cee42501cf8</url>
-		<type>SNIPPET</type>
-		<license>
-			<type>MIT</type>
-			<copyright>Copyright (c) 2017 Petr Tsymbarovich</copyright>
-			<text>licenses/MIT.txt</text>
-		</license>
-    </include>
-    <include>
-        <name>Hutspot</name>
-        <url>https://github.com/sailfish-spotify/hutspot/tree/22787baa6603b5235a3c9e6a65778e0485dfcd7b</url>
+        <url>https://github.com/mentaljam/harbour-storeman/tree/f64314e7f72550faf35f95f046b52cee42501cf8</url>
         <type>SNIPPET</type>
         <license>
             <type>MIT</type>
-            <copyright>Copyright (c) 2019 sailfish-spotify contributors</copyright>
+            <copyright>Copyright (c) 2017 Petr Tsymbarovich</copyright>
             <text>licenses/MIT.txt</text>
+        </license>
+    </include>
+    <include>
+        <name>mlite5</name>
+        <url>https://github.com/sailfishos/mlite</url>
+        <type>SNIPPET</type>
+        <license>
+            <type>LGPL 2.1</type>
+            <copyright>Copyright (C) 2014 Jolla Mobile &lt;andrew.den.exter@jollamobile.com&gt;</copyright>
+            <text>licenses/lgpl-2.1.txt</text>
         </license>
     </include>
 </includes>

@@ -95,7 +95,7 @@ Page {
                             id: userResumeLoader
                             apiClient: appWindow.apiClient
                             limit: 12
-                            //recursive: true*/
+                            //recursive: true
                         }
                     }
                 }
@@ -127,8 +127,7 @@ Page {
                 MoreSection {
                     text: model.name
                     busy: userItemModel.status !== J.UsersViewsLoader.Ready
-
-                    onHeaderClicked: pageStack.push(Qt.resolvedUrl("itemdetails/CollectionPage.qml"), {"itemId": model.jellyfinId})
+                    onHeaderClicked: appWindow.navigateToItem(model.jellyfinId, model.mediaType, model.type, model.isFolder);
                     Loader {
                         width: parent.width
                         sourceComponent: carrouselView
@@ -232,7 +231,7 @@ Page {
                 progress: (typeof model.userDataPlayedProgress !== 0.0) ? model.userDataPlayedPercentage / 100 : 0.0
 
                 onClicked: {
-                    pageStack.push(Utils.getPageUrl(model.mediaType, model.type, model.isFolder), {"itemId": model.jellyfinId, "itemData": model.qtObject})
+                    appWindow.navigateToItem(model.jellyfinId, model.mediaType, model.type, model.isFolder);
                 }
             }
         }

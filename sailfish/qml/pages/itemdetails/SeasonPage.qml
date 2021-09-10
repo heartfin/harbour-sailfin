@@ -144,7 +144,7 @@ BaseDetailPage {
                 wrapMode: Text.WordWrap
                 elide: Text.ElideRight
             }
-            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type), {"itemId": model.jellyfinId})
+            onClicked: appWindow.navigateToItem(model.jellyfinId, model.mediaType, model.type, model.isFolder);
         }
 
         VerticalScrollDecorator {}

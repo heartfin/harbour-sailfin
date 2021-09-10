@@ -325,10 +325,10 @@ PanelBackground {
             }
 
             PropertyChanges {
-                target: previousButton; opacity: 1; enabled: true;
+                target: previousButton; opacity: 1; enabled: playbackManager.hasPrevious;
             }
             PropertyChanges {
-                target: nextButton; opacity: 1; enabled: true;
+                target: nextButton; opacity: 1; enabled: playbackManager.hasNext;
             }
             PropertyChanges {
                 target: playModeButton; opacity: 1; enabled: true;
@@ -423,16 +423,24 @@ PanelBackground {
             allowedOrientations: appWindow.allowedOrientations
             SilicaFlickable {
                 anchors.fill: parent
-                /*PullDownMenu {
-                    MenuItem {
+                PullDownMenu {
+                    /*MenuItem {
                         //: Pulley menu item to view detailed media information of a song
                         text: qsTr("Info")
                     }
                     MenuItem {
                         //: Pulley menu item: add music to a playlist
                         text: qsTr("Add to playlist")
+                    }*/
+                    MenuItem {
+                        //: Pulley menu item: stops playback of music
+                        text: qsTr("Stop")
+                        onClicked: {
+                            playbackManager.stop()
+                            pageStack.pop()
+                        }
                     }
-                }*/
+                }
                 Loader {
                     Component.onCompleted: setSource(Qt.resolvedUrl("PlaybackBar.qml"),
                                                      {"isFullPage": true, "manager": manager, "y": 0})

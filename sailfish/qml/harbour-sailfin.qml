@@ -28,7 +28,7 @@ import Nemo.KeepAlive 1.2
 
 import "components"
 import "pages"
-import "." as D
+import "."
 
 ApplicationWindow {
     id: appWindow
@@ -50,7 +50,7 @@ ApplicationWindow {
     ApiClient {
         id: _apiClient
         objectName: "Test"
-        supportedCommands: [GeneralCommandType.Play, GeneralCommandType.DisplayContent, GeneralCommandType.DisplayMessage]
+        supportedCommands: [GeneralCommandType.Play, GeneralCommandType.DisplayMessage]
     }
 
     PlatformMediaControl {
@@ -80,7 +80,8 @@ ApplicationWindow {
     //cover: CoverBackground {CoverPlaceholder { icon.source: "icon.png"; text: "Sailfin"}}
     cover: {
         // Disabled due to buggy Loader behaviour
-        if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(_playbackManager.mediaStatus) >= 0) {
+        if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(_playbackManager.mediaStatus) >= 0
+                 || _playbackManager.playbackState === MediaPlayer.StoppedState) {
             return Qt.resolvedUrl("cover/CollectionPage.qml")
         } else {
             return Qt.resolvedUrl("cover/NowPlayingCover.qml")
@@ -153,6 +154,14 @@ ApplicationWindow {
         id: config
         path: "/nl/netsoj/chris/Sailfin"
         property bool showDebugInfo: false
+    }
+
+    function navigateToItem(jellyfinId, mediaType, type, isFolder) {
+        if (mediaType === "Audio") {
+            playbackManager.playItemId(jellyfinId)
+        } else {
+            pageStack.push(Utils.getPageUrl(mediaType, type, isFolder), {"itemId": jellyfinId});
+        }
     }
 
     //FIXME: proper error handling

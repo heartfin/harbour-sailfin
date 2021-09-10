@@ -58,7 +58,7 @@ BaseDetailPage {
                 text: qsTr("Sort by")
                 onClicked: pageStack.push(sortPageComponent)
             }
-            busy: collectionModel.status === J.UserItemsLoader.Loading
+            busy: collectionModel.status === J.ModelStatus.Loading
         }
         delegate: GridItem {
             RemoteImage {
@@ -94,7 +94,7 @@ BaseDetailPage {
                 horizontalAlignment: Text.AlignLeft
                 font.pixelSize: Theme.fontSizeSmall
             }
-            onClicked: pageStack.push(Utils.getPageUrl(model.mediaType, model.type, model.isFolder), {"itemId": model.jellyfinId})
+            onClicked: appWindow.navigateToItem(model.jellyfinId, model.mediaType, model.type, model.isFolder);
         }
 
         ViewPlaceholder {

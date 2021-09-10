@@ -91,7 +91,9 @@ ApplicationWindow {
                 color: "white"
             }
             Text {
-                text: "%1\n%2".arg(playbackManager.item.name ? playbackManager.item.name : "Nothing").arg(playbackManager.streamUrl)
+                text: "%1\n%2"
+                        .arg(playbackManager.item.name ? playbackManager.item.name : "Nothing")
+                        .arg(playbackManager.error === MediaPlayer.NoError ? playbackManager.streamUrl : playbackManager.errorString)
                 color: "white"
             }
         }

@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class CreateUserByName {
-public:
-	CreateUserByName();
+public:	CreateUserByName();
 	CreateUserByName(const CreateUserByName &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_name;
 	QString m_password;
+
+
 };
+
 
 } // NS DTO
 

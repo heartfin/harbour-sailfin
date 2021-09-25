@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 OpenLiveStreamDto::OpenLiveStreamDto() {}
+OpenLiveStreamDto::OpenLiveStreamDto (
+		QSharedPointer<DeviceProfile> deviceProfile 
+		) :
+	m_deviceProfile(deviceProfile) { }
+
+
 
 OpenLiveStreamDto::OpenLiveStreamDto(const OpenLiveStreamDto &other) :
 

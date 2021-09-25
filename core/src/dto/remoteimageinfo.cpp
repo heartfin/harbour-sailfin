@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 RemoteImageInfo::RemoteImageInfo() {}
+RemoteImageInfo::RemoteImageInfo (
+		ImageType type, 
+		RatingType ratingType 
+		) :
+	m_type(type),
+	m_ratingType(ratingType) { }
+
+
 
 RemoteImageInfo::RemoteImageInfo(const RemoteImageInfo &other) :
 

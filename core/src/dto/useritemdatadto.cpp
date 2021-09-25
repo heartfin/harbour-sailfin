@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 UserItemDataDto::UserItemDataDto() {}
+UserItemDataDto::UserItemDataDto (
+		qint64 playbackPositionTicks, 
+		qint32 playCount, 
+		bool isFavorite, 
+		bool played 
+		) :
+	m_playbackPositionTicks(playbackPositionTicks),
+	m_playCount(playCount),
+	m_isFavorite(isFavorite),
+	m_played(played) { }
+
+
 
 UserItemDataDto::UserItemDataDto(const UserItemDataDto &other) :
 

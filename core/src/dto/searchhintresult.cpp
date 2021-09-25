@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 SearchHintResult::SearchHintResult() {}
+SearchHintResult::SearchHintResult (
+		qint32 totalRecordCount 
+		) :
+	m_totalRecordCount(totalRecordCount) { }
+
+
 
 SearchHintResult::SearchHintResult(const SearchHintResult &other) :
 

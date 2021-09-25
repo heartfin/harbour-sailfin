@@ -47,7 +47,10 @@ namespace DTO {
 
 class UpdateUserEasyPassword {
 public:
-	UpdateUserEasyPassword();
+	UpdateUserEasyPassword(					
+		bool resetPassword		
+	);
+
 	UpdateUserEasyPassword(const UpdateUserEasyPassword &other);
 	
 	/**
@@ -96,7 +99,12 @@ protected:
 	QString m_newPassword;
 	QString m_newPw;
 	bool m_resetPassword;
+
+private:
+	// Private constructor which generates an invalid object, for use withing UpdateUserEasyPassword::fromJson();
+	UpdateUserEasyPassword();
 };
+
 
 } // NS DTO
 

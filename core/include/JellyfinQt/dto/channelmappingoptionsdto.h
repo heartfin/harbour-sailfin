@@ -51,8 +51,7 @@ namespace DTO {
 
 
 class ChannelMappingOptionsDto {
-public:
-	ChannelMappingOptionsDto();
+public:	ChannelMappingOptionsDto();
 	ChannelMappingOptionsDto(const ChannelMappingOptionsDto &other);
 	
 	/**
@@ -115,7 +114,10 @@ protected:
 	QList<NameIdPair> m_providerChannels;
 	QList<NameValuePair> m_mappings;
 	QString m_providerName;
+
+
 };
+
 
 } // NS DTO
 

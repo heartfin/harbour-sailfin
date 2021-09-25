@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class MediaUpdateInfoDto {
-public:
-	MediaUpdateInfoDto();
+public:	MediaUpdateInfoDto();
 	MediaUpdateInfoDto(const MediaUpdateInfoDto &other);
 	
 	/**
@@ -88,7 +87,10 @@ Created, Modified, Deleted.
 protected:
 	QString m_path;
 	QString m_updateType;
+
+
 };
+
 
 } // NS DTO
 

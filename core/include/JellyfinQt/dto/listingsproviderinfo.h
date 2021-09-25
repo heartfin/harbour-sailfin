@@ -50,7 +50,10 @@ namespace DTO {
 
 class ListingsProviderInfo {
 public:
-	ListingsProviderInfo();
+	ListingsProviderInfo(																			
+		bool enableAllTuners																		
+	);
+
 	ListingsProviderInfo(const ListingsProviderInfo &other);
 	
 	/**
@@ -207,7 +210,12 @@ protected:
 	QString m_moviePrefix;
 	QString m_preferredLanguage;
 	QString m_userAgent;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ListingsProviderInfo::fromJson();
+	ListingsProviderInfo();
 };
+
 
 } // NS DTO
 

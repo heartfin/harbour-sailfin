@@ -33,6 +33,24 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaybackStartInfo::PlaybackStartInfo() {}
+PlaybackStartInfo::PlaybackStartInfo (
+		bool canSeek, 
+		QSharedPointer<BaseItemDto> item, 
+		QString itemId, 
+		bool isPaused, 
+		bool isMuted, 
+		PlayMethod playMethod, 
+		RepeatMode repeatMode 
+		) :
+	m_canSeek(canSeek),
+	m_item(item),
+	m_itemId(itemId),
+	m_isPaused(isPaused),
+	m_isMuted(isMuted),
+	m_playMethod(playMethod),
+	m_repeatMode(repeatMode) { }
+
+
 
 PlaybackStartInfo::PlaybackStartInfo(const PlaybackStartInfo &other) :
 

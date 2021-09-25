@@ -51,7 +51,10 @@ namespace DTO {
 
 class AlbumInfo {
 public:
-	AlbumInfo();
+	AlbumInfo(																			
+		bool isAutomated								
+	);
+
 	AlbumInfo(const AlbumInfo &other);
 	
 	/**
@@ -200,7 +203,12 @@ protected:
 	QStringList m_albumArtists;
 	QJsonObject m_artistProviderIds;
 	QList<SongInfo> m_songInfos;
+
+private:
+	// Private constructor which generates an invalid object, for use withing AlbumInfo::fromJson();
+	AlbumInfo();
 };
+
 
 } // NS DTO
 

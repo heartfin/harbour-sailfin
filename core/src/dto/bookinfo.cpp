@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 BookInfo::BookInfo() {}
+BookInfo::BookInfo (
+		bool isAutomated 
+		) :
+	m_isAutomated(isAutomated) { }
+
+
 
 BookInfo::BookInfo(const BookInfo &other) :
 

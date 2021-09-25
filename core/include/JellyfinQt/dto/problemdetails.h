@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class ProblemDetails {
-public:
-	ProblemDetails();
+public:	ProblemDetails();
 	ProblemDetails(const ProblemDetails &other);
 	
 	/**
@@ -102,7 +101,10 @@ protected:
 	std::optional<qint32> m_status = std::nullopt;
 	QString m_detail;
 	QString m_instance;
+
+
 };
+
 
 } // NS DTO
 

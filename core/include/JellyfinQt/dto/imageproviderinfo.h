@@ -49,8 +49,7 @@ namespace DTO {
 
 
 class ImageProviderInfo {
-public:
-	ImageProviderInfo();
+public:	ImageProviderInfo();
 	ImageProviderInfo(const ImageProviderInfo &other);
 	
 	/**
@@ -89,7 +88,10 @@ public:
 protected:
 	QString m_name;
 	QList<ImageType> m_supportedImages;
+
+
 };
+
 
 } // NS DTO
 

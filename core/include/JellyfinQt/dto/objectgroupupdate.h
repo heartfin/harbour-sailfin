@@ -49,7 +49,12 @@ namespace DTO {
 
 class ObjectGroupUpdate {
 public:
-	ObjectGroupUpdate();
+	ObjectGroupUpdate(	
+		QString groupId,			
+		GroupUpdateType type,			
+		QVariant data		
+	);
+
 	ObjectGroupUpdate(const ObjectGroupUpdate &other);
 	
 	/**
@@ -90,7 +95,12 @@ protected:
 	QString m_groupId;
 	GroupUpdateType m_type;
 	QVariant m_data;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ObjectGroupUpdate::fromJson();
+	ObjectGroupUpdate();
 };
+
 
 } // NS DTO
 

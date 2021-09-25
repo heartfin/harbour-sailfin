@@ -33,6 +33,22 @@ namespace Jellyfin {
 namespace DTO {
 
 Version::Version() {}
+Version::Version (
+		qint32 major, 
+		qint32 minor, 
+		qint32 build, 
+		qint32 revision, 
+		qint32 majorRevision, 
+		qint32 minorRevision 
+		) :
+	m_major(major),
+	m_minor(minor),
+	m_build(build),
+	m_revision(revision),
+	m_majorRevision(majorRevision),
+	m_minorRevision(minorRevision) { }
+
+
 
 Version::Version(const Version &other) :
 

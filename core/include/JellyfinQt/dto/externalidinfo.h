@@ -48,7 +48,10 @@ namespace DTO {
 
 class ExternalIdInfo {
 public:
-	ExternalIdInfo();
+	ExternalIdInfo(					
+		ExternalIdMediaType type				
+	);
+
 	ExternalIdInfo(const ExternalIdInfo &other);
 	
 	/**
@@ -105,7 +108,12 @@ protected:
 	QString m_key;
 	ExternalIdMediaType m_type;
 	QString m_urlFormatString;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ExternalIdInfo::fromJson();
+	ExternalIdInfo();
 };
+
 
 } // NS DTO
 

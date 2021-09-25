@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 ImageOption::ImageOption() {}
+ImageOption::ImageOption (
+		ImageType type, 
+		qint32 limit, 
+		qint32 minWidth 
+		) :
+	m_type(type),
+	m_limit(limit),
+	m_minWidth(minWidth) { }
+
+
 
 ImageOption::ImageOption(const ImageOption &other) :
 

@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ResponseProfile::ResponseProfile() {}
+ResponseProfile::ResponseProfile (
+		DlnaProfileType type 
+		) :
+	m_type(type) { }
+
+
 
 ResponseProfile::ResponseProfile(const ResponseProfile &other) :
 

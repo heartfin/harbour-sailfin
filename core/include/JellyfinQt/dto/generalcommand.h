@@ -48,7 +48,11 @@ namespace DTO {
 
 class GeneralCommand {
 public:
-	GeneralCommand();
+	GeneralCommand(	
+		GeneralCommandType name,			
+		QString controllingUserId				
+	);
+
 	GeneralCommand(const GeneralCommand &other);
 	
 	/**
@@ -83,7 +87,12 @@ protected:
 	GeneralCommandType m_name;
 	QString m_controllingUserId;
 	QJsonObject m_arguments;
+
+private:
+	// Private constructor which generates an invalid object, for use withing GeneralCommand::fromJson();
+	GeneralCommand();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaPathDto::MediaPathDto() {}
+MediaPathDto::MediaPathDto (
+		QString name, 
+		QSharedPointer<MediaPathInfo> pathInfo 
+		) :
+	m_name(name),
+	m_pathInfo(pathInfo) { }
+
+
 
 MediaPathDto::MediaPathDto(const MediaPathDto &other) :
 

@@ -49,7 +49,12 @@ namespace DTO {
 
 class TaskResult {
 public:
-	TaskResult();
+	TaskResult(	
+		QDateTime startTimeUtc,			
+		QDateTime endTimeUtc,			
+		TaskCompletionStatus status												
+	);
+
 	TaskResult(const TaskResult &other);
 	
 	/**
@@ -150,7 +155,12 @@ protected:
 	QString m_jellyfinId;
 	QString m_errorMessage;
 	QString m_longErrorMessage;
+
+private:
+	// Private constructor which generates an invalid object, for use withing TaskResult::fromJson();
+	TaskResult();
 };
+
 
 } // NS DTO
 

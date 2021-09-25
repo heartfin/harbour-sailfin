@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 SearchHint::SearchHint() {}
+SearchHint::SearchHint (
+		QString itemId, 
+		QString jellyfinId, 
+		QString albumId, 
+		QString channelId 
+		) :
+	m_itemId(itemId),
+	m_jellyfinId(jellyfinId),
+	m_albumId(albumId),
+	m_channelId(channelId) { }
+
+
 
 SearchHint::SearchHint(const SearchHint &other) :
 

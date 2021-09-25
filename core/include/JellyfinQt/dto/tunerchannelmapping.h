@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class TunerChannelMapping {
-public:
-	TunerChannelMapping();
+public:	TunerChannelMapping();
 	TunerChannelMapping(const TunerChannelMapping &other);
 	
 	/**
@@ -94,7 +93,10 @@ protected:
 	QString m_providerChannelName;
 	QString m_providerChannelId;
 	QString m_jellyfinId;
+
+
 };
+
 
 } // NS DTO
 

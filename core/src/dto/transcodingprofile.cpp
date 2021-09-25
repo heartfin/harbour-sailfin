@@ -33,6 +33,30 @@ namespace Jellyfin {
 namespace DTO {
 
 TranscodingProfile::TranscodingProfile() {}
+TranscodingProfile::TranscodingProfile (
+		DlnaProfileType type, 
+		bool estimateContentLength, 
+		bool enableMpegtsM2TsMode, 
+		TranscodeSeekInfo transcodeSeekInfo, 
+		bool copyTimestamps, 
+		EncodingContext context, 
+		bool enableSubtitlesInManifest, 
+		qint32 minSegments, 
+		qint32 segmentLength, 
+		bool breakOnNonKeyFrames 
+		) :
+	m_type(type),
+	m_estimateContentLength(estimateContentLength),
+	m_enableMpegtsM2TsMode(enableMpegtsM2TsMode),
+	m_transcodeSeekInfo(transcodeSeekInfo),
+	m_copyTimestamps(copyTimestamps),
+	m_context(context),
+	m_enableSubtitlesInManifest(enableSubtitlesInManifest),
+	m_minSegments(minSegments),
+	m_segmentLength(segmentLength),
+	m_breakOnNonKeyFrames(breakOnNonKeyFrames) { }
+
+
 
 TranscodingProfile::TranscodingProfile(const TranscodingProfile &other) :
 

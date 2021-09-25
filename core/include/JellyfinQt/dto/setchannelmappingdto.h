@@ -47,7 +47,12 @@ namespace DTO {
 
 class SetChannelMappingDto {
 public:
-	SetChannelMappingDto();
+	SetChannelMappingDto(	
+		QString providerId,			
+		QString tunerChannelId,			
+		QString providerChannelId		
+	);
+
 	SetChannelMappingDto(const SetChannelMappingDto &other);
 	
 	/**
@@ -92,7 +97,12 @@ protected:
 	QString m_providerId;
 	QString m_tunerChannelId;
 	QString m_providerChannelId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SetChannelMappingDto::fromJson();
+	SetChannelMappingDto();
 };
+
 
 } // NS DTO
 

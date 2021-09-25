@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 JoinGroupRequestDto::JoinGroupRequestDto() {}
+JoinGroupRequestDto::JoinGroupRequestDto (
+		QString groupId 
+		) :
+	m_groupId(groupId) { }
+
+
 
 JoinGroupRequestDto::JoinGroupRequestDto(const JoinGroupRequestDto &other) :
 

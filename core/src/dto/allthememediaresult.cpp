@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 AllThemeMediaResult::AllThemeMediaResult() {}
+AllThemeMediaResult::AllThemeMediaResult (
+		QSharedPointer<ThemeMediaResult> themeVideosResult, 
+		QSharedPointer<ThemeMediaResult> themeSongsResult, 
+		QSharedPointer<ThemeMediaResult> soundtrackSongsResult 
+		) :
+	m_themeVideosResult(themeVideosResult),
+	m_themeSongsResult(themeSongsResult),
+	m_soundtrackSongsResult(soundtrackSongsResult) { }
+
+
 
 AllThemeMediaResult::AllThemeMediaResult(const AllThemeMediaResult &other) :
 

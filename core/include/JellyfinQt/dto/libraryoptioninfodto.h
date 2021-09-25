@@ -47,7 +47,10 @@ namespace DTO {
 
 class LibraryOptionInfoDto {
 public:
-	LibraryOptionInfoDto();
+	LibraryOptionInfoDto(			
+		bool defaultEnabled		
+	);
+
 	LibraryOptionInfoDto(const LibraryOptionInfoDto &other);
 	
 	/**
@@ -84,7 +87,12 @@ public:
 protected:
 	QString m_name;
 	bool m_defaultEnabled;
+
+private:
+	// Private constructor which generates an invalid object, for use withing LibraryOptionInfoDto::fromJson();
+	LibraryOptionInfoDto();
 };
+
 
 } // NS DTO
 

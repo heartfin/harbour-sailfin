@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 NotificationResultDto::NotificationResultDto() {}
+NotificationResultDto::NotificationResultDto (
+		qint32 totalRecordCount 
+		) :
+	m_totalRecordCount(totalRecordCount) { }
+
+
 
 NotificationResultDto::NotificationResultDto(const NotificationResultDto &other) :
 

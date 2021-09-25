@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 TrailerInfo::TrailerInfo() {}
+TrailerInfo::TrailerInfo (
+		bool isAutomated 
+		) :
+	m_isAutomated(isAutomated) { }
+
+
 
 TrailerInfo::TrailerInfo(const TrailerInfo &other) :
 

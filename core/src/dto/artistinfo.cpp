@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ArtistInfo::ArtistInfo() {}
+ArtistInfo::ArtistInfo (
+		bool isAutomated 
+		) :
+	m_isAutomated(isAutomated) { }
+
+
 
 ArtistInfo::ArtistInfo(const ArtistInfo &other) :
 

@@ -49,7 +49,10 @@ namespace DTO {
 
 class ForgotPasswordResult {
 public:
-	ForgotPasswordResult();
+	ForgotPasswordResult(	
+		ForgotPasswordAction action						
+	);
+
 	ForgotPasswordResult(const ForgotPasswordResult &other);
 	
 	/**
@@ -94,7 +97,12 @@ protected:
 	ForgotPasswordAction m_action;
 	QString m_pinFile;
 	QDateTime m_pinExpirationDate;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ForgotPasswordResult::fromJson();
+	ForgotPasswordResult();
 };
+
 
 } // NS DTO
 

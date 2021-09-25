@@ -33,6 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 SendCommand::SendCommand() {}
+SendCommand::SendCommand (
+		QString groupId, 
+		QString playlistItemId, 
+		QDateTime when, 
+		SendCommandType command, 
+		QDateTime emittedAt 
+		) :
+	m_groupId(groupId),
+	m_playlistItemId(playlistItemId),
+	m_when(when),
+	m_command(command),
+	m_emittedAt(emittedAt) { }
+
+
 
 SendCommand::SendCommand(const SendCommand &other) :
 

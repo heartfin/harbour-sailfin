@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryUpdateInfo::LibraryUpdateInfo() {}
+LibraryUpdateInfo::LibraryUpdateInfo (
+		bool isEmpty 
+		) :
+	m_isEmpty(isEmpty) { }
+
+
 
 LibraryUpdateInfo::LibraryUpdateInfo(const LibraryUpdateInfo &other) :
 

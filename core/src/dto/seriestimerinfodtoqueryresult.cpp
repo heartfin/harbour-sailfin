@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 SeriesTimerInfoDtoQueryResult::SeriesTimerInfoDtoQueryResult() {}
+SeriesTimerInfoDtoQueryResult::SeriesTimerInfoDtoQueryResult (
+		qint32 totalRecordCount, 
+		qint32 startIndex 
+		) :
+	m_totalRecordCount(totalRecordCount),
+	m_startIndex(startIndex) { }
+
+
 
 SeriesTimerInfoDtoQueryResult::SeriesTimerInfoDtoQueryResult(const SeriesTimerInfoDtoQueryResult &other) :
 

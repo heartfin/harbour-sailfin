@@ -52,7 +52,12 @@ namespace DTO {
 
 class PlaybackStopInfo {
 public:
-	PlaybackStopInfo();
+	PlaybackStopInfo(	
+		QSharedPointer<BaseItemDto> item,			
+		QString itemId,													
+		bool failed								
+	);
+
 	PlaybackStopInfo(const PlaybackStopInfo &other);
 	
 	/**
@@ -177,7 +182,12 @@ protected:
 	QString m_nextMediaType;
 	QString m_playlistItemId;
 	QList<QueueItem> m_nowPlayingQueue;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PlaybackStopInfo::fromJson();
+	PlaybackStopInfo();
 };
+
 
 } // NS DTO
 

@@ -46,7 +46,21 @@ namespace DTO {
 
 class ItemCounts {
 public:
-	ItemCounts();
+	ItemCounts(	
+		qint32 movieCount,			
+		qint32 seriesCount,			
+		qint32 episodeCount,			
+		qint32 artistCount,			
+		qint32 programCount,			
+		qint32 trailerCount,			
+		qint32 songCount,			
+		qint32 albumCount,			
+		qint32 musicVideoCount,			
+		qint32 boxSetCount,			
+		qint32 bookCount,			
+		qint32 itemCount		
+	);
+
 	ItemCounts(const ItemCounts &other);
 	
 	/**
@@ -181,7 +195,12 @@ protected:
 	qint32 m_boxSetCount;
 	qint32 m_bookCount;
 	qint32 m_itemCount;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ItemCounts::fromJson();
+	ItemCounts();
 };
+
 
 } // NS DTO
 

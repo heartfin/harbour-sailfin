@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaybackInfoDto::PlaybackInfoDto() {}
+PlaybackInfoDto::PlaybackInfoDto (
+		QSharedPointer<DeviceProfile> deviceProfile 
+		) :
+	m_deviceProfile(deviceProfile) { }
+
+
 
 PlaybackInfoDto::PlaybackInfoDto(const PlaybackInfoDto &other) :
 

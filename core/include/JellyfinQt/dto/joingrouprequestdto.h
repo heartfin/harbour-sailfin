@@ -47,7 +47,10 @@ namespace DTO {
 
 class JoinGroupRequestDto {
 public:
-	JoinGroupRequestDto();
+	JoinGroupRequestDto(	
+		QString groupId		
+	);
+
 	JoinGroupRequestDto(const JoinGroupRequestDto &other);
 	
 	/**
@@ -72,7 +75,12 @@ public:
 
 protected:
 	QString m_groupId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing JoinGroupRequestDto::fromJson();
+	JoinGroupRequestDto();
 };
+
 
 } // NS DTO
 

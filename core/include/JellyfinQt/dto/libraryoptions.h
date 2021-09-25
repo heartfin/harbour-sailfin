@@ -51,7 +51,23 @@ namespace DTO {
 
 class LibraryOptions {
 public:
-	LibraryOptions();
+	LibraryOptions(	
+		bool enablePhotos,			
+		bool enableRealtimeMonitor,			
+		bool enableChapterImageExtraction,			
+		bool extractChapterImagesDuringLibraryScan,					
+		bool saveLocalMetadata,			
+		bool enableInternetProviders,			
+		bool enableAutomaticSeriesGrouping,			
+		bool enableEmbeddedTitles,			
+		bool enableEmbeddedEpisodeInfos,			
+		qint32 automaticRefreshIntervalDays,																			
+		bool skipSubtitlesIfEmbeddedSubtitlesPresent,			
+		bool skipSubtitlesIfAudioTrackMatches,					
+		bool requirePerfectSubtitleMatch,			
+		bool saveSubtitlesWithMedia				
+	);
+
 	LibraryOptions(const LibraryOptions &other);
 	
 	/**
@@ -246,7 +262,12 @@ protected:
 	bool m_requirePerfectSubtitleMatch;
 	bool m_saveSubtitlesWithMedia;
 	QList<TypeOptions> m_typeOptions;
+
+private:
+	// Private constructor which generates an invalid object, for use withing LibraryOptions::fromJson();
+	LibraryOptions();
 };
+
 
 } // NS DTO
 

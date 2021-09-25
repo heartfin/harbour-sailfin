@@ -54,7 +54,20 @@ namespace DTO {
 
 class TimerInfoDto {
 public:
-	TimerInfoDto();
+	TimerInfoDto(									
+		QString channelId,																	
+		QDateTime startDate,			
+		QDateTime endDate,					
+		qint32 priority,			
+		qint32 prePaddingSeconds,			
+		qint32 postPaddingSeconds,			
+		bool isPrePaddingRequired,							
+		bool isPostPaddingRequired,			
+		KeepUntil keepUntil,			
+		RecordingStatus status,									
+		QSharedPointer<BaseItemDto> programInfo		
+	);
+
 	TimerInfoDto(const TimerInfoDto &other);
 	
 	/**
@@ -363,7 +376,12 @@ protected:
 	QString m_externalSeriesTimerId;
 	std::optional<qint64> m_runTimeTicks = std::nullopt;
 	QSharedPointer<BaseItemDto> m_programInfo = QSharedPointer<BaseItemDto>();
+
+private:
+	// Private constructor which generates an invalid object, for use withing TimerInfoDto::fromJson();
+	TimerInfoDto();
 };
+
 
 } // NS DTO
 

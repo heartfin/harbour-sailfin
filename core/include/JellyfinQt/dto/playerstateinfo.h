@@ -49,7 +49,14 @@ namespace DTO {
 
 class PlayerStateInfo {
 public:
-	PlayerStateInfo();
+	PlayerStateInfo(			
+		bool canSeek,			
+		bool isPaused,			
+		bool isMuted,											
+		PlayMethod playMethod,			
+		RepeatMode repeatMode		
+	);
+
 	PlayerStateInfo(const PlayerStateInfo &other);
 	
 	/**
@@ -166,7 +173,12 @@ protected:
 	QString m_mediaSourceId;
 	PlayMethod m_playMethod;
 	RepeatMode m_repeatMode;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PlayerStateInfo::fromJson();
+	PlayerStateInfo();
 };
+
 
 } // NS DTO
 

@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class NewGroupRequestDto {
-public:
-	NewGroupRequestDto();
+public:	NewGroupRequestDto();
 	NewGroupRequestDto(const NewGroupRequestDto &other);
 	
 	/**
@@ -74,7 +73,10 @@ public:
 
 protected:
 	QString m_groupName;
+
+
 };
+
 
 } // NS DTO
 

@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class PublicSystemInfo {
-public:
-	PublicSystemInfo();
+public:	PublicSystemInfo();
 	PublicSystemInfo(const PublicSystemInfo &other);
 	
 	/**
@@ -146,7 +145,10 @@ protected:
 	QString m_operatingSystem;
 	QString m_jellyfinId;
 	std::optional<bool> m_startupWizardCompleted = std::nullopt;
+
+
 };
+
 
 } // NS DTO
 

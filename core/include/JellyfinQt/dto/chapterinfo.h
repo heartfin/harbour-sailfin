@@ -48,7 +48,11 @@ namespace DTO {
 
 class ChapterInfo {
 public:
-	ChapterInfo();
+	ChapterInfo(	
+		qint64 startPositionTicks,							
+		QDateTime imageDateModified				
+	);
+
 	ChapterInfo(const ChapterInfo &other);
 	
 	/**
@@ -111,7 +115,12 @@ protected:
 	QString m_imagePath;
 	QDateTime m_imageDateModified;
 	QString m_imageTag;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ChapterInfo::fromJson();
+	ChapterInfo();
 };
+
 
 } // NS DTO
 

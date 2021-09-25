@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class MediaUrl {
-public:
-	MediaUrl();
+public:	MediaUrl();
 	MediaUrl(const MediaUrl &other);
 	
 	/**
@@ -78,7 +77,10 @@ public:
 protected:
 	QString m_url;
 	QString m_name;
+
+
 };
+
 
 } // NS DTO
 

@@ -48,8 +48,7 @@ namespace DTO {
 
 
 class RemoveFromPlaylistRequestDto {
-public:
-	RemoveFromPlaylistRequestDto();
+public:	RemoveFromPlaylistRequestDto();
 	RemoveFromPlaylistRequestDto(const RemoveFromPlaylistRequestDto &other);
 	
 	/**
@@ -76,7 +75,10 @@ public:
 
 protected:
 	QStringList m_playlistItemIds;
+
+
 };
+
 
 } // NS DTO
 

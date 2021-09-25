@@ -52,7 +52,10 @@ namespace DTO {
 
 class OpenLiveStreamDto {
 public:
-	OpenLiveStreamDto();
+	OpenLiveStreamDto(																							
+		QSharedPointer<DeviceProfile> deviceProfile				
+	);
+
 	OpenLiveStreamDto(const OpenLiveStreamDto &other);
 	
 	/**
@@ -217,7 +220,12 @@ protected:
 	std::optional<bool> m_enableDirectStream = std::nullopt;
 	QSharedPointer<DeviceProfile> m_deviceProfile = QSharedPointer<DeviceProfile>();
 	QList<MediaProtocol> m_directPlayProtocols;
+
+private:
+	// Private constructor which generates an invalid object, for use withing OpenLiveStreamDto::fromJson();
+	OpenLiveStreamDto();
 };
+
 
 } // NS DTO
 

@@ -48,7 +48,11 @@ namespace DTO {
 
 class ConfigurationPageInfo {
 public:
-	ConfigurationPageInfo();
+	ConfigurationPageInfo(			
+		bool enableInMainMenu,									
+		ConfigurationPageType configurationPageType				
+	);
+
 	ConfigurationPageInfo(const ConfigurationPageInfo &other);
 	
 	/**
@@ -139,7 +143,12 @@ protected:
 	QString m_displayName;
 	ConfigurationPageType m_configurationPageType;
 	QString m_pluginId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ConfigurationPageInfo::fromJson();
+	ConfigurationPageInfo();
 };
+
 
 } // NS DTO
 

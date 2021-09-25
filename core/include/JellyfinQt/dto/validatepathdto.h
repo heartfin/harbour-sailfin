@@ -47,7 +47,10 @@ namespace DTO {
 
 class ValidatePathDto {
 public:
-	ValidatePathDto();
+	ValidatePathDto(	
+		bool validateWritable						
+	);
+
 	ValidatePathDto(const ValidatePathDto &other);
 	
 	/**
@@ -96,7 +99,12 @@ protected:
 	bool m_validateWritable;
 	QString m_path;
 	std::optional<bool> m_isFile = std::nullopt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ValidatePathDto::fromJson();
+	ValidatePathDto();
 };
+
 
 } // NS DTO
 

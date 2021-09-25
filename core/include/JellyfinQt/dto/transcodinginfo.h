@@ -50,7 +50,11 @@ namespace DTO {
 
 class TranscodingInfo {
 public:
-	TranscodingInfo();
+	TranscodingInfo(							
+		bool isVideoDirect,			
+		bool isAudioDirect																
+	);
+
 	TranscodingInfo(const TranscodingInfo &other);
 	
 	/**
@@ -157,7 +161,12 @@ protected:
 	std::optional<qint32> m_height = std::nullopt;
 	std::optional<qint32> m_audioChannels = std::nullopt;
 	QList<TranscodeReason> m_transcodeReasons;
+
+private:
+	// Private constructor which generates an invalid object, for use withing TranscodingInfo::fromJson();
+	TranscodingInfo();
 };
+
 
 } // NS DTO
 

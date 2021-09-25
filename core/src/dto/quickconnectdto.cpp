@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 QuickConnectDto::QuickConnectDto() {}
+QuickConnectDto::QuickConnectDto (
+		QString token 
+		) :
+	m_token(token) { }
+
+
 
 QuickConnectDto::QuickConnectDto(const QuickConnectDto &other) :
 

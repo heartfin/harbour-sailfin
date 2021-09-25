@@ -53,7 +53,12 @@ namespace DTO {
 
 class TaskInfo {
 public:
-	TaskInfo();
+	TaskInfo(			
+		TaskState state,							
+		QSharedPointer<TaskResult> lastExecutionResult,									
+		bool isHidden				
+	);
+
 	TaskInfo(const TaskInfo &other);
 	
 	/**
@@ -174,7 +179,12 @@ protected:
 	QString m_category;
 	bool m_isHidden;
 	QString m_key;
+
+private:
+	// Private constructor which generates an invalid object, for use withing TaskInfo::fromJson();
+	TaskInfo();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ImageByNameInfo::ImageByNameInfo() {}
+ImageByNameInfo::ImageByNameInfo (
+		qint64 fileLength 
+		) :
+	m_fileLength(fileLength) { }
+
+
 
 ImageByNameInfo::ImageByNameInfo(const ImageByNameInfo &other) :
 

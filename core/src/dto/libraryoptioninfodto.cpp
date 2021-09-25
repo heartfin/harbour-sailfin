@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryOptionInfoDto::LibraryOptionInfoDto() {}
+LibraryOptionInfoDto::LibraryOptionInfoDto (
+		bool defaultEnabled 
+		) :
+	m_defaultEnabled(defaultEnabled) { }
+
+
 
 LibraryOptionInfoDto::LibraryOptionInfoDto(const LibraryOptionInfoDto &other) :
 

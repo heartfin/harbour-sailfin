@@ -49,7 +49,10 @@ namespace DTO {
 
 class LibraryUpdateInfo {
 public:
-	LibraryUpdateInfo();
+	LibraryUpdateInfo(													
+		bool isEmpty		
+	);
+
 	LibraryUpdateInfo(const LibraryUpdateInfo &other);
 	
 	/**
@@ -138,7 +141,12 @@ protected:
 	QStringList m_itemsUpdated;
 	QStringList m_collectionFolders;
 	bool m_isEmpty;
+
+private:
+	// Private constructor which generates an invalid object, for use withing LibraryUpdateInfo::fromJson();
+	LibraryUpdateInfo();
 };
+
 
 } // NS DTO
 

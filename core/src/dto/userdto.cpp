@@ -33,6 +33,22 @@ namespace Jellyfin {
 namespace DTO {
 
 UserDto::UserDto() {}
+UserDto::UserDto (
+		QString jellyfinId, 
+		bool hasPassword, 
+		bool hasConfiguredPassword, 
+		bool hasConfiguredEasyPassword, 
+		QSharedPointer<UserConfiguration> configuration, 
+		QSharedPointer<UserPolicy> policy 
+		) :
+	m_jellyfinId(jellyfinId),
+	m_hasPassword(hasPassword),
+	m_hasConfiguredPassword(hasConfiguredPassword),
+	m_hasConfiguredEasyPassword(hasConfiguredEasyPassword),
+	m_configuration(configuration),
+	m_policy(policy) { }
+
+
 
 UserDto::UserDto(const UserDto &other) :
 

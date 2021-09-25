@@ -49,7 +49,12 @@ namespace DTO {
 
 class PersonLookupInfoRemoteSearchQuery {
 public:
-	PersonLookupInfoRemoteSearchQuery();
+	PersonLookupInfoRemoteSearchQuery(	
+		QSharedPointer<PersonLookupInfo> searchInfo,			
+		QString itemId,					
+		bool includeDisabledProviders		
+	);
+
 	PersonLookupInfoRemoteSearchQuery(const PersonLookupInfoRemoteSearchQuery &other);
 	
 	/**
@@ -98,7 +103,12 @@ protected:
 	QString m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PersonLookupInfoRemoteSearchQuery::fromJson();
+	PersonLookupInfoRemoteSearchQuery();
 };
+
 
 } // NS DTO
 

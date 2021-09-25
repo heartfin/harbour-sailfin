@@ -47,7 +47,10 @@ namespace DTO {
 
 class ForgotPasswordDto {
 public:
-	ForgotPasswordDto();
+	ForgotPasswordDto(	
+		QString enteredUsername		
+	);
+
 	ForgotPasswordDto(const ForgotPasswordDto &other);
 	
 	/**
@@ -72,7 +75,12 @@ public:
 
 protected:
 	QString m_enteredUsername;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ForgotPasswordDto::fromJson();
+	ForgotPasswordDto();
 };
+
 
 } // NS DTO
 

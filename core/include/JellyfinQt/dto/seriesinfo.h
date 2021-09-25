@@ -48,7 +48,10 @@ namespace DTO {
 
 class SeriesInfo {
 public:
-	SeriesInfo();
+	SeriesInfo(																			
+		bool isAutomated		
+	);
+
 	SeriesInfo(const SeriesInfo &other);
 	
 	/**
@@ -165,7 +168,12 @@ protected:
 	std::optional<qint32> m_parentIndexNumber = std::nullopt;
 	QDateTime m_premiereDate;
 	bool m_isAutomated;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SeriesInfo::fromJson();
+	SeriesInfo();
 };
+
 
 } // NS DTO
 

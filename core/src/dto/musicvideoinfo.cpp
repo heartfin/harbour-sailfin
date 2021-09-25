@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 MusicVideoInfo::MusicVideoInfo() {}
+MusicVideoInfo::MusicVideoInfo (
+		bool isAutomated 
+		) :
+	m_isAutomated(isAutomated) { }
+
+
 
 MusicVideoInfo::MusicVideoInfo(const MusicVideoInfo &other) :
 

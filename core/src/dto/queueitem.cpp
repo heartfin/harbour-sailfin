@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 QueueItem::QueueItem() {}
+QueueItem::QueueItem (
+		QString jellyfinId 
+		) :
+	m_jellyfinId(jellyfinId) { }
+
+
 
 QueueItem::QueueItem(const QueueItem &other) :
 

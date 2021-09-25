@@ -47,7 +47,10 @@ namespace DTO {
 
 class SetShuffleModeRequestDto {
 public:
-	SetShuffleModeRequestDto();
+	SetShuffleModeRequestDto(	
+		GroupShuffleMode mode		
+	);
+
 	SetShuffleModeRequestDto(const SetShuffleModeRequestDto &other);
 	
 	/**
@@ -68,7 +71,12 @@ public:
 
 protected:
 	GroupShuffleMode m_mode;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SetShuffleModeRequestDto::fromJson();
+	SetShuffleModeRequestDto();
 };
+
 
 } // NS DTO
 

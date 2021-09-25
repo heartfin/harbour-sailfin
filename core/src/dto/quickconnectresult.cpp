@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 QuickConnectResult::QuickConnectResult() {}
+QuickConnectResult::QuickConnectResult (
+		bool authenticated 
+		) :
+	m_authenticated(authenticated) { }
+
+
 
 QuickConnectResult::QuickConnectResult(const QuickConnectResult &other) :
 

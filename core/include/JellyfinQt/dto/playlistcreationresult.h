@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class PlaylistCreationResult {
-public:
-	PlaylistCreationResult();
+public:	PlaylistCreationResult();
 	PlaylistCreationResult(const PlaylistCreationResult &other);
 	
 	/**
@@ -70,7 +69,10 @@ public:
 
 protected:
 	QString m_jellyfinId;
+
+
 };
+
 
 } // NS DTO
 

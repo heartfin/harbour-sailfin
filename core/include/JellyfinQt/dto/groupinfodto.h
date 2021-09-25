@@ -51,7 +51,12 @@ namespace DTO {
 
 class GroupInfoDto {
 public:
-	GroupInfoDto();
+	GroupInfoDto(	
+		QString groupId,					
+		GroupStateType state,					
+		QDateTime lastUpdatedAt		
+	);
+
 	GroupInfoDto(const GroupInfoDto &other);
 	
 	/**
@@ -116,7 +121,12 @@ protected:
 	GroupStateType m_state;
 	QStringList m_participants;
 	QDateTime m_lastUpdatedAt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing GroupInfoDto::fromJson();
+	GroupInfoDto();
 };
+
 
 } // NS DTO
 

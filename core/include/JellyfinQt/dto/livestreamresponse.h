@@ -48,7 +48,10 @@ namespace DTO {
 
 class LiveStreamResponse {
 public:
-	LiveStreamResponse();
+	LiveStreamResponse(	
+		QSharedPointer<MediaSourceInfo> mediaSource		
+	);
+
 	LiveStreamResponse(const LiveStreamResponse &other);
 	
 	/**
@@ -69,7 +72,12 @@ public:
 
 protected:
 	QSharedPointer<MediaSourceInfo> m_mediaSource = QSharedPointer<MediaSourceInfo>();
+
+private:
+	// Private constructor which generates an invalid object, for use withing LiveStreamResponse::fromJson();
+	LiveStreamResponse();
 };
+
 
 } // NS DTO
 

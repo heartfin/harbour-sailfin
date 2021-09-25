@@ -48,8 +48,7 @@ namespace DTO {
 
 
 class MetadataOptions {
-public:
-	MetadataOptions();
+public:	MetadataOptions();
 	MetadataOptions(const MetadataOptions &other);
 	
 	/**
@@ -120,7 +119,10 @@ protected:
 	QStringList m_metadataFetcherOrder;
 	QStringList m_disabledImageFetchers;
 	QStringList m_imageFetcherOrder;
+
+
 };
+
 
 } // NS DTO
 

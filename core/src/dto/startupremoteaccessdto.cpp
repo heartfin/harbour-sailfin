@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 StartupRemoteAccessDto::StartupRemoteAccessDto() {}
+StartupRemoteAccessDto::StartupRemoteAccessDto (
+		bool enableRemoteAccess, 
+		bool enableAutomaticPortMapping 
+		) :
+	m_enableRemoteAccess(enableRemoteAccess),
+	m_enableAutomaticPortMapping(enableAutomaticPortMapping) { }
+
+
 
 StartupRemoteAccessDto::StartupRemoteAccessDto(const StartupRemoteAccessDto &other) :
 

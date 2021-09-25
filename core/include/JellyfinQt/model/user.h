@@ -27,7 +27,8 @@ namespace Model {
 class User : public DTO::UserDto {
 
 public:
-    User();
+    // Default empty constructor
+    User(ApiClient *apiClient = nullptr);
     User(const DTO::UserDto &data, ApiClient *apiClient = nullptr);
 
     bool sameAs(const DTO::UserDto &other);

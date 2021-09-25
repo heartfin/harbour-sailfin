@@ -33,6 +33,64 @@ namespace Jellyfin {
 namespace DTO {
 
 UserPolicy::UserPolicy() {}
+UserPolicy::UserPolicy (
+		bool isAdministrator, 
+		bool isHidden, 
+		bool isDisabled, 
+		bool enableUserPreferenceAccess, 
+		bool enableRemoteControlOfOtherUsers, 
+		bool enableSharedDeviceControl, 
+		bool enableRemoteAccess, 
+		bool enableLiveTvManagement, 
+		bool enableLiveTvAccess, 
+		bool enableMediaPlayback, 
+		bool enableAudioPlaybackTranscoding, 
+		bool enableVideoPlaybackTranscoding, 
+		bool enablePlaybackRemuxing, 
+		bool forceRemoteSourceTranscoding, 
+		bool enableContentDeletion, 
+		bool enableContentDownloading, 
+		bool enableSyncTranscoding, 
+		bool enableMediaConversion, 
+		bool enableAllDevices, 
+		bool enableAllChannels, 
+		bool enableAllFolders, 
+		qint32 invalidLoginAttemptCount, 
+		qint32 loginAttemptsBeforeLockout, 
+		qint32 maxActiveSessions, 
+		bool enablePublicSharing, 
+		qint32 remoteClientBitrateLimit, 
+		SyncPlayUserAccessType syncPlayAccess 
+		) :
+	m_isAdministrator(isAdministrator),
+	m_isHidden(isHidden),
+	m_isDisabled(isDisabled),
+	m_enableUserPreferenceAccess(enableUserPreferenceAccess),
+	m_enableRemoteControlOfOtherUsers(enableRemoteControlOfOtherUsers),
+	m_enableSharedDeviceControl(enableSharedDeviceControl),
+	m_enableRemoteAccess(enableRemoteAccess),
+	m_enableLiveTvManagement(enableLiveTvManagement),
+	m_enableLiveTvAccess(enableLiveTvAccess),
+	m_enableMediaPlayback(enableMediaPlayback),
+	m_enableAudioPlaybackTranscoding(enableAudioPlaybackTranscoding),
+	m_enableVideoPlaybackTranscoding(enableVideoPlaybackTranscoding),
+	m_enablePlaybackRemuxing(enablePlaybackRemuxing),
+	m_forceRemoteSourceTranscoding(forceRemoteSourceTranscoding),
+	m_enableContentDeletion(enableContentDeletion),
+	m_enableContentDownloading(enableContentDownloading),
+	m_enableSyncTranscoding(enableSyncTranscoding),
+	m_enableMediaConversion(enableMediaConversion),
+	m_enableAllDevices(enableAllDevices),
+	m_enableAllChannels(enableAllChannels),
+	m_enableAllFolders(enableAllFolders),
+	m_invalidLoginAttemptCount(invalidLoginAttemptCount),
+	m_loginAttemptsBeforeLockout(loginAttemptsBeforeLockout),
+	m_maxActiveSessions(maxActiveSessions),
+	m_enablePublicSharing(enablePublicSharing),
+	m_remoteClientBitrateLimit(remoteClientBitrateLimit),
+	m_syncPlayAccess(syncPlayAccess) { }
+
+
 
 UserPolicy::UserPolicy(const UserPolicy &other) :
 

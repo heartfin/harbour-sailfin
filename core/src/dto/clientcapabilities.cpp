@@ -33,6 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 ClientCapabilities::ClientCapabilities() {}
+ClientCapabilities::ClientCapabilities (
+		bool supportsMediaControl, 
+		bool supportsContentUploading, 
+		bool supportsPersistentIdentifier, 
+		bool supportsSync, 
+		QSharedPointer<DeviceProfile> deviceProfile 
+		) :
+	m_supportsMediaControl(supportsMediaControl),
+	m_supportsContentUploading(supportsContentUploading),
+	m_supportsPersistentIdentifier(supportsPersistentIdentifier),
+	m_supportsSync(supportsSync),
+	m_deviceProfile(deviceProfile) { }
+
+
 
 ClientCapabilities::ClientCapabilities(const ClientCapabilities &other) :
 

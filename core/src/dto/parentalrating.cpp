@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ParentalRating::ParentalRating() {}
+ParentalRating::ParentalRating (
+		qint32 value 
+		) :
+	m_value(value) { }
+
+
 
 ParentalRating::ParentalRating(const ParentalRating &other) :
 

@@ -51,7 +51,11 @@ namespace DTO {
 
 class RecommendationDto {
 public:
-	RecommendationDto();
+	RecommendationDto(			
+		RecommendationType recommendationType,					
+		QString categoryId		
+	);
+
 	RecommendationDto(const RecommendationDto &other);
 	
 	/**
@@ -94,7 +98,12 @@ protected:
 	RecommendationType m_recommendationType;
 	QString m_baselineItemName;
 	QString m_categoryId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing RecommendationDto::fromJson();
+	RecommendationDto();
 };
+
 
 } // NS DTO
 

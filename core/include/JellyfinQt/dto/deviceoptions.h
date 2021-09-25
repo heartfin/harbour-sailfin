@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class DeviceOptions {
-public:
-	DeviceOptions();
+public:	DeviceOptions();
 	DeviceOptions(const DeviceOptions &other);
 	
 	/**
@@ -70,7 +69,10 @@ public:
 
 protected:
 	QString m_customName;
+
+
 };
+
 
 } // NS DTO
 

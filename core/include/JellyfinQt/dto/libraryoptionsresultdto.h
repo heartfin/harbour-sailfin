@@ -49,8 +49,7 @@ namespace DTO {
 
 
 class LibraryOptionsResultDto {
-public:
-	LibraryOptionsResultDto();
+public:	LibraryOptionsResultDto();
 	LibraryOptionsResultDto(const LibraryOptionsResultDto &other);
 	
 	/**
@@ -113,7 +112,10 @@ protected:
 	QList<LibraryOptionInfoDto> m_metadataReaders;
 	QList<LibraryOptionInfoDto> m_subtitleFetchers;
 	QList<LibraryTypeOptionsDto> m_typeOptions;
+
+
 };
+
 
 } // NS DTO
 

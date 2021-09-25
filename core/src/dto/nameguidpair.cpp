@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 NameGuidPair::NameGuidPair() {}
+NameGuidPair::NameGuidPair (
+		QString jellyfinId 
+		) :
+	m_jellyfinId(jellyfinId) { }
+
+
 
 NameGuidPair::NameGuidPair(const NameGuidPair &other) :
 

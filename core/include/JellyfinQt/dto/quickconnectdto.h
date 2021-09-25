@@ -47,7 +47,10 @@ namespace DTO {
 
 class QuickConnectDto {
 public:
-	QuickConnectDto();
+	QuickConnectDto(	
+		QString token		
+	);
+
 	QuickConnectDto(const QuickConnectDto &other);
 	
 	/**
@@ -72,7 +75,12 @@ public:
 
 protected:
 	QString m_token;
+
+private:
+	// Private constructor which generates an invalid object, for use withing QuickConnectDto::fromJson();
+	QuickConnectDto();
 };
+
 
 } // NS DTO
 

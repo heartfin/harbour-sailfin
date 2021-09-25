@@ -625,6 +625,13 @@ void generateFileForSchema(ref const string name, ref const Node scheme, Node al
 		foreach (type; usedTypes) {
 			collectImports(type);
 		}
+
+		foreach (ref type; usedTypes.retro) {
+			if (type.isNotNullable) {
+				type.isLastNonNullable = true;
+				break;
+			}
+		}
 		
 		// Sort them for nicer reading
 		string[] sortedSystemImports = sort(systemImports[]).array;
@@ -817,11 +824,13 @@ void writeObjectHeader(File output, string name, MetaTypeInfo[] properties, stri
 		MetaTypeInfo[] properties;
 		string[] userImports;
 		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
+		bool hasRequiredProperties;
 	}
 	Controller controller = new Controller();
 	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
 	controller.properties = properties;
 	controller.userImports = userImports;
+	controller.hasRequiredProperties = properties.canFind!((x) => !x.isNullable);
 	
 	output.writeln(render!(import("object_header.hbs"), Controller)(controller));
 	
@@ -833,10 +842,13 @@ void writeObjectImplementation(File output, string name, MetaTypeInfo[] properti
 		string className;
 		MetaTypeInfo[] properties;
 		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
+		bool hasRequiredProperties;
 	}
 	Controller controller = new Controller();
 	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
 	controller.properties = properties;
+	controller.hasRequiredProperties = properties.canFind!((x) => !x.isNullable);
+
 	output.writeln(render!(import("object_implementation.hbs"), Controller)(controller));
 }
 
@@ -1019,21 +1031,22 @@ public:
 	
 	/// For use in templating
 	bool isLast = false;
+	bool isLastNonNullable = false;
 	string defaultValue = "";
 	
-	bool hasDefaultValue() {
+	bool hasDefaultValue() const {
 		return defaultValue.length > 0;
 	}
 	
-	string writeName() {
+	string writeName() const {
 		return name.applyCasePolicy(CPP_CLASS_MEMBER_CASING, CasePolicy.PASCAL);
 	}
 	
-	string memberName() {
+	string memberName() const {
 		return CPP_CLASS_MEMBER_PREFIX ~ name;
 	}
 	
-	string typeNameWithQualifiers() {
+	string typeNameWithQualifiers() const {
 		if (needsPointer) {
 			return "QSharedPointer<" ~ typeName ~ ">";
 		}
@@ -1044,12 +1057,12 @@ public:
 		}
 	}
 	
-	bool needsOptional() {
+	bool needsOptional() const {
 		return (isNullable || hasDefaultValue) && !isTypeNullable;
 	}
 	
 	string typeNullableCheck;
-	string nullableCheck() {
+	string nullableCheck() const {
 		if (needsOptional) {
 			return "!" ~ memberName ~ ".has_value()";
 		} else if (typeNullableCheck.length > 0) {
@@ -1060,18 +1073,20 @@ public:
 	}
 	
 	string typeNullableSetter = "";
-	string nullableSetter() {
+	string nullableSetter() const {
 		if (needsOptional) {
 			return " = std::nullopt";
 		}
 		return typeNullableSetter;
 	}
 	
-	string defaultInitializer() {
+	string defaultInitializer() const {
 		if (needsPointer) return "QSharedPointer<" ~ typeName ~ ">()";
 		if (needsOptional) return "std::nullopt";
 		return "";
 	}
+
+	bool isNotNullable() const { return !isNullable; }
 	
 	string fileName (){
 		return typeName.applyCasePolicy(CasePolicy.PASCAL, CasePolicy.LOWER) ~ ".h";

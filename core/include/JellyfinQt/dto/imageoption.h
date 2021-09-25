@@ -47,7 +47,12 @@ namespace DTO {
 
 class ImageOption {
 public:
-	ImageOption();
+	ImageOption(	
+		ImageType type,			
+		qint32 limit,			
+		qint32 minWidth		
+	);
+
 	ImageOption(const ImageOption &other);
 	
 	/**
@@ -88,7 +93,12 @@ protected:
 	ImageType m_type;
 	qint32 m_limit;
 	qint32 m_minWidth;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ImageOption::fromJson();
+	ImageOption();
 };
+
 
 } // NS DTO
 

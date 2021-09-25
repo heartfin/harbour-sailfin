@@ -49,7 +49,11 @@ namespace DTO {
 
 class UpdateLibraryOptionsDto {
 public:
-	UpdateLibraryOptionsDto();
+	UpdateLibraryOptionsDto(	
+		QString jellyfinId,			
+		QSharedPointer<LibraryOptions> libraryOptions		
+	);
+
 	UpdateLibraryOptionsDto(const UpdateLibraryOptionsDto &other);
 	
 	/**
@@ -80,7 +84,12 @@ public:
 protected:
 	QString m_jellyfinId;
 	QSharedPointer<LibraryOptions> m_libraryOptions = QSharedPointer<LibraryOptions>();
+
+private:
+	// Private constructor which generates an invalid object, for use withing UpdateLibraryOptionsDto::fromJson();
+	UpdateLibraryOptionsDto();
 };
+
 
 } // NS DTO
 

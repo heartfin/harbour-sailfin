@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 LogFile::LogFile() {}
+LogFile::LogFile (
+		QDateTime dateCreated, 
+		QDateTime dateModified, 
+		qint64 size 
+		) :
+	m_dateCreated(dateCreated),
+	m_dateModified(dateModified),
+	m_size(size) { }
+
+
 
 LogFile::LogFile(const LogFile &other) :
 

@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 ActivityLogEntry::ActivityLogEntry() {}
+ActivityLogEntry::ActivityLogEntry (
+		qint64 jellyfinId, 
+		QDateTime date, 
+		QString userId, 
+		LogLevel severity 
+		) :
+	m_jellyfinId(jellyfinId),
+	m_date(date),
+	m_userId(userId),
+	m_severity(severity) { }
+
+
 
 ActivityLogEntry::ActivityLogEntry(const ActivityLogEntry &other) :
 

@@ -33,6 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 PluginInfo::PluginInfo() {}
+PluginInfo::PluginInfo (
+		QSharedPointer<Version> version, 
+		QString jellyfinId, 
+		bool canUninstall, 
+		bool hasImage, 
+		PluginStatus status 
+		) :
+	m_version(version),
+	m_jellyfinId(jellyfinId),
+	m_canUninstall(canUninstall),
+	m_hasImage(hasImage),
+	m_status(status) { }
+
+
 
 PluginInfo::PluginInfo(const PluginInfo &other) :
 

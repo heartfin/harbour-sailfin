@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ListingsProviderInfo::ListingsProviderInfo() {}
+ListingsProviderInfo::ListingsProviderInfo (
+		bool enableAllTuners 
+		) :
+	m_enableAllTuners(enableAllTuners) { }
+
+
 
 ListingsProviderInfo::ListingsProviderInfo(const ListingsProviderInfo &other) :
 

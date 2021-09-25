@@ -49,7 +49,11 @@ namespace DTO {
 
 class AuthenticationInfoQueryResult {
 public:
-	AuthenticationInfoQueryResult();
+	AuthenticationInfoQueryResult(			
+		qint32 totalRecordCount,			
+		qint32 startIndex		
+	);
+
 	AuthenticationInfoQueryResult(const AuthenticationInfoQueryResult &other);
 	
 	/**
@@ -96,7 +100,12 @@ protected:
 	QList<AuthenticationInfo> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
+
+private:
+	// Private constructor which generates an invalid object, for use withing AuthenticationInfoQueryResult::fromJson();
+	AuthenticationInfoQueryResult();
 };
+
 
 } // NS DTO
 

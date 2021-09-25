@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 RepositoryInfo::RepositoryInfo() {}
+RepositoryInfo::RepositoryInfo (
+		bool enabled 
+		) :
+	m_enabled(enabled) { }
+
+
 
 RepositoryInfo::RepositoryInfo(const RepositoryInfo &other) :
 

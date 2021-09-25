@@ -49,7 +49,12 @@ namespace DTO {
 
 class IPlugin {
 public:
-	IPlugin();
+	IPlugin(					
+		QString jellyfinId,			
+		QSharedPointer<Version> version,					
+		bool canUninstall				
+	);
+
 	IPlugin(const IPlugin &other);
 	
 	/**
@@ -138,7 +143,12 @@ protected:
 	QString m_assemblyFilePath;
 	bool m_canUninstall;
 	QString m_dataFolderPath;
+
+private:
+	// Private constructor which generates an invalid object, for use withing IPlugin::fromJson();
+	IPlugin();
 };
+
 
 } // NS DTO
 

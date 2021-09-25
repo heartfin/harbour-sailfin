@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 UtcTimeResponse::UtcTimeResponse() {}
+UtcTimeResponse::UtcTimeResponse (
+		QDateTime requestReceptionTime, 
+		QDateTime responseTransmissionTime 
+		) :
+	m_requestReceptionTime(requestReceptionTime),
+	m_responseTransmissionTime(responseTransmissionTime) { }
+
+
 
 UtcTimeResponse::UtcTimeResponse(const UtcTimeResponse &other) :
 

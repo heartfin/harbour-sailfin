@@ -48,7 +48,10 @@ namespace DTO {
 
 class QuickConnectResult {
 public:
-	QuickConnectResult();
+	QuickConnectResult(	
+		bool authenticated												
+	);
+
 	QuickConnectResult(const QuickConnectResult &other);
 	
 	/**
@@ -133,7 +136,12 @@ protected:
 	QString m_authentication;
 	QString m_error;
 	QDateTime m_dateAdded;
+
+private:
+	// Private constructor which generates an invalid object, for use withing QuickConnectResult::fromJson();
+	QuickConnectResult();
 };
+
 
 } // NS DTO
 

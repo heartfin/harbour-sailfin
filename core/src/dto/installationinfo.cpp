@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 InstallationInfo::InstallationInfo() {}
+InstallationInfo::InstallationInfo (
+		QString guid, 
+		QSharedPointer<Version> version 
+		) :
+	m_guid(guid),
+	m_version(version) { }
+
+
 
 InstallationInfo::InstallationInfo(const InstallationInfo &other) :
 

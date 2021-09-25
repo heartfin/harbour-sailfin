@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 TunerHostInfo::TunerHostInfo() {}
+TunerHostInfo::TunerHostInfo (
+		bool importFavoritesOnly, 
+		bool allowHWTranscoding, 
+		bool enableStreamLooping, 
+		qint32 tunerCount 
+		) :
+	m_importFavoritesOnly(importFavoritesOnly),
+	m_allowHWTranscoding(allowHWTranscoding),
+	m_enableStreamLooping(enableStreamLooping),
+	m_tunerCount(tunerCount) { }
+
+
 
 TunerHostInfo::TunerHostInfo(const TunerHostInfo &other) :
 

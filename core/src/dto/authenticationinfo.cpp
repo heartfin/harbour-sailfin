@@ -33,6 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 AuthenticationInfo::AuthenticationInfo() {}
+AuthenticationInfo::AuthenticationInfo (
+		qint64 jellyfinId, 
+		QString userId, 
+		bool isActive, 
+		QDateTime dateCreated, 
+		QDateTime dateLastActivity 
+		) :
+	m_jellyfinId(jellyfinId),
+	m_userId(userId),
+	m_isActive(isActive),
+	m_dateCreated(dateCreated),
+	m_dateLastActivity(dateLastActivity) { }
+
+
 
 AuthenticationInfo::AuthenticationInfo(const AuthenticationInfo &other) :
 

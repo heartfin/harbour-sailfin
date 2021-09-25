@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 BoxSetInfo::BoxSetInfo() {}
+BoxSetInfo::BoxSetInfo (
+		bool isAutomated 
+		) :
+	m_isAutomated(isAutomated) { }
+
+
 
 BoxSetInfo::BoxSetInfo(const BoxSetInfo &other) :
 

@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ForgotPasswordResult::ForgotPasswordResult() {}
+ForgotPasswordResult::ForgotPasswordResult (
+		ForgotPasswordAction action 
+		) :
+	m_action(action) { }
+
+
 
 ForgotPasswordResult::ForgotPasswordResult(const ForgotPasswordResult &other) :
 

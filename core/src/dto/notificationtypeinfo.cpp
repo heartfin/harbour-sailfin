@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 NotificationTypeInfo::NotificationTypeInfo() {}
+NotificationTypeInfo::NotificationTypeInfo (
+		bool enabled, 
+		bool isBasedOnUserEvent 
+		) :
+	m_enabled(enabled),
+	m_isBasedOnUserEvent(isBasedOnUserEvent) { }
+
+
 
 NotificationTypeInfo::NotificationTypeInfo(const NotificationTypeInfo &other) :
 

@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 TaskResult::TaskResult() {}
+TaskResult::TaskResult (
+		QDateTime startTimeUtc, 
+		QDateTime endTimeUtc, 
+		TaskCompletionStatus status 
+		) :
+	m_startTimeUtc(startTimeUtc),
+	m_endTimeUtc(endTimeUtc),
+	m_status(status) { }
+
+
 
 TaskResult::TaskResult(const TaskResult &other) :
 

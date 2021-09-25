@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 NotificationsSummaryDto::NotificationsSummaryDto() {}
+NotificationsSummaryDto::NotificationsSummaryDto (
+		qint32 unreadCount, 
+		NotificationLevel maxUnreadNotificationLevel 
+		) :
+	m_unreadCount(unreadCount),
+	m_maxUnreadNotificationLevel(maxUnreadNotificationLevel) { }
+
+
 
 NotificationsSummaryDto::NotificationsSummaryDto(const NotificationsSummaryDto &other) :
 

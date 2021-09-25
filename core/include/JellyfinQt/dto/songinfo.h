@@ -50,7 +50,10 @@ namespace DTO {
 
 class SongInfo {
 public:
-	SongInfo();
+	SongInfo(																			
+		bool isAutomated								
+	);
+
 	SongInfo(const SongInfo &other);
 	
 	/**
@@ -191,7 +194,12 @@ protected:
 	QStringList m_albumArtists;
 	QString m_album;
 	QStringList m_artists;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SongInfo::fromJson();
+	SongInfo();
 };
+
 
 } // NS DTO
 

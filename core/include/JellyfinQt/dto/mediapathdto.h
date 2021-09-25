@@ -49,7 +49,11 @@ namespace DTO {
 
 class MediaPathDto {
 public:
-	MediaPathDto();
+	MediaPathDto(	
+		QString name,					
+		QSharedPointer<MediaPathInfo> pathInfo		
+	);
+
 	MediaPathDto(const MediaPathDto &other);
 	
 	/**
@@ -92,7 +96,12 @@ protected:
 	QString m_name;
 	QString m_path;
 	QSharedPointer<MediaPathInfo> m_pathInfo = QSharedPointer<MediaPathInfo>();
+
+private:
+	// Private constructor which generates an invalid object, for use withing MediaPathDto::fromJson();
+	MediaPathDto();
 };
+
 
 } // NS DTO
 

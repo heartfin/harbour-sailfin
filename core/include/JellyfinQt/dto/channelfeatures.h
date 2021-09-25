@@ -52,7 +52,14 @@ namespace DTO {
 
 class ChannelFeatures {
 public:
-	ChannelFeatures();
+	ChannelFeatures(					
+		bool canSearch,													
+		bool supportsSortOrderToggle,			
+		bool supportsLatestMedia,			
+		bool canFilter,			
+		bool supportsContentDownloading		
+	);
+
 	ChannelFeatures(const ChannelFeatures &other);
 	
 	/**
@@ -201,7 +208,12 @@ protected:
 	bool m_supportsLatestMedia;
 	bool m_canFilter;
 	bool m_supportsContentDownloading;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ChannelFeatures::fromJson();
+	ChannelFeatures();
 };
+
 
 } // NS DTO
 

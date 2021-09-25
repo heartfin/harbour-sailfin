@@ -49,7 +49,10 @@ namespace DTO {
 
 class VersionInfo {
 public:
-	VersionInfo();
+	VersionInfo(			
+		QSharedPointer<Version> versionNumber																
+	);
+
 	VersionInfo(const VersionInfo &other);
 	
 	/**
@@ -166,7 +169,12 @@ protected:
 	QString m_timestamp;
 	QString m_repositoryName;
 	QString m_repositoryUrl;
+
+private:
+	// Private constructor which generates an invalid object, for use withing VersionInfo::fromJson();
+	VersionInfo();
 };
+
 
 } // NS DTO
 

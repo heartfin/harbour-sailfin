@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 GeneralCommand::GeneralCommand() {}
+GeneralCommand::GeneralCommand (
+		GeneralCommandType name, 
+		QString controllingUserId 
+		) :
+	m_name(name),
+	m_controllingUserId(controllingUserId) { }
+
+
 
 GeneralCommand::GeneralCommand(const GeneralCommand &other) :
 

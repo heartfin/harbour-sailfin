@@ -47,7 +47,10 @@ namespace DTO {
 
 class MediaAttachment {
 public:
-	MediaAttachment();
+	MediaAttachment(							
+		qint32 index								
+	);
+
 	MediaAttachment(const MediaAttachment &other);
 	
 	/**
@@ -144,7 +147,12 @@ protected:
 	QString m_fileName;
 	QString m_mimeType;
 	QString m_deliveryUrl;
+
+private:
+	// Private constructor which generates an invalid object, for use withing MediaAttachment::fromJson();
+	MediaAttachment();
 };
+
 
 } // NS DTO
 

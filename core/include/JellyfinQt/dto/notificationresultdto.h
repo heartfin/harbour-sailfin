@@ -49,7 +49,10 @@ namespace DTO {
 
 class NotificationResultDto {
 public:
-	NotificationResultDto();
+	NotificationResultDto(			
+		qint32 totalRecordCount		
+	);
+
 	NotificationResultDto(const NotificationResultDto &other);
 	
 	/**
@@ -86,7 +89,12 @@ public:
 protected:
 	QList<NotificationDto> m_notifications;
 	qint32 m_totalRecordCount;
+
+private:
+	// Private constructor which generates an invalid object, for use withing NotificationResultDto::fromJson();
+	NotificationResultDto();
 };
+
 
 } // NS DTO
 

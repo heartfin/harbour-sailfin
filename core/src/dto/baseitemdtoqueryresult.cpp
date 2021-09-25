@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 BaseItemDtoQueryResult::BaseItemDtoQueryResult() {}
+BaseItemDtoQueryResult::BaseItemDtoQueryResult (
+		qint32 totalRecordCount, 
+		qint32 startIndex 
+		) :
+	m_totalRecordCount(totalRecordCount),
+	m_startIndex(startIndex) { }
+
+
 
 BaseItemDtoQueryResult::BaseItemDtoQueryResult(const BaseItemDtoQueryResult &other) :
 

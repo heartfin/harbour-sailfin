@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class TimerEventInfo {
-public:
-	TimerEventInfo();
+public:	TimerEventInfo();
 	TimerEventInfo(const TimerEventInfo &other);
 	
 	/**
@@ -78,7 +77,10 @@ public:
 protected:
 	QString m_jellyfinId;
 	QString m_programId;
+
+
 };
+
 
 } // NS DTO
 

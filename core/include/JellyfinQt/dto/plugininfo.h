@@ -50,7 +50,14 @@ namespace DTO {
 
 class PluginInfo {
 public:
-	PluginInfo();
+	PluginInfo(			
+		QSharedPointer<Version> version,							
+		QString jellyfinId,			
+		bool canUninstall,			
+		bool hasImage,			
+		PluginStatus status		
+	);
+
 	PluginInfo(const PluginInfo &other);
 	
 	/**
@@ -143,7 +150,12 @@ protected:
 	bool m_canUninstall;
 	bool m_hasImage;
 	PluginStatus m_status;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PluginInfo::fromJson();
+	PluginInfo();
 };
+
 
 } // NS DTO
 

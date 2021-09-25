@@ -49,7 +49,13 @@ namespace DTO {
 
 class ActivityLogEntry {
 public:
-	ActivityLogEntry();
+	ActivityLogEntry(	
+		qint64 jellyfinId,													
+		QDateTime date,			
+		QString userId,					
+		LogLevel severity		
+	);
+
 	ActivityLogEntry(const ActivityLogEntry &other);
 	
 	/**
@@ -172,7 +178,12 @@ protected:
 	QString m_userId;
 	QString m_userPrimaryImageTag;
 	LogLevel m_severity;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ActivityLogEntry::fromJson();
+	ActivityLogEntry();
 };
+
 
 } // NS DTO
 

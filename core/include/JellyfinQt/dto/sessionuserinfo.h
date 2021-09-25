@@ -47,7 +47,10 @@ namespace DTO {
 
 class SessionUserInfo {
 public:
-	SessionUserInfo();
+	SessionUserInfo(	
+		QString userId				
+	);
+
 	SessionUserInfo(const SessionUserInfo &other);
 	
 	/**
@@ -84,7 +87,12 @@ public:
 protected:
 	QString m_userId;
 	QString m_userName;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SessionUserInfo::fromJson();
+	SessionUserInfo();
 };
+
 
 } // NS DTO
 

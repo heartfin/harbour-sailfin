@@ -33,6 +33,32 @@ namespace Jellyfin {
 namespace DTO {
 
 BaseItemDto::BaseItemDto() {}
+BaseItemDto::BaseItemDto (
+		QString jellyfinId, 
+		Video3DFormat video3DFormat, 
+		PlayAccess playAccess, 
+		QSharedPointer<UserItemDataDto> userData, 
+		VideoType videoType, 
+		LocationType locationType, 
+		IsoType isoType, 
+		ImageOrientation imageOrientation, 
+		ChannelType channelType, 
+		ProgramAudio audio, 
+		QSharedPointer<BaseItemDto> currentProgram 
+		) :
+	m_jellyfinId(jellyfinId),
+	m_video3DFormat(video3DFormat),
+	m_playAccess(playAccess),
+	m_userData(userData),
+	m_videoType(videoType),
+	m_locationType(locationType),
+	m_isoType(isoType),
+	m_imageOrientation(imageOrientation),
+	m_channelType(channelType),
+	m_audio(audio),
+	m_currentProgram(currentProgram) { }
+
+
 
 BaseItemDto::BaseItemDto(const BaseItemDto &other) :
 

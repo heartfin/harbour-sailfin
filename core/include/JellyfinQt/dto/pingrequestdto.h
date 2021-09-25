@@ -46,7 +46,10 @@ namespace DTO {
 
 class PingRequestDto {
 public:
-	PingRequestDto();
+	PingRequestDto(	
+		qint64 ping		
+	);
+
 	PingRequestDto(const PingRequestDto &other);
 	
 	/**
@@ -71,7 +74,12 @@ public:
 
 protected:
 	qint64 m_ping;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PingRequestDto::fromJson();
+	PingRequestDto();
 };
+
 
 } // NS DTO
 

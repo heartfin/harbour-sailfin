@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 ReadyRequestDto::ReadyRequestDto() {}
+ReadyRequestDto::ReadyRequestDto (
+		QDateTime when, 
+		qint64 positionTicks, 
+		bool isPlaying, 
+		QString playlistItemId 
+		) :
+	m_when(when),
+	m_positionTicks(positionTicks),
+	m_isPlaying(isPlaying),
+	m_playlistItemId(playlistItemId) { }
+
+
 
 ReadyRequestDto::ReadyRequestDto(const ReadyRequestDto &other) :
 

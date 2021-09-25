@@ -46,7 +46,11 @@ namespace DTO {
 
 class StartupRemoteAccessDto {
 public:
-	StartupRemoteAccessDto();
+	StartupRemoteAccessDto(	
+		bool enableRemoteAccess,			
+		bool enableAutomaticPortMapping		
+	);
+
 	StartupRemoteAccessDto(const StartupRemoteAccessDto &other);
 	
 	/**
@@ -81,7 +85,12 @@ public:
 protected:
 	bool m_enableRemoteAccess;
 	bool m_enableAutomaticPortMapping;
+
+private:
+	// Private constructor which generates an invalid object, for use withing StartupRemoteAccessDto::fromJson();
+	StartupRemoteAccessDto();
 };
+
 
 } // NS DTO
 

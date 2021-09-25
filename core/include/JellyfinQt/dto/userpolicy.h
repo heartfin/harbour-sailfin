@@ -52,7 +52,36 @@ namespace DTO {
 
 class UserPolicy {
 public:
-	UserPolicy();
+	UserPolicy(	
+		bool isAdministrator,			
+		bool isHidden,			
+		bool isDisabled,							
+		bool enableUserPreferenceAccess,							
+		bool enableRemoteControlOfOtherUsers,			
+		bool enableSharedDeviceControl,			
+		bool enableRemoteAccess,			
+		bool enableLiveTvManagement,			
+		bool enableLiveTvAccess,			
+		bool enableMediaPlayback,			
+		bool enableAudioPlaybackTranscoding,			
+		bool enableVideoPlaybackTranscoding,			
+		bool enablePlaybackRemuxing,			
+		bool forceRemoteSourceTranscoding,			
+		bool enableContentDeletion,					
+		bool enableContentDownloading,			
+		bool enableSyncTranscoding,			
+		bool enableMediaConversion,					
+		bool enableAllDevices,					
+		bool enableAllChannels,					
+		bool enableAllFolders,			
+		qint32 invalidLoginAttemptCount,			
+		qint32 loginAttemptsBeforeLockout,			
+		qint32 maxActiveSessions,			
+		bool enablePublicSharing,							
+		qint32 remoteClientBitrateLimit,							
+		SyncPlayUserAccessType syncPlayAccess		
+	);
+
 	UserPolicy(const UserPolicy &other);
 	
 	/**
@@ -345,7 +374,12 @@ protected:
 	QString m_authenticationProviderId;
 	QString m_passwordResetProviderId;
 	SyncPlayUserAccessType m_syncPlayAccess;
+
+private:
+	// Private constructor which generates an invalid object, for use withing UserPolicy::fromJson();
+	UserPolicy();
 };
+
 
 } // NS DTO
 

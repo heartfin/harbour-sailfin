@@ -49,7 +49,12 @@ namespace DTO {
 
 class AlbumInfoRemoteSearchQuery {
 public:
-	AlbumInfoRemoteSearchQuery();
+	AlbumInfoRemoteSearchQuery(	
+		QSharedPointer<AlbumInfo> searchInfo,			
+		QString itemId,					
+		bool includeDisabledProviders		
+	);
+
 	AlbumInfoRemoteSearchQuery(const AlbumInfoRemoteSearchQuery &other);
 	
 	/**
@@ -98,7 +103,12 @@ protected:
 	QString m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;
+
+private:
+	// Private constructor which generates an invalid object, for use withing AlbumInfoRemoteSearchQuery::fromJson();
+	AlbumInfoRemoteSearchQuery();
 };
+
 
 } // NS DTO
 

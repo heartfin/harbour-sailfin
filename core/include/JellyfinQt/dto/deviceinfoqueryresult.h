@@ -49,7 +49,11 @@ namespace DTO {
 
 class DeviceInfoQueryResult {
 public:
-	DeviceInfoQueryResult();
+	DeviceInfoQueryResult(			
+		qint32 totalRecordCount,			
+		qint32 startIndex		
+	);
+
 	DeviceInfoQueryResult(const DeviceInfoQueryResult &other);
 	
 	/**
@@ -96,7 +100,12 @@ protected:
 	QList<DeviceInfo> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
+
+private:
+	// Private constructor which generates an invalid object, for use withing DeviceInfoQueryResult::fromJson();
+	DeviceInfoQueryResult();
 };
+
 
 } // NS DTO
 

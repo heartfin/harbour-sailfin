@@ -48,7 +48,10 @@ namespace DTO {
 
 class SubtitleProfile {
 public:
-	SubtitleProfile();
+	SubtitleProfile(			
+		SubtitleDeliveryMethod method								
+	);
+
 	SubtitleProfile(const SubtitleProfile &other);
 	
 	/**
@@ -101,7 +104,12 @@ protected:
 	QString m_didlMode;
 	QString m_language;
 	QString m_container;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SubtitleProfile::fromJson();
+	SubtitleProfile();
 };
+
 
 } // NS DTO
 

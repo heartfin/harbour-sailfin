@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ExternalIdInfo::ExternalIdInfo() {}
+ExternalIdInfo::ExternalIdInfo (
+		ExternalIdMediaType type 
+		) :
+	m_type(type) { }
+
+
 
 ExternalIdInfo::ExternalIdInfo(const ExternalIdInfo &other) :
 

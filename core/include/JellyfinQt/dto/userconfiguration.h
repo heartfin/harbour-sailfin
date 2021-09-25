@@ -50,7 +50,18 @@ namespace DTO {
 
 class UserConfiguration {
 public:
-	UserConfiguration();
+	UserConfiguration(			
+		bool playDefaultAudioTrack,					
+		bool displayMissingEpisodes,					
+		SubtitlePlaybackMode subtitleMode,			
+		bool displayCollectionsView,			
+		bool enableLocalPassword,									
+		bool hidePlayedInLatest,			
+		bool rememberAudioSelections,			
+		bool rememberSubtitleSelections,			
+		bool enableNextEpisodeAutoPlay		
+	);
+
 	UserConfiguration(const UserConfiguration &other);
 	
 	/**
@@ -179,7 +190,12 @@ protected:
 	bool m_rememberAudioSelections;
 	bool m_rememberSubtitleSelections;
 	bool m_enableNextEpisodeAutoPlay;
+
+private:
+	// Private constructor which generates an invalid object, for use withing UserConfiguration::fromJson();
+	UserConfiguration();
 };
+
 
 } // NS DTO
 

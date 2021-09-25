@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 FileSystemEntryInfo::FileSystemEntryInfo() {}
+FileSystemEntryInfo::FileSystemEntryInfo (
+		FileSystemEntryType type 
+		) :
+	m_type(type) { }
+
+
 
 FileSystemEntryInfo::FileSystemEntryInfo(const FileSystemEntryInfo &other) :
 

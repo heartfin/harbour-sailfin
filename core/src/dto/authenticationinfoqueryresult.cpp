@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 AuthenticationInfoQueryResult::AuthenticationInfoQueryResult() {}
+AuthenticationInfoQueryResult::AuthenticationInfoQueryResult (
+		qint32 totalRecordCount, 
+		qint32 startIndex 
+		) :
+	m_totalRecordCount(totalRecordCount),
+	m_startIndex(startIndex) { }
+
+
 
 AuthenticationInfoQueryResult::AuthenticationInfoQueryResult(const AuthenticationInfoQueryResult &other) :
 

@@ -47,7 +47,11 @@ namespace DTO {
 
 class NotificationsSummaryDto {
 public:
-	NotificationsSummaryDto();
+	NotificationsSummaryDto(	
+		qint32 unreadCount,			
+		NotificationLevel maxUnreadNotificationLevel		
+	);
+
 	NotificationsSummaryDto(const NotificationsSummaryDto &other);
 	
 	/**
@@ -78,7 +82,12 @@ public:
 protected:
 	qint32 m_unreadCount;
 	NotificationLevel m_maxUnreadNotificationLevel;
+
+private:
+	// Private constructor which generates an invalid object, for use withing NotificationsSummaryDto::fromJson();
+	NotificationsSummaryDto();
 };
+
 
 } // NS DTO
 

@@ -49,7 +49,11 @@ namespace DTO {
 
 class PlayRequestDto {
 public:
-	PlayRequestDto();
+	PlayRequestDto(			
+		qint32 playingItemPosition,			
+		qint64 startPositionTicks		
+	);
+
 	PlayRequestDto(const PlayRequestDto &other);
 	
 	/**
@@ -96,7 +100,12 @@ protected:
 	QStringList m_playingQueue;
 	qint32 m_playingItemPosition;
 	qint64 m_startPositionTicks;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PlayRequestDto::fromJson();
+	PlayRequestDto();
 };
+
 
 } // NS DTO
 

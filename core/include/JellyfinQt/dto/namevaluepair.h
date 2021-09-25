@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class NameValuePair {
-public:
-	NameValuePair();
+public:	NameValuePair();
 	NameValuePair(const NameValuePair &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_name;
 	QString m_value;
+
+
 };
+
 
 } // NS DTO
 

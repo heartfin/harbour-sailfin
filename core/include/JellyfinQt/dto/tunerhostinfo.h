@@ -47,7 +47,13 @@ namespace DTO {
 
 class TunerHostInfo {
 public:
-	TunerHostInfo();
+	TunerHostInfo(											
+		bool importFavoritesOnly,			
+		bool allowHWTranscoding,			
+		bool enableStreamLooping,					
+		qint32 tunerCount				
+	);
+
 	TunerHostInfo(const TunerHostInfo &other);
 	
 	/**
@@ -142,7 +148,12 @@ protected:
 	QString m_source;
 	qint32 m_tunerCount;
 	QString m_userAgent;
+
+private:
+	// Private constructor which generates an invalid object, for use withing TunerHostInfo::fromJson();
+	TunerHostInfo();
 };
+
 
 } // NS DTO
 

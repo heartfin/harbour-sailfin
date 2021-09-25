@@ -47,7 +47,10 @@ namespace DTO {
 
 class RepositoryInfo {
 public:
-	RepositoryInfo();
+	RepositoryInfo(					
+		bool enabled		
+	);
+
 	RepositoryInfo(const RepositoryInfo &other);
 	
 	/**
@@ -96,7 +99,12 @@ protected:
 	QString m_name;
 	QString m_url;
 	bool m_enabled;
+
+private:
+	// Private constructor which generates an invalid object, for use withing RepositoryInfo::fromJson();
+	RepositoryInfo();
 };
+
 
 } // NS DTO
 

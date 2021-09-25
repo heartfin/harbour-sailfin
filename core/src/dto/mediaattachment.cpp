@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaAttachment::MediaAttachment() {}
+MediaAttachment::MediaAttachment (
+		qint32 index 
+		) :
+	m_index(index) { }
+
+
 
 MediaAttachment::MediaAttachment(const MediaAttachment &other) :
 

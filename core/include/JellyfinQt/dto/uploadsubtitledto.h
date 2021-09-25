@@ -47,7 +47,13 @@ namespace DTO {
 
 class UploadSubtitleDto {
 public:
-	UploadSubtitleDto();
+	UploadSubtitleDto(	
+		QString language,			
+		QString format,			
+		bool isForced,			
+		QString data		
+	);
+
 	UploadSubtitleDto(const UploadSubtitleDto &other);
 	
 	/**
@@ -102,7 +108,12 @@ protected:
 	QString m_format;
 	bool m_isForced;
 	QString m_data;
+
+private:
+	// Private constructor which generates an invalid object, for use withing UploadSubtitleDto::fromJson();
+	UploadSubtitleDto();
 };
+
 
 } // NS DTO
 

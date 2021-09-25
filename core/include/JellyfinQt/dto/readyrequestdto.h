@@ -48,7 +48,13 @@ namespace DTO {
 
 class ReadyRequestDto {
 public:
-	ReadyRequestDto();
+	ReadyRequestDto(	
+		QDateTime when,			
+		qint64 positionTicks,			
+		bool isPlaying,			
+		QString playlistItemId		
+	);
+
 	ReadyRequestDto(const ReadyRequestDto &other);
 	
 	/**
@@ -103,7 +109,12 @@ protected:
 	qint64 m_positionTicks;
 	bool m_isPlaying;
 	QString m_playlistItemId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ReadyRequestDto::fromJson();
+	ReadyRequestDto();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 GroupInfoDto::GroupInfoDto() {}
+GroupInfoDto::GroupInfoDto (
+		QString groupId, 
+		GroupStateType state, 
+		QDateTime lastUpdatedAt 
+		) :
+	m_groupId(groupId),
+	m_state(state),
+	m_lastUpdatedAt(lastUpdatedAt) { }
+
+
 
 GroupInfoDto::GroupInfoDto(const GroupInfoDto &other) :
 

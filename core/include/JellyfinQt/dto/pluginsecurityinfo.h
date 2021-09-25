@@ -47,7 +47,10 @@ namespace DTO {
 
 class PluginSecurityInfo {
 public:
-	PluginSecurityInfo();
+	PluginSecurityInfo(			
+		bool isMbSupporter		
+	);
+
 	PluginSecurityInfo(const PluginSecurityInfo &other);
 	
 	/**
@@ -84,7 +87,12 @@ public:
 protected:
 	QString m_supporterKey;
 	bool m_isMbSupporter;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PluginSecurityInfo::fromJson();
+	PluginSecurityInfo();
 };
+
 
 } // NS DTO
 

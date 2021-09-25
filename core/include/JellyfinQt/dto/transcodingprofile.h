@@ -50,7 +50,19 @@ namespace DTO {
 
 class TranscodingProfile {
 public:
-	TranscodingProfile();
+	TranscodingProfile(			
+		DlnaProfileType type,									
+		bool estimateContentLength,			
+		bool enableMpegtsM2TsMode,			
+		TranscodeSeekInfo transcodeSeekInfo,			
+		bool copyTimestamps,			
+		EncodingContext context,			
+		bool enableSubtitlesInManifest,					
+		qint32 minSegments,			
+		qint32 segmentLength,			
+		bool breakOnNonKeyFrames		
+	);
+
 	TranscodingProfile(const TranscodingProfile &other);
 	
 	/**
@@ -165,7 +177,12 @@ protected:
 	qint32 m_minSegments;
 	qint32 m_segmentLength;
 	bool m_breakOnNonKeyFrames;
+
+private:
+	// Private constructor which generates an invalid object, for use withing TranscodingProfile::fromJson();
+	TranscodingProfile();
 };
+
 
 } // NS DTO
 

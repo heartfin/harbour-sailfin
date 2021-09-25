@@ -33,6 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 AccessSchedule::AccessSchedule() {}
+AccessSchedule::AccessSchedule (
+		qint32 jellyfinId, 
+		QString userId, 
+		DynamicDayOfWeek dayOfWeek, 
+		double startHour, 
+		double endHour 
+		) :
+	m_jellyfinId(jellyfinId),
+	m_userId(userId),
+	m_dayOfWeek(dayOfWeek),
+	m_startHour(startHour),
+	m_endHour(endHour) { }
+
+
 
 AccessSchedule::AccessSchedule(const AccessSchedule &other) :
 

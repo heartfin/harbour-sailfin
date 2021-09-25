@@ -49,7 +49,12 @@ namespace DTO {
 
 class ProfileCondition {
 public:
-	ProfileCondition();
+	ProfileCondition(	
+		ProfileConditionType condition,			
+		ProfileConditionValue property,					
+		bool isRequired		
+	);
+
 	ProfileCondition(const ProfileCondition &other);
 	
 	/**
@@ -90,7 +95,12 @@ protected:
 	ProfileConditionValue m_property;
 	QString m_value;
 	bool m_isRequired;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ProfileCondition::fromJson();
+	ProfileCondition();
 };
+
 
 } // NS DTO
 

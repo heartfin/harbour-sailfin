@@ -25,6 +25,7 @@ namespace Jellyfin {
 namespace ViewModel {
 
 // User
+
 User::User(QObject *parent, QSharedPointer<Model::User> data)
     : QObject(parent),
       m_data(data) {

@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 EndPointInfo::EndPointInfo() {}
+EndPointInfo::EndPointInfo (
+		bool isLocal, 
+		bool isInNetwork 
+		) :
+	m_isLocal(isLocal),
+	m_isInNetwork(isInNetwork) { }
+
+
 
 EndPointInfo::EndPointInfo(const EndPointInfo &other) :
 

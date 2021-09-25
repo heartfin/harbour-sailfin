@@ -52,7 +52,18 @@ namespace DTO {
 
 class SystemInfo {
 public:
-	SystemInfo();
+	SystemInfo(																			
+		bool hasPendingRestart,			
+		bool isShuttingDown,			
+		bool supportsLibraryMonitor,			
+		qint32 webSocketPortNumber,					
+		bool canSelfRestart,			
+		bool canLaunchWebBrowser,																	
+		bool hasUpdateAvailable,			
+		FFmpegLocation encoderLocation,			
+		Architecture systemArchitecture		
+	);
+
 	SystemInfo(const SystemInfo &other);
 	
 	/**
@@ -345,7 +356,12 @@ protected:
 	bool m_hasUpdateAvailable;
 	FFmpegLocation m_encoderLocation;
 	Architecture m_systemArchitecture;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SystemInfo::fromJson();
+	SystemInfo();
 };
+
 
 } // NS DTO
 

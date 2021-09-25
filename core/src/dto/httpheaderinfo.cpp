@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 HttpHeaderInfo::HttpHeaderInfo() {}
+HttpHeaderInfo::HttpHeaderInfo (
+		HeaderMatchType match 
+		) :
+	m_match(match) { }
+
+
 
 HttpHeaderInfo::HttpHeaderInfo(const HttpHeaderInfo &other) :
 

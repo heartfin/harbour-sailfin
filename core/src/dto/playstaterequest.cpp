@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaystateRequest::PlaystateRequest() {}
+PlaystateRequest::PlaystateRequest (
+		PlaystateCommand command 
+		) :
+	m_command(command) { }
+
+
 
 PlaystateRequest::PlaystateRequest(const PlaystateRequest &other) :
 

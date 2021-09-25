@@ -51,7 +51,10 @@ namespace DTO {
 
 class ResponseProfile {
 public:
-	ResponseProfile();
+	ResponseProfile(							
+		DlnaProfileType type								
+	);
+
 	ResponseProfile(const ResponseProfile &other);
 	
 	/**
@@ -120,7 +123,12 @@ protected:
 	QString m_orgPn;
 	QString m_mimeType;
 	QList<ProfileCondition> m_conditions;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ResponseProfile::fromJson();
+	ResponseProfile();
 };
+
 
 } // NS DTO
 

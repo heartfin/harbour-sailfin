@@ -48,7 +48,10 @@ namespace DTO {
 
 class TaskTriggerInfo {
 public:
-	TaskTriggerInfo();
+	TaskTriggerInfo(							
+		DayOfWeek dayOfWeek				
+	);
+
 	TaskTriggerInfo(const TaskTriggerInfo &other);
 	
 	/**
@@ -117,7 +120,12 @@ protected:
 	std::optional<qint64> m_intervalTicks = std::nullopt;
 	DayOfWeek m_dayOfWeek;
 	std::optional<qint64> m_maxRuntimeTicks = std::nullopt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing TaskTriggerInfo::fromJson();
+	TaskTriggerInfo();
 };
+
 
 } // NS DTO
 

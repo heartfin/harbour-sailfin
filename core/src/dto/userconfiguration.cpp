@@ -33,6 +33,28 @@ namespace Jellyfin {
 namespace DTO {
 
 UserConfiguration::UserConfiguration() {}
+UserConfiguration::UserConfiguration (
+		bool playDefaultAudioTrack, 
+		bool displayMissingEpisodes, 
+		SubtitlePlaybackMode subtitleMode, 
+		bool displayCollectionsView, 
+		bool enableLocalPassword, 
+		bool hidePlayedInLatest, 
+		bool rememberAudioSelections, 
+		bool rememberSubtitleSelections, 
+		bool enableNextEpisodeAutoPlay 
+		) :
+	m_playDefaultAudioTrack(playDefaultAudioTrack),
+	m_displayMissingEpisodes(displayMissingEpisodes),
+	m_subtitleMode(subtitleMode),
+	m_displayCollectionsView(displayCollectionsView),
+	m_enableLocalPassword(enableLocalPassword),
+	m_hidePlayedInLatest(hidePlayedInLatest),
+	m_rememberAudioSelections(rememberAudioSelections),
+	m_rememberSubtitleSelections(rememberSubtitleSelections),
+	m_enableNextEpisodeAutoPlay(enableNextEpisodeAutoPlay) { }
+
+
 
 UserConfiguration::UserConfiguration(const UserConfiguration &other) :
 

@@ -47,7 +47,11 @@ namespace DTO {
 
 class UtcTimeResponse {
 public:
-	UtcTimeResponse();
+	UtcTimeResponse(	
+		QDateTime requestReceptionTime,			
+		QDateTime responseTransmissionTime		
+	);
+
 	UtcTimeResponse(const UtcTimeResponse &other);
 	
 	/**
@@ -82,7 +86,12 @@ public:
 protected:
 	QDateTime m_requestReceptionTime;
 	QDateTime m_responseTransmissionTime;
+
+private:
+	// Private constructor which generates an invalid object, for use withing UtcTimeResponse::fromJson();
+	UtcTimeResponse();
 };
+
 
 } // NS DTO
 

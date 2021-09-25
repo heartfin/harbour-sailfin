@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ContainerProfile::ContainerProfile() {}
+ContainerProfile::ContainerProfile (
+		DlnaProfileType type 
+		) :
+	m_type(type) { }
+
+
 
 ContainerProfile::ContainerProfile(const ContainerProfile &other) :
 

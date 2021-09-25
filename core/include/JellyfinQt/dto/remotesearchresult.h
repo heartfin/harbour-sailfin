@@ -51,7 +51,10 @@ namespace DTO {
 
 class RemoteSearchResult {
 public:
-	RemoteSearchResult();
+	RemoteSearchResult(																					
+		QSharedPointer<RemoteSearchResult> albumArtist				
+	);
+
 	RemoteSearchResult(const RemoteSearchResult &other);
 	
 	/**
@@ -172,7 +175,12 @@ protected:
 	QString m_overview;
 	QSharedPointer<RemoteSearchResult> m_albumArtist = QSharedPointer<RemoteSearchResult>();
 	QList<RemoteSearchResult> m_artists;
+
+private:
+	// Private constructor which generates an invalid object, for use withing RemoteSearchResult::fromJson();
+	RemoteSearchResult();
 };
+
 
 } // NS DTO
 

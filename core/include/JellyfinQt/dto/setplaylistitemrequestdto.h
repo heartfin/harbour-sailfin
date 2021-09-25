@@ -47,7 +47,10 @@ namespace DTO {
 
 class SetPlaylistItemRequestDto {
 public:
-	SetPlaylistItemRequestDto();
+	SetPlaylistItemRequestDto(	
+		QString playlistItemId		
+	);
+
 	SetPlaylistItemRequestDto(const SetPlaylistItemRequestDto &other);
 	
 	/**
@@ -72,7 +75,12 @@ public:
 
 protected:
 	QString m_playlistItemId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SetPlaylistItemRequestDto::fromJson();
+	SetPlaylistItemRequestDto();
 };
+
 
 } // NS DTO
 

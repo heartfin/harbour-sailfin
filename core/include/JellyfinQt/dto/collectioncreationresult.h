@@ -47,7 +47,10 @@ namespace DTO {
 
 class CollectionCreationResult {
 public:
-	CollectionCreationResult();
+	CollectionCreationResult(	
+		QString jellyfinId		
+	);
+
 	CollectionCreationResult(const CollectionCreationResult &other);
 	
 	/**
@@ -68,7 +71,12 @@ public:
 
 protected:
 	QString m_jellyfinId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing CollectionCreationResult::fromJson();
+	CollectionCreationResult();
 };
+
 
 } // NS DTO
 

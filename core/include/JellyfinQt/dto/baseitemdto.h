@@ -69,7 +69,20 @@ namespace DTO {
 
 class BaseItemDto {
 public:
-	BaseItemDto();
+	BaseItemDto(							
+		QString jellyfinId,																																							
+		Video3DFormat video3DFormat,																																					
+		PlayAccess playAccess,																																													
+		QSharedPointer<UserItemDataDto> userData,																																																			
+		VideoType videoType,																																			
+		LocationType locationType,			
+		IsoType isoType,																																											
+		ImageOrientation imageOrientation,																													
+		ChannelType channelType,			
+		ProgramAudio audio,																			
+		QSharedPointer<BaseItemDto> currentProgram		
+	);
+
 	BaseItemDto(const BaseItemDto &other);
 	
 	/**
@@ -1700,7 +1713,12 @@ protected:
 	std::optional<bool> m_isPremiere = std::nullopt;
 	QString m_timerId;
 	QSharedPointer<BaseItemDto> m_currentProgram = QSharedPointer<BaseItemDto>();
+
+private:
+	// Private constructor which generates an invalid object, for use withing BaseItemDto::fromJson();
+	BaseItemDto();
 };
+
 
 } // NS DTO
 

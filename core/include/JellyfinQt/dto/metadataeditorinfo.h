@@ -53,8 +53,7 @@ namespace DTO {
 
 
 class MetadataEditorInfo {
-public:
-	MetadataEditorInfo();
+public:	MetadataEditorInfo();
 	MetadataEditorInfo(const MetadataEditorInfo &other);
 	
 	/**
@@ -117,7 +116,10 @@ protected:
 	QList<ExternalIdInfo> m_externalIdInfos;
 	QString m_contentType;
 	QList<NameValuePair> m_contentTypeOptions;
+
+
 };
+
 
 } // NS DTO
 

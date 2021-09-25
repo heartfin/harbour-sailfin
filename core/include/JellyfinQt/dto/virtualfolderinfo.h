@@ -51,7 +51,10 @@ namespace DTO {
 
 class VirtualFolderInfo {
 public:
-	VirtualFolderInfo();
+	VirtualFolderInfo(							
+		QSharedPointer<LibraryOptions> libraryOptions										
+	);
+
 	VirtualFolderInfo(const VirtualFolderInfo &other);
 	
 	/**
@@ -148,7 +151,12 @@ protected:
 	QString m_primaryImageItemId;
 	std::optional<double> m_refreshProgress = std::nullopt;
 	QString m_refreshStatus;
+
+private:
+	// Private constructor which generates an invalid object, for use withing VirtualFolderInfo::fromJson();
+	VirtualFolderInfo();
 };
+
 
 } // NS DTO
 

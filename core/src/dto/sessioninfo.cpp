@@ -33,6 +33,36 @@ namespace Jellyfin {
 namespace DTO {
 
 SessionInfo::SessionInfo() {}
+SessionInfo::SessionInfo (
+		QSharedPointer<PlayerStateInfo> playState, 
+		QSharedPointer<ClientCapabilities> capabilities, 
+		QString userId, 
+		QDateTime lastActivityDate, 
+		QDateTime lastPlaybackCheckIn, 
+		QSharedPointer<BaseItemDto> nowPlayingItem, 
+		QSharedPointer<BaseItem> fullNowPlayingItem, 
+		QSharedPointer<BaseItemDto> nowViewingItem, 
+		QSharedPointer<TranscodingInfo> transcodingInfo, 
+		bool isActive, 
+		bool supportsMediaControl, 
+		bool supportsRemoteControl, 
+		bool hasCustomDeviceName 
+		) :
+	m_playState(playState),
+	m_capabilities(capabilities),
+	m_userId(userId),
+	m_lastActivityDate(lastActivityDate),
+	m_lastPlaybackCheckIn(lastPlaybackCheckIn),
+	m_nowPlayingItem(nowPlayingItem),
+	m_fullNowPlayingItem(fullNowPlayingItem),
+	m_nowViewingItem(nowViewingItem),
+	m_transcodingInfo(transcodingInfo),
+	m_isActive(isActive),
+	m_supportsMediaControl(supportsMediaControl),
+	m_supportsRemoteControl(supportsRemoteControl),
+	m_hasCustomDeviceName(hasCustomDeviceName) { }
+
+
 
 SessionInfo::SessionInfo(const SessionInfo &other) :
 

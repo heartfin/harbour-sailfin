@@ -58,7 +58,20 @@ namespace DTO {
 
 class DeviceProfile {
 public:
-	DeviceProfile();
+	DeviceProfile(					
+		QSharedPointer<DeviceIdentification> identification,																			
+		bool enableAlbumArtInDidl,			
+		bool enableSingleAlbumArtLimit,			
+		bool enableSingleSubtitleLimit,									
+		qint32 maxAlbumArtWidth,			
+		qint32 maxAlbumArtHeight,																			
+		qint32 timelineOffsetSeconds,			
+		bool requiresPlainVideoItems,			
+		bool requiresPlainFolders,			
+		bool enableMSMediaReceiverRegistrar,			
+		bool ignoreTranscodeByteRangeRequests																
+	);
+
 	DeviceProfile(const DeviceProfile &other);
 	
 	/**
@@ -515,7 +528,12 @@ protected:
 	QList<CodecProfile> m_codecProfiles;
 	QList<ResponseProfile> m_responseProfiles;
 	QList<SubtitleProfile> m_subtitleProfiles;
+
+private:
+	// Private constructor which generates an invalid object, for use withing DeviceProfile::fromJson();
+	DeviceProfile();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,50 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaSourceInfo::MediaSourceInfo() {}
+MediaSourceInfo::MediaSourceInfo (
+		MediaProtocol protocol, 
+		MediaProtocol encoderProtocol, 
+		MediaSourceType type, 
+		bool isRemote, 
+		bool readAtNativeFramerate, 
+		bool ignoreDts, 
+		bool ignoreIndex, 
+		bool genPtsInput, 
+		bool supportsTranscoding, 
+		bool supportsDirectStream, 
+		bool supportsDirectPlay, 
+		bool isInfiniteStream, 
+		bool requiresOpening, 
+		bool requiresClosing, 
+		bool requiresLooping, 
+		bool supportsProbing, 
+		VideoType videoType, 
+		IsoType isoType, 
+		Video3DFormat video3DFormat, 
+		TransportStreamTimestamp timestamp 
+		) :
+	m_protocol(protocol),
+	m_encoderProtocol(encoderProtocol),
+	m_type(type),
+	m_isRemote(isRemote),
+	m_readAtNativeFramerate(readAtNativeFramerate),
+	m_ignoreDts(ignoreDts),
+	m_ignoreIndex(ignoreIndex),
+	m_genPtsInput(genPtsInput),
+	m_supportsTranscoding(supportsTranscoding),
+	m_supportsDirectStream(supportsDirectStream),
+	m_supportsDirectPlay(supportsDirectPlay),
+	m_isInfiniteStream(isInfiniteStream),
+	m_requiresOpening(requiresOpening),
+	m_requiresClosing(requiresClosing),
+	m_requiresLooping(requiresLooping),
+	m_supportsProbing(supportsProbing),
+	m_videoType(videoType),
+	m_isoType(isoType),
+	m_video3DFormat(video3DFormat),
+	m_timestamp(timestamp) { }
+
+
 
 MediaSourceInfo::MediaSourceInfo(const MediaSourceInfo &other) :
 

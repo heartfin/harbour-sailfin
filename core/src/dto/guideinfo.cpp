@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 GuideInfo::GuideInfo() {}
+GuideInfo::GuideInfo (
+		QDateTime startDate, 
+		QDateTime endDate 
+		) :
+	m_startDate(startDate),
+	m_endDate(endDate) { }
+
+
 
 GuideInfo::GuideInfo(const GuideInfo &other) :
 

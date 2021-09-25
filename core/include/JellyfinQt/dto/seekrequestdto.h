@@ -46,7 +46,10 @@ namespace DTO {
 
 class SeekRequestDto {
 public:
-	SeekRequestDto();
+	SeekRequestDto(	
+		qint64 positionTicks		
+	);
+
 	SeekRequestDto(const SeekRequestDto &other);
 	
 	/**
@@ -71,7 +74,12 @@ public:
 
 protected:
 	qint64 m_positionTicks;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SeekRequestDto::fromJson();
+	SeekRequestDto();
 };
+
 
 } // NS DTO
 

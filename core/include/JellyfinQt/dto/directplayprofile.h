@@ -48,7 +48,10 @@ namespace DTO {
 
 class DirectPlayProfile {
 public:
-	DirectPlayProfile();
+	DirectPlayProfile(							
+		DlnaProfileType type		
+	);
+
 	DirectPlayProfile(const DirectPlayProfile &other);
 	
 	/**
@@ -93,7 +96,12 @@ protected:
 	QString m_audioCodec;
 	QString m_videoCodec;
 	DlnaProfileType m_type;
+
+private:
+	// Private constructor which generates an invalid object, for use withing DirectPlayProfile::fromJson();
+	DirectPlayProfile();
 };
+
 
 } // NS DTO
 

@@ -49,7 +49,14 @@ namespace DTO {
 
 class SendCommand {
 public:
-	SendCommand();
+	SendCommand(	
+		QString groupId,			
+		QString playlistItemId,			
+		QDateTime when,					
+		SendCommandType command,			
+		QDateTime emittedAt		
+	);
+
 	SendCommand(const SendCommand &other);
 	
 	/**
@@ -122,7 +129,12 @@ protected:
 	std::optional<qint64> m_positionTicks = std::nullopt;
 	SendCommandType m_command;
 	QDateTime m_emittedAt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SendCommand::fromJson();
+	SendCommand();
 };
+
 
 } // NS DTO
 

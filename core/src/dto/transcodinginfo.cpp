@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 TranscodingInfo::TranscodingInfo() {}
+TranscodingInfo::TranscodingInfo (
+		bool isVideoDirect, 
+		bool isAudioDirect 
+		) :
+	m_isVideoDirect(isVideoDirect),
+	m_isAudioDirect(isAudioDirect) { }
+
+
 
 TranscodingInfo::TranscodingInfo(const TranscodingInfo &other) :
 

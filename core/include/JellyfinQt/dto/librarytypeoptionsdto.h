@@ -51,8 +51,7 @@ namespace DTO {
 
 
 class LibraryTypeOptionsDto {
-public:
-	LibraryTypeOptionsDto();
+public:	LibraryTypeOptionsDto();
 	LibraryTypeOptionsDto(const LibraryTypeOptionsDto &other);
 	
 	/**
@@ -127,7 +126,10 @@ protected:
 	QList<LibraryOptionInfoDto> m_imageFetchers;
 	QList<ImageType> m_supportedImageTypes;
 	QList<ImageOption> m_defaultImageOptions;
+
+
 };
+
 
 } // NS DTO
 

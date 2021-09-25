@@ -49,7 +49,17 @@ namespace DTO {
 
 class DisplayPreferencesDto {
 public:
-	DisplayPreferencesDto();
+	DisplayPreferencesDto(									
+		bool rememberIndexing,			
+		qint32 primaryImageHeight,			
+		qint32 primaryImageWidth,					
+		ScrollDirection scrollDirection,			
+		bool showBackdrop,			
+		bool rememberSorting,			
+		SortOrder sortOrder,			
+		bool showSidebar				
+	);
+
 	DisplayPreferencesDto(const DisplayPreferencesDto &other);
 	
 	/**
@@ -208,7 +218,12 @@ protected:
 	SortOrder m_sortOrder;
 	bool m_showSidebar;
 	QString m_client;
+
+private:
+	// Private constructor which generates an invalid object, for use withing DisplayPreferencesDto::fromJson();
+	DisplayPreferencesDto();
 };
+
 
 } // NS DTO
 

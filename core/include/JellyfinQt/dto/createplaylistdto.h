@@ -48,8 +48,7 @@ namespace DTO {
 
 
 class CreatePlaylistDto {
-public:
-	CreatePlaylistDto();
+public:	CreatePlaylistDto();
 	CreatePlaylistDto(const CreatePlaylistDto &other);
 	
 	/**
@@ -112,7 +111,10 @@ protected:
 	QStringList m_ids;
 	QString m_userId;
 	QString m_mediaType;
+
+
 };
+
 
 } // NS DTO
 

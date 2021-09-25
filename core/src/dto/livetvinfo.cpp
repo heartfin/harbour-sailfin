@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 LiveTvInfo::LiveTvInfo() {}
+LiveTvInfo::LiveTvInfo (
+		bool isEnabled 
+		) :
+	m_isEnabled(isEnabled) { }
+
+
 
 LiveTvInfo::LiveTvInfo(const LiveTvInfo &other) :
 

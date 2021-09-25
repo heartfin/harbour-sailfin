@@ -47,7 +47,10 @@ namespace DTO {
 
 class WakeOnLanInfo {
 public:
-	WakeOnLanInfo();
+	WakeOnLanInfo(			
+		qint32 port		
+	);
+
 	WakeOnLanInfo(const WakeOnLanInfo &other);
 	
 	/**
@@ -84,7 +87,12 @@ public:
 protected:
 	QString m_macAddress;
 	qint32 m_port;
+
+private:
+	// Private constructor which generates an invalid object, for use withing WakeOnLanInfo::fromJson();
+	WakeOnLanInfo();
 };
+
 
 } // NS DTO
 

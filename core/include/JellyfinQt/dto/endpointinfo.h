@@ -46,7 +46,11 @@ namespace DTO {
 
 class EndPointInfo {
 public:
-	EndPointInfo();
+	EndPointInfo(	
+		bool isLocal,			
+		bool isInNetwork		
+	);
+
 	EndPointInfo(const EndPointInfo &other);
 	
 	/**
@@ -73,7 +77,12 @@ public:
 protected:
 	bool m_isLocal;
 	bool m_isInNetwork;
+
+private:
+	// Private constructor which generates an invalid object, for use withing EndPointInfo::fromJson();
+	EndPointInfo();
 };
+
 
 } // NS DTO
 

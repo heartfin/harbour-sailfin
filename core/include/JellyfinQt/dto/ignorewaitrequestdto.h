@@ -46,7 +46,10 @@ namespace DTO {
 
 class IgnoreWaitRequestDto {
 public:
-	IgnoreWaitRequestDto();
+	IgnoreWaitRequestDto(	
+		bool ignoreWait		
+	);
+
 	IgnoreWaitRequestDto(const IgnoreWaitRequestDto &other);
 	
 	/**
@@ -71,7 +74,12 @@ public:
 
 protected:
 	bool m_ignoreWait;
+
+private:
+	// Private constructor which generates an invalid object, for use withing IgnoreWaitRequestDto::fromJson();
+	IgnoreWaitRequestDto();
 };
+
 
 } // NS DTO
 

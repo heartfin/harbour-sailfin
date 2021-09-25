@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 WakeOnLanInfo::WakeOnLanInfo() {}
+WakeOnLanInfo::WakeOnLanInfo (
+		qint32 port 
+		) :
+	m_port(port) { }
+
+
 
 WakeOnLanInfo::WakeOnLanInfo(const WakeOnLanInfo &other) :
 

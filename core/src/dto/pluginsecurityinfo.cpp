@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 PluginSecurityInfo::PluginSecurityInfo() {}
+PluginSecurityInfo::PluginSecurityInfo (
+		bool isMbSupporter 
+		) :
+	m_isMbSupporter(isMbSupporter) { }
+
+
 
 PluginSecurityInfo::PluginSecurityInfo(const PluginSecurityInfo &other) :
 

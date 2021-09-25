@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class ExternalUrl {
-public:
-	ExternalUrl();
+public:	ExternalUrl();
 	ExternalUrl(const ExternalUrl &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_name;
 	QString m_url;
+
+
 };
+
 
 } // NS DTO
 

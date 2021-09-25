@@ -49,7 +49,10 @@ namespace DTO {
 
 class SearchHintResult {
 public:
-	SearchHintResult();
+	SearchHintResult(			
+		qint32 totalRecordCount		
+	);
+
 	SearchHintResult(const SearchHintResult &other);
 	
 	/**
@@ -86,7 +89,12 @@ public:
 protected:
 	QList<SearchHint> m_searchHints;
 	qint32 m_totalRecordCount;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SearchHintResult::fromJson();
+	SearchHintResult();
 };
+
 
 } // NS DTO
 

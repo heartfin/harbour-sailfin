@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 VirtualFolderInfo::VirtualFolderInfo() {}
+VirtualFolderInfo::VirtualFolderInfo (
+		QSharedPointer<LibraryOptions> libraryOptions 
+		) :
+	m_libraryOptions(libraryOptions) { }
+
+
 
 VirtualFolderInfo::VirtualFolderInfo(const VirtualFolderInfo &other) :
 

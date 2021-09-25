@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 BoxSetInfoRemoteSearchQuery::BoxSetInfoRemoteSearchQuery() {}
+BoxSetInfoRemoteSearchQuery::BoxSetInfoRemoteSearchQuery (
+		QSharedPointer<BoxSetInfo> searchInfo, 
+		QString itemId, 
+		bool includeDisabledProviders 
+		) :
+	m_searchInfo(searchInfo),
+	m_itemId(itemId),
+	m_includeDisabledProviders(includeDisabledProviders) { }
+
+
 
 BoxSetInfoRemoteSearchQuery::BoxSetInfoRemoteSearchQuery(const BoxSetInfoRemoteSearchQuery &other) :
 

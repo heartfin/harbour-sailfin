@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 DirectPlayProfile::DirectPlayProfile() {}
+DirectPlayProfile::DirectPlayProfile (
+		DlnaProfileType type 
+		) :
+	m_type(type) { }
+
+
 
 DirectPlayProfile::DirectPlayProfile(const DirectPlayProfile &other) :
 

@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class NameIdPair {
-public:
-	NameIdPair();
+public:	NameIdPair();
 	NameIdPair(const NameIdPair &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_name;
 	QString m_jellyfinId;
+
+
 };
+
 
 } // NS DTO
 

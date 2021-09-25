@@ -50,7 +50,10 @@ namespace DTO {
 
 class MusicVideoInfo {
 public:
-	MusicVideoInfo();
+	MusicVideoInfo(																			
+		bool isAutomated				
+	);
+
 	MusicVideoInfo(const MusicVideoInfo &other);
 	
 	/**
@@ -175,7 +178,12 @@ protected:
 	QDateTime m_premiereDate;
 	bool m_isAutomated;
 	QStringList m_artists;
+
+private:
+	// Private constructor which generates an invalid object, for use withing MusicVideoInfo::fromJson();
+	MusicVideoInfo();
 };
+
 
 } // NS DTO
 

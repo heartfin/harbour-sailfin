@@ -51,7 +51,10 @@ namespace DTO {
 
 class CodecProfile {
 public:
-	CodecProfile();
+	CodecProfile(	
+		CodecType type										
+	);
+
 	CodecProfile(const CodecProfile &other);
 	
 	/**
@@ -104,7 +107,12 @@ protected:
 	QList<ProfileCondition> m_applyConditions;
 	QString m_codec;
 	QString m_container;
+
+private:
+	// Private constructor which generates an invalid object, for use withing CodecProfile::fromJson();
+	CodecProfile();
 };
+
 
 } // NS DTO
 

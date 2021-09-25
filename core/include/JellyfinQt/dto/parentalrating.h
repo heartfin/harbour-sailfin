@@ -47,7 +47,10 @@ namespace DTO {
 
 class ParentalRating {
 public:
-	ParentalRating();
+	ParentalRating(			
+		qint32 value		
+	);
+
 	ParentalRating(const ParentalRating &other);
 	
 	/**
@@ -84,7 +87,12 @@ public:
 protected:
 	QString m_name;
 	qint32 m_value;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ParentalRating::fromJson();
+	ParentalRating();
 };
+
 
 } // NS DTO
 

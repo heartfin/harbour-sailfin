@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 MovieInfo::MovieInfo() {}
+MovieInfo::MovieInfo (
+		bool isAutomated 
+		) :
+	m_isAutomated(isAutomated) { }
+
+
 
 MovieInfo::MovieInfo(const MovieInfo &other) :
 

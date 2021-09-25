@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 VersionInfo::VersionInfo() {}
+VersionInfo::VersionInfo (
+		QSharedPointer<Version> versionNumber 
+		) :
+	m_versionNumber(versionNumber) { }
+
+
 
 VersionInfo::VersionInfo(const VersionInfo &other) :
 

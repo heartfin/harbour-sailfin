@@ -49,7 +49,12 @@ namespace DTO {
 
 class TrailerInfoRemoteSearchQuery {
 public:
-	TrailerInfoRemoteSearchQuery();
+	TrailerInfoRemoteSearchQuery(	
+		QSharedPointer<TrailerInfo> searchInfo,			
+		QString itemId,					
+		bool includeDisabledProviders		
+	);
+
 	TrailerInfoRemoteSearchQuery(const TrailerInfoRemoteSearchQuery &other);
 	
 	/**
@@ -98,7 +103,12 @@ protected:
 	QString m_itemId;
 	QString m_searchProviderName;
 	bool m_includeDisabledProviders;
+
+private:
+	// Private constructor which generates an invalid object, for use withing TrailerInfoRemoteSearchQuery::fromJson();
+	TrailerInfoRemoteSearchQuery();
 };
+
 
 } // NS DTO
 

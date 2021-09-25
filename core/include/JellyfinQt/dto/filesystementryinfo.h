@@ -48,7 +48,10 @@ namespace DTO {
 
 class FileSystemEntryInfo {
 public:
-	FileSystemEntryInfo();
+	FileSystemEntryInfo(					
+		FileSystemEntryType type		
+	);
+
 	FileSystemEntryInfo(const FileSystemEntryInfo &other);
 	
 	/**
@@ -93,7 +96,12 @@ protected:
 	QString m_name;
 	QString m_path;
 	FileSystemEntryType m_type;
+
+private:
+	// Private constructor which generates an invalid object, for use withing FileSystemEntryInfo::fromJson();
+	FileSystemEntryInfo();
 };
+
 
 } // NS DTO
 

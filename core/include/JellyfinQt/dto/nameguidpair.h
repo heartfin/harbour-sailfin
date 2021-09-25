@@ -47,7 +47,10 @@ namespace DTO {
 
 class NameGuidPair {
 public:
-	NameGuidPair();
+	NameGuidPair(			
+		QString jellyfinId		
+	);
+
 	NameGuidPair(const NameGuidPair &other);
 	
 	/**
@@ -76,7 +79,12 @@ public:
 protected:
 	QString m_name;
 	QString m_jellyfinId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing NameGuidPair::fromJson();
+	NameGuidPair();
 };
+
 
 } // NS DTO
 

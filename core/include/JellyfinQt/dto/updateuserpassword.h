@@ -47,7 +47,10 @@ namespace DTO {
 
 class UpdateUserPassword {
 public:
-	UpdateUserPassword();
+	UpdateUserPassword(							
+		bool resetPassword		
+	);
+
 	UpdateUserPassword(const UpdateUserPassword &other);
 	
 	/**
@@ -108,7 +111,12 @@ protected:
 	QString m_currentPw;
 	QString m_newPw;
 	bool m_resetPassword;
+
+private:
+	// Private constructor which generates an invalid object, for use withing UpdateUserPassword::fromJson();
+	UpdateUserPassword();
 };
+
 
 } // NS DTO
 

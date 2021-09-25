@@ -33,6 +33,38 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryOptions::LibraryOptions() {}
+LibraryOptions::LibraryOptions (
+		bool enablePhotos, 
+		bool enableRealtimeMonitor, 
+		bool enableChapterImageExtraction, 
+		bool extractChapterImagesDuringLibraryScan, 
+		bool saveLocalMetadata, 
+		bool enableInternetProviders, 
+		bool enableAutomaticSeriesGrouping, 
+		bool enableEmbeddedTitles, 
+		bool enableEmbeddedEpisodeInfos, 
+		qint32 automaticRefreshIntervalDays, 
+		bool skipSubtitlesIfEmbeddedSubtitlesPresent, 
+		bool skipSubtitlesIfAudioTrackMatches, 
+		bool requirePerfectSubtitleMatch, 
+		bool saveSubtitlesWithMedia 
+		) :
+	m_enablePhotos(enablePhotos),
+	m_enableRealtimeMonitor(enableRealtimeMonitor),
+	m_enableChapterImageExtraction(enableChapterImageExtraction),
+	m_extractChapterImagesDuringLibraryScan(extractChapterImagesDuringLibraryScan),
+	m_saveLocalMetadata(saveLocalMetadata),
+	m_enableInternetProviders(enableInternetProviders),
+	m_enableAutomaticSeriesGrouping(enableAutomaticSeriesGrouping),
+	m_enableEmbeddedTitles(enableEmbeddedTitles),
+	m_enableEmbeddedEpisodeInfos(enableEmbeddedEpisodeInfos),
+	m_automaticRefreshIntervalDays(automaticRefreshIntervalDays),
+	m_skipSubtitlesIfEmbeddedSubtitlesPresent(skipSubtitlesIfEmbeddedSubtitlesPresent),
+	m_skipSubtitlesIfAudioTrackMatches(skipSubtitlesIfAudioTrackMatches),
+	m_requirePerfectSubtitleMatch(requirePerfectSubtitleMatch),
+	m_saveSubtitlesWithMedia(saveSubtitlesWithMedia) { }
+
+
 
 LibraryOptions::LibraryOptions(const LibraryOptions &other) :
 

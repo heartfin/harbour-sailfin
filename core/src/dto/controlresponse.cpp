@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ControlResponse::ControlResponse() {}
+ControlResponse::ControlResponse (
+		bool isSuccessful 
+		) :
+	m_isSuccessful(isSuccessful) { }
+
+
 
 ControlResponse::ControlResponse(const ControlResponse &other) :
 

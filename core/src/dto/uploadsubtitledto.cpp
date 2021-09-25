@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 UploadSubtitleDto::UploadSubtitleDto() {}
+UploadSubtitleDto::UploadSubtitleDto (
+		QString language, 
+		QString format, 
+		bool isForced, 
+		QString data 
+		) :
+	m_language(language),
+	m_format(format),
+	m_isForced(isForced),
+	m_data(data) { }
+
+
 
 UploadSubtitleDto::UploadSubtitleDto(const UploadSubtitleDto &other) :
 

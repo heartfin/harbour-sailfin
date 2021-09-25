@@ -33,6 +33,40 @@ namespace Jellyfin {
 namespace DTO {
 
 SeriesTimerInfoDto::SeriesTimerInfoDto() {}
+SeriesTimerInfoDto::SeriesTimerInfoDto (
+		QString channelId, 
+		QDateTime startDate, 
+		QDateTime endDate, 
+		qint32 priority, 
+		qint32 prePaddingSeconds, 
+		qint32 postPaddingSeconds, 
+		bool isPrePaddingRequired, 
+		bool isPostPaddingRequired, 
+		KeepUntil keepUntil, 
+		bool recordAnyTime, 
+		bool skipEpisodesInLibrary, 
+		bool recordAnyChannel, 
+		qint32 keepUpTo, 
+		bool recordNewOnly, 
+		DayPattern dayPattern 
+		) :
+	m_channelId(channelId),
+	m_startDate(startDate),
+	m_endDate(endDate),
+	m_priority(priority),
+	m_prePaddingSeconds(prePaddingSeconds),
+	m_postPaddingSeconds(postPaddingSeconds),
+	m_isPrePaddingRequired(isPrePaddingRequired),
+	m_isPostPaddingRequired(isPostPaddingRequired),
+	m_keepUntil(keepUntil),
+	m_recordAnyTime(recordAnyTime),
+	m_skipEpisodesInLibrary(skipEpisodesInLibrary),
+	m_recordAnyChannel(recordAnyChannel),
+	m_keepUpTo(keepUpTo),
+	m_recordNewOnly(recordNewOnly),
+	m_dayPattern(dayPattern) { }
+
+
 
 SeriesTimerInfoDto::SeriesTimerInfoDto(const SeriesTimerInfoDto &other) :
 

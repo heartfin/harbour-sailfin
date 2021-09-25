@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class SpecialViewOptionDto {
-public:
-	SpecialViewOptionDto();
+public:	SpecialViewOptionDto();
 	SpecialViewOptionDto(const SpecialViewOptionDto &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_name;
 	QString m_jellyfinId;
+
+
 };
+
 
 } // NS DTO
 

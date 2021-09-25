@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 SeekRequestDto::SeekRequestDto() {}
+SeekRequestDto::SeekRequestDto (
+		qint64 positionTicks 
+		) :
+	m_positionTicks(positionTicks) { }
+
+
 
 SeekRequestDto::SeekRequestDto(const SeekRequestDto &other) :
 

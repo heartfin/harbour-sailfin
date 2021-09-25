@@ -49,8 +49,7 @@ namespace DTO {
 
 
 class PackageInfo {
-public:
-	PackageInfo();
+public:	PackageInfo();
 	PackageInfo(const PackageInfo &other);
 	
 	/**
@@ -163,7 +162,10 @@ protected:
 	QString m_guid;
 	QList<VersionInfo> m_versions;
 	QString m_imageUrl;
+
+
 };
+
 
 } // NS DTO
 

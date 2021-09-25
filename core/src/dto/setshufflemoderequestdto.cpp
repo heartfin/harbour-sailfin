@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 SetShuffleModeRequestDto::SetShuffleModeRequestDto() {}
+SetShuffleModeRequestDto::SetShuffleModeRequestDto (
+		GroupShuffleMode mode 
+		) :
+	m_mode(mode) { }
+
+
 
 SetShuffleModeRequestDto::SetShuffleModeRequestDto(const SetShuffleModeRequestDto &other) :
 

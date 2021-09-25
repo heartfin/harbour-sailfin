@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 AuthenticationResult::AuthenticationResult() {}
+AuthenticationResult::AuthenticationResult (
+		QSharedPointer<UserDto> user, 
+		QSharedPointer<SessionInfo> sessionInfo 
+		) :
+	m_user(user),
+	m_sessionInfo(sessionInfo) { }
+
+
 
 AuthenticationResult::AuthenticationResult(const AuthenticationResult &other) :
 

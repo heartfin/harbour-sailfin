@@ -47,8 +47,7 @@ namespace DTO {
 
 
 class RemoteSubtitleInfo {
-public:
-	RemoteSubtitleInfo();
+public:	RemoteSubtitleInfo();
 	RemoteSubtitleInfo(const RemoteSubtitleInfo &other);
 	
 	/**
@@ -151,7 +150,10 @@ protected:
 	std::optional<float> m_communityRating = std::nullopt;
 	std::optional<qint32> m_downloadCount = std::nullopt;
 	std::optional<bool> m_isHashMatch = std::nullopt;
+
+
 };
+
 
 } // NS DTO
 

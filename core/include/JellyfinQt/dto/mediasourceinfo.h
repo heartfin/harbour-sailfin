@@ -57,7 +57,29 @@ namespace DTO {
 
 class MediaSourceInfo {
 public:
-	MediaSourceInfo();
+	MediaSourceInfo(	
+		MediaProtocol protocol,									
+		MediaProtocol encoderProtocol,			
+		MediaSourceType type,									
+		bool isRemote,							
+		bool readAtNativeFramerate,			
+		bool ignoreDts,			
+		bool ignoreIndex,			
+		bool genPtsInput,			
+		bool supportsTranscoding,			
+		bool supportsDirectStream,			
+		bool supportsDirectPlay,			
+		bool isInfiniteStream,			
+		bool requiresOpening,					
+		bool requiresClosing,							
+		bool requiresLooping,			
+		bool supportsProbing,			
+		VideoType videoType,			
+		IsoType isoType,			
+		Video3DFormat video3DFormat,											
+		TransportStreamTimestamp timestamp																
+	);
+
 	MediaSourceInfo(const MediaSourceInfo &other);
 	
 	/**
@@ -372,7 +394,12 @@ protected:
 	std::optional<qint32> m_analyzeDurationMs = std::nullopt;
 	std::optional<qint32> m_defaultAudioStreamIndex = std::nullopt;
 	std::optional<qint32> m_defaultSubtitleStreamIndex = std::nullopt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing MediaSourceInfo::fromJson();
+	MediaSourceInfo();
 };
+
 
 } // NS DTO
 

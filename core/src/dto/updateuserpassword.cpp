@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 UpdateUserPassword::UpdateUserPassword() {}
+UpdateUserPassword::UpdateUserPassword (
+		bool resetPassword 
+		) :
+	m_resetPassword(resetPassword) { }
+
+
 
 UpdateUserPassword::UpdateUserPassword(const UpdateUserPassword &other) :
 

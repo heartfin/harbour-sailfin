@@ -52,7 +52,12 @@ namespace DTO {
 
 class GetProgramsDto {
 public:
-	GetProgramsDto();
+	GetProgramsDto(			
+		QString userId,																																							
+		bool enableTotalRecordCount,											
+		QString librarySeriesId				
+	);
+
 	GetProgramsDto(const GetProgramsDto &other);
 	
 	/**
@@ -427,7 +432,12 @@ protected:
 	QString m_seriesTimerId;
 	QString m_librarySeriesId;
 	QList<ItemFields> m_fields;
+
+private:
+	// Private constructor which generates an invalid object, for use withing GetProgramsDto::fromJson();
+	GetProgramsDto();
 };
+
 
 } // NS DTO
 

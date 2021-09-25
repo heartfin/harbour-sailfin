@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 CodecProfile::CodecProfile() {}
+CodecProfile::CodecProfile (
+		CodecType type 
+		) :
+	m_type(type) { }
+
+
 
 CodecProfile::CodecProfile(const CodecProfile &other) :
 

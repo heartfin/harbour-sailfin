@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 UpdateLibraryOptionsDto::UpdateLibraryOptionsDto() {}
+UpdateLibraryOptionsDto::UpdateLibraryOptionsDto (
+		QString jellyfinId, 
+		QSharedPointer<LibraryOptions> libraryOptions 
+		) :
+	m_jellyfinId(jellyfinId),
+	m_libraryOptions(libraryOptions) { }
+
+
 
 UpdateLibraryOptionsDto::UpdateLibraryOptionsDto(const UpdateLibraryOptionsDto &other) :
 

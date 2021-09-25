@@ -33,6 +33,28 @@ namespace Jellyfin {
 namespace DTO {
 
 SystemInfo::SystemInfo() {}
+SystemInfo::SystemInfo (
+		bool hasPendingRestart, 
+		bool isShuttingDown, 
+		bool supportsLibraryMonitor, 
+		qint32 webSocketPortNumber, 
+		bool canSelfRestart, 
+		bool canLaunchWebBrowser, 
+		bool hasUpdateAvailable, 
+		FFmpegLocation encoderLocation, 
+		Architecture systemArchitecture 
+		) :
+	m_hasPendingRestart(hasPendingRestart),
+	m_isShuttingDown(isShuttingDown),
+	m_supportsLibraryMonitor(supportsLibraryMonitor),
+	m_webSocketPortNumber(webSocketPortNumber),
+	m_canSelfRestart(canSelfRestart),
+	m_canLaunchWebBrowser(canLaunchWebBrowser),
+	m_hasUpdateAvailable(hasUpdateAvailable),
+	m_encoderLocation(encoderLocation),
+	m_systemArchitecture(systemArchitecture) { }
+
+
 
 SystemInfo::SystemInfo(const SystemInfo &other) :
 

@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class MediaPathInfo {
-public:
-	MediaPathInfo();
+public:	MediaPathInfo();
 	MediaPathInfo(const MediaPathInfo &other);
 	
 	/**
@@ -78,7 +77,10 @@ public:
 protected:
 	QString m_path;
 	QString m_networkPath;
+
+
 };
+
 
 } // NS DTO
 

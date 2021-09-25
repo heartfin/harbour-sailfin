@@ -33,6 +33,26 @@ namespace Jellyfin {
 namespace DTO {
 
 DisplayPreferencesDto::DisplayPreferencesDto() {}
+DisplayPreferencesDto::DisplayPreferencesDto (
+		bool rememberIndexing, 
+		qint32 primaryImageHeight, 
+		qint32 primaryImageWidth, 
+		ScrollDirection scrollDirection, 
+		bool showBackdrop, 
+		bool rememberSorting, 
+		SortOrder sortOrder, 
+		bool showSidebar 
+		) :
+	m_rememberIndexing(rememberIndexing),
+	m_primaryImageHeight(primaryImageHeight),
+	m_primaryImageWidth(primaryImageWidth),
+	m_scrollDirection(scrollDirection),
+	m_showBackdrop(showBackdrop),
+	m_rememberSorting(rememberSorting),
+	m_sortOrder(sortOrder),
+	m_showSidebar(showSidebar) { }
+
+
 
 DisplayPreferencesDto::DisplayPreferencesDto(const DisplayPreferencesDto &other) :
 

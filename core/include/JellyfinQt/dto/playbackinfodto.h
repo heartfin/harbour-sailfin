@@ -49,7 +49,10 @@ namespace DTO {
 
 class PlaybackInfoDto {
 public:
-	PlaybackInfoDto();
+	PlaybackInfoDto(																	
+		QSharedPointer<DeviceProfile> deviceProfile														
+	);
+
 	PlaybackInfoDto(const PlaybackInfoDto &other);
 	
 	/**
@@ -238,7 +241,12 @@ protected:
 	std::optional<bool> m_allowVideoStreamCopy = std::nullopt;
 	std::optional<bool> m_allowAudioStreamCopy = std::nullopt;
 	std::optional<bool> m_autoOpenLiveStream = std::nullopt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PlaybackInfoDto::fromJson();
+	PlaybackInfoDto();
 };
+
 
 } // NS DTO
 

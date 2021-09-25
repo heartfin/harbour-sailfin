@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class StartupConfigurationDto {
-public:
-	StartupConfigurationDto();
+public:	StartupConfigurationDto();
 	StartupConfigurationDto(const StartupConfigurationDto &other);
 	
 	/**
@@ -98,7 +97,10 @@ protected:
 	QString m_uICulture;
 	QString m_metadataCountryCode;
 	QString m_preferredMetadataLanguage;
+
+
 };
+
 
 } // NS DTO
 

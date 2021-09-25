@@ -49,7 +49,11 @@ namespace DTO {
 
 class BaseItemDtoQueryResult {
 public:
-	BaseItemDtoQueryResult();
+	BaseItemDtoQueryResult(			
+		qint32 totalRecordCount,			
+		qint32 startIndex		
+	);
+
 	BaseItemDtoQueryResult(const BaseItemDtoQueryResult &other);
 	
 	/**
@@ -96,7 +100,12 @@ protected:
 	QList<BaseItemDto> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
+
+private:
+	// Private constructor which generates an invalid object, for use withing BaseItemDtoQueryResult::fromJson();
+	BaseItemDtoQueryResult();
 };
+
 
 } // NS DTO
 

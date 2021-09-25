@@ -50,7 +50,10 @@ namespace DTO {
 
 class QueueRequestDto {
 public:
-	QueueRequestDto();
+	QueueRequestDto(			
+		GroupQueueMode mode		
+	);
+
 	QueueRequestDto(const QueueRequestDto &other);
 	
 	/**
@@ -83,7 +86,12 @@ public:
 protected:
 	QStringList m_itemIds;
 	GroupQueueMode m_mode;
+
+private:
+	// Private constructor which generates an invalid object, for use withing QueueRequestDto::fromJson();
+	QueueRequestDto();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,22 @@ namespace Jellyfin {
 namespace DTO {
 
 BaseItem::BaseItem() {}
+BaseItem::BaseItem (
+		QDateTime dateLastSaved, 
+		bool isHD, 
+		bool isShortcut, 
+		qint32 width, 
+		qint32 height, 
+		bool supportsExternalTransfer 
+		) :
+	m_dateLastSaved(dateLastSaved),
+	m_isHD(isHD),
+	m_isShortcut(isShortcut),
+	m_width(width),
+	m_height(height),
+	m_supportsExternalTransfer(supportsExternalTransfer) { }
+
+
 
 BaseItem::BaseItem(const BaseItem &other) :
 

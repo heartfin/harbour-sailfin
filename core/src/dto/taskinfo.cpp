@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 TaskInfo::TaskInfo() {}
+TaskInfo::TaskInfo (
+		TaskState state, 
+		QSharedPointer<TaskResult> lastExecutionResult, 
+		bool isHidden 
+		) :
+	m_state(state),
+	m_lastExecutionResult(lastExecutionResult),
+	m_isHidden(isHidden) { }
+
+
 
 TaskInfo::TaskInfo(const TaskInfo &other) :
 

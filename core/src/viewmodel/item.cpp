@@ -85,7 +85,7 @@ void Item::setUserData(DTO::UserItemDataDto &newData) {
 
 void Item::setUserData(QSharedPointer<DTO::UserItemDataDto> newData)  {
     if (m_data.isNull() || m_data->userData().isNull()) {
-        m_userData->setData(QSharedPointer<DTO::UserData>::create());
+        m_userData->setData(QSharedPointer<DTO::UserData>::create(0, 0, false, false));
     } else {
         m_userData->setData(newData);
     }

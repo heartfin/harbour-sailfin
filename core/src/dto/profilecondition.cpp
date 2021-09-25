@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 ProfileCondition::ProfileCondition() {}
+ProfileCondition::ProfileCondition (
+		ProfileConditionType condition, 
+		ProfileConditionValue property, 
+		bool isRequired 
+		) :
+	m_condition(condition),
+	m_property(property),
+	m_isRequired(isRequired) { }
+
+
 
 ProfileCondition::ProfileCondition(const ProfileCondition &other) :
 

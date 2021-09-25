@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 ConfigurationPageInfo::ConfigurationPageInfo() {}
+ConfigurationPageInfo::ConfigurationPageInfo (
+		bool enableInMainMenu, 
+		ConfigurationPageType configurationPageType 
+		) :
+	m_enableInMainMenu(enableInMainMenu),
+	m_configurationPageType(configurationPageType) { }
+
+
 
 ConfigurationPageInfo::ConfigurationPageInfo(const ConfigurationPageInfo &other) :
 

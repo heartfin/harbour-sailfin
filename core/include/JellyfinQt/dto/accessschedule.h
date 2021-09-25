@@ -48,7 +48,14 @@ namespace DTO {
 
 class AccessSchedule {
 public:
-	AccessSchedule();
+	AccessSchedule(	
+		qint32 jellyfinId,			
+		QString userId,			
+		DynamicDayOfWeek dayOfWeek,			
+		double startHour,			
+		double endHour		
+	);
+
 	AccessSchedule(const AccessSchedule &other);
 	
 	/**
@@ -109,7 +116,12 @@ protected:
 	DynamicDayOfWeek m_dayOfWeek;
 	double m_startHour;
 	double m_endHour;
+
+private:
+	// Private constructor which generates an invalid object, for use withing AccessSchedule::fromJson();
+	AccessSchedule();
 };
+
 
 } // NS DTO
 

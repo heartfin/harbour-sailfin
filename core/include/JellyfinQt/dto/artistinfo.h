@@ -51,7 +51,10 @@ namespace DTO {
 
 class ArtistInfo {
 public:
-	ArtistInfo();
+	ArtistInfo(																			
+		bool isAutomated				
+	);
+
 	ArtistInfo(const ArtistInfo &other);
 	
 	/**
@@ -176,7 +179,12 @@ protected:
 	QDateTime m_premiereDate;
 	bool m_isAutomated;
 	QList<SongInfo> m_songInfos;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ArtistInfo::fromJson();
+	ArtistInfo();
 };
+
 
 } // NS DTO
 

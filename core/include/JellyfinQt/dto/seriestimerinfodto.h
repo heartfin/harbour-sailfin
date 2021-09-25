@@ -53,7 +53,24 @@ namespace DTO {
 
 class SeriesTimerInfoDto {
 public:
-	SeriesTimerInfoDto();
+	SeriesTimerInfoDto(									
+		QString channelId,																	
+		QDateTime startDate,			
+		QDateTime endDate,					
+		qint32 priority,			
+		qint32 prePaddingSeconds,			
+		qint32 postPaddingSeconds,			
+		bool isPrePaddingRequired,							
+		bool isPostPaddingRequired,			
+		KeepUntil keepUntil,			
+		bool recordAnyTime,			
+		bool skipEpisodesInLibrary,			
+		bool recordAnyChannel,			
+		qint32 keepUpTo,			
+		bool recordNewOnly,					
+		DayPattern dayPattern												
+	);
+
 	SeriesTimerInfoDto(const SeriesTimerInfoDto &other);
 	
 	/**
@@ -434,7 +451,12 @@ protected:
 	QString m_parentThumbImageTag;
 	QString m_parentPrimaryImageItemId;
 	QString m_parentPrimaryImageTag;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SeriesTimerInfoDto::fromJson();
+	SeriesTimerInfoDto();
 };
+
 
 } // NS DTO
 

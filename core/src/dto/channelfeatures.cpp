@@ -33,6 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 ChannelFeatures::ChannelFeatures() {}
+ChannelFeatures::ChannelFeatures (
+		bool canSearch, 
+		bool supportsSortOrderToggle, 
+		bool supportsLatestMedia, 
+		bool canFilter, 
+		bool supportsContentDownloading 
+		) :
+	m_canSearch(canSearch),
+	m_supportsSortOrderToggle(supportsSortOrderToggle),
+	m_supportsLatestMedia(supportsLatestMedia),
+	m_canFilter(canFilter),
+	m_supportsContentDownloading(supportsContentDownloading) { }
+
+
 
 ChannelFeatures::ChannelFeatures(const ChannelFeatures &other) :
 

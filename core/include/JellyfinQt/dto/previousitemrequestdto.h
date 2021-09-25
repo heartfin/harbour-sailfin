@@ -47,7 +47,10 @@ namespace DTO {
 
 class PreviousItemRequestDto {
 public:
-	PreviousItemRequestDto();
+	PreviousItemRequestDto(	
+		QString playlistItemId		
+	);
+
 	PreviousItemRequestDto(const PreviousItemRequestDto &other);
 	
 	/**
@@ -72,7 +75,12 @@ public:
 
 protected:
 	QString m_playlistItemId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PreviousItemRequestDto::fromJson();
+	PreviousItemRequestDto();
 };
+
 
 } // NS DTO
 

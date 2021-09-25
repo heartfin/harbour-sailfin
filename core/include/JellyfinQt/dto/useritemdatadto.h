@@ -48,7 +48,13 @@ namespace DTO {
 
 class UserItemDataDto {
 public:
-	UserItemDataDto();
+	UserItemDataDto(							
+		qint64 playbackPositionTicks,			
+		qint32 playCount,			
+		bool isFavorite,							
+		bool played						
+	);
+
 	UserItemDataDto(const UserItemDataDto &other);
 	
 	/**
@@ -187,7 +193,12 @@ protected:
 	bool m_played;
 	QString m_key;
 	QString m_itemId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing UserItemDataDto::fromJson();
+	UserItemDataDto();
 };
+
 
 } // NS DTO
 

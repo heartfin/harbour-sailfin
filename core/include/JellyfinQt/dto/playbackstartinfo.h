@@ -54,7 +54,16 @@ namespace DTO {
 
 class PlaybackStartInfo {
 public:
-	PlaybackStartInfo();
+	PlaybackStartInfo(	
+		bool canSeek,			
+		QSharedPointer<BaseItemDto> item,			
+		QString itemId,											
+		bool isPaused,			
+		bool isMuted,													
+		PlayMethod playMethod,							
+		RepeatMode repeatMode						
+	);
+
 	PlaybackStartInfo(const PlaybackStartInfo &other);
 	
 	/**
@@ -263,7 +272,12 @@ protected:
 	RepeatMode m_repeatMode;
 	QList<QueueItem> m_nowPlayingQueue;
 	QString m_playlistItemId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PlaybackStartInfo::fromJson();
+	PlaybackStartInfo();
 };
+
 
 } // NS DTO
 

@@ -51,7 +51,15 @@ namespace DTO {
 
 class BaseItem {
 public:
-	BaseItem();
+	BaseItem(					
+		QDateTime dateLastSaved,					
+		bool isHD,			
+		bool isShortcut,					
+		qint32 width,			
+		qint32 height,					
+		bool supportsExternalTransfer		
+	);
+
 	BaseItem(const BaseItem &other);
 	
 	/**
@@ -146,7 +154,12 @@ protected:
 	qint32 m_height;
 	QStringList m_extraIds;
 	bool m_supportsExternalTransfer;
+
+private:
+	// Private constructor which generates an invalid object, for use withing BaseItem::fromJson();
+	BaseItem();
 };
+
 
 } // NS DTO
 

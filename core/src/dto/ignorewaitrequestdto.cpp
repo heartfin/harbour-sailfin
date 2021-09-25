@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 IgnoreWaitRequestDto::IgnoreWaitRequestDto() {}
+IgnoreWaitRequestDto::IgnoreWaitRequestDto (
+		bool ignoreWait 
+		) :
+	m_ignoreWait(ignoreWait) { }
+
+
 
 IgnoreWaitRequestDto::IgnoreWaitRequestDto(const IgnoreWaitRequestDto &other) :
 

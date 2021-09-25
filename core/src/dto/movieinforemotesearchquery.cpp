@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 MovieInfoRemoteSearchQuery::MovieInfoRemoteSearchQuery() {}
+MovieInfoRemoteSearchQuery::MovieInfoRemoteSearchQuery (
+		QSharedPointer<MovieInfo> searchInfo, 
+		QString itemId, 
+		bool includeDisabledProviders 
+		) :
+	m_searchInfo(searchInfo),
+	m_itemId(itemId),
+	m_includeDisabledProviders(includeDisabledProviders) { }
+
+
 
 MovieInfoRemoteSearchQuery::MovieInfoRemoteSearchQuery(const MovieInfoRemoteSearchQuery &other) :
 

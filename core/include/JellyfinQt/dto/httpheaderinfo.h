@@ -48,7 +48,10 @@ namespace DTO {
 
 class HttpHeaderInfo {
 public:
-	HttpHeaderInfo();
+	HttpHeaderInfo(					
+		HeaderMatchType match		
+	);
+
 	HttpHeaderInfo(const HttpHeaderInfo &other);
 	
 	/**
@@ -85,7 +88,12 @@ protected:
 	QString m_name;
 	QString m_value;
 	HeaderMatchType m_match;
+
+private:
+	// Private constructor which generates an invalid object, for use withing HttpHeaderInfo::fromJson();
+	HttpHeaderInfo();
 };
+
 
 } // NS DTO
 

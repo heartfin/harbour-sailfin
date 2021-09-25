@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 CollectionCreationResult::CollectionCreationResult() {}
+CollectionCreationResult::CollectionCreationResult (
+		QString jellyfinId 
+		) :
+	m_jellyfinId(jellyfinId) { }
+
+
 
 CollectionCreationResult::CollectionCreationResult(const CollectionCreationResult &other) :
 

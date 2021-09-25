@@ -48,7 +48,10 @@ namespace DTO {
 
 class PlaystateRequest {
 public:
-	PlaystateRequest();
+	PlaystateRequest(	
+		PlaystateCommand command						
+	);
+
 	PlaystateRequest(const PlaystateRequest &other);
 	
 	/**
@@ -89,7 +92,12 @@ protected:
 	PlaystateCommand m_command;
 	std::optional<qint64> m_seekPositionTicks = std::nullopt;
 	QString m_controllingUserId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PlaystateRequest::fromJson();
+	PlaystateRequest();
 };
+
 
 } // NS DTO
 

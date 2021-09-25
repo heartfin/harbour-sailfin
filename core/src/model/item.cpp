@@ -23,8 +23,22 @@ namespace Jellyfin {
 namespace Model {
 
 
-Item::Item(QObject *parent)
-    : Item(DTO::BaseItemDto(), nullptr, parent) { }
+Item::Item(ApiClient *apiClient, QObject *parent)
+    : Item(DTO::BaseItemDto(
+                QString(), // id
+                Video3DFormat::EnumNotSet,
+                PlayAccess::Full,
+                QSharedPointer<UserItemDataDto>::create(0, 0, false, false),
+                VideoType::EnumNotSet,
+                LocationType::Virtual,
+                IsoType::EnumNotSet,
+                ImageOrientation::EnumNotSet,
+                ChannelType::EnumNotSet,
+                ProgramAudio::EnumNotSet,
+                QSharedPointer<DTO::BaseItemDto>(nullptr)
+           ),
+           apiClient, parent) {
+}
 
 Item::Item(const DTO::BaseItemDto &data, ApiClient *apiClient, QObject *parent)
     : DTO::BaseItemDto(data),

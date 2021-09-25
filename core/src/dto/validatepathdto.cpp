@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 ValidatePathDto::ValidatePathDto() {}
+ValidatePathDto::ValidatePathDto (
+		bool validateWritable 
+		) :
+	m_validateWritable(validateWritable) { }
+
+
 
 ValidatePathDto::ValidatePathDto(const ValidatePathDto &other) :
 

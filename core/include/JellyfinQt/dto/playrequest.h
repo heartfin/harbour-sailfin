@@ -50,7 +50,11 @@ namespace DTO {
 
 class PlayRequest {
 public:
-	PlayRequest();
+	PlayRequest(					
+		PlayCommand playCommand,			
+		QString controllingUserId										
+	);
+
 	PlayRequest(const PlayRequest &other);
 	
 	/**
@@ -137,7 +141,12 @@ protected:
 	std::optional<qint32> m_audioStreamIndex = std::nullopt;
 	QString m_mediaSourceId;
 	std::optional<qint32> m_startIndex = std::nullopt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PlayRequest::fromJson();
+	PlayRequest();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 ThemeMediaResult::ThemeMediaResult() {}
+ThemeMediaResult::ThemeMediaResult (
+		qint32 totalRecordCount, 
+		qint32 startIndex, 
+		QString ownerId 
+		) :
+	m_totalRecordCount(totalRecordCount),
+	m_startIndex(startIndex),
+	m_ownerId(ownerId) { }
+
+
 
 ThemeMediaResult::ThemeMediaResult(const ThemeMediaResult &other) :
 

@@ -33,6 +33,28 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaStream::MediaStream() {}
+MediaStream::MediaStream (
+		bool isInterlaced, 
+		bool isDefault, 
+		bool isForced, 
+		MediaStreamType type, 
+		qint32 index, 
+		bool isExternal, 
+		SubtitleDeliveryMethod deliveryMethod, 
+		bool isTextSubtitleStream, 
+		bool supportsExternalStream 
+		) :
+	m_isInterlaced(isInterlaced),
+	m_isDefault(isDefault),
+	m_isForced(isForced),
+	m_type(type),
+	m_index(index),
+	m_isExternal(isExternal),
+	m_deliveryMethod(deliveryMethod),
+	m_isTextSubtitleStream(isTextSubtitleStream),
+	m_supportsExternalStream(supportsExternalStream) { }
+
+
 
 MediaStream::MediaStream(const MediaStream &other) :
 

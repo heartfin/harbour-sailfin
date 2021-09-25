@@ -48,7 +48,10 @@ namespace DTO {
 
 class DeviceProfileInfo {
 public:
-	DeviceProfileInfo();
+	DeviceProfileInfo(					
+		DeviceProfileType type		
+	);
+
 	DeviceProfileInfo(const DeviceProfileInfo &other);
 	
 	/**
@@ -93,7 +96,12 @@ protected:
 	QString m_jellyfinId;
 	QString m_name;
 	DeviceProfileType m_type;
+
+private:
+	// Private constructor which generates an invalid object, for use withing DeviceProfileInfo::fromJson();
+	DeviceProfileInfo();
 };
+
 
 } // NS DTO
 

@@ -47,7 +47,10 @@ namespace DTO {
 
 class QueueItem {
 public:
-	QueueItem();
+	QueueItem(	
+		QString jellyfinId				
+	);
+
 	QueueItem(const QueueItem &other);
 	
 	/**
@@ -76,7 +79,12 @@ public:
 protected:
 	QString m_jellyfinId;
 	QString m_playlistItemId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing QueueItem::fromJson();
+	QueueItem();
 };
+
 
 } // NS DTO
 

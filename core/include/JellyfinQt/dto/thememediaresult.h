@@ -50,7 +50,12 @@ namespace DTO {
 
 class ThemeMediaResult {
 public:
-	ThemeMediaResult();
+	ThemeMediaResult(			
+		qint32 totalRecordCount,			
+		qint32 startIndex,			
+		QString ownerId		
+	);
+
 	ThemeMediaResult(const ThemeMediaResult &other);
 	
 	/**
@@ -107,7 +112,12 @@ protected:
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
 	QString m_ownerId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ThemeMediaResult::fromJson();
+	ThemeMediaResult();
 };
+
 
 } // NS DTO
 

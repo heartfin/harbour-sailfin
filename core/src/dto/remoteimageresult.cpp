@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 RemoteImageResult::RemoteImageResult() {}
+RemoteImageResult::RemoteImageResult (
+		qint32 totalRecordCount 
+		) :
+	m_totalRecordCount(totalRecordCount) { }
+
+
 
 RemoteImageResult::RemoteImageResult(const RemoteImageResult &other) :
 

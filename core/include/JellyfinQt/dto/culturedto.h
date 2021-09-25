@@ -48,8 +48,7 @@ namespace DTO {
 
 
 class CultureDto {
-public:
-	CultureDto();
+public:	CultureDto();
 	CultureDto(const CultureDto &other);
 	
 	/**
@@ -120,7 +119,10 @@ protected:
 	QString m_twoLetterISOLanguageName;
 	QString m_threeLetterISOLanguageName;
 	QStringList m_threeLetterISOLanguageNames;
+
+
 };
+
 
 } // NS DTO
 

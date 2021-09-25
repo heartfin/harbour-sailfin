@@ -33,6 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 PlayerStateInfo::PlayerStateInfo() {}
+PlayerStateInfo::PlayerStateInfo (
+		bool canSeek, 
+		bool isPaused, 
+		bool isMuted, 
+		PlayMethod playMethod, 
+		RepeatMode repeatMode 
+		) :
+	m_canSeek(canSeek),
+	m_isPaused(isPaused),
+	m_isMuted(isMuted),
+	m_playMethod(playMethod),
+	m_repeatMode(repeatMode) { }
+
+
 
 PlayerStateInfo::PlayerStateInfo(const PlayerStateInfo &other) :
 

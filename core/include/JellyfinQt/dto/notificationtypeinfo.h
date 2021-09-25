@@ -47,7 +47,11 @@ namespace DTO {
 
 class NotificationTypeInfo {
 public:
-	NotificationTypeInfo();
+	NotificationTypeInfo(					
+		bool enabled,					
+		bool isBasedOnUserEvent		
+	);
+
 	NotificationTypeInfo(const NotificationTypeInfo &other);
 	
 	/**
@@ -98,7 +102,12 @@ protected:
 	bool m_enabled;
 	QString m_category;
 	bool m_isBasedOnUserEvent;
+
+private:
+	// Private constructor which generates an invalid object, for use withing NotificationTypeInfo::fromJson();
+	NotificationTypeInfo();
 };
+
 
 } // NS DTO
 

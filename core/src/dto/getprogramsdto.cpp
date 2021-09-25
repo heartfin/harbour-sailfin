@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 GetProgramsDto::GetProgramsDto() {}
+GetProgramsDto::GetProgramsDto (
+		QString userId, 
+		bool enableTotalRecordCount, 
+		QString librarySeriesId 
+		) :
+	m_userId(userId),
+	m_enableTotalRecordCount(enableTotalRecordCount),
+	m_librarySeriesId(librarySeriesId) { }
+
+
 
 GetProgramsDto::GetProgramsDto(const GetProgramsDto &other) :
 

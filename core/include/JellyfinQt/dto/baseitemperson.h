@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class BaseItemPerson {
-public:
-	BaseItemPerson();
+public:	BaseItemPerson();
 	BaseItemPerson(const BaseItemPerson &other);
 	
 	/**
@@ -134,7 +133,10 @@ protected:
 	QString m_type;
 	QString m_primaryImageTag;
 	QJsonObject m_imageBlurHashes;
+
+
 };
+
 
 } // NS DTO
 

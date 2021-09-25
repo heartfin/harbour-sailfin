@@ -48,7 +48,10 @@ namespace DTO {
 
 class BookInfo {
 public:
-	BookInfo();
+	BookInfo(																			
+		bool isAutomated				
+	);
+
 	BookInfo(const BookInfo &other);
 	
 	/**
@@ -173,7 +176,12 @@ protected:
 	QDateTime m_premiereDate;
 	bool m_isAutomated;
 	QString m_seriesName;
+
+private:
+	// Private constructor which generates an invalid object, for use withing BookInfo::fromJson();
+	BookInfo();
 };
+
 
 } // NS DTO
 

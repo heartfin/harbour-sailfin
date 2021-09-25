@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class PathSubstitution {
-public:
-	PathSubstitution();
+public:	PathSubstitution();
 	PathSubstitution(const PathSubstitution &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_from;
 	QString m_to;
+
+
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaybackInfoResponse::PlaybackInfoResponse() {}
+PlaybackInfoResponse::PlaybackInfoResponse (
+		PlaybackErrorCode errorCode 
+		) :
+	m_errorCode(errorCode) { }
+
+
 
 PlaybackInfoResponse::PlaybackInfoResponse(const PlaybackInfoResponse &other) :
 

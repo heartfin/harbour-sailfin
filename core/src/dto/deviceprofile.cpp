@@ -33,6 +33,32 @@ namespace Jellyfin {
 namespace DTO {
 
 DeviceProfile::DeviceProfile() {}
+DeviceProfile::DeviceProfile (
+		QSharedPointer<DeviceIdentification> identification, 
+		bool enableAlbumArtInDidl, 
+		bool enableSingleAlbumArtLimit, 
+		bool enableSingleSubtitleLimit, 
+		qint32 maxAlbumArtWidth, 
+		qint32 maxAlbumArtHeight, 
+		qint32 timelineOffsetSeconds, 
+		bool requiresPlainVideoItems, 
+		bool requiresPlainFolders, 
+		bool enableMSMediaReceiverRegistrar, 
+		bool ignoreTranscodeByteRangeRequests 
+		) :
+	m_identification(identification),
+	m_enableAlbumArtInDidl(enableAlbumArtInDidl),
+	m_enableSingleAlbumArtLimit(enableSingleAlbumArtLimit),
+	m_enableSingleSubtitleLimit(enableSingleSubtitleLimit),
+	m_maxAlbumArtWidth(maxAlbumArtWidth),
+	m_maxAlbumArtHeight(maxAlbumArtHeight),
+	m_timelineOffsetSeconds(timelineOffsetSeconds),
+	m_requiresPlainVideoItems(requiresPlainVideoItems),
+	m_requiresPlainFolders(requiresPlainFolders),
+	m_enableMSMediaReceiverRegistrar(enableMSMediaReceiverRegistrar),
+	m_ignoreTranscodeByteRangeRequests(ignoreTranscodeByteRangeRequests) { }
+
+
 
 DeviceProfile::DeviceProfile(const DeviceProfile &other) :
 

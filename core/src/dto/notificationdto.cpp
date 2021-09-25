@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 NotificationDto::NotificationDto() {}
+NotificationDto::NotificationDto (
+		QDateTime date, 
+		bool isRead, 
+		NotificationLevel level 
+		) :
+	m_date(date),
+	m_isRead(isRead),
+	m_level(level) { }
+
+
 
 NotificationDto::NotificationDto(const NotificationDto &other) :
 

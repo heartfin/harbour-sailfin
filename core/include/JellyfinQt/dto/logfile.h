@@ -48,7 +48,12 @@ namespace DTO {
 
 class LogFile {
 public:
-	LogFile();
+	LogFile(	
+		QDateTime dateCreated,			
+		QDateTime dateModified,			
+		qint64 size				
+	);
+
 	LogFile(const LogFile &other);
 	
 	/**
@@ -105,7 +110,12 @@ protected:
 	QDateTime m_dateModified;
 	qint64 m_size;
 	QString m_name;
+
+private:
+	// Private constructor which generates an invalid object, for use withing LogFile::fromJson();
+	LogFile();
 };
+
 
 } // NS DTO
 

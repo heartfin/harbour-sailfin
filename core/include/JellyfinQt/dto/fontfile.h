@@ -48,7 +48,12 @@ namespace DTO {
 
 class FontFile {
 public:
-	FontFile();
+	FontFile(			
+		qint64 size,			
+		QDateTime dateCreated,			
+		QDateTime dateModified		
+	);
+
 	FontFile(const FontFile &other);
 	
 	/**
@@ -105,7 +110,12 @@ protected:
 	qint64 m_size;
 	QDateTime m_dateCreated;
 	QDateTime m_dateModified;
+
+private:
+	// Private constructor which generates an invalid object, for use withing FontFile::fromJson();
+	FontFile();
 };
+
 
 } // NS DTO
 

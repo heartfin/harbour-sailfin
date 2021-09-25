@@ -50,7 +50,13 @@ namespace DTO {
 
 class SearchHint {
 public:
-	SearchHint();
+	SearchHint(	
+		QString itemId,			
+		QString jellyfinId,																																									
+		QString albumId,											
+		QString channelId						
+	);
+
 	SearchHint(const SearchHint &other);
 	
 	/**
@@ -381,7 +387,12 @@ protected:
 	QString m_channelId;
 	QString m_channelName;
 	std::optional<double> m_primaryImageAspectRatio = std::nullopt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SearchHint::fromJson();
+	SearchHint();
 };
+
 
 } // NS DTO
 

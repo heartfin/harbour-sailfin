@@ -47,7 +47,11 @@ namespace DTO {
 
 class GuideInfo {
 public:
-	GuideInfo();
+	GuideInfo(	
+		QDateTime startDate,			
+		QDateTime endDate		
+	);
+
 	GuideInfo(const GuideInfo &other);
 	
 	/**
@@ -82,7 +86,12 @@ public:
 protected:
 	QDateTime m_startDate;
 	QDateTime m_endDate;
+
+private:
+	// Private constructor which generates an invalid object, for use withing GuideInfo::fromJson();
+	GuideInfo();
 };
+
 
 } // NS DTO
 

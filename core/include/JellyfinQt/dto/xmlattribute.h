@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class XmlAttribute {
-public:
-	XmlAttribute();
+public:	XmlAttribute();
 	XmlAttribute(const XmlAttribute &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_name;
 	QString m_value;
+
+
 };
+
 
 } // NS DTO
 

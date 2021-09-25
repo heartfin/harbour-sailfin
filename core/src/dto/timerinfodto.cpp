@@ -33,6 +33,32 @@ namespace Jellyfin {
 namespace DTO {
 
 TimerInfoDto::TimerInfoDto() {}
+TimerInfoDto::TimerInfoDto (
+		QString channelId, 
+		QDateTime startDate, 
+		QDateTime endDate, 
+		qint32 priority, 
+		qint32 prePaddingSeconds, 
+		qint32 postPaddingSeconds, 
+		bool isPrePaddingRequired, 
+		bool isPostPaddingRequired, 
+		KeepUntil keepUntil, 
+		RecordingStatus status, 
+		QSharedPointer<BaseItemDto> programInfo 
+		) :
+	m_channelId(channelId),
+	m_startDate(startDate),
+	m_endDate(endDate),
+	m_priority(priority),
+	m_prePaddingSeconds(prePaddingSeconds),
+	m_postPaddingSeconds(postPaddingSeconds),
+	m_isPrePaddingRequired(isPrePaddingRequired),
+	m_isPostPaddingRequired(isPostPaddingRequired),
+	m_keepUntil(keepUntil),
+	m_status(status),
+	m_programInfo(programInfo) { }
+
+
 
 TimerInfoDto::TimerInfoDto(const TimerInfoDto &other) :
 

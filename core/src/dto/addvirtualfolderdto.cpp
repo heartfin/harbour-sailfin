@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 AddVirtualFolderDto::AddVirtualFolderDto() {}
+AddVirtualFolderDto::AddVirtualFolderDto (
+		QSharedPointer<LibraryOptions> libraryOptions 
+		) :
+	m_libraryOptions(libraryOptions) { }
+
+
 
 AddVirtualFolderDto::AddVirtualFolderDto(const AddVirtualFolderDto &other) :
 

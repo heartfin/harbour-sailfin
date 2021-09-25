@@ -48,7 +48,12 @@ namespace DTO {
 
 class AllThemeMediaResult {
 public:
-	AllThemeMediaResult();
+	AllThemeMediaResult(	
+		QSharedPointer<ThemeMediaResult> themeVideosResult,			
+		QSharedPointer<ThemeMediaResult> themeSongsResult,			
+		QSharedPointer<ThemeMediaResult> soundtrackSongsResult		
+	);
+
 	AllThemeMediaResult(const AllThemeMediaResult &other);
 	
 	/**
@@ -81,7 +86,12 @@ protected:
 	QSharedPointer<ThemeMediaResult> m_themeVideosResult = QSharedPointer<ThemeMediaResult>();
 	QSharedPointer<ThemeMediaResult> m_themeSongsResult = QSharedPointer<ThemeMediaResult>();
 	QSharedPointer<ThemeMediaResult> m_soundtrackSongsResult = QSharedPointer<ThemeMediaResult>();
+
+private:
+	// Private constructor which generates an invalid object, for use withing AllThemeMediaResult::fromJson();
+	AllThemeMediaResult();
 };
+
 
 } // NS DTO
 

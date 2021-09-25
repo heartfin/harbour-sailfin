@@ -47,7 +47,11 @@ namespace DTO {
 
 class MovePlaylistItemRequestDto {
 public:
-	MovePlaylistItemRequestDto();
+	MovePlaylistItemRequestDto(	
+		QString playlistItemId,			
+		qint32 newIndex		
+	);
+
 	MovePlaylistItemRequestDto(const MovePlaylistItemRequestDto &other);
 	
 	/**
@@ -82,7 +86,12 @@ public:
 protected:
 	QString m_playlistItemId;
 	qint32 m_newIndex;
+
+private:
+	// Private constructor which generates an invalid object, for use withing MovePlaylistItemRequestDto::fromJson();
+	MovePlaylistItemRequestDto();
 };
+
 
 } // NS DTO
 

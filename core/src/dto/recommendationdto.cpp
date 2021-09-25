@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 RecommendationDto::RecommendationDto() {}
+RecommendationDto::RecommendationDto (
+		RecommendationType recommendationType, 
+		QString categoryId 
+		) :
+	m_recommendationType(recommendationType),
+	m_categoryId(categoryId) { }
+
+
 
 RecommendationDto::RecommendationDto(const RecommendationDto &other) :
 

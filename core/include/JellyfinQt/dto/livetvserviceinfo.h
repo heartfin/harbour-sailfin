@@ -50,7 +50,12 @@ namespace DTO {
 
 class LiveTvServiceInfo {
 public:
-	LiveTvServiceInfo();
+	LiveTvServiceInfo(					
+		LiveTvServiceStatus status,							
+		bool hasUpdateAvailable,			
+		bool isVisible				
+	);
+
 	LiveTvServiceInfo(const LiveTvServiceInfo &other);
 	
 	/**
@@ -147,7 +152,12 @@ protected:
 	bool m_hasUpdateAvailable;
 	bool m_isVisible;
 	QStringList m_tuners;
+
+private:
+	// Private constructor which generates an invalid object, for use withing LiveTvServiceInfo::fromJson();
+	LiveTvServiceInfo();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 IPlugin::IPlugin() {}
+IPlugin::IPlugin (
+		QString jellyfinId, 
+		QSharedPointer<Version> version, 
+		bool canUninstall 
+		) :
+	m_jellyfinId(jellyfinId),
+	m_version(version),
+	m_canUninstall(canUninstall) { }
+
+
 
 IPlugin::IPlugin(const IPlugin &other) :
 

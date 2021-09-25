@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 SeriesInfo::SeriesInfo() {}
+SeriesInfo::SeriesInfo (
+		bool isAutomated 
+		) :
+	m_isAutomated(isAutomated) { }
+
+
 
 SeriesInfo::SeriesInfo(const SeriesInfo &other) :
 

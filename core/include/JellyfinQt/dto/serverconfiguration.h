@@ -56,7 +56,63 @@ namespace DTO {
 
 class ServerConfiguration {
 public:
-	ServerConfiguration();
+	ServerConfiguration(	
+		qint32 logFileRetentionDays,			
+		bool isStartupWizardCompleted,					
+		QSharedPointer<Version> previousVersion,					
+		bool enableUPnP,			
+		bool enableMetrics,			
+		qint32 publicPort,			
+		bool uPnPCreateHttpPortMap,					
+		bool enableIPV6,			
+		bool enableIPV4,			
+		bool enableSSDPTracing,					
+		qint32 uDPSendCount,			
+		qint32 uDPSendDelay,			
+		bool ignoreVirtualInterfaces,					
+		qint32 gatewayMonitorPeriod,			
+		bool enableMultiSocketBinding,			
+		bool trustAllIP6Interfaces,							
+		bool autoDiscoveryTracing,			
+		bool autoDiscovery,			
+		qint32 publicHttpsPort,			
+		qint32 httpServerPortNumber,			
+		qint32 httpsPortNumber,			
+		bool enableHttps,			
+		bool enableNormalizedItemByNameIds,							
+		bool isPortAuthorized,			
+		bool quickConnectAvailable,			
+		bool enableRemoteAccess,			
+		bool enableCaseSensitiveItemIds,			
+		bool disableLiveTvChannelUserDataName,																	
+		qint32 minResumePct,			
+		qint32 maxResumePct,			
+		qint32 minResumeDurationSeconds,			
+		qint32 minAudiobookResume,			
+		qint32 maxAudiobookResume,			
+		qint32 libraryMonitorDelay,			
+		bool enableDashboardResponseCaching,			
+		ImageSavingConvention imageSavingConvention,					
+		bool skipDeserializationForBasicTypes,									
+		bool saveMetadataHidden,					
+		qint32 remoteClientBitrateLimit,			
+		bool enableFolderView,			
+		bool enableGroupingIntoCollections,			
+		bool displaySpecialsWithinSeasons,											
+		bool enableExternalContentInSuggestions,			
+		bool requireHttps,			
+		bool enableNewOmdbSupport,					
+		bool isRemoteIPFilterBlacklist,			
+		qint32 imageExtractionTimeoutMs,					
+		bool enableSimpleArtistDetection,					
+		bool enableSlowResponseWarning,			
+		qint64 slowResponseThresholdMs,									
+		qint32 libraryScanFanoutConcurrency,			
+		qint32 libraryMetadataRefreshConcurrency,			
+		bool removeOldPlugins,			
+		bool disablePluginImages		
+	);
+
 	ServerConfiguration(const ServerConfiguration &other);
 	
 	/**
@@ -901,7 +957,12 @@ protected:
 	qint32 m_libraryMetadataRefreshConcurrency;
 	bool m_removeOldPlugins;
 	bool m_disablePluginImages;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ServerConfiguration::fromJson();
+	ServerConfiguration();
 };
+
 
 } // NS DTO
 

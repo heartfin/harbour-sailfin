@@ -51,7 +51,15 @@ namespace DTO {
 
 class UserDto {
 public:
-	UserDto();
+	UserDto(							
+		QString jellyfinId,					
+		bool hasPassword,			
+		bool hasConfiguredPassword,			
+		bool hasConfiguredEasyPassword,									
+		QSharedPointer<UserConfiguration> configuration,			
+		QSharedPointer<UserPolicy> policy				
+	);
+
 	UserDto(const UserDto &other);
 	
 	/**
@@ -216,7 +224,12 @@ protected:
 	QSharedPointer<UserConfiguration> m_configuration = QSharedPointer<UserConfiguration>();
 	QSharedPointer<UserPolicy> m_policy = QSharedPointer<UserPolicy>();
 	std::optional<double> m_primaryImageAspectRatio = std::nullopt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing UserDto::fromJson();
+	UserDto();
 };
+
 
 } // NS DTO
 

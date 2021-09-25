@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 SongInfo::SongInfo() {}
+SongInfo::SongInfo (
+		bool isAutomated 
+		) :
+	m_isAutomated(isAutomated) { }
+
+
 
 SongInfo::SongInfo(const SongInfo &other) :
 

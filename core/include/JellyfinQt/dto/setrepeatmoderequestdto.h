@@ -47,7 +47,10 @@ namespace DTO {
 
 class SetRepeatModeRequestDto {
 public:
-	SetRepeatModeRequestDto();
+	SetRepeatModeRequestDto(	
+		GroupRepeatMode mode		
+	);
+
 	SetRepeatModeRequestDto(const SetRepeatModeRequestDto &other);
 	
 	/**
@@ -68,7 +71,12 @@ public:
 
 protected:
 	GroupRepeatMode m_mode;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SetRepeatModeRequestDto::fromJson();
+	SetRepeatModeRequestDto();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 DeviceInfo::DeviceInfo() {}
+DeviceInfo::DeviceInfo (
+		QString lastUserId, 
+		QDateTime dateLastActivity, 
+		QSharedPointer<ClientCapabilities> capabilities 
+		) :
+	m_lastUserId(lastUserId),
+	m_dateLastActivity(dateLastActivity),
+	m_capabilities(capabilities) { }
+
+
 
 DeviceInfo::DeviceInfo(const DeviceInfo &other) :
 

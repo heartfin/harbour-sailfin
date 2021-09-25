@@ -52,7 +52,14 @@ namespace DTO {
 
 class ClientCapabilitiesDto {
 public:
-	ClientCapabilitiesDto();
+	ClientCapabilitiesDto(					
+		bool supportsMediaControl,			
+		bool supportsContentUploading,					
+		bool supportsPersistentIdentifier,			
+		bool supportsSync,			
+		QSharedPointer<DeviceProfile> deviceProfile						
+	);
+
 	ClientCapabilitiesDto(const ClientCapabilitiesDto &other);
 	
 	/**
@@ -173,7 +180,12 @@ protected:
 	QSharedPointer<DeviceProfile> m_deviceProfile = QSharedPointer<DeviceProfile>();
 	QString m_appStoreUrl;
 	QString m_iconUrl;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ClientCapabilitiesDto::fromJson();
+	ClientCapabilitiesDto();
 };
+
 
 } // NS DTO
 

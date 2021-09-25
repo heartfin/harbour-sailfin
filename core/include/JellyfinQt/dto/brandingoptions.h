@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class BrandingOptions {
-public:
-	BrandingOptions();
+public:	BrandingOptions();
 	BrandingOptions(const BrandingOptions &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_loginDisclaimer;
 	QString m_customCss;
+
+
 };
+
 
 } // NS DTO
 

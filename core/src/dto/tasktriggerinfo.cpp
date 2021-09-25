@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 TaskTriggerInfo::TaskTriggerInfo() {}
+TaskTriggerInfo::TaskTriggerInfo (
+		DayOfWeek dayOfWeek 
+		) :
+	m_dayOfWeek(dayOfWeek) { }
+
+
 
 TaskTriggerInfo::TaskTriggerInfo(const TaskTriggerInfo &other) :
 

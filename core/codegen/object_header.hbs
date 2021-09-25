@@ -7,9 +7,22 @@ class {{className}};
 
 class {{className}} {
 public:
-	
+	{{#if hasRequiredProperties}}
+
+	{{className}}(
+	{{#each properties as |p|}}
+	{{#if p.isNotNullable}}
+
+		{{p.typeNameWithQualifiers}} {{p.name}}{{#if p.isLastNonNullable}}{{else}},{{/if}}
+	{{/if}}
+	{{/each}}
+
+	);
+
+	{{else}}
 	{{className}}();
-	
+	{{/if}}
+
 	{{className}}(const {{className}} &other);
 	
 	/**
@@ -60,7 +73,17 @@ protected:
 {{/if}}
 
 {{/each}}
+
+
+{{#if hasRequiredProperties}}
+private:
+	// Private constructor which generates an invalid object, for use withing {{className}}::fromJson();
+	
+	{{className}}();
+{{/if}}
+
 };
+
 
 } // NS DTO
 

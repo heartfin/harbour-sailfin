@@ -49,7 +49,10 @@ namespace DTO {
 
 class LiveTvInfo {
 public:
-	LiveTvInfo();
+	LiveTvInfo(			
+		bool isEnabled				
+	);
+
 	LiveTvInfo(const LiveTvInfo &other);
 	
 	/**
@@ -98,7 +101,12 @@ protected:
 	QList<LiveTvServiceInfo> m_services;
 	bool m_isEnabled;
 	QStringList m_enabledUsers;
+
+private:
+	// Private constructor which generates an invalid object, for use withing LiveTvInfo::fromJson();
+	LiveTvInfo();
 };
+
 
 } // NS DTO
 

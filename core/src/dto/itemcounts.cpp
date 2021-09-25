@@ -33,6 +33,34 @@ namespace Jellyfin {
 namespace DTO {
 
 ItemCounts::ItemCounts() {}
+ItemCounts::ItemCounts (
+		qint32 movieCount, 
+		qint32 seriesCount, 
+		qint32 episodeCount, 
+		qint32 artistCount, 
+		qint32 programCount, 
+		qint32 trailerCount, 
+		qint32 songCount, 
+		qint32 albumCount, 
+		qint32 musicVideoCount, 
+		qint32 boxSetCount, 
+		qint32 bookCount, 
+		qint32 itemCount 
+		) :
+	m_movieCount(movieCount),
+	m_seriesCount(seriesCount),
+	m_episodeCount(episodeCount),
+	m_artistCount(artistCount),
+	m_programCount(programCount),
+	m_trailerCount(trailerCount),
+	m_songCount(songCount),
+	m_albumCount(albumCount),
+	m_musicVideoCount(musicVideoCount),
+	m_boxSetCount(boxSetCount),
+	m_bookCount(bookCount),
+	m_itemCount(itemCount) { }
+
+
 
 ItemCounts::ItemCounts(const ItemCounts &other) :
 

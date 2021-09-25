@@ -1,5 +1,32 @@
 {{className}}::{{className}}() {}
 
+{{#if hasRequiredProperties}}
+{{className}}::{{className}} (
+
+{{#each properties as |property|}}
+{{#if property.isNotNullable}}
+		
+		{{property.typeNameWithQualifiers}} {{property.name}}{{#if property.isLastNonNullable}} {{else}}, {{/if}}
+
+{{/if}}
+{{/each}}
+		) :
+
+{{#each properties as |property|}}
+{{#if property.isNotNullable}}
+	{{property.memberName}}({{property.name}})
+	{{#if property.isLastNonNullable}}
+ { }
+	{{else}}
+,
+	{{/if}}
+
+{{/if}}
+{{/each}}
+
+
+
+{{/if}}
 
 {{className}}::{{className}}(const {{className}} &other) :
 

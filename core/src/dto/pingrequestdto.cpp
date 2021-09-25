@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 PingRequestDto::PingRequestDto() {}
+PingRequestDto::PingRequestDto (
+		qint64 ping 
+		) :
+	m_ping(ping) { }
+
+
 
 PingRequestDto::PingRequestDto(const PingRequestDto &other) :
 

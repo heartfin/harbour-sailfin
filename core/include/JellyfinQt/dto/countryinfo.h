@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class CountryInfo {
-public:
-	CountryInfo();
+public:	CountryInfo();
 	CountryInfo(const CountryInfo &other);
 	
 	/**
@@ -110,7 +109,10 @@ protected:
 	QString m_displayName;
 	QString m_twoLetterISORegionName;
 	QString m_threeLetterISORegionName;
+
+
 };
+
 
 } // NS DTO
 

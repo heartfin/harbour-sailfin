@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 PlayRequest::PlayRequest() {}
+PlayRequest::PlayRequest (
+		PlayCommand playCommand, 
+		QString controllingUserId 
+		) :
+	m_playCommand(playCommand),
+	m_controllingUserId(controllingUserId) { }
+
+
 
 PlayRequest::PlayRequest(const PlayRequest &other) :
 

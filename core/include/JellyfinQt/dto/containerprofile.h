@@ -51,7 +51,10 @@ namespace DTO {
 
 class ContainerProfile {
 public:
-	ContainerProfile();
+	ContainerProfile(	
+		DlnaProfileType type						
+	);
+
 	ContainerProfile(const ContainerProfile &other);
 	
 	/**
@@ -88,7 +91,12 @@ protected:
 	DlnaProfileType m_type;
 	QList<ProfileCondition> m_conditions;
 	QString m_container;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ContainerProfile::fromJson();
+	ContainerProfile();
 };
+
 
 } // NS DTO
 

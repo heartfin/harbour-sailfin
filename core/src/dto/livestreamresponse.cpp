@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 LiveStreamResponse::LiveStreamResponse() {}
+LiveStreamResponse::LiveStreamResponse (
+		QSharedPointer<MediaSourceInfo> mediaSource 
+		) :
+	m_mediaSource(mediaSource) { }
+
+
 
 LiveStreamResponse::LiveStreamResponse(const LiveStreamResponse &other) :
 

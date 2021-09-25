@@ -49,7 +49,10 @@ namespace DTO {
 
 class PinRedeemResult {
 public:
-	PinRedeemResult();
+	PinRedeemResult(	
+		bool success				
+	);
+
 	PinRedeemResult(const PinRedeemResult &other);
 	
 	/**
@@ -86,7 +89,12 @@ public:
 protected:
 	bool m_success;
 	QStringList m_usersReset;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PinRedeemResult::fromJson();
+	PinRedeemResult();
 };
+
 
 } // NS DTO
 

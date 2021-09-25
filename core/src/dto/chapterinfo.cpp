@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 ChapterInfo::ChapterInfo() {}
+ChapterInfo::ChapterInfo (
+		qint64 startPositionTicks, 
+		QDateTime imageDateModified 
+		) :
+	m_startPositionTicks(startPositionTicks),
+	m_imageDateModified(imageDateModified) { }
+
+
 
 ChapterInfo::ChapterInfo(const ChapterInfo &other) :
 

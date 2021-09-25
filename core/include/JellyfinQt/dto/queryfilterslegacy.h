@@ -48,8 +48,7 @@ namespace DTO {
 
 
 class QueryFiltersLegacy {
-public:
-	QueryFiltersLegacy();
+public:	QueryFiltersLegacy();
 	QueryFiltersLegacy(const QueryFiltersLegacy &other);
 	
 	/**
@@ -96,7 +95,10 @@ protected:
 	QStringList m_tags;
 	QStringList m_officialRatings;
 	QList<qint32> m_years;
+
+
 };
+
 
 } // NS DTO
 

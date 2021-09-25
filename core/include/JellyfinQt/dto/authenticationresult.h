@@ -50,7 +50,11 @@ namespace DTO {
 
 class AuthenticationResult {
 public:
-	AuthenticationResult();
+	AuthenticationResult(	
+		QSharedPointer<UserDto> user,			
+		QSharedPointer<SessionInfo> sessionInfo						
+	);
+
 	AuthenticationResult(const AuthenticationResult &other);
 	
 	/**
@@ -93,7 +97,12 @@ protected:
 	QSharedPointer<SessionInfo> m_sessionInfo = QSharedPointer<SessionInfo>();
 	QString m_accessToken;
 	QString m_serverId;
+
+private:
+	// Private constructor which generates an invalid object, for use withing AuthenticationResult::fromJson();
+	AuthenticationResult();
 };
+
 
 } // NS DTO
 

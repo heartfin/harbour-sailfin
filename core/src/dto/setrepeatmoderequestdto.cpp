@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 SetRepeatModeRequestDto::SetRepeatModeRequestDto() {}
+SetRepeatModeRequestDto::SetRepeatModeRequestDto (
+		GroupRepeatMode mode 
+		) :
+	m_mode(mode) { }
+
+
 
 SetRepeatModeRequestDto::SetRepeatModeRequestDto(const SetRepeatModeRequestDto &other) :
 

@@ -49,7 +49,11 @@ namespace DTO {
 
 class TimerInfoDtoQueryResult {
 public:
-	TimerInfoDtoQueryResult();
+	TimerInfoDtoQueryResult(			
+		qint32 totalRecordCount,			
+		qint32 startIndex		
+	);
+
 	TimerInfoDtoQueryResult(const TimerInfoDtoQueryResult &other);
 	
 	/**
@@ -96,7 +100,12 @@ protected:
 	QList<TimerInfoDto> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
+
+private:
+	// Private constructor which generates an invalid object, for use withing TimerInfoDtoQueryResult::fromJson();
+	TimerInfoDtoQueryResult();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 ObjectGroupUpdate::ObjectGroupUpdate() {}
+ObjectGroupUpdate::ObjectGroupUpdate (
+		QString groupId, 
+		GroupUpdateType type, 
+		QVariant data 
+		) :
+	m_groupId(groupId),
+	m_type(type),
+	m_data(data) { }
+
+
 
 ObjectGroupUpdate::ObjectGroupUpdate(const ObjectGroupUpdate &other) :
 

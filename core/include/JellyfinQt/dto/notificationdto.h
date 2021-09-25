@@ -49,7 +49,12 @@ namespace DTO {
 
 class NotificationDto {
 public:
-	NotificationDto();
+	NotificationDto(					
+		QDateTime date,			
+		bool isRead,									
+		NotificationLevel level		
+	);
+
 	NotificationDto(const NotificationDto &other);
 	
 	/**
@@ -150,7 +155,12 @@ protected:
 	QString m_description;
 	QString m_url;
 	NotificationLevel m_level;
+
+private:
+	// Private constructor which generates an invalid object, for use withing NotificationDto::fromJson();
+	NotificationDto();
 };
+
 
 } // NS DTO
 

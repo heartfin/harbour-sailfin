@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 DeviceProfileInfo::DeviceProfileInfo() {}
+DeviceProfileInfo::DeviceProfileInfo (
+		DeviceProfileType type 
+		) :
+	m_type(type) { }
+
+
 
 DeviceProfileInfo::DeviceProfileInfo(const DeviceProfileInfo &other) :
 

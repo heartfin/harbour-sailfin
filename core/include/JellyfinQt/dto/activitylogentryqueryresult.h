@@ -49,7 +49,11 @@ namespace DTO {
 
 class ActivityLogEntryQueryResult {
 public:
-	ActivityLogEntryQueryResult();
+	ActivityLogEntryQueryResult(			
+		qint32 totalRecordCount,			
+		qint32 startIndex		
+	);
+
 	ActivityLogEntryQueryResult(const ActivityLogEntryQueryResult &other);
 	
 	/**
@@ -96,7 +100,12 @@ protected:
 	QList<ActivityLogEntry> m_items;
 	qint32 m_totalRecordCount;
 	qint32 m_startIndex;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ActivityLogEntryQueryResult::fromJson();
+	ActivityLogEntryQueryResult();
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 ImageInfo::ImageInfo() {}
+ImageInfo::ImageInfo (
+		ImageType imageType, 
+		qint64 size 
+		) :
+	m_imageType(imageType),
+	m_size(size) { }
+
+
 
 ImageInfo::ImageInfo(const ImageInfo &other) :
 

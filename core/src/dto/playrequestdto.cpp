@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 PlayRequestDto::PlayRequestDto() {}
+PlayRequestDto::PlayRequestDto (
+		qint32 playingItemPosition, 
+		qint64 startPositionTicks 
+		) :
+	m_playingItemPosition(playingItemPosition),
+	m_startPositionTicks(startPositionTicks) { }
+
+
 
 PlayRequestDto::PlayRequestDto(const PlayRequestDto &other) :
 

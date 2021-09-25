@@ -49,8 +49,7 @@ namespace DTO {
 
 
 class DeviceIdentification {
-public:
-	DeviceIdentification();
+public:	DeviceIdentification();
 	DeviceIdentification(const DeviceIdentification &other);
 	
 	/**
@@ -173,7 +172,10 @@ protected:
 	QString m_manufacturer;
 	QString m_manufacturerUrl;
 	QList<HttpHeaderInfo> m_headers;
+
+
 };
+
 
 } // NS DTO
 

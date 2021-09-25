@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 BufferRequestDto::BufferRequestDto() {}
+BufferRequestDto::BufferRequestDto (
+		QDateTime when, 
+		qint64 positionTicks, 
+		bool isPlaying, 
+		QString playlistItemId 
+		) :
+	m_when(when),
+	m_positionTicks(positionTicks),
+	m_isPlaying(isPlaying),
+	m_playlistItemId(playlistItemId) { }
+
+
 
 BufferRequestDto::BufferRequestDto(const BufferRequestDto &other) :
 

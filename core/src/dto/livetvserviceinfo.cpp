@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 LiveTvServiceInfo::LiveTvServiceInfo() {}
+LiveTvServiceInfo::LiveTvServiceInfo (
+		LiveTvServiceStatus status, 
+		bool hasUpdateAvailable, 
+		bool isVisible 
+		) :
+	m_status(status),
+	m_hasUpdateAvailable(hasUpdateAvailable),
+	m_isVisible(isVisible) { }
+
+
 
 LiveTvServiceInfo::LiveTvServiceInfo(const LiveTvServiceInfo &other) :
 

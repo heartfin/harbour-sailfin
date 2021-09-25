@@ -40,8 +40,13 @@ public:
     using BaseItemDto::userData;
     /**
      * @brief Constructor that creates an empty item.
+     *
+    Item(QObject *parent = nullptr);*/
+
+    /**
+     * Creates an "empty" item
      */
-    Item(QObject *parent = nullptr);
+    Item(ApiClient *apiClient = nullptr, QObject *parent = nullptr);
 
     /**
      * @brief Copies the data from the DTO into this model and attaches an ApiClient

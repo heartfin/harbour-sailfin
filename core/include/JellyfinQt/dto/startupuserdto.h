@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class StartupUserDto {
-public:
-	StartupUserDto();
+public:	StartupUserDto();
 	StartupUserDto(const StartupUserDto &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_name;
 	QString m_password;
+
+
 };
+
 
 } // NS DTO
 

@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 QueueRequestDto::QueueRequestDto() {}
+QueueRequestDto::QueueRequestDto (
+		GroupQueueMode mode 
+		) :
+	m_mode(mode) { }
+
+
 
 QueueRequestDto::QueueRequestDto(const QueueRequestDto &other) :
 

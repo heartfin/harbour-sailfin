@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class MediaEncoderPathDto {
-public:
-	MediaEncoderPathDto();
+public:	MediaEncoderPathDto();
 	MediaEncoderPathDto(const MediaEncoderPathDto &other);
 	
 	/**
@@ -86,7 +85,10 @@ public:
 protected:
 	QString m_path;
 	QString m_pathType;
+
+
 };
+
 
 } // NS DTO
 

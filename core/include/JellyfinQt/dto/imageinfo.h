@@ -48,7 +48,11 @@ namespace DTO {
 
 class ImageInfo {
 public:
-	ImageInfo();
+	ImageInfo(	
+		ImageType imageType,															
+		qint64 size		
+	);
+
 	ImageInfo(const ImageInfo &other);
 	
 	/**
@@ -151,7 +155,12 @@ protected:
 	std::optional<qint32> m_height = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 	qint64 m_size;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ImageInfo::fromJson();
+	ImageInfo();
 };
+
 
 } // NS DTO
 

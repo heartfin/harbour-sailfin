@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 RemoteSearchResult::RemoteSearchResult() {}
+RemoteSearchResult::RemoteSearchResult (
+		QSharedPointer<RemoteSearchResult> albumArtist 
+		) :
+	m_albumArtist(albumArtist) { }
+
+
 
 RemoteSearchResult::RemoteSearchResult(const RemoteSearchResult &other) :
 

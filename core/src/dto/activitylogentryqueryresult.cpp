@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 ActivityLogEntryQueryResult::ActivityLogEntryQueryResult() {}
+ActivityLogEntryQueryResult::ActivityLogEntryQueryResult (
+		qint32 totalRecordCount, 
+		qint32 startIndex 
+		) :
+	m_totalRecordCount(totalRecordCount),
+	m_startIndex(startIndex) { }
+
+
 
 ActivityLogEntryQueryResult::ActivityLogEntryQueryResult(const ActivityLogEntryQueryResult &other) :
 

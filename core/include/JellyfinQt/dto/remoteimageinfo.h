@@ -49,7 +49,11 @@ namespace DTO {
 
 class RemoteImageInfo {
 public:
-	RemoteImageInfo();
+	RemoteImageInfo(																	
+		ImageType type,			
+		RatingType ratingType		
+	);
+
 	RemoteImageInfo(const RemoteImageInfo &other);
 	
 	/**
@@ -172,7 +176,12 @@ protected:
 	QString m_language;
 	ImageType m_type;
 	RatingType m_ratingType;
+
+private:
+	// Private constructor which generates an invalid object, for use withing RemoteImageInfo::fromJson();
+	RemoteImageInfo();
 };
+
 
 } // NS DTO
 

@@ -49,7 +49,11 @@ namespace DTO {
 
 class InstallationInfo {
 public:
-	InstallationInfo();
+	InstallationInfo(	
+		QString guid,					
+		QSharedPointer<Version> version								
+	);
+
 	InstallationInfo(const InstallationInfo &other);
 	
 	/**
@@ -128,7 +132,12 @@ protected:
 	QString m_changelog;
 	QString m_sourceUrl;
 	QString m_checksum;
+
+private:
+	// Private constructor which generates an invalid object, for use withing InstallationInfo::fromJson();
+	InstallationInfo();
 };
+
 
 } // NS DTO
 

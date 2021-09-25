@@ -46,7 +46,15 @@ namespace DTO {
 
 class Version {
 public:
-	Version();
+	Version(	
+		qint32 major,			
+		qint32 minor,			
+		qint32 build,			
+		qint32 revision,			
+		qint32 majorRevision,			
+		qint32 minorRevision		
+	);
+
 	Version(const Version &other);
 	
 	/**
@@ -97,7 +105,12 @@ protected:
 	qint32 m_revision;
 	qint32 m_majorRevision;
 	qint32 m_minorRevision;
+
+private:
+	// Private constructor which generates an invalid object, for use withing Version::fromJson();
+	Version();
 };
+
 
 } // NS DTO
 

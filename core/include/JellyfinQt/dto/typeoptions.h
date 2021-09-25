@@ -49,8 +49,7 @@ namespace DTO {
 
 
 class TypeOptions {
-public:
-	TypeOptions();
+public:	TypeOptions();
 	TypeOptions(const TypeOptions &other);
 	
 	/**
@@ -113,7 +112,10 @@ protected:
 	QStringList m_imageFetchers;
 	QStringList m_imageFetcherOrder;
 	QList<ImageOption> m_imageOptions;
+
+
 };
+
 
 } // NS DTO
 

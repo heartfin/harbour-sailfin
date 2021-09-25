@@ -414,33 +414,31 @@ void PlaybackManager::handlePlaystateRequest(const DTO::PlaystateRequest &reques
 }
 
 void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
-    DTO::PlaybackProgressInfo progress;
-
     if (m_item == nullptr) {
-        qWarning() << "Item is null. Not posting playback info";
+        qCWarning(playbackManager) << "Item is null. Not posting playback info";
         return;
     }
-    progress.setItemId(Support::toString(m_item->jellyfinId()));
+    DTO::PlaybackProgressInfo progress(
+                seekable(),
+                m_item,
+                m_item->jellyfinId(),
+                playbackState() == QMediaPlayer::PausedState,
+                false, // is muted?
+                m_playMethod,
+                DTO::RepeatMode::RepeatNone);
+
     progress.setSessionId(m_playSessionId);
-    progress.setRepeatMode(DTO::RepeatMode::RepeatNone);
 
     switch(type) {
     case Started: // FALLTHROUGH
     case Progress: {
-        progress.setCanSeek(seekable());
-        progress.setIsPaused(m_mediaPlayer->state() == QMediaPlayer::PausedState);
-        progress.setIsMuted(false);
-
         progress.setAudioStreamIndex(m_audioIndex);
         progress.setSubtitleStreamIndex(m_subtitleIndex);
-
-        progress.setPlayMethod(m_playMethod);
         progress.setPositionTicks(m_mediaPlayer->position() * MS_TICK_FACTOR);
 
         QList<DTO::QueueItem> queue;
         for (int i = 0; i < m_queue->listSize(); i++) {
-            DTO::QueueItem queueItem;
-            queueItem.setJellyfinId(m_queue->listAt(i)->jellyfinId());
+            DTO::QueueItem queueItem(m_queue->listAt(i)->jellyfinId());
             queue.append(queueItem);
         }
         progress.setNowPlayingQueue(queue);
@@ -500,7 +498,7 @@ void PlaybackManager::requestItemUrl(QSharedPointer<Model::Item> item) {
 
     bool forceTranscoding = allowTranscoding && transcodePreferred;
 
-    QSharedPointer<DTO::PlaybackInfoDto> playbackInfo = QSharedPointer<DTO::PlaybackInfoDto>::create();
+    QSharedPointer<DTO::PlaybackInfoDto> playbackInfo = QSharedPointer<DTO::PlaybackInfoDto>::create(m_apiClient->deviceProfile());
     params.setItemId(item->jellyfinId());
     params.setUserId(m_apiClient->userId());
     playbackInfo->setEnableDirectPlay(true);
@@ -508,7 +506,6 @@ void PlaybackManager::requestItemUrl(QSharedPointer<Model::Item> item) {
     playbackInfo->setEnableTranscoding(forceTranscoding || allowTranscoding);
     playbackInfo->setAudioStreamIndex(this->m_audioIndex);
     playbackInfo->setSubtitleStreamIndex(this->m_subtitleIndex);
-    playbackInfo->setDeviceProfile(m_apiClient->deviceProfile());
     params.setBody(playbackInfo);
 
     loader->setParameters(params);

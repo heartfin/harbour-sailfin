@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class DefaultDirectoryBrowserInfoDto {
-public:
-	DefaultDirectoryBrowserInfoDto();
+public:	DefaultDirectoryBrowserInfoDto();
 	DefaultDirectoryBrowserInfoDto(const DefaultDirectoryBrowserInfoDto &other);
 	
 	/**
@@ -74,7 +73,10 @@ public:
 
 protected:
 	QString m_path;
+
+
 };
+
 
 } // NS DTO
 

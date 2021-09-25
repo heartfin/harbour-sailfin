@@ -49,7 +49,18 @@ namespace DTO {
 
 class MediaStream {
 public:
-	MediaStream();
+	MediaStream(																																			
+		bool isInterlaced,																			
+		bool isDefault,			
+		bool isForced,													
+		MediaStreamType type,					
+		qint32 index,					
+		bool isExternal,			
+		SubtitleDeliveryMethod deliveryMethod,							
+		bool isTextSubtitleStream,			
+		bool supportsExternalStream										
+	);
+
 	MediaStream(const MediaStream &other);
 	
 	/**
@@ -574,7 +585,12 @@ protected:
 	QString m_pixelFormat;
 	std::optional<double> m_level = std::nullopt;
 	std::optional<bool> m_isAnamorphic = std::nullopt;
+
+private:
+	// Private constructor which generates an invalid object, for use withing MediaStream::fromJson();
+	MediaStream();
 };
+
 
 } // NS DTO
 

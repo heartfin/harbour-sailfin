@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 PinRedeemResult::PinRedeemResult() {}
+PinRedeemResult::PinRedeemResult (
+		bool success 
+		) :
+	m_success(success) { }
+
+
 
 PinRedeemResult::PinRedeemResult(const PinRedeemResult &other) :
 

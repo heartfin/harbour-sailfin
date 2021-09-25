@@ -51,7 +51,10 @@ namespace DTO {
 
 class PlaybackInfoResponse {
 public:
-	PlaybackInfoResponse();
+	PlaybackInfoResponse(					
+		PlaybackErrorCode errorCode		
+	);
+
 	PlaybackInfoResponse(const PlaybackInfoResponse &other);
 	
 	/**
@@ -96,7 +99,12 @@ protected:
 	QList<MediaSourceInfo> m_mediaSources;
 	QString m_playSessionId;
 	PlaybackErrorCode m_errorCode;
+
+private:
+	// Private constructor which generates an invalid object, for use withing PlaybackInfoResponse::fromJson();
+	PlaybackInfoResponse();
 };
+
 
 } // NS DTO
 

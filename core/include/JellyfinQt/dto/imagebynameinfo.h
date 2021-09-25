@@ -47,7 +47,10 @@ namespace DTO {
 
 class ImageByNameInfo {
 public:
-	ImageByNameInfo();
+	ImageByNameInfo(							
+		qint64 fileLength				
+	);
+
 	ImageByNameInfo(const ImageByNameInfo &other);
 	
 	/**
@@ -120,7 +123,12 @@ protected:
 	QString m_context;
 	qint64 m_fileLength;
 	QString m_format;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ImageByNameInfo::fromJson();
+	ImageByNameInfo();
 };
+
 
 } // NS DTO
 

@@ -48,8 +48,7 @@ namespace DTO {
 
 
 class QueryFilters {
-public:
-	QueryFilters();
+public:	QueryFilters();
 	QueryFilters(const QueryFilters &other);
 	
 	/**
@@ -80,7 +79,10 @@ public:
 protected:
 	QList<NameGuidPair> m_genres;
 	QStringList m_tags;
+
+
 };
+
 
 } // NS DTO
 

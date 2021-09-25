@@ -59,7 +59,22 @@ namespace DTO {
 
 class SessionInfo {
 public:
-	SessionInfo();
+	SessionInfo(	
+		QSharedPointer<PlayerStateInfo> playState,					
+		QSharedPointer<ClientCapabilities> capabilities,									
+		QString userId,							
+		QDateTime lastActivityDate,			
+		QDateTime lastPlaybackCheckIn,							
+		QSharedPointer<BaseItemDto> nowPlayingItem,			
+		QSharedPointer<BaseItem> fullNowPlayingItem,			
+		QSharedPointer<BaseItemDto> nowViewingItem,							
+		QSharedPointer<TranscodingInfo> transcodingInfo,			
+		bool isActive,			
+		bool supportsMediaControl,			
+		bool supportsRemoteControl,					
+		bool hasCustomDeviceName										
+	);
+
 	SessionInfo(const SessionInfo &other);
 	
 	/**
@@ -328,7 +343,12 @@ protected:
 	QString m_serverId;
 	QString m_userPrimaryImageTag;
 	QList<GeneralCommandType> m_supportedCommands;
+
+private:
+	// Private constructor which generates an invalid object, for use withing SessionInfo::fromJson();
+	SessionInfo();
 };
+
 
 } // NS DTO
 

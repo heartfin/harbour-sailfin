@@ -48,7 +48,14 @@ namespace DTO {
 
 class AuthenticationInfo {
 public:
-	AuthenticationInfo();
+	AuthenticationInfo(	
+		qint64 jellyfinId,													
+		QString userId,			
+		bool isActive,			
+		QDateTime dateCreated,					
+		QDateTime dateLastActivity				
+	);
+
 	AuthenticationInfo(const AuthenticationInfo &other);
 	
 	/**
@@ -189,7 +196,12 @@ protected:
 	QDateTime m_dateRevoked;
 	QDateTime m_dateLastActivity;
 	QString m_userName;
+
+private:
+	// Private constructor which generates an invalid object, for use withing AuthenticationInfo::fromJson();
+	AuthenticationInfo();
 };
+
 
 } // NS DTO
 

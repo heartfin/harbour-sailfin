@@ -48,7 +48,10 @@ namespace DTO {
 
 class AddVirtualFolderDto {
 public:
-	AddVirtualFolderDto();
+	AddVirtualFolderDto(	
+		QSharedPointer<LibraryOptions> libraryOptions		
+	);
+
 	AddVirtualFolderDto(const AddVirtualFolderDto &other);
 	
 	/**
@@ -69,7 +72,12 @@ public:
 
 protected:
 	QSharedPointer<LibraryOptions> m_libraryOptions = QSharedPointer<LibraryOptions>();
+
+private:
+	// Private constructor which generates an invalid object, for use withing AddVirtualFolderDto::fromJson();
+	AddVirtualFolderDto();
 };
+
 
 } // NS DTO
 

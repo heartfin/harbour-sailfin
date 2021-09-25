@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaybackStopInfo::PlaybackStopInfo() {}
+PlaybackStopInfo::PlaybackStopInfo (
+		QSharedPointer<BaseItemDto> item, 
+		QString itemId, 
+		bool failed 
+		) :
+	m_item(item),
+	m_itemId(itemId),
+	m_failed(failed) { }
+
+
 
 PlaybackStopInfo::PlaybackStopInfo(const PlaybackStopInfo &other) :
 

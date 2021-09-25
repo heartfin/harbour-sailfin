@@ -22,7 +22,10 @@
 namespace Jellyfin {
 namespace Model {
 
-User::User() {}
+User::User(ApiClient *apiClient)
+    : DTO::UserDto(QString(), false, false, false,
+                   QSharedPointer<DTO::UserConfiguration>(), QSharedPointer<DTO::UserPolicy>()) {
+}
 
 User::User(const DTO::UserDto &other, ApiClient *apiClient)
     : DTO::UserDto(other) {

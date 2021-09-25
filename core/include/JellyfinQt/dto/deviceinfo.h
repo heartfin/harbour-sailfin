@@ -50,7 +50,12 @@ namespace DTO {
 
 class DeviceInfo {
 public:
-	DeviceInfo();
+	DeviceInfo(											
+		QString lastUserId,			
+		QDateTime dateLastActivity,			
+		QSharedPointer<ClientCapabilities> capabilities				
+	);
+
 	DeviceInfo(const DeviceInfo &other);
 	
 	/**
@@ -155,7 +160,12 @@ protected:
 	QDateTime m_dateLastActivity;
 	QSharedPointer<ClientCapabilities> m_capabilities = QSharedPointer<ClientCapabilities>();
 	QString m_iconUrl;
+
+private:
+	// Private constructor which generates an invalid object, for use withing DeviceInfo::fromJson();
+	DeviceInfo();
 };
+
 
 } // NS DTO
 

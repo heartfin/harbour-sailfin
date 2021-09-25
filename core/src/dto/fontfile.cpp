@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 FontFile::FontFile() {}
+FontFile::FontFile (
+		qint64 size, 
+		QDateTime dateCreated, 
+		QDateTime dateModified 
+		) :
+	m_size(size),
+	m_dateCreated(dateCreated),
+	m_dateModified(dateModified) { }
+
+
 
 FontFile::FontFile(const FontFile &other) :
 

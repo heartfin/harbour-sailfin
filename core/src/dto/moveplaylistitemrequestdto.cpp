@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 MovePlaylistItemRequestDto::MovePlaylistItemRequestDto() {}
+MovePlaylistItemRequestDto::MovePlaylistItemRequestDto (
+		QString playlistItemId, 
+		qint32 newIndex 
+		) :
+	m_playlistItemId(playlistItemId),
+	m_newIndex(newIndex) { }
+
+
 
 MovePlaylistItemRequestDto::MovePlaylistItemRequestDto(const MovePlaylistItemRequestDto &other) :
 

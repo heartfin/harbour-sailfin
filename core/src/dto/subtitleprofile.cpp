@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 SubtitleProfile::SubtitleProfile() {}
+SubtitleProfile::SubtitleProfile (
+		SubtitleDeliveryMethod method 
+		) :
+	m_method(method) { }
+
+
 
 SubtitleProfile::SubtitleProfile(const SubtitleProfile &other) :
 

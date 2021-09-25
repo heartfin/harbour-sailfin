@@ -47,7 +47,10 @@ namespace DTO {
 
 class ControlResponse {
 public:
-	ControlResponse();
+	ControlResponse(					
+		bool isSuccessful		
+	);
+
 	ControlResponse(const ControlResponse &other);
 	
 	/**
@@ -84,7 +87,12 @@ protected:
 	QJsonObject m_headers;
 	QString m_xml;
 	bool m_isSuccessful;
+
+private:
+	// Private constructor which generates an invalid object, for use withing ControlResponse::fromJson();
+	ControlResponse();
 };
+
 
 } // NS DTO
 

@@ -105,9 +105,14 @@ public:
 
     /**
      * @brief Retrieves the loaded resource. Only valid after the ready signal has been emitted.
-     * @return The loaded resource
+     *
+     * @return The loaded resource.
      */
     R result() const {
+        return m_result.value();
+    }
+
+    bool hasResult() const {
         return m_result;
     }
 
@@ -130,11 +135,21 @@ public:
     virtual bool isAvailable() const { return false; };
     void setApiClient(ApiClient *newApiClient) { m_apiClient = newApiClient; }
     ApiClient *apiClient() const { return m_apiClient; }
-    void setParameters(const P &parameters) { m_parameters = parameters; }
+
+    /**
+     * @brief Sets the parameters for this loader.
+     * @param parameters The parameters to set
+     *
+     * This method will copy the parameters. The parameters must have a
+     * copy constructor.
+     */
+    void setParameters(const P &parameters) {
+        m_parameters = parameters;
+    }
 protected:
     Jellyfin::ApiClient *m_apiClient;
-    P m_parameters;
-    R m_result;
+    std::optional<P> m_parameters;
+    std::optional<R> m_result;
     bool m_isRunning = false;
 
     void stopWithError(QString message = QString()) {
@@ -158,13 +173,16 @@ public:
         if (m_reply != nullptr) {
             this->m_reply->deleteLater();
         }
+        if (!this->m_parameters) {
+            this->stopWithError("No parameters set");
+        }
         this->m_isRunning = true;
         switch(operation()) {
         case QNetworkAccessManager::GetOperation:
-            m_reply = this->m_apiClient->get(path(this->m_parameters), query(this->m_parameters));
+            m_reply = this->m_apiClient->get(path(this->m_parameters.value()), query(this->m_parameters.value()));
             break;
         case QNetworkAccessManager::PostOperation:
-            m_reply = this->m_apiClient->post(path(this->m_parameters), body(this->m_parameters), query(this->m_parameters));
+            m_reply = this->m_apiClient->post(path(this->m_parameters.value()), body(this->m_parameters.value()), query(this->m_parameters.value()));
             break;
         default:
             this->stopWithError(QStringLiteral("Unsupported network okperation %1").arg(operation()));

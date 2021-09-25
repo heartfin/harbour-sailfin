@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 PersonLookupInfo::PersonLookupInfo() {}
+PersonLookupInfo::PersonLookupInfo (
+		bool isAutomated 
+		) :
+	m_isAutomated(isAutomated) { }
+
+
 
 PersonLookupInfo::PersonLookupInfo(const PersonLookupInfo &other) :
 

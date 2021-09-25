@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class LocalizationOption {
-public:
-	LocalizationOption();
+public:	LocalizationOption();
 	LocalizationOption(const LocalizationOption &other);
 	
 	/**
@@ -78,7 +77,10 @@ public:
 protected:
 	QString m_name;
 	QString m_value;
+
+
 };
+
 
 } // NS DTO
 

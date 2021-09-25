@@ -46,8 +46,7 @@ namespace DTO {
 
 
 class AuthenticateUserByName {
-public:
-	AuthenticateUserByName();
+public:	AuthenticateUserByName();
 	AuthenticateUserByName(const AuthenticateUserByName &other);
 	
 	/**
@@ -98,7 +97,10 @@ protected:
 	QString m_username;
 	QString m_pw;
 	QString m_password;
+
+
 };
+
 
 } // NS DTO
 

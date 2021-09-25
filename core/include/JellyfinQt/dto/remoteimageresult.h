@@ -49,7 +49,10 @@ namespace DTO {
 
 class RemoteImageResult {
 public:
-	RemoteImageResult();
+	RemoteImageResult(			
+		qint32 totalRecordCount				
+	);
+
 	RemoteImageResult(const RemoteImageResult &other);
 	
 	/**
@@ -98,7 +101,12 @@ protected:
 	QList<RemoteImageInfo> m_images;
 	qint32 m_totalRecordCount;
 	QStringList m_providers;
+
+private:
+	// Private constructor which generates an invalid object, for use withing RemoteImageResult::fromJson();
+	RemoteImageResult();
 };
+
 
 } // NS DTO
 

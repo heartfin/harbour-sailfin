@@ -254,6 +254,7 @@ QNetworkReply *ApiClient::post(const QString &path, const QByteArray &data, cons
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     addBaseRequestHeaders(req, path, params);
     qDebug() << "POST " << req.url();
+    qDebug() << "   DATA: " << data;
     if (data.isEmpty())
         return m_naManager.post(req, QByteArray());
     else {
@@ -430,16 +431,15 @@ void ApiClient::generateDeviceProfile() {
     deviceProfile->setMaxStreamingBitrate(d->settings->maxStreamingBitRate());
     d->deviceProfile = deviceProfile;
 
-    QSharedPointer<DTO::ClientCapabilitiesDto> clientCapabilities = QSharedPointer<DTO::ClientCapabilitiesDto>::create();
+    QSharedPointer<DTO::ClientCapabilitiesDto> clientCapabilities = QSharedPointer<DTO::ClientCapabilitiesDto>::create(true,  // supports mediaControl
+                                                                                                                       false, // supports content uploading
+                                                                                                                       true,  // supports persistent identifier
+                                                                                                                       false, // supports sync
+                                                                                                                       deviceProfile);
     clientCapabilities->setPlayableMediaTypes({"Audio", "Video", "Photo"});
-    clientCapabilities->setDeviceProfile(deviceProfile);
     clientCapabilities->setSupportedCommands(d->supportedCommands);
     clientCapabilities->setAppStoreUrl("https://chris.netsoj.nl/projects/harbour-sailfin");
     clientCapabilities->setIconUrl("https://chris.netsoj.nl/static/img/logo.png");
-    clientCapabilities->setSupportsPersistentIdentifier(true);
-    clientCapabilities->setSupportsSync(false);
-    clientCapabilities->setSupportsMediaControl(true);
-    clientCapabilities->setSupportsContentUploading(false);
 
     d->clientCapabilities = clientCapabilities;
     emit deviceProfileChanged();

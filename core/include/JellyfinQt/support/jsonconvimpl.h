@@ -22,6 +22,7 @@
 #include <QtGlobal>
 #include <QDateTime>
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
@@ -147,7 +148,17 @@ QString toString(const T &source) {
 
 template <typename T>
 QString toString(const T &source, convertType<T>) {
-    return toJsonValue(source).toString();
+    QJsonValue val = toJsonValue(source);
+    const QJsonDocument::JsonFormat format = QJsonDocument::Compact;
+    switch(val.type()) {
+    case QJsonValue::Array:
+        return QJsonDocument(val.toArray()).toJson(format);
+    case QJsonValue::Object:
+        return QJsonDocument(val.toObject()).toJson(format);
+    case QJsonValue::Null:
+    default:
+        return QString();
+    }
 }
 
 template <typename T>

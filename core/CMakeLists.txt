@@ -15,6 +15,9 @@ include(GeneratedSources.cmake)
 set(JellyfinQt_SOURCES
         src/model/deviceprofile.cpp
         src/model/item.cpp
+        src/model/player.cpp
+        src/model/playbackmanager.cpp
+        src/model/playbackreporter.cpp
         src/model/playlist.cpp
         src/model/shuffle.cpp
         src/model/user.cpp
@@ -48,6 +51,9 @@ list(APPEND JellyfinQt_SOURCES ${openapi_SOURCES})
 set(JellyfinQt_HEADERS
         include/JellyfinQt/model/deviceprofile.h
         include/JellyfinQt/model/item.h
+        include/JellyfinQt/model/player.h
+        include/JellyfinQt/model/playbackmanager.h
+        include/JellyfinQt/model/playbackreporter.h
         include/JellyfinQt/model/playlist.h
         include/JellyfinQt/model/shuffle.h
         include/JellyfinQt/model/user.h

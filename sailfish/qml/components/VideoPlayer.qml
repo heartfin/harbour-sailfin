@@ -42,6 +42,7 @@ SilicaItem {
     property int subtitleTrack: 0
     //FIXME: Once QTBUG-10822 is resolved, change to J.PlaybackManager
     property var manager;
+    onManagerChanged: console.log(manager.player)
 
     // Blackground to prevent the ambience from leaking through
     Rectangle {
@@ -53,6 +54,9 @@ SilicaItem {
         id: videoOutput
         source: manager
         anchors.fill: parent
+        Component.onCompleted: {
+            console.log(manager.player)
+        }
     }
 
     VideoHud {
@@ -71,14 +75,16 @@ SilicaItem {
     Label {
         readonly property string _playbackMethod: {
             switch(manager.playMethod) {
-            case J.PlaybackManager.DirectPlay:
-                return"Direct Play"
-            case J.PlaybackManager.Transcoding:
+            case J.PlayMethod.EnumNotSet:
+                return "Enum not set"
+            case J.PlayMethod.DirectPlay:
+                return "Direct Play"
+            case J.PlayMethod.Transcode:
                 return "Transcoding"
-            case J.PlaybackManager.DirectStream:
+            case J.PlayMethod.DirectStream:
                 return "Direct Stream"
             default:
-                return "Unknown playback method"
+                return "Unknown playback method '%1'".arg(manager.playMethod)
             }
         }
         anchors.fill: parent
@@ -86,6 +92,7 @@ SilicaItem {
         text: item.jellyfinId + "\n" + appWindow.playbackManager.streamUrl + "\n"
           + "Playback method: " + _playbackMethod + "\n"
           + "Media status: " + manager.mediaStatus + "\n"
+          + "Playback state: " + manager.playbackState + "\n"
           // + player.bufferProgress + "\n"
           // + player.metaData.videoCodec + "@" + player.metaData.videoFrameRate + "(" + player.metaData.videoBitRate + ")" + "\n"
           // + player.metaData.audioCodec + "(" + player.metaData.audioBitRate + ")" + "\n"

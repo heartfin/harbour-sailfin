@@ -1,6 +1,6 @@
 /*
  * Sailfin: a Jellyfin client written using Qt
- * Copyright (C) 2021 Chris Josten and the Sailfin Contributors.
+ * Copyright (C) 2021-2022 Chris Josten and the Sailfin Contributors.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,13 +20,12 @@
 #include "JellyfinQt/viewmodel/playbackmanager.h"
 
 #include "JellyfinQt/apimodel.h"
-#include "JellyfinQt/loader/http/mediainfo.h"
 #include <JellyfinQt/dto/playstatecommand.h>
 #include <JellyfinQt/dto/playstaterequest.h>
 
 // #include "JellyfinQt/DTO/dto.h"
-#include <JellyfinQt/loader/http/userlibrary.h>
 #include <JellyfinQt/dto/useritemdatadto.h>
+#include <JellyfinQt/model/playbackmanager.h>
 #include <JellyfinQt/viewmodel/settings.h>
 #include <utility>
 
@@ -41,348 +40,288 @@ namespace ViewModel {
 
 Q_LOGGING_CATEGORY(playbackManager, "jellyfin.viewmodel.playbackmanager")
 
+class PlaybackManagerPrivate {
+    Q_DECLARE_PUBLIC(PlaybackManager);
+public:
+    explicit PlaybackManagerPrivate(PlaybackManager *q);
+    PlaybackManager *q_ptr = nullptr;
+
+    ApiClient *m_apiClient = nullptr;
+    Model::PlaybackManager *m_impl = nullptr;
+
+    /// The currently played item that will be shown in the GUI
+    ViewModel::Item *m_displayItem = nullptr;
+    /// The currently played queue that will be shown in the GUI
+    ViewModel::Playlist *m_displayQueue = nullptr;
+
+    bool m_handlePlaystateCommands;
+};
+
+PlaybackManagerPrivate::PlaybackManagerPrivate(PlaybackManager *q)
+    : q_ptr(q),
+      m_impl(new Model::LocalPlaybackManager(q)),
+      m_displayItem(new ViewModel::Item(q)),
+      m_displayQueue(new ViewModel::Playlist(m_impl->queue())) {
+}
+
+// PlaybackManager
+
 PlaybackManager::PlaybackManager(QObject *parent)
-    : QObject(parent),
-      m_item(nullptr),
-      m_mediaPlayer(new QMediaPlayer(this)),
-      m_queue(new Model::Playlist(this)) {
+    : QObject(parent) {
+    QScopedPointer<PlaybackManagerPrivate> foo(new PlaybackManagerPrivate(this));
+    d_ptr.swap(foo);
 
-    m_displayQueue = new ViewModel::Playlist(m_queue, this);
+    Q_D(PlaybackManager);
     // Set up connections.
-    m_updateTimer.setInterval(10000); // 10 seconds
-    m_updateTimer.setSingleShot(false);
+    connect(d->m_impl, &Model::PlaybackManager::positionChanged, this, &PlaybackManager::positionChanged);
+    connect(d->m_impl, &Model::PlaybackManager::durationChanged, this, &PlaybackManager::durationChanged);
+    connect(d->m_impl, &Model::PlaybackManager::hasNextChanged, this, &PlaybackManager::hasNextChanged);
+    connect(d->m_impl, &Model::PlaybackManager::hasPreviousChanged, this, &PlaybackManager::hasPreviousChanged);
+    connect(d->m_impl, &Model::PlaybackManager::seekableChanged, this, &PlaybackManager::seekableChanged);
+    connect(d->m_impl, &Model::PlaybackManager::queueIndexChanged, this, &PlaybackManager::queueIndexChanged);
+    connect(d->m_impl, &Model::PlaybackManager::itemChanged, this, &PlaybackManager::mediaPlayerItemChanged);
+    connect(d->m_impl, &Model::PlaybackManager::playbackStateChanged, this, &PlaybackManager::playbackStateChanged);
+    if (auto localImp = qobject_cast<Model::LocalPlaybackManager*>(d->m_impl)) {
+        connect(localImp, &Model::LocalPlaybackManager::streamUrlChanged, this, [this](const QUrl& newUrl){
+            this->streamUrlChanged(newUrl.toString());
+        });
+        connect(localImp, &Model::LocalPlaybackManager::playMethodChanged, this, &PlaybackManager::playMethodChanged);
+    }
+    connect(d->m_impl, &Model::PlaybackManager::mediaStatusChanged, this, &PlaybackManager::mediaStatusChanged);
+}
 
-    m_preloadTimer.setSingleShot(true);
-
-    connect(&m_updateTimer, &QTimer::timeout, this, &PlaybackManager::updatePlaybackInfo);
-
-    connect(m_mediaPlayer, &QMediaPlayer::stateChanged, this, &PlaybackManager::mediaPlayerStateChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::positionChanged, this, &PlaybackManager::mediaPlayerPositionChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::durationChanged, this, &PlaybackManager::mediaPlayerDurationChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::mediaStatusChanged, this, &PlaybackManager::mediaPlayerMediaStatusChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::videoAvailableChanged, this, &PlaybackManager::hasVideoChanged);
-    connect(m_mediaPlayer, &QMediaPlayer::seekableChanged, this, &PlaybackManager::mediaPlayerSeekableChanged);
-    //                     I do not like the complicated overload cast
-    connect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(mediaPlayerError(QMediaPlayer::Error)));
-
-    m_forceSeekTimer.setInterval(500);
-    m_forceSeekTimer.setSingleShot(false);
-
-    // Yes, this is a very ugly way of forcing the video player to seek to the resume position
-    connect(&m_forceSeekTimer, &QTimer::timeout, this, [this]() {
-        if (m_seekToResumedPosition && m_mediaPlayer->isSeekable()) {
-            qCDebug(playbackManager) << "Trying to seek to the resume position" << (m_resumePosition / MS_TICK_FACTOR);
-            if (m_mediaPlayer->position() > m_resumePosition / MS_TICK_FACTOR - 500) {
-                m_seekToResumedPosition = false;
-                m_forceSeekTimer.stop();
-            } else {
-                m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
-            }
-        }
-
-    });
+PlaybackManager::~PlaybackManager() {
 
 }
 
 void PlaybackManager::setApiClient(ApiClient *apiClient) {
-    if (m_apiClient != nullptr) {
-        disconnect(m_apiClient->eventbus(), &EventBus::playstateCommandReceived, this, &PlaybackManager::handlePlaystateRequest);
+    Q_D(PlaybackManager);
+    if (d->m_apiClient != nullptr) {
+        disconnect(d->m_apiClient->eventbus(), &EventBus::playstateCommandReceived, this, &PlaybackManager::handlePlaystateRequest);
     }
 
-    if (!m_item.isNull()) {
-        m_item->setApiClient(apiClient);
+    if (!d->m_displayItem->data().isNull()) {
+        d->m_displayItem->data()->setApiClient(apiClient);
     }
-    m_apiClient = apiClient;
+    d->m_apiClient = apiClient;
+    d->m_impl->setApiClient(apiClient);
 
-    if (m_apiClient != nullptr) {
-        connect(m_apiClient->eventbus(), &EventBus::playstateCommandReceived, this, &PlaybackManager::handlePlaystateRequest);
+    if (d->m_apiClient != nullptr) {
+        connect(d->m_apiClient->eventbus(), &EventBus::playstateCommandReceived, this, &PlaybackManager::handlePlaystateRequest);
     }
 }
 
-void PlaybackManager::setItem(QSharedPointer<Model::Item> newItem) {
-    if (m_mediaPlayer != nullptr) m_mediaPlayer->stop();
-    bool shouldFetchStreamUrl = !newItem.isNull()
-            && ((m_streamUrl.isEmpty()     || (!m_item.isNull()
-                 && m_item->jellyfinId()      != newItem->jellyfinId()))
-            ||  (m_nextStreamUrl.isEmpty() || (!m_nextItem.isNull()
-                 && m_nextItem->jellyfinId()  != newItem->jellyfinId())));
+bool PlaybackManager::resumePlayback() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->resumePlayback();
+}
 
-    this->m_item = newItem;
+void PlaybackManager::setResumePlayback(bool newResumePlayback) {
+    Q_D(PlaybackManager);
+    return d->m_impl->setResumePlayback(newResumePlayback);
+}
 
-    if (newItem.isNull()) {
-        m_displayItem->setData(QSharedPointer<Model::Item>::create());
+int PlaybackManager::audioIndex() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->audioIndex();
+}
+
+void PlaybackManager::setAudioIndex(int newAudioIndex){
+    Q_D(PlaybackManager);
+    d->m_impl->setAudioIndex(newAudioIndex);
+}
+
+int PlaybackManager::subtitleIndex() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->subtitleIndex();
+}
+
+void PlaybackManager::setSubtitleIndex(int newSubtitleIndex){
+    Q_D(PlaybackManager);
+    d->m_impl->setSubtitleIndex(newSubtitleIndex);
+}
+
+ViewModel::Item *PlaybackManager::item() const {
+    const Q_D(PlaybackManager);
+    return d->m_displayItem;
+}
+QSharedPointer<Model::Item> PlaybackManager::dataItem() const {
+    const Q_D(PlaybackManager);
+    return d->m_displayItem->data();
+}
+
+ApiClient * PlaybackManager::apiClient() const {
+    const Q_D(PlaybackManager);
+    return d->m_apiClient;
+}
+
+QString PlaybackManager::streamUrl() const {
+    const Q_D(PlaybackManager);
+    if (Model::LocalPlaybackManager *lpm = qobject_cast<Model::LocalPlaybackManager *>(d->m_impl)) {
+        return lpm->streamUrl().toString();
     } else {
-        m_displayItem->setData(newItem);
-        if (!newItem->userData().isNull()) {
-            this->m_resumePosition = newItem->userData()->playbackPositionTicks();
-        }
+        return QStringLiteral("<not playing back locally>");
     }
-    emit itemChanged(m_displayItem);
+}
 
-    emit hasNextChanged(m_queue->hasNext());
-    emit hasPreviousChanged(m_queue->hasPrevious());
-
-    this->m_seekToResumedPosition = m_resumePlayback;
-
-    if (m_apiClient == nullptr) {
-
-        qCWarning(playbackManager) << "apiClient is not set on this MediaSource instance! Aborting.";
-        return;
-    }
-    // Deinitialize the streamUrl
-    if (shouldFetchStreamUrl) {
-        setStreamUrl(QUrl());
-        requestItemUrl(m_item);
+PlayMethod PlaybackManager::playMethod() const {
+    const Q_D(PlaybackManager);
+    if (Model::LocalPlaybackManager *lpm = qobject_cast<Model::LocalPlaybackManager *>(d->m_impl)) {
+        return lpm->playMethod();
     } else {
-        setStreamUrl(m_nextStreamUrl);
-        m_mediaPlayer->play();
+        return PlayMethod::EnumNotSet;
     }
+}
+
+Model::MediaStatus PlaybackManager::mediaStatus() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->mediaStatus();
+}
+
+qint64 PlaybackManager::position() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->position();
+}
+
+qint64 PlaybackManager::duration() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->duration();
+}
+
+ViewModel::Playlist *PlaybackManager::queue() const {
+    const Q_D(PlaybackManager);
+    return d->m_displayQueue;
+}
+
+int PlaybackManager::queueIndex() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->queueIndex();
+}
+
+bool PlaybackManager::hasNext() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->hasNext();
+}
+
+bool PlaybackManager::hasPrevious() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->hasPrevious();
+}
+
+QObject* PlaybackManager::mediaObject() const {
+    const Q_D(PlaybackManager);
+    if (auto localPb = qobject_cast<Model::LocalPlaybackManager*>(d->m_impl)) {
+        return localPb->player()->videoOutputSource();
+    } else {
+        return nullptr;
+    }
+}
+
+Model::PlayerState PlaybackManager::playbackState() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->playbackState();
+}
+
+bool PlaybackManager::hasVideo() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->hasVideo();
+}
+
+bool PlaybackManager::seekable() const {
+    const Q_D(PlaybackManager);
+    return d->m_impl->seekable();
+}
+
+bool PlaybackManager::handlePlaystateCommands() const {
+    const Q_D(PlaybackManager);
+    return d->m_handlePlaystateCommands;
+}
+
+void PlaybackManager::setHandlePlaystateCommands(bool newHandlePlaystateCommands) {
+    Q_D(PlaybackManager);
+    d->m_handlePlaystateCommands = newHandlePlaystateCommands;
+    emit handlePlaystateCommandsChanged(newHandlePlaystateCommands);
 }
 
 QMediaPlayer::Error PlaybackManager::error() const {
-    if (m_error != QMediaPlayer::NoError) {
-        return m_error;
-    } else {
-        return m_mediaPlayer->error();
-    }
+    return QMediaPlayer::NoError;
 }
 
 QString PlaybackManager::errorString() const {
-    if (!m_errorString.isEmpty()) {
-        return m_errorString;
-    } else {
-        return m_mediaPlayer->errorString();
-    }
+    const Q_D(PlaybackManager);
+    return d->m_impl->errorString();
 }
 
-
-void PlaybackManager::setStreamUrl(const QUrl &streamUrl) {
-    m_streamUrl = streamUrl.toString();
-    // Inspired by PHP naming schemes
-    Q_ASSERT_X(streamUrl.isValid() || streamUrl.isEmpty(), "setStreamUrl", "StreamURL Jellyfin returned is not valid");
-    emit streamUrlChanged(m_streamUrl);
-}
-
-void PlaybackManager::setPlaybackState(QMediaPlayer::State newState) {
-    if (newState != m_playbackState) {
-        m_playbackState = newState;
-        emit playbackStateChanged(newState);
-    }
-}
-
-void PlaybackManager::mediaPlayerPositionChanged(qint64 position) {
-    emit positionChanged(position);
-    if (position == 0 && m_oldPosition != 0) {
-        // Save the old position when stop gets called. The QMediaPlayer will try to set
-        // position to 0 when stopped, but we don't want to report that to Jellyfin. We
-        // want the old position.
-        m_stopPosition = m_oldPosition;
-    }
-    m_oldPosition = position;
-}
-
-void PlaybackManager::mediaPlayerStateChanged(QMediaPlayer::State newState) {
-    if (m_oldState == newState) return;
-
-    if (newState == QMediaPlayer::PlayingState) {
-        if (m_seekToResumedPosition) {
-            if (m_mediaPlayer->isSeekable()) {
-                qCDebug(playbackManager) << "Resuming playback by seeking to " << (m_resumePosition / MS_TICK_FACTOR);
-                m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
-                m_seekToResumedPosition = false;
-            }
-        }
-    }
-
-    if (m_oldState == QMediaPlayer::StoppedState) {
-        // We're transitioning from stopped to either playing or paused.
-        // Set up the recurring timer
-        m_updateTimer.start();
-        postPlaybackInfo(Started);
-    } else if (newState == QMediaPlayer::StoppedState && m_playbackState == QMediaPlayer::StoppedState) {
-        // We've stopped playing the media. Post a stop signal.
-        m_updateTimer.stop();
-        postPlaybackInfo(Stopped);
-    } else {
-        postPlaybackInfo(Progress);
-    }
-    m_oldState = newState;
-    emit playbackStateChanged(newState);
-}
-
-void PlaybackManager::mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus newStatus) {
-    emit mediaStatusChanged(newStatus);
-    if (m_playbackState == QMediaPlayer::StoppedState) return;
-    if (newStatus == QMediaPlayer::LoadedMedia) {
-               m_mediaPlayer->play();
-    } else if (newStatus == QMediaPlayer::EndOfMedia) {
-        if (m_queue->hasNext() && m_queue->totalSize() > 1) {
-            next();
-        } else {
-            // End of the playlist
-            setPlaybackState(QMediaPlayer::StoppedState);
-        }
-    }
-}
-
-void PlaybackManager::mediaPlayerDurationChanged(qint64 newDuration) {
-    emit durationChanged(newDuration);
-    if (newDuration > 0 && !m_nextItem.isNull()) {
-        m_preloadTimer.stop();
-        m_preloadTimer.start(std::max(static_cast<int>(newDuration - PRELOAD_DURATION), 0));
-    }
-}
-
-void PlaybackManager::mediaPlayerSeekableChanged(bool newSeekable) {
-    emit seekableChanged(newSeekable);
-    if (m_seekToResumedPosition) {
-        m_forceSeekTimer.start();
-    }
-    /*if (m_seekToResumedPosition && newSeekable) {
-        qCDebug(playbackManager) << "Trying to seek to the resume position";
-
-        m_mediaPlayer->setPosition(m_resumePosition / MS_TICK_FACTOR);
-        if (m_mediaPlayer->position() > 1000) {
-            m_seekToResumedPosition = false;
-        }
-    }*/
-}
-
-void PlaybackManager::mediaPlayerError(QMediaPlayer::Error error) {
-    emit errorChanged(error);
-    emit errorStringChanged(m_mediaPlayer->errorString());
-}
-
-void PlaybackManager::updatePlaybackInfo() {
-    postPlaybackInfo(Progress);
+void PlaybackManager::mediaPlayerItemChanged() {
+    Q_D(PlaybackManager);
+    d->m_displayItem->setData(d->m_impl->currentItem());
+    emit itemChanged();
 }
 
 void PlaybackManager::playItem(Item *item) {
-    this->playItem(item->data());
+    playItem(item->data());
 }
 
 
 void PlaybackManager::playItem(QSharedPointer<Model::Item> item) {
-    m_queue->clearList();
-    m_queue->appendToList(item);
-    setItem(item);
-    emit hasNextChanged(m_queue->hasNext());
-    emit hasPreviousChanged(m_queue->hasPrevious());
-    setPlaybackState(QMediaPlayer::PlayingState);
+    Q_D(PlaybackManager);
+    d->m_impl->playItem(item);
 }
 
 void PlaybackManager::playItemId(const QString &id) {
-    Jellyfin::Loader::HTTP::GetItemLoader *loader = new Jellyfin::Loader::HTTP::GetItemLoader(m_apiClient);
-    connect(loader, &Support::LoaderBase::error, this, [loader]() {
-        // TODO: error handling
-        loader->deleteLater();
-    });
-    connect(loader, &Support::LoaderBase::ready, this, [this, loader](){
-        this->playItem(QSharedPointer<Model::Item>::create(loader->result()));
-        loader->deleteLater();
-    });
-    Jellyfin::Loader::GetItemParams params;
-    params.setUserId(m_apiClient->userId());
-    params.setItemId(id);
-    loader->setParameters(params);
-    loader->load();
+    Q_D(PlaybackManager);
+    d->m_impl->playItemId(id);
 }
 
 void PlaybackManager::playItemInList(ItemModel *playlist, int index) {
-    m_queue->clearList();
-    m_queue->appendToList(*playlist);
-    m_queue->play(index);
-    m_queueIndex = index;
-    emit queueIndexChanged(m_queueIndex);
-    setItem(playlist->itemAt(index));
-    emit hasNextChanged(m_queue->hasNext());
-    emit hasPreviousChanged(m_queue->hasPrevious());
-    setPlaybackState(QMediaPlayer::PlayingState);
+    Q_D(PlaybackManager);
+    d->m_impl->playItemInList(playlist->toList(), index);
 }
 
 void PlaybackManager::skipToItemIndex(int index) {
-    if (index < m_queue->queueSize()) {
-        // Skip until we hit the right number in the queue
-        index++;
-        while(index != 0) {
-            m_queue->next();
-            index--;
-        }
-    } else {
-        m_queue->play(index);
-    }
-    setItem(m_queue->currentItem());
-    emit hasNextChanged(m_queue->hasNext());
-    emit hasPreviousChanged(m_queue->hasPrevious());
+    Q_D(PlaybackManager);
+    d->m_impl->goTo(index);
 }
 
 void PlaybackManager::play() {
-    m_mediaPlayer->play();
-    if (m_queue->totalSize() != 0) {
-        setPlaybackState(QMediaPlayer::PlayingState);
-    }
+    Q_D(PlaybackManager);
+    d->m_impl->play();
 }
 
-void PlaybackManager::next() {
-    m_mediaPlayer->stop();
-    m_mediaPlayer->setMedia(QMediaContent());
-
-    if (m_nextItem.isNull() || !m_queue->nextItem()->sameAs(*m_nextItem)) {
-        setItem(m_queue->nextItem());
-        m_nextStreamUrl = QString();
-        m_queue->next();
-        m_nextItem.clear();
-    } else {
-        m_item = m_nextItem;
-        m_streamUrl = m_nextStreamUrl;
-
-        m_nextItem.clear();
-        m_nextStreamUrl = QString();
-
-        m_queue->next();
-        setItem(m_nextItem);
-    }
-    emit hasNextChanged(m_queue->hasNext());
-    emit hasPreviousChanged(m_queue->hasPrevious());
-}
-
-void PlaybackManager::previous() {
-    m_mediaPlayer->stop();
-    m_mediaPlayer->setPosition(0);
-
-    m_item.clear();
-    m_streamUrl = QString();
-
-    m_nextStreamUrl = m_streamUrl;
-    m_nextItem = m_queue->nextItem();
-
-    m_queue->previous();
-    setItem(m_queue->currentItem());
-
-    emit hasNextChanged(m_queue->hasNext());
-    emit hasPreviousChanged(m_queue->hasPrevious());
-}
-
-void PlaybackManager::stop() {
-    setPlaybackState(QMediaPlayer::StoppedState);
-    m_queue->clearList();
-    m_mediaPlayer->stop();
+void PlaybackManager::pause() {
+    Q_D(PlaybackManager);
+    return d->m_impl->pause();
 }
 
 void PlaybackManager::seek(qint64 pos) {
-    m_mediaPlayer->setPosition(pos);
-    postPlaybackInfo(Progress);
+    Q_D(PlaybackManager);
+    d->m_impl->seek(pos);
     emit seeked(pos);
 }
 
+void PlaybackManager::stop() {
+    Q_D(PlaybackManager);
+    d->m_impl->stop();
+}
+
+void PlaybackManager::next() {
+    Q_D(PlaybackManager);
+    d->m_impl->next();
+}
+
+void PlaybackManager::previous() {
+    Q_D(PlaybackManager);
+    d->m_impl->previous();
+}
+
 void PlaybackManager::handlePlaystateRequest(const DTO::PlaystateRequest &request) {
-    if (!m_handlePlaystateCommands) return;
+    //if (!m_handlePlaystateCommands) return;
     switch(request.command()) {
     case DTO::PlaystateCommand::Pause:
         pause();
         break;
     case DTO::PlaystateCommand::PlayPause:
-        if (playbackState() != QMediaPlayer::PlayingState) {
+        if (playbackState() != Model::PlayerState::Playing) {
             play();
         } else {
             pause();
@@ -413,228 +352,10 @@ void PlaybackManager::handlePlaystateRequest(const DTO::PlaystateRequest &reques
     }
 }
 
-void PlaybackManager::postPlaybackInfo(PlaybackInfoType type) {
-    if (m_item == nullptr) {
-        qCWarning(playbackManager) << "Item is null. Not posting playback info";
-        return;
-    }
-    DTO::PlaybackProgressInfo progress(
-                seekable(),
-                m_item,
-                m_item->jellyfinId(),
-                playbackState() == QMediaPlayer::PausedState,
-                false, // is muted?
-                m_playMethod,
-                DTO::RepeatMode::RepeatNone);
-
-    progress.setSessionId(m_playSessionId);
-
-    switch(type) {
-    case Started: // FALLTHROUGH
-    case Progress: {
-        progress.setAudioStreamIndex(m_audioIndex);
-        progress.setSubtitleStreamIndex(m_subtitleIndex);
-        progress.setPositionTicks(m_mediaPlayer->position() * MS_TICK_FACTOR);
-
-        QList<DTO::QueueItem> queue;
-        for (int i = 0; i < m_queue->listSize(); i++) {
-            DTO::QueueItem queueItem(m_queue->listAt(i)->jellyfinId());
-            queue.append(queueItem);
-        }
-        progress.setNowPlayingQueue(queue);
-        break;
-    }
-    case Stopped:
-        progress.setPositionTicks(m_stopPosition * MS_TICK_FACTOR);
-        break;
-    }
-
-    QString path;
-    switch (type) {
-    case Started:
-        path = "/Sessions/Playing";
-        break;
-    case Progress:
-        path = "/Sessions/Playing/Progress";
-        break;
-    case Stopped:
-        path = "/Sessions/Playing/Stopped";
-        break;
-    }
-
-    QNetworkReply *rep = m_apiClient->post(path, QJsonDocument(progress.toJson()));
-    connect(rep, &QNetworkReply::finished, this, [rep](){
-        rep->deleteLater();
-    });
-    m_apiClient->setDefaultErrorHandler(rep);
-}
-
 void PlaybackManager::componentComplete() {
-    if (m_apiClient == nullptr) qCWarning(playbackManager) << "No ApiClient set for PlaybackManager";
+    Q_D(PlaybackManager);
+    if (d->m_apiClient == nullptr) qCWarning(playbackManager) << "No ApiClient set for PlaybackManager";
     m_qmlIsParsingComponent = false;
-}
-
-void PlaybackManager::requestItemUrl(QSharedPointer<Model::Item> item) {
-    ItemUrlLoader *loader = new Jellyfin::Loader::HTTP::GetPostedPlaybackInfoLoader(m_apiClient);
-    Jellyfin::Loader::GetPostedPlaybackInfoParams params;
-
-
-    // Check if we'd prefer to transcode if the video file contains multiple audio tracks
-    // or if a subtitle track was selected.
-    // This has to be done due to the lack of support of selecting audio tracks within QtMultimedia
-    bool allowTranscoding = m_apiClient->settings()->allowTranscoding();
-    bool transcodePreferred = m_subtitleIndex > 0;
-    int audioTracks = 0;
-    const QList<DTO::MediaStream> &streams = item->mediaStreams();
-    for(int i = 0; i < streams.size(); i++) {
-        const DTO::MediaStream &stream = streams[i];
-        if (stream.type() == MediaStreamType::Audio) {
-            audioTracks++;
-        }
-    }
-    if (audioTracks > 1) {
-        transcodePreferred = true;
-    }
-
-    bool forceTranscoding = allowTranscoding && transcodePreferred;
-
-    QSharedPointer<DTO::PlaybackInfoDto> playbackInfo = QSharedPointer<DTO::PlaybackInfoDto>::create(m_apiClient->deviceProfile());
-    params.setItemId(item->jellyfinId());
-    params.setUserId(m_apiClient->userId());
-    playbackInfo->setEnableDirectPlay(true);
-    playbackInfo->setEnableDirectStream(!forceTranscoding);
-    playbackInfo->setEnableTranscoding(forceTranscoding || allowTranscoding);
-    playbackInfo->setAudioStreamIndex(this->m_audioIndex);
-    playbackInfo->setSubtitleStreamIndex(this->m_subtitleIndex);
-    params.setBody(playbackInfo);
-
-    loader->setParameters(params);
-    connect(loader, &ItemUrlLoader::ready, this, [this, loader, item] {
-        DTO::PlaybackInfoResponse result = loader->result();
-        handlePlaybackInfoResponse(item->jellyfinId(), item->mediaType(), result);
-        loader->deleteLater();
-    });
-    connect(loader, &ItemUrlLoader::error, this, [this, loader, item](QString message) {
-        onItemErrorReceived(item->jellyfinId(), message);
-        loader->deleteLater();
-    });
-    loader->load();
-}
-
-void PlaybackManager::handlePlaybackInfoResponse(QString itemId, QString mediaType, DTO::PlaybackInfoResponse &response) {
-    //TODO: move the item URL fetching logic out of this function, into MediaSourceInfo?
-    QList<DTO::MediaSourceInfo> mediaSources = response.mediaSources();
-    QUrl resultingUrl;
-    QString playSession = response.playSessionId();
-    PlayMethod playMethod = PlayMethod::EnumNotSet;
-    bool transcodingAllowed = m_apiClient->settings()->allowTranscoding();
-
-
-
-    for (int i = 0; i < mediaSources.size(); i++) {
-        const DTO::MediaSourceInfo &source = mediaSources.at(i);
-
-        // Check if we'd prefer to transcode if the video file contains multiple audio tracks
-        // or if a subtitle track was selected.
-        // This has to be done due to the lack of support of selecting audio tracks within QtMultimedia
-        bool transcodePreferred = false;
-        if (transcodingAllowed) {
-            transcodePreferred = m_subtitleIndex > 0;
-            int audioTracks = 0;
-            const QList<DTO::MediaStream> &streams = source.mediaStreams();
-            for (int i = 0; i < streams.size(); i++) {
-                DTO::MediaStream stream = streams[i];
-                if (stream.type() == MediaStreamType::Audio) {
-                    audioTracks++;
-                }
-            }
-            if (audioTracks > 1) {
-                transcodePreferred = true;
-            }
-        }
-
-
-        qCDebug(playbackManager()) << "Media source: " << source.name() << "\n"
-                                   << "Prefer transcoding: " << transcodePreferred << "\n"
-                                   << "DirectPlay supported: " << source.supportsDirectPlay() << "\n"
-                                   << "DirectStream supported: " << source.supportsDirectStream() << "\n"
-                                   << "Transcode supported: " << source.supportsTranscoding();
-
-        if (source.supportsDirectPlay() && QFile::exists(source.path())) {
-            resultingUrl = QUrl::fromLocalFile(source.path());
-            playMethod = PlayMethod::DirectPlay;
-        } else if (source.supportsDirectStream() && !transcodePreferred) {
-            if (mediaType == "Video") {
-                mediaType.append('s');
-            }
-            QUrlQuery query;
-            query.addQueryItem("mediaSourceId", source.jellyfinId());
-            query.addQueryItem("deviceId", m_apiClient->deviceId());
-            query.addQueryItem("api_key", m_apiClient->token());
-            query.addQueryItem("Static", "True");
-            resultingUrl = QUrl(m_apiClient->baseUrl() + "/" + mediaType + "/" + itemId
-                    + "/stream." + source.container() + "?" + query.toString(QUrl::EncodeReserved));
-            playMethod = PlayMethod::DirectStream;
-        } else if (source.supportsTranscoding() && !source.transcodingUrlNull() && transcodingAllowed) {
-            qCDebug(playbackManager) << "Transcoding url: " << source.transcodingUrl();
-            resultingUrl = QUrl(m_apiClient->baseUrl() + source.transcodingUrl());
-            playMethod = PlayMethod::Transcode;
-        } else {
-            qCDebug(playbackManager) << "No suitable sources for item " << itemId;
-        }
-        if (!resultingUrl.isEmpty()) break;
-    }
-    if (resultingUrl.isEmpty()) {
-        qCWarning(playbackManager) << "Could not find suitable media source for item " << itemId;
-        onItemErrorReceived(itemId, tr("Could not find a suitable media source."));
-    } else {
-        emit playMethodChanged(playMethod);
-        onItemUrlReceived(itemId, resultingUrl, playSession, playMethod);
-    }
-}
-
-void PlaybackManager::onItemUrlReceived(const QString &itemId, const QUrl &url,
-                                              const QString &playSession, PlayMethod playMethod) {
-    Q_UNUSED(url)
-    Q_UNUSED(playSession)
-    if (!m_item.isNull() && m_item->jellyfinId() == itemId) {
-        // We want to play the item probably right now
-        m_playSessionId = playSession;
-        m_playMethod = playMethod;
-        setStreamUrl(url);
-        emit playMethodChanged(m_playMethod);
-
-        // Clear the error string if it is currently set
-        if (!m_errorString.isEmpty()) {
-            m_errorString.clear();
-            emit errorStringChanged(m_errorString);
-        }
-
-        if (m_error != QMediaPlayer::NoError) {
-            m_error = QMediaPlayer::NoError;
-            emit errorChanged(error());
-        }
-
-        m_mediaPlayer->setMedia(QMediaContent(url));
-        m_mediaPlayer->play();
-    } else {
-        qDebug() << "Late reply for " << itemId << " received, ignoring";
-    }
-}
-
-
-/// Called when the fetcherThread encountered an error
-void PlaybackManager::onItemErrorReceived(const QString &itemId, const QString &errorString) {
-    Q_UNUSED(itemId)
-    Q_UNUSED(errorString)
-    qWarning() << "Error while fetching streaming url for " << itemId << ": " << errorString;
-    if (!m_item.isNull() && m_item->jellyfinId() == itemId) {
-        setStreamUrl(QUrl());
-        m_error = QMediaPlayer::ResourceError;
-        emit errorChanged(error());
-        m_errorString = errorString;
-        emit errorStringChanged(errorString);
-    }
 }
 
 } // NS ViewModel

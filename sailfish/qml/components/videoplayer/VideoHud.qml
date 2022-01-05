@@ -79,16 +79,17 @@ Item {
         id: busyIndicator
         anchors.centerIn: parent
         size: BusyIndicatorSize.Medium
-        running: [MediaPlayer.Loading, MediaPlayer.Stalled].indexOf(manager.mediaStatus) >= 0
+        running: [J.MediaStatus.Loading, J.MediaStatus.Stalled].indexOf(manager.mediaStatus) >= 0
     }
 
     IconButton {
         id: playPause
         enabled: !hidden
         anchors.centerIn: parent
-        icon.source: manager.playbackState === MediaPlayer.PausedState ? "image://theme/icon-l-play" : "image://theme/icon-l-pause"
+        icon.source: manager.playbackState === J.PlayerState.Paused ? "image://theme/icon-l-play" : "image://theme/icon-l-pause"
         onClicked: {
-            if (manager.playbackState === MediaPlayer.PlayingState) {
+            console.log(manager.playbackState)
+            if (manager.playbackState === J.PlayerState.Playing) {
                 manager.pause()
             } else {
                 manager.play()
@@ -102,7 +103,7 @@ Item {
         anchors.bottom: parent.bottom
         width: parent.width
         height: progress.height
-        visible: [MediaPlayer.Unavailable, MediaPlayer.Loading, MediaPlayer.NoMedia].indexOf(manager.mediaStatus) == -1
+        visible: [J.MediaStatus.Unavailable, J.MediaStatus.Loading, J.MediaStatus.NoMedia].indexOf(manager.mediaStatus) == -1
 
         gradient: Gradient {
             GradientStop { position: 0.0; color: Theme.rgba(palette.overlayBackgroundColor, 0.15); }
@@ -151,11 +152,11 @@ Item {
         onMediaStatusChanged: {
             console.log("New mediaPlayer status: " + manager.mediaStatus)
             switch(manager.mediaStatus) {
-            case MediaPlayer.Loaded:
-            case MediaPlayer.Buffering:
+            case J.MediaStatus.Loaded:
+            case J.MediaStatus.Buffering:
                 show(false)
                 break;
-            case MediaPlayer.Buffered:
+            case J.MediaStatus.Buffered:
                 hide(false)
                 break;
             }

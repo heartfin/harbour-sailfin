@@ -110,7 +110,7 @@ ApplicationWindow {
                 enabled: playbackManager.hasPrevious
             }
             Button {
-                readonly property bool _playing: playbackManager.playbackState === MediaPlayer.PlayingState;
+                readonly property bool _playing: playbackManager.playbackState === PlayerState.Playing
                 anchors.verticalCenter: parent.verticalCenter
                 text:  _playing ? "Pause" : "Play"
                 onClicked: _playing ? playbackManager.pause() : playbackManager.play()

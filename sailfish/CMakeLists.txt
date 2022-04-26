@@ -44,7 +44,8 @@ set(sailfin_QML_SOURCES
 	qml/pages/LegalPage.qml
 	qml/pages/MainPage.qml
 	qml/pages/AboutPage.qml
-	qml/harbour-sailfin.qml
+        qml/harbour-sailfin.qml
+        qml/pages/ConnectingPage.qml
 	qml/pages/SettingsPage.qml
 	qml/pages/VideoPage.qml
 	qml/pages/itemdetails/BaseDetailPage.qml
@@ -110,6 +111,4 @@ install(FILES icons/172x172/harbour-sailfin.png
 # Search the Qt Creator Manual to learn about the QtCreatorDeployment.txt file
 # format.
 file(WRITE "${CMAKE_BINARY_DIR}/QtCreatorDeployment.txt"
-	"${CMAKE_INSTALL_PREFIX}
-	 ${CMAKE_BINARY_DIR}/sailfish/harbour-sailfin:bin
-")
+        "${CMAKE_INSTALL_PREFIX}\n${CMAKE_BINARY_DIR}/sailfish/harbour-sailfin:bin")

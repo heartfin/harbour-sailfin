@@ -62,18 +62,12 @@ ApplicationWindow {
         onRaiseRequested: appWindow.raise()
     }
 
-    initialPage: Component {
-        MainPage {
-            Connections {
-                target: apiClient
-                // Replace the MainPage if no server was set up.
-
-            }
-            onStatusChanged: {
-                if (status == PageStatus.Active && !_hasInitialized) {
-                    _hasInitialized = true;
-                    apiClient.restoreSavedSession();
-                }
+    initialPage:  ConnectingPage {
+        id: connectingPage
+        onStatusChanged: {
+            if (connectingPage.status == PageStatus.Active && !_hasInitialized) {
+                _hasInitialized = true;
+                apiClient.restoreSavedSession();
             }
         }
     }
@@ -171,11 +165,36 @@ ApplicationWindow {
         onConnectionFailed: errorNotification.show("Connect error: " + error)
         //onConnectionSuccess: errorNotification.show("Success: " + loginMessage)
         onSetupRequired: {
-            var isInSetup = pageStack.find(function (page) { return typeof page._isSetupPage !== "undefined" }) !== null
-            console.log("Is in setup: " + isInSetup)
-            if (!isInSetup) {
+            console.log("Is in setup: " + isInSetup())
+            if (!isInSetup()) {
                 pageStack.replace(Qt.resolvedUrl("pages/setup/AddServerPage.qml"), {"backNavigation": false});
             }
         }
+        onAuthenticatedChanged: {
+            if (authenticated && !isInSetup()) {
+                console.log("Authenticated)")
+                loginAnimation.start()
+                //pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
+            }
+        }
+    }
+
+    // Delaying the creation of the MainPage prevents the application from freezing
+    // if connecting to the server over HTTPS
+    // TODO: figure out why the application actually freezes and remove this workaround
+    SequentialAnimation {
+        id: loginAnimation
+
+        PauseAnimation {
+            duration: 250
+        }
+
+        ScriptAction {
+            script: pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"), {}, PageStackAction.Immediate)
+        }
+    }
+
+    function isInSetup() {
+        return pageStack.find(function (page) { return typeof page._isSetupPage !== "undefined" }) !== null
     }
 }

@@ -222,7 +222,7 @@ Page {
             delegate: LibraryItemDelegate {
                 property string id: model.jellyfinId
                 title: model.name
-                poster: Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"maxHeight": height})
+                poster: Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"height": height})
                 Binding on blurhash {
                     when: poster !== ""
                     value: model.imageBlurHashes["Primary"][model.imageTags["Primary"]]

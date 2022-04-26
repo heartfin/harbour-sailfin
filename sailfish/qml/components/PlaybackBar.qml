@@ -68,7 +68,7 @@ PanelBackground {
             }
             width: height
             Binding on blurhash {
-                when: manager.item !== null && "Primary" in manager.item.imageBlurHashes
+                when: manager.item !== null && "Primary" in manager.item.imageBlurHashes && "Primary" in manager.item.imageTags
                 value: manager.item.imageBlurHashes["Primary"][manager.item.imageTags["Primary"]]
             }
             source: largeAlbumArt.source

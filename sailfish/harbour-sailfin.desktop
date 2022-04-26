@@ -4,8 +4,6 @@ Version=1.1
 X-Nemo-Application-Type=silica-qt5
 Icon=harbour-sailfin
 Exec=harbour-sailfin
-#Exec=/usr/bin/sailjail -p harbour-sailfin.desktop /usr/bin/harbour-sailfin
-
 Name=Sailfin
 # translation example:
 # your app name in German locale (de)

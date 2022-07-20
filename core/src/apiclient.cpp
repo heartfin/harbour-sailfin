@@ -225,7 +225,7 @@ void ApiClient::addTokenHeader(QNetworkRequest &request) const {
     authentication        += ", DeviceId=\"" + d->deviceId + "\"";
     authentication        += ", Version=\"" + version() + "\"";
     if (d->authenticated) {
-        authentication    += ", token=\"" + d->token + "\"";
+        authentication    += ", Token=\"" + d->token + "\"";
     }
     request.setRawHeader("X-Emby-Authorization", authentication.toUtf8());
 }

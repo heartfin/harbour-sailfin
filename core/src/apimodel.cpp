@@ -165,6 +165,14 @@ bool setRequestStartIndex(Loader::GetResumeItemsParams &params, int index) {
     return true;
 }
 
+template<>
+void setRequestLimit(Loader::GetPublicUsersParams &/*params*/, int /*limit*/) {
+    // NOOP
+}
+template<>
+bool setRequestStartIndex(Loader::GetPublicUsersParams &/*params*/, int /*offset*/) {
+    return false;
+}
 
 template<>
 QList<DTO::UserDto> extractRecords(const QList<DTO::UserDto> &result) {

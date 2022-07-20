@@ -12,6 +12,11 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 
+* Wed Jul 20 2022 Chris Josten <chris@netsoj.nl> 0.4.2-1
+- Bugfixes:
+  - Public user list does not show on login
+  - Authentication was broken, which broke the entire application
+
 * Fri Sep 10 2021 Chris Josten <chris@netsoj.nl> 0.4.0-1
 - Note: Jellyfin 1.7.0 or later is now required for use with Sailfin.
 - AARCH64 support

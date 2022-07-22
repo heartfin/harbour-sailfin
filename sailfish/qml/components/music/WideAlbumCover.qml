@@ -28,6 +28,7 @@ import "../.."
  */
 
 Column {
+    id: wideAlbumCover
     property ListView listview
     property real releaseYear
     property alias albumArt: albumArt.source
@@ -37,6 +38,8 @@ Column {
     property string name
     property alias blurhash : albumArt.blurhash
     property bool twoColumns: true
+    property real aspectRatio
+    property string type
 
     Item { width:1; height: Theme.paddingLarge }
 
@@ -51,12 +54,21 @@ Column {
         leftMargin: 0
         rightMargin: 0
         title: name
-        //: Short description of the album: %1 -> album artist, %2 -> amount of songs, %3 -> duration, %4 -> release year
-        description: qsTr("%1\n%2 songs | %3 | %4")
-            .arg(albumArtist)
-            .arg(songCount)
-            .arg(Utils.ticksToText(duration))
-            //: Unknown album release year
-            .arg(releaseYear >= 0 ? releaseYear : qsTr("Unknown year"))
+        description: {
+            if (wideAlbumCover.type == "MusicAlbum") {
+                //: Short description of the album: %1 -> album artist, %2 -> amount of songs, %3 -> duration, %4 -> release year
+                qsTr("%1\n%2 songs | %3 | %4")
+                    .arg(albumArtist)
+                    .arg(songCount)
+                    .arg(Utils.ticksToText(duration))
+                    //: Unknown album release year
+                    .arg(releaseYear >= 0 ? releaseYear : qsTr("Unknown year"))
+            } else {
+                //: Playlist header: %1 -> amount of songs in the playlist, %2 -> Total duration
+                qsTr("Playlist\n%1 songs | %2")
+                    .arg(songCount)
+                    .arg(Utils.ticksToText(duration))
+            }
+        }
     }
 }

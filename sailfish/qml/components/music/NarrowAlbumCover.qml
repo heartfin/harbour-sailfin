@@ -37,6 +37,7 @@ Item {
     property alias blurhash : albumArtImage.blurhash
     property bool twoColumns
     property real aspectRatio
+    property string type
 
     readonly property real smallSize: albumHeader.height
     readonly property real bigSize: listHeader.width / aspectRatio
@@ -101,12 +102,22 @@ Item {
         width: parent.width - Theme.horizontalPageMargin - height
         title: name
         //: Short description of the album: %1 -> album artist, %2 -> amount of songs, %3 -> duration, %4 -> release year
-        description: qsTr("%1\n%2 songs | %3 | %4")
-            .arg(albumArtist)
-            .arg(songCount)
-            .arg(Utils.ticksToText(duration))
-            //: Unknown album release year
-            .arg(releaseYear >= 0 ? releaseYear : qsTr("Unknown year"))
+        description: {
+            if (type == "MusicAlbum") {
+                //: Short description of the album: %1 -> album artist, %2 -> amount of songs, %3 -> duration, %4 -> release year
+                qsTr("%1\n%2 songs | %3 | %4")
+                    .arg(albumArtist)
+                    .arg(songCount)
+                    .arg(Utils.ticksToText(duration))
+                    //: Unknown album release year
+                    .arg(releaseYear >= 0 ? releaseYear : qsTr("Unknown year"))
+            } else {
+                qsTr("Playlist\n%1 songs | %2")
+                    .arg(songCount)
+                    .arg(Utils.ticksToText(duration))
+            }
+        }
+
     }
 
     RemoteImage {

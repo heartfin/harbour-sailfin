@@ -89,6 +89,7 @@ function getPageUrl(mediaType, itemType, isFolder) {
     case "episode":
         return Qt.resolvedUrl("pages/itemdetails/EpisodePage.qml")
     case "musicalbum":
+    case "playlist":
         return Qt.resolvedUrl("pages/itemdetails/MusicAlbumPage.qml")
     case "photo":
         return Qt.resolvedUrl("pages/itemdetails/PhotoPage.qml")

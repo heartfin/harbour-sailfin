@@ -38,7 +38,7 @@ BaseDetailPage {
         id: collectionModel
         loader: J.UserItemsLoader {
             apiClient: appWindow.apiClient
-            sortBy: "SortName"
+            sortBy: itemData.type === "MusicAlbum" ? "ParentIndexNumber,IndexNumber,SortName" : undefined
             fields: [J.ItemFields.ItemCounts, J.ItemFields.PrimaryImageAspectRatio]
             parentId: itemData.jellyfinId
             autoReload: itemData.jellyfinId.length > 0
@@ -70,7 +70,7 @@ BaseDetailPage {
                 onLoaded: bindAlbum(item)
             }
             section {
-                property: "parentIndexNumber"
+                property: itemData.type === "MusicAlbum" ? "parentIndexNumber" : undefined
                 delegate: SectionHeader {
                     text: qsTr("Disc %1").arg(section)
                 }
@@ -80,7 +80,7 @@ BaseDetailPage {
                 name: model.name
                 artists: model.artists
                 duration: model.runTimeTicks
-                indexNumber: model.indexNumber
+                indexNumber: itemData.type === "MusicAlbum" ?  model.indexNumber : index + 1
                 onClicked: window.playbackManager.playItemInList(collectionModel, model.index)
             }
 
@@ -99,5 +99,6 @@ BaseDetailPage {
         item.aspectRatio = Qt.binding(function() { return itemData.primaryImageAspectRatio})
         item.blurhash = Qt.binding(function() { return itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]; })
         item.twoColumns = Qt.binding(function() { return _twoColumns })
+        item.type = Qt.binding(function() { return itemData.type})
     }
 }

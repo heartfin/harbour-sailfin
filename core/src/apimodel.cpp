@@ -150,7 +150,7 @@ void setRequestLimit(Loader::GetItemsByUserIdParams &params, int limit) {
 
 template<>
 bool setRequestStartIndex(Loader::GetItemsByUserIdParams &params, int index) {
-    params.setLimit(index);
+    params.setStartIndex(index);
     return true;
 }
 
@@ -161,7 +161,7 @@ void setRequestLimit(Loader::GetResumeItemsParams &params, int limit) {
 
 template<>
 bool setRequestStartIndex(Loader::GetResumeItemsParams &params, int index) {
-    params.setLimit(index);
+    params.setStartIndex(index);
     return true;
 }
 
@@ -172,6 +172,16 @@ void setRequestLimit(Loader::GetPublicUsersParams &/*params*/, int /*limit*/) {
 template<>
 bool setRequestStartIndex(Loader::GetPublicUsersParams &/*params*/, int /*offset*/) {
     return false;
+}
+
+template<>
+void setRequestLimit(Loader::GetNextUpParams &params, int limit) {
+    params.setLimit(limit);
+}
+template<>
+bool setRequestStartIndex(Loader::GetNextUpParams &params, int offset) {
+    params.setStartIndex(offset);
+    return true;
 }
 
 template<>

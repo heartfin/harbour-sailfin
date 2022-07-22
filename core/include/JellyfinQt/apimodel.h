@@ -251,6 +251,8 @@ extern template void setRequestLimit(Loader::GetResumeItemsParams &params, int l
 extern template bool setRequestStartIndex(Loader::GetResumeItemsParams &params, int offset);
 extern template void setRequestLimit(Loader::GetPublicUsersParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetPublicUsersParams &params, int offset);
+extern template void setRequestLimit(Loader::GetNextUpParams &params, int limit);
+extern template bool setRequestStartIndex(Loader::GetNextUpParams &params, int offset);
 
 extern template QList<DTO::UserDto> extractRecords(const QList<DTO::UserDto> &result);
 extern template int extractTotalRecordCount(const QList<DTO::UserDto> &result);

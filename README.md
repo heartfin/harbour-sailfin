@@ -1,5 +1,5 @@
 # Sailfin
-[!["Chat via Matrix"](https://img.shields.io/matrix/sailfin:netsoj.nl?label=Chat%20via%20Matrix&logo=matrix&server_fqdn=meetriks.netsoj.nl&style=for-the-badge)](https://matrix.to/#/#sailfin:netsoj.nl)
+[!["Chat via Matrix"](https://img.shields.io/matrix/sailfin:netsoj.nl?label=Chat%20via%20Matrix&logo=matrix&server_fqdn=meetriks.netsoj.nl&style=for-the-badge)](https://matrix.to/#/#sailfin:netsoj.nl)  
 Sailfin is a [Sailfish OS](https://sailfishos.org) client for [Jellyfin](https://jellyfin.org), a media server, written in C++ and qml.
 
 ## Screenshots (running on Sailfish OS)

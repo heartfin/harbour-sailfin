@@ -33,12 +33,27 @@ BaseDetailPage {
 
     property bool _collectionModelLoaded: false
     readonly property bool _twoColumns: albumPageRoot.width / Theme.pixelRatio >= 800
+    readonly property string _description: {
+        if (itemData.type === "MusicAlbum") {
+            //: Short description of the album: %1 -> album artist, %2 -> amount of songs, %3 -> duration, %4 -> release year
+            qsTr("%1\n%2 songs | %3 | %4")
+                .arg(itemData.albumArtist)
+                .arg(itemData.childCount)
+                .arg(Utils.ticksToText(itemData.runTimeTicks))
+                //: Unknown album release year
+                .arg(itemData.productionYear >= 0 ? itemData.productionYear : qsTr("Unknown year"))
+        } else {
+            qsTr("Playlist\n%1 songs | %2")
+                .arg(itemData.childCount)
+                .arg(Utils.ticksToText(itemData.runTimeTicks))
+        }
+    }
 
     J.ItemModel {
         id: collectionModel
         loader: J.UserItemsLoader {
             apiClient: appWindow.apiClient
-            sortBy: itemData.type === "MusicAlbum" ? "ParentIndexNumber,IndexNumber,SortName" : undefined
+            sortBy: itemData.type === "MusicAlbum" ? "ParentIndexNumber,IndexNumber,SortName" : ""
             fields: [J.ItemFields.ItemCounts, J.ItemFields.PrimaryImageAspectRatio]
             parentId: itemData.jellyfinId
             autoReload: itemData.jellyfinId.length > 0
@@ -70,7 +85,7 @@ BaseDetailPage {
                 onLoaded: bindAlbum(item)
             }
             section {
-                property: itemData.type === "MusicAlbum" ? "parentIndexNumber" : undefined
+                property: itemData.type === "MusicAlbum" ? "parentIndexNumber" : ""
                 delegate: SectionHeader {
                     text: qsTr("Disc %1").arg(section)
                 }
@@ -91,14 +106,10 @@ BaseDetailPage {
     function bindAlbum(item) {
         item.albumArt = Qt.binding(function(){ return Utils.itemImageUrl(apiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})})
         item.name = Qt.binding(function(){ return itemData.name})
-        item.releaseYear = Qt.binding(function() { return itemData.productionYear})
-        item.albumArtist = Qt.binding(function() { return itemData.albumArtist})
-        item.duration = Qt.binding(function() { return itemData.runTimeTicks})
-        item.songCount = Qt.binding(function() { return itemData.childCount})
         item.listview = Qt.binding(function() { return list})
         item.aspectRatio = Qt.binding(function() { return itemData.primaryImageAspectRatio})
         item.blurhash = Qt.binding(function() { return itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]; })
         item.twoColumns = Qt.binding(function() { return _twoColumns })
-        item.type = Qt.binding(function() { return itemData.type})
+        item.description = Qt.binding(function() { return _description })
     }
 }

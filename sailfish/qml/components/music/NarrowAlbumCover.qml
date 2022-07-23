@@ -27,21 +27,20 @@ import "../.."
  * Album details for "narrow" devices such as phones in portrait mode.
  */
 Item {
+    id: listHeader
     property ListView listview
-    property real releaseYear
     property alias albumArt: albumArtImage.source
-    property string albumArtist
-    property real duration
-    property int songCount
     property string name
     property alias blurhash : albumArtImage.blurhash
     property bool twoColumns
     property real aspectRatio
-    property string type
+    property string description
 
-    readonly property real smallSize: albumHeader.height
-    readonly property real bigSize: listHeader.width / aspectRatio
-    id: listHeader
+    readonly property real smallHeight: albumHeader.height
+    readonly property real smallWidth: smallHeight * aspectRatio
+    readonly property real bigWidth: listHeader.width
+    readonly property real bigHeight: bigWidth / aspectRatio
+
     width: parent.width
     //spacing: Theme.paddingLarge
 
@@ -49,7 +48,7 @@ Item {
         target: listview
         onVerticalVelocityChanged: {
             if (!listview.draggingVertically && Math.abs(listview.verticalVelocity) < Theme.itemSizeMedium
-                    && listview.contentY < -smallSize) {
+                    && listview.contentY < -smallHeight) {
                 if (listview.verticalVelocity > 0) {
                     listview.cancelFlick()
                     listviewShrinkAnimation.start()
@@ -61,7 +60,7 @@ Item {
         }
         onDraggingVerticallyChanged: {
             if (!listview.draggingVertically && listview.verticalVelocity == 0) {
-                if (-smallSize - listview.contentY > -bigSize - listview.contentY) {
+                if (-smallHeight - listview.contentY > -bigHeight - listview.contentY) {
                     listviewShrinkAnimation.start()
                 } else {
                     listviewGrowAnimation.start()
@@ -73,7 +72,7 @@ Item {
     MouseArea {
         anchors.fill: albumArtImage
         onClicked: {
-            if (listview.contentY < -bigSize + 10) {
+            if (listview.contentY < -bigHeight + 10) {
                 listviewShrinkAnimation.start()
             } else {
                 listviewGrowAnimation.start()
@@ -86,7 +85,7 @@ Item {
         target: listview
         property: "contentY"
         easing.type: Easing.OutCubic
-        to: -smallSize
+        to: -smallHeight
     }
 
     NumberAnimation {
@@ -94,30 +93,14 @@ Item {
         target: listview
         property: "contentY"
         easing.type: Easing.OutCubic
-        to: -bigSize
+        to: -bigHeight
     }
 
     PageHeader {
         id: albumHeader
         width: parent.width - Theme.horizontalPageMargin - height
         title: name
-        //: Short description of the album: %1 -> album artist, %2 -> amount of songs, %3 -> duration, %4 -> release year
-        description: {
-            if (type == "MusicAlbum") {
-                //: Short description of the album: %1 -> album artist, %2 -> amount of songs, %3 -> duration, %4 -> release year
-                qsTr("%1\n%2 songs | %3 | %4")
-                    .arg(albumArtist)
-                    .arg(songCount)
-                    .arg(Utils.ticksToText(duration))
-                    //: Unknown album release year
-                    .arg(releaseYear >= 0 ? releaseYear : qsTr("Unknown year"))
-            } else {
-                qsTr("Playlist\n%1 songs | %2")
-                    .arg(songCount)
-                    .arg(Utils.ticksToText(duration))
-            }
-        }
-
+        description: listHeader.description
     }
 
     RemoteImage {
@@ -126,8 +109,9 @@ Item {
             right: parent.right
             bottom: parent.bottom
         }
+        aspectRatio: listHeader.aspectRatio
         sourceSize.width: listHeader.width
-        sourceSize.height: listHeader.width
+        sourceSize.height: listHeader.width / aspectRatio
         fillMode: Image.PreserveAspectFit
         opacity: 1
         clip: true
@@ -139,24 +123,24 @@ Item {
             when: albumArtImage.status != Image.Null && !twoColumns
             PropertyChanges {
                 target: listview
-                //contentY: -smallSize
-                topMargin: Screen.width - smallSize
+                //contentY: -smallHeight
+                topMargin: bigHeight - smallHeight
                 bottomMargin: listview.contentHeight < listview.height ? listview.height - listview.contentHeight : 0
             }
             PropertyChanges {
                 target: albumArtImage
                 opacity: 1
-                width: height
-                height: smallSize + -(Math.min(listview.contentY + smallSize, 0) / (listview.topMargin)) * (bigSize - smallSize)
+                width: height * aspectRatio
+                height: smallHeight + -(Math.min(listview.contentY + smallHeight , 0) / (listview.topMargin)) * (bigHeight - smallHeight)
             }
             PropertyChanges {
                 target: listHeader
-                height: smallSize
+                height: smallHeight
                 visible: true
             }
             PropertyChanges {
                 target: albumHeader
-                opacity: 1.0 - Math.min(1.0, Math.max(0.0, -Math.min(listview.contentY + smallSize, 0) / (listview.topMargin)))
+                opacity: 1.0 - Math.min(1.0, Math.max(0.0, -Math.min(listview.contentY + smallHeight, 0) / (listview.topMargin)))
                 anchors.rightMargin: Theme.paddingMedium + albumArtImage.width
             }
             AnchorChanges {
@@ -175,7 +159,7 @@ Item {
             }
             PropertyChanges {
                 target: listHeader
-                height: smallSize
+                height: smallHeight
             }
             PropertyChanges {
                 target: albumHeader
@@ -234,7 +218,7 @@ Item {
                 ScriptAction {
                     script: {
                         if (listview.contentY < 10) {
-                            listview.contentY = -smallSize
+                            listview.contentY = -smallHeight
                         }
                     }
                 }
@@ -249,7 +233,7 @@ Item {
                 ScriptAction {
                     script: {
                         if (listview.contentY < 10) {
-                            listview.contentY = -smallSize
+                            listview.contentY = -smallHeight
                         }
                     }
                 }

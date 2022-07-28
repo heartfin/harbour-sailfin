@@ -198,6 +198,7 @@ public:
         if (m_reply->isRunning()) {
             m_reply->abort();
             m_reply->deleteLater();
+            m_reply = nullptr;
         }
     }
 

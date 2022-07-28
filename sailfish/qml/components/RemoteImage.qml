@@ -90,8 +90,8 @@ SilicaItem {
         id: blurhashImage
         anchors.fill: parent
         fillMode: root.fillMode
-        sourceSize.height: 32
-        sourceSize.width: 32 * aspectRatio
+        sourceSize.height: 16
+        sourceSize.width: 16 * aspectRatio
         source: blurhash.length > 0 ? "image://blurhash/" + encodeURIComponent(blurhash) : ""
         opacity: 0
     }

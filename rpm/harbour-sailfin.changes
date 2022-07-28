@@ -11,6 +11,10 @@
 
 # * date Author's Name <author's email> version-release
 # - Summary of changes
+#
+* Future version Chris Josten <chris@netsoj.nl> 0.??.??-1
+- New features
+  - New layout for artist pages
 
 * Wed Jul 20 2022 Chris Josten <chris@netsoj.nl> 0.4.2-1
 - Bugfixes:

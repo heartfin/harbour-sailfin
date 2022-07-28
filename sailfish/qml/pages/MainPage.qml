@@ -171,6 +171,7 @@ Page {
     onStatusChanged: {
         if (status == PageStatus.Active) {
             appWindow.itemData = null
+            //appWindow.navigateToItem("14b92f36bfc877ae741079fef49a3d80", "MusicArtist", "MusicArtist", true)
         }
     }
 

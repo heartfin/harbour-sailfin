@@ -47,6 +47,32 @@ function ticksToText(ticks, showHours) {
     return timeToText(ticks / 10000, showHours);
 }
 
+function propsToQuery(options) {
+    var query = "";
+    for (var prop in options) {
+        if (options.hasOwnProperty(prop)) {
+            var value = options[prop];
+            if (prop === "maxWidth" || prop === "maxHeight") {
+                value = Math.floor(options[prop]);
+            }
+            query += "&" + prop + "=" + value;
+        }
+    }
+    return query;
+}
+
+function randomBackdrop(baseUrl, item) {
+    var count = item.backdropImageTags.length;
+    if (count === 0) return -1
+    return Math.floor(Math.random() * count);
+}
+
+function itemBackdropUrl(baseUrl, item, idx, options) {
+    var extraQuery = propsToQuery(options)
+    return baseUrl + "/Items/" + item.jellyfinId + "/Images/Backdrop/" + idx + "?tag=" + item.backdropImageTags[idx] + extraQuery;
+}
+
+
 function itemImageUrl(baseUrl, item, type, options) {
     if (item === null || !item.imageTags[type]) { return "" }
     return itemModelImageUrl(baseUrl, item.jellyfinId, item.imageTags[type], type, options)
@@ -54,16 +80,7 @@ function itemImageUrl(baseUrl, item, type, options) {
 
 function itemModelImageUrl(baseUrl, itemId, tag, type, options) {
     if (tag === undefined) return ""
-    var extraQuery = "";
-    for (var prop in options) {
-        if (options.hasOwnProperty(prop)) {
-            var value = options[prop];
-            if (prop === "maxWidth" || prop === "maxHeight") {
-                value = Math.floor(options[prop]);
-            }
-            extraQuery += "&" + prop + "=" + value;
-        }
-    }
+    var extraQuery = propsToQuery(options)
     return baseUrl + "/Items/" + itemId + "/Images/" + type + "?tag=" + tag + extraQuery
 }
 
@@ -88,6 +105,8 @@ function getPageUrl(mediaType, itemType, isFolder) {
         return Qt.resolvedUrl("pages/itemdetails/SeasonPage.qml")
     case "episode":
         return Qt.resolvedUrl("pages/itemdetails/EpisodePage.qml")
+    case "musicartist":
+        return Qt.resolvedUrl("pages/itemdetails/MusicArtistPage.qml")
     case "musicalbum":
     case "playlist":
         return Qt.resolvedUrl("pages/itemdetails/MusicAlbumPage.qml")

@@ -257,6 +257,10 @@ template <>
 QString toString(const QString &source, convertType<QString>) {
     return source;
 }
+template <>
+QString toString(const QStringList &source, convertType<QStringList>) {
+    return source.join(',');
+}
 
 } // NS Support
 } // NS Jellyfin

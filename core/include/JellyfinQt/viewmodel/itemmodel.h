@@ -290,6 +290,42 @@ public:
     FWDPROP(QString, seriesId, SeriesId)
 };
 
+using AlbumArtistLoaderBase = AbstractUserParameterLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetAlbumArtistsParams>;
+class AlbumArtistLoader : public AlbumArtistLoaderBase {
+    Q_OBJECT
+public:
+    explicit AlbumArtistLoader(QObject *parent = nullptr);
+
+    FWDLISTPROP(Jellyfin::DTO::ImageTypeClass::Value, enableImageTypes, EnableImageTypes);
+    FWDPROP(bool, enableImages, EnableImages)
+    FWDPROP(bool, enableTotalRecordCount, EnableTotalRecordCount)
+    FWDPROP(bool, enableUserData, EnableUserData)
+    FWDPROP(QStringList, excludeItemTypes, ExcludeItemTypes)
+    FWDLISTPROP(Jellyfin::DTO::ItemFieldsClass::Value, fields, Fields)
+    FWDLISTPROP(Jellyfin::DTO::ItemFilterClass::Value, filters, Filters)
+    FWDPROP(QStringList, genreIds, GenreIds)
+    FWDPROP(QStringList, genres, Genres)
+    FWDPROP(qint32, imageTypeLimit, ImageTypeLimit)
+    FWDPROP(QStringList, includeItemTypes, IncludeItemTypes)
+    FWDPROP(bool, isFavorite, IsFavorite)
+    FWDPROP(int, limit, Limit)
+    FWDPROP(QStringList, mediaTypes, MediaTypes)
+    FWDPROP(double, minCommunityRating, MinCommunityRating)
+    FWDPROP(QString, nameLessThan, NameLessThan)
+    FWDPROP(QString, nameStartsWith, NameStartsWith)
+    FWDPROP(QString, nameStartsWithOrGreater, NameStartsWithOrGreater)
+    FWDPROP(QStringList, officialRatings, OfficialRatings)
+    FWDPROP(QString, parentId, ParentId)
+    FWDPROP(QStringList, personIds, PersonIds)
+    FWDPROP(QStringList, personTypes, PersonTypes)
+    FWDPROP(QString, searchTerm, SearchTerm)
+    FWDPROP(int, startIndex, StartIndex)
+    FWDPROP(QStringList, studioIds, StudioIds)
+    FWDPROP(QStringList, studios, Studios)
+    FWDPROP(QStringList, tags, Tags)
+    FWDPROP(QString, userId, UserId)
+    FWDLISTPROP(int, years, Years);
+};
 
 /**
  * @brief Base class for each model that works with items.

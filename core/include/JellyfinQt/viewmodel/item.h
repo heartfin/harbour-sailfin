@@ -121,6 +121,15 @@ public:
     Q_PROPERTY(QJsonObject imageTags READ imageTags NOTIFY imageTagsChanged)
     Q_PROPERTY(QStringList backdropImageTags READ backdropImageTags NOTIFY backdropImageTagsChanged)
     Q_PROPERTY(QJsonObject imageBlurHashes READ imageBlurHashes NOTIFY imageBlurHashesChanged)
+    Q_PROPERTY(int trailerCount READ trailerCount NOTIFY trailerCountChanged)
+    Q_PROPERTY(int movieCount READ movieCount NOTIFY movieCountChanged)
+    Q_PROPERTY(int seriesCount READ seriesCount NOTIFY seriesCountChanged)
+    Q_PROPERTY(int programCount READ programCount NOTIFY programCountChanged)
+    Q_PROPERTY(int episodeCount READ episodeCount NOTIFY episodeCountChanged)
+    Q_PROPERTY(int songCount READ songCount NOTIFY songCountChanged)
+    Q_PROPERTY(int albumCount READ albumCount NOTIFY albumCountChanged)
+    Q_PROPERTY(int artistCount READ artistCount NOTIFY artistCountChanged)
+    Q_PROPERTY(int musicVideoCount READ musicVideoCount NOTIFY musicVideoCountChanged)
     Q_PROPERTY(QString mediaType READ mediaType READ mediaType NOTIFY mediaTypeChanged)
     Q_PROPERTY(int width READ width NOTIFY widthChanged)
     Q_PROPERTY(int height READ height NOTIFY heightChanged)
@@ -166,6 +175,17 @@ public:
     QStringList backdropImageTags() const { return m_data->backdropImageTags(); }
     QJsonObject imageBlurHashes() const { return m_data->imageBlurHashes(); }
     QString mediaType() const { return m_data->mediaType(); }
+
+    int trailerCount() const { return m_data->trailerCount().value_or(0); }
+    int movieCount() const { return m_data->movieCount().value_or(0); }
+    int seriesCount() const { return m_data->seriesCount().value_or(0); }
+    int programCount() const { return m_data->programCount().value_or(0); }
+    int episodeCount() const { return m_data->episodeCount().value_or(0); }
+    int songCount() const { return m_data->songCount().value_or(0); }
+    int albumCount() const { return m_data->albumCount().value_or(0); }
+    int artistCount() const { return m_data->artistCount().value_or(0); }
+    int musicVideoCount() const { return m_data->musicVideoCount().value_or(0); }
+
     int width() const { return m_data->width().value_or(0); }
     int height() const { return m_data->height().value_or(0); }
 
@@ -226,6 +246,15 @@ signals:
     void imageTagsChanged();
     void backdropImageTagsChanged();
     void imageBlurHashesChanged();
+    void trailerCountChanged(int newTrailerCount);
+    void movieCountChanged(int newMovieCount);
+    void seriesCountChanged(int newSeriesCount);
+    void programCountChanged(int newProgramCount);
+    void episodeCountChanged(int newEpisodeCount);
+    void songCountChanged(int newSongCount);
+    void albumCountChanged(int newAlbumCount);
+    void artistCountChanged(int newArtistCount);
+    void musicVideoCountChanged(int newMusicVideoCount);
     void mediaTypeChanged(const QString &newMediaType);
     void widthChanged(int newWidth);
     void heightChanged(int newHeight);

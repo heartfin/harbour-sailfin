@@ -57,6 +57,7 @@ extern template QString toString(const float &source, convertType<float>);
 extern template QString toString(const double &source, convertType<double>);
 extern template QString toString(const bool &source, convertType<bool>);
 extern template QString toString(const QString &source, convertType<QString>);
+extern template QString toString(const QStringList &source, convertType<QStringList>);
 
 } // NS Support
 } // NS Jellyfin

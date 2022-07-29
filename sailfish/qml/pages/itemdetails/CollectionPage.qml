@@ -28,6 +28,10 @@ BaseDetailPage {
     id: pageRoot
 
     property bool _collectionModelLoaded: false
+    property bool allowSort: true
+    property var modelStatus: collectionModel.loader.modelStatus
+    property string pageTitle: itemData.name
+    property alias loader: collectionModel.loader
 
     J.ItemModel {
         id: collectionModel
@@ -35,13 +39,22 @@ BaseDetailPage {
             id: collectionLoader
             apiClient: appWindow.apiClient
             parentId: itemData.jellyfinId
-            autoReload: itemData.jellyfinId.length > 0 && (pageRoot.status == PageStatus.Active || _collectionModelLoaded)
-            //onParentIdChanged: if (parentId.length > 0) reload()
             sortBy: "SortName"
-            onStatusChanged: {
-                if (status === J.ModelStatus.Ready) {
-                    _collectionModelLoaded = true
-                }
+            autoReload: itemData.jellyfinId.length > 0 && (pageRoot.status == PageStatus.Active || _collectionModelLoaded)
+        }
+    }
+
+    Binding {
+        target: collectionModel.loader
+        property: "autoReload"
+        value: (pageRoot.status == PageStatus.Active || pageRoot._collectionModelLoaded)
+    }
+
+    Connections {
+        target: collectionModel.loader
+        onStatusChanged: {
+            if (status === J.ModelStatus.Ready) {
+                _collectionModelLoaded = true
             }
         }
     }
@@ -56,16 +69,18 @@ BaseDetailPage {
         visible: itemData.status !== J.ItemLoader.Error
 
         header: PageHeader {
-            title: itemData.name || qsTr("Loading")
+            title: pageTitle || qsTr("Loading")
         }
         PullDownMenu {
             id: downMenu
+            visible: pageRoot.allowSort
             MenuItem {
+                id: sortMenuItem
                 //: Menu item for selecting the sort order of a collection
                 text: qsTr("Sort by")
                 onClicked: pageStack.push(sortPageComponent)
             }
-            busy: collectionLoader.status === J.ModelStatus.Loading
+            busy: modelStatus === J.ModelStatus.Loading
         }
         add: Transition {
             id: trans
@@ -169,9 +184,9 @@ BaseDetailPage {
                     onClicked: openMenu()
 
                     function apply(field, order) {
-                        collectionLoader.sortBy = field;
-                        collectionLoader.sortOrder = order;
-                        collectionLoader.reload()
+                        collectionModel.loader.sortBy = field;
+                        collectionModel.loader.sortOrder = order;
+                        collectionModel.loader.reload()
                         pageStack.pop()
                     }
                 }

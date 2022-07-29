@@ -24,7 +24,7 @@ SilicaListView {
         }
     }
     delegate: SongDelegate {
-        artists: model.artists
+        artists: model.artistItems
         name: model.name
         width: parent.width
         indexNumber: index + 1

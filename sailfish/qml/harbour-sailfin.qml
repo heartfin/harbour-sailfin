@@ -154,7 +154,13 @@ ApplicationWindow {
         if (mediaType === "Audio" && !isFolder) {
             playbackManager.playItemId(jellyfinId)
         } else {
-            pageStack.push(Utils.getPageUrl(mediaType, type, isFolder), {"itemId": jellyfinId});
+            var url = Utils.getPageUrl(mediaType, type, isFolder)
+            var properties = {"itemId": jellyfinId}
+            if ("__isPlaybackBar" in pageStack.currentPage) {
+                pageStack.replace(url, properties);
+            } else {
+                pageStack.push(url, properties);
+            }
         }
     }
 

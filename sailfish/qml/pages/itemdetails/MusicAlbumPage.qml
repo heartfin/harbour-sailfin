@@ -93,7 +93,7 @@ BaseDetailPage {
             delegate: SongDelegate {
                 id: songDelegate
                 name: model.name
-                artists: model.artists
+                artists: model.artistItems
                 duration: model.runTimeTicks
                 indexNumber: itemData.type === "MusicAlbum" ?  model.indexNumber : index + 1
                 onClicked: window.playbackManager.playItemInList(collectionModel, model.index)

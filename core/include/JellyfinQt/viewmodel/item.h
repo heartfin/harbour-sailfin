@@ -28,6 +28,7 @@
 #include <QDebug>
 #include <QList>
 #include <QObject>
+#include <QQmlListProperty>
 #include <QSharedPointer>
 #include <QUuid>
 
@@ -54,6 +55,51 @@ class UserItemDataDto;
 namespace ViewModel {
 
 class UserData;
+
+namespace {
+    template<typename T>
+    void qqmlistproperty_qlist_append(QQmlListProperty<T> *prop, T *data) {
+        static_cast<QList<T> *>(prop->data())->append(data);
+    }
+
+    template<typename T>
+    void qqmlistproperty_qlist_clear(QQmlListProperty<T> *prop) {
+        static_cast<QList<T> *>(prop->data())->clear();
+    }
+
+    template<typename T>
+    T *qqmlistproperty_qlist_at(QQmlListProperty<T> *prop, qint32 idx) {
+        return &static_cast<QList<T> *>(prop->data())->at(idx);
+    }
+
+    template<typename T>
+    void qqmlistproperty_qlist_count(QQmlListProperty<T> *prop) {
+        static_cast<QList<T> *>(prop->data())->count();
+    }
+}
+
+template <typename T>
+QQmlListProperty<T> qQmlListPropertyFromQList(QObject *object, QList<T> *list) {
+    return QQmlListProperty<T>(object, list, &qqmlistproperty_qlist_append<T>, &qqmlistproperty_qlist_count<T>, &qqmlistproperty_qlist_at<T>, &qqmlistproperty_qlist_clear<T>);
+}
+
+
+class NameGuidPair : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+    Q_PROPERTY(QString jellyfinId READ jellyfinId NOTIFY jellyfinIdChanged)
+public:
+    explicit NameGuidPair(QSharedPointer<DTO::NameGuidPair> data = QSharedPointer<DTO::NameGuidPair>::create(QStringLiteral("00000000000000000000000000000000")), QObject *parent = nullptr);
+
+    QString name() const { return m_data->name(); }
+    QString jellyfinId() const { return m_data->jellyfinId(); }
+signals:
+    void nameChanged(const QString &newName);
+    void jellyfinIdChanged(const QString &newJellyfinId);
+
+private:
+    QSharedPointer<DTO::NameGuidPair> m_data;
+};
 
 class Item : public QObject {
     Q_OBJECT
@@ -116,6 +162,7 @@ public:
     Q_PROPERTY(QList<QObject *> subtitleStreams READ subtitleStreams NOTIFY subtitleStreamsChanged)
     Q_PROPERTY(double primaryImageAspectRatio READ primaryImageAspectRatio NOTIFY primaryImageAspectRatioChanged)
     Q_PROPERTY(QStringList artists READ artists NOTIFY artistsChanged)
+    Q_PROPERTY(QList<QObject *> artistItems READ artistItems NOTIFY artistItemsChanged);
     // Why is this a QJsonObject? Well, because I couldn't be bothered to implement the deserialisations of
     // a QHash at the moment.
     Q_PROPERTY(QJsonObject imageTags READ imageTags NOTIFY imageTagsChanged)
@@ -171,6 +218,7 @@ public:
     QObjectList subtitleStreams() const { return m_subtitleStreams; }
     double primaryImageAspectRatio() const { return m_data->primaryImageAspectRatio().value_or(1.0); }
     QStringList artists() const { return m_data->artists(); }
+    QList<QObject *> artistItems() const{ return this->m_artistItems; }
     QJsonObject imageTags() const { return m_data->imageTags(); }
     QStringList backdropImageTags() const { return m_data->backdropImageTags(); }
     QJsonObject imageBlurHashes() const { return m_data->imageBlurHashes(); }
@@ -243,6 +291,7 @@ signals:
     void subtitleStreamsChanged(QVariantList &newSubtitleStreams);
     void primaryImageAspectRatioChanged(double newPrimaryImageAspectRatio);
     void artistsChanged(const QStringList &newArtists);
+    void artistItemsChanged();
     void imageTagsChanged();
     void backdropImageTagsChanged();
     void imageBlurHashesChanged();
@@ -269,6 +318,7 @@ protected:
     QObjectList m_audioStreams;
     QObjectList m_videoStreams;
     QObjectList m_subtitleStreams;
+    QObjectList m_artistItems;
 private slots:
     void onUserDataChanged(const DTO::UserItemDataDto &userData);
 };

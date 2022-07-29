@@ -18,6 +18,8 @@
  */
 #include "JellyfinQt/viewmodel/itemmodel.h"
 
+#include "JellyfinQt/viewmodel/item.h"
+
 #include "JellyfinQt/loader/http/artists.h"
 #include "JellyfinQt/loader/http/items.h"
 #include "JellyfinQt/loader/http/userlibrary.h"
@@ -93,6 +95,14 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
     case RoleNames::runTimeTicks:
         return QVariant(item->runTimeTicks().value_or(0));
     JF_CASE(artists)
+    case RoleNames::artistItems: {
+        QVariantList data;
+        auto artists = item->artistItems();
+        for (auto it = artists.cbegin(); it != artists.cend(); it++) {
+            data.append(QVariant::fromValue(new NameGuidPair(QSharedPointer<DTO::NameGuidPair>::create(*it), const_cast<ItemModel *>(this))));
+        }
+        return data;
+    }
     case RoleNames::isFolder:
         return QVariant(item->isFolder().value_or(false));
     JF_CASE(overview)

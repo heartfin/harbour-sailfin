@@ -54,6 +54,7 @@ void JellyfinPlugin::registerTypes(const char *uri) {
     qmlRegisterUncreatableType<ViewModel::User>(uri, 1, 0, "User", "Acquire one via UserLoader or exposed properties");
     qmlRegisterUncreatableType<EventBus>(uri, 1, 0, "EventBus", "Obtain one via your ApiClient");
     qmlRegisterUncreatableType<WebSocket>(uri, 1, 0, "WebSocket", "Obtain one via your ApiClient");
+    qmlRegisterUncreatableType<ViewModel::NameGuidPair>(uri, 1, 0, "NameGuidPair", "Obbtain one via an Item");
     qmlRegisterUncreatableType<ViewModel::MediaStream>(uri, 1, 0, "MediaStream", "Obtain one via an Item");
     qmlRegisterUncreatableType<ViewModel::Settings>(uri, 1, 0, "Settings", "Obtain one via your ApiClient");
     qmlRegisterUncreatableType<ViewModel::UserData>(uri, 1, 0, "UserData", "Obtain one via an Item");

@@ -18,6 +18,8 @@
  */
 #include "JellyfinQt/viewmodel/playlist.h"
 
+#include "JellyfinQt/viewmodel/item.h"
+
 namespace Jellyfin {
 namespace ViewModel {
 
@@ -47,6 +49,7 @@ QHash<int, QByteArray> Playlist::roleNames() const {
     return {
         {RoleNames::name, "name"},
         {RoleNames::artists, "artists"},
+        {RoleNames::artistItems, "artistItems"},
         {RoleNames::runTimeTicks, "runTimeTicks"},
         {RoleNames::section, "section"},
         {RoleNames::playing, "playing"},
@@ -83,6 +86,16 @@ QVariant Playlist::data(const QModelIndex &index, int role) const {
         return QVariant(rowData->name());
     case RoleNames::artists:
         return QVariant(rowData->artists());
+    case RoleNames::artistItems: {
+        QVariantList result;
+
+        auto items = rowData->artistItems();
+        for (auto it = items.cbegin(); it != items.cend(); it++) {
+            result.append(QVariant::fromValue(new NameGuidPair(QSharedPointer<DTO::NameGuidPair>::create(*it), const_cast<Playlist *>(this))));
+        }
+
+        return result;
+    }
     case RoleNames::runTimeTicks:
         return QVariant(rowData->runTimeTicks().value_or(-1));
     default:

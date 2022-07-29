@@ -147,6 +147,11 @@ PanelBackground {
                 maximumLineCount: 1
                 truncationMode: TruncationMode.Fade
                 color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
+                linkColor: Theme.secondaryColor
+                onLinkActivated: {
+                    appWindow.navigateToItem(link, "Audio", "MusicArtist", true)
+                }
+                textFormat: Text.RichText
             }
         }
 
@@ -349,6 +354,21 @@ PanelBackground {
             PropertyChanges {
                 target: artists
                 font.pixelSize: Theme.fontSizeMedium
+                text: {
+                    var links = [];
+                    var items = manager.item.artistItems;
+                    console.log(items)
+                    for (var i = 0; i < items.length; i++) {
+                        links.push("<a href=\"%1\" style=\"text-decoration:none;color:%3\">%2</a>"
+                            .arg(items[i].jellyfinId)
+                            .arg(items[i].name)
+                            .arg(Theme.secondaryColor)
+                        )
+                    }
+
+                    return links.join(", ")
+                }
+
             }
             AnchorChanges {
                 target: artists
@@ -419,6 +439,7 @@ PanelBackground {
         id: fullPage
         Page {
             property bool __hidePlaybackBar: true
+            property bool __isPlaybackBar: true
             showNavigationIndicator: true
             allowedOrientations: appWindow.allowedOrientations
             SilicaFlickable {

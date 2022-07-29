@@ -31,6 +31,7 @@ ListItem {
 
     contentHeight: songName.height + songArtists.height + 2 * Theme.paddingMedium
     width: parent.width
+    menu: contextMenu
 
     TextMetrics {
         id: indexMetrics
@@ -77,7 +78,13 @@ ListItem {
             right: parent.right
             rightMargin: Theme.horizontalPageMargin
         }
-        text: artists.join(", ")
+        text: {
+            var names = []
+            for (var i = 0; i < artists.length; i++) {
+                names.push(artists[i].name)
+            }
+            return names.join(", ")
+        }
         font.pixelSize: Theme.fontSizeSmall
         truncationMode: TruncationMode.Fade
         color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
@@ -97,4 +104,48 @@ ListItem {
         color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
         highlighted: down || playing
     }
+
+    function goToArtist(id) {
+        appWindow.navigateToItem(id, "audio", "MusicArtist", true)
+    }
+
+    Component {
+        id: contextMenu
+        ContextMenu {
+            MenuItem {
+                text: {
+                    if(artists.length === 1) {
+                        //: Context menu item for navigating to the artist of the selected track
+                        return qsTr("Go to %1").arg(artists[0].name)
+                    } else {
+                        //: Context menu item for navigating to one of the artists of the selected track (opens submenu)
+                        return qsTr("Go to artists")
+                    }
+                }
+                onDelayedClick: {
+                    if (artists.length > 1) {
+                        songDelegateRoot.menu = artistMenu
+                        songDelegateRoot.openMenu()
+                    } else {
+                        goToArtist(artists[0].jellyfinId)
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: artistMenu
+        ContextMenu {
+            Repeater {
+                model: artists
+                MenuItem {
+                    text: modelData.name
+                    onDelayedClick: goToArtist(modelData.jellyfinId)
+                }
+            }
+            onClosed: songDelegateRoot.menu = contextMenu
+        }
+    }
+
 }

@@ -59,6 +59,7 @@ public:
         // Item properties
         name = Qt::UserRole + 1,
         artists,
+        artistItems,
         runTimeTicks,
 
         // Non-item properties

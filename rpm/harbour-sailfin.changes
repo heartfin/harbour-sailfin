@@ -17,6 +17,8 @@
   - New layout for artist pages
   - New layout for the music library
   - New layout for playlist pages
+  - Navigation to artists of a song added when long-pressing a song or pressing the name
+    on the now playing screen.
 - Bug fixes
   - The album overview page should now behave correclty with an image with a non-square image
 

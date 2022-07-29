@@ -26,6 +26,9 @@
 namespace Jellyfin {
 namespace ViewModel {
 
+NameGuidPair::NameGuidPair(QSharedPointer<DTO::NameGuidPair> data, QObject *parent)
+    : QObject(parent), m_data(data) {}
+
 Item::Item(QObject *parent, QSharedPointer<Model::Item> data)
     : QObject(parent),
       m_data(data),
@@ -44,6 +47,7 @@ void Item::setData(QSharedPointer<Model::Item> newData) {
 
     if (!m_data.isNull()) {
         connect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
+        updateMediaStreams();
         setUserData(m_data->userData());
     }
 
@@ -77,6 +81,11 @@ void Item::updateMediaStreams() {
     qDebug() << m_audioStreams.size() << " audio streams, " << m_videoStreams.size() << " video streams, "
              << m_subtitleStreams.size() << " subtitle streams, " << m_allMediaStreams.size() << " streams total";
 
+    m_artistItems.clear();
+    const QList<DTO::NameGuidPair> artists = m_data->artistItems();
+    for (auto it = artists.cbegin(); it != artists.cend(); it++) {
+        m_artistItems.append(new NameGuidPair(QSharedPointer<DTO::NameGuidPair>::create(*it), this));
+    }
 }
 
 void Item::setUserData(DTO::UserItemDataDto &newData) {

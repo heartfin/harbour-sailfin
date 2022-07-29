@@ -19,6 +19,15 @@ BaseDetailPage {
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height
+        Component {
+            id: latestMediaLoaderComponent
+            J.LatestMediaLoader {
+                apiClient: appWindow.apiClient
+                parentId: itemData.jellyfinId
+                includeItemTypes: "Audio"
+                autoReload: false
+            }
+        }
 
         Component {
             id: albumArtistLoaderComponent
@@ -64,7 +73,6 @@ BaseDetailPage {
                 text: qsTr("Recently added")
                 //collapseWhenEmpty: false
                 extraBusy: !_firstTimeLoaded
-                clickable: false
                 loader: J.LatestMediaLoader {
                     apiClient: appWindow.apiClient
                     parentId: itemData.jellyfinId
@@ -72,6 +80,12 @@ BaseDetailPage {
                     includeItemTypes: "Audio"
                     limit: 12
                 }
+                onHeaderClicked: pageStack.push(Qt.resolvedUrl("CollectionPage.qml"), {
+                                                                   "loader": latestMediaLoaderComponent.createObject(musicLibraryPage),
+                                                                    //: Page title for the list of all albums within the music library
+                                                                    "pageTitle": qsTr("Latest media"),
+                                                                    "allowSort": false
+                                                               })
 
             }
 

@@ -78,73 +78,40 @@ Page {
                 }
             }
 
-            MoreSection {
+            ItemChildrenShowcase {
                 //- Section header for films and TV shows that an user hasn't completed yet.
                 text: qsTr("Resume watching")
                 clickable: false
-                busy: userResumeLoader.status === J.ModelStatus.Loading
-                Loader {
-                    width: parent.width
-                    sourceComponent: carrouselView
-                    property alias itemModel: userResumeModel
-                    property string collectionType: "series"
-
-                    J.ItemModel {
-                        id: userResumeModel
-                        loader: J.ResumeItemsLoader {
-                            id: userResumeLoader
-                            apiClient: appWindow.apiClient
-                            limit: 12
-                            //recursive: true
-                        }
-                    }
+                loader: J.ResumeItemsLoader {
+                    id: userResumeLoader
+                    apiClient: appWindow.apiClient
+                    limit: 12
+                    //recursive: true
                 }
             }
-            MoreSection {
+            ItemChildrenShowcase {
                 //- Section header for next episodes in a TV show that an user was watching.
                 text: qsTr("Next up")
                 clickable: false
-                busy: showNextUpLoader.status === J.ModelStatus.Loading
-
-                Loader {
-                    width: parent.width
-                    sourceComponent: carrouselView
-                    property alias itemModel: showNextUpModel
-                    property string collectionType: "series"
-
-                    J.ItemModel {
-                        id: showNextUpModel
-                        loader: J.NextUpLoader {
-                            id: showNextUpLoader
-                            apiClient: appWindow.apiClient
-                            enableUserData: true
-                        }
-                    }
+                loader: J.NextUpLoader {
+                    id: showNextUpLoader
+                    apiClient: appWindow.apiClient
+                    enableUserData: true
                 }
             }
             Repeater {
                 model: mediaLibraryModel
-                MoreSection {
+                ItemChildrenShowcase {
                     text: model.name
-                    busy: userItemModel.status !== J.UsersViewsLoader.Ready
-                    onHeaderClicked: appWindow.navigateToItem(model.jellyfinId, model.mediaType, model.type, model.isFolder);
-                    Loader {
-                        width: parent.width
-                        sourceComponent: carrouselView
-                        property alias itemModel: userItemModel
-                        property string collectionType: model.collectionType || ""
-
-                        J.ItemModel {
-                            id: userItemModel
-                            loader: J.LatestMediaLoader {
-                                apiClient: appWindow.apiClient
-                                parentId: jellyfinId
-                            }
-                        }
-                        Connections {
-                            target: mediaLibraryLoader
-                            onReady: userItemModel.reload()
-                        }
+                    onHeaderClicked: appWindow.navigateToItem(model.jellyfinId, model.collectionType, model.type, model.isFolder);
+                    collectionType: model.collectionType || ""
+                    loader: J.LatestMediaLoader {
+                        apiClient: appWindow.apiClient
+                        parentId: jellyfinId
+                    }
+                    Connections {
+                        target: mediaLibraryLoader
+                        onReady: loader.reload()
                     }
                 }
             }
@@ -191,50 +158,6 @@ Page {
             mediaLibraryModel.reload()
             userResumeModel.reload()
             showNextUpModel.reload()
-        }
-    }
-
-    Component {
-        id: carrouselView
-        SilicaListView {
-            property bool isPortrait: Utils.usePortraitCover(collectionType)
-            id: list
-            clip: true
-            height: {
-                if (count > 0) {
-                    if (isPortrait) {
-                        Constants.libraryDelegatePosterHeight
-                    } else {
-                        Constants.libraryDelegateHeight
-                    }
-                } else {
-                    0
-                }
-            }
-            Behavior on height {
-                NumberAnimation { easing.type: Easing.OutQuad; duration: 300 }
-            }
-            model: itemModel
-            width: parent.width
-            orientation: ListView.Horizontal
-            leftMargin: Theme.horizontalPageMargin
-            rightMargin: Theme.horizontalPageMargin
-            spacing: Theme.paddingLarge
-            delegate: LibraryItemDelegate {
-                property string id: model.jellyfinId
-                title: model.name
-                poster: Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"height": height})
-                Binding on blurhash {
-                    when: poster !== ""
-                    value: model.imageBlurHashes["Primary"][model.imageTags["Primary"]]
-                }
-                landscape: !isPortrait
-                progress: (typeof model.userDataPlayedProgress !== 0.0) ? model.userDataPlayedPercentage / 100 : 0.0
-
-                onClicked: {
-                    appWindow.navigateToItem(model.jellyfinId, model.mediaType, model.type, model.isFolder);
-                }
-            }
         }
     }
 

@@ -73,10 +73,9 @@ BaseDetailPage {
         }
         PullDownMenu {
             id: downMenu
-            visible: visibleChildren.length > 0
+            visible: pageRoot.allowSort
             MenuItem {
                 id: sortMenuItem
-                visible: pageRoot.allowSort
                 //: Menu item for selecting the sort order of a collection
                 text: qsTr("Sort by")
                 onClicked: pageStack.push(sortPageComponent)

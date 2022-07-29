@@ -112,6 +112,13 @@ function getPageUrl(mediaType, itemType, isFolder) {
         return Qt.resolvedUrl("pages/itemdetails/MusicAlbumPage.qml")
     case "photo":
         return Qt.resolvedUrl("pages/itemdetails/PhotoPage.qml")
+    case "collectionfolder":
+        // TODO: support for other collection folders
+        switch(mediaType.toLowerCase()) {
+        case "music":
+            return Qt.resolvedUrl("pages/itemdetails/MusicLibraryPage.qml")
+        }
+        // FALLTRHOUGH
     default:
         switch (mediaType ? mediaType.toLowerCase() : isFolder ? "folder" : "") {
         case "folder":

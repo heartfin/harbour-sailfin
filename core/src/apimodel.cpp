@@ -185,6 +185,16 @@ bool setRequestStartIndex(Loader::GetNextUpParams &params, int offset) {
 }
 
 template<>
+void setRequestLimit(Loader::GetAlbumArtistsParams &params, int limit) {
+    params.setLimit(limit);
+}
+template<>
+bool setRequestStartIndex(Loader::GetAlbumArtistsParams &params, int offset) {
+    params.setStartIndex(offset);
+    return true;
+}
+
+template<>
 QList<DTO::UserDto> extractRecords(const QList<DTO::UserDto> &result) {
     return result;
 }

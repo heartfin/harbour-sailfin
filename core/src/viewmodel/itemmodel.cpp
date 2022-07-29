@@ -18,6 +18,7 @@
  */
 #include "JellyfinQt/viewmodel/itemmodel.h"
 
+#include "JellyfinQt/loader/http/artists.h"
 #include "JellyfinQt/loader/http/items.h"
 #include "JellyfinQt/loader/http/userlibrary.h"
 #include "JellyfinQt/loader/http/userviews.h"
@@ -56,6 +57,9 @@ ShowEpisodesLoader::ShowEpisodesLoader(QObject *parent)
 
 NextUpLoader::NextUpLoader(QObject *parent)
     : NextUpLoaderBase(new Jellyfin::Loader::HTTP::GetNextUpLoader(), parent) {}
+
+AlbumArtistLoader::AlbumArtistLoader(QObject *parent)
+    : AlbumArtistLoaderBase(new Jellyfin::Loader::HTTP::GetAlbumArtistsLoader(), parent) {}
 
 ItemModel::ItemModel(QObject *parent)
     : ApiModel<Model::Item>(parent) {
@@ -128,7 +132,7 @@ QSharedPointer<Model::Item> ItemModel::itemAt(int index) {
 
 void ItemModel::onInsertItems(const QModelIndex &parent, int start, int end) {
     if (parent.isValid()) return;
-    qDebug() << "Connecting " << (end - start + 1) << "items!";
+    //qDebug() << "Connecting " << (end - start + 1) << "items!";
     for (int i = start; i <= end; i++) {
         connect(itemAt(i).data(), &Model::Item::userDataChanged, this, &ItemModel::onUserDataUpdated);
     }

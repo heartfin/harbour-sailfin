@@ -22,6 +22,7 @@
 #include "JellyfinQt/loader/http/items.h"
 #include "JellyfinQt/loader/http/userlibrary.h"
 #include "JellyfinQt/viewmodel/userdata.h"
+#include "JellyfinQt/viewmodel/utils.h"
 
 namespace Jellyfin {
 namespace ViewModel {
@@ -81,11 +82,9 @@ void Item::updateMediaStreams() {
     qDebug() << m_audioStreams.size() << " audio streams, " << m_videoStreams.size() << " video streams, "
              << m_subtitleStreams.size() << " subtitle streams, " << m_allMediaStreams.size() << " streams total";
 
-    m_artistItems.clear();
     const QList<DTO::NameGuidPair> artists = m_data->artistItems();
-    for (auto it = artists.cbegin(); it != artists.cend(); it++) {
-        m_artistItems.append(new NameGuidPair(QSharedPointer<DTO::NameGuidPair>::create(*it), this));
-    }
+    qDeleteAll(m_artistItems);
+    m_artistItems = wrapQObjectList<NameGuidPair, DTO::NameGuidPair>(artists.cbegin(), artists.cend(), this);
 }
 
 void Item::setUserData(DTO::UserItemDataDto &newData) {

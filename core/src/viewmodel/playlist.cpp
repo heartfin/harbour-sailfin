@@ -19,6 +19,7 @@
 #include "JellyfinQt/viewmodel/playlist.h"
 
 #include "JellyfinQt/viewmodel/item.h"
+#include "JellyfinQt/viewmodel/utils.h"
 
 namespace Jellyfin {
 namespace ViewModel {
@@ -87,14 +88,8 @@ QVariant Playlist::data(const QModelIndex &index, int role) const {
     case RoleNames::artists:
         return QVariant(rowData->artists());
     case RoleNames::artistItems: {
-        QVariantList result;
-
-        auto items = rowData->artistItems();
-        for (auto it = items.cbegin(); it != items.cend(); it++) {
-            result.append(QVariant::fromValue(new NameGuidPair(QSharedPointer<DTO::NameGuidPair>::create(*it), const_cast<Playlist *>(this))));
-        }
-
-        return result;
+        auto artists = rowData->artistItems();
+        return wrapQVariantList<NameGuidPair, DTO::NameGuidPair>(artists.cbegin(), artists.cend(), const_cast<Playlist *>(this));
     }
     case RoleNames::runTimeTicks:
         return QVariant(rowData->runTimeTicks().value_or(-1));

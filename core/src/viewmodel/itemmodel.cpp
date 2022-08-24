@@ -27,6 +27,7 @@
 #include "JellyfinQt/loader/http/tvshows.h"
 
 #include "JellyfinQt/viewmodel/userdata.h"
+#include "JellyfinQt/viewmodel/utils.h"
 
 #define JF_CASE(roleName) case roleName: \
     try { \
@@ -96,12 +97,8 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
         return QVariant(item->runTimeTicks().value_or(0));
     JF_CASE(artists)
     case RoleNames::artistItems: {
-        QVariantList data;
         auto artists = item->artistItems();
-        for (auto it = artists.cbegin(); it != artists.cend(); it++) {
-            data.append(QVariant::fromValue(new NameGuidPair(QSharedPointer<DTO::NameGuidPair>::create(*it), const_cast<ItemModel *>(this))));
-        }
-        return data;
+        return wrapQVariantList<NameGuidPair, DTO::NameGuidPair>(artists.cbegin(), artists.cend(), const_cast<ItemModel *>(this));
     }
     case RoleNames::isFolder:
         return QVariant(item->isFolder().value_or(false));

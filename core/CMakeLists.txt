@@ -68,6 +68,7 @@ set(JellyfinQt_HEADERS
         include/JellyfinQt/viewmodel/userdata.h
         include/JellyfinQt/viewmodel/usermodel.h
         include/JellyfinQt/viewmodel/user.h
+        include/JellyfinQt/viewmodel/utils.h
         include/JellyfinQt/apiclient.h
         include/JellyfinQt/apimodel.h
         include/JellyfinQt/credentialmanager.h

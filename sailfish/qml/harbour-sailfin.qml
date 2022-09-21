@@ -148,6 +148,7 @@ ApplicationWindow {
         id: config
         path: "/nl/netsoj/chris/Sailfin"
         property bool showDebugInfo: false
+        property bool musicMode: false
     }
 
     function navigateToItem(jellyfinId, mediaType, type, isFolder) {
@@ -196,7 +197,13 @@ ApplicationWindow {
         }
 
         ScriptAction {
-            script: pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"), {}, PageStackAction.Immediate)
+            script: {
+                if (config.musicMode) {
+                    pageStack.replace(Qt.resolvedUrl("pages/itemdetails/MusicLibraryPage.qml"), {}, PageStackAction.Immediate)
+                } else {
+                    pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"), {}, PageStackAction.Immediate)
+                }
+            }
         }
     }
 

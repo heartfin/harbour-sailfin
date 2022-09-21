@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import Nemo.Configuration 1.0
 
 import nl.netsoj.chris.Jellyfin 1.0 as J
 
@@ -29,6 +30,17 @@ Page {
     allowedOrientations: Orientation.All
 
     property alias loggedInUser: userLoader.data
+
+    ConfigurationGroup {
+        id: config
+        path: "/nl/netsoj/chris/Sailfin"
+        property bool showDebugInfo: false
+        property bool musicMode: false
+    }
+
+    Component.onCompleted: {
+        btnMusicMode.checked = config.musicMode;
+    }
 
     SilicaFlickable {
         anchors.fill: parent
@@ -116,6 +128,14 @@ Page {
                 //: Other settings menu item
                 text: qsTr("Other")
             }
+
+            IconTextSwitch {
+                id: btnMusicMode
+                text: qsTr("Music Mode")
+                icon.source: "image://theme/icon-m-music"
+                description: "Toggle UI into music only mode"
+                onCheckedChanged: config.musicMode = checked
+             }
 
             IconListItem {
                 //: Settings list item for settings related to streaming

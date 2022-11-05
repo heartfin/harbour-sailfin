@@ -1,6 +1,6 @@
 /*
  * Sailfin: a Jellyfin client written using Qt
- * Copyright (C) 2021 Chris Josten and the Sailfin Contributors.
+ * Copyright (C) 2021-2022 Chris Josten and the Sailfin Contributors.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -132,13 +132,13 @@ QSharedPointer<Item> Playlist::nextItem() {
     return m_nextItem;
 }
 
-void Playlist::appendToList(ViewModel::ItemModel &model) {
+void Playlist::appendToList(const QList<QSharedPointer<Model::Item>> &items) {
     int start = m_list.size();
-    int count = model.size();
+    int count = items.size();
     m_list.reserve(count);
     emit beforeItemsAddedToList(start, count);
     for (int i = 0; i < count; i++) {
-        m_list.append(QSharedPointer<Model::Item>(model.at(i)));
+        m_list.append(QSharedPointer<Model::Item>(items.at(i)));
     }
     emit itemsAddedToList();
     reshuffle();

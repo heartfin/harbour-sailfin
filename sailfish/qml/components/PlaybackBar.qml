@@ -48,7 +48,7 @@ PanelBackground {
     property bool showQueue: false
 
     property bool _pageWasShowingNavigationIndicator
-    readonly property bool mediaLoading: [MediaPlayer.Loading, MediaPlayer.Buffering].indexOf(manager.mediaStatus) >= 0
+    readonly property bool mediaLoading: [J.MediaStatus.Loading, J.MediaStatus.Buffering].indexOf(manager.mediaStatus) >= 0
 
 
     transform: Translate {id: playbackBarTranslate; y: 0}
@@ -134,14 +134,24 @@ PanelBackground {
             Label {
                 id: artists
                 text: {
-                    //return manager.item.mediaType;
                     if (manager.item === null) return qsTr("Play some media!")
                     switch(manager.item.mediaType) {
                     case "Audio":
-                        return manager.item.artists.join(", ")
+                        var links = [];
+                        var items = manager.item.artistItems;
+                        console.log(items)
+                        for (var i = 0; i < items.length; i++) {
+                            links.push("<a href=\"%1\" style=\"text-decoration:none;color:%3\">%2</a>"
+                                .arg(items[i].jellyfinId)
+                                .arg(items[i].name)
+                                .arg(Theme.secondaryColor)
+                            )
+                        }
+                        return links.join(", ")
                     }
                     return qsTr("No audio")
                 }
+
                 width: Math.min(contentWidth, parent.width)
                 font.pixelSize: Theme.fontSizeSmall
                 maximumLineCount: 1
@@ -151,7 +161,7 @@ PanelBackground {
                 onLinkActivated: {
                     appWindow.navigateToItem(link, "Audio", "MusicArtist", true)
                 }
-                textFormat: Text.RichText
+                textFormat: Text.StyledText
             }
         }
 
@@ -257,7 +267,7 @@ PanelBackground {
    states: [
        State {
            name: ""
-           when: manager.playbackState !== MediaPlayer.StoppedState && !isFullPage && !("__hidePlaybackBar" in pageStack.currentPage)
+           when: manager.playbackState !== J.PlayerState.Stopped && !isFullPage && !("__hidePlaybackBar" in pageStack.currentPage)
        },
        State {
            name: "large"
@@ -354,20 +364,6 @@ PanelBackground {
             PropertyChanges {
                 target: artists
                 font.pixelSize: Theme.fontSizeMedium
-                text: {
-                    var links = [];
-                    var items = manager.item.artistItems;
-                    console.log(items)
-                    for (var i = 0; i < items.length; i++) {
-                        links.push("<a href=\"%1\" style=\"text-decoration:none;color:%3\">%2</a>"
-                            .arg(items[i].jellyfinId)
-                            .arg(items[i].name)
-                            .arg(Theme.secondaryColor)
-                        )
-                    }
-
-                    return links.join(", ")
-                }
 
             }
             AnchorChanges {
@@ -390,7 +386,7 @@ PanelBackground {
         },
         State {
             name: "hidden"
-            when: ((manager.playbackState === MediaPlayer.StoppedState && !mediaLoading) || "__hidePlaybackBar" in pageStack.currentPage) && !isFullPage
+            when: ((manager.playbackState === J.PlayerState.Stopped && !mediaLoading) || "__hidePlaybackBar" in pageStack.currentPage) && !isFullPage
             PropertyChanges {
                 target: playbackBarTranslate
                 // + small padding since the ProgressBar otherwise would stick out

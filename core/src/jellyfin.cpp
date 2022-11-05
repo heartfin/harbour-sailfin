@@ -30,6 +30,7 @@
 #include "JellyfinQt/eventbus.h"
 #include "JellyfinQt/serverdiscoverymodel.h"
 #include "JellyfinQt/websocket.h"
+#include "JellyfinQt/model/player.h"
 #include "JellyfinQt/viewmodel/item.h"
 #include "JellyfinQt/viewmodel/itemmodel.h"
 #include "JellyfinQt/viewmodel/loader.h"
@@ -87,6 +88,8 @@ void JellyfinPlugin::registerTypes(const char *uri) {
     qmlRegisterUncreatableType<Jellyfin::DTO::ItemFieldsClass>(uri, 1, 0, "ItemFields", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::DTO::ImageTypeClass>(uri, 1, 0, "ImageType", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::ViewModel::NowPlayingSection>(uri, 1, 0, "NowPlayingSection", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::Model::PlayerStateClass>(uri, 1, 0, "PlayerState", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::Model::MediaStatusClass>(uri, 1, 0, "MediaStatus", "Is an enum");
 
     qRegisterMetaType<Jellyfin::DTO::PlayMethodClass::Value>();
 }

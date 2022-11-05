@@ -16,6 +16,8 @@
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
 #include <QMediaPlayer>
+#include "JellyfinQt/model/player.h"
+
 QT_BEGIN_NAMESPACE
 class QByteArray;
 template<class T> class QList;
@@ -190,9 +192,9 @@ private:
     ViewModel::PlatformMediaControl *m_mediaControl;
     void notifyPropertiesChanged(QStringList properties);
 private slots:
-    void onCurrentItemChanged(ViewModel::Item *newItem);
-    void onPlaybackStateChanged(QMediaPlayer::State state);
-    void onMediaStatusChanged(QMediaPlayer::MediaStatus status);
+    void onCurrentItemChanged();
+    void onPlaybackStateChanged(Jellyfin::Model::PlayerStateClass::Value state);
+    void onMediaStatusChanged(Jellyfin::Model::MediaStatusClass::Value status);
     void onPositionChanged(qint64 position);
     void onSeekableChanged(bool seekable);
     void onPlaybackManagerChanged(ViewModel::PlaybackManager *newPlaybackManager);

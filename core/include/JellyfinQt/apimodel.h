@@ -489,6 +489,10 @@ public:
         this->endResetModel();
     }
 
+    const QList<QSharedPointer<T>> &toList() {
+        return m_array;
+    }
+
     // From AbstractListModel, gets implemented in ApiModel<T>
     //virtual QHash<int, QByteArray> roleNames() const override = 0;
     /*virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override = 0;*/

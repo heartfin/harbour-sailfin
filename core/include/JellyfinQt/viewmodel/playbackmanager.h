@@ -1,6 +1,6 @@
 /*
  * Sailfin: a Jellyfin client written using Qt
- * Copyright (C) 2021 Chris Josten and the Sailfin Contributors.
+ * Copyright (C) 2021-2022 Chris Josten and the Sailfin Contributors.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,6 +39,7 @@
 #include "../dto/playbackinforesponse.h"
 #include "../dto/playmethod.h"
 #include "../loader/requesttypes.h"
+#include "../model/player.h"
 #include "../model/playlist.h"
 #include "../support/jsonconv.h"
 #include "../viewmodel/item.h"
@@ -60,31 +61,34 @@ class PlaystateRequest;
 namespace ViewModel {
 Q_DECLARE_LOGGING_CATEGORY(playbackManager);
 
-// Later defined in this file
-class ItemUrlFetcherThread;
+class PlaybackManagerPrivate;
 
 /**
- * @brief The PlaybackManager class manages the playback of Jellyfin items. It fetches streams based on Jellyfin items, posts
- * the current playback state to the Jellyfin Server, contains the actual media player and so on.
+ * @brief The PlaybackManager class manages the playback of Jellyfin items.
  *
- * The PlaybackManager actually keeps two mediaPlayers, m_mediaPlayer1 and m_mediaPlayer2. When one is playing, the other is
- * preloading the next item in the queue. The current media player is pointed to by m_mediaPlayer.
+ * It is a small wrapper around an instance of Jellyfin::Model::PlaybackManager,
+ * which do the actual work. The Jellyfin::Model::PlaybackManager can be switched
+ * on the fly, allowing this class to switch between controlling the playback locally
+ * or remote.
  */
 class PlaybackManager : public QObject, public QQmlParserStatus {
-    friend class ItemUrlFetcherThread;
     Q_OBJECT
+    Q_DECLARE_PRIVATE(PlaybackManager);
     Q_INTERFACES(QQmlParserStatus)
 public:
-    using ItemUrlLoader = Support::Loader<DTO::PlaybackInfoResponse, Jellyfin::Loader::GetPostedPlaybackInfoParams>;
 
     explicit PlaybackManager(QObject *parent = nullptr);
+    virtual ~PlaybackManager();
 
-    Q_PROPERTY(ApiClient *apiClient MEMBER m_apiClient WRITE setApiClient)
+    Q_PROPERTY(ApiClient *apiClient READ apiClient WRITE setApiClient)
+    Q_PROPERTY(int audioIndex READ audioIndex WRITE setAudioIndex NOTIFY audioIndexChanged)
+    Q_PROPERTY(int subtitleIndex READ subtitleIndex WRITE setSubtitleIndex NOTIFY subtitleIndexChanged)
     Q_PROPERTY(QString streamUrl READ streamUrl NOTIFY streamUrlChanged)
-    Q_PROPERTY(bool autoOpen MEMBER m_autoOpen NOTIFY autoOpenChanged)
-    Q_PROPERTY(int audioIndex MEMBER m_audioIndex NOTIFY audioIndexChanged)
-    Q_PROPERTY(int subtitleIndex MEMBER m_subtitleIndex NOTIFY subtitleIndexChanged)
-    Q_PROPERTY(bool resumePlayback MEMBER m_resumePlayback NOTIFY resumePlaybackChanged)
+    //Q_PROPERTY(bool autoOpen MEMBER m_autoOpen NOTIFY autoOpenChanged)
+    /**
+     * Whether the player should resume playback.
+     */
+    Q_PROPERTY(bool resumePlayback READ resumePlayback WRITE setResumePlayback NOTIFY resumePlaybackChanged)
     Q_PROPERTY(Jellyfin::DTO::PlayMethodClass::Value playMethod READ playMethod NOTIFY playMethodChanged)
 
     // Current Item and queue informatoion
@@ -98,42 +102,50 @@ public:
     Q_PROPERTY(QString errorString READ errorString NOTIFY errorStringChanged)
     Q_PROPERTY(bool hasVideo READ hasVideo NOTIFY hasVideoChanged)
     Q_PROPERTY(bool seekable READ seekable NOTIFY seekableChanged)
-    Q_PROPERTY(QObject* mediaObject READ mediaObject NOTIFY mediaObjectChanged)
-    Q_PROPERTY(QMediaPlayer::MediaStatus mediaStatus READ mediaStatus NOTIFY mediaStatusChanged)
-    Q_PROPERTY(QMediaPlayer::State playbackState READ playbackState NOTIFY playbackStateChanged)
+    Q_PROPERTY(QObject* mediaObject READ mediaObject NOTIFY mediaObjectChanged);
+    Q_PROPERTY(Jellyfin::Model::MediaStatusClass::Value mediaStatus READ mediaStatus NOTIFY mediaStatusChanged)
+    Q_PROPERTY(Jellyfin::Model::PlayerStateClass::Value playbackState READ playbackState NOTIFY playbackStateChanged)
     Q_PROPERTY(qint64 position READ position NOTIFY positionChanged)
     Q_PROPERTY(bool hasNext READ hasNext NOTIFY hasNextChanged)
     Q_PROPERTY(bool hasPrevious READ hasPrevious NOTIFY hasPreviousChanged)
     /// Whether playstate commands received over the websocket should be handled
     Q_PROPERTY(bool handlePlaystateCommands READ handlePlaystateCommands WRITE setHandlePlaystateCommands NOTIFY handlePlaystateCommandsChanged)
 
-    ViewModel::Item *item() const { return m_displayItem; }
-    QSharedPointer<Model::Item> dataItem() const { return m_item; }
-    ApiClient *apiClient() const { return m_apiClient; }
+    // R/W props
+    ApiClient *apiClient() const;
     void setApiClient(ApiClient *apiClient);
+    bool resumePlayback() const;
+    void setResumePlayback(bool newResumePlayback);
+    int audioIndex() const;
+    void setAudioIndex(int newAudioIndex);
+    int subtitleIndex() const;
+    void setSubtitleIndex(int newAudioIndex);
 
-    QString streamUrl() const { return m_streamUrl; }
-    PlayMethod playMethod() const { return m_playMethod; }
-    QObject *mediaObject() const { return m_mediaPlayer; }
-    qint64 position() const { return m_mediaPlayer->position(); }
-    qint64 duration() const { return m_mediaPlayer->duration(); }
-    ViewModel::Playlist *queue() const { return m_displayQueue; }
-    int queueIndex() const { return m_queueIndex; }
-    bool hasNext() const { return m_queue->hasNext(); }
-    bool hasPrevious() const { return m_queue->hasPrevious(); }
+    ViewModel::Item *item() const;
+    QSharedPointer<Model::Item> dataItem() const;
+
+    QString streamUrl() const;
+    PlayMethod playMethod() const;
+    qint64 position() const;
+    qint64 duration() const;
+    ViewModel::Playlist *queue() const;
+    int queueIndex() const;
+    bool hasNext() const;
+    bool hasPrevious() const;
 
     // Current media player related property getters
-    QMediaPlayer::State playbackState() const { return m_playbackState; }
-    QMediaPlayer::MediaStatus mediaStatus() const { return m_mediaPlayer->mediaStatus(); }
-    bool hasVideo() const { return m_mediaPlayer->isVideoAvailable(); }
-    bool seekable() const { return m_mediaPlayer->isSeekable(); }
+    QObject* mediaObject() const;
+    Model::PlayerState playbackState() const;
+    Model::MediaStatus mediaStatus() const;
+    bool hasVideo() const;
+    bool seekable() const;
     QMediaPlayer::Error error () const;
     QString errorString() const;
 
-    bool handlePlaystateCommands() const { return m_handlePlaystateCommands; }
-    void setHandlePlaystateCommands(bool newHandlePlaystateCommands) { m_handlePlaystateCommands = newHandlePlaystateCommands; emit handlePlaystateCommandsChanged(m_handlePlaystateCommands); }
+    bool handlePlaystateCommands() const;
+    void setHandlePlaystateCommands(bool newHandlePlaystateCommands);
 signals:
-    void itemChanged(ViewModel::Item *newItemId);
+    void itemChanged();
     void streamUrlChanged(const QString &newStreamUrl);
     void autoOpenChanged(bool autoOpen);
     void audioIndexChanged(int audioIndex);
@@ -145,20 +157,21 @@ signals:
     // Emitted when seek has been called.
     void seeked(qint64 newPosition);
 
+    void hasNextChanged(bool newHasNext);
+    void hasPreviousChanged(bool newHasPrevious);
+
     // Current media player related property signals
-    void mediaObjectChanged(QObject *newMediaObject);
+    void mediaObjectChanged(QObject *newPlayer);
     void positionChanged(qint64 newPosition);
     void durationChanged(qint64 newDuration);
     void queueChanged(QAbstractItemModel *newQueue);
     void queueIndexChanged(int newIndex);
-    void playbackStateChanged(QMediaPlayer::State newState);
-    void mediaStatusChanged(QMediaPlayer::MediaStatus newMediaStatus);
+    void playbackStateChanged(Jellyfin::Model::PlayerStateClass::Value newState);
+    void mediaStatusChanged(Jellyfin::Model::MediaStatusClass::Value newMediaStatus);
     void hasVideoChanged(bool newHasVideo);
     void seekableChanged(bool newSeekable);
     void errorChanged(QMediaPlayer::Error newError);
     void errorStringChanged(const QString &newErrorString);
-    void hasNextChanged(bool newHasNext);
-    void hasPreviousChanged(bool newHasPrevious);
     void handlePlaystateCommandsChanged(bool newHandlePlaystateCommands);
 public slots:
     /**
@@ -187,7 +200,7 @@ public slots:
      */
     void skipToItemIndex(int index);
     void play();
-    void pause() { m_mediaPlayer->pause(); setPlaybackState(QMediaPlayer::PausedState); }
+    void pause();
     void seek(qint64 pos);
     void stop();
 
@@ -204,105 +217,21 @@ public slots:
     void handlePlaystateRequest(const DTO::PlaystateRequest &request);
 
 private slots:
-    void mediaPlayerStateChanged(QMediaPlayer::State newState);
-    void mediaPlayerPositionChanged(qint64 position);
-    void mediaPlayerMediaStatusChanged(QMediaPlayer::MediaStatus newStatus);
-    void mediaPlayerError(QMediaPlayer::Error error);
-    void mediaPlayerDurationChanged(qint64 newDuration);
-    void mediaPlayerSeekableChanged(bool seekable);
-    /**
-     * @brief updatePlaybackInfo Updates the Jellyfin server with the current playback progress etc.
-     */
-    void updatePlaybackInfo();
-
-    /// Called when we have fetched the playback URL and playSession
-    void onItemUrlReceived(const QString &itemId, const QUrl &url, const QString &playSession,
-                                 // Fully specify class to please MOC
-                                 Jellyfin::DTO::PlayMethodClass::Value playMethod);
-    /// Called when we have encountered an error
-    void onItemErrorReceived(const QString &itemId, const QString &errorString);
-
+    void mediaPlayerItemChanged();
 private:
     /// Factor to multiply with when converting from milliseconds to ticks.
     const static int MS_TICK_FACTOR = 10000;
-    enum PlaybackInfoType { Started, Stopped, Progress };
 
-    /// Timer used to update the play progress on the Jellyfin server
-    QTimer m_updateTimer;
-    /// Timer used to notify ourselves when we need to preload the next item
-    QTimer m_preloadTimer;
 
-    ApiClient *m_apiClient = nullptr;
-    /// The currently playing item
-    QSharedPointer<Model::Item> m_item;
-    /// The item that will be played next
-    QSharedPointer<Model::Item> m_nextItem;
-    /// The currently played item that will be shown in the GUI
-    ViewModel::Item *m_displayItem = new ViewModel::Item(this);
-    /// The currently played queue that will be shown in the GUI
-    ViewModel::Playlist *m_displayQueue = nullptr;
 
-    // Properties for making the streaming request.
-    QString m_streamUrl;
-    QString m_nextStreamUrl;
-    QString m_playSessionId;
-    QString m_nextPlaySessionId;
-    QString m_errorString;
     QMediaPlayer::Error m_error = QMediaPlayer::NoError;
-    /// The index of the mediastreams of the to-be-played item containing the audio
-    int m_audioIndex = 0;
-    /// The index of the mediastreams of the to-be-played item containing subtitles
-    int m_subtitleIndex = -1;
-    /// The position in ticks to resume playback from
-    qint64 m_resumePosition = 0;
-    /// The position in ticks the playback was stopped
-    qint64 m_stopPosition = 0;
-
-    /// Keeps track of latest playback position
-    qint64 m_oldPosition = 0;
-    /**
-     * @brief Whether to automatically open the livestream of the item;
-     */
-    bool m_autoOpen = false;
-
-    bool m_seekToResumedPosition = false;
-
-    QMediaPlayer::State m_oldState = QMediaPlayer::StoppedState;
-    /// State of the playbackManager. While the internal media player stops after a
-    /// song has ended, this will not do so.
-    QMediaPlayer::State m_playbackState = QMediaPlayer::StoppedState;
-    PlayMethod m_playMethod = PlayMethod::Transcode;
-    /// Pointer to the current media player.
-    QMediaPlayer *m_mediaPlayer = nullptr;
-
-    Model::Playlist *m_queue = nullptr;
-    int m_queueIndex = 0;
-    bool m_resumePlayback = false;
-    bool m_handlePlaystateCommands = true;
-
-    // Helper methods
-    void setItem(QSharedPointer<Model::Item> newItem);
-
-    void setStreamUrl(const QUrl &streamUrl);
-    void setPlaybackState(QMediaPlayer::State newState);
-
-    /**
-     * @brief Posts the playback information
-     */
-    void postPlaybackInfo(PlaybackInfoType type);
-
-    void requestItemUrl(QSharedPointer<Model::Item> item);
-    void handlePlaybackInfoResponse(QString itemId, QString mediaType, DTO::PlaybackInfoResponse &response);
-
 
     // QQmlParserListener interface
     void classBegin() override { m_qmlIsParsingComponent = true; }
     void componentComplete() override;
     bool m_qmlIsParsingComponent = false;
 
-    /// Time in ms at what moment this playbackmanager should start loading the next item.
-    const qint64 PRELOAD_DURATION = 15 * 1000;
-    QTimer m_forceSeekTimer;
+    QScopedPointer<PlaybackManagerPrivate> d_ptr;
 };
 
 } // NS ViewModel

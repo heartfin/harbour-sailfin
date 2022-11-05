@@ -165,12 +165,13 @@ QString PlayerAdaptor::playbackStatus() const
     if (m_mediaControl == nullptr || m_mediaControl->playbackManager() == nullptr) {
         return "Stopped";
     }
+    using PlayerState = Jellyfin::Model::PlayerState;
     switch(m_mediaControl->playbackManager()->playbackState()) {
-    case QMediaPlayer::StoppedState:
+    case PlayerState::Stopped:
         return "Stopped";
-    case QMediaPlayer::PlayingState:
+    case PlayerState::Playing:
         return "Playing";
-    case QMediaPlayer::PausedState:
+    case PlayerState::Paused:
         return "Paused";
     default:
         return "Stopped";
@@ -246,7 +247,8 @@ void PlayerAdaptor::Play()
 void PlayerAdaptor::PlayPause()
 {
     // handle method call org.mpris.MediaPlayer2.Player.PlayPause
-    if (m_mediaControl->playbackManager()->playbackState() == QMediaPlayer::PlayingState) {
+    using PlayerState = Jellyfin::Model::PlayerState;
+    if (m_mediaControl->playbackManager()->playbackState() == PlayerState::Playing) {
         m_mediaControl->playbackManager()->pause();
     } else {
         m_mediaControl->playbackManager()->play();
@@ -290,14 +292,12 @@ void PlayerAdaptor::notifyPropertiesChanged(QStringList properties) {
     QDBusConnection::sessionBus().send(signal);
 }
 
-void PlayerAdaptor::onCurrentItemChanged(ViewModel::Item *item) {
-    Q_UNUSED(item)
-
+void PlayerAdaptor::onCurrentItemChanged() {
     QStringList properties;
     properties << "Metadata" << "Position" << "CanPlay" << "CanPause" << "CanGoNext" << "CanGoPrevious";
     notifyPropertiesChanged(properties);
 }
-void PlayerAdaptor::onPlaybackStateChanged(QMediaPlayer::State state) {
+void PlayerAdaptor::onPlaybackStateChanged(Jellyfin::Model::PlayerStateClass::Value state) {
     Q_UNUSED(state)
     QStringList properties;
     properties << "PlaybackStatus" << "Position";
@@ -305,7 +305,7 @@ void PlayerAdaptor::onPlaybackStateChanged(QMediaPlayer::State state) {
 
 }
 
-void PlayerAdaptor::onMediaStatusChanged(QMediaPlayer::MediaStatus status) {
+void PlayerAdaptor::onMediaStatusChanged(Jellyfin::Model::MediaStatusClass::Value status) {
     Q_UNUSED(status)
     QStringList properties;
     properties << "PlaybackStatus" << "Position";

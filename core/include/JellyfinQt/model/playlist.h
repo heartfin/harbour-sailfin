@@ -1,6 +1,6 @@
 /*
  * Sailfin: a Jellyfin client written using Qt
- * Copyright (C) 2021 Chris Josten and the Sailfin Contributors.
+ * Copyright (C) 2021-2022 Chris Josten and the Sailfin Contributors.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -96,9 +96,9 @@ public:
     void clearList();
 
     /**
-     * @brief Appends all items from the given itemModel to this list
+     * @brief Appends all items from the given item list to this list
      */
-    void appendToList(ViewModel::ItemModel &model);
+    void appendToList(const QList<QSharedPointer<Item>> &model);
 
     /**
      * @brief appendToList Appends a single item to the current list

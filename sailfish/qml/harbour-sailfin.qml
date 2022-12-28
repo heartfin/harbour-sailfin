@@ -50,6 +50,7 @@ ApplicationWindow {
     ApiClient {
         id: _apiClient
         objectName: "Test"
+        appName: "Sailfin"
         supportedCommands: [GeneralCommandType.Play, GeneralCommandType.DisplayMessage]
     }
 

@@ -46,6 +46,11 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
             }
             MenuItem {
+                //: Pulley menu item: shows controllable device page
+                text: qsTr("Remote control")
+                onClicked: pageStack.push(Qt.resolvedUrl("ControllableDevicesPage.qml"))
+            }
+            MenuItem {
                 //: Pulley menu item: reload items on page
                 text: qsTr("Reload")
                 onClicked: loadModels(true)

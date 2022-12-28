@@ -26,7 +26,7 @@ set(sailfin_QML_SOURCES
 	qml/components/videoplayer/VideoError.qml
 	qml/components/videoplayer/VideoHud.qml
 	qml/components/IconListItem.qml
-    qml/components/ItemChildrenShowcase.qml
+	qml/components/ItemChildrenShowcase.qml
 	qml/components/JItem.qml
 	qml/components/LibraryItemDelegate.qml
 	qml/components/MoreSection.qml
@@ -39,14 +39,15 @@ set(sailfin_QML_SOURCES
 	qml/components/UserGridDelegate.qml
 	qml/components/VideoPlayer.qml
 	qml/components/VideoTrackSelector.qml
-        qml/cover/CollectionPage.qml
+	qml/cover/CollectionPage.qml
 	qml/cover/PosterCover.qml
-        qml/cover/NowPlayingCover.qml
+	qml/cover/NowPlayingCover.qml
 	qml/pages/LegalPage.qml
 	qml/pages/MainPage.qml
 	qml/pages/AboutPage.qml
-        qml/harbour-sailfin.qml
-        qml/pages/ConnectingPage.qml
+	qml/harbour-sailfin.qml
+	qml/pages/ConnectingPage.qml
+	qml/pages/ControllableDevicesPage.qml
 	qml/pages/SettingsPage.qml
 	qml/pages/VideoPage.qml
 	qml/pages/itemdetails/BaseDetailPage.qml
@@ -54,8 +55,8 @@ set(sailfin_QML_SOURCES
 	qml/pages/itemdetails/EpisodePage.qml
 	qml/pages/itemdetails/FilmPage.qml
 	qml/pages/itemdetails/MusicAlbumPage.qml
-    qml/pages/itemdetails/MusicArtistPage.qml
-    qml/pages/itemdetails/MusicLibraryPage.qml
+	qml/pages/itemdetails/MusicArtistPage.qml
+	qml/pages/itemdetails/MusicLibraryPage.qml
 	qml/pages/itemdetails/PhotoPage.qml
 	qml/pages/itemdetails/SeasonPage.qml
 	qml/pages/itemdetails/SeriesPage.qml

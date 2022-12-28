@@ -30,6 +30,7 @@
 #include "JellyfinQt/eventbus.h"
 #include "JellyfinQt/serverdiscoverymodel.h"
 #include "JellyfinQt/websocket.h"
+#include "JellyfinQt/model/controllablesession.h"
 #include "JellyfinQt/model/player.h"
 #include "JellyfinQt/viewmodel/item.h"
 #include "JellyfinQt/viewmodel/itemmodel.h"
@@ -39,6 +40,7 @@
 #include "JellyfinQt/viewmodel/platformmediacontrol.h"
 #include "JellyfinQt/viewmodel/playbackmanager.h"
 #include "JellyfinQt/viewmodel/playlist.h"
+#include "JellyfinQt/viewmodel/remotedevice.h"
 #include "JellyfinQt/viewmodel/settings.h"
 #include "JellyfinQt/viewmodel/userdata.h"
 #include "JellyfinQt/viewmodel/usermodel.h"
@@ -66,6 +68,7 @@ void JellyfinPlugin::registerTypes(const char *uri) {
     qmlRegisterType<ViewModel::ItemModel>(uri, 1, 0, "ItemModel");
     qmlRegisterType<ViewModel::UserModel>(uri, 1, 0, "UserModel");
     qmlRegisterUncreatableType<ViewModel::Playlist>(uri, 1, 0, "Playlist", "Available via PlaybackManager");
+    qmlRegisterType<ViewModel::RemoteDeviceList>(uri, 1, 0, "RemoteDeviceList");
 
     // Loaders
     qmlRegisterUncreatableType<ViewModel::LoaderBase>(uri, 1, 0, "LoaderBase", "Use one of its subclasses");
@@ -90,6 +93,7 @@ void JellyfinPlugin::registerTypes(const char *uri) {
     qmlRegisterUncreatableType<Jellyfin::ViewModel::NowPlayingSection>(uri, 1, 0, "NowPlayingSection", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::Model::PlayerStateClass>(uri, 1, 0, "PlayerState", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::Model::MediaStatusClass>(uri, 1, 0, "MediaStatus", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::Model::DeviceTypeClass>(uri, 1, 0, "DeviceType", "Is an enum");
 
     qRegisterMetaType<Jellyfin::DTO::PlayMethodClass::Value>();
 }

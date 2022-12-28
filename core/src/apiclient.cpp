@@ -44,6 +44,7 @@ public:
     // Authentication-related variables
     QString token;
     QString baseUrl;
+    QString appName;
     QString deviceName;
     QString deviceId;
     QString userId;
@@ -101,6 +102,21 @@ void ApiClient::setBaseUrl(const QString &url) {
         d->baseUrl.chop(1);
     }
     emit this->baseUrlChanged(d->baseUrl);
+}
+
+const QString &ApiClient::appName() const {
+    const Q_D(ApiClient);
+    return d->appName;
+}
+
+void ApiClient::setAppName(const QString &name) {
+    Q_D(ApiClient);
+    d->appName = name;
+    emit appNameChanged(name);
+
+    if (!d->componentBeingParsed) {
+        generateDeviceProfile();
+    }
 }
 
 const QString &ApiClient::userId() const {
@@ -220,7 +236,7 @@ void ApiClient::addBaseRequestHeaders(QNetworkRequest &request, const QString &p
 void ApiClient::addTokenHeader(QNetworkRequest &request) const {
     Q_D(const ApiClient);
     QString authentication =   "MediaBrowser ";
-    authentication        +=   "Client=\"Sailfin\"";
+    authentication        +=   "Client=\"" +d->appName +"\"";
     authentication        += ", Device=\"" + d->deviceName + "\"";
     authentication        += ", DeviceId=\"" + d->deviceId + "\"";
     authentication        += ", Version=\"" + version() + "\"";
@@ -425,7 +441,6 @@ QString ApiClient::downloadUrl(const QString &itemId) const {
 void ApiClient::generateDeviceProfile() {
     Q_D(ApiClient);
     QSharedPointer<DTO::DeviceProfile> deviceProfile = QSharedPointer<DTO::DeviceProfile>::create(Model::DeviceProfile::generateProfile());
-    deviceProfile->setName(d->deviceName);
     deviceProfile->setJellyfinId(d->deviceId);
     deviceProfile->setFriendlyName(QSysInfo::prettyProductName());
     deviceProfile->setMaxStreamingBitrate(d->settings->maxStreamingBitRate());

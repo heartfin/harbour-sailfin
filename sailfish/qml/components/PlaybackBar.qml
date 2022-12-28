@@ -267,7 +267,16 @@ PanelBackground {
    states: [
        State {
            name: ""
-           when: manager.playbackState !== J.PlayerState.Stopped && !isFullPage && !("__hidePlaybackBar" in pageStack.currentPage)
+           // Show the bar whenever:
+           // 1. Either one of the following is true:
+           //    a. The playbackmanager is playing media
+           //    b. The playbackmanager is controlling a remote session
+           // AND
+           // 2. The playback bar isn't in the full page state
+           // AND
+           // 3. The topmost page on the pagestack hasn't requested to hide the page
+           when: (manager.playbackState !== J.PlayerState.Stopped || !manager.controllingSessionLocal)
+                 && !isFullPage && !("__hidePlaybackBar" in pageStack.currentPage)
        },
        State {
            name: "large"

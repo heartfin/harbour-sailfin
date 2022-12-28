@@ -89,7 +89,7 @@ QtMultimediaPlayerPrivate::QtMultimediaPlayerPrivate(QtMultimediaPlayer *q)
     q->connect(m_mediaPlayer, &QMediaPlayer::seekableChanged, q, &QtMultimediaPlayer::seekableChanged);
     q->connect(m_mediaPlayer, &QMediaPlayer::audioAvailableChanged, q, &QtMultimediaPlayer::hasAudioChanged);
     q->connect(m_mediaPlayer, &QMediaPlayer::videoAvailableChanged, q, &QtMultimediaPlayer::hasVideoChanged);
-    q->connect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), q, SLOT(errorStringChanged));
+    //q->connect(m_mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), q, SLOT(errorStringChanged(QString)));
     if (m_mediaStreamsControl != nullptr) {
         q->connect(m_mediaStreamsControl, &QMediaStreamsControl::streamsChanged, q, [this](){
             qCDebug(player) << m_mediaStreamsControl->streamCount() << " streams in the medi source";

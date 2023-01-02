@@ -64,6 +64,35 @@ QNetworkAccessManager::Operation GetProfileInfosLoader::operation() const {
 
 }
 
+CreateProfileLoader::CreateProfileLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CreateProfileParams>(apiClient) {}
+
+QString CreateProfileLoader::path(const CreateProfileParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Dlna/Profiles");
+}
+
+QUrlQuery CreateProfileLoader::query(const CreateProfileParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray CreateProfileLoader::body(const CreateProfileParams &params) const {
+	return Support::toString<QSharedPointer<DeviceProfile>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation CreateProfileLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetProfileLoader::GetProfileLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<DeviceProfile, GetProfileParams>(apiClient) {}
 
@@ -90,6 +119,64 @@ QByteArray GetProfileLoader::body(const GetProfileParams &params) const {
 QNetworkAccessManager::Operation GetProfileLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+DeleteProfileLoader::DeleteProfileLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteProfileParams>(apiClient) {}
+
+QString DeleteProfileLoader::path(const DeleteProfileParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Dlna/Profiles/") + Support::toString< QString>(params.profileId()) ;
+}
+
+QUrlQuery DeleteProfileLoader::query(const DeleteProfileParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DeleteProfileLoader::body(const DeleteProfileParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteProfileLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+UpdateProfileLoader::UpdateProfileLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateProfileParams>(apiClient) {}
+
+QString UpdateProfileLoader::path(const UpdateProfileParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Dlna/Profiles/") + Support::toString< QString>(params.profileId()) ;
+}
+
+QUrlQuery UpdateProfileLoader::query(const UpdateProfileParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateProfileLoader::body(const UpdateProfileParams &params) const {
+	return Support::toString<QSharedPointer<DeviceProfile>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateProfileLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

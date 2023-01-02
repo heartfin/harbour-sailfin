@@ -188,6 +188,35 @@ QNetworkAccessManager::Operation GetParentPathLoader::operation() const {
 
 }
 
+ValidatePathLoader::ValidatePathLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, ValidatePathParams>(apiClient) {}
+
+QString ValidatePathLoader::path(const ValidatePathParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Environment/ValidatePath");
+}
+
+QUrlQuery ValidatePathLoader::query(const ValidatePathParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray ValidatePathLoader::body(const ValidatePathParams &params) const {
+	return Support::toString<QSharedPointer<ValidatePathDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation ValidatePathLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

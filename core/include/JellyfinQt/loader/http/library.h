@@ -62,6 +62,34 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
+ * @brief Deletes items from the library and filesystem.
+ */
+
+class DeleteItemsLoader : public Jellyfin::Support::HttpLoader<void, DeleteItemsParams> {
+public:
+	explicit DeleteItemsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteItemsParams& parameters) const override;
+	QUrlQuery query(const DeleteItemsParams& parameters) const override;
+	QByteArray body(const DeleteItemsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Deletes an item from the library and filesystem.
+ */
+
+class DeleteItemLoader : public Jellyfin::Support::HttpLoader<void, DeleteItemParams> {
+public:
+	explicit DeleteItemLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteItemParams& parameters) const override;
+	QUrlQuery query(const DeleteItemParams& parameters) const override;
+	QByteArray body(const DeleteItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets similar items.
  */
 
@@ -202,6 +230,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Reports that new movies have been added by an external source.
+ */
+
+class PostUpdatedMediaLoader : public Jellyfin::Support::HttpLoader<void, PostUpdatedMediaParams> {
+public:
+	explicit PostUpdatedMediaLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const PostUpdatedMediaParams& parameters) const override;
+	QUrlQuery query(const PostUpdatedMediaParams& parameters) const override;
+	QByteArray body(const PostUpdatedMediaParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets all user media folders.
  */
 
@@ -216,6 +258,34 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Reports that new movies have been added by an external source.
+ */
+
+class PostAddedMoviesLoader : public Jellyfin::Support::HttpLoader<void, PostAddedMoviesParams> {
+public:
+	explicit PostAddedMoviesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const PostAddedMoviesParams& parameters) const override;
+	QUrlQuery query(const PostAddedMoviesParams& parameters) const override;
+	QByteArray body(const PostAddedMoviesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports that new movies have been added by an external source.
+ */
+
+class PostUpdatedMoviesLoader : public Jellyfin::Support::HttpLoader<void, PostUpdatedMoviesParams> {
+public:
+	explicit PostUpdatedMoviesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const PostUpdatedMoviesParams& parameters) const override;
+	QUrlQuery query(const PostUpdatedMoviesParams& parameters) const override;
+	QByteArray body(const PostUpdatedMoviesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets a list of physical paths from virtual folders.
  */
 
@@ -227,6 +297,48 @@ protected:
 	QString path(const GetPhysicalPathsParams& parameters) const override;
 	QUrlQuery query(const GetPhysicalPathsParams& parameters) const override;
 	QByteArray body(const GetPhysicalPathsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Starts a library scan.
+ */
+
+class RefreshLibraryLoader : public Jellyfin::Support::HttpLoader<void, RefreshLibraryParams> {
+public:
+	explicit RefreshLibraryLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const RefreshLibraryParams& parameters) const override;
+	QUrlQuery query(const RefreshLibraryParams& parameters) const override;
+	QByteArray body(const RefreshLibraryParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports that new episodes of a series have been added by an external source.
+ */
+
+class PostAddedSeriesLoader : public Jellyfin::Support::HttpLoader<void, PostAddedSeriesParams> {
+public:
+	explicit PostAddedSeriesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const PostAddedSeriesParams& parameters) const override;
+	QUrlQuery query(const PostAddedSeriesParams& parameters) const override;
+	QByteArray body(const PostAddedSeriesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports that new episodes of a series have been added by an external source.
+ */
+
+class PostUpdatedSeriesLoader : public Jellyfin::Support::HttpLoader<void, PostUpdatedSeriesParams> {
+public:
+	explicit PostUpdatedSeriesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const PostUpdatedSeriesParams& parameters) const override;
+	QUrlQuery query(const PostUpdatedSeriesParams& parameters) const override;
+	QByteArray body(const PostUpdatedSeriesParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**

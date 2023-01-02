@@ -35,6 +35,47 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+PostLoader::PostLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, PostParams>(apiClient) {}
+
+QString PostLoader::path(const PostParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Refresh");
+}
+
+QUrlQuery PostLoader::query(const PostParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.metadataRefreshModeNull()) {
+		result.addQueryItem("metadataRefreshMode", Support::toString<MetadataRefreshMode>(params.metadataRefreshMode()));
+	}
+	if (!params.imageRefreshModeNull()) {
+		result.addQueryItem("imageRefreshMode", Support::toString<MetadataRefreshMode>(params.imageRefreshMode()));
+	}
+	if (!params.replaceAllMetadataNull()) {
+		result.addQueryItem("replaceAllMetadata", Support::toString<std::optional<bool>>(params.replaceAllMetadata()));
+	}
+	if (!params.replaceAllImagesNull()) {
+		result.addQueryItem("replaceAllImages", Support::toString<std::optional<bool>>(params.replaceAllImages()));
+	}
+	
+	return result;
+}
+
+QByteArray PostLoader::body(const PostParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation PostLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

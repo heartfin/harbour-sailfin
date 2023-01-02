@@ -136,6 +136,36 @@ QNetworkAccessManager::Operation GetPostedPlaybackInfoLoader::operation() const 
 
 }
 
+CloseLiveStreamLoader::CloseLiveStreamLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CloseLiveStreamParams>(apiClient) {}
+
+QString CloseLiveStreamLoader::path(const CloseLiveStreamParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveStreams/Close");
+}
+
+QUrlQuery CloseLiveStreamLoader::query(const CloseLiveStreamParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("liveStreamId", Support::toString<QString>(params.liveStreamId()));
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray CloseLiveStreamLoader::body(const CloseLiveStreamParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation CloseLiveStreamLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 OpenLiveStreamLoader::OpenLiveStreamLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<LiveStreamResponse, OpenLiveStreamParams>(apiClient) {}
 

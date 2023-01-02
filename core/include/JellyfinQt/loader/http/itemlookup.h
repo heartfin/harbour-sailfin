@@ -71,6 +71,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Applies search criteria to an item and refreshes metadata.
+ */
+
+class ApplySearchCriteriaLoader : public Jellyfin::Support::HttpLoader<void, ApplySearchCriteriaParams> {
+public:
+	explicit ApplySearchCriteriaLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const ApplySearchCriteriaParams& parameters) const override;
+	QUrlQuery query(const ApplySearchCriteriaParams& parameters) const override;
+	QByteArray body(const ApplySearchCriteriaParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Get book remote search.
  */
 

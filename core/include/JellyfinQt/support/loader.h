@@ -62,58 +62,16 @@ static const int HTTP_TIMEOUT = 30000; // 30 seconds;
  */
 class LoaderBase : public QObject {
     Q_OBJECT
-signals:
-    /**
-     * @brief Emitted when an error has occurred during loading and no result
-     * is available.
-     */
-    void error(QString message = QString());
-    /**
-     * @brief Emitted when data was successfully loaded.
-     */
-    void ready();
-};
-
-/**
- * Interface describing a way to load items. Used to abstract away
- * the difference between loading from a cache or loading over the network.
- *
- * To implement this class, implement prepareLoad() and load(). These are always called
- * in the same order, but prepareLoad() must always be called on the same thread as the
- * m_apiClient, while load() may be called on another thread.
- *
- * @note: Loaders should NEVER call load() again while load() is running on another
- * thread or change the apiClient while running. This will result in undefined behaviour.
- * Please use a Mutex to enforce this.
- *
- * @tparam R the type of data that should be fetched, R for result.
- * @tparam P the type of paramaters given, to determine which resource should
- *           be loaded.
- */
-template <typename R, typename P>
-class Loader : public LoaderBase {
-public:
-    explicit Loader(ApiClient *apiClient)
+protected:
+    explicit LoaderBase(ApiClient *apiClient)
         : m_apiClient(apiClient) {}
 
+public:
     /**
      * @brief load Loads the given resource asynchronously.
      */
     virtual void load() {
         throw LoadException(QStringLiteral("Loader not set"));
-    }
-
-    /**
-     * @brief Retrieves the loaded resource. Only valid after the ready signal has been emitted.
-     *
-     * @return The loaded resource.
-     */
-    R result() const {
-        return m_result.value();
-    }
-
-    bool hasResult() const {
-        return m_result;
     }
 
     /**
@@ -136,6 +94,61 @@ public:
     void setApiClient(ApiClient *newApiClient) { m_apiClient = newApiClient; }
     ApiClient *apiClient() const { return m_apiClient; }
 
+signals:
+    /**
+     * @brief Emitted when an error has occurred during loading and no result
+     * is available.
+     */
+    void error(QString message = QString());
+    /**
+     * @brief Emitted when data was successfully loaded.
+     */
+    void ready();
+protected:
+    Jellyfin::ApiClient *m_apiClient;
+    bool m_isRunning = false;
+
+    void stopWithError(QString message = QString()) {
+        m_isRunning = false;
+        emit this->error(message);
+    }
+};
+
+/**
+ * Interface describing a way to load items. Used to abstract away
+ * the difference between loading from a cache or loading over the network.
+ *
+ * To implement this class, implement prepareLoad() and load(). These are always called
+ * in the same order, but prepareLoad() must always be called on the same thread as the
+ * m_apiClient, while load() may be called on another thread.
+ *
+ * @note: Loaders should NEVER call load() again while load() is running on another
+ * thread or change the apiClient while running. This will result in undefined behaviour.
+ * Please use a Mutex to enforce this.
+ *
+ * @tparam R the type of data that should be fetched, R for result.
+ * @tparam P the type of paramaters given, to determine which resource should
+ *           be loaded.
+ */
+template <typename R, typename P>
+class Loader : public LoaderBase {
+public:
+    using ResultType = std::optional<R>;
+    explicit Loader(ApiClient *apiClient)
+        : LoaderBase(apiClient) {}
+
+    /**
+     * @brief Retrieves the loaded resource. Only valid after the ready signal has been emitted.
+     *
+     * @return The loaded resource.
+     */
+    R result() const {
+        return m_result.value();
+    }
+
+    bool hasResult() const {
+        return m_result;
+    }
     /**
      * @brief Sets the parameters for this loader.
      * @param parameters The parameters to set
@@ -146,26 +159,112 @@ public:
     void setParameters(const P &parameters) {
         m_parameters = parameters;
     }
-protected:
-    Jellyfin::ApiClient *m_apiClient;
-    std::optional<P> m_parameters;
-    std::optional<R> m_result;
-    bool m_isRunning = false;
 
-    void stopWithError(QString message = QString()) {
-        m_isRunning = false;
-        emit this->error(message);
+protected:
+    std::optional<P> m_parameters;
+    ResultType m_result;
+
+    ResultType createFailureResult() {
+        return std::nullopt;
+    }
+
+    ResultType createSuccessResult(R &&result) {
+        return std::make_optional<R>(result);
+    }
+
+    static R createDummyResponse() {
+        return fromJsonValue<R>(QJsonValue());
+    }
+
+};
+
+template <typename P>
+class Loader<void, P> : public LoaderBase {
+public:
+    using ResultType = bool;
+    explicit Loader(ApiClient *apiClient)
+        : LoaderBase(apiClient) {}
+
+    void result() const { }
+
+    bool hasResult() const {
+        return m_result;
+    }
+    /**
+     * @brief Sets the parameters for this loader.
+     * @param parameters The parameters to set
+     *
+     * This method will copy the parameters. The parameters must have a
+     * copy constructor.
+     */
+    void setParameters(const P &parameters) {
+        m_parameters = parameters;
+    }
+
+protected:
+    std::optional<P> m_parameters;
+    ResultType m_result;
+
+    ResultType createFailureResult() {
+        return false;
+    }
+
+    ResultType createSuccessResult(void) {
+        return true;
+    }
+
+    static void createDummyResponse() { }
+};
+
+template<typename R, typename P>
+class HttpLoaderBase : public Loader<R, P> {
+public:
+    explicit HttpLoaderBase(Jellyfin::ApiClient *apiClient)
+        : Loader<R, P> (apiClient) {}
+
+    typename Loader<R, P>::ResultType parseResponse(int /*statusCode*/, QByteArray response) {
+        QJsonParseError error;
+        QJsonDocument document = QJsonDocument::fromJson(response, &error);
+        if (error.error != QJsonParseError::NoError) {
+            qWarning() << response;
+            this->stopWithError(error.errorString().toLocal8Bit().constData());
+        }
+        if (document.isNull() || document.isEmpty()) {
+            this->stopWithError(QStringLiteral("Unexpected empty JSON response"));
+            return this->createFailureResult();
+        } else if (document.isArray()) {
+            return this->createSuccessResult(fromJsonValue<R>(document.array()));
+        } else if (document.isObject()){
+            return this->createSuccessResult(fromJsonValue<R>(document.object()));
+        } else {
+            this->stopWithError(QStringLiteral("Unexpected JSON response"));
+            return this->createFailureResult();
+        }
+    }
+
+};
+
+// Specialisation for void result
+template<typename P>
+class HttpLoaderBase<void, P> : public Loader<void, P> {
+public:
+    explicit HttpLoaderBase(Jellyfin::ApiClient *apiClient)
+        : Loader<void, P> (apiClient) {}
+
+    typename Loader<void, P>::ResultType parseResponse(int statusCode, QByteArray response) {
+        return statusCode == 204;
     }
 };
+
 
 /**
  * Implementation of Loader that loads Items over HTTP
  */
 template <typename R, typename P>
-class HttpLoader : public Loader<R, P> {
+class HttpLoader : public HttpLoaderBase<R, P> {
 public:
     explicit HttpLoader(Jellyfin::ApiClient *apiClient)
-        : Loader<R, P> (apiClient) {
+        : HttpLoaderBase<R, P> (apiClient) {
         this->connect(&m_parsedWatcher, &QFutureWatcher<std::optional<R>>::finished, this, &HttpLoader<R, P>::onResponseParsed);
     }
 
@@ -221,7 +320,7 @@ protected:
     virtual QNetworkAccessManager::Operation operation() const = 0;
 private:
     QNetworkReply *m_reply = nullptr;
-    QFutureWatcher<std::optional<R>> m_parsedWatcher;
+    QFutureWatcher<typename Loader<R, P>::ResultType> m_parsedWatcher;
 
     void onRequestFinished() {
         if (m_reply->error() != QNetworkReply::NoError) {
@@ -229,38 +328,32 @@ private:
             m_parsedWatcher.cancel();
             //: An HTTP has occurred. First argument is replaced by QNetworkReply->errorString()
             this->stopWithError(QStringLiteral("HTTP error: %1").arg(m_reply->errorString()));
+            return;
         }
         QByteArray array = m_reply->readAll();
+        int statusCode = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         m_reply->deleteLater();
         m_reply = nullptr;
-        m_parsedWatcher.setFuture(QtConcurrent::run(this, &HttpLoader<R, P>::parseResponse, array));
-    }
-
-    std::optional<R> parseResponse(QByteArray response) {
-        QJsonParseError error;
-        QJsonDocument document = QJsonDocument::fromJson(response, &error);
-        if (error.error != QJsonParseError::NoError) {
-            qWarning() << response;
-            this->stopWithError(error.errorString().toLocal8Bit().constData());
-        }
-        if (document.isNull() || document.isEmpty()) {
-            this->stopWithError(QStringLiteral("Unexpected empty JSON response"));
-            return std::nullopt;
-        } else if (document.isArray()) {
-            return std::make_optional<R>(fromJsonValue<R>(document.array()));
-        } else if (document.isObject()){
-            return std::make_optional<R>(fromJsonValue<R>(document.object()));
-        } else {
-            this->stopWithError(QStringLiteral("Unexpected JSON response"));
-            return std::nullopt;
-        }
+        /*m_parsedWatcher.setFuture(QtConcurrent::run([this, statusCode, array]() {
+            return this->parseResponse(statusCode, array);
+        }));*/
+        m_parsedWatcher.setFuture(
+                    QtConcurrent::run<typename HttpLoader<R, P>::ResultType, // Result
+                                      HttpLoader<R, P>,                      // class
+                                      int, int,                              // Argument 1
+                                      QByteArray, QByteArray>                // Argument 2
+                                        (this, &HttpLoader<R, P>::parseResponse, statusCode, array)
+                    );
     }
 
     void onResponseParsed() {
         Q_ASSERT(m_parsedWatcher.isFinished());
         try {
-            if (m_parsedWatcher.result().has_value()) {
-                this->m_result = m_parsedWatcher.result().value();
+            /* In case the result is an optional, it invokes the bool cast of std::optional, checking
+               if it has a value.
+               In case the result is a boolean, it just checks the boolean */
+            if (m_parsedWatcher.result()) {
+                this->m_result = m_parsedWatcher.result();
                 this->m_isRunning = false;
                 emit this->ready();
             } else {

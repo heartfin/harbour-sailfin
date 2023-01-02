@@ -63,6 +63,34 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Adds items to a playlist.
+ */
+
+class AddToPlaylistLoader : public Jellyfin::Support::HttpLoader<void, AddToPlaylistParams> {
+public:
+	explicit AddToPlaylistLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const AddToPlaylistParams& parameters) const override;
+	QUrlQuery query(const AddToPlaylistParams& parameters) const override;
+	QByteArray body(const AddToPlaylistParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Removes items from a playlist.
+ */
+
+class RemoveFromPlaylistLoader : public Jellyfin::Support::HttpLoader<void, RemoveFromPlaylistParams> {
+public:
+	explicit RemoveFromPlaylistLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const RemoveFromPlaylistParams& parameters) const override;
+	QUrlQuery query(const RemoveFromPlaylistParams& parameters) const override;
+	QByteArray body(const RemoveFromPlaylistParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets the original items of a playlist.
  */
 
@@ -74,6 +102,20 @@ protected:
 	QString path(const GetPlaylistItemsParams& parameters) const override;
 	QUrlQuery query(const GetPlaylistItemsParams& parameters) const override;
 	QByteArray body(const GetPlaylistItemsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Moves a playlist item.
+ */
+
+class MoveItemLoader : public Jellyfin::Support::HttpLoader<void, MoveItemParams> {
+public:
+	explicit MoveItemLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const MoveItemParams& parameters) const override;
+	QUrlQuery query(const MoveItemParams& parameters) const override;
+	QByteArray body(const MoveItemParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

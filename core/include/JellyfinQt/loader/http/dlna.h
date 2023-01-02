@@ -64,6 +64,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Creates a profile.
+ */
+
+class CreateProfileLoader : public Jellyfin::Support::HttpLoader<void, CreateProfileParams> {
+public:
+	explicit CreateProfileLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CreateProfileParams& parameters) const override;
+	QUrlQuery query(const CreateProfileParams& parameters) const override;
+	QByteArray body(const CreateProfileParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets a single profile.
  */
 
@@ -75,6 +89,34 @@ protected:
 	QString path(const GetProfileParams& parameters) const override;
 	QUrlQuery query(const GetProfileParams& parameters) const override;
 	QByteArray body(const GetProfileParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Deletes a profile.
+ */
+
+class DeleteProfileLoader : public Jellyfin::Support::HttpLoader<void, DeleteProfileParams> {
+public:
+	explicit DeleteProfileLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteProfileParams& parameters) const override;
+	QUrlQuery query(const DeleteProfileParams& parameters) const override;
+	QByteArray body(const DeleteProfileParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a profile.
+ */
+
+class UpdateProfileLoader : public Jellyfin::Support::HttpLoader<void, UpdateProfileParams> {
+public:
+	explicit UpdateProfileLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateProfileParams& parameters) const override;
+	QUrlQuery query(const UpdateProfileParams& parameters) const override;
+	QByteArray body(const UpdateProfileParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**

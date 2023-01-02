@@ -96,6 +96,93 @@ QNetworkAccessManager::Operation SearchRemoteSubtitlesLoader::operation() const 
 
 }
 
+DownloadRemoteSubtitlesLoader::DownloadRemoteSubtitlesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DownloadRemoteSubtitlesParams>(apiClient) {}
+
+QString DownloadRemoteSubtitlesLoader::path(const DownloadRemoteSubtitlesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/RemoteSearch/Subtitles/") + Support::toString< QString>(params.subtitleId()) ;
+}
+
+QUrlQuery DownloadRemoteSubtitlesLoader::query(const DownloadRemoteSubtitlesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DownloadRemoteSubtitlesLoader::body(const DownloadRemoteSubtitlesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DownloadRemoteSubtitlesLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+UploadSubtitleLoader::UploadSubtitleLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UploadSubtitleParams>(apiClient) {}
+
+QString UploadSubtitleLoader::path(const UploadSubtitleParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Videos/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Subtitles");
+}
+
+QUrlQuery UploadSubtitleLoader::query(const UploadSubtitleParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UploadSubtitleLoader::body(const UploadSubtitleParams &params) const {
+	return Support::toString<QSharedPointer<UploadSubtitleDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UploadSubtitleLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+DeleteSubtitleLoader::DeleteSubtitleLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteSubtitleParams>(apiClient) {}
+
+QString DeleteSubtitleLoader::path(const DeleteSubtitleParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Videos/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Subtitles/") + Support::toString< qint32>(params.index()) ;
+}
+
+QUrlQuery DeleteSubtitleLoader::query(const DeleteSubtitleParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DeleteSubtitleLoader::body(const DeleteSubtitleParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteSubtitleLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

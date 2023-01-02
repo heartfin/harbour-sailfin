@@ -63,6 +63,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Updates application configuration.
+ */
+
+class UpdateConfigurationLoader : public Jellyfin::Support::HttpLoader<void, UpdateConfigurationParams> {
+public:
+	explicit UpdateConfigurationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateConfigurationParams& parameters) const override;
+	QUrlQuery query(const UpdateConfigurationParams& parameters) const override;
+	QByteArray body(const UpdateConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets a named configuration.
  */
 
@@ -77,6 +91,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Updates named configuration.
+ */
+
+class UpdateNamedConfigurationLoader : public Jellyfin::Support::HttpLoader<void, UpdateNamedConfigurationParams> {
+public:
+	explicit UpdateNamedConfigurationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateNamedConfigurationParams& parameters) const override;
+	QUrlQuery query(const UpdateNamedConfigurationParams& parameters) const override;
+	QByteArray body(const UpdateNamedConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets a default MetadataOptions object.
  */
 
@@ -88,6 +116,20 @@ protected:
 	QString path(const GetDefaultMetadataOptionsParams& parameters) const override;
 	QUrlQuery query(const GetDefaultMetadataOptionsParams& parameters) const override;
 	QByteArray body(const GetDefaultMetadataOptionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates the path to the media encoder.
+ */
+
+class UpdateMediaEncoderPathLoader : public Jellyfin::Support::HttpLoader<void, UpdateMediaEncoderPathParams> {
+public:
+	explicit UpdateMediaEncoderPathLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateMediaEncoderPathParams& parameters) const override;
+	QUrlQuery query(const UpdateMediaEncoderPathParams& parameters) const override;
+	QByteArray body(const UpdateMediaEncoderPathParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

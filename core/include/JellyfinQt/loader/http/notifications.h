@@ -65,6 +65,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Sets notifications as read.
+ */
+
+class SetReadLoader : public Jellyfin::Support::HttpLoader<void, SetReadParams> {
+public:
+	explicit SetReadLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const SetReadParams& parameters) const override;
+	QUrlQuery query(const SetReadParams& parameters) const override;
+	QByteArray body(const SetReadParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets a user's notification summary.
  */
 
@@ -76,6 +90,34 @@ protected:
 	QString path(const GetNotificationsSummaryParams& parameters) const override;
 	QUrlQuery query(const GetNotificationsSummaryParams& parameters) const override;
 	QByteArray body(const GetNotificationsSummaryParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Sets notifications as unread.
+ */
+
+class SetUnreadLoader : public Jellyfin::Support::HttpLoader<void, SetUnreadParams> {
+public:
+	explicit SetUnreadLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const SetUnreadParams& parameters) const override;
+	QUrlQuery query(const SetUnreadParams& parameters) const override;
+	QByteArray body(const SetUnreadParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Sends a notification to all admins.
+ */
+
+class CreateAdminNotificationLoader : public Jellyfin::Support::HttpLoader<void, CreateAdminNotificationParams> {
+public:
+	explicit CreateAdminNotificationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CreateAdminNotificationParams& parameters) const override;
+	QUrlQuery query(const CreateAdminNotificationParams& parameters) const override;
+	QByteArray body(const CreateAdminNotificationParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**

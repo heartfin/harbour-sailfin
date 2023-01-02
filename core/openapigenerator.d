@@ -457,7 +457,11 @@ void generateFileForEndpoints(ref const Node[] endpointNodes,
 						}
 					}
 				}
-				}
+			}
+			if (codeNo == 204 /* No content */) {
+				endpoint.resultType = "void";
+				endpoint.hasSuccessResponse = true;
+			}
 		}
 		
 		if ("requestBody" in endpointNode) {

@@ -78,6 +78,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Closes a media source.
+ */
+
+class CloseLiveStreamLoader : public Jellyfin::Support::HttpLoader<void, CloseLiveStreamParams> {
+public:
+	explicit CloseLiveStreamLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CloseLiveStreamParams& parameters) const override;
+	QUrlQuery query(const CloseLiveStreamParams& parameters) const override;
+	QByteArray body(const CloseLiveStreamParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Opens a media source.
  */
 

@@ -35,6 +35,35 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+ActivateLoader::ActivateLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, ActivateParams>(apiClient) {}
+
+QString ActivateLoader::path(const ActivateParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/QuickConnect/Activate");
+}
+
+QUrlQuery ActivateLoader::query(const ActivateParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray ActivateLoader::body(const ActivateParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation ActivateLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 AuthorizeLoader::AuthorizeLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<bool, AuthorizeParams>(apiClient) {}
 
@@ -60,6 +89,38 @@ QByteArray AuthorizeLoader::body(const AuthorizeParams &params) const {
 }
 
 QNetworkAccessManager::Operation AuthorizeLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+AvailableLoader::AvailableLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, AvailableParams>(apiClient) {}
+
+QString AvailableLoader::path(const AvailableParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/QuickConnect/Available");
+}
+
+QUrlQuery AvailableLoader::query(const AvailableParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.statusNull()) {
+		result.addQueryItem("status", Support::toString<QuickConnectState>(params.status()));
+	}
+	
+	return result;
+}
+
+QByteArray AvailableLoader::body(const AvailableParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation AvailableLoader::operation() const {
 	// HTTP method Post
 	return QNetworkAccessManager::PostOperation;
 

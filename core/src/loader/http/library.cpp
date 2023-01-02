@@ -35,6 +35,67 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+DeleteItemsLoader::DeleteItemsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteItemsParams>(apiClient) {}
+
+QString DeleteItemsLoader::path(const DeleteItemsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items");
+}
+
+QUrlQuery DeleteItemsLoader::query(const DeleteItemsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.idsNull()) {
+		result.addQueryItem("ids", Support::toString<QStringList>(params.ids()));
+	}
+	
+	return result;
+}
+
+QByteArray DeleteItemsLoader::body(const DeleteItemsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteItemsLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+DeleteItemLoader::DeleteItemLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteItemParams>(apiClient) {}
+
+QString DeleteItemLoader::path(const DeleteItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) ;
+}
+
+QUrlQuery DeleteItemLoader::query(const DeleteItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DeleteItemLoader::body(const DeleteItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteItemLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 GetSimilarAlbumsLoader::GetSimilarAlbumsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetSimilarAlbumsParams>(apiClient) {}
 
@@ -394,6 +455,35 @@ QNetworkAccessManager::Operation GetLibraryOptionsInfoLoader::operation() const 
 
 }
 
+PostUpdatedMediaLoader::PostUpdatedMediaLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, PostUpdatedMediaParams>(apiClient) {}
+
+QString PostUpdatedMediaLoader::path(const PostUpdatedMediaParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Library/Media/Updated");
+}
+
+QUrlQuery PostUpdatedMediaLoader::query(const PostUpdatedMediaParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray PostUpdatedMediaLoader::body(const PostUpdatedMediaParams &params) const {
+	return Support::toString<QList<MediaUpdateInfoDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation PostUpdatedMediaLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetMediaFoldersLoader::GetMediaFoldersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetMediaFoldersParams>(apiClient) {}
 
@@ -426,6 +516,76 @@ QNetworkAccessManager::Operation GetMediaFoldersLoader::operation() const {
 
 }
 
+PostAddedMoviesLoader::PostAddedMoviesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, PostAddedMoviesParams>(apiClient) {}
+
+QString PostAddedMoviesLoader::path(const PostAddedMoviesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Library/Movies/Added");
+}
+
+QUrlQuery PostAddedMoviesLoader::query(const PostAddedMoviesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.tmdbIdNull()) {
+		result.addQueryItem("tmdbId", Support::toString<QString>(params.tmdbId()));
+	}
+	if (!params.imdbIdNull()) {
+		result.addQueryItem("imdbId", Support::toString<QString>(params.imdbId()));
+	}
+	
+	return result;
+}
+
+QByteArray PostAddedMoviesLoader::body(const PostAddedMoviesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation PostAddedMoviesLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+PostUpdatedMoviesLoader::PostUpdatedMoviesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, PostUpdatedMoviesParams>(apiClient) {}
+
+QString PostUpdatedMoviesLoader::path(const PostUpdatedMoviesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Library/Movies/Updated");
+}
+
+QUrlQuery PostUpdatedMoviesLoader::query(const PostUpdatedMoviesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.tmdbIdNull()) {
+		result.addQueryItem("tmdbId", Support::toString<QString>(params.tmdbId()));
+	}
+	if (!params.imdbIdNull()) {
+		result.addQueryItem("imdbId", Support::toString<QString>(params.imdbId()));
+	}
+	
+	return result;
+}
+
+QByteArray PostUpdatedMoviesLoader::body(const PostUpdatedMoviesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation PostUpdatedMoviesLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetPhysicalPathsLoader::GetPhysicalPathsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QStringList, GetPhysicalPathsParams>(apiClient) {}
 
@@ -452,6 +612,99 @@ QByteArray GetPhysicalPathsLoader::body(const GetPhysicalPathsParams &params) co
 QNetworkAccessManager::Operation GetPhysicalPathsLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+RefreshLibraryLoader::RefreshLibraryLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, RefreshLibraryParams>(apiClient) {}
+
+QString RefreshLibraryLoader::path(const RefreshLibraryParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Library/Refresh");
+}
+
+QUrlQuery RefreshLibraryLoader::query(const RefreshLibraryParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray RefreshLibraryLoader::body(const RefreshLibraryParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation RefreshLibraryLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
+PostAddedSeriesLoader::PostAddedSeriesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, PostAddedSeriesParams>(apiClient) {}
+
+QString PostAddedSeriesLoader::path(const PostAddedSeriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Library/Series/Added");
+}
+
+QUrlQuery PostAddedSeriesLoader::query(const PostAddedSeriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.tvdbIdNull()) {
+		result.addQueryItem("tvdbId", Support::toString<QString>(params.tvdbId()));
+	}
+	
+	return result;
+}
+
+QByteArray PostAddedSeriesLoader::body(const PostAddedSeriesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation PostAddedSeriesLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+PostUpdatedSeriesLoader::PostUpdatedSeriesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, PostUpdatedSeriesParams>(apiClient) {}
+
+QString PostUpdatedSeriesLoader::path(const PostUpdatedSeriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Library/Series/Updated");
+}
+
+QUrlQuery PostUpdatedSeriesLoader::query(const PostUpdatedSeriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.tvdbIdNull()) {
+		result.addQueryItem("tvdbId", Support::toString<QString>(params.tvdbId()));
+	}
+	
+	return result;
+}
+
+QByteArray PostUpdatedSeriesLoader::body(const PostUpdatedSeriesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation PostUpdatedSeriesLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

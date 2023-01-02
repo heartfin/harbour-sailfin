@@ -66,6 +66,37 @@ QNetworkAccessManager::Operation GetDisplayPreferencesLoader::operation() const 
 
 }
 
+UpdateDisplayPreferencesLoader::UpdateDisplayPreferencesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateDisplayPreferencesParams>(apiClient) {}
+
+QString UpdateDisplayPreferencesLoader::path(const UpdateDisplayPreferencesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/DisplayPreferences/") + Support::toString< QString>(params.displayPreferencesId()) ;
+}
+
+QUrlQuery UpdateDisplayPreferencesLoader::query(const UpdateDisplayPreferencesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	result.addQueryItem("client", Support::toString<QString>(params.client()));
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateDisplayPreferencesLoader::body(const UpdateDisplayPreferencesParams &params) const {
+	return Support::toString<QSharedPointer<DisplayPreferencesDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateDisplayPreferencesLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

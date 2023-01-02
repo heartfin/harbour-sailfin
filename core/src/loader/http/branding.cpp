@@ -65,7 +65,7 @@ QNetworkAccessManager::Operation GetBrandingOptionsLoader::operation() const {
 }
 
 GetBrandingCssLoader::GetBrandingCssLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<QString, GetBrandingCssParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<void, GetBrandingCssParams>(apiClient) {}
 
 QString GetBrandingCssLoader::path(const GetBrandingCssParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -94,7 +94,7 @@ QNetworkAccessManager::Operation GetBrandingCssLoader::operation() const {
 }
 
 GetBrandingCss_2Loader::GetBrandingCss_2Loader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<QString, GetBrandingCss_2Params>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<void, GetBrandingCss_2Params>(apiClient) {}
 
 QString GetBrandingCss_2Loader::path(const GetBrandingCss_2Params &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings

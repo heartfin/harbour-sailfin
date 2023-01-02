@@ -64,6 +64,38 @@ QNetworkAccessManager::Operation GetExternalIdInfosLoader::operation() const {
 
 }
 
+ApplySearchCriteriaLoader::ApplySearchCriteriaLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, ApplySearchCriteriaParams>(apiClient) {}
+
+QString ApplySearchCriteriaLoader::path(const ApplySearchCriteriaParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/RemoteSearch/Apply/") + Support::toString< QString>(params.itemId()) ;
+}
+
+QUrlQuery ApplySearchCriteriaLoader::query(const ApplySearchCriteriaParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.replaceAllImagesNull()) {
+		result.addQueryItem("replaceAllImages", Support::toString<std::optional<bool>>(params.replaceAllImages()));
+	}
+	
+	return result;
+}
+
+QByteArray ApplySearchCriteriaLoader::body(const ApplySearchCriteriaParams &params) const {
+	return Support::toString<QSharedPointer<RemoteSearchResult>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation ApplySearchCriteriaLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetBookRemoteSearchResultsLoader::GetBookRemoteSearchResultsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<RemoteSearchResult>, GetBookRemoteSearchResultsParams>(apiClient) {}
 

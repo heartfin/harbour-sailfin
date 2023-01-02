@@ -64,6 +64,65 @@ QNetworkAccessManager::Operation GetKeysLoader::operation() const {
 
 }
 
+CreateKeyLoader::CreateKeyLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CreateKeyParams>(apiClient) {}
+
+QString CreateKeyLoader::path(const CreateKeyParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Auth/Keys");
+}
+
+QUrlQuery CreateKeyLoader::query(const CreateKeyParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("app", Support::toString<QString>(params.app()));
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray CreateKeyLoader::body(const CreateKeyParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation CreateKeyLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+RevokeKeyLoader::RevokeKeyLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, RevokeKeyParams>(apiClient) {}
+
+QString RevokeKeyLoader::path(const RevokeKeyParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Auth/Keys/") + Support::toString< QString>(params.key()) ;
+}
+
+QUrlQuery RevokeKeyLoader::query(const RevokeKeyParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray RevokeKeyLoader::body(const RevokeKeyParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation RevokeKeyLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -172,6 +172,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Delete listing provider.
+ */
+
+class DeleteListingProviderLoader : public Jellyfin::Support::HttpLoader<void, DeleteListingProviderParams> {
+public:
+	explicit DeleteListingProviderLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteListingProviderParams& parameters) const override;
+	QUrlQuery query(const DeleteListingProviderParams& parameters) const override;
+	QByteArray body(const DeleteListingProviderParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets default listings provider info.
  */
 
@@ -298,6 +312,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Deletes a live tv recording.
+ */
+
+class DeleteRecordingLoader : public Jellyfin::Support::HttpLoader<void, DeleteRecordingParams> {
+public:
+	explicit DeleteRecordingLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteRecordingParams& parameters) const override;
+	QUrlQuery query(const DeleteRecordingParams& parameters) const override;
+	QByteArray body(const DeleteRecordingParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets recording folders.
  */
 
@@ -354,6 +382,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Creates a live tv series timer.
+ */
+
+class CreateSeriesTimerLoader : public Jellyfin::Support::HttpLoader<void, CreateSeriesTimerParams> {
+public:
+	explicit CreateSeriesTimerLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CreateSeriesTimerParams& parameters) const override;
+	QUrlQuery query(const CreateSeriesTimerParams& parameters) const override;
+	QByteArray body(const CreateSeriesTimerParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets a live tv series timer.
  */
 
@@ -365,6 +407,34 @@ protected:
 	QString path(const GetSeriesTimerParams& parameters) const override;
 	QUrlQuery query(const GetSeriesTimerParams& parameters) const override;
 	QByteArray body(const GetSeriesTimerParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Cancels a live tv series timer.
+ */
+
+class CancelSeriesTimerLoader : public Jellyfin::Support::HttpLoader<void, CancelSeriesTimerParams> {
+public:
+	explicit CancelSeriesTimerLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CancelSeriesTimerParams& parameters) const override;
+	QUrlQuery query(const CancelSeriesTimerParams& parameters) const override;
+	QByteArray body(const CancelSeriesTimerParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a live tv series timer.
+ */
+
+class UpdateSeriesTimerLoader : public Jellyfin::Support::HttpLoader<void, UpdateSeriesTimerParams> {
+public:
+	explicit UpdateSeriesTimerLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateSeriesTimerParams& parameters) const override;
+	QUrlQuery query(const UpdateSeriesTimerParams& parameters) const override;
+	QByteArray body(const UpdateSeriesTimerParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
@@ -382,6 +452,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Creates a live tv timer.
+ */
+
+class CreateTimerLoader : public Jellyfin::Support::HttpLoader<void, CreateTimerParams> {
+public:
+	explicit CreateTimerLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CreateTimerParams& parameters) const override;
+	QUrlQuery query(const CreateTimerParams& parameters) const override;
+	QByteArray body(const CreateTimerParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets a timer.
  */
 
@@ -393,6 +477,34 @@ protected:
 	QString path(const GetTimerParams& parameters) const override;
 	QUrlQuery query(const GetTimerParams& parameters) const override;
 	QByteArray body(const GetTimerParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Cancels a live tv timer.
+ */
+
+class CancelTimerLoader : public Jellyfin::Support::HttpLoader<void, CancelTimerParams> {
+public:
+	explicit CancelTimerLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CancelTimerParams& parameters) const override;
+	QUrlQuery query(const CancelTimerParams& parameters) const override;
+	QByteArray body(const CancelTimerParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a live tv timer.
+ */
+
+class UpdateTimerLoader : public Jellyfin::Support::HttpLoader<void, UpdateTimerParams> {
+public:
+	explicit UpdateTimerLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateTimerParams& parameters) const override;
+	QUrlQuery query(const UpdateTimerParams& parameters) const override;
+	QByteArray body(const UpdateTimerParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
@@ -424,6 +536,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Deletes a tuner host.
+ */
+
+class DeleteTunerHostLoader : public Jellyfin::Support::HttpLoader<void, DeleteTunerHostParams> {
+public:
+	explicit DeleteTunerHostLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteTunerHostParams& parameters) const override;
+	QUrlQuery query(const DeleteTunerHostParams& parameters) const override;
+	QByteArray body(const DeleteTunerHostParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Get tuner host types.
  */
 
@@ -435,6 +561,20 @@ protected:
 	QString path(const GetTunerHostTypesParams& parameters) const override;
 	QUrlQuery query(const GetTunerHostTypesParams& parameters) const override;
 	QByteArray body(const GetTunerHostTypesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Resets a tv tuner.
+ */
+
+class ResetTunerLoader : public Jellyfin::Support::HttpLoader<void, ResetTunerParams> {
+public:
+	explicit ResetTunerLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const ResetTunerParams& parameters) const override;
+	QUrlQuery query(const ResetTunerParams& parameters) const override;
+	QByteArray body(const ResetTunerParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**

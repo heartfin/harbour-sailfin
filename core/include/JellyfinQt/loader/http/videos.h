@@ -61,6 +61,34 @@ protected:
 	QByteArray body(const GetAdditionalPartParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
+/**
+ * @brief Removes alternate video sources.
+ */
+
+class DeleteAlternateSourcesLoader : public Jellyfin::Support::HttpLoader<void, DeleteAlternateSourcesParams> {
+public:
+	explicit DeleteAlternateSourcesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteAlternateSourcesParams& parameters) const override;
+	QUrlQuery query(const DeleteAlternateSourcesParams& parameters) const override;
+	QByteArray body(const DeleteAlternateSourcesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Merges videos into a single record.
+ */
+
+class MergeVersionsLoader : public Jellyfin::Support::HttpLoader<void, MergeVersionsParams> {
+public:
+	explicit MergeVersionsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const MergeVersionsParams& parameters) const override;
+	QUrlQuery query(const MergeVersionsParams& parameters) const override;
+	QByteArray body(const MergeVersionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

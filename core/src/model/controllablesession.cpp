@@ -5,6 +5,7 @@
 #include "JellyfinQt/loader/http/session.h"
 #include "JellyfinQt/loader/requesttypes.h"
 #include <JellyfinQt/model/playbackmanager.h>
+#include <JellyfinQt/model/remotejellyfinplayback.h>
 
 
 namespace Jellyfin {
@@ -39,13 +40,16 @@ QString LocalSession::userName() const {
 }
 
 PlaybackManager *LocalSession::createPlaybackManager() const {
-    return new LocalPlaybackManager();
+    LocalPlaybackManager *playbackManager = new LocalPlaybackManager();
+    playbackManager->setApiClient(&m_apiClient);
+    return playbackManager;
 }
 
 // ControllableJellyfinSession
-ControllableJellyfinSession::ControllableJellyfinSession(const QSharedPointer<DTO::SessionInfo> info, QObject *parent)
+ControllableJellyfinSession::ControllableJellyfinSession(const QSharedPointer<DTO::SessionInfo> info, ApiClient &apiClient, QObject *parent)
     : ControllableSession(parent),
-      m_data(info) {}
+      m_data(info),
+      m_apiClient(apiClient){}
 
 QString ControllableJellyfinSession::id() const {
     return m_data->jellyfinId();
@@ -68,8 +72,7 @@ QString ControllableJellyfinSession::userName() const {
 }
 
 PlaybackManager * ControllableJellyfinSession::createPlaybackManager() const {
-    // TODO: implement
-    return nullptr;
+    return new RemoteJellyfinPlayback(m_apiClient, m_data->jellyfinId());
 }
 
 RemoteSessionScanner::RemoteSessionScanner(QObject *parent)
@@ -114,7 +117,7 @@ void RemoteJellyfinSessionScanner::startScanning() {
             // Skip this device
             if (it->jellyfinId() == d->apiClient->deviceId()) continue;
 
-            emit sessionFound(new ControllableJellyfinSession(QSharedPointer<DTO::SessionInfo>::create(*it)));
+            emit sessionFound(new ControllableJellyfinSession(QSharedPointer<DTO::SessionInfo>::create(*it), *d->apiClient));
         }
     });
     d->loader->load();

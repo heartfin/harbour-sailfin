@@ -41,8 +41,8 @@ Item::Item(ApiClient *apiClient, QObject *parent)
 }
 
 Item::Item(const DTO::BaseItemDto &data, ApiClient *apiClient, QObject *parent)
-    : DTO::BaseItemDto(data),
-      QObject(parent),
+    : QObject(parent),
+      DTO::BaseItemDto(data),
       m_apiClient(nullptr) {
     setApiClient(apiClient);
 }

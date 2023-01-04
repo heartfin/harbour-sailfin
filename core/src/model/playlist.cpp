@@ -104,6 +104,14 @@ void Playlist::next() {
     emit currentItemChanged();
 }
 
+QList<QSharedPointer<Item>> Playlist::queueAndList() const {
+    QList<QSharedPointer<Item>> result;
+    result.reserve(totalSize());
+    result.append(m_queue.toList());
+    result.append(m_list.toList());
+    return result;
+}
+
 QSharedPointer<const Item> Playlist::listAt(int index) const {
     if (m_shuffler->canShuffleInAdvance()) {
         return m_list.at(m_shuffler->itemAt(index));

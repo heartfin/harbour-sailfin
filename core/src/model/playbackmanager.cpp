@@ -59,7 +59,7 @@ public:
 
     PlayerState m_state;
 
-    Model::Playlist *m_queue = nullptr;
+    Model::Playlist *m_queue;
     int m_queueIndex = 0;
 
     bool m_resumePlayback = false;
@@ -153,6 +153,15 @@ int PlaybackManager::queueIndex() const {
     return d->m_queueIndex;
 }
 
+void PlaybackManager::swap(PlaybackManager &other) {
+    other.queue()->clearList();
+    other.queue()->appendToList(this->queue()->queueAndList());
+    other.playItemInList(this->queue()->queueAndList(), this->queue()->currentItemIndexInList() >= 0
+                                                            ? this->queue()->currentItemIndexInList()
+                                                            : 0);
+    other.seek(position());
+}
+
 void PlaybackManager::playItemId(const QString &id) {}
 
 bool PlaybackManager::resumePlayback() const {
@@ -186,6 +195,12 @@ void PlaybackManager::setSubtitleIndex(int newSubtitleIndex) {
     Q_D(PlaybackManager);
     d->m_subtitleIndex = newSubtitleIndex;
     emit subtitleIndexChanged(newSubtitleIndex);
+}
+
+void PlaybackManager::setItem(QSharedPointer<Item> item) {
+    Q_D(PlaybackManager);
+    d->m_item = item;
+    emit itemChanged();
 }
 
 /*****************************************************************************
@@ -489,10 +504,6 @@ LocalPlaybackManager::LocalPlaybackManager(QObject *parent)
     connect(d->m_mediaPlayer, &Player::errorStringChanged, this, [d]() {
         d->onPlayerError();
     });
-}
-
-void LocalPlaybackManager::swap(PlaybackManager &other) {
-    Q_UNIMPLEMENTED();
 }
 
 Player* LocalPlaybackManager::player() const {

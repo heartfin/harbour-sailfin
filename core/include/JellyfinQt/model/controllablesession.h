@@ -105,7 +105,7 @@ private:
 class ControllableJellyfinSession : public ControllableSession {
     Q_OBJECT
 public:
-    ControllableJellyfinSession(QSharedPointer<DTO::SessionInfo> info, QObject *parent = nullptr);
+    ControllableJellyfinSession(QSharedPointer<DTO::SessionInfo> info, ApiClient &apiClient, QObject *parent = nullptr);
     QString id() const override;
     QString name() const override;
     QString appName() const override;
@@ -114,6 +114,7 @@ public:
     PlaybackManager *createPlaybackManager() const override;
 private:
     QSharedPointer<DTO::SessionInfo> m_data;
+    ApiClient &m_apiClient;
 };
 
 /**

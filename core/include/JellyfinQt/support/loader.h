@@ -334,9 +334,6 @@ private:
         int statusCode = m_reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         m_reply->deleteLater();
         m_reply = nullptr;
-        /*m_parsedWatcher.setFuture(QtConcurrent::run([this, statusCode, array]() {
-            return this->parseResponse(statusCode, array);
-        }));*/
         m_parsedWatcher.setFuture(
                     QtConcurrent::run<typename HttpLoader<R, P>::ResultType, // Result
                                       HttpLoader<R, P>,                      // class

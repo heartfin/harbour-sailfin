@@ -75,25 +75,6 @@ PlaybackManager::PlaybackManager(QObject *parent)
     : QObject(parent) {
     QScopedPointer<PlaybackManagerPrivate> foo(new PlaybackManagerPrivate(this));
     d_ptr.swap(foo);
-
-    Q_D(PlaybackManager);
-    // Set up connections.
-    connect(d->m_impl.data(), &Model::PlaybackManager::positionChanged, this, &PlaybackManager::positionChanged);
-    connect(d->m_impl.data(), &Model::PlaybackManager::durationChanged, this, &PlaybackManager::durationChanged);
-    connect(d->m_impl.data(), &Model::PlaybackManager::hasNextChanged, this, &PlaybackManager::hasNextChanged);
-    connect(d->m_impl.data(), &Model::PlaybackManager::hasPreviousChanged, this, &PlaybackManager::hasPreviousChanged);
-    connect(d->m_impl.data(), &Model::PlaybackManager::seekableChanged, this, &PlaybackManager::seekableChanged);
-    connect(d->m_impl.data(), &Model::PlaybackManager::queueIndexChanged, this, &PlaybackManager::queueIndexChanged);
-    connect(d->m_impl.data(), &Model::PlaybackManager::itemChanged, this, &PlaybackManager::mediaPlayerItemChanged);
-    connect(d->m_impl.data(), &Model::PlaybackManager::playbackStateChanged, this, &PlaybackManager::playbackStateChanged);
-
-    if (auto localImp = qobject_cast<Model::LocalPlaybackManager*>(d->m_impl.data())) {
-        connect(localImp, &Model::LocalPlaybackManager::streamUrlChanged, this, [this](const QUrl& newUrl){
-            emit this->streamUrlChanged(newUrl.toString());
-        });
-        connect(localImp, &Model::LocalPlaybackManager::playMethodChanged, this, &PlaybackManager::playMethodChanged);
-    }
-    connect(d->m_impl.data(), &Model::PlaybackManager::mediaStatusChanged, this, &PlaybackManager::mediaStatusChanged);
 }
 
 PlaybackManager::~PlaybackManager() {
@@ -175,12 +156,61 @@ void PlaybackManager::setControllingSession(QSharedPointer<Model::ControllableSe
 
     qCDebug(playbackManager()) << "Now controlling session " << session->name();
     session->setParent(this);
+
+    if (!d->m_impl.isNull()) {
+        disconnect(d->m_impl.data(), &Model::PlaybackManager::positionChanged, this, &PlaybackManager::positionChanged);
+        disconnect(d->m_impl.data(), &Model::PlaybackManager::durationChanged, this, &PlaybackManager::durationChanged);
+        disconnect(d->m_impl.data(), &Model::PlaybackManager::hasNextChanged, this, &PlaybackManager::hasNextChanged);
+        disconnect(d->m_impl.data(), &Model::PlaybackManager::hasPreviousChanged, this, &PlaybackManager::hasPreviousChanged);
+        disconnect(d->m_impl.data(), &Model::PlaybackManager::seekableChanged, this, &PlaybackManager::seekableChanged);
+        disconnect(d->m_impl.data(), &Model::PlaybackManager::queueIndexChanged, this, &PlaybackManager::queueIndexChanged);
+        disconnect(d->m_impl.data(), &Model::PlaybackManager::itemChanged, this, &PlaybackManager::mediaPlayerItemChanged);
+        disconnect(d->m_impl.data(), &Model::PlaybackManager::playbackStateChanged, this, &PlaybackManager::playbackStateChanged);
+
+        if (auto localImp = qobject_cast<Model::LocalPlaybackManager*>(d->m_impl.data())) {
+            disconnect(localImp, &Model::LocalPlaybackManager::playMethodChanged, this, &PlaybackManager::playMethodChanged);
+        }
+        disconnect(d->m_impl.data(), &Model::PlaybackManager::mediaStatusChanged, this, &PlaybackManager::mediaStatusChanged);
+    }
+
+    Model::PlaybackManager *other = session->createPlaybackManager();
+
+    if (!d->m_impl.isNull()) {
+        bool thisIsLocal  = qobject_cast<Model::LocalPlaybackManager *>(d->m_impl.data()) != nullptr;
+        //bool otherIsLocal = qobject_cast<Model::LocalPlaybackManager *>(other) != nullptr;
+
+        // Stop playing locally when switching to another session
+        if (thisIsLocal) {
+            d->m_impl->stop();
+        }
+    }
+    d->m_displayQueue->setPlaylistModel(other->queue());
+    d->m_impl.reset(other);
     d->m_session.swap(session);
     // TODO: swap out playback manager
     emit controllingSessionChanged();
     emit controllingSessionIdChanged();
     emit controllingSessionNameChanged();
     emit controllingSessionLocalChanged();
+
+    if (other != nullptr) {
+        connect(d->m_impl.data(), &Model::PlaybackManager::positionChanged, this, &PlaybackManager::positionChanged);
+        connect(d->m_impl.data(), &Model::PlaybackManager::durationChanged, this, &PlaybackManager::durationChanged);
+        connect(d->m_impl.data(), &Model::PlaybackManager::hasNextChanged, this, &PlaybackManager::hasNextChanged);
+        connect(d->m_impl.data(), &Model::PlaybackManager::hasPreviousChanged, this, &PlaybackManager::hasPreviousChanged);
+        connect(d->m_impl.data(), &Model::PlaybackManager::seekableChanged, this, &PlaybackManager::seekableChanged);
+        connect(d->m_impl.data(), &Model::PlaybackManager::queueIndexChanged, this, &PlaybackManager::queueIndexChanged);
+        connect(d->m_impl.data(), &Model::PlaybackManager::itemChanged, this, &PlaybackManager::mediaPlayerItemChanged);
+        connect(d->m_impl.data(), &Model::PlaybackManager::playbackStateChanged, this, &PlaybackManager::playbackStateChanged);
+
+        if (auto localImp = qobject_cast<Model::LocalPlaybackManager*>(d->m_impl.data())) {
+            connect(localImp, &Model::LocalPlaybackManager::streamUrlChanged, this, [this](const QUrl& newUrl){
+                emit this->streamUrlChanged(newUrl.toString());
+            });
+            connect(localImp, &Model::LocalPlaybackManager::playMethodChanged, this, &PlaybackManager::playMethodChanged);
+        }
+        connect(d->m_impl.data(), &Model::PlaybackManager::mediaStatusChanged, this, &PlaybackManager::mediaStatusChanged);
+    }
 }
 
 QString PlaybackManager::controllingSessionId() const {

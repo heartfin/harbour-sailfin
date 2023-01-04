@@ -26,20 +26,8 @@ namespace ViewModel {
 
 Playlist::Playlist(Model::Playlist *data, QObject *parent)
     : QAbstractListModel(parent),
-      m_data(data) {
-
-    connect(data, &Model::Playlist::beforeListCleared, this, &Playlist::onBeforePlaylistCleared);
-    connect(data, &Model::Playlist::listCleared, this, &Playlist::onPlaylistCleared);
-    connect(data, &Model::Playlist::beforeItemsAddedToList, this, &Playlist::onBeforeItemsAddedToList);
-    connect(data, &Model::Playlist::beforeItemsAddedToQueue, this, &Playlist::onBeforeItemsAddedToQueue);
-    connect(data, &Model::Playlist::itemsAddedToList, this, &Playlist::onItemsAddedToList);
-    connect(data, &Model::Playlist::itemsAddedToQueue, this, &Playlist::onItemsAddedToQueue);
-    connect(data, &Model::Playlist::beforeItemsRemovedFromList, this, &Playlist::onBeforeItemsRemovedFromList);
-    connect(data, &Model::Playlist::beforeItemsRemovedFromQueue, this, &Playlist::onBeforeItemsRemovedFromQueue);
-    connect(data, &Model::Playlist::itemsRemovedFromList, this, &Playlist::onItemsRemovedFromList);
-    connect(data, &Model::Playlist::itemsRemovedFromQueue, this, &Playlist::onItemsRemovedFromQueue);
-    connect(data, &Model::Playlist::listReshuffled, this, &Playlist::onReshuffled);
-    connect(data, &Model::Playlist::currentItemChanged, this, &Playlist::onPlayingItemChanged);
+      m_data(nullptr) {
+    setPlaylistModel(data);
 }
 
 int Playlist::rowCount(const QModelIndex &parent) const {
@@ -55,6 +43,41 @@ QHash<int, QByteArray> Playlist::roleNames() const {
         {RoleNames::section, "section"},
         {RoleNames::playing, "playing"},
     };
+}
+
+void Playlist::setPlaylistModel(Model::Playlist *data) {
+    if (m_data != nullptr) {
+        disconnect(data, &Model::Playlist::beforeListCleared, this, &Playlist::onBeforePlaylistCleared);
+        disconnect(data, &Model::Playlist::listCleared, this, &Playlist::onPlaylistCleared);
+        disconnect(data, &Model::Playlist::beforeItemsAddedToList, this, &Playlist::onBeforeItemsAddedToList);
+        disconnect(data, &Model::Playlist::beforeItemsAddedToQueue, this, &Playlist::onBeforeItemsAddedToQueue);
+        disconnect(data, &Model::Playlist::itemsAddedToList, this, &Playlist::onItemsAddedToList);
+        disconnect(data, &Model::Playlist::itemsAddedToQueue, this, &Playlist::onItemsAddedToQueue);
+        disconnect(data, &Model::Playlist::beforeItemsRemovedFromList, this, &Playlist::onBeforeItemsRemovedFromList);
+        disconnect(data, &Model::Playlist::beforeItemsRemovedFromQueue, this, &Playlist::onBeforeItemsRemovedFromQueue);
+        disconnect(data, &Model::Playlist::itemsRemovedFromList, this, &Playlist::onItemsRemovedFromList);
+        disconnect(data, &Model::Playlist::itemsRemovedFromQueue, this, &Playlist::onItemsRemovedFromQueue);
+        disconnect(data, &Model::Playlist::listReshuffled, this, &Playlist::onReshuffled);
+        disconnect(data, &Model::Playlist::currentItemChanged, this, &Playlist::onPlayingItemChanged);
+    }
+    beginResetModel();
+    m_data = data;
+    endResetModel();
+
+    if (m_data != nullptr) {
+        connect(data, &Model::Playlist::beforeListCleared, this, &Playlist::onBeforePlaylistCleared);
+        connect(data, &Model::Playlist::listCleared, this, &Playlist::onPlaylistCleared);
+        connect(data, &Model::Playlist::beforeItemsAddedToList, this, &Playlist::onBeforeItemsAddedToList);
+        connect(data, &Model::Playlist::beforeItemsAddedToQueue, this, &Playlist::onBeforeItemsAddedToQueue);
+        connect(data, &Model::Playlist::itemsAddedToList, this, &Playlist::onItemsAddedToList);
+        connect(data, &Model::Playlist::itemsAddedToQueue, this, &Playlist::onItemsAddedToQueue);
+        connect(data, &Model::Playlist::beforeItemsRemovedFromList, this, &Playlist::onBeforeItemsRemovedFromList);
+        connect(data, &Model::Playlist::beforeItemsRemovedFromQueue, this, &Playlist::onBeforeItemsRemovedFromQueue);
+        connect(data, &Model::Playlist::itemsRemovedFromList, this, &Playlist::onItemsRemovedFromList);
+        connect(data, &Model::Playlist::itemsRemovedFromQueue, this, &Playlist::onItemsRemovedFromQueue);
+        connect(data, &Model::Playlist::listReshuffled, this, &Playlist::onReshuffled);
+        connect(data, &Model::Playlist::currentItemChanged, this, &Playlist::onPlayingItemChanged);
+    }
 };
 
 QVariant Playlist::data(const QModelIndex &index, int role) const {

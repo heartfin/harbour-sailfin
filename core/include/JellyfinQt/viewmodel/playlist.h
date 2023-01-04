@@ -71,6 +71,7 @@ public:
     QVariant data(const QModelIndex &parent, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex &parent) const override;
     QHash<int, QByteArray> roleNames() const override;
+    void setPlaylistModel(Model::Playlist *data);
 
 
 private slots:

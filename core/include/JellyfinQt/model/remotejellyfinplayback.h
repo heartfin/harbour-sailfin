@@ -20,10 +20,17 @@
 #define JELLYFIN_MODEL_REMOTEJELLYFINPLAYBACK_H
 
 #include <JellyfinQt/dto/generalcommandtype.h>
+#include <JellyfinQt/dto/playcommand.h>
+#include <JellyfinQt/dto/playstatecommand.h>
+#include <JellyfinQt/dto/sessioninfo.h>
 #include <JellyfinQt/model/playbackmanager.h>
+#include <JellyfinQt/support/loader.h>
 
 #include <QJsonObject>
 #include <QSharedPointer>
+#include <QTimer>
+
+#include <optional>
 
 namespace Jellyfin {
 
@@ -33,11 +40,10 @@ namespace Model {
 
 class RemoteJellyfinPlayback : public PlaybackManager {
 public:
-    RemoteJellyfinPlayback(ApiClient &apiClient, QObject *parent = nullptr);
-
+    RemoteJellyfinPlayback(ApiClient &apiClient, QString sessionId, QObject *parent = nullptr);
+    virtual ~RemoteJellyfinPlayback();
 
     // PlaybackManager
-    void swap(PlaybackManager &other) override;
     PlayerState playbackState() const override;
     MediaStatus mediaStatus() const override;
     bool hasNext() const override;
@@ -61,9 +67,19 @@ public slots:
     void goTo(int index) override;
     void stop() override;
     void seek(qint64 pos) override;
+private slots:
+    void onPositionTimerFired();
+    void onSessionInfoUpdated(const QString &sessionId, const DTO::SessionInfo &sessionInfo);
 private:
+    void sendPlaystateCommand(DTO::PlaystateCommand command, qint64 seekTicks = -1);
     void sendGeneralCommand(DTO::GeneralCommandType command, QJsonObject arguments = QJsonObject());
+    void sendCommand(Support::LoaderBase *loader);
+    void playItemInList(const QStringList &items, int index, qint64 resumeTicks = -1);
     ApiClient &m_apiClient;
+    QString m_sessionId;
+    std::optional<DTO::SessionInfo> m_lastSessionInfo;
+    QTimer *m_positionTimer;
+    qint64 m_position = 0;
 };
 
 

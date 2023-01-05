@@ -47966,6 +47966,69 @@ void PlayParams::setPlayCommand(PlayCommand newPlayCommand) {
 }
 
 
+const qint32 &PlayParams::audioStreamIndex() const {
+	return m_audioStreamIndex.value();
+}
+
+void PlayParams::setAudioStreamIndex(qint32 newAudioStreamIndex)  {
+	m_audioStreamIndex = newAudioStreamIndex;
+}
+
+bool PlayParams::audioStreamIndexNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_audioStreamIndex.has_value();
+}
+
+void PlayParams::setAudioStreamIndexNull() {
+	m_audioStreamIndex = std::nullopt;
+}
+
+
+const QString &PlayParams::mediaSourceId() const {
+	return m_mediaSourceId;
+}
+
+void PlayParams::setMediaSourceId(QString newMediaSourceId)  {
+	m_mediaSourceId = newMediaSourceId;
+}
+
+bool PlayParams::mediaSourceIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_mediaSourceId.isNull();
+}
+
+void PlayParams::setMediaSourceIdNull() {
+	m_mediaSourceId.clear();
+}
+
+
+const qint32 &PlayParams::startIndex() const {
+	return m_startIndex.value();
+}
+
+void PlayParams::setStartIndex(qint32 newStartIndex)  {
+	m_startIndex = newStartIndex;
+}
+
+bool PlayParams::startIndexNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_startIndex.has_value();
+}
+
+void PlayParams::setStartIndexNull() {
+	m_startIndex = std::nullopt;
+}
+
+
 const qint64 &PlayParams::startPositionTicks() const {
 	return m_startPositionTicks.value();
 }
@@ -47984,6 +48047,27 @@ bool PlayParams::startPositionTicksNull() const {
 
 void PlayParams::setStartPositionTicksNull() {
 	m_startPositionTicks = std::nullopt;
+}
+
+
+const qint32 &PlayParams::subtitleStreamIndex() const {
+	return m_subtitleStreamIndex.value();
+}
+
+void PlayParams::setSubtitleStreamIndex(qint32 newSubtitleStreamIndex)  {
+	m_subtitleStreamIndex = newSubtitleStreamIndex;
+}
+
+bool PlayParams::subtitleStreamIndexNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_subtitleStreamIndex.has_value();
+}
+
+void PlayParams::setSubtitleStreamIndexNull() {
+	m_subtitleStreamIndex = std::nullopt;
 }
 
 

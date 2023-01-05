@@ -34508,6 +34508,41 @@
               "format": "int64",
               "nullable": true
             }
+          },
+          {
+            "name": "mediaSourceId",
+            "in": "query",
+            "description": "Optional. The media source id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "audioStreamIndex",
+            "in": "query",
+            "description": "Optional. The index of the audio stream to play.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "subtitleStreamIndex",
+            "in": "query",
+            "description": "Optional. The index of the subtitle stream to play.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "startIndex",
+            "in": "query",
+            "description": "Optional. The start index.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         ],
         "responses": {

@@ -245,6 +245,18 @@ QUrlQuery PlayLoader::query(const PlayParams &params) const {
 	if (!params.startPositionTicksNull()) {
 		result.addQueryItem("startPositionTicks", Support::toString<std::optional<qint64>>(params.startPositionTicks()));
 	}
+	if (!params.mediaSourceIdNull()) {
+		result.addQueryItem("mediaSourceId", Support::toString<QString>(params.mediaSourceId()));
+	}
+	if (!params.audioStreamIndexNull()) {
+		result.addQueryItem("audioStreamIndex", Support::toString<std::optional<qint32>>(params.audioStreamIndex()));
+	}
+	if (!params.subtitleStreamIndexNull()) {
+		result.addQueryItem("subtitleStreamIndex", Support::toString<std::optional<qint32>>(params.subtitleStreamIndex()));
+	}
+	if (!params.startIndexNull()) {
+		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));
+	}
 	
 	return result;
 }

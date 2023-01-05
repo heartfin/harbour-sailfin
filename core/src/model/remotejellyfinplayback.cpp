@@ -243,7 +243,11 @@ void RemoteJellyfinPlayback::playItemInList(const QStringList &items, int index,
     }
     params.setPlayCommand(DTO::PlayCommand::PlayNow);
     params.setItemIds(items);
-    //params.setStartIndex(index);
+    params.setStartIndex(index);
+    params.setAudioStreamIndex(this->audioIndex());
+    if (this->subtitleIndex() >= 0) {
+        params.setSubtitleStreamIndex(this->subtitleIndex());
+    }
 
     CommandLoader *loader = new CommandLoader(&m_apiClient);
     loader->setParameters(params);

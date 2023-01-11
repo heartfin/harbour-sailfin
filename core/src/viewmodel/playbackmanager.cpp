@@ -195,13 +195,21 @@ void PlaybackManager::setControllingSession(QSharedPointer<Model::ControllableSe
 
     if (other != nullptr) {
         connect(d->m_impl.data(), &Model::PlaybackManager::positionChanged, this, &PlaybackManager::positionChanged);
+        emit positionChanged(d->m_impl->position());
         connect(d->m_impl.data(), &Model::PlaybackManager::durationChanged, this, &PlaybackManager::durationChanged);
+        emit durationChanged(d->m_impl->duration());
         connect(d->m_impl.data(), &Model::PlaybackManager::hasNextChanged, this, &PlaybackManager::hasNextChanged);
+        emit hasNextChanged(d->m_impl->hasNext());
         connect(d->m_impl.data(), &Model::PlaybackManager::hasPreviousChanged, this, &PlaybackManager::hasPreviousChanged);
+        emit hasPreviousChanged(d->m_impl->hasPrevious());
         connect(d->m_impl.data(), &Model::PlaybackManager::seekableChanged, this, &PlaybackManager::seekableChanged);
+        emit seekableChanged(d->m_impl->seekable());
         connect(d->m_impl.data(), &Model::PlaybackManager::queueIndexChanged, this, &PlaybackManager::queueIndexChanged);
+        emit queueIndexChanged(d->m_impl->queueIndex());
         connect(d->m_impl.data(), &Model::PlaybackManager::itemChanged, this, &PlaybackManager::mediaPlayerItemChanged);
+        emit itemChanged();
         connect(d->m_impl.data(), &Model::PlaybackManager::playbackStateChanged, this, &PlaybackManager::playbackStateChanged);
+        emit playbackStateChanged(d->m_impl->playbackState());
 
         if (auto localImp = qobject_cast<Model::LocalPlaybackManager*>(d->m_impl.data())) {
             connect(localImp, &Model::LocalPlaybackManager::streamUrlChanged, this, [this](const QUrl& newUrl){
@@ -209,7 +217,9 @@ void PlaybackManager::setControllingSession(QSharedPointer<Model::ControllableSe
             });
             connect(localImp, &Model::LocalPlaybackManager::playMethodChanged, this, &PlaybackManager::playMethodChanged);
         }
+        emit streamUrlChanged(streamUrl());
         connect(d->m_impl.data(), &Model::PlaybackManager::mediaStatusChanged, this, &PlaybackManager::mediaStatusChanged);
+        emit mediaStatusChanged(d->m_impl->mediaStatus());
     }
 }
 

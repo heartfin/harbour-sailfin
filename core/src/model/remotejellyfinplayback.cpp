@@ -49,7 +49,7 @@ RemoteJellyfinPlayback::~RemoteJellyfinPlayback() {
 }
 
 PlayerState RemoteJellyfinPlayback::playbackState() const {
-    return m_lastSessionInfo.has_value()
+    return m_lastSessionInfo.has_value() && !m_lastSessionInfo->nowPlayingItem().isNull()
             ? m_lastSessionInfo.value().playState()->isPaused()
                     ? PlayerState::Paused
                     : PlayerState::Playing
@@ -149,6 +149,12 @@ void RemoteJellyfinPlayback::goTo(int index) {
 
 void RemoteJellyfinPlayback::stop() {
     sendPlaystateCommand(DTO::PlaystateCommand::Stop);
+    // Force update the UI, since the server will stop sending updates for some reason
+    /*if (m_lastSessionInfo.has_value()) {
+        m_lastSessionInfo->playState().clear();
+        m_lastSessionInfo->nowPlayingItem().clear();
+        onSessionInfoUpdated(m_sessionId, m_lastSessionInfo.value());
+    }*/
 }
 
 void RemoteJellyfinPlayback::seek(qint64 pos) {
@@ -162,7 +168,6 @@ void RemoteJellyfinPlayback::onPositionTimerFired() {
 
 void RemoteJellyfinPlayback::onSessionInfoUpdated(const QString &sessionId, const SessionInfo &sessionInfo) {
     if (sessionId != m_sessionId) return;
-    qDebug() << "Session info updated for " << sessionId;
     m_lastSessionInfo = sessionInfo;
 
     if (m_lastSessionInfo->nowPlayingItem().isNull()) {
@@ -174,7 +179,9 @@ void RemoteJellyfinPlayback::onSessionInfoUpdated(const QString &sessionId, cons
 
     // Update current position and run timer if needed
     if (m_lastSessionInfo.has_value()
-            && !m_lastSessionInfo.value().playState().isNull()) {
+            && !m_lastSessionInfo.value().playState().isNull()
+            // Apparently the nowPlayingItem should be null when the playback has stopped
+            && !m_lastSessionInfo.value().nowPlayingItem().isNull()) {
         m_position = m_lastSessionInfo.value().playState()->positionTicks().value_or(0) / PlaybackManager::MS_TICK_FACTOR;
         if (!m_positionTimer->isActive()  && !m_lastSessionInfo.value().playState()->isPaused()) {
             m_positionTimer->start();

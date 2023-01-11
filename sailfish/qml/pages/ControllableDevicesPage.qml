@@ -25,7 +25,7 @@ Page {
             property bool isConnected: model.jellyfinId === appWindow.playbackManager.controllingSessionId
             onClicked: deviceList.activateSession(appWindow.playbackManager, model.index)
             contentHeight: Theme.itemSizeMedium
-            HighlightImage {
+            Icon {
                 id: deviceIcon
                 anchors {
                     left: parent.left

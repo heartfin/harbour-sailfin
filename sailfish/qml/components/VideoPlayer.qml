@@ -50,6 +50,16 @@ SilicaItem {
         color: Theme.overlayBackgroundColor
     }
 
+    RemoteImage {
+        id: backdrop
+        anchors.fill: parent
+        visible: !manager.controllingSessionLocal
+                  || [J.MediaStatus.NoMedia, J.MediaStatus.Loading].indexOf(manager.mediaStatus) >= 0
+        fillMode: Image.PreserveAspectFit
+        source: Utils.itemBackdropUrl(apiClient.baseUrl, item, 0, {"maxWidth": parent.width})
+        blurhash: item.imageBlurHashes["Backdrop"][item.backdropImageTags[0]]
+    }
+
     VideoOutput {
         id: videoOutput
         source: manager
@@ -64,7 +74,7 @@ SilicaItem {
         anchors.fill: parent
         manager: playerRoot.manager
         title: videoPlayer.title
-
+        alwaysVisible: !manager.controllingSessionLocal
     }
 
     VideoError {

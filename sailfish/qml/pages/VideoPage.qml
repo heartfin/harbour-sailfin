@@ -38,7 +38,16 @@ Page {
     property int subtitleTrack
     property bool resume: true
 
-    allowedOrientations: Orientation.All
+    allowedOrientations: {
+        if (itemData.width !== null && itemData.height !== null) {
+            return itemData.width / itemData.height > Screen.width / Screen.height
+                             ? Orientation.LandscapeMask
+                             : Orientation.PortraitMask
+        } else {
+            return Orientation.All
+        }
+    }
+
     showNavigationIndicator: videoPlayer.hudVisible
 
     VideoPlayer {

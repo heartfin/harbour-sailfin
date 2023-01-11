@@ -75,7 +75,7 @@ ApplicationWindow {
     //cover: CoverBackground {CoverPlaceholder { icon.source: "icon.png"; text: "Sailfin"}}
     cover: {
         // Disabled due to buggy Loader behaviour
-        if ([MediaPlayer.NoMedia, MediaPlayer.InvalidMedia, MediaPlayer.UnknownStatus].indexOf(_playbackManager.mediaStatus) >= 0
+        if ([MediaStatus.NoMedia, MediaStatus.InvalidMedia].indexOf(_playbackManager.mediaStatus) >= 0
                  || _playbackManager.playbackState === MediaPlayer.StoppedState) {
             return Qt.resolvedUrl("cover/CollectionPage.qml")
         } else {
@@ -134,7 +134,9 @@ ApplicationWindow {
     }
 
     DisplayBlanking {
-        preventBlanking: playbackManager.playbackState === MediaPlayer.PlayingState && playbackManager.hasVideo
+        preventBlanking: playbackManager.playbackState === MediaPlayer.PlayingState
+                         && playbackManager.hasVideo
+                         && playbackManager.controllingSessionLocal // Must be controlling a local session
     }
     
     PlaybackBar {

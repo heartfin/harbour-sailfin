@@ -11,7 +11,7 @@ ExternalProject_Add(BlurhashQt
 
 	CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON -DENABLE_EXPORT=OFF -DQML_PLUGIN_PATH=${PROJECT_BINARY_DIR}/plugins/)
 
-find_package(Qt5 COMPONENTS Gui Qml Quick)
+find_package(Qt5 COMPONENTS Gui Qml Quick LinguistTools)
 find_package(SailfishApp 1.0 REQUIRED)
 
 set(harbour-sailfin_SOURCES
@@ -68,6 +68,22 @@ set(sailfin_QML_SOURCES
 	qml/pages/setup/LoginDialog.qml
 	qml/qmldir)
 	
+set(TRANSLATION_SOURCE_FILES
+        ${harbour-sailfin_SOURCES}
+        ${sailfin_QML_SOURCES}
+        )
+
+set(TRANSLATION_TS_FILES
+        translations/harbour-sailfin.ts
+        translations/harbour-sailfin-de.ts
+        translations/harbour-sailfin-ru.ts
+       )
+
+qt5_create_translation(TRANSLATION_QM_FILES
+       ${TRANSLATION_SOURCE_FILES}
+       ${TRANSLATION_TS_FILES})
+add_custom_target(translations ALL DEPENDS ${TRANSLATION_QM_FILES})
+
 add_executable(harbour-sailfin ${harbour-sailfin_SOURCES} ${sailfin_QML_SOURCES})
 target_link_libraries(harbour-sailfin PRIVATE Qt5::Gui Qt5::Qml Qt5::Quick SailfishApp::SailfishApp 
 	# Note: this may break when the compiler changes. -rdynamic and -pie seem to be needed for the 
@@ -84,9 +100,8 @@ install(DIRECTORY ${PROJECT_BINARY_DIR}/plugins/
 install(DIRECTORY qml
 	DESTINATION share/harbour-sailfin
 )
-install(DIRECTORY translations
-	DESTINATION share/harbour-sailfin
-	FILES_MATCHING PATTERN "*.qm"
+install(FILES ${TRANSLATION_QM_FILES}
+        DESTINATION share/harbour-sailfin/translations
 )
 install(FILES harbour-sailfin.desktop
 	DESTINATION share/applications

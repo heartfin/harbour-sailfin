@@ -298,12 +298,12 @@
     </message>
     <message>
         <source>Appears on</source>
-        <translation type="unfinished">Появляется на</translation>
+        <translation>Появляется на</translation>
     </message>
     <message>
         <source>%1 appears on</source>
         <extracomment>Page title for the page with an overview of all albums a specific artist appears on</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>%1 появляется на</translation>
     </message>
 </context>
 <context>
@@ -311,29 +311,29 @@
     <message>
         <source>Recently added</source>
         <extracomment>Header on music library: Recently added music albums</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Добавлены недавно</translation>
     </message>
     <message>
         <source>Latest media</source>
         <extracomment>Page title for the list of all albums within the music library</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Самые новые песни</translation>
     </message>
     <message>
         <source>Albums</source>
         <extracomment>Page title for the list of all albums within the music library</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Альбомы</translation>
     </message>
     <message>
         <source>Playlists</source>
         <extracomment>Page title for the list of all playlists within the music library</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Плейлисты</translation>
     </message>
     <message>
         <source>Artists</source>
         <extracomment>Header for music artists
 ----------
 Page title for the list of all artists within the music library</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Исполнители</translation>
     </message>
 </context>
 <context>
@@ -341,40 +341,40 @@ Page title for the list of all artists within the music library</extracomment>
     <message>
         <source>Queue</source>
         <extracomment>Now playing page queue section header</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Очередь</translation>
     </message>
     <message>
         <source>Playlist</source>
         <extracomment>Now playing page playlist section header</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Плейлист</translation>
     </message>
     <message>
         <source>Unknown section: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная секция: %1</translation>
     </message>
 </context>
 <context>
     <name>PlaybackBar</name>
     <message>
         <source>No media selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Ничего не выбрано</translation>
     </message>
     <message>
         <source>Play some media!</source>
-        <translation type="unfinished"></translation>
+        <translation>Начните что-то проигрывать!</translation>
     </message>
     <message>
         <source>No audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет звука</translation>
     </message>
     <message>
         <source>Shuffle not yet implemented</source>
-        <translation type="unfinished"></translation>
+        <translation>Перемешивание ещё не работает</translation>
     </message>
     <message>
         <source>Stop</source>
         <extracomment>Pulley menu item: stops playback of music</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Стоп</translation>
     </message>
 </context>
 <context>
@@ -453,12 +453,12 @@ Page title for the list of all artists within the music library</extracomment>
     <message>
         <source>Go to %1</source>
         <extracomment>Context menu item for navigating to the artist of the selected track</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Перейти к %1</translation>
     </message>
     <message>
         <source>Go to artists</source>
         <extracomment>Context menu item for navigating to one of the artists of the selected track (opens submenu)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Перейти к исполнителям</translation>
     </message>
 </context>
 <context>
@@ -473,7 +473,7 @@ Page title for the list of all artists within the music library</extracomment>
     </message>
     <message>
         <source>If enabled, Sailfin may request the Jellyfin server to transcode media to a more suitable media format for this device. It is recommended to leave this enabled unless your server is weak.</source>
-        <translation type="unfinished"></translation>
+        <translation>Если включено, Sailfin может попросить сервер Jellyfin перекодировать медиафайл в более подходящий формат для устройства. Рекомендуется оставить это включенным, если ваш сервер не слишком слабый.</translation>
     </message>
     <message>
         <source>%1 mbps</source>
@@ -488,7 +488,7 @@ Page title for the list of all artists within the music library</extracomment>
     <name>UnsupportedPage</name>
     <message>
         <source>Item type (%1) unsupported</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип файла (%1) не поддерживается</translation>
     </message>
     <message>
         <source>Fallback page for %2 not found either
@@ -500,7 +500,7 @@ This is still an alpha version :)</source>
     <name>UserGridDelegate</name>
     <message>
         <source>Other account</source>
-        <translation type="unfinished"></translation>
+        <translation>Другая учетная запись</translation>
     </message>
 </context>
 <context>
@@ -549,7 +549,7 @@ This is still an alpha version :)</source>
     <name>VideoPage</name>
     <message>
         <source>Run time: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Длительность: %2</translation>
     </message>
 </context>
 <context>

@@ -180,17 +180,28 @@ void Playlist::reshuffle() {
 }
 
 void Playlist::play(int index) {
+    // We need to defend against indices that are outside of the playlist.
+    // The RemoteJellyfinPlaybackController will usually first update the now playing index
+    // before this playlist is updated. For example, if new playlist is bigger than
+    // the current and an item index out of range of the current playlist is requested.
+
     m_shuffler->setIndex(index);
     if (!m_nextItemFromQueue) {
         int nextItemIdx = m_shuffler->nextItem();
         if (nextItemIdx >= 0) {
-            m_nextItem = m_list[m_shuffler->nextItem()];
+            m_nextItem = m_list[nextItemIdx];
         } else {
             m_nextItem.clear();
         }
     }
-    m_currentItem = m_list[m_shuffler->currentItem()];
-    emit currentItemChanged();
+
+    if (m_shuffler->currentItem() >= 0) {
+        m_currentItem = m_list[m_shuffler->currentItem()];
+        emit currentItemChanged();
+    } else {
+        m_currentItem.clear();
+        emit currentItemChanged();
+    }
 }
 
 bool Playlist::playingFromQueue() const {

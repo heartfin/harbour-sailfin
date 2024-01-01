@@ -75,6 +75,17 @@ private:
     void sendGeneralCommand(DTO::GeneralCommandType command, QJsonObject arguments = QJsonObject());
     void sendCommand(Support::LoaderBase *loader);
     void playItemInList(const QStringList &items, int index, qint64 resumeTicks = -1);
+    /**
+     * @brief isQueueSame Checks if the items in the list are the same as in the queue
+     * @param items The item ids to compare to the queue
+     * @return True if the same, otherwise false
+     */
+    bool isQueueSame(QList<QueueItem> itemIds);
+    /**
+     * Updates the now playing queue, with the given items
+     * @param itemIds The item ids to load
+     */
+    void updateQueue(QList<QueueItem> itemIds);
     ApiClient &m_apiClient;
     QString m_sessionId;
     std::optional<DTO::SessionInfo> m_lastSessionInfo;

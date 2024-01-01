@@ -131,6 +131,7 @@ public:
     static const qint64 MS_TICK_FACTOR = 10000;
 protected:
     void setItem(QSharedPointer<Item> item);
+    void setQueueIndex(int index);
 
 signals:
     void playbackStateChanged(Jellyfin::Model::PlayerStateClass::Value newPlaybackState);

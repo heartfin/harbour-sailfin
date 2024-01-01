@@ -203,6 +203,13 @@ void PlaybackManager::setItem(QSharedPointer<Item> item) {
     emit itemChanged();
 }
 
+void PlaybackManager::setQueueIndex(int index)
+{
+    Q_D(PlaybackManager);
+    d->m_queueIndex = index;
+    emit queueIndexChanged(index);
+}
+
 /*****************************************************************************
  * LocalPlaybackManagerPrivate                                               *
  *****************************************************************************/
@@ -611,9 +618,8 @@ void LocalPlaybackManager::playItemInList(const QList<QSharedPointer<Model::Item
     d->m_queue->clearList();
     d->m_queue->appendToList(items);
     d->m_queue->play(index);
-    d->m_queueIndex = index;
 
-    emit queueIndexChanged(d->m_queueIndex);
+    setQueueIndex(index);
 
     d->setItem(items.at(index));
     emit hasNextChanged(d->m_queue->hasNext());
@@ -624,8 +630,7 @@ void LocalPlaybackManager::playItemInList(const QList<QSharedPointer<Model::Item
 void LocalPlaybackManager::goTo(int index) {
     Q_D(LocalPlaybackManager);
     d->m_queue->play(index);
-    d->m_queueIndex = index;
-    emit queueIndexChanged(index);
+    setQueueIndex(index);
 
     d->setItem(d->m_queue->currentItem());
     emit hasNextChanged(d->m_queue->hasNext());

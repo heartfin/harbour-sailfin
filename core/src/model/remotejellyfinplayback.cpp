@@ -21,6 +21,7 @@
 
 #include <JellyfinQt/apiclient.h>
 #include <JellyfinQt/dto/sessioninfo.h>
+#include <JellyfinQt/loader/http/items.h>
 #include <JellyfinQt/loader/http/session.h>
 #include <JellyfinQt/loader/requesttypes.h>
 #include <JellyfinQt/model/item.h>
@@ -32,6 +33,7 @@
 
 namespace Jellyfin {
 namespace Model {
+
 
 RemoteJellyfinPlayback::RemoteJellyfinPlayback(ApiClient &apiClient, QString sessionId, QObject *parent)
     : PlaybackManager(parent), m_apiClient(apiClient), m_sessionId(sessionId), m_positionTimer(new QTimer(this)) {
@@ -144,7 +146,8 @@ void RemoteJellyfinPlayback::next() {
 }
 
 void RemoteJellyfinPlayback::goTo(int index) {
-
+    // This is the way Jellyfin does it as well: we send the entire queue to the server.
+    this->playItemInList(this->queue()->queueAndList(), index);
 }
 
 void RemoteJellyfinPlayback::stop() {
@@ -191,6 +194,24 @@ void RemoteJellyfinPlayback::onSessionInfoUpdated(const QString &sessionId, cons
     } else if (m_positionTimer->isActive()){
         m_positionTimer->stop();
         m_position = 0;
+    }
+
+
+    // Handle the now playing queue
+    if (sessionInfo.nowPlayingQueueNull()) {
+        queue()->clearList();
+    } else {
+        QList<QueueItem> sessionQueue = sessionInfo.nowPlayingQueue();
+        updateQueue(sessionQueue);
+
+        int pos = 0;
+        for (pos = 0; pos < sessionQueue.size(); pos++) {
+            if (sessionQueue[pos].playlistItemId() == sessionInfo.playlistItemId()) break;
+        }
+        this->setQueueIndex(pos);
+        if (this->queue()->listSize() > 0) {
+            this->queue()->play(pos);
+        }
     }
 
     emit playbackStateChanged(playbackState());
@@ -259,6 +280,56 @@ void RemoteJellyfinPlayback::playItemInList(const QStringList &items, int index,
     CommandLoader *loader = new CommandLoader(&m_apiClient);
     loader->setParameters(params);
     sendCommand(loader);
+}
+
+bool RemoteJellyfinPlayback::isQueueSame(QList<QueueItem> itemIds) {
+    Playlist *queue = this->queue();
+    if (itemIds.length() == queue->listSize()) {
+        for (int i = 0; i < itemIds.length(); i++) {
+            if (queue->listAt(i)->jellyfinId() != itemIds[i].jellyfinId()) {
+                return false;
+            }
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void RemoteJellyfinPlayback::updateQueue(QList<QueueItem> items) {
+    using GetItemsLoader = Loader::HTTP::GetItemsLoader;
+    using GetItemsParams = Loader::GetItemsParams;
+
+    static GetItemsLoader *loader = new GetItemsLoader(&this->m_apiClient);
+
+    if (!isQueueSame(items)) {
+        // Update queue
+
+        QStringList itemIds;
+        for (QueueItem queueItem : items) {
+            itemIds.append(queueItem.jellyfinId());
+        }
+
+        if (loader->isRunning()) {
+            loader->cancel();
+        }
+
+        GetItemsParams params;
+        params.setIds(itemIds);
+        loader->setParameters(params);
+        connect(loader, &GetItemsLoader::ready, this, [this]() {
+            auto queue = this->queue();
+            Loader::BaseItemDtoQueryResult result = loader->result();
+            QList<QSharedPointer<Item>> items;
+            for (Item item : result.items()) {
+                items.append(QSharedPointer<Item>::create(item, &this->m_apiClient));
+            }
+
+            queue->clearList();
+            queue->appendToList(items);
+        });
+        loader->load();
+    }
 }
 
 } // NS Model

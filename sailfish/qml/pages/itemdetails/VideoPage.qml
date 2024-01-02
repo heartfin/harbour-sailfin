@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -30,10 +30,15 @@ import "../.."
  * the FilmPage or EpisodePage.
  */
 BaseDetailPage {
+    id: detailPage
     property alias subtitle: pageHeader.description
     default property alias _data: content.data
     property real _playbackProsition: itemData.userData.playbackPositionTicks
     readonly property bool _userdataReady:  itemLoader.status === J.ItemLoader.Ready && itemData.userData !== null
+
+    property string imageSource: Utils.itemImageUrl(apiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
+    property string imageBlurhash: itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]
+
     SilicaFlickable {
         anchors.fill: parent
         contentHeight: content.height + Theme.paddingLarge
@@ -55,9 +60,9 @@ BaseDetailPage {
             PlayToolbar {
                 id: toolbar
                 width: parent.width
-                imageSource: Utils.itemImageUrl(apiClient.baseUrl, itemData, "Primary", {"maxWidth": parent.width})
+                imageSource: detailPage.imageSource
                 imageAspectRatio: Constants.horizontalVideoAspectRatio
-                imageBlurhash: itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]
+                imageBlurhash: detailPage.imageBlurhash
                 Binding on favourited {
                     when: _userdataReady
                     value: itemData.userData.favorite

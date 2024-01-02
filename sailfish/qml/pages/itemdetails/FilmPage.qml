@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -27,6 +27,8 @@ import "../.."
 
 VideoPage {
     subtitle: qsTr("Released: %1 — Run time: %2").arg(itemData.productionYear).arg(Utils.ticksToText(itemData.runTimeTicks))
+    imageSource: Utils.itemBackdropUrl(apiClient.baseUrl, itemData, 0, {"maxWidth": parent.width})
+    imageBlurhash: itemData.imageBlurHashes["Backdrop"][itemData.backdropImageTags[0]]
 
     SectionHeader {
         text: qsTr("Overview")

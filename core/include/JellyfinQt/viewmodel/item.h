@@ -163,6 +163,7 @@ public:
     Q_PROPERTY(double primaryImageAspectRatio READ primaryImageAspectRatio NOTIFY primaryImageAspectRatioChanged)
     Q_PROPERTY(QStringList artists READ artists NOTIFY artistsChanged)
     Q_PROPERTY(QList<QObject *> artistItems READ artistItems NOTIFY artistItemsChanged);
+    Q_PROPERTY(QString collectionType READ collectionType NOTIFY collectionTypeChanged)
     // Why is this a QJsonObject? Well, because I couldn't be bothered to implement the deserialisations of
     // a QHash at the moment.
     Q_PROPERTY(QJsonObject imageTags READ imageTags NOTIFY imageTagsChanged)
@@ -219,6 +220,7 @@ public:
     double primaryImageAspectRatio() const { return m_data->primaryImageAspectRatio().value_or(1.0); }
     QStringList artists() const { return m_data->artists(); }
     QList<QObject *> artistItems() const{ return this->m_artistItems; }
+    QString collectionType() const { return this->m_data->collectionType(); }
     QJsonObject imageTags() const { return m_data->imageTags(); }
     QStringList backdropImageTags() const { return m_data->backdropImageTags(); }
     QJsonObject imageBlurHashes() const { return m_data->imageBlurHashes(); }
@@ -292,6 +294,7 @@ signals:
     void primaryImageAspectRatioChanged(double newPrimaryImageAspectRatio);
     void artistsChanged(const QStringList &newArtists);
     void artistItemsChanged();
+    void collectionTypeChanged();
     void imageTagsChanged();
     void backdropImageTagsChanged();
     void imageBlurHashesChanged();

@@ -22,7 +22,9 @@
   - Navigation to artists of a song added when long-pressing a song or pressing the name
     on the now playing screen.
 - Bug fixes
-  - The album overview page should now behave correclty with an image with a non-square image
+  - The album overview page should now behave correctly with a non-square image
+  - Collections with films and series should now show the items in a 16:9 aspect ratio again
+  - Large lists with more than 100 items should no longer infinitly repeat the first 100 items
 
 * Wed Jul 20 2022 Chris Josten <chris@netsoj.nl> 0.4.2-1
 - Bugfixes:

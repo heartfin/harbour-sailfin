@@ -44,7 +44,10 @@ WebSocket::WebSocket(ApiClient *client)
     connect(client, &ApiClient::authenticatedChanged, this, [this](bool isAuthenticated) {
         if (isAuthenticated) {
             this->m_reconnectAttempt = 0;
-            this->open();
+            // https://github.com/heartfin/harbour-sailfin/issues/16
+            // Opening a websocket just afther the authentication may cause the application to freeze
+            // Therefore, we delay the initialisation :)
+            QTimer::singleShot(5'000, this, &WebSocket::open);
         }
     });
 }

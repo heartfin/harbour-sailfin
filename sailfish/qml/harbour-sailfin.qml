@@ -182,24 +182,9 @@ ApplicationWindow {
         onAuthenticatedChanged: {
             if (authenticated && !isInSetup()) {
                 console.log("Authenticated)")
-                loginAnimation.start()
-                //pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
+                //loginAnimation.start()
+                pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
             }
-        }
-    }
-
-    // Delaying the creation of the MainPage prevents the application from freezing
-    // if connecting to the server over HTTPS
-    // TODO: figure out why the application actually freezes and remove this workaround
-    SequentialAnimation {
-        id: loginAnimation
-
-        PauseAnimation {
-            duration: 250
-        }
-
-        ScriptAction {
-            script: pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"), {}, PageStackAction.Immediate)
         }
     }
 

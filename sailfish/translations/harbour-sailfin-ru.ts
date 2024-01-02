@@ -19,6 +19,10 @@
         <source>&lt;p&gt;&lt;b&gt;Sailfin version %1&lt;/b&gt;&lt;br/&gt;Copyright © Chris Josten 2020–%2&lt;/p&gt;&lt;p&gt;Sailfin is Free Software licensed under the &lt;a href=&apos;lgpl&apos;&gt;LGPL-v2.1&lt;/a&gt; or later, at your choice. Parts of the code of Sailfin are from other libraries. &lt;a href=&apos;3rdparty&apos;&gt;View their licenses here&lt;/a&gt;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>LGPL 2.1 License</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AddServerConnectingPage</name>
@@ -112,6 +116,19 @@
     </message>
     <message>
         <source>Sailfin</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ControllableDevicesPage</name>
+    <message>
+        <source>Remote control</source>
+        <extracomment>Page title: page for remote controlling other Jellyfin apps</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 — %2</source>
+        <extracomment>List of devices item title in the form of &lt;app name&gt; — &lt;device name&gt;</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -255,6 +272,11 @@
         <extracomment>Pulley menu item: reload items on page</extracomment>
         <translation>Обновить</translation>
     </message>
+    <message>
+        <source>Remote control</source>
+        <extracomment>Pulley menu item: shows controllable device page</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MusicAlbumPage</name>
@@ -357,11 +379,11 @@ Page title for the list of all artists within the music library</extracomment>
     <name>PlaybackBar</name>
     <message>
         <source>No media selected</source>
-        <translation>Ничего не выбрано</translation>
+        <translation type="vanished">Ничего не выбрано</translation>
     </message>
     <message>
         <source>Play some media!</source>
-        <translation>Начните что-то проигрывать!</translation>
+        <translation type="vanished">Начните что-то проигрывать!</translation>
     </message>
     <message>
         <source>No audio</source>
@@ -375,6 +397,20 @@ Page title for the list of all artists within the music library</extracomment>
         <source>Stop</source>
         <extracomment>Pulley menu item: stops playback of music</extracomment>
         <translation>Стоп</translation>
+    </message>
+    <message>
+        <source>Nothing is playing</source>
+        <extracomment>Shown in a bright font when no media is playing in the bottom bar and now playing screen</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connected to %1</source>
+        <extracomment>Shown when no media is being played, but the app is controlling another Jellyfin client %1 is the name of said client</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start playing some media!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -518,7 +554,7 @@ This is still an alpha version :)</source>
     <message>
         <source>Network error</source>
         <extracomment>Video playback error: network error</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ошибка сети</translation>
     </message>
     <message>
         <source>Access denied</source>
@@ -533,7 +569,7 @@ This is still an alpha version :)</source>
     <message>
         <source>Retry</source>
         <extracomment>Button to retry loading a video after a failure</extracomment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Попробовать снова</translation>
     </message>
     <message>
         <source>No error</source>

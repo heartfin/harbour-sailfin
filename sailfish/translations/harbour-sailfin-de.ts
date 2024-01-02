@@ -116,6 +116,19 @@
     </message>
 </context>
 <context>
+    <name>ControllableDevicesPage</name>
+    <message>
+        <source>Remote control</source>
+        <extracomment>Page title: page for remote controlling other Jellyfin apps</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 — %2</source>
+        <extracomment>List of devices item title in the form of &lt;app name&gt; — &lt;device name&gt;</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>My Cover</source>
@@ -277,6 +290,11 @@
         <source>Pull down to retry again</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Remote control</source>
+        <extracomment>Pulley menu item: shows controllable device page</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MusicAlbumPage</name>
@@ -376,14 +394,6 @@ Page title for the list of all artists within the music library</extracomment>
 <context>
     <name>PlaybackBar</name>
     <message>
-        <source>No media selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Play some media!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>No audio</source>
         <translation type="unfinished"></translation>
     </message>
@@ -394,6 +404,20 @@ Page title for the list of all artists within the music library</extracomment>
     <message>
         <source>Stop</source>
         <extracomment>Pulley menu item: stops playback of music</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nothing is playing</source>
+        <extracomment>Shown in a bright font when no media is playing in the bottom bar and now playing screen</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Connected to %1</source>
+        <extracomment>Shown when no media is being played, but the app is controlling another Jellyfin client %1 is the name of said client</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start playing some media!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

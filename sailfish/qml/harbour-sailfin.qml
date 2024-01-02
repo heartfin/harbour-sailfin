@@ -51,6 +51,7 @@ ApplicationWindow {
         id: _apiClient
         objectName: "Test"
         appName: "Sailfin"
+        deviceType: DeviceType.Phone
         supportedCommands: [GeneralCommandType.Play, GeneralCommandType.DisplayMessage]
     }
 

@@ -155,11 +155,13 @@ int PlaybackManager::queueIndex() const {
 
 void PlaybackManager::swap(PlaybackManager &other) {
     other.queue()->clearList();
-    other.queue()->appendToList(this->queue()->queueAndList());
-    other.playItemInList(this->queue()->queueAndList(), this->queue()->currentItemIndexInList() >= 0
-                                                            ? this->queue()->currentItemIndexInList()
-                                                            : 0);
-    other.seek(position());
+    if (other.queue()->listSize() > 0) {
+        other.queue()->appendToList(this->queue()->queueAndList());
+        other.playItemInList(this->queue()->queueAndList(), this->queue()->currentItemIndexInList() >= 0
+                                                                ? this->queue()->currentItemIndexInList()
+                                                                : 0);
+        other.seek(position());
+    }
 }
 
 void PlaybackManager::playItemId(const QString &id) {}

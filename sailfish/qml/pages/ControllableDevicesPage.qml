@@ -34,7 +34,19 @@ Page {
                 }
                 height: parent.contentHeight - 2 * Theme.paddingMedium
                 width: height
-                source: "image://theme/icon-m-computer"
+                source: {
+                    if (model.deviceType == J.DeviceType.Phone) {
+                        return "image://theme/icon-m-device"
+                    } else if (model.deviceType == J.DeviceType.Tv) {
+                        // For the lack of a better icon
+                        return "image://theme/icon-m-device-landscape"
+                    } else if (model.deviceType == J.DeviceType.Computer) {
+                        return "image://theme/icon-m-computer"
+                    } else {
+                        //case J.DeviceType.Unknown:
+                        return "image://theme/icon-m-question"
+                    }
+                }
                 highlighted: parent.down || isConnected
             }
             Column {

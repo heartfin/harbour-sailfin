@@ -32,11 +32,11 @@ QString LocalSession::name() const {
 }
 
 DeviceType LocalSession::deviceType() const {
-    return DeviceType::Unknown;
+    return m_apiClient.deviceType();
 }
 
 QString LocalSession::userName() const {
-    return m_apiClient.userId();
+    return QString(); //m_apiClient.userId();
 }
 
 PlaybackManager *LocalSession::createPlaybackManager() const {
@@ -64,7 +64,42 @@ QString ControllableJellyfinSession::name() const {
 }
 
 DeviceType ControllableJellyfinSession::deviceType() const {
-    return DeviceType::Unknown;
+    // This is surely not the best way
+    // I based this of https://github.com/jellyfin/jellyfin-web/blob/45793052fa7c854ec97133878c75937065ae4650/src/utils/image.ts
+    const QStringList tvDevices = {
+        "Samsung Smart TV",
+        "Xbox One",
+        "Sony PS4",
+        "Kodi",
+        "Kodi JellyCon",
+        "AndroidTV",
+        "Android TV",
+        "Infuse",
+        "Jellyfin Roku",
+        "DLNA"
+    };
+
+    const QStringList pcDevices = {
+        "Jellyfin Web",
+    };
+
+    const QStringList phoneDevices = {
+        "FinAmp",
+        "Jellyfin Mobile (iOS)",
+        "Jellyfin Mobile (iPadOS)",
+        "Jellyfin Android",
+        "Sailfin"
+    };
+
+    if (tvDevices.contains(m_data->client())) {
+        return DeviceType::Tv;
+    } else if (pcDevices.contains(m_data->client())) {
+        return DeviceType::Computer;
+    } else if (phoneDevices.contains(m_data->client())) {
+        return DeviceType::Phone;
+    } else {
+        return DeviceType::Unknown;
+    }
 }
 
 QString ControllableJellyfinSession::userName() const {
@@ -101,21 +136,23 @@ void RemoteJellyfinSessionScanner::startScanning() {
     Q_D(RemoteJellyfinSessionScanner);
     if (d->loader != nullptr) return;
 
+    LocalSession *localSession = new LocalSession(*d->apiClient);
+
     emit resetSessions();
-    emit sessionFound(new LocalSession(*d->apiClient));
+    emit sessionFound(localSession);
 
     Loader::GetSessionsParams params;
     params.setControllableByUserId(d->apiClient->userId());
     d->loader = new GetSessionsLoader(d->apiClient);
     d->loader->setParameters(params);
-    connect(d->loader, &Loader::HTTP::GetSessionsLoader::ready, this, [this, d]() {
+    connect(d->loader, &Loader::HTTP::GetSessionsLoader::ready, this, [this, d, localSession]() {
         if (d->loader == nullptr) return;
         QList<DTO::SessionInfo> sessions = d->loader->result();
 
         for(auto it = sessions.begin(); it != sessions.end(); it++) {
 
             // Skip this device
-            if (it->jellyfinId() == d->apiClient->deviceId()) continue;
+            if (it->deviceId() == localSession->id()) continue;
 
             emit sessionFound(new ControllableJellyfinSession(QSharedPointer<DTO::SessionInfo>::create(*it), *d->apiClient));
         }

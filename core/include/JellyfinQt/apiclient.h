@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "dto/generalcommandtype.h"
 #include "credentialmanager.h"
+#include "model/controllablesession.h"
 #include "model/deviceprofile.h"
 #include "eventbus.h"
 
@@ -97,6 +98,7 @@ public:
     virtual ~ApiClient();
     Q_PROPERTY(QString baseUrl READ baseUrl WRITE setBaseUrl NOTIFY baseUrlChanged)
     Q_PROPERTY(QString appName READ appName WRITE setAppName NOTIFY appNameChanged)
+    Q_PROPERTY(Jellyfin::Model::DeviceTypeClass::Value deviceType READ deviceType WRITE setDeviceType NOTIFY deviceTypeChanged)
     Q_PROPERTY(bool authenticated READ authenticated WRITE setAuthenticated NOTIFY authenticatedChanged)
     Q_PROPERTY(QString userId READ userId NOTIFY userIdChanged)
     Q_PROPERTY(QJsonObject deviceProfile READ deviceProfileJson NOTIFY deviceProfileChanged)
@@ -116,6 +118,8 @@ public:
     bool authenticated() const;
     void setBaseUrl(const QString &url);
     void setAppName(const QString &appName);
+    void setDeviceType(Model::DeviceType deviceType);
+
     QNetworkReply *get(const QString &path, const QUrlQuery &params = QUrlQuery());
     QNetworkReply *post(const QString &path, const QJsonDocument &data, const QUrlQuery &params = QUrlQuery());
     QNetworkReply *post(const QString &path, const QByteArray &data = QByteArray(), const QUrlQuery &params = QUrlQuery());
@@ -132,6 +136,7 @@ public:
     const QString &appName() const;
     const QString &userId() const;
     const QString &deviceId() const;
+    Model::DeviceType deviceType() const;
     /**
      * @brief QML applications can set this type to indicate which commands they support.
      *
@@ -200,6 +205,7 @@ signals:
     void userIdChanged(QString userId);
 
     void deviceProfileChanged();
+    void deviceTypeChanged();
 
     void supportedCommandsChanged();
     void onlineChanged();

@@ -182,8 +182,12 @@ void PlaybackManager::setControllingSession(QSharedPointer<Model::ControllableSe
         // Stop playing locally when switching to another session
         if (thisIsLocal) {
             d->m_impl->stop();
+            if (other != nullptr) {
+                d->m_impl->swap(*other);
+            }
         }
     }
+
     d->m_displayQueue->setPlaylistModel(other->queue());
     d->m_impl.reset(other);
     d->m_session.swap(session);

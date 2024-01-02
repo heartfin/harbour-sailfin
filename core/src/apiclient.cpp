@@ -47,6 +47,7 @@ public:
     QString appName;
     QString deviceName;
     QString deviceId;
+    Model::DeviceType deviceType = Model::DeviceType::Unknown;
     QString userId;
 
     bool online = true;
@@ -133,6 +134,17 @@ void ApiClient::setUserId(const QString &userId) {
 const QString &ApiClient::deviceId() const {
     Q_D(const ApiClient);
     return d->deviceId;
+}
+
+Model::DeviceType ApiClient::deviceType() const {
+    Q_D(const ApiClient);
+    return d->deviceType;
+}
+
+void ApiClient::setDeviceType(Model::DeviceType newDeviceType) {
+    Q_D(ApiClient);
+    d->deviceType =newDeviceType;
+    emit deviceTypeChanged();
 }
 
 EventBus *ApiClient::eventbus() const {

@@ -119,7 +119,12 @@ void RemoteJellyfinPlayback::playItemInList(const QList<QSharedPointer<Item> > &
     }
 
     if (this->resumePlayback()) {
-        this->playItemInList(itemIds, index, items.at(index)->userData()->playbackPositionTicks());
+        QSharedPointer<DTO::UserData> userData = items.at(index)->userData();
+        if (userData) {
+            this->playItemInList(itemIds, index, items.at(index)->userData()->playbackPositionTicks());
+        } else {
+            this->playItemInList(itemIds, index, 0);
+        }
     } else {
         this->playItemInList(itemIds, index);
     }
@@ -271,6 +276,7 @@ void RemoteJellyfinPlayback::playItemInList(const QStringList &items, int index,
     }
     params.setPlayCommand(DTO::PlayCommand::PlayNow);
     params.setItemIds(items);
+    params.setMediaSourceId(items.at(index));
     params.setStartIndex(index);
     params.setAudioStreamIndex(this->audioIndex());
     if (this->subtitleIndex() >= 0) {

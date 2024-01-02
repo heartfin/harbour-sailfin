@@ -108,7 +108,7 @@ QVariantMap PlayerAdaptor::metadata() const
 
     QSharedPointer<Model::Item> item = plybkMgr->dataItem();
     if (!item.isNull()) {
-        map[QStringLiteral("mpris:trackid")] = QVariant::fromValue<QDBusObjectPath>(QDBusObjectPath(QStringLiteral("/nl/netsoj/chris/jellyfinqt/item/").append(item->jellyfinId())));
+        map[QStringLiteral("mpris:trackid")] = QVariant::fromValue<QString>(QStringLiteral("/nl/netsoj/chris/jellyfinqt/item/").append(item->jellyfinId()));
         if (item->runTimeTicks().has_value()) {
             map[QStringLiteral("mpris:length")] = item->runTimeTicks().value() / 10;
         }

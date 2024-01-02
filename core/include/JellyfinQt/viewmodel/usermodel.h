@@ -43,17 +43,17 @@ public:
         userId = Qt::UserRole + 1,
         name,
         hasPassword,
-        primaryImageTag,
+        primaryImageTag
     };
 
     explicit UserModel (QObject *parent = nullptr);
 
     virtual QHash<int, QByteArray> roleNames() const override {
         return {
-            { RoleNames::userId,                    "userId"                    },
-            { RoleNames::name,                      "name"                      },
-            { RoleNames::hasPassword,               "hasPassword"               },
-            { RoleNames::primaryImageTag,           "primaryImageTag"           },
+            { RoleNames::userId,                    "userId"          },
+            { RoleNames::name,                      "name"            },
+            { RoleNames::hasPassword,               "hasPassword"     },
+            { RoleNames::primaryImageTag,           "primaryImageTag" }
         };
     }
     QVariant data(const QModelIndex &index, int role) const override;

@@ -76,6 +76,66 @@ QNetworkAccessManager::Operation CreateCollectionLoader::operation() const {
 
 }
 
+AddToCollectionLoader::AddToCollectionLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, AddToCollectionParams>(apiClient) {}
+
+QString AddToCollectionLoader::path(const AddToCollectionParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Collections/") + Support::toString< QString>(params.collectionId()) + QStringLiteral("/Items");
+}
+
+QUrlQuery AddToCollectionLoader::query(const AddToCollectionParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("ids", Support::toString<QStringList>(params.ids()));
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray AddToCollectionLoader::body(const AddToCollectionParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation AddToCollectionLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+RemoveFromCollectionLoader::RemoveFromCollectionLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, RemoveFromCollectionParams>(apiClient) {}
+
+QString RemoveFromCollectionLoader::path(const RemoveFromCollectionParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Collections/") + Support::toString< QString>(params.collectionId()) + QStringLiteral("/Items");
+}
+
+QUrlQuery RemoveFromCollectionLoader::query(const RemoveFromCollectionParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("ids", Support::toString<QStringList>(params.ids()));
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray RemoveFromCollectionLoader::body(const RemoveFromCollectionParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation RemoveFromCollectionLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -65,7 +65,7 @@ protected:
  * @brief Gets branding css.
  */
 
-class GetBrandingCssLoader : public Jellyfin::Support::HttpLoader<QString, GetBrandingCssParams> {
+class GetBrandingCssLoader : public Jellyfin::Support::HttpLoader<void, GetBrandingCssParams> {
 public:
 	explicit GetBrandingCssLoader(ApiClient *apiClient = nullptr);
 
@@ -79,7 +79,7 @@ protected:
  * @brief Gets branding css.
  */
 
-class GetBrandingCss_2Loader : public Jellyfin::Support::HttpLoader<QString, GetBrandingCss_2Params> {
+class GetBrandingCss_2Loader : public Jellyfin::Support::HttpLoader<void, GetBrandingCss_2Params> {
 public:
 	explicit GetBrandingCss_2Loader(ApiClient *apiClient = nullptr);
 

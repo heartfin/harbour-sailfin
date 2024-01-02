@@ -96,6 +96,73 @@ QNetworkAccessManager::Operation GetPackageInfoLoader::operation() const {
 
 }
 
+InstallPackageLoader::InstallPackageLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, InstallPackageParams>(apiClient) {}
+
+QString InstallPackageLoader::path(const InstallPackageParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Packages/Installed/") + Support::toString< QString>(params.name()) ;
+}
+
+QUrlQuery InstallPackageLoader::query(const InstallPackageParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.assemblyGuidNull()) {
+		result.addQueryItem("assemblyGuid", Support::toString<QString>(params.assemblyGuid()));
+	}
+	if (!params.versionNull()) {
+		result.addQueryItem("version", Support::toString<QString>(params.version()));
+	}
+	if (!params.repositoryUrlNull()) {
+		result.addQueryItem("repositoryUrl", Support::toString<QString>(params.repositoryUrl()));
+	}
+	
+	return result;
+}
+
+QByteArray InstallPackageLoader::body(const InstallPackageParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation InstallPackageLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+CancelPackageInstallationLoader::CancelPackageInstallationLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CancelPackageInstallationParams>(apiClient) {}
+
+QString CancelPackageInstallationLoader::path(const CancelPackageInstallationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Packages/Installing/") + Support::toString< QString>(params.packageId()) ;
+}
+
+QUrlQuery CancelPackageInstallationLoader::query(const CancelPackageInstallationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray CancelPackageInstallationLoader::body(const CancelPackageInstallationParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation CancelPackageInstallationLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 GetRepositoriesLoader::GetRepositoriesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<RepositoryInfo>, GetRepositoriesParams>(apiClient) {}
 
@@ -122,6 +189,35 @@ QByteArray GetRepositoriesLoader::body(const GetRepositoriesParams &params) cons
 QNetworkAccessManager::Operation GetRepositoriesLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+SetRepositoriesLoader::SetRepositoriesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, SetRepositoriesParams>(apiClient) {}
+
+QString SetRepositoriesLoader::path(const SetRepositoriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Repositories");
+}
+
+QUrlQuery SetRepositoriesLoader::query(const SetRepositoriesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray SetRepositoriesLoader::body(const SetRepositoriesParams &params) const {
+	return Support::toString<QList<RepositoryInfo>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation SetRepositoriesLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

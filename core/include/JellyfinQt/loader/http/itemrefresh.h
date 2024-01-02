@@ -46,6 +46,20 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+/**
+ * @brief Refreshes metadata for an item.
+ */
+
+class PostLoader : public Jellyfin::Support::HttpLoader<void, PostParams> {
+public:
+	explicit PostLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const PostParams& parameters) const override;
+	QUrlQuery query(const PostParams& parameters) const override;
+	QByteArray body(const PostParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

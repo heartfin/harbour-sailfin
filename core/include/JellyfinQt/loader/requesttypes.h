@@ -27729,12 +27729,48 @@ public:
 
 	
 	/**
+	 * @brief Optional. The index of the audio stream to play.	
+	 */
+	const qint32 &audioStreamIndex() const;
+	void setAudioStreamIndex(qint32 newAudioStreamIndex);
+	bool audioStreamIndexNull() const;
+	void setAudioStreamIndexNull();
+	
+	
+	/**
+	 * @brief Optional. The media source id.	
+	 */
+	const QString &mediaSourceId() const;
+	void setMediaSourceId(QString newMediaSourceId);
+	bool mediaSourceIdNull() const;
+	void setMediaSourceIdNull();
+	
+	
+	/**
+	 * @brief Optional. The start index.	
+	 */
+	const qint32 &startIndex() const;
+	void setStartIndex(qint32 newStartIndex);
+	bool startIndexNull() const;
+	void setStartIndexNull();
+	
+	
+	/**
 	 * @brief The starting position of the first item.	
 	 */
 	const qint64 &startPositionTicks() const;
 	void setStartPositionTicks(qint64 newStartPositionTicks);
 	bool startPositionTicksNull() const;
 	void setStartPositionTicksNull();
+	
+	
+	/**
+	 * @brief Optional. The index of the subtitle stream to play.	
+	 */
+	const qint32 &subtitleStreamIndex() const;
+	void setSubtitleStreamIndex(qint32 newSubtitleStreamIndex);
+	bool subtitleStreamIndexNull() const;
+	void setSubtitleStreamIndexNull();
 	
 	
 private:
@@ -27746,7 +27782,11 @@ private:
 	PlayCommand m_playCommand;
 
 	// Optional query parameters
+	std::optional<qint32> m_audioStreamIndex = std::nullopt;
+	QString m_mediaSourceId;
+	std::optional<qint32> m_startIndex = std::nullopt;
 	std::optional<qint64> m_startPositionTicks = std::nullopt;
+	std::optional<qint32> m_subtitleStreamIndex = std::nullopt;
 
 
 };

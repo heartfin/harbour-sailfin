@@ -61,6 +61,104 @@ protected:
 	QByteArray body(const GetVirtualFoldersParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
+/**
+ * @brief Adds a virtual folder.
+ */
+
+class AddVirtualFolderLoader : public Jellyfin::Support::HttpLoader<void, AddVirtualFolderParams> {
+public:
+	explicit AddVirtualFolderLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const AddVirtualFolderParams& parameters) const override;
+	QUrlQuery query(const AddVirtualFolderParams& parameters) const override;
+	QByteArray body(const AddVirtualFolderParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Removes a virtual folder.
+ */
+
+class RemoveVirtualFolderLoader : public Jellyfin::Support::HttpLoader<void, RemoveVirtualFolderParams> {
+public:
+	explicit RemoveVirtualFolderLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const RemoveVirtualFolderParams& parameters) const override;
+	QUrlQuery query(const RemoveVirtualFolderParams& parameters) const override;
+	QByteArray body(const RemoveVirtualFolderParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Update library options.
+ */
+
+class UpdateLibraryOptionsLoader : public Jellyfin::Support::HttpLoader<void, UpdateLibraryOptionsParams> {
+public:
+	explicit UpdateLibraryOptionsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateLibraryOptionsParams& parameters) const override;
+	QUrlQuery query(const UpdateLibraryOptionsParams& parameters) const override;
+	QByteArray body(const UpdateLibraryOptionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Renames a virtual folder.
+ */
+
+class RenameVirtualFolderLoader : public Jellyfin::Support::HttpLoader<void, RenameVirtualFolderParams> {
+public:
+	explicit RenameVirtualFolderLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const RenameVirtualFolderParams& parameters) const override;
+	QUrlQuery query(const RenameVirtualFolderParams& parameters) const override;
+	QByteArray body(const RenameVirtualFolderParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Add a media path to a library.
+ */
+
+class AddMediaPathLoader : public Jellyfin::Support::HttpLoader<void, AddMediaPathParams> {
+public:
+	explicit AddMediaPathLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const AddMediaPathParams& parameters) const override;
+	QUrlQuery query(const AddMediaPathParams& parameters) const override;
+	QByteArray body(const AddMediaPathParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Remove a media path.
+ */
+
+class RemoveMediaPathLoader : public Jellyfin::Support::HttpLoader<void, RemoveMediaPathParams> {
+public:
+	explicit RemoveMediaPathLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const RemoveMediaPathParams& parameters) const override;
+	QUrlQuery query(const RemoveMediaPathParams& parameters) const override;
+	QByteArray body(const RemoveMediaPathParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a media path.
+ */
+
+class UpdateMediaPathLoader : public Jellyfin::Support::HttpLoader<void, UpdateMediaPathParams> {
+public:
+	explicit UpdateMediaPathLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateMediaPathParams& parameters) const override;
+	QUrlQuery query(const UpdateMediaPathParams& parameters) const override;
+	QByteArray body(const UpdateMediaPathParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

@@ -35,6 +35,67 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+UpdateItemLoader::UpdateItemLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateItemParams>(apiClient) {}
+
+QString UpdateItemLoader::path(const UpdateItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) ;
+}
+
+QUrlQuery UpdateItemLoader::query(const UpdateItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateItemLoader::body(const UpdateItemParams &params) const {
+	return Support::toString<QSharedPointer<BaseItemDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateItemLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+UpdateItemContentTypeLoader::UpdateItemContentTypeLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateItemContentTypeParams>(apiClient) {}
+
+QString UpdateItemContentTypeLoader::path(const UpdateItemContentTypeParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/ContentType");
+}
+
+QUrlQuery UpdateItemContentTypeLoader::query(const UpdateItemContentTypeParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.contentTypeNull()) {
+		result.addQueryItem("contentType", Support::toString<QString>(params.contentType()));
+	}
+	
+	return result;
+}
+
+QByteArray UpdateItemContentTypeLoader::body(const UpdateItemContentTypeParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation UpdateItemContentTypeLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetMetadataEditorInfoLoader::GetMetadataEditorInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<MetadataEditorInfo, GetMetadataEditorInfoParams>(apiClient) {}
 

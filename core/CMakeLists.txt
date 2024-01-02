@@ -13,12 +13,14 @@ include(GNUInstallDirs)
 include(GeneratedSources.cmake)
 
 set(JellyfinQt_SOURCES
+        src/model/controllablesession.cpp
         src/model/deviceprofile.cpp
         src/model/item.cpp
         src/model/player.cpp
         src/model/playbackmanager.cpp
         src/model/playbackreporter.cpp
         src/model/playlist.cpp
+        src/model/remotejellyfinplayback.cpp
         src/model/shuffle.cpp
         src/model/user.cpp
 
@@ -32,6 +34,7 @@ set(JellyfinQt_SOURCES
         src/viewmodel/modelstatus.cpp
         src/viewmodel/playbackmanager.cpp
         src/viewmodel/playlist.cpp
+        src/viewmodel/remotedevice.cpp
         src/viewmodel/settings.cpp
         src/viewmodel/userdata.cpp
         src/viewmodel/usermodel.cpp
@@ -49,41 +52,44 @@ set(JellyfinQt_SOURCES
 list(APPEND JellyfinQt_SOURCES ${openapi_SOURCES})
 
 set(JellyfinQt_HEADERS
-        include/JellyfinQt/model/deviceprofile.h
-        include/JellyfinQt/model/item.h
-        include/JellyfinQt/model/player.h
-        include/JellyfinQt/model/playbackmanager.h
-        include/JellyfinQt/model/playbackreporter.h
-        include/JellyfinQt/model/playlist.h
-        include/JellyfinQt/model/shuffle.h
-        include/JellyfinQt/model/user.h
-        include/JellyfinQt/support/jsonconv.h
-        include/JellyfinQt/support/jsonconvimpl.h
-        include/JellyfinQt/support/loader.h
-        include/JellyfinQt/support/parseexception.h
-        include/JellyfinQt/viewmodel/item.h
-        include/JellyfinQt/viewmodel/itemmodel.h
-        include/JellyfinQt/viewmodel/loader.h
-        include/JellyfinQt/viewmodel/mediastream.h
-        include/JellyfinQt/viewmodel/modelstatus.h
-        include/JellyfinQt/viewmodel/propertyhelper.h
-        include/JellyfinQt/viewmodel/playbackmanager.h
-        include/JellyfinQt/viewmodel/platformmediacontrol.h
-        include/JellyfinQt/viewmodel/playlist.h
-        include/JellyfinQt/viewmodel/settings.h
-        include/JellyfinQt/viewmodel/userdata.h
-        include/JellyfinQt/viewmodel/usermodel.h
-        include/JellyfinQt/viewmodel/user.h
-        include/JellyfinQt/viewmodel/utils.h
-        include/JellyfinQt/apiclient.h
-        include/JellyfinQt/apimodel.h
-        include/JellyfinQt/credentialmanager.h
-        include/JellyfinQt/eventbus.h
-        include/JellyfinQt/jellyfin.h
-        include/JellyfinQt/jsonhelper.h
-        include/JellyfinQt/qobjectsettingswrapper.h
-        include/JellyfinQt/serverdiscoverymodel.h
-        include/JellyfinQt/websocket.h)
+    include/JellyfinQt/model/controllablesession.h
+    include/JellyfinQt/model/deviceprofile.h
+    include/JellyfinQt/model/item.h
+    include/JellyfinQt/model/player.h
+    include/JellyfinQt/model/playbackmanager.h
+    include/JellyfinQt/model/playbackreporter.h
+    include/JellyfinQt/model/playlist.h
+    include/JellyfinQt/model/remotejellyfinplayback.h
+    include/JellyfinQt/model/shuffle.h
+    include/JellyfinQt/model/user.h
+    include/JellyfinQt/support/jsonconv.h
+    include/JellyfinQt/support/jsonconvimpl.h
+    include/JellyfinQt/support/loader.h
+    include/JellyfinQt/support/parseexception.h
+    include/JellyfinQt/viewmodel/item.h
+    include/JellyfinQt/viewmodel/itemmodel.h
+    include/JellyfinQt/viewmodel/loader.h
+    include/JellyfinQt/viewmodel/mediastream.h
+    include/JellyfinQt/viewmodel/modelstatus.h
+    include/JellyfinQt/viewmodel/propertyhelper.h
+    include/JellyfinQt/viewmodel/playbackmanager.h
+    include/JellyfinQt/viewmodel/platformmediacontrol.h
+    include/JellyfinQt/viewmodel/playlist.h
+    include/JellyfinQt/viewmodel/remotedevice.h
+    include/JellyfinQt/viewmodel/settings.h
+    include/JellyfinQt/viewmodel/userdata.h
+    include/JellyfinQt/viewmodel/usermodel.h
+    include/JellyfinQt/viewmodel/user.h
+    include/JellyfinQt/viewmodel/utils.h
+    include/JellyfinQt/apiclient.h
+    include/JellyfinQt/apimodel.h
+    include/JellyfinQt/credentialmanager.h
+    include/JellyfinQt/eventbus.h
+    include/JellyfinQt/jellyfin.h
+    include/JellyfinQt/jsonhelper.h
+    include/JellyfinQt/qobjectsettingswrapper.h
+    include/JellyfinQt/serverdiscoverymodel.h
+    include/JellyfinQt/websocket.h)
 
 if (FREEDESKTOP_INTEGRATION)
     list(APPEND JellyfinQt_SOURCES

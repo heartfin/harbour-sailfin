@@ -67,6 +67,65 @@ QNetworkAccessManager::Operation GetAdditionalPartLoader::operation() const {
 
 }
 
+DeleteAlternateSourcesLoader::DeleteAlternateSourcesLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteAlternateSourcesParams>(apiClient) {}
+
+QString DeleteAlternateSourcesLoader::path(const DeleteAlternateSourcesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Videos/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/AlternateSources");
+}
+
+QUrlQuery DeleteAlternateSourcesLoader::query(const DeleteAlternateSourcesParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DeleteAlternateSourcesLoader::body(const DeleteAlternateSourcesParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteAlternateSourcesLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+MergeVersionsLoader::MergeVersionsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, MergeVersionsParams>(apiClient) {}
+
+QString MergeVersionsLoader::path(const MergeVersionsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Videos/MergeVersions");
+}
+
+QUrlQuery MergeVersionsLoader::query(const MergeVersionsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("ids", Support::toString<QStringList>(params.ids()));
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray MergeVersionsLoader::body(const MergeVersionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation MergeVersionsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -35,6 +35,35 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+CompleteWizardLoader::CompleteWizardLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CompleteWizardParams>(apiClient) {}
+
+QString CompleteWizardLoader::path(const CompleteWizardParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Startup/Complete");
+}
+
+QUrlQuery CompleteWizardLoader::query(const CompleteWizardParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray CompleteWizardLoader::body(const CompleteWizardParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation CompleteWizardLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetStartupConfigurationLoader::GetStartupConfigurationLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<StartupConfigurationDto, GetStartupConfigurationParams>(apiClient) {}
 
@@ -61,6 +90,35 @@ QByteArray GetStartupConfigurationLoader::body(const GetStartupConfigurationPara
 QNetworkAccessManager::Operation GetStartupConfigurationLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+UpdateInitialConfigurationLoader::UpdateInitialConfigurationLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateInitialConfigurationParams>(apiClient) {}
+
+QString UpdateInitialConfigurationLoader::path(const UpdateInitialConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Startup/Configuration");
+}
+
+QUrlQuery UpdateInitialConfigurationLoader::query(const UpdateInitialConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateInitialConfigurationLoader::body(const UpdateInitialConfigurationParams &params) const {
+	return Support::toString<QSharedPointer<StartupConfigurationDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateInitialConfigurationLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 
@@ -93,6 +151,35 @@ QNetworkAccessManager::Operation GetFirstUser_2Loader::operation() const {
 
 }
 
+SetRemoteAccessLoader::SetRemoteAccessLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, SetRemoteAccessParams>(apiClient) {}
+
+QString SetRemoteAccessLoader::path(const SetRemoteAccessParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Startup/RemoteAccess");
+}
+
+QUrlQuery SetRemoteAccessLoader::query(const SetRemoteAccessParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray SetRemoteAccessLoader::body(const SetRemoteAccessParams &params) const {
+	return Support::toString<QSharedPointer<StartupRemoteAccessDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation SetRemoteAccessLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetFirstUserLoader::GetFirstUserLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<StartupUserDto, GetFirstUserParams>(apiClient) {}
 
@@ -119,6 +206,35 @@ QByteArray GetFirstUserLoader::body(const GetFirstUserParams &params) const {
 QNetworkAccessManager::Operation GetFirstUserLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+UpdateStartupUserLoader::UpdateStartupUserLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateStartupUserParams>(apiClient) {}
+
+QString UpdateStartupUserLoader::path(const UpdateStartupUserParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Startup/User");
+}
+
+QUrlQuery UpdateStartupUserLoader::query(const UpdateStartupUserParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateStartupUserLoader::body(const UpdateStartupUserParams &params) const {
+	return Support::toString<QSharedPointer<StartupUserDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateStartupUserLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

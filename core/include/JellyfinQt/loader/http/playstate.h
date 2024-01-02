@@ -49,6 +49,62 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
+ * @brief Reports playback has started within a session.
+ */
+
+class ReportPlaybackStartLoader : public Jellyfin::Support::HttpLoader<void, ReportPlaybackStartParams> {
+public:
+	explicit ReportPlaybackStartLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const ReportPlaybackStartParams& parameters) const override;
+	QUrlQuery query(const ReportPlaybackStartParams& parameters) const override;
+	QByteArray body(const ReportPlaybackStartParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Pings a playback session.
+ */
+
+class PingPlaybackSessionLoader : public Jellyfin::Support::HttpLoader<void, PingPlaybackSessionParams> {
+public:
+	explicit PingPlaybackSessionLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const PingPlaybackSessionParams& parameters) const override;
+	QUrlQuery query(const PingPlaybackSessionParams& parameters) const override;
+	QByteArray body(const PingPlaybackSessionParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports playback progress within a session.
+ */
+
+class ReportPlaybackProgressLoader : public Jellyfin::Support::HttpLoader<void, ReportPlaybackProgressParams> {
+public:
+	explicit ReportPlaybackProgressLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const ReportPlaybackProgressParams& parameters) const override;
+	QUrlQuery query(const ReportPlaybackProgressParams& parameters) const override;
+	QByteArray body(const ReportPlaybackProgressParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports playback has stopped within a session.
+ */
+
+class ReportPlaybackStoppedLoader : public Jellyfin::Support::HttpLoader<void, ReportPlaybackStoppedParams> {
+public:
+	explicit ReportPlaybackStoppedLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const ReportPlaybackStoppedParams& parameters) const override;
+	QUrlQuery query(const ReportPlaybackStoppedParams& parameters) const override;
+	QByteArray body(const ReportPlaybackStoppedParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Marks an item as played for user.
  */
 
@@ -74,6 +130,48 @@ protected:
 	QString path(const MarkUnplayedItemParams& parameters) const override;
 	QUrlQuery query(const MarkUnplayedItemParams& parameters) const override;
 	QByteArray body(const MarkUnplayedItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports that a user has begun playing an item.
+ */
+
+class OnPlaybackStartLoader : public Jellyfin::Support::HttpLoader<void, OnPlaybackStartParams> {
+public:
+	explicit OnPlaybackStartLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const OnPlaybackStartParams& parameters) const override;
+	QUrlQuery query(const OnPlaybackStartParams& parameters) const override;
+	QByteArray body(const OnPlaybackStartParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports that a user has stopped playing an item.
+ */
+
+class OnPlaybackStoppedLoader : public Jellyfin::Support::HttpLoader<void, OnPlaybackStoppedParams> {
+public:
+	explicit OnPlaybackStoppedLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const OnPlaybackStoppedParams& parameters) const override;
+	QUrlQuery query(const OnPlaybackStoppedParams& parameters) const override;
+	QByteArray body(const OnPlaybackStoppedParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports a user's playback progress.
+ */
+
+class OnPlaybackProgressLoader : public Jellyfin::Support::HttpLoader<void, OnPlaybackProgressParams> {
+public:
+	explicit OnPlaybackProgressLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const OnPlaybackProgressParams& parameters) const override;
+	QUrlQuery query(const OnPlaybackProgressParams& parameters) const override;
+	QByteArray body(const OnPlaybackProgressParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

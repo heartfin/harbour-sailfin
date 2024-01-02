@@ -61,6 +61,20 @@ protected:
 	QByteArray body(const GetDisplayPreferencesParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
+/**
+ * @brief Update Display Preferences.
+ */
+
+class UpdateDisplayPreferencesLoader : public Jellyfin::Support::HttpLoader<void, UpdateDisplayPreferencesParams> {
+public:
+	explicit UpdateDisplayPreferencesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateDisplayPreferencesParams& parameters) const override;
+	QUrlQuery query(const UpdateDisplayPreferencesParams& parameters) const override;
+	QByteArray body(const UpdateDisplayPreferencesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

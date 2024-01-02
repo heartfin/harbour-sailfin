@@ -70,6 +70,36 @@ QNetworkAccessManager::Operation GetDevicesLoader::operation() const {
 
 }
 
+DeleteDeviceLoader::DeleteDeviceLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteDeviceParams>(apiClient) {}
+
+QString DeleteDeviceLoader::path(const DeleteDeviceParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Devices");
+}
+
+QUrlQuery DeleteDeviceLoader::query(const DeleteDeviceParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("id", Support::toString<QString>(params.jellyfinId()));
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DeleteDeviceLoader::body(const DeleteDeviceParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteDeviceLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 GetDeviceInfoLoader::GetDeviceInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<DeviceInfo, GetDeviceInfoParams>(apiClient) {}
 
@@ -127,6 +157,36 @@ QByteArray GetDeviceOptionsLoader::body(const GetDeviceOptionsParams &params) co
 QNetworkAccessManager::Operation GetDeviceOptionsLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+UpdateDeviceOptionsLoader::UpdateDeviceOptionsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateDeviceOptionsParams>(apiClient) {}
+
+QString UpdateDeviceOptionsLoader::path(const UpdateDeviceOptionsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Devices/Options");
+}
+
+QUrlQuery UpdateDeviceOptionsLoader::query(const UpdateDeviceOptionsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("id", Support::toString<QString>(params.jellyfinId()));
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateDeviceOptionsLoader::body(const UpdateDeviceOptionsParams &params) const {
+	return Support::toString<QSharedPointer<DeviceOptions>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateDeviceOptionsLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

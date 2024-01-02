@@ -76,6 +76,48 @@ protected:
 	QByteArray body(const GetTaskParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
+/**
+ * @brief Update specified task triggers.
+ */
+
+class UpdateTaskLoader : public Jellyfin::Support::HttpLoader<void, UpdateTaskParams> {
+public:
+	explicit UpdateTaskLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateTaskParams& parameters) const override;
+	QUrlQuery query(const UpdateTaskParams& parameters) const override;
+	QByteArray body(const UpdateTaskParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Start specified task.
+ */
+
+class StartTaskLoader : public Jellyfin::Support::HttpLoader<void, StartTaskParams> {
+public:
+	explicit StartTaskLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const StartTaskParams& parameters) const override;
+	QUrlQuery query(const StartTaskParams& parameters) const override;
+	QByteArray body(const StartTaskParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Stop specified task.
+ */
+
+class StopTaskLoader : public Jellyfin::Support::HttpLoader<void, StopTaskParams> {
+public:
+	explicit StopTaskLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const StopTaskParams& parameters) const override;
+	QUrlQuery query(const StopTaskParams& parameters) const override;
+	QByteArray body(const StopTaskParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

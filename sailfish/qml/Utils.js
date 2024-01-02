@@ -69,7 +69,11 @@ function randomBackdrop(baseUrl, item) {
 
 function itemBackdropUrl(baseUrl, item, idx, options) {
     var extraQuery = propsToQuery(options)
-    return baseUrl + "/Items/" + item.jellyfinId + "/Images/Backdrop/" + idx + "?tag=" + item.backdropImageTags[idx] + extraQuery;
+    if (item.backdropImageTags[idx]) {
+        return baseUrl + "/Items/" + item.jellyfinId + "/Images/Backdrop/" + idx + "?tag=" + item.backdropImageTags[idx] + extraQuery;
+    } else {
+        return baseUrl + "/Items/" + item.parentBackdropItemId + "/Images/Backdrop/" + idx + "?tag=" + item.parentBackdropImageTags[idx] + extraQuery;
+    }
 }
 
 

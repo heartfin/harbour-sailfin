@@ -64,6 +64,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Deletes a device.
+ */
+
+class DeleteDeviceLoader : public Jellyfin::Support::HttpLoader<void, DeleteDeviceParams> {
+public:
+	explicit DeleteDeviceLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteDeviceParams& parameters) const override;
+	QUrlQuery query(const DeleteDeviceParams& parameters) const override;
+	QByteArray body(const DeleteDeviceParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Get info for a device.
  */
 
@@ -89,6 +103,20 @@ protected:
 	QString path(const GetDeviceOptionsParams& parameters) const override;
 	QUrlQuery query(const GetDeviceOptionsParams& parameters) const override;
 	QByteArray body(const GetDeviceOptionsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Update device options.
+ */
+
+class UpdateDeviceOptionsLoader : public Jellyfin::Support::HttpLoader<void, UpdateDeviceOptionsParams> {
+public:
+	explicit UpdateDeviceOptionsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateDeviceOptionsParams& parameters) const override;
+	QUrlQuery query(const UpdateDeviceOptionsParams& parameters) const override;
+	QByteArray body(const UpdateDeviceOptionsParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

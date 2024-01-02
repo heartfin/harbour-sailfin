@@ -120,6 +120,20 @@ protected:
 	QByteArray body(const GetParentPathParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
+/**
+ * @brief Validates path.
+ */
+
+class ValidatePathLoader : public Jellyfin::Support::HttpLoader<void, ValidatePathParams> {
+public:
+	explicit ValidatePathLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const ValidatePathParams& parameters) const override;
+	QUrlQuery query(const ValidatePathParams& parameters) const override;
+	QByteArray body(const ValidatePathParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

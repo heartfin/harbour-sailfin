@@ -63,6 +63,62 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Uninstalls a plugin.
+ */
+
+class UninstallPluginLoader : public Jellyfin::Support::HttpLoader<void, UninstallPluginParams> {
+public:
+	explicit UninstallPluginLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UninstallPluginParams& parameters) const override;
+	QUrlQuery query(const UninstallPluginParams& parameters) const override;
+	QByteArray body(const UninstallPluginParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Uninstalls a plugin by version.
+ */
+
+class UninstallPluginByVersionLoader : public Jellyfin::Support::HttpLoader<void, UninstallPluginByVersionParams> {
+public:
+	explicit UninstallPluginByVersionLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UninstallPluginByVersionParams& parameters) const override;
+	QUrlQuery query(const UninstallPluginByVersionParams& parameters) const override;
+	QByteArray body(const UninstallPluginByVersionParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Disable a plugin.
+ */
+
+class DisablePluginLoader : public Jellyfin::Support::HttpLoader<void, DisablePluginParams> {
+public:
+	explicit DisablePluginLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DisablePluginParams& parameters) const override;
+	QUrlQuery query(const DisablePluginParams& parameters) const override;
+	QByteArray body(const DisablePluginParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Enables a disabled plugin.
+ */
+
+class EnablePluginLoader : public Jellyfin::Support::HttpLoader<void, EnablePluginParams> {
+public:
+	explicit EnablePluginLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const EnablePluginParams& parameters) const override;
+	QUrlQuery query(const EnablePluginParams& parameters) const override;
+	QByteArray body(const EnablePluginParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets plugin configuration.
  */
 
@@ -74,6 +130,48 @@ protected:
 	QString path(const GetPluginConfigurationParams& parameters) const override;
 	QUrlQuery query(const GetPluginConfigurationParams& parameters) const override;
 	QByteArray body(const GetPluginConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates plugin configuration.
+ */
+
+class UpdatePluginConfigurationLoader : public Jellyfin::Support::HttpLoader<void, UpdatePluginConfigurationParams> {
+public:
+	explicit UpdatePluginConfigurationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdatePluginConfigurationParams& parameters) const override;
+	QUrlQuery query(const UpdatePluginConfigurationParams& parameters) const override;
+	QByteArray body(const UpdatePluginConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Gets a plugin's manifest.
+ */
+
+class GetPluginManifestLoader : public Jellyfin::Support::HttpLoader<void, GetPluginManifestParams> {
+public:
+	explicit GetPluginManifestLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetPluginManifestParams& parameters) const override;
+	QUrlQuery query(const GetPluginManifestParams& parameters) const override;
+	QByteArray body(const GetPluginManifestParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates plugin security info.
+ */
+
+class UpdatePluginSecurityInfoLoader : public Jellyfin::Support::HttpLoader<void, UpdatePluginSecurityInfoParams> {
+public:
+	explicit UpdatePluginSecurityInfoLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdatePluginSecurityInfoParams& parameters) const override;
+	QUrlQuery query(const UpdatePluginSecurityInfoParams& parameters) const override;
+	QByteArray body(const UpdatePluginSecurityInfoParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

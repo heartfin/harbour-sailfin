@@ -209,6 +209,64 @@ QNetworkAccessManager::Operation PostPingSystemLoader::operation() const {
 
 }
 
+RestartApplicationLoader::RestartApplicationLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, RestartApplicationParams>(apiClient) {}
+
+QString RestartApplicationLoader::path(const RestartApplicationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/System/Restart");
+}
+
+QUrlQuery RestartApplicationLoader::query(const RestartApplicationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray RestartApplicationLoader::body(const RestartApplicationParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation RestartApplicationLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+ShutdownApplicationLoader::ShutdownApplicationLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, ShutdownApplicationParams>(apiClient) {}
+
+QString ShutdownApplicationLoader::path(const ShutdownApplicationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/System/Shutdown");
+}
+
+QUrlQuery ShutdownApplicationLoader::query(const ShutdownApplicationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray ShutdownApplicationLoader::body(const ShutdownApplicationParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation ShutdownApplicationLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetWakeOnLanInfoLoader::GetWakeOnLanInfoLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<WakeOnLanInfo>, GetWakeOnLanInfoParams>(apiClient) {}
 

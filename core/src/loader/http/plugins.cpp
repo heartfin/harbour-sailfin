@@ -64,6 +64,122 @@ QNetworkAccessManager::Operation GetPluginsLoader::operation() const {
 
 }
 
+UninstallPluginLoader::UninstallPluginLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UninstallPluginParams>(apiClient) {}
+
+QString UninstallPluginLoader::path(const UninstallPluginParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) ;
+}
+
+QUrlQuery UninstallPluginLoader::query(const UninstallPluginParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UninstallPluginLoader::body(const UninstallPluginParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation UninstallPluginLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+UninstallPluginByVersionLoader::UninstallPluginByVersionLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UninstallPluginByVersionParams>(apiClient) {}
+
+QString UninstallPluginByVersionLoader::path(const UninstallPluginByVersionParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/") + Support::toString< QSharedPointer<Version>>(params.version()) ;
+}
+
+QUrlQuery UninstallPluginByVersionLoader::query(const UninstallPluginByVersionParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UninstallPluginByVersionLoader::body(const UninstallPluginByVersionParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation UninstallPluginByVersionLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+DisablePluginLoader::DisablePluginLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DisablePluginParams>(apiClient) {}
+
+QString DisablePluginLoader::path(const DisablePluginParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/") + Support::toString< QSharedPointer<Version>>(params.version()) + QStringLiteral("/Disable");
+}
+
+QUrlQuery DisablePluginLoader::query(const DisablePluginParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DisablePluginLoader::body(const DisablePluginParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DisablePluginLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+EnablePluginLoader::EnablePluginLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, EnablePluginParams>(apiClient) {}
+
+QString EnablePluginLoader::path(const EnablePluginParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/") + Support::toString< QSharedPointer<Version>>(params.version()) + QStringLiteral("/Enable");
+}
+
+QUrlQuery EnablePluginLoader::query(const EnablePluginParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray EnablePluginLoader::body(const EnablePluginParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation EnablePluginLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetPluginConfigurationLoader::GetPluginConfigurationLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BasePluginConfiguration, GetPluginConfigurationParams>(apiClient) {}
 
@@ -90,6 +206,93 @@ QByteArray GetPluginConfigurationLoader::body(const GetPluginConfigurationParams
 QNetworkAccessManager::Operation GetPluginConfigurationLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+UpdatePluginConfigurationLoader::UpdatePluginConfigurationLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdatePluginConfigurationParams>(apiClient) {}
+
+QString UpdatePluginConfigurationLoader::path(const UpdatePluginConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/Configuration");
+}
+
+QUrlQuery UpdatePluginConfigurationLoader::query(const UpdatePluginConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdatePluginConfigurationLoader::body(const UpdatePluginConfigurationParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation UpdatePluginConfigurationLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+GetPluginManifestLoader::GetPluginManifestLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, GetPluginManifestParams>(apiClient) {}
+
+QString GetPluginManifestLoader::path(const GetPluginManifestParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/Manifest");
+}
+
+QUrlQuery GetPluginManifestLoader::query(const GetPluginManifestParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray GetPluginManifestLoader::body(const GetPluginManifestParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetPluginManifestLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+UpdatePluginSecurityInfoLoader::UpdatePluginSecurityInfoLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdatePluginSecurityInfoParams>(apiClient) {}
+
+QString UpdatePluginSecurityInfoLoader::path(const UpdatePluginSecurityInfoParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Plugins/SecurityInfo");
+}
+
+QUrlQuery UpdatePluginSecurityInfoLoader::query(const UpdatePluginSecurityInfoParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdatePluginSecurityInfoLoader::body(const UpdatePluginSecurityInfoParams &params) const {
+	return Support::toString<QSharedPointer<PluginSecurityInfo>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdatePluginSecurityInfoLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

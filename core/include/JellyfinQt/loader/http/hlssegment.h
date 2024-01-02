@@ -46,6 +46,20 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+/**
+ * @brief Stops an active encoding.
+ */
+
+class StopEncodingProcessLoader : public Jellyfin::Support::HttpLoader<void, StopEncodingProcessParams> {
+public:
+	explicit StopEncodingProcessLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const StopEncodingProcessParams& parameters) const override;
+	QUrlQuery query(const StopEncodingProcessParams& parameters) const override;
+	QByteArray body(const StopEncodingProcessParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

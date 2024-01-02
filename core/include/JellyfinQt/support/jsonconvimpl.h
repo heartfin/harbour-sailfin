@@ -155,6 +155,8 @@ QString toString(const T &source, convertType<T>) {
         return QJsonDocument(val.toArray()).toJson(format);
     case QJsonValue::Object:
         return QJsonDocument(val.toObject()).toJson(format);
+    case QJsonValue::String:
+        return val.toString();
     case QJsonValue::Null:
     default:
         return QString();

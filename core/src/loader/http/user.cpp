@@ -99,6 +99,64 @@ QNetworkAccessManager::Operation GetUserByIdLoader::operation() const {
 
 }
 
+DeleteUserLoader::DeleteUserLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteUserParams>(apiClient) {}
+
+QString DeleteUserLoader::path(const DeleteUserParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) ;
+}
+
+QUrlQuery DeleteUserLoader::query(const DeleteUserParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DeleteUserLoader::body(const DeleteUserParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteUserLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+UpdateUserLoader::UpdateUserLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateUserParams>(apiClient) {}
+
+QString UpdateUserLoader::path(const UpdateUserParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) ;
+}
+
+QUrlQuery UpdateUserLoader::query(const UpdateUserParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateUserLoader::body(const UpdateUserParams &params) const {
+	return Support::toString<QSharedPointer<UserDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateUserLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 AuthenticateUserLoader::AuthenticateUserLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<AuthenticationResult, AuthenticateUserParams>(apiClient) {}
 
@@ -127,6 +185,122 @@ QByteArray AuthenticateUserLoader::body(const AuthenticateUserParams &params) co
 }
 
 QNetworkAccessManager::Operation AuthenticateUserLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+UpdateUserConfigurationLoader::UpdateUserConfigurationLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateUserConfigurationParams>(apiClient) {}
+
+QString UpdateUserConfigurationLoader::path(const UpdateUserConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Configuration");
+}
+
+QUrlQuery UpdateUserConfigurationLoader::query(const UpdateUserConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateUserConfigurationLoader::body(const UpdateUserConfigurationParams &params) const {
+	return Support::toString<QSharedPointer<UserConfiguration>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateUserConfigurationLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+UpdateUserEasyPasswordLoader::UpdateUserEasyPasswordLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateUserEasyPasswordParams>(apiClient) {}
+
+QString UpdateUserEasyPasswordLoader::path(const UpdateUserEasyPasswordParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/EasyPassword");
+}
+
+QUrlQuery UpdateUserEasyPasswordLoader::query(const UpdateUserEasyPasswordParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateUserEasyPasswordLoader::body(const UpdateUserEasyPasswordParams &params) const {
+	return Support::toString<QSharedPointer<UpdateUserEasyPassword>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateUserEasyPasswordLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+UpdateUserPasswordLoader::UpdateUserPasswordLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateUserPasswordParams>(apiClient) {}
+
+QString UpdateUserPasswordLoader::path(const UpdateUserPasswordParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Password");
+}
+
+QUrlQuery UpdateUserPasswordLoader::query(const UpdateUserPasswordParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateUserPasswordLoader::body(const UpdateUserPasswordParams &params) const {
+	return Support::toString<QSharedPointer<UpdateUserPassword>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateUserPasswordLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+UpdateUserPolicyLoader::UpdateUserPolicyLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateUserPolicyParams>(apiClient) {}
+
+QString UpdateUserPolicyLoader::path(const UpdateUserPolicyParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Policy");
+}
+
+QUrlQuery UpdateUserPolicyLoader::query(const UpdateUserPolicyParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateUserPolicyLoader::body(const UpdateUserPolicyParams &params) const {
+	return Support::toString<QSharedPointer<UserPolicy>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateUserPolicyLoader::operation() const {
 	// HTTP method Post
 	return QNetworkAccessManager::PostOperation;
 

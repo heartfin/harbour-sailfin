@@ -60,9 +60,30 @@ public:
      */
     explicit WebSocket(ApiClient *client);
     enum MessageType {
+        /**
+         * @brief Server to client: instruct client to send periodical KeepAlive messages
+         */
         ForceKeepAlive,
+        /**
+         * @brief Client to server: keep the connection alive
+         */
         KeepAlive,
-        UserDataChanged
+        /**
+         * @brief Server to client: user data for an item has changed.
+         */
+        UserDataChanged,
+        /**
+         * @brief Client to server: Subscribe to playback update sessions.
+         */
+        SessionsStart,
+        /**
+         * @brief Client to server: unsubscribe from playback session updates
+         */
+        SessionsStop,
+        /**
+         * @brief Server to client: session information has changed
+         */
+        Sessions
     };
     Q_PROPERTY(QAbstractSocket::SocketState state READ state NOTIFY stateChanged)
     Q_ENUM(MessageType)
@@ -72,6 +93,8 @@ public:
     }
 public slots:
     void open();
+    void subscribeToSessionInfo();
+    void unsubscribeToSessionInfo();
 private slots:
     void textMessageReceived(const QString &message);
     void onConnected();
@@ -80,7 +103,7 @@ private slots:
     void sendKeepAlive();
     void onWebsocketStateChanged(QAbstractSocket::SocketState newState) { emit stateChanged(newState); }
 signals:
-    void commandReceived(QString arts, QVariantMap args);
+    void commandReceived(QString command, QVariantMap args);
     void stateChanged(QAbstractSocket::SocketState newState);
 
 protected:
@@ -90,6 +113,7 @@ protected:
     QTimer m_keepAliveTimer;
     QTimer m_retryTimer;
     int m_reconnectAttempt = 0;
+    int m_sessionInfoSubscribeCount = 0;
 
 
     void setupKeepAlive(int data);

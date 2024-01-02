@@ -34,6 +34,8 @@ Item {
     property var manager
     property string title
     property bool _manuallyActivated: false
+    /// Don't allow the HUD to hide
+    property bool alwaysVisible: false
     readonly property bool hidden: opacity == 0.0
 
     Behavior on opacity { FadeAnimator {} }
@@ -174,6 +176,7 @@ Item {
     }
 
     function hide(manual) {
+        if (alwaysVisible) return
         // Don't hide if the user decided on their own to show the hud
         //if (!manual && _manuallyActivated) return;
         // Don't give in to the user if they want to hide the hud while it was forced upon them

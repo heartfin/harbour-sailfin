@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <JellyfinQt/dto/generalcommand.h>
 #include <JellyfinQt/dto/generalcommandtype.h>
 #include <JellyfinQt/dto/playstaterequest.h>
+#include <JellyfinQt/dto/sessioninfo.h>
 #include <JellyfinQt/dto/useritemdatadto.h>
 
 Q_LOGGING_CATEGORY(jellyfinWebSocket, "jellyfin.websocket");
@@ -61,6 +62,21 @@ void WebSocket::open() {
     qCDebug(jellyfinWebSocket) << "Opening WebSocket connection to " << m_webSocket.requestUrl() << ", connect attempt " << m_reconnectAttempt;
 }
 
+void WebSocket::subscribeToSessionInfo() {
+    if (m_sessionInfoSubscribeCount++ == 0) {
+        // First argument: initial delay in milliseconds
+        // Second argument: periodic update interval in milliseconds
+        // Reference: https://github.com/jellyfin/jellyfin/blob/f3c57e6a0ae015dc51cf548a0380d1bed33959c2/MediaBrowser.Controller/Net/BasePeriodicWebSocketListener.cs#L99
+        sendMessage(MessageType::SessionsStart, QJsonValue(QStringLiteral("0,5000")));
+    }
+}
+
+void WebSocket::unsubscribeToSessionInfo() {
+    if (--m_sessionInfoSubscribeCount == 0) {
+        sendMessage(MessageType::SessionsStop);
+    }
+}
+
 void WebSocket::onConnected() {
     connect(&m_webSocket, &QWebSocket::textMessageReceived, this, &WebSocket::textMessageReceived);
     m_reconnectAttempt = 0;
@@ -76,7 +92,6 @@ void WebSocket::onDisconnected() {
 }
 
 void WebSocket::textMessageReceived(const QString &message) {
-    qCDebug(jellyfinWebSocket) << "message received: " << message;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
     if (doc.isNull() || !doc.isObject()) {
         qCWarning(jellyfinWebSocket()) << "Malformed message received over WebSocket: parse error or root not an object.";
@@ -90,6 +105,7 @@ void WebSocket::textMessageReceived(const QString &message) {
 
     // Convert the type so we can use it in our enums.
     QString messageType = messageRoot["MessageType"].toString();
+    qCDebug(jellyfinWebSocket) << "Message received: " << messageType;
     QJsonValue data = messageRoot["Data"];
     if (messageType == QStringLiteral("ForceKeepAlive")) {
         setupKeepAlive(data.toInt());
@@ -136,8 +152,17 @@ void WebSocket::textMessageReceived(const QString &message) {
                 qCWarning(jellyfinWebSocket) << "Unparseable UserData list received: " << e->what();
             }
         }
+    } else if (messageType == QStringLiteral("Sessions")) {
+        try {
+            QList<DTO::SessionInfo> sessionInfoList = Support::fromJsonValue<QList<DTO::SessionInfo>>(data);
+            for (auto it = sessionInfoList.cbegin(); it != sessionInfoList.cend(); it++) {
+                emit m_apiClient->eventbus()->sessionInfoUpdated(it->jellyfinId(), *it);
+            }
+        } catch(QException *e) {
+            qCWarning(jellyfinWebSocket) << "Unparseable SessionInfo list received: " << e->what();
+        }
     } else {
-        qCDebug(jellyfinWebSocket) << messageType;
+        qCDebug(jellyfinWebSocket) << "Unhandled message: " << messageType;
     }
 }
 

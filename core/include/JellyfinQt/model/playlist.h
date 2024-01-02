@@ -72,6 +72,11 @@ public:
      */
     void next();
 
+    /**
+     * @brief Returns all items in the queue
+     */
+    QList<QSharedPointer<Item>> queueAndList() const;
+
     int queueSize() { return m_queue.size(); };
     int listSize() const { return m_list.size(); };
     int totalSize() const { return m_queue.size() + m_list.size(); }

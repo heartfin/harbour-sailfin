@@ -50,6 +50,20 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
+ * @brief Temporarily activates quick connect for five minutes.
+ */
+
+class ActivateLoader : public Jellyfin::Support::HttpLoader<void, ActivateParams> {
+public:
+	explicit ActivateLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const ActivateParams& parameters) const override;
+	QUrlQuery query(const ActivateParams& parameters) const override;
+	QByteArray body(const ActivateParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Authorizes a pending quick connect request.
  */
 
@@ -61,6 +75,20 @@ protected:
 	QString path(const AuthorizeParams& parameters) const override;
 	QUrlQuery query(const AuthorizeParams& parameters) const override;
 	QByteArray body(const AuthorizeParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Enables or disables quick connect.
+ */
+
+class AvailableLoader : public Jellyfin::Support::HttpLoader<void, AvailableParams> {
+public:
+	explicit AvailableLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const AvailableParams& parameters) const override;
+	QUrlQuery query(const AvailableParams& parameters) const override;
+	QByteArray body(const AvailableParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**

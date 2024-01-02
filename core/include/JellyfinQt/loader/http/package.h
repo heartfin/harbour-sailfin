@@ -78,6 +78,34 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Installs a package.
+ */
+
+class InstallPackageLoader : public Jellyfin::Support::HttpLoader<void, InstallPackageParams> {
+public:
+	explicit InstallPackageLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const InstallPackageParams& parameters) const override;
+	QUrlQuery query(const InstallPackageParams& parameters) const override;
+	QByteArray body(const InstallPackageParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Cancels a package installation.
+ */
+
+class CancelPackageInstallationLoader : public Jellyfin::Support::HttpLoader<void, CancelPackageInstallationParams> {
+public:
+	explicit CancelPackageInstallationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CancelPackageInstallationParams& parameters) const override;
+	QUrlQuery query(const CancelPackageInstallationParams& parameters) const override;
+	QByteArray body(const CancelPackageInstallationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets all package repositories.
  */
 
@@ -89,6 +117,20 @@ protected:
 	QString path(const GetRepositoriesParams& parameters) const override;
 	QUrlQuery query(const GetRepositoriesParams& parameters) const override;
 	QByteArray body(const GetRepositoriesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Sets the enabled and existing package repositories.
+ */
+
+class SetRepositoriesLoader : public Jellyfin::Support::HttpLoader<void, SetRepositoriesParams> {
+public:
+	explicit SetRepositoriesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const SetRepositoriesParams& parameters) const override;
+	QUrlQuery query(const SetRepositoriesParams& parameters) const override;
+	QByteArray body(const SetRepositoriesParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

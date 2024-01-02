@@ -48,6 +48,8 @@ PanelBackground {
     property bool showQueue: false
 
     property bool _pageWasShowingNavigationIndicator
+    readonly property bool _isItemSet: manager.item !== null && manager.item !== undefined && manager.item.jellyfinId.length > 0
+    readonly property bool controllingRemote: !manager.controllingSessionLocal
     readonly property bool mediaLoading: [J.MediaStatus.Loading, J.MediaStatus.Buffering].indexOf(manager.mediaStatus) >= 0
 
 
@@ -67,9 +69,12 @@ PanelBackground {
                 top: parent.top
             }
             width: height
-            Binding on blurhash {
-                when: manager.item !== null && "Primary" in manager.item.imageBlurHashes && "Primary" in manager.item.imageTags
-                value: manager.item.imageBlurHashes["Primary"][manager.item.imageTags["Primary"]]
+            blurhash: {
+                if (_isItemSet && "Primary" in manager.item.imageBlurHashes && "Primary" in manager.item.imageTags) {
+                    return manager.item.imageBlurHashes["Primary"][manager.item.imageTags["Primary"]]
+                } else {
+                    return ""
+                }
             }
             source: largeAlbumArt.source
             fillMode: Image.PreserveAspectCrop
@@ -125,7 +130,10 @@ PanelBackground {
 
             Label {
                 id: name
-                text: manager.item === null ? qsTr("No media selected") : manager.item.name
+                text: manager.item.jellyfinId
+                      ? manager.item.name
+                      //: Shown in a bright font when no media is playing in the bottom bar and now playing screen
+                      : qsTr("Nothing is playing")
                 width: Math.min(contentWidth, parent.width)
                 font.pixelSize: Theme.fontSizeMedium
                 maximumLineCount: 1
@@ -133,8 +141,23 @@ PanelBackground {
             }
             Label {
                 id: artists
+                leftPadding: controllingRemote ? remoteIcon.width + Theme.paddingSmall : 0
                 text: {
-                    if (manager.item === null) return qsTr("Play some media!")
+                    if (!_isItemSet) {
+                        if (controllingRemote) {
+                            //: Shown when no media is being played, but the app is controlling another Jellyfin client
+                            //: %1 is the name of said client
+                            return qsTr("Connected to %1").arg(manager.controllingSessionName)
+                        } else {
+                            return qsTr("Start playing some media!")
+                        }
+                    }
+                    var remoteText = "";
+
+                    if (controllingRemote) {
+                        remoteText = manager.controllingSessionName + " - "
+                    }
+
                     switch(manager.item.mediaType) {
                     case "Audio":
                         var links = [];
@@ -147,7 +170,7 @@ PanelBackground {
                                 .arg(Theme.secondaryColor)
                             )
                         }
-                        return links.join(", ")
+                        return remoteText + links.join(", ")
                     }
                     return qsTr("No audio")
                 }
@@ -162,6 +185,16 @@ PanelBackground {
                     appWindow.navigateToItem(link, "Audio", "MusicArtist", true)
                 }
                 textFormat: Text.StyledText
+                Icon {
+                    id: remoteIcon
+                    anchors {
+                        left: parent.left
+                        verticalCenter: parent.verticalCenter
+                    }
+                    height: parent
+                    source: "image://theme/icon-s-device-upload"
+                    visible: controllingRemote
+                }
             }
         }
 
@@ -267,7 +300,16 @@ PanelBackground {
    states: [
        State {
            name: ""
-           when: manager.playbackState !== J.PlayerState.Stopped && !isFullPage && !("__hidePlaybackBar" in pageStack.currentPage)
+           // Show the bar whenever:
+           // 1. Either one of the following is true:
+           //    a. The playbackmanager is playing media
+           //    b. The playbackmanager is controlling a remote session
+           // AND
+           // 2. The playback bar isn't in the full page state
+           // AND
+           // 3. The topmost page on the pagestack hasn't requested to hide the page
+           when: (manager.playbackState !== J.PlayerState.Stopped || !manager.controllingSessionLocal)
+                 && !isFullPage && !("__hidePlaybackBar" in pageStack.currentPage)
        },
        State {
            name: "large"
@@ -386,7 +428,9 @@ PanelBackground {
         },
         State {
             name: "hidden"
-            when: ((manager.playbackState === J.PlayerState.Stopped && !mediaLoading) || "__hidePlaybackBar" in pageStack.currentPage) && !isFullPage
+            when: ((manager.playbackState === J.PlayerState.Stopped && !mediaLoading)
+                    || ("__hidePlaybackBar" in pageStack.currentPage && pageStack.currentPage.__hidePlaybackBar))
+                  && !isFullPage
             PropertyChanges {
                 target: playbackBarTranslate
                 // + small padding since the ProgressBar otherwise would stick out

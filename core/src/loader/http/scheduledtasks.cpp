@@ -99,6 +99,93 @@ QNetworkAccessManager::Operation GetTaskLoader::operation() const {
 
 }
 
+UpdateTaskLoader::UpdateTaskLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateTaskParams>(apiClient) {}
+
+QString UpdateTaskLoader::path(const UpdateTaskParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/ScheduledTasks/") + Support::toString< QString>(params.taskId()) + QStringLiteral("/Triggers");
+}
+
+QUrlQuery UpdateTaskLoader::query(const UpdateTaskParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateTaskLoader::body(const UpdateTaskParams &params) const {
+	return Support::toString<QList<TaskTriggerInfo>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateTaskLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+StartTaskLoader::StartTaskLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, StartTaskParams>(apiClient) {}
+
+QString StartTaskLoader::path(const StartTaskParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/ScheduledTasks/Running/") + Support::toString< QString>(params.taskId()) ;
+}
+
+QUrlQuery StartTaskLoader::query(const StartTaskParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray StartTaskLoader::body(const StartTaskParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation StartTaskLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+StopTaskLoader::StopTaskLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, StopTaskParams>(apiClient) {}
+
+QString StopTaskLoader::path(const StopTaskParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/ScheduledTasks/Running/") + Support::toString< QString>(params.taskId()) ;
+}
+
+QUrlQuery StopTaskLoader::query(const StopTaskParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray StopTaskLoader::body(const StopTaskParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation StopTaskLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

@@ -76,6 +76,73 @@ QNetworkAccessManager::Operation CreatePlaylistLoader::operation() const {
 
 }
 
+AddToPlaylistLoader::AddToPlaylistLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, AddToPlaylistParams>(apiClient) {}
+
+QString AddToPlaylistLoader::path(const AddToPlaylistParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Playlists/") + Support::toString< QString>(params.playlistId()) + QStringLiteral("/Items");
+}
+
+QUrlQuery AddToPlaylistLoader::query(const AddToPlaylistParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.idsNull()) {
+		result.addQueryItem("ids", Support::toString<QStringList>(params.ids()));
+	}
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	
+	return result;
+}
+
+QByteArray AddToPlaylistLoader::body(const AddToPlaylistParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation AddToPlaylistLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+RemoveFromPlaylistLoader::RemoveFromPlaylistLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, RemoveFromPlaylistParams>(apiClient) {}
+
+QString RemoveFromPlaylistLoader::path(const RemoveFromPlaylistParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Playlists/") + Support::toString< QString>(params.playlistId()) + QStringLiteral("/Items");
+}
+
+QUrlQuery RemoveFromPlaylistLoader::query(const RemoveFromPlaylistParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.entryIdsNull()) {
+		result.addQueryItem("entryIds", Support::toString<QStringList>(params.entryIds()));
+	}
+	
+	return result;
+}
+
+QByteArray RemoveFromPlaylistLoader::body(const RemoveFromPlaylistParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation RemoveFromPlaylistLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 GetPlaylistItemsLoader::GetPlaylistItemsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetPlaylistItemsParams>(apiClient) {}
 
@@ -124,6 +191,35 @@ QByteArray GetPlaylistItemsLoader::body(const GetPlaylistItemsParams &params) co
 QNetworkAccessManager::Operation GetPlaylistItemsLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+MoveItemLoader::MoveItemLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, MoveItemParams>(apiClient) {}
+
+QString MoveItemLoader::path(const MoveItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Playlists/") + Support::toString< QString>(params.playlistId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Move/") + Support::toString< qint32>(params.newIndex()) ;
+}
+
+QUrlQuery MoveItemLoader::query(const MoveItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray MoveItemLoader::body(const MoveItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation MoveItemLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

@@ -50,6 +50,20 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
+ * @brief Completes the startup wizard.
+ */
+
+class CompleteWizardLoader : public Jellyfin::Support::HttpLoader<void, CompleteWizardParams> {
+public:
+	explicit CompleteWizardLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CompleteWizardParams& parameters) const override;
+	QUrlQuery query(const CompleteWizardParams& parameters) const override;
+	QByteArray body(const CompleteWizardParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets the initial startup wizard configuration.
  */
 
@@ -61,6 +75,20 @@ protected:
 	QString path(const GetStartupConfigurationParams& parameters) const override;
 	QUrlQuery query(const GetStartupConfigurationParams& parameters) const override;
 	QByteArray body(const GetStartupConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Sets the initial startup wizard configuration.
+ */
+
+class UpdateInitialConfigurationLoader : public Jellyfin::Support::HttpLoader<void, UpdateInitialConfigurationParams> {
+public:
+	explicit UpdateInitialConfigurationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateInitialConfigurationParams& parameters) const override;
+	QUrlQuery query(const UpdateInitialConfigurationParams& parameters) const override;
+	QByteArray body(const UpdateInitialConfigurationParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
@@ -78,6 +106,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Sets remote access and UPnP.
+ */
+
+class SetRemoteAccessLoader : public Jellyfin::Support::HttpLoader<void, SetRemoteAccessParams> {
+public:
+	explicit SetRemoteAccessLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const SetRemoteAccessParams& parameters) const override;
+	QUrlQuery query(const SetRemoteAccessParams& parameters) const override;
+	QByteArray body(const SetRemoteAccessParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets the first user.
  */
 
@@ -89,6 +131,20 @@ protected:
 	QString path(const GetFirstUserParams& parameters) const override;
 	QUrlQuery query(const GetFirstUserParams& parameters) const override;
 	QByteArray body(const GetFirstUserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Sets the user name and password.
+ */
+
+class UpdateStartupUserLoader : public Jellyfin::Support::HttpLoader<void, UpdateStartupUserParams> {
+public:
+	explicit UpdateStartupUserLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateStartupUserParams& parameters) const override;
+	QUrlQuery query(const UpdateStartupUserParams& parameters) const override;
+	QByteArray body(const UpdateStartupUserParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

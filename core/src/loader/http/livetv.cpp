@@ -316,6 +316,38 @@ QNetworkAccessManager::Operation AddListingProviderLoader::operation() const {
 
 }
 
+DeleteListingProviderLoader::DeleteListingProviderLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteListingProviderParams>(apiClient) {}
+
+QString DeleteListingProviderLoader::path(const DeleteListingProviderParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/ListingProviders");
+}
+
+QUrlQuery DeleteListingProviderLoader::query(const DeleteListingProviderParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.jellyfinIdNull()) {
+		result.addQueryItem("id", Support::toString<QString>(params.jellyfinId()));
+	}
+	
+	return result;
+}
+
+QByteArray DeleteListingProviderLoader::body(const DeleteListingProviderParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteListingProviderLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 GetDefaultListingProviderLoader::GetDefaultListingProviderLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<ListingsProviderInfo, GetDefaultListingProviderParams>(apiClient) {}
 
@@ -781,6 +813,35 @@ QNetworkAccessManager::Operation GetRecordingLoader::operation() const {
 
 }
 
+DeleteRecordingLoader::DeleteRecordingLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteRecordingParams>(apiClient) {}
+
+QString DeleteRecordingLoader::path(const DeleteRecordingParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/Recordings/") + Support::toString< QString>(params.recordingId()) ;
+}
+
+QUrlQuery DeleteRecordingLoader::query(const DeleteRecordingParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DeleteRecordingLoader::body(const DeleteRecordingParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteRecordingLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 GetRecordingFoldersLoader::GetRecordingFoldersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetRecordingFoldersParams>(apiClient) {}
 
@@ -951,6 +1012,35 @@ QNetworkAccessManager::Operation GetSeriesTimersLoader::operation() const {
 
 }
 
+CreateSeriesTimerLoader::CreateSeriesTimerLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CreateSeriesTimerParams>(apiClient) {}
+
+QString CreateSeriesTimerLoader::path(const CreateSeriesTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/SeriesTimers");
+}
+
+QUrlQuery CreateSeriesTimerLoader::query(const CreateSeriesTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray CreateSeriesTimerLoader::body(const CreateSeriesTimerParams &params) const {
+	return Support::toString<QSharedPointer<SeriesTimerInfoDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation CreateSeriesTimerLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetSeriesTimerLoader::GetSeriesTimerLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<SeriesTimerInfoDto, GetSeriesTimerParams>(apiClient) {}
 
@@ -977,6 +1067,64 @@ QByteArray GetSeriesTimerLoader::body(const GetSeriesTimerParams &params) const 
 QNetworkAccessManager::Operation GetSeriesTimerLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+CancelSeriesTimerLoader::CancelSeriesTimerLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CancelSeriesTimerParams>(apiClient) {}
+
+QString CancelSeriesTimerLoader::path(const CancelSeriesTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/SeriesTimers/") + Support::toString< QString>(params.timerId()) ;
+}
+
+QUrlQuery CancelSeriesTimerLoader::query(const CancelSeriesTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray CancelSeriesTimerLoader::body(const CancelSeriesTimerParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation CancelSeriesTimerLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+UpdateSeriesTimerLoader::UpdateSeriesTimerLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateSeriesTimerParams>(apiClient) {}
+
+QString UpdateSeriesTimerLoader::path(const UpdateSeriesTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/SeriesTimers/") + Support::toString< QString>(params.timerId()) ;
+}
+
+QUrlQuery UpdateSeriesTimerLoader::query(const UpdateSeriesTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateSeriesTimerLoader::body(const UpdateSeriesTimerParams &params) const {
+	return Support::toString<QSharedPointer<SeriesTimerInfoDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateSeriesTimerLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 
@@ -1021,6 +1169,35 @@ QNetworkAccessManager::Operation GetTimersLoader::operation() const {
 
 }
 
+CreateTimerLoader::CreateTimerLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CreateTimerParams>(apiClient) {}
+
+QString CreateTimerLoader::path(const CreateTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/Timers");
+}
+
+QUrlQuery CreateTimerLoader::query(const CreateTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray CreateTimerLoader::body(const CreateTimerParams &params) const {
+	return Support::toString<QSharedPointer<TimerInfoDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation CreateTimerLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetTimerLoader::GetTimerLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<TimerInfoDto, GetTimerParams>(apiClient) {}
 
@@ -1047,6 +1224,64 @@ QByteArray GetTimerLoader::body(const GetTimerParams &params) const {
 QNetworkAccessManager::Operation GetTimerLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+CancelTimerLoader::CancelTimerLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CancelTimerParams>(apiClient) {}
+
+QString CancelTimerLoader::path(const CancelTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/Timers/") + Support::toString< QString>(params.timerId()) ;
+}
+
+QUrlQuery CancelTimerLoader::query(const CancelTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray CancelTimerLoader::body(const CancelTimerParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation CancelTimerLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+UpdateTimerLoader::UpdateTimerLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateTimerParams>(apiClient) {}
+
+QString UpdateTimerLoader::path(const UpdateTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/Timers/") + Support::toString< QString>(params.timerId()) ;
+}
+
+QUrlQuery UpdateTimerLoader::query(const UpdateTimerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UpdateTimerLoader::body(const UpdateTimerParams &params) const {
+	return Support::toString<QSharedPointer<TimerInfoDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateTimerLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 
@@ -1111,6 +1346,38 @@ QNetworkAccessManager::Operation AddTunerHostLoader::operation() const {
 
 }
 
+DeleteTunerHostLoader::DeleteTunerHostLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteTunerHostParams>(apiClient) {}
+
+QString DeleteTunerHostLoader::path(const DeleteTunerHostParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/TunerHosts");
+}
+
+QUrlQuery DeleteTunerHostLoader::query(const DeleteTunerHostParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.jellyfinIdNull()) {
+		result.addQueryItem("id", Support::toString<QString>(params.jellyfinId()));
+	}
+	
+	return result;
+}
+
+QByteArray DeleteTunerHostLoader::body(const DeleteTunerHostParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteTunerHostLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 GetTunerHostTypesLoader::GetTunerHostTypesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<NameIdPair>, GetTunerHostTypesParams>(apiClient) {}
 
@@ -1137,6 +1404,35 @@ QByteArray GetTunerHostTypesLoader::body(const GetTunerHostTypesParams &params) 
 QNetworkAccessManager::Operation GetTunerHostTypesLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+ResetTunerLoader::ResetTunerLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, ResetTunerParams>(apiClient) {}
+
+QString ResetTunerLoader::path(const ResetTunerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/LiveTv/Tuners/") + Support::toString< QString>(params.tunerId()) + QStringLiteral("/Reset");
+}
+
+QUrlQuery ResetTunerLoader::query(const ResetTunerParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray ResetTunerLoader::body(const ResetTunerParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation ResetTunerLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

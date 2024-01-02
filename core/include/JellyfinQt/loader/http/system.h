@@ -136,6 +136,34 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Restarts the application.
+ */
+
+class RestartApplicationLoader : public Jellyfin::Support::HttpLoader<void, RestartApplicationParams> {
+public:
+	explicit RestartApplicationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const RestartApplicationParams& parameters) const override;
+	QUrlQuery query(const RestartApplicationParams& parameters) const override;
+	QByteArray body(const RestartApplicationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Shuts down the application.
+ */
+
+class ShutdownApplicationLoader : public Jellyfin::Support::HttpLoader<void, ShutdownApplicationParams> {
+public:
+	explicit ShutdownApplicationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const ShutdownApplicationParams& parameters) const override;
+	QUrlQuery query(const ShutdownApplicationParams& parameters) const override;
+	QByteArray body(const ShutdownApplicationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets wake on lan information.
  */
 

@@ -85,6 +85,34 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Deletes a user.
+ */
+
+class DeleteUserLoader : public Jellyfin::Support::HttpLoader<void, DeleteUserParams> {
+public:
+	explicit DeleteUserLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteUserParams& parameters) const override;
+	QUrlQuery query(const DeleteUserParams& parameters) const override;
+	QByteArray body(const DeleteUserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a user.
+ */
+
+class UpdateUserLoader : public Jellyfin::Support::HttpLoader<void, UpdateUserParams> {
+public:
+	explicit UpdateUserLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateUserParams& parameters) const override;
+	QUrlQuery query(const UpdateUserParams& parameters) const override;
+	QByteArray body(const UpdateUserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Authenticates a user.
  */
 
@@ -96,6 +124,62 @@ protected:
 	QString path(const AuthenticateUserParams& parameters) const override;
 	QUrlQuery query(const AuthenticateUserParams& parameters) const override;
 	QByteArray body(const AuthenticateUserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a user configuration.
+ */
+
+class UpdateUserConfigurationLoader : public Jellyfin::Support::HttpLoader<void, UpdateUserConfigurationParams> {
+public:
+	explicit UpdateUserConfigurationLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateUserConfigurationParams& parameters) const override;
+	QUrlQuery query(const UpdateUserConfigurationParams& parameters) const override;
+	QByteArray body(const UpdateUserConfigurationParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a user's easy password.
+ */
+
+class UpdateUserEasyPasswordLoader : public Jellyfin::Support::HttpLoader<void, UpdateUserEasyPasswordParams> {
+public:
+	explicit UpdateUserEasyPasswordLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateUserEasyPasswordParams& parameters) const override;
+	QUrlQuery query(const UpdateUserEasyPasswordParams& parameters) const override;
+	QByteArray body(const UpdateUserEasyPasswordParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a user's password.
+ */
+
+class UpdateUserPasswordLoader : public Jellyfin::Support::HttpLoader<void, UpdateUserPasswordParams> {
+public:
+	explicit UpdateUserPasswordLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateUserPasswordParams& parameters) const override;
+	QUrlQuery query(const UpdateUserPasswordParams& parameters) const override;
+	QByteArray body(const UpdateUserPasswordParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a user policy.
+ */
+
+class UpdateUserPolicyLoader : public Jellyfin::Support::HttpLoader<void, UpdateUserPolicyParams> {
+public:
+	explicit UpdateUserPolicyLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateUserPolicyParams& parameters) const override;
+	QUrlQuery query(const UpdateUserPolicyParams& parameters) const override;
+	QByteArray body(const UpdateUserPolicyParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**

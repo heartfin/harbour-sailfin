@@ -62,19 +62,33 @@ class PlaybackManager : public QObject {
     Q_PROPERTY(bool resumePlayback READ resumePlayback WRITE setResumePlayback NOTIFY resumePlaybackChanged)
     Q_PROPERTY(int audioIndex READ audioIndex WRITE setAudioIndex NOTIFY audioIndexChanged)
     Q_PROPERTY(int subtitleIndex READ subtitleIndex WRITE setSubtitleIndex NOTIFY subtitleIndexChanged)
+    /**
+     * @brief The position in ticks in the currently playing item
+     */
     Q_PROPERTY(qint64 position READ position NOTIFY positionChanged)
+    /**
+     * @brief The duration in ticks of the currently playing item
+     */
     Q_PROPERTY(qint64 duration READ duration NOTIFY durationChanged)
+    /**
+     * @brief Whether the playbackmanager is currently able to seek
+     */
     Q_PROPERTY(bool seekable READ seekable NOTIFY seekableChanged)
+    /**
+     * @brief Whether the currently playing item has audio
+     */
     Q_PROPERTY(bool hasAudio READ hasAudio NOTIFY hasAudioChanged)
+    /**
+     * @brief Whether the currently playing item has video
+     */
     Q_PROPERTY(bool hasVideo READ hasVideo NOTIFY hasVideoChanged)
     Q_PROPERTY(Jellyfin::Model::PlayerStateClass::Value playbackState READ playbackState NOTIFY playbackStateChanged)
     Q_PROPERTY(Jellyfin::Model::MediaStatusClass::Value mediaStatus READ mediaStatus NOTIFY mediaStatusChanged)
-    Q_PROPERTY(Jellyfin::Model::Playlist *queue READ queue NOTIFY queueChanged)
     Q_PROPERTY(int queueIndex READ queueIndex NOTIFY queueIndexChanged)
 public:
     explicit PlaybackManager(QObject *parent = nullptr);
     virtual ~PlaybackManager();
-    virtual void swap(PlaybackManager& other) = 0;
+    void swap(PlaybackManager& other);
 
     ApiClient * apiClient() const;
     void setApiClient(ApiClient *apiClient);
@@ -104,8 +118,20 @@ public:
     virtual bool hasAudio() const = 0;
     virtual bool hasVideo() const = 0;
 
+    /**
+     * @brief Start playing the given item
+     */
     virtual void playItem(QSharedPointer<Model::Item> item) = 0;
+    /**
+     * @brief Set the playlist to the given playlist and start playing the item at the given index
+     * @param items The list of items to play
+     * @param index Index of the item to play
+     */
     virtual void playItemInList(const QList<QSharedPointer<Model::Item>> &items, int index) = 0;
+    static const qint64 MS_TICK_FACTOR = 10000;
+protected:
+    void setItem(QSharedPointer<Item> item);
+    void setQueueIndex(int index);
 
 signals:
     void playbackStateChanged(Jellyfin::Model::PlayerStateClass::Value newPlaybackState);
@@ -166,8 +192,6 @@ class LocalPlaybackManager : public PlaybackManager {
     Q_PROPERTY(QUrl streamUrl READ streamUrl NOTIFY streamUrlChanged)
 public:
     explicit LocalPlaybackManager(QObject *parent = nullptr);
-
-    void swap(PlaybackManager& other) override;
 
     Player *player() const;
     QString sessionId() const;

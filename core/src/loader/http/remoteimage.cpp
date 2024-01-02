@@ -79,6 +79,39 @@ QNetworkAccessManager::Operation GetRemoteImagesLoader::operation() const {
 
 }
 
+DownloadRemoteImageLoader::DownloadRemoteImageLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DownloadRemoteImageParams>(apiClient) {}
+
+QString DownloadRemoteImageLoader::path(const DownloadRemoteImageParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/RemoteImages/Download");
+}
+
+QUrlQuery DownloadRemoteImageLoader::query(const DownloadRemoteImageParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("type", Support::toString<ImageType>(params.type()));
+
+	// Optional parameters
+	if (!params.imageUrlNull()) {
+		result.addQueryItem("imageUrl", Support::toString<QString>(params.imageUrl()));
+	}
+	
+	return result;
+}
+
+QByteArray DownloadRemoteImageLoader::body(const DownloadRemoteImageParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DownloadRemoteImageLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetRemoteImageProvidersLoader::GetRemoteImageProvidersLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<ImageProviderInfo>, GetRemoteImageProvidersParams>(apiClient) {}
 

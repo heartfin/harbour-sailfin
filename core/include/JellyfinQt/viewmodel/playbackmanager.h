@@ -20,11 +20,12 @@
 #define JELLYFIN_VIEWMODEL_PLAYBACKMANAGER_H
 
 #include <QAbstractItemModel>
+#include <QFuture>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QLoggingCategory>
-#include <QFuture>
 #include <QObject>
+#include <QSharedPointer>
 #include <QtGlobal>
 #include <QUrlQuery>
 #include <QVariant>
@@ -34,17 +35,18 @@
 
 #include <functional>
 
-#include "../dto/baseitemdto.h"
-#include "../dto/playbackinfodto.h"
-#include "../dto/playbackinforesponse.h"
-#include "../dto/playmethod.h"
-#include "../loader/requesttypes.h"
-#include "../model/player.h"
-#include "../model/playlist.h"
-#include "../support/jsonconv.h"
-#include "../viewmodel/item.h"
-#include "../viewmodel/playlist.h"
-#include "../apiclient.h"
+#include <JellyfinQt/dto/baseitemdto.h>
+#include <JellyfinQt/dto/playbackinfodto.h>
+#include <JellyfinQt/dto/playbackinforesponse.h>
+#include <JellyfinQt/dto/playmethod.h>
+#include <JellyfinQt/loader/requesttypes.h>
+#include <JellyfinQt/model/controllablesession.h>
+#include <JellyfinQt/model/player.h>
+#include <JellyfinQt/model/playlist.h>
+#include <JellyfinQt/support/jsonconv.h>
+#include <JellyfinQt/viewmodel/item.h>
+#include <JellyfinQt/viewmodel/playlist.h>
+#include <JellyfinQt/apiclient.h>
 #include "itemmodel.h"
 
 
@@ -81,6 +83,13 @@ public:
     virtual ~PlaybackManager();
 
     Q_PROPERTY(ApiClient *apiClient READ apiClient WRITE setApiClient)
+    Q_PROPERTY(QString controllingSessionId READ controllingSessionId NOTIFY controllingSessionIdChanged)
+    Q_PROPERTY(QString controllingSessionName READ controllingSessionName NOTIFY controllingSessionNameChanged)
+    /**
+     * Whether the playback is done by this client
+     */
+    Q_PROPERTY(bool controllingSessionLocal READ controllingSessionLocal NOTIFY controllingSessionLocalChanged)
+
     Q_PROPERTY(int audioIndex READ audioIndex WRITE setAudioIndex NOTIFY audioIndexChanged)
     Q_PROPERTY(int subtitleIndex READ subtitleIndex WRITE setSubtitleIndex NOTIFY subtitleIndexChanged)
     Q_PROPERTY(QString streamUrl READ streamUrl NOTIFY streamUrlChanged)
@@ -91,7 +100,7 @@ public:
     Q_PROPERTY(bool resumePlayback READ resumePlayback WRITE setResumePlayback NOTIFY resumePlaybackChanged)
     Q_PROPERTY(Jellyfin::DTO::PlayMethodClass::Value playMethod READ playMethod NOTIFY playMethodChanged)
 
-    // Current Item and queue informatoion
+    // Current Item and queue information
     Q_PROPERTY(QObject *item READ item NOTIFY itemChanged)
     Q_PROPERTY(int queueIndex READ queueIndex NOTIFY queueIndexChanged)
     Q_PROPERTY(Jellyfin::ViewModel::Playlist *queue READ queue NOTIFY queueChanged)
@@ -124,6 +133,11 @@ public:
     ViewModel::Item *item() const;
     QSharedPointer<Model::Item> dataItem() const;
 
+    QSharedPointer<Model::ControllableSession> controllingSession() const;
+    void setControllingSession(QSharedPointer<Model::ControllableSession> session);
+    QString controllingSessionId() const;
+    QString controllingSessionName() const;
+    bool controllingSessionLocal() const;
     QString streamUrl() const;
     PlayMethod playMethod() const;
     qint64 position() const;
@@ -146,6 +160,10 @@ public:
     void setHandlePlaystateCommands(bool newHandlePlaystateCommands);
 signals:
     void itemChanged();
+    void controllingSessionChanged();
+    void controllingSessionIdChanged();
+    void controllingSessionNameChanged();
+    void controllingSessionLocalChanged();
     void streamUrlChanged(const QString &newStreamUrl);
     void autoOpenChanged(bool autoOpen);
     void audioIndexChanged(int audioIndex);

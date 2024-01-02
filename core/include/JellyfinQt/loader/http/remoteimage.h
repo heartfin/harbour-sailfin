@@ -63,6 +63,20 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Downloads a remote image for an item.
+ */
+
+class DownloadRemoteImageLoader : public Jellyfin::Support::HttpLoader<void, DownloadRemoteImageParams> {
+public:
+	explicit DownloadRemoteImageLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DownloadRemoteImageParams& parameters) const override;
+	QUrlQuery query(const DownloadRemoteImageParams& parameters) const override;
+	QByteArray body(const DownloadRemoteImageParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets available remote image providers for an item.
  */
 

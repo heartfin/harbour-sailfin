@@ -76,6 +76,48 @@ protected:
 	QByteArray body(const SearchRemoteSubtitlesParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
+/**
+ * @brief Downloads a remote subtitle.
+ */
+
+class DownloadRemoteSubtitlesLoader : public Jellyfin::Support::HttpLoader<void, DownloadRemoteSubtitlesParams> {
+public:
+	explicit DownloadRemoteSubtitlesLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DownloadRemoteSubtitlesParams& parameters) const override;
+	QUrlQuery query(const DownloadRemoteSubtitlesParams& parameters) const override;
+	QByteArray body(const DownloadRemoteSubtitlesParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Upload an external subtitle file.
+ */
+
+class UploadSubtitleLoader : public Jellyfin::Support::HttpLoader<void, UploadSubtitleParams> {
+public:
+	explicit UploadSubtitleLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UploadSubtitleParams& parameters) const override;
+	QUrlQuery query(const UploadSubtitleParams& parameters) const override;
+	QByteArray body(const UploadSubtitleParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Deletes an external subtitle file.
+ */
+
+class DeleteSubtitleLoader : public Jellyfin::Support::HttpLoader<void, DeleteSubtitleParams> {
+public:
+	explicit DeleteSubtitleLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteSubtitleParams& parameters) const override;
+	QUrlQuery query(const DeleteSubtitleParams& parameters) const override;
+	QByteArray body(const DeleteSubtitleParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

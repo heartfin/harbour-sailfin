@@ -61,6 +61,34 @@ protected:
 	QByteArray body(const GetKeysParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
+/**
+ * @brief Create a new api key.
+ */
+
+class CreateKeyLoader : public Jellyfin::Support::HttpLoader<void, CreateKeyParams> {
+public:
+	explicit CreateKeyLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const CreateKeyParams& parameters) const override;
+	QUrlQuery query(const CreateKeyParams& parameters) const override;
+	QByteArray body(const CreateKeyParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Remove an api key.
+ */
+
+class RevokeKeyLoader : public Jellyfin::Support::HttpLoader<void, RevokeKeyParams> {
+public:
+	explicit RevokeKeyLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const RevokeKeyParams& parameters) const override;
+	QUrlQuery query(const RevokeKeyParams& parameters) const override;
+	QByteArray body(const RevokeKeyParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

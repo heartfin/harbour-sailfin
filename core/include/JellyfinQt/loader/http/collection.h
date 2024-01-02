@@ -61,6 +61,34 @@ protected:
 	QByteArray body(const CreateCollectionParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
+/**
+ * @brief Adds items to a collection.
+ */
+
+class AddToCollectionLoader : public Jellyfin::Support::HttpLoader<void, AddToCollectionParams> {
+public:
+	explicit AddToCollectionLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const AddToCollectionParams& parameters) const override;
+	QUrlQuery query(const AddToCollectionParams& parameters) const override;
+	QByteArray body(const AddToCollectionParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Removes items from a collection.
+ */
+
+class RemoveFromCollectionLoader : public Jellyfin::Support::HttpLoader<void, RemoveFromCollectionParams> {
+public:
+	explicit RemoveFromCollectionLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const RemoveFromCollectionParams& parameters) const override;
+	QUrlQuery query(const RemoveFromCollectionParams& parameters) const override;
+	QByteArray body(const RemoveFromCollectionParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
 
 } // NS HTTP
 } // NS Loader

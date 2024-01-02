@@ -64,6 +64,35 @@ QNetworkAccessManager::Operation GetNotificationsLoader::operation() const {
 
 }
 
+SetReadLoader::SetReadLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, SetReadParams>(apiClient) {}
+
+QString SetReadLoader::path(const SetReadParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Notifications/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Read");
+}
+
+QUrlQuery SetReadLoader::query(const SetReadParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray SetReadLoader::body(const SetReadParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation SetReadLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetNotificationsSummaryLoader::GetNotificationsSummaryLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<NotificationsSummaryDto, GetNotificationsSummaryParams>(apiClient) {}
 
@@ -90,6 +119,76 @@ QByteArray GetNotificationsSummaryLoader::body(const GetNotificationsSummaryPara
 QNetworkAccessManager::Operation GetNotificationsSummaryLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+SetUnreadLoader::SetUnreadLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, SetUnreadParams>(apiClient) {}
+
+QString SetUnreadLoader::path(const SetUnreadParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Notifications/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Unread");
+}
+
+QUrlQuery SetUnreadLoader::query(const SetUnreadParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray SetUnreadLoader::body(const SetUnreadParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation SetUnreadLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+CreateAdminNotificationLoader::CreateAdminNotificationLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, CreateAdminNotificationParams>(apiClient) {}
+
+QString CreateAdminNotificationLoader::path(const CreateAdminNotificationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Notifications/Admin");
+}
+
+QUrlQuery CreateAdminNotificationLoader::query(const CreateAdminNotificationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.urlNull()) {
+		result.addQueryItem("url", Support::toString<QString>(params.url()));
+	}
+	if (!params.levelNull()) {
+		result.addQueryItem("level", Support::toString<NotificationLevel>(params.level()));
+	}
+	if (!params.nameNull()) {
+		result.addQueryItem("name", Support::toString<QString>(params.name()));
+	}
+	if (!params.descriptionNull()) {
+		result.addQueryItem("description", Support::toString<QString>(params.description()));
+	}
+	
+	return result;
+}
+
+QByteArray CreateAdminNotificationLoader::body(const CreateAdminNotificationParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation CreateAdminNotificationLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

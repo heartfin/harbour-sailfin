@@ -48,6 +48,34 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
+ * @brief Updates an item.
+ */
+
+class UpdateItemLoader : public Jellyfin::Support::HttpLoader<void, UpdateItemParams> {
+public:
+	explicit UpdateItemLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateItemParams& parameters) const override;
+	QUrlQuery query(const UpdateItemParams& parameters) const override;
+	QByteArray body(const UpdateItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates an item's content type.
+ */
+
+class UpdateItemContentTypeLoader : public Jellyfin::Support::HttpLoader<void, UpdateItemContentTypeParams> {
+public:
+	explicit UpdateItemContentTypeLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateItemContentTypeParams& parameters) const override;
+	QUrlQuery query(const UpdateItemContentTypeParams& parameters) const override;
+	QByteArray body(const UpdateItemContentTypeParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Gets metadata editor info for an item.
  */
 

@@ -80,7 +80,7 @@ int NoShuffle::nextIndex() const {
         return (m_index + 1) % m_playlist->listSize();
     } else {
         if (m_index + 1 >= m_playlist->listSize()) {
-            return 0;
+            return -1;
         } else {
             return m_index + 1;
         }
@@ -88,7 +88,11 @@ int NoShuffle::nextIndex() const {
 }
 
 void NoShuffle::setIndex(int i) {
-    m_index = i;
+    if (i >= 0 && i < m_playlist->listSize()) {
+        m_index = i;
+    } else {
+        m_index = -1;
+    }
 }
 
 // ListShuffleBase

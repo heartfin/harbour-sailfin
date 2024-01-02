@@ -46,37 +46,37 @@ PlayerAdaptor::~PlayerAdaptor() {
 bool PlayerAdaptor::canControl() const
 {
     // get the value of property CanControl
-    return true;
+    return m_mediaControl->playbackManager() != nullptr;
 }
 
 bool PlayerAdaptor::canGoNext() const
 {
     // get the value of property CanGoNext
-    return canPlay() && m_mediaControl->playbackManager()->hasNext();
+    return canControl() && canPlay() && m_mediaControl->playbackManager()->hasNext();
 }
 
 bool PlayerAdaptor::canGoPrevious() const
 {
     // get the value of property CanGoPrevious
-    return canPlay() && m_mediaControl->playbackManager()->hasPrevious();
+    return canControl() && canPlay() && m_mediaControl->playbackManager()->hasPrevious();
 }
 
 bool PlayerAdaptor::canPause() const
 {
     // get the value of property CanPause
-    return canPlay();
+    return canControl() && canPlay();
 }
 
 bool PlayerAdaptor::canPlay() const
 {
     // get the value of property CanPlay
-    return m_mediaControl->playbackManager()->queue()->rowCount(QModelIndex()) > 0;
+    return canControl() && m_mediaControl->playbackManager()->queue()->rowCount(QModelIndex()) > 0;
 }
 
 bool PlayerAdaptor::canSeek() const
 {
     // get the value of property CanSeek
-    return m_mediaControl->playbackManager()->seekable();
+    return canControl() && m_mediaControl->playbackManager()->seekable();
 }
 
 QString PlayerAdaptor::loopStatus() const
@@ -134,7 +134,10 @@ QVariantMap PlayerAdaptor::metadata() const
         }
         map[QStringLiteral("xesam:contentCreated")] = item->dateCreated();
         map[QStringLiteral("xesam:genre")] = item->genres();
-        map[QStringLiteral("xesam:lastUsed")] = item->userData()->lastPlayedDate();
+
+        if (!item->userData().isNull()) {
+            map[QStringLiteral("xesam:lastUsed")] = item->userData()->lastPlayedDate();
+        }
 
         QJsonObject providers = item->providerIds();
         if (providers.contains(QStringLiteral("MusicBrainzTrack"))) {

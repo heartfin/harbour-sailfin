@@ -35,6 +35,41 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+StopEncodingProcessLoader::StopEncodingProcessLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, StopEncodingProcessParams>(apiClient) {}
+
+QString StopEncodingProcessLoader::path(const StopEncodingProcessParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Videos/ActiveEncodings");
+}
+
+QUrlQuery StopEncodingProcessLoader::query(const StopEncodingProcessParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.deviceIdNull()) {
+		result.addQueryItem("deviceId", Support::toString<QString>(params.deviceId()));
+	}
+	if (!params.playSessionIdNull()) {
+		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
+	}
+	
+	return result;
+}
+
+QByteArray StopEncodingProcessLoader::body(const StopEncodingProcessParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation StopEncodingProcessLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 
 } // NS HTTP
 } // NS Loader

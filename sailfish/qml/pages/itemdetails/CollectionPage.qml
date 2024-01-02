@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -66,7 +66,7 @@ BaseDetailPage {
         cellWidth: Constants.libraryDelegateWidth
         cellHeight: Utils.usePortraitCover(itemData.collectionType) ? Constants.libraryDelegatePosterHeight
                                                                     : Constants.libraryDelegateHeight
-        visible: itemData.status !== J.ItemLoader.Error
+        visible: itemData.status !== J.LoaderBase.Error
 
         header: PageHeader {
             title: pageTitle || qsTr("Loading")
@@ -74,6 +74,16 @@ BaseDetailPage {
         PullDownMenu {
             id: downMenu
             visible: pageRoot.allowSort
+            MenuItem {
+                //: Pulley menu item: navigate to application settings page
+                text: qsTr("Settings")
+                onClicked: pageStack.push(Qt.resolvedUrl("../SettingsPage.qml"))
+            }
+            MenuItem {
+                //: Pulley menu item: shows controllable device page
+                text: qsTr("Remote control")
+                onClicked: pageStack.push(Qt.resolvedUrl("../ControllableDevicesPage.qml"))
+            }
             MenuItem {
                 id: sortMenuItem
                 //: Menu item for selecting the sort order of a collection

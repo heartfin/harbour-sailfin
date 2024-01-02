@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -26,6 +26,20 @@ BaseDetailPage {
         visible: itemData.status !== JellyfinItem.Error
         PageHeader {
             title: itemData.name
+        }
+        PullDownMenu {
+            // If for some reason the initial library item is not accessible, we must be able
+            // to access the settings.
+            MenuItem {
+                //: Pulley menu item: navigate to application settings page
+                text: qsTr("Settings")
+                onClicked: pageStack.push(Qt.resolvedUrl("../SettingsPage.qml"))
+            }
+            MenuItem {
+                //: Pulley menu item: shows controllable device page
+                text: qsTr("Remote control")
+                onClicked: pageStack.push(Qt.resolvedUrl("../ControllableDevicesPage.qml"))
+            }
         }
         ViewPlaceholder {
 

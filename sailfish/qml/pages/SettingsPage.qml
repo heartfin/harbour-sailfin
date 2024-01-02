@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import Nemo.Configuration 1.0
 
 import nl.netsoj.chris.Jellyfin 1.0 as J
 
@@ -122,6 +123,63 @@ Page {
                 text: qsTr("Other")
             }
 
+            ConfigurationGroup {
+                id: config
+                path: "/nl/netsoj/chris/Sailfin"
+                property string startupItemId
+                property string startupItemType
+            }
+
+            ComboBox {
+                id: startupLibrarySelector
+                //: Combo box label for selecting where the application should start
+                label: qsTr("Start page")
+                //: Combo box description for selecting where the application should start
+                description: qsTr("Which page should be shown when the application starts?")
+                               menu: ContextMenu {
+                    MenuItem {
+                        readonly property string jellyfinId: ""
+                        readonly property string mediaType: ""
+                        text: qsTr("All libraries (default)")
+                        onClicked:saveStartupLibrary("", "")
+                    }
+
+                    Timer {
+                        id: libraryRepeaterDelay
+                        // Ugh, there must be a small delay before setting the currentIndex or else it won't work
+                        interval: 100
+                        onTriggered: {
+                            console.log("Libraries ready")
+                            for (var i = 0; i < libraryRepeater.count; i++) {
+                                console.log("%1: %2 (%3)".arg(i).arg(libraryRepeater.itemAt(i).jellyfinId).arg(config.startupItemId))
+                                if (libraryRepeater.itemAt(i).jellyfinId == config.startupItemId) {
+                                    startupLibrarySelector.currentIndex = i + 1
+                                    console.log("%1: %2".arg(i + 1).arg(startupLibrarySelector.currentIndex))
+                                }
+                            }
+                        }
+                    }
+
+                    Repeater {
+                        id: libraryRepeater
+                        model: J.ItemModel {
+                            loader: J.UserItemsLoader {
+                                apiClient: appWindow.apiClient
+                                includeItemTypes: "CollectionFolder"
+                                onReady: libraryRepeaterDelay.start()
+                            }
+                        }
+
+                        MenuItem {
+                            readonly property string jellyfinId: model.jellyfinId
+                            readonly property string type: model.collectionType
+                            onClicked: saveStartupLibrary(jellyfinId, model.collectionType)
+                            text: model.name
+                        }
+                    }
+                }
+            }
+
             IconListItem {
                 //: Settings list item for settings related to streaming
                 text: qsTr("Streaming settings")
@@ -142,6 +200,41 @@ Page {
                 iconSource: "image://theme/icon-m-about"
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
+        }
+    }
+    function saveStartupLibrary(itemId, mediaType) {
+        config.startupItemId = itemId
+        config.startupItemType = mediaType
+        config.sync()
+        console.log("Saved pref: %1 (%2)".arg(config.startupItemId).arg(config.startupMediaType))
+        // We do a little trick: after clicking an item, we wait for
+        // the animation to finish and then replace the entire page stack with the new start page
+        // and the settings page. This is not ideal in the case that the page stack does not equal that
+        // but the tradeoff is that users should not get stuck in the app when the library that they selected
+        // as their start library has been deleted on the server. Otherwise, they need to restart the app.
+        startupPageReplacer.start()
+    }
+
+    Timer {
+        id: startupPageReplacer
+        interval: 500
+        onTriggered: {
+            var firstPage = Qt.resolvedUrl("MainPage.qml")
+            if (config.startupItemId) {
+                firstPage = {
+                    "page": Utils.getPageUrl(config.startupItemType, "collectionfolder", true),
+                    "properties": { "itemId": config.startupItemId }
+                }
+            }
+            pageStack.replaceAbove(
+                null,
+                [
+                    firstPage,
+                    Qt.resolvedUrl("SettingsPage.qml")
+                ],
+                {},
+                PageStackAction.Immediate
+            )
         }
     }
 

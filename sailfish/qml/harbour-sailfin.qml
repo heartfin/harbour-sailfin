@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020-2022 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -151,6 +151,8 @@ ApplicationWindow {
         id: config
         path: "/nl/netsoj/chris/Sailfin"
         property bool showDebugInfo: false
+        property string startupItemId
+        property string startupItemType
     }
 
     function navigateToItem(jellyfinId, mediaType, type, isFolder) {
@@ -182,8 +184,17 @@ ApplicationWindow {
         onAuthenticatedChanged: {
             if (authenticated && !isInSetup()) {
                 console.log("Authenticated)")
-                //loginAnimation.start()
-                pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
+                console.log("Startup id: %1, item type: %2".arg(config.startupItemId).arg(config.startupItemType))
+
+                if (config.startupItemId) {
+                    pageStack.replace(
+                        Utils.getPageUrl(config.startupItemType, "collectionfolder", true),
+                        { "itemId": config.startupItemId }
+                    )
+                } else {
+                    pageStack.replace(Qt.resolvedUrl("pages/MainPage.qml"))
+                }
+                pageStack.replace(pages)
             }
         }
     }

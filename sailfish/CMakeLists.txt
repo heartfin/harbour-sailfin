@@ -25,6 +25,7 @@ set(sailfin_QML_SOURCES
 	qml/components/music/SongDelegate.qml
 	qml/components/videoplayer/VideoError.qml
 	qml/components/videoplayer/VideoHud.qml
+    qml/components/ContributorsSection.qml
 	qml/components/IconListItem.qml
 	qml/components/ItemChildrenShowcase.qml
 	qml/components/JItem.qml

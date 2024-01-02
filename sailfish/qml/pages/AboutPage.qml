@@ -53,9 +53,10 @@ Page {
                 text: qsTr("<p><b>Sailfin version %1</b><br/>" +
                       "Copyright © Chris Josten 2020–%2</p>" +
                       "<p>Sailfin is Free Software licensed under the <a href='lgpl'>LGPL-v2.1</a> or later, at your choice. " +
+                      "You can <a href=\"github\">view its source code on GitHub</a>. " +
                       "Parts of the code of Sailfin are from other libraries. <a href='3rdparty'>View their licenses here</a>.</p>")
                         .arg(apiClient.version)
-                        .arg(2021)
+                        .arg(2024)
                 textFormat: Text.StyledText
                 color: Theme.secondaryHighlightColor
                 linkColor: Theme.primaryColor
@@ -67,10 +68,28 @@ Page {
                     case "3rdparty":
                         pageStack.push(Qt.resolvedUrl("LegalPage.qml"))
                         break;
+                    case "github":
+                        Qt.openUrlExternally("https://github.com/heartfin/harbour-sailfin")
+                        break;
                      }
                 }
             }
-
+            ContributorsSection {
+                //: SectionHeader
+                headerText: qsTr("Contributors")
+                contributors: ListModel {
+                    ListElement {
+                        name: "Chris Josten"
+                        role: "Developer"
+                        url: "https://github.com/HenkKalkwater"
+                    }
+                    ListElement {
+                        name: "Mikhail Barashkov"
+                        role: "Russian translation"
+                        url: "https://github.com/mbarashkov"
+                    }
+                }
+            }
         }
         VerticalScrollDecorator {}
     }

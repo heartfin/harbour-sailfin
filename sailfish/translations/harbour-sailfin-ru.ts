@@ -16,11 +16,16 @@
         <translation>Лицензия LGPL 2.1</translation>
     </message>
     <message>
-        <source>&lt;p&gt;&lt;b&gt;Sailfin version %1&lt;/b&gt;&lt;br/&gt;Copyright © Chris Josten 2020–%2&lt;/p&gt;&lt;p&gt;Sailfin is Free Software licensed under the &lt;a href=&apos;lgpl&apos;&gt;LGPL-v2.1&lt;/a&gt; or later, at your choice. Parts of the code of Sailfin are from other libraries. &lt;a href=&apos;3rdparty&apos;&gt;View their licenses here&lt;/a&gt;.&lt;/p&gt;</source>
+        <source>LGPL 2.1 License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>LGPL 2.1 License</source>
+        <source>&lt;p&gt;&lt;b&gt;Sailfin version %1&lt;/b&gt;&lt;br/&gt;Copyright © Chris Josten 2020–%2&lt;/p&gt;&lt;p&gt;Sailfin is Free Software licensed under the &lt;a href=&apos;lgpl&apos;&gt;LGPL-v2.1&lt;/a&gt; or later, at your choice. You can &lt;a href=&quot;github&quot;&gt;view its source code on GitHub&lt;/a&gt;. Parts of the code of Sailfin are from other libraries. &lt;a href=&apos;3rdparty&apos;&gt;View their licenses here&lt;/a&gt;.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contributors</source>
+        <extracomment>SectionHeader</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>

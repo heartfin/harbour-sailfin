@@ -5,7 +5,7 @@
     <name>AboutPage</name>
     <message>
         <source>About Sailfin</source>
-        <translation>About Sailfin1</translation>
+        <translation>About Sailfin</translation>
     </message>
     <message>
         <source>Open externally</source>

@@ -119,6 +119,16 @@
         <source>Sailfin</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <extracomment>Pulley menu item: navigate to application settings page</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remote control</source>
+        <extracomment>Pulley menu item: shows controllable device page</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ControllableDevicesPage</name>
@@ -356,6 +366,16 @@
 Page title for the list of all artists within the music library</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Settings</source>
+        <extracomment>Pulley menu item: navigate to application settings page</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remote control</source>
+        <extracomment>Pulley menu item: shows controllable device page</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PlayQueue</name>
@@ -504,6 +524,20 @@ Placeholder text for textfield for entering the Quick Connect codeyy</extracomme
         <extracomment>This is a name used by Jellyfin and seems to be untranslated in other languages</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Start page</source>
+        <extracomment>Combo box label for selecting where the application should start</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Which page should be shown when the application starts?</source>
+        <extracomment>Combo box description for selecting where the application should start</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All libraries (default)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SongDelegate</name>
@@ -550,6 +584,16 @@ Placeholder text for textfield for entering the Quick Connect codeyy</extracomme
     <message>
         <source>Fallback page for %2 not found either
 This is still an alpha version :)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <extracomment>Pulley menu item: navigate to application settings page</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remote control</source>
+        <extracomment>Pulley menu item: shows controllable device page</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>

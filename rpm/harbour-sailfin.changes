@@ -12,7 +12,7 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 #
-* Future version Chris Josten <chris@netsoj.nl> 0.??.??-1
+* Tue Jan 2 2024 Chris Josten <chris@netsoj.nl> 0.5.0-1
 - New features
   - Allow remote controlling other Jellyfin clients. See the pulley item on the main screen named 
     "Remote Control"
@@ -22,10 +22,15 @@
   - New layout for playlist pages
   - Navigation to artists of a song added when long-pressing a song or pressing the name
     on the now playing screen.
+  - Allow selecting the start page of the app.
+  - Films now display the backdrop instead of the poster on the now playing page, since this has
+    a better aspect ratio for the available space.
+  - Added a Russian translation (thanks to Mikhail Barashkov)
 - Bug fixes
   - The album overview page should now behave correctly with a non-square image
-  - Collections with films and series should now show the items in a 16:9 aspect ratio again
+  - Collections with films and series should now show the items in a 9:16 aspect ratio again
   - Large lists with more than 100 items should no longer infinitly repeat the first 100 items
+  - Media controls on the lockscreen should work again
 
 * Wed Jul 20 2022 Chris Josten <chris@netsoj.nl> 0.4.2-1
 - Bugfixes:

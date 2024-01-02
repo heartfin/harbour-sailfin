@@ -209,6 +209,14 @@ signals:
 
     void supportedCommandsChanged();
     void onlineChanged();
+    /**
+     * @brief Emitted after submitQuickConnectCode succeeded
+     */
+    void quickConnectAccepted();
+    /**
+     * @brief Emitted after submitQuickConnectCode failed
+     */
+    void quickConnectRejected();
 
     /**
      * @brief onUserDataChanged Emitted when the user data of an item is changed on the server.
@@ -233,6 +241,7 @@ public slots:
      */
     void setupConnection();
     void authenticate(QString username, QString password, bool storeCredentials = false);
+    void submitQuickConnectCode(const QString &code);
 
     /**
      * @brief Logs the user out and clears the session.

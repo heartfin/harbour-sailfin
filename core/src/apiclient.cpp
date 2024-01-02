@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QSharedPointer>
 
 #include "JellyfinQt/dto/clientcapabilitiesdto.h"
+#include "JellyfinQt/loader/http/quickconnect.h"
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/viewmodel/settings.h"
 #include "JellyfinQt/websocket.h"
@@ -426,6 +427,26 @@ void ApiClient::authenticate(QString username, QString password, bool storeCrede
         rep->deleteLater();
     });
     setDefaultErrorHandler(rep);
+}
+
+void ApiClient::submitQuickConnectCode(const QString &code) {
+    using QQAuthorizeLoader = Loader::HTTP::AuthorizeLoader;
+    Loader::AuthorizeParams params;
+    params.setCode(code);
+
+    QQAuthorizeLoader *loader = new QQAuthorizeLoader(this);
+    loader->setParameters(params);
+    loader->load();
+
+    loader->connect(loader, &QQAuthorizeLoader::error, this, [this, loader](QString message) {
+        qDebug() << "QQ error: " << message;
+        emit this->quickConnectRejected();
+        loader->deleteLater();
+    });
+    loader->connect(loader, &QQAuthorizeLoader::ready, this, [this, loader]() {
+        emit this->quickConnectAccepted();
+        loader->deleteLater();
+    });
 }
 
 void ApiClient::deleteSession() {

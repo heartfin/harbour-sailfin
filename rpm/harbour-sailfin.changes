@@ -16,6 +16,7 @@
 - New features
   - Allow remote controlling other Jellyfin clients. See the pulley item on the main screen named 
     "Remote Control"
+  - Let other devices log in using the Quick Connect feature of Jellyfin.
   - New layout for artist pages
   - New layout for the music library
   - New layout for playlist pages

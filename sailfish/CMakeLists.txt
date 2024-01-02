@@ -25,7 +25,7 @@ set(sailfin_QML_SOURCES
 	qml/components/music/SongDelegate.qml
 	qml/components/videoplayer/VideoError.qml
 	qml/components/videoplayer/VideoHud.qml
-    qml/components/ContributorsSection.qml
+	qml/components/ContributorsSection.qml
 	qml/components/IconListItem.qml
 	qml/components/ItemChildrenShowcase.qml
 	qml/components/JItem.qml
@@ -49,6 +49,7 @@ set(sailfin_QML_SOURCES
 	qml/harbour-sailfin.qml
 	qml/pages/ConnectingPage.qml
 	qml/pages/ControllableDevicesPage.qml
+	qml/pages/QuickConnectDialog.qml
 	qml/pages/SettingsPage.qml
 	qml/pages/VideoPage.qml
 	qml/pages/itemdetails/BaseDetailPage.qml

@@ -16,7 +16,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;p&gt;&lt;b&gt;Sailfin version %1&lt;/b&gt;&lt;br/&gt;Copyright © Chris Josten 2020–%2&lt;/p&gt;&lt;p&gt;Sailfin is Free Software licensed under the &lt;a href=&apos;lgpl&apos;&gt;LGPL-v2.1&lt;/a&gt; or later, at your choice. Parts of the code of Sailfin are from other libraries. &lt;a href=&apos;3rdparty&apos;&gt;View their licenses here&lt;/a&gt;.&lt;/p&gt;</source>
+        <source>&lt;p&gt;&lt;b&gt;Sailfin version %1&lt;/b&gt;&lt;br/&gt;Copyright © Chris Josten 2020–%2&lt;/p&gt;&lt;p&gt;Sailfin is Free Software licensed under the &lt;a href=&apos;lgpl&apos;&gt;LGPL-v2.1&lt;/a&gt; or later, at your choice. You can &lt;a href=&quot;github&quot;&gt;view its source code on GitHub&lt;/a&gt;. Parts of the code of Sailfin are from other libraries. &lt;a href=&apos;3rdparty&apos;&gt;View their licenses here&lt;/a&gt;.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contributors</source>
+        <extracomment>SectionHeader</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -415,6 +420,31 @@ Page title for the list of all artists within the music library</extracomment>
     </message>
 </context>
 <context>
+    <name>QuickConnectDialog</name>
+    <message>
+        <source>Quick Connect code</source>
+        <extracomment>Label for textfield for entering the Quick Connect codeyy
+----------
+Placeholder text for textfield for entering the Quick Connect codeyy</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow login</source>
+        <extracomment>Accept button on dialog for submitting a Quick Connect code</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To log a device in with Quick Connect, select the Quick Connect button and enter the displayed code in the field below.</source>
+        <extracomment>Instructions on page that tells the user a bit about how Quick Connect works</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Quick Connect code was not accepted</source>
+        <extracomment>Error message shown below the textfield when it is not connected</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SeasonPage</name>
     <message>
         <source>No overview available</source>
@@ -445,7 +475,7 @@ Page title for the list of all artists within the music library</extracomment>
     <message>
         <source>About Sailfin</source>
         <extracomment>About Sailfin settings menu itemy</extracomment>
-        <translation type="unfinished">About Sailfin1</translation>
+        <translation type="unfinished">About Sailfin</translation>
     </message>
     <message>
         <source>Session</source>
@@ -467,6 +497,11 @@ Page title for the list of all artists within the music library</extracomment>
     <message>
         <source>Debug information</source>
         <extracomment>Debug information settings menu itemy</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quick Connect</source>
+        <extracomment>This is a name used by Jellyfin and seems to be untranslated in other languages</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>

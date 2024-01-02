@@ -256,6 +256,27 @@ public:
     }
 };
 
+// Specialisation for endpoints that return "true" or "false" as response.
+template<typename P>
+class HttpLoaderBase<bool, P> : public Loader<bool, P> {
+public:
+    explicit HttpLoaderBase(Jellyfin::ApiClient *apiClient)
+        : Loader<bool, P> (apiClient) {}
+
+    typename Loader<bool, P>::ResultType parseResponse(int statusCode, QByteArray response) {
+        QString text = QString::fromUtf8(response);
+
+        if (text == QStringLiteral("true")) {
+            return true;
+        } else if (text == QStringLiteral("false")) {
+            return false;
+        } else {
+            this->stopWithError(QStringLiteral("Could not parse boolean response: %1").arg(text));
+            return std::nullopt;
+        }
+    }
+};
+
 
 /**
  * Implementation of Loader that loads Items over HTTP

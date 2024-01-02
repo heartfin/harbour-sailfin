@@ -107,6 +107,11 @@ Page {
 
             ButtonLayout {
                 Button {
+                    //: This is a name used by Jellyfin and seems to be untranslated in other languages
+                    text: qsTr("Quick Connect")
+                    onClicked: pageStack.push(Qt.resolvedUrl("QuickConnectDialog.qml"))
+                }
+                Button {
                     text: qsTr("Log out")
                     onClicked: remorse.execute(qsTr("Logging out"), apiClient.deleteSession)
                 }

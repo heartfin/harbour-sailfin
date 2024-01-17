@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2022 Chris Josten
+Copyright (C) 2022-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -107,7 +107,7 @@ BaseDetailPage {
                         left: parent.left
                         right: parent.right
                     }
-                    height: width / 16 * 9
+                    height: Math.min(albumPage.height / 2, width / 16 * 9)
                     fillMode: Image.PreserveAspectCrop
                     source: Utils.itemBackdropUrl(apiClient.baseUrl, itemData, 0, {"maxWidth": parent.width})
                     blurhash: itemData.imageBlurHashes["Backdrop"][itemData.backdropImageTags[0]]
@@ -219,15 +219,14 @@ BaseDetailPage {
                                                     "pageTitle": qsTr("Discography of %1").arg(itemData.name)
                                                 })
             }
+
             GridLayout {
-                width: parent.width
-                columns: 3
+                anchors.left: parent.left
+                width: Math.min(appearsOnModel.count() * gridCellSize, gridColumnCount * gridCellSize)
+                columns: gridColumnCount
                 columnSpacing: 0
                 rowSpacing: 0
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
+
                 Repeater {
                     id: albumRepeater
                     model: albumsModel
@@ -237,8 +236,8 @@ BaseDetailPage {
                         poster: Utils.itemModelImageUrl(appWindow.apiClient.baseUrl, model.jellyfinId, model.imageTags["Primary"], "Primary", {"height": height})
                         blurhash: model.imageBlurHashes["Primary"][model.imageTags["Primary"]]
                         title: model.name
-                        Layout.preferredWidth: Constants.libraryDelegateWidth * _multiplier
-                        Layout.preferredHeight: Constants.libraryDelegateHeight * _multiplier
+                        Layout.preferredWidth: gridCellSize * _multiplier
+                        Layout.preferredHeight: gridCellSize * _multiplier
                         Layout.rowSpan: _multiplier
                         Layout.columnSpan: _multiplier
                         onClicked:  appWindow.navigateToItem(model.jellyfinId, model.mediaType, model.type, model.isFolder)
@@ -256,14 +255,13 @@ BaseDetailPage {
                                                 })
             }
             GridLayout {
-                width: parent.width
-                columns: 3
+                anchors.left: parent.left
+                width: Math.min(appearsOnModel.count() * gridCellSize, gridColumnCount * gridCellSize)
+
+                columns: gridColumnCount
                 columnSpacing: 0
                 rowSpacing: 0
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
+
                 Repeater {
                     id: appearsOnRepeater
                     model: appearsOnModel
@@ -274,8 +272,9 @@ BaseDetailPage {
                         blurhash: model.imageBlurHashes["Primary"][model.imageTags["Primary"]]
                         title: model.name
                         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-                        Layout.preferredWidth: Constants.libraryDelegateWidth * _multiplier
-                        Layout.preferredHeight: Constants.libraryDelegateHeight * _multiplier
+                        Layout.preferredWidth: gridCellSize * _multiplier
+                        Layout.maximumWidth: gridCellSize * _multiplier
+                        Layout.preferredHeight: gridCellSize * _multiplier
                         Layout.fillWidth: false
                         Layout.fillHeight: false
                         onClicked:  appWindow.navigateToItem(model.jellyfinId, model.mediaType, model.type, model.isFolder)

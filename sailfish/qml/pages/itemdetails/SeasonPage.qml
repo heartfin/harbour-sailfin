@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -58,7 +58,7 @@ BaseDetailPage {
                 id: episodeImage
                 anchors {
                     top: parent.top
-                    left: parent.left
+                    right: parent.right
                     bottom: parent.bottom
                 }
                 width: Constants.libraryDelegateWidth
@@ -116,11 +116,11 @@ BaseDetailPage {
             Label {
                 id: episodeTitle
                 anchors {
-                    left: episodeImage.right
-                    leftMargin: Theme.paddingLarge
+                    right: episodeImage.left
+                    rightMargin: Theme.paddingLarge
                     top: parent.top
-                    right: parent.right
-                    rightMargin: Theme.horizontalPageMargin
+                    left: parent.left
+                    leftMargin: Theme.horizontalPageMargin
                 }
                 text: model.name
                 truncationMode: TruncationMode.Fade
@@ -130,10 +130,10 @@ BaseDetailPage {
             Label {
                 id: episodeOverview
                 anchors {
-                    left: episodeImage.right
-                    leftMargin: Theme.paddingLarge
-                    right: parent.right
-                    rightMargin: Theme.horizontalPageMargin
+                    right: episodeImage.left
+                    rightMargin: Theme.paddingLarge
+                    left: parent.left
+                    leftMargin: Theme.horizontalPageMargin
                     top: episodeTitle.bottom
                     bottom: parent.bottom
                 }

@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -52,7 +52,7 @@ function propsToQuery(options) {
     for (var prop in options) {
         if (options.hasOwnProperty(prop)) {
             var value = options[prop];
-            if (prop === "maxWidth" || prop === "maxHeight") {
+            if (prop === "maxWidth" || prop === "maxHeight" || prop === "width" || prop === "height") {
                 value = Math.floor(options[prop]);
             }
             query += "&" + prop + "=" + value;

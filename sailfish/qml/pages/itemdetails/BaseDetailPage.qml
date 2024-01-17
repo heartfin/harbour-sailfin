@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -39,6 +39,9 @@ Page {
     readonly property bool hasLogo: (typeof itemData.imageTags !== "undefined") && (typeof itemData.imageTags["Logo"] !== "undefined")
     property string _chosenBackdropImage: ""
     readonly property string parentId: itemData.parentId || ""
+
+    readonly property int gridColumnCount: Math.floor(pageRoot.width / Theme.itemSizeHuge)
+    readonly property int gridCellSize: Math.floor(pageRoot.width / gridColumnCount)
 
     function updateBackdrop() {
         /*var rand = 0;

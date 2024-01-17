@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -26,12 +26,13 @@ Column {
     property real playProgress: 0.0
     property bool favourited: false
     property alias imageBlurhash: playImage.blurhash
+    property real maxHeight: parent.width / imageAspectRatio
     signal playPressed(bool resume)
     spacing: Theme.paddingLarge
 
     BackgroundItem {
         width: parent.width
-        height: width / imageAspectRatio
+        height: Math.min(maxHeight, width / imageAspectRatio)
         RemoteImage {
             id: playImage
             anchors.fill: parent

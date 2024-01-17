@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2021 Chris Josten
+Copyright (C) 2021-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 import QtQuick 2.6
-import QtMultimedia 5.6
 import Sailfish.Silica 1.0
 
 import nl.netsoj.chris.Jellyfin 1.0 as J
@@ -231,9 +230,9 @@ PanelBackground {
                 rightMargin: Theme.paddingMedium
                 verticalCenter: parent.verticalCenter
             }
-            icon.source: manager.playbackState === MediaPlayer.PlayingState
+            icon.source: manager.playbackState === J.PlayerState.Playing
                          ? "image://theme/icon-m-pause" : "image://theme/icon-m-play"
-            onClicked: manager.playbackState === MediaPlayer.PlayingState
+            onClicked: manager.playbackState === J.PlayerState.Playing
                 ? manager.pause()
                 : manager.play()
         }

@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -59,7 +59,8 @@ QtObject {
         }
     }
 
-    readonly property real libraryDelegatePosterHeight: libraryDelegateHeight * 1.5 // 1.6667
+    readonly property real libraryDelegatePosterRatio: 1.5
+    readonly property real libraryDelegatePosterHeight: libraryDelegateHeight * libraryDelegatePosterRatio
 
     readonly property real libraryProgressHeight: Theme.paddingMedium
 

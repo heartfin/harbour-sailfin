@@ -42,6 +42,7 @@ Dialog {
 
 
     acceptDestination: Page {
+        allowedOrientations: Orientation.All
         BusyLabel {
             text: qsTr("Logging in as %1").arg(username.text)
             running: true

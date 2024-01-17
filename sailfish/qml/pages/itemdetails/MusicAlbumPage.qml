@@ -1,6 +1,6 @@
 /*
 Sailfin: a Jellyfin client written using Qt
-Copyright (C) 2020 Chris Josten
+Copyright (C) 2020-2024 Chris Josten
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -29,10 +29,8 @@ import "../.."
 BaseDetailPage {
     id: albumPageRoot
     readonly property int _songIndexWidth: 100
-    width: 800 * Theme.pixelRatio
-
     property bool _collectionModelLoaded: false
-    readonly property bool _twoColumns: albumPageRoot.width / Theme.pixelRatio >= 800
+    readonly property bool _twoColumns: gridColumnCount > 4
     readonly property string _description: {
         if (itemData.type === "MusicAlbum") {
             //: Short description of the album: %1 -> album artist, %2 -> amount of songs, %3 -> duration, %4 -> release year
@@ -63,17 +61,7 @@ BaseDetailPage {
     RowLayout {
         anchors.fill: parent
 
-        Item {height: 1; width: Theme.horizontalPageMargin; visible: wideAlbumCover.visible; }
-        Loader {
-            id: wideAlbumCover
-            visible: _twoColumns
-            Layout.minimumWidth: 1000 / Theme.pixelRatio
-            Layout.fillHeight: true
-            source: visible
-                    ? "../../components/music/WideAlbumCover.qml" : ""
-            onLoaded: bindAlbum(item)
-        }
-        Item {height: 1; width: Theme.horizontalPageMargin; visible: wideAlbumCover.visible; }
+
         SilicaListView {
             id: list
             Layout.fillHeight: true
@@ -101,6 +89,17 @@ BaseDetailPage {
 
             VerticalScrollDecorator {}
         }
+        Item {height: 1; width: Theme.paddingLarge; visible: wideAlbumCover.visible; }
+        Loader {
+            id: wideAlbumCover
+            visible: _twoColumns
+            Layout.minimumWidth: gridCellSize * 2
+            Layout.fillHeight: true
+            source: visible
+                    ? "../../components/music/WideAlbumCover.qml" : ""
+            onLoaded: bindAlbum(item)
+        }
+        Item {height: 1; width: Theme.horizontalPageMargin; visible: wideAlbumCover.visible; }
     }
 
     function bindAlbum(item) {

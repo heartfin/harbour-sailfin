@@ -63,9 +63,9 @@ BaseDetailPage {
         id: gridView
         anchors.fill: parent
         model: collectionModel
-        cellWidth: Constants.libraryDelegateWidth
-        cellHeight: Utils.usePortraitCover(itemData.collectionType) ? Constants.libraryDelegatePosterHeight
-                                                                    : Constants.libraryDelegateHeight
+        cellWidth: gridCellSize
+        cellHeight: Utils.usePortraitCover(itemData.collectionType) ? gridCellSize * Constants.libraryDelegatePosterRatio
+                                                                    : gridCellSize
         visible: itemData.status !== J.LoaderBase.Error
 
         header: PageHeader {

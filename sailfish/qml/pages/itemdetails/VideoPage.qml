@@ -63,6 +63,7 @@ BaseDetailPage {
                 imageSource: detailPage.imageSource
                 imageAspectRatio: Constants.horizontalVideoAspectRatio
                 imageBlurhash: detailPage.imageBlurhash
+                maxHeight: detailPage.height / 2
                 Binding on favourited {
                     when: _userdataReady
                     value: itemData.userData.favorite

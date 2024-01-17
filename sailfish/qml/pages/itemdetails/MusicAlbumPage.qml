@@ -29,7 +29,6 @@ import "../.."
 BaseDetailPage {
     id: albumPageRoot
     readonly property int _songIndexWidth: 100
-    width: 800 * Theme.pixelRatio
 
     property bool _collectionModelLoaded: false
     readonly property bool _twoColumns: albumPageRoot.width / Theme.pixelRatio >= 800

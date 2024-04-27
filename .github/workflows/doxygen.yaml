@@ -24,7 +24,7 @@ jobs:
       - name: Install the doxyqml filter
         run: pip install doxyqml
       - name: Doxygen
-        uses: uses: mattnotmitt/doxygen-action@v1.9.5
+        uses: mattnotmitt/doxygen-action@v1.9.5
       - name: Upload GitHub pages artifact
         uses: "actions/upload-pages-artifact@v2"
         with:

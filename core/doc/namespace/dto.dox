@@ -1,0 +1,4 @@
+/**
+ * \namespace Jellyfin::DTO
+ * \brief Contains auto-generated Data Transfer Objects for the Jellyfin HTTP API
+ */

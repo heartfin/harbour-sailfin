@@ -5,6 +5,7 @@ rpm/*.spec
 build/
 build-*/
 .dub/
+doxygen/
 
 # IDE files
 *.user

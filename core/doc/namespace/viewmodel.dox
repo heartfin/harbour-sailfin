@@ -1,0 +1,4 @@
+/**
+ * \namespace Jellyfin::ViewModel
+ * \brief Contains all types exposed to QML
+ */

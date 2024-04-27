@@ -15,6 +15,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Configure pages
         uses: actions/configure-pages@v3
       - name: Add python
         uses: actions/setup-python@v5

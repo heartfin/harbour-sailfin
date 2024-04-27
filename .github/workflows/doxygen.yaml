@@ -15,12 +15,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: true
       - name: Configure pages
         uses: actions/configure-pages@v3
       - name: Install the doxyqml filter
         run: pip install doxyqml
       - name: Doxygen
-        uses: mattnotmitt/doxygen-action@v1.9.5
+        uses: mattnotmitt/doxygen-action@edge
       - name: Upload GitHub pages artifact
         uses: "actions/upload-pages-artifact@v2"
         with:

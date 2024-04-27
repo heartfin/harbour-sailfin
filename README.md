@@ -9,8 +9,8 @@ This application can be found on [OpenRepos.net](https://openrepos.net/content/a
 <img alt="Screenshot showing the library root" src="graphics/screenshot-sailfish-1.png" width="33%" /> <img alt="Screenshot showing TV show page" src="graphics/screenshot-sailfish-2.png" width="33%" />
 
 ## Contributing
-Please [see this page for contribution guidelines](https://sailfin.github.io/harbour-sailfin/contributing.html).
-and [this page for how the Jellyfin-Qt library works](https://sailfin.github.io/harbour-sailfin/contributing.html).
+Please [see this page for how the Jellyfin Qt library works](https://heartfin.github.io/harbour-sailfin/guides.html).
+and [see this page for contribution guidelines](https://heartfin.github.io/harbour-sailfin/contributing.html).
 
 ## Code layout
 ```

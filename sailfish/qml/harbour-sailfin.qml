@@ -131,11 +131,11 @@ ApplicationWindow {
 
     // Keep the sytem alive while playing media
     KeepAlive {
-        enabled: playbackManager.playbackState === MediaPlayer.PlayingState
+        enabled: playbackManager.playbackState == PlayerState.Playing
     }
 
     DisplayBlanking {
-        preventBlanking: playbackManager.playbackState === MediaPlayer.PlayingState
+        preventBlanking: playbackManager.playbackState == PlayerState.Playing
                          && playbackManager.hasVideo
                          && playbackManager.controllingSessionLocal // Must be controlling a local session
     }

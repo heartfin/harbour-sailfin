@@ -152,15 +152,10 @@ Item {
     Connections {
         target: manager
         onMediaStatusChanged: {
-            console.log("New mediaPlayer status: " + manager.mediaStatus)
-            switch(manager.mediaStatus) {
-            case J.MediaStatus.Loaded:
-            case J.MediaStatus.Buffering:
-                show(false)
-                break;
-            case J.MediaStatus.Buffered:
+            if (manager.mediaStatus == J.MediaStatus.Loaded || manager.mediaStatus == J.MediaStatus.Buffered) {
                 hide(false)
-                break;
+            } else if (manager.mediaStatus == J.MediaStatus.Buffering || manager.mediaStatus == J.MediaStatus.Stalled) {
+                show(false)
             }
         }
     }

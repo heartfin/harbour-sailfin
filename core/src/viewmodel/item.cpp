@@ -34,9 +34,7 @@ Item::Item(QObject *parent, QSharedPointer<Model::Item> data)
     : QObject(parent),
       m_data(data),
       m_userData(new UserData(this)){
-    connect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
-    m_userData->setData(data->userData());
-    updateMediaStreams();
+    this->setData(data);
 }
 
 void Item::setData(QSharedPointer<Model::Item> newData) {
@@ -50,7 +48,17 @@ void Item::setData(QSharedPointer<Model::Item> newData) {
         connect(m_data.data(), &Model::Item::userDataChanged, this, &Item::onUserDataChanged);
         updateMediaStreams();
         setUserData(m_data->userData());
+
+        if (m_data->currentProgram().isNull()) {
+            m_currentProgram = nullptr;
+        } else {
+            QSharedPointer<DTO::BaseItemDto> dataDto = m_data->currentProgram();
+            QSharedPointer<Model::Item> data = QSharedPointer<Model::Item>::create(*dataDto.data());
+            m_currentProgram = new Item(this, data);
+        }
+        emit currentProgramChanged();
     }
+
 
     emit userDataChanged(m_userData);
 }

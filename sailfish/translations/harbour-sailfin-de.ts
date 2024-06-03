@@ -242,6 +242,29 @@
     </message>
 </context>
 <context>
+    <name>LiveTvChannelPage</name>
+    <message>
+        <source>%1 | %2 - %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Program info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No program info available</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LiveTvChannelsPage</name>
+    <message>
+        <source>No program information available</source>
+        <extracomment>Shown in the channel list when the name of the current program is unknown</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LoginDialog</name>
     <message>
         <source>Logging in as %1</source>

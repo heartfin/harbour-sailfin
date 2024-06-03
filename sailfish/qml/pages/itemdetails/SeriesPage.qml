@@ -72,10 +72,6 @@ BaseDetailPage {
                     autoReload: itemData.jellyfinId.length > 0
                 }
             }
-            Connections {
-                target: itemData
-                onReady: showSeasonsModel.reload()
-            }
 
             SilicaListView {
                 model: showSeasonsModel
@@ -94,19 +90,6 @@ BaseDetailPage {
                 }
             }
 
-        }
-    }
-
-    /*onStatusChanged: {
-        if (status == PageStatus.Active) {
-            showSeasonsModel.reload()
-        }
-    }*/
-    Connections {
-        target: itemData
-        onJellyfinIdChanged: {
-            console.log("Item id changed")
-            //showSeasonsModel.show = itemData.jellyfinId
         }
     }
 }

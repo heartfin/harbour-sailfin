@@ -37,11 +37,6 @@ BaseDetailPage {
         }
     }
 
-    Connections {
-        target: itemData
-        onReady: episodeModel.reload()
-    }
-
     SilicaListView {
         anchors.fill: parent
         contentHeight: content.height
@@ -148,20 +143,5 @@ BaseDetailPage {
         }
 
         VerticalScrollDecorator {}
-    }
-    Connections {
-        target: itemData
-        onStatusChanged: {
-            if (itemData.status == JellyfinItem.Ready) {
-                episodeModel.reload()
-            }
-        }
-    }
-    onStatusChanged: {
-        if (status == PageStatus.Active) {
-            //console.log(JSON.stringify(itemData))
-            //episodeModel.show = itemData.seriesId
-            //episodeModel.seasonId = itemData.jellyfinId
-        }
     }
 }

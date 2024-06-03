@@ -178,9 +178,12 @@ public:
     Q_PROPERTY(int albumCount READ albumCount NOTIFY albumCountChanged)
     Q_PROPERTY(int artistCount READ artistCount NOTIFY artistCountChanged)
     Q_PROPERTY(int musicVideoCount READ musicVideoCount NOTIFY musicVideoCountChanged)
-    Q_PROPERTY(QString mediaType READ mediaType READ mediaType NOTIFY mediaTypeChanged)
+    Q_PROPERTY(QString mediaType READ mediaType NOTIFY mediaTypeChanged)
+    Q_PROPERTY(QDateTime endDate READ endDate NOTIFY endDateChanged)
+    Q_PROPERTY(QDateTime startDate READ startDate NOTIFY startDateChanged)
     Q_PROPERTY(int width READ width NOTIFY widthChanged)
     Q_PROPERTY(int height READ height NOTIFY heightChanged)
+    Q_PROPERTY(Jellyfin::ViewModel::Item *currentProgram READ currentProgram NOTIFY currentProgramChanged)
 
     QString jellyfinId() const { return m_data->jellyfinId(); }
     QString name() const { return m_data->name(); }
@@ -225,6 +228,9 @@ public:
     QStringList backdropImageTags() const { return m_data->backdropImageTags(); }
     QJsonObject imageBlurHashes() const { return m_data->imageBlurHashes(); }
     QString mediaType() const { return m_data->mediaType(); }
+    QDateTime endDate() const { return m_data->endDate(); }
+    QDateTime startDate() const { return m_data->startDate(); }
+    Item *currentProgram() const { return m_currentProgram; }
 
     int trailerCount() const { return m_data->trailerCount().value_or(0); }
     int movieCount() const { return m_data->movieCount().value_or(0); }
@@ -308,8 +314,11 @@ signals:
     void artistCountChanged(int newArtistCount);
     void musicVideoCountChanged(int newMusicVideoCount);
     void mediaTypeChanged(const QString &newMediaType);
+    void endDateChanged();
+    void startDateChanged();
     void widthChanged(int newWidth);
     void heightChanged(int newHeight);
+    void currentProgramChanged();
 protected:
     void setUserData(DTO::UserItemDataDto &newData);
     void setUserData(QSharedPointer<DTO::UserItemDataDto> newData);
@@ -322,6 +331,7 @@ protected:
     QObjectList m_videoStreams;
     QObjectList m_subtitleStreams;
     QObjectList m_artistItems;
+    Item *m_currentProgram = nullptr;
 private slots:
     void onUserDataChanged(const DTO::UserItemDataDto &userData);
 };

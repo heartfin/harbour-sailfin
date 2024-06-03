@@ -191,7 +191,7 @@ PanelBackground {
                         left: parent.left
                         verticalCenter: parent.verticalCenter
                     }
-                    height: parent
+                    height: parent.height
                     source: "image://theme/icon-s-device-upload"
                     visible: controllingRemote
                 }

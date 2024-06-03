@@ -31,6 +31,7 @@ import "../.."
  */
 BaseDetailPage {
     id: detailPage
+    property alias title: pageHeader.title
     property alias subtitle: pageHeader.description
     default property alias _data: content.data
     property real _playbackProsition: itemData.userData.playbackPositionTicks

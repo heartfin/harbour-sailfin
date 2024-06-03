@@ -195,6 +195,18 @@ bool setRequestStartIndex(Loader::GetAlbumArtistsParams &params, int offset) {
 }
 
 template<>
+void setRequestLimit(Loader::GetLiveTvChannelsParams &params, int limit) {
+    params.setLimit(limit);
+}
+
+template<>
+bool setRequestStartIndex(Loader::GetLiveTvChannelsParams &params, int offset) {
+    params.setStartIndex(offset);
+    return true;
+}
+
+
+template<>
 QList<DTO::UserDto> extractRecords(const QList<DTO::UserDto> &result) {
     return result;
 }

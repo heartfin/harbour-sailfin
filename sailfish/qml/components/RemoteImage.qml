@@ -106,6 +106,9 @@ SilicaItem {
     BusyIndicator {
         anchors.centerIn: parent
         running: realImage.status === Image.Loading
+        size: root.height <= Theme.fontSizeLarge
+                ? BusyIndicatorSize.Small
+                : BusyIndicatorSize.Medium
     }
 
     HighlightImage {

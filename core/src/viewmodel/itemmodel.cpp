@@ -16,18 +16,19 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#include "JellyfinQt/viewmodel/itemmodel.h"
+#include <JellyfinQt/viewmodel/itemmodel.h>
 
-#include "JellyfinQt/viewmodel/item.h"
+#include <JellyfinQt/viewmodel/item.h>
 
-#include "JellyfinQt/loader/http/artists.h"
-#include "JellyfinQt/loader/http/items.h"
-#include "JellyfinQt/loader/http/userlibrary.h"
-#include "JellyfinQt/loader/http/userviews.h"
-#include "JellyfinQt/loader/http/tvshows.h"
+#include <JellyfinQt/loader/http/artists.h>
+#include <JellyfinQt/loader/http/items.h>
+#include <JellyfinQt/loader/http/livetv.h>
+#include <JellyfinQt/loader/http/userlibrary.h>
+#include <JellyfinQt/loader/http/userviews.h>
+#include <JellyfinQt/loader/http/tvshows.h>
 
-#include "JellyfinQt/viewmodel/userdata.h"
-#include "JellyfinQt/viewmodel/utils.h"
+#include <JellyfinQt/viewmodel/userdata.h>
+#include <JellyfinQt/viewmodel/utils.h>
 
 #define JF_CASE(roleName) case roleName: \
     try { \
@@ -63,6 +64,9 @@ NextUpLoader::NextUpLoader(QObject *parent)
 
 AlbumArtistLoader::AlbumArtistLoader(QObject *parent)
     : AlbumArtistLoaderBase(new Jellyfin::Loader::HTTP::GetAlbumArtistsLoader(), parent) {}
+
+LiveTvChannelsLoader::LiveTvChannelsLoader(QObject *parent)
+    : LiveTvChannelsLoaderBase(new Jellyfin::Loader::HTTP::GetLiveTvChannelsLoader(), parent) {}
 
 ItemModel::ItemModel(QObject *parent)
     : ApiModel<Model::Item>(parent) {
@@ -126,6 +130,30 @@ QVariant ItemModel::data(const QModelIndex &index, int role) const {
         return QVariant(item->userData()->played());
     case RoleNames::userDataKey:
         return QVariant(item->userData()->key());
+    case RoleNames::currentProgramName:
+        if (item->currentProgram()) {
+            return QVariant(item->currentProgram()->name());
+        } else {
+            return QVariant();
+        }
+    case RoleNames::currentProgramOverview:
+        if (item->currentProgram()) {
+            return QVariant(item->currentProgram()->overview());
+        } else {
+            return QVariant();
+        }
+    case RoleNames::currentProgramStartDate:
+        if (item->currentProgram()) {
+            return QVariant(item->currentProgram()->startDate());
+        } else {
+            return QVariant();
+        }
+    case RoleNames::currentProgramEndDate:
+        if (item->currentProgram()) {
+            return QVariant(item->currentProgram()->endDate());
+        } else {
+            return QVariant();
+        }
     default:
         return QVariant();
     }

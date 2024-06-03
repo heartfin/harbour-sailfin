@@ -327,6 +327,32 @@ public:
     FWDLISTPROP(int, years, Years);
 };
 
+using LiveTvChannelsLoaderBase = AbstractUserParameterLoader<Model::Item, DTO::BaseItemDto, DTO::BaseItemDtoQueryResult, Jellyfin::Loader::GetLiveTvChannelsParams>;
+class LiveTvChannelsLoader : public LiveTvChannelsLoaderBase {
+    Q_OBJECT
+public:
+    explicit LiveTvChannelsLoader(QObject *parent = nullptr);
+
+    FWDPROP(Jellyfin::DTO::ChannelTypeClass::Value, type, Type)
+    FWDPROP(bool, isMovie, IsMovie)
+    FWDPROP(bool, isSeries, IsSeries)
+    FWDPROP(bool, isNews, IsNews)
+    FWDPROP(bool, isKids, IsKids)
+    FWDPROP(bool, isSports, IsSports)
+    FWDPROP(bool, isFavorite, IsFavorite)
+    FWDPROP(bool, isLiked, IsLiked)
+    FWDPROP(bool, isDisliked, IsDisliked)
+    FWDPROP(bool, enableImages, EnableImages)
+    FWDPROP(int, imageTypeLimit, ImageTypeLimit)
+    FWDLISTPROP(Jellyfin::DTO::ImageTypeClass::Value, enableImageTypes, EnableImageTypes)
+    FWDLISTPROP(Jellyfin::DTO::ItemFieldsClass::Value, fields, Fields)
+    FWDPROP(bool, enableUserData, EnableUserData)
+    FWDPROP(QStringList, sortBy, SortBy)
+    FWDPROP(Jellyfin::DTO::SortOrderClass::Value, sortOrder, SortOrder)
+    FWDPROP(bool, enableFavoriteSorting, EnableFavoriteSorting)
+    FWDPROP(bool, addCurrentProgram, AddCurrentProgram)
+};
+
 /**
  * @brief Base class for each model that works with items.
  */
@@ -369,6 +395,10 @@ public:
         userDataLastPlayedDate,
         userDataPlayed,
         userDataKey,
+        currentProgramName,
+        currentProgramOverview,
+        currentProgramStartDate,
+        currentProgramEndDate,
 
         jellyfinExtendModelAfterHere = Qt::UserRole + 300 // Should be enough for now
     };
@@ -410,6 +440,10 @@ public:
             JFRN(userDataLastPlayedDate),
             JFRN(userDataPlayed),
             JFRN(userDataKey),
+            JFRN(currentProgramName),
+            JFRN(currentProgramOverview),
+            JFRN(currentProgramStartDate),
+            JFRN(currentProgramEndDate),
         };
     }
     QVariant data(const QModelIndex &index, int role) const override;

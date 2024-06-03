@@ -55,7 +55,6 @@ BaseDetailPage {
             fields: [J.ItemFields.ItemCounts, J.ItemFields.PrimaryImageAspectRatio]
             parentId: itemData.jellyfinId
             autoReload: itemData.jellyfinId.length > 0
-            //onParentIdChanged: if (parentId.length > 0) reload()
         }
     }
     RowLayout {

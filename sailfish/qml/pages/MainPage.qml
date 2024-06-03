@@ -114,6 +114,12 @@ Page {
                         apiClient: appWindow.apiClient
                         parentId: jellyfinId
                     }
+                    Binding on loader {
+                        when: model.collectionType == "livetv"
+                        value: J.LiveTvChannelsLoader{
+                            apiClient: appWindow.apiClient
+                        }
+                    }
                     Connections {
                         target: mediaLibraryLoader
                         onReady: loader.reload()

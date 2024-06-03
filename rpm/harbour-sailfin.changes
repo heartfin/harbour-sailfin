@@ -12,6 +12,12 @@
 # * date Author's Name <author's email> version-release
 # - Summary of changes
 #
+* ??? ??? ? ???? Chris Josten <chris@netsoj.nl> ?.?.?-?
+- New features:
+  - Added a page that shows a list of Live TV channels with details about currently running 
+    programs.
+- Changes:
+  - TV CHannels on the main page are now sorted by channel number, instead of recently added
 * Tue Jan 2 2024 Chris Josten <chris@netsoj.nl> 0.5.0-1
 - New features
   - Allow remote controlling other Jellyfin clients. See the pulley item on the main screen named 

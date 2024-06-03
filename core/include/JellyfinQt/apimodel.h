@@ -239,22 +239,32 @@ bool setRequestStartIndex(P &parameters, int startIndex) {
 #ifndef JELLYFIN_APIMODEL_CPP
 extern template bool setRequestStartIndex(Loader::GetUserViewsParams &params, int startIndex);
 extern template void setRequestLimit(Loader::GetUserViewsParams &params, int limit);
+
 extern template QList<DTO::BaseItemDto> extractRecords(const DTO::BaseItemDtoQueryResult &result);
 extern template int extractTotalRecordCount(const DTO::BaseItemDtoQueryResult &result);
 extern template QList<DTO::BaseItemDto> extractRecords(const QList<DTO::BaseItemDto> &result);
 extern template int extractTotalRecordCount(const QList<DTO::BaseItemDto> &result);
+
 extern template void setRequestLimit(Loader::GetLatestMediaParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetLatestMediaParams &params, int offset);
+
 extern template void setRequestLimit(Loader::GetItemsByUserIdParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetItemsByUserIdParams &params, int offset);
+
 extern template void setRequestLimit(Loader::GetResumeItemsParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetResumeItemsParams &params, int offset);
+
 extern template void setRequestLimit(Loader::GetPublicUsersParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetPublicUsersParams &params, int offset);
+
 extern template void setRequestLimit(Loader::GetNextUpParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetNextUpParams &params, int offset);
+
 extern template void setRequestLimit(Loader::GetAlbumArtistsParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetAlbumArtistsParams &params, int offset);
+
+extern template void setRequestLimit(Loader::GetLiveTvChannelsParams &params, int limit);
+extern template bool setRequestStartIndex(Loader::GetLiveTvChannelsParams &params, int offset);
 
 extern template QList<DTO::UserDto> extractRecords(const QList<DTO::UserDto> &result);
 extern template int extractTotalRecordCount(const QList<DTO::UserDto> &result);
@@ -519,6 +529,7 @@ public:
             BaseApiModel::setLoader(newLoader);
             BaseApiModel::disconnectOldLoader(m_loader);
             m_loader = castedLoader;
+            reload();
         } else {
             qWarning() << "Somehow set a BaseModelLoader on ApiModel instead of a ModelLoader<T>";
         }

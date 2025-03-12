@@ -48,6 +48,12 @@
 
 namespace Jellyfin {
 
+JellyfinPlugin::JellyfinPlugin(QObject *parent)
+    : QQmlExtensionPlugin(parent)
+{
+
+}
+
 void JellyfinPlugin::registerTypes(const char *uri) {
     qmlRegisterType<ApiClient>(uri, 1, 0, "ApiClient");
     qmlRegisterType<ServerDiscoveryModel>(uri, 1, 0, "ServerDiscoveryModel");

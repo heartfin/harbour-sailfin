@@ -28,6 +28,7 @@ class JellyfinPlugin : public QQmlExtensionPlugin {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QQmlExtensionInterface_iid)
 public:
+    explicit JellyfinPlugin(QObject *parent = nullptr);
     void registerTypes(const char *uri) override;
 
 };

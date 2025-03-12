@@ -114,7 +114,7 @@ endif()
 
 
 
-add_library(JellyfinQt ${JellyfinQt_SOURCES} ${JellyfinQt_HEADERS} qmldir JellyfinQt.qmltypes)
+add_library(JellyfinQt STATIC ${JellyfinQt_SOURCES} ${JellyfinQt_HEADERS} qmldir JellyfinQt.qmltypes)
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.16.0") 
     if(BUILD_PRECOMPILED_HEADERS)
@@ -164,6 +164,6 @@ add_custom_command(
 
 
 set(QML_IMPORT_PATH $<TARGET_FILE_DIR:JellyfinQt> CACHE PATH "")
-install(FILES $<TARGET_FILE_DIR:JellyfinQt>/qmldir DESTINATION ${CMAKE_INSTALL_LIBDIR})
+# install(FILES $<TARGET_FILE_DIR:JellyfinQt>/qmldir DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 export(TARGETS JellyfinQt FILE JellyfinQtConfig.cmake)

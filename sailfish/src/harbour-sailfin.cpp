@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <QQuickView>
 #include <QQmlEngine>
 #include <QString>
+#include <JellyfinQt/jellyfin.h>
 
 #include <sailfishapp.h>
 
@@ -51,6 +52,9 @@ int main(int argc, char *argv[]) {
     app->setApplicationName("Sailfin");
     //: Application display name
     app->setApplicationDisplayName(QObject::tr("Sailfin"));
+
+    Jellyfin::JellyfinPlugin *plugin = new Jellyfin::JellyfinPlugin(app);
+    plugin->registerTypes("nl.netsoj.chris.Jellyfin");
 
     QCommandLineParser cmdParser;
     cmdParser.addHelpOption();

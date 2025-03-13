@@ -39,6 +39,7 @@
 #include <optional>
 
 #include "JellyfinQt/dto/baseitemdto.h"
+#include "JellyfinQt/dto/playbackorder.h"
 #include "JellyfinQt/dto/playmethod.h"
 #include "JellyfinQt/dto/queueitem.h"
 #include "JellyfinQt/dto/repeatmode.h"
@@ -61,7 +62,8 @@ public:
 		bool isPaused,			
 		bool isMuted,													
 		PlayMethod playMethod,							
-		RepeatMode repeatMode						
+		RepeatMode repeatMode,			
+		PlaybackOrder playbackOrder						
 	);
 
 	PlaybackStartInfo(const PlaybackStartInfo &other);
@@ -237,6 +239,11 @@ public:
 	void setRepeatMode(RepeatMode newRepeatMode);
 
 
+	PlaybackOrder playbackOrder() const;
+
+	void setPlaybackOrder(PlaybackOrder newPlaybackOrder);
+
+
 	QList<QueueItem> nowPlayingQueue() const;
 
 	void setNowPlayingQueue(QList<QueueItem> newNowPlayingQueue);
@@ -270,6 +277,7 @@ protected:
 	QString m_liveStreamId;
 	QString m_playSessionId;
 	RepeatMode m_repeatMode;
+	PlaybackOrder m_playbackOrder;
 	QList<QueueItem> m_nowPlayingQueue;
 	QString m_playlistItemId;
 

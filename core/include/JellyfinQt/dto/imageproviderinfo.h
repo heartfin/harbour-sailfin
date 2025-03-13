@@ -49,7 +49,12 @@ namespace DTO {
 
 
 class ImageProviderInfo {
-public:	ImageProviderInfo();
+public:
+	ImageProviderInfo(	
+		QString name,			
+		QList<ImageType> supportedImages		
+	);
+
 	ImageProviderInfo(const ImageProviderInfo &other);
 	
 	/**
@@ -70,8 +75,6 @@ public:	ImageProviderInfo();
 	* @brief Gets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets the supported image types.
@@ -81,15 +84,15 @@ public:	ImageProviderInfo();
 	* @brief Gets the supported image types.
 	*/
 	void setSupportedImages(QList<ImageType> newSupportedImages);
-	bool supportedImagesNull() const;
-	void setSupportedImagesNull();
 
 
 protected:
 	QString m_name;
 	QList<ImageType> m_supportedImages;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing ImageProviderInfo::fromJson();
+	ImageProviderInfo();
 };
 
 

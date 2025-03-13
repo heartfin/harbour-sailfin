@@ -50,7 +50,8 @@ class GeneralCommand {
 public:
 	GeneralCommand(	
 		GeneralCommandType name,			
-		QString controllingUserId				
+		QString controllingUserId,			
+		QJsonObject arguments		
 	);
 
 	GeneralCommand(const GeneralCommand &other);
@@ -79,8 +80,6 @@ public:
 	QJsonObject arguments() const;
 
 	void setArguments(QJsonObject newArguments);
-	bool argumentsNull() const;
-	void setArgumentsNull();
 
 
 protected:

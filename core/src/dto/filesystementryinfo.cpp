@@ -34,8 +34,12 @@ namespace DTO {
 
 FileSystemEntryInfo::FileSystemEntryInfo() {}
 FileSystemEntryInfo::FileSystemEntryInfo (
+		QString name, 
+		QString path, 
 		FileSystemEntryType type 
 		) :
+	m_name(name),
+	m_path(path),
 	m_type(type) { }
 
 
@@ -70,16 +74,8 @@ void FileSystemEntryInfo::setFromJson(QJsonObject source) {
 QJsonObject FileSystemEntryInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
-	
-	if (!(m_path.isNull())) {
-		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	}
-			
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);		
 	result["Type"] = Jellyfin::Support::toJsonValue<FileSystemEntryType>(m_type);	
 	return result;
 }
@@ -89,27 +85,13 @@ QString FileSystemEntryInfo::name() const { return m_name; }
 void FileSystemEntryInfo::setName(QString newName) {
 	m_name = newName;
 }
-bool FileSystemEntryInfo::nameNull() const {
-	return m_name.isNull();
-}
 
-void FileSystemEntryInfo::setNameNull() {
-	m_name.clear();
-
-}
 QString FileSystemEntryInfo::path() const { return m_path; }
 
 void FileSystemEntryInfo::setPath(QString newPath) {
 	m_path = newPath;
 }
-bool FileSystemEntryInfo::pathNull() const {
-	return m_path.isNull();
-}
 
-void FileSystemEntryInfo::setPathNull() {
-	m_path.clear();
-
-}
 FileSystemEntryType FileSystemEntryInfo::type() const { return m_type; }
 
 void FileSystemEntryInfo::setType(FileSystemEntryType newType) {

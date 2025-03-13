@@ -49,6 +49,48 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
+ * @brief Reports that a session has begun playing an item.
+ */
+
+class OnPlaybackStartLoader : public Jellyfin::Support::HttpLoader<void, OnPlaybackStartParams> {
+public:
+	explicit OnPlaybackStartLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const OnPlaybackStartParams& parameters) const override;
+	QUrlQuery query(const OnPlaybackStartParams& parameters) const override;
+	QByteArray body(const OnPlaybackStartParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports that a session has stopped playing an item.
+ */
+
+class OnPlaybackStoppedLoader : public Jellyfin::Support::HttpLoader<void, OnPlaybackStoppedParams> {
+public:
+	explicit OnPlaybackStoppedLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const OnPlaybackStoppedParams& parameters) const override;
+	QUrlQuery query(const OnPlaybackStoppedParams& parameters) const override;
+	QByteArray body(const OnPlaybackStoppedParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Reports a session's playback progress.
+ */
+
+class OnPlaybackProgressLoader : public Jellyfin::Support::HttpLoader<void, OnPlaybackProgressParams> {
+public:
+	explicit OnPlaybackProgressLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const OnPlaybackProgressParams& parameters) const override;
+	QUrlQuery query(const OnPlaybackProgressParams& parameters) const override;
+	QByteArray body(const OnPlaybackProgressParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Reports playback has started within a session.
  */
 
@@ -130,48 +172,6 @@ protected:
 	QString path(const MarkUnplayedItemParams& parameters) const override;
 	QUrlQuery query(const MarkUnplayedItemParams& parameters) const override;
 	QByteArray body(const MarkUnplayedItemParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Reports that a user has begun playing an item.
- */
-
-class OnPlaybackStartLoader : public Jellyfin::Support::HttpLoader<void, OnPlaybackStartParams> {
-public:
-	explicit OnPlaybackStartLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const OnPlaybackStartParams& parameters) const override;
-	QUrlQuery query(const OnPlaybackStartParams& parameters) const override;
-	QByteArray body(const OnPlaybackStartParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Reports that a user has stopped playing an item.
- */
-
-class OnPlaybackStoppedLoader : public Jellyfin::Support::HttpLoader<void, OnPlaybackStoppedParams> {
-public:
-	explicit OnPlaybackStoppedLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const OnPlaybackStoppedParams& parameters) const override;
-	QUrlQuery query(const OnPlaybackStoppedParams& parameters) const override;
-	QByteArray body(const OnPlaybackStoppedParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Reports a user's playback progress.
- */
-
-class OnPlaybackProgressLoader : public Jellyfin::Support::HttpLoader<void, OnPlaybackProgressParams> {
-public:
-	explicit OnPlaybackProgressLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const OnPlaybackProgressParams& parameters) const override;
-	QUrlQuery query(const OnPlaybackProgressParams& parameters) const override;
-	QByteArray body(const OnPlaybackProgressParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

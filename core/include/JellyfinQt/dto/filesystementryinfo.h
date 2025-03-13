@@ -48,7 +48,9 @@ namespace DTO {
 
 class FileSystemEntryInfo {
 public:
-	FileSystemEntryInfo(					
+	FileSystemEntryInfo(	
+		QString name,			
+		QString path,			
 		FileSystemEntryType type		
 	);
 
@@ -72,8 +74,6 @@ public:
 	* @brief Gets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets the path.
@@ -83,8 +83,6 @@ public:
 	* @brief Gets the path.
 	*/
 	void setPath(QString newPath);
-	bool pathNull() const;
-	void setPathNull();
 
 
 	FileSystemEntryType type() const;

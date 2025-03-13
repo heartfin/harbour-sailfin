@@ -33,16 +33,24 @@ namespace Jellyfin {
 namespace DTO {
 
 BrandingOptions::BrandingOptions() {}
+BrandingOptions::BrandingOptions (
+		bool splashscreenEnabled 
+		) :
+	m_splashscreenEnabled(splashscreenEnabled) { }
+
+
 
 BrandingOptions::BrandingOptions(const BrandingOptions &other) :
 
 	m_loginDisclaimer(other.m_loginDisclaimer),
-	m_customCss(other.m_customCss){}
+	m_customCss(other.m_customCss),
+	m_splashscreenEnabled(other.m_splashscreenEnabled){}
 
 
 void BrandingOptions::replaceData(BrandingOptions &other) {
 	m_loginDisclaimer = other.m_loginDisclaimer;
 	m_customCss = other.m_customCss;
+	m_splashscreenEnabled = other.m_splashscreenEnabled;
 }
 
 BrandingOptions BrandingOptions::fromJson(QJsonObject source) {
@@ -55,6 +63,7 @@ BrandingOptions BrandingOptions::fromJson(QJsonObject source) {
 void BrandingOptions::setFromJson(QJsonObject source) {
 	m_loginDisclaimer = Jellyfin::Support::fromJsonValue<QString>(source["LoginDisclaimer"]);
 	m_customCss = Jellyfin::Support::fromJsonValue<QString>(source["CustomCss"]);
+	m_splashscreenEnabled = Jellyfin::Support::fromJsonValue<bool>(source["SplashscreenEnabled"]);
 
 }
 	
@@ -70,7 +79,8 @@ QJsonObject BrandingOptions::toJson() const {
 	if (!(m_customCss.isNull())) {
 		result["CustomCss"] = Jellyfin::Support::toJsonValue<QString>(m_customCss);
 	}
-		
+			
+	result["SplashscreenEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_splashscreenEnabled);	
 	return result;
 }
 
@@ -100,6 +110,12 @@ void BrandingOptions::setCustomCssNull() {
 	m_customCss.clear();
 
 }
+bool BrandingOptions::splashscreenEnabled() const { return m_splashscreenEnabled; }
+
+void BrandingOptions::setSplashscreenEnabled(bool newSplashscreenEnabled) {
+	m_splashscreenEnabled = newSplashscreenEnabled;
+}
+
 
 } // NS DTO
 

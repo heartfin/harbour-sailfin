@@ -52,7 +52,9 @@ namespace DTO {
 class CodecProfile {
 public:
 	CodecProfile(	
-		CodecType type										
+		CodecType type,			
+		QList<ProfileCondition> conditions,			
+		QList<ProfileCondition> applyConditions								
 	);
 
 	CodecProfile(const CodecProfile &other);
@@ -72,33 +74,56 @@ public:
 
 	void setType(CodecType newType);
 
-
+	/**
+	 * @brief Gets or sets the list of MediaBrowser.Model.Dlna.ProfileCondition which this profile must meet.
+	 */
 	QList<ProfileCondition> conditions() const;
-
+	/**
+	* @brief Gets or sets the list of MediaBrowser.Model.Dlna.ProfileCondition which this profile must meet.
+	*/
 	void setConditions(QList<ProfileCondition> newConditions);
-	bool conditionsNull() const;
-	void setConditionsNull();
 
-
+	/**
+	 * @brief Gets or sets the list of MediaBrowser.Model.Dlna.ProfileCondition to apply if this profile is met.
+	 */
 	QList<ProfileCondition> applyConditions() const;
-
+	/**
+	* @brief Gets or sets the list of MediaBrowser.Model.Dlna.ProfileCondition to apply if this profile is met.
+	*/
 	void setApplyConditions(QList<ProfileCondition> newApplyConditions);
-	bool applyConditionsNull() const;
-	void setApplyConditionsNull();
 
-
+	/**
+	 * @brief Gets or sets the codec(s) that this profile applies to.
+	 */
 	QString codec() const;
-
+	/**
+	* @brief Gets or sets the codec(s) that this profile applies to.
+	*/
 	void setCodec(QString newCodec);
 	bool codecNull() const;
 	void setCodecNull();
 
-
+	/**
+	 * @brief Gets or sets the container(s) which this profile will be applied to.
+	 */
 	QString container() const;
-
+	/**
+	* @brief Gets or sets the container(s) which this profile will be applied to.
+	*/
 	void setContainer(QString newContainer);
 	bool containerNull() const;
 	void setContainerNull();
+
+	/**
+	 * @brief Gets or sets the sub-container(s) which this profile will be applied to.
+	 */
+	QString subContainer() const;
+	/**
+	* @brief Gets or sets the sub-container(s) which this profile will be applied to.
+	*/
+	void setSubContainer(QString newSubContainer);
+	bool subContainerNull() const;
+	void setSubContainerNull();
 
 
 protected:
@@ -107,6 +132,7 @@ protected:
 	QList<ProfileCondition> m_applyConditions;
 	QString m_codec;
 	QString m_container;
+	QString m_subContainer;
 
 private:
 	// Private constructor which generates an invalid object, for use withing CodecProfile::fromJson();

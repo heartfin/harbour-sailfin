@@ -34,15 +34,22 @@ namespace DTO {
 
 AlbumInfo::AlbumInfo() {}
 AlbumInfo::AlbumInfo (
-		bool isAutomated 
+		bool isAutomated, 
+		QStringList albumArtists, 
+		QJsonObject artistProviderIds, 
+		QList<SongInfo> songInfos 
 		) :
-	m_isAutomated(isAutomated) { }
+	m_isAutomated(isAutomated),
+	m_albumArtists(albumArtists),
+	m_artistProviderIds(artistProviderIds),
+	m_songInfos(songInfos) { }
 
 
 
 AlbumInfo::AlbumInfo(const AlbumInfo &other) :
 
 	m_name(other.m_name),
+	m_originalTitle(other.m_originalTitle),
 	m_path(other.m_path),
 	m_metadataLanguage(other.m_metadataLanguage),
 	m_metadataCountryCode(other.m_metadataCountryCode),
@@ -59,6 +66,7 @@ AlbumInfo::AlbumInfo(const AlbumInfo &other) :
 
 void AlbumInfo::replaceData(AlbumInfo &other) {
 	m_name = other.m_name;
+	m_originalTitle = other.m_originalTitle;
 	m_path = other.m_path;
 	m_metadataLanguage = other.m_metadataLanguage;
 	m_metadataCountryCode = other.m_metadataCountryCode;
@@ -82,6 +90,7 @@ AlbumInfo AlbumInfo::fromJson(QJsonObject source) {
 
 void AlbumInfo::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_originalTitle = Jellyfin::Support::fromJsonValue<QString>(source["OriginalTitle"]);
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
@@ -103,6 +112,11 @@ QJsonObject AlbumInfo::toJson() const {
 	
 	if (!(m_name.isNull())) {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_originalTitle.isNull())) {
+		result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
 	}
 			
 	
@@ -146,21 +160,9 @@ QJsonObject AlbumInfo::toJson() const {
 	}
 			
 	result["IsAutomated"] = Jellyfin::Support::toJsonValue<bool>(m_isAutomated);		
-	
-	if (!(m_albumArtists.size() == 0)) {
-		result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QStringList>(m_albumArtists);
-	}
-			
-	
-	if (!(m_artistProviderIds.isEmpty())) {
-		result["ArtistProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_artistProviderIds);
-	}
-			
-	
-	if (!(m_songInfos.size() == 0)) {
-		result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<SongInfo>>(m_songInfos);
-	}
-		
+	result["AlbumArtists"] = Jellyfin::Support::toJsonValue<QStringList>(m_albumArtists);		
+	result["ArtistProviderIds"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_artistProviderIds);		
+	result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<SongInfo>>(m_songInfos);	
 	return result;
 }
 
@@ -175,6 +177,19 @@ bool AlbumInfo::nameNull() const {
 
 void AlbumInfo::setNameNull() {
 	m_name.clear();
+
+}
+QString AlbumInfo::originalTitle() const { return m_originalTitle; }
+
+void AlbumInfo::setOriginalTitle(QString newOriginalTitle) {
+	m_originalTitle = newOriginalTitle;
+}
+bool AlbumInfo::originalTitleNull() const {
+	return m_originalTitle.isNull();
+}
+
+void AlbumInfo::setOriginalTitleNull() {
+	m_originalTitle.clear();
 
 }
 QString AlbumInfo::path() const { return m_path; }
@@ -292,40 +307,19 @@ QStringList AlbumInfo::albumArtists() const { return m_albumArtists; }
 void AlbumInfo::setAlbumArtists(QStringList newAlbumArtists) {
 	m_albumArtists = newAlbumArtists;
 }
-bool AlbumInfo::albumArtistsNull() const {
-	return m_albumArtists.size() == 0;
-}
 
-void AlbumInfo::setAlbumArtistsNull() {
-	m_albumArtists.clear();
-
-}
 QJsonObject AlbumInfo::artistProviderIds() const { return m_artistProviderIds; }
 
 void AlbumInfo::setArtistProviderIds(QJsonObject newArtistProviderIds) {
 	m_artistProviderIds = newArtistProviderIds;
 }
-bool AlbumInfo::artistProviderIdsNull() const {
-	return m_artistProviderIds.isEmpty();
-}
 
-void AlbumInfo::setArtistProviderIdsNull() {
-	m_artistProviderIds= QJsonObject();
-
-}
 QList<SongInfo> AlbumInfo::songInfos() const { return m_songInfos; }
 
 void AlbumInfo::setSongInfos(QList<SongInfo> newSongInfos) {
 	m_songInfos = newSongInfos;
 }
-bool AlbumInfo::songInfosNull() const {
-	return m_songInfos.size() == 0;
-}
 
-void AlbumInfo::setSongInfosNull() {
-	m_songInfos.clear();
-
-}
 
 } // NS DTO
 

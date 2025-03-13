@@ -51,6 +51,8 @@ public:
 		Audio,
 		Video,
 		Photo,
+		Subtitle,
+		Lyric,
 	};
 	Q_ENUM(Value)
 private:

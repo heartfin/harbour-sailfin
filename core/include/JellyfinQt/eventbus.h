@@ -26,7 +26,7 @@ namespace Jellyfin {
 namespace DTO {
     class UserItemDataDto;
     class PlaystateRequest;
-    class SessionInfo;
+    class SessionInfoDto;
 }
 
 /**
@@ -43,14 +43,14 @@ signals:
      * @param itemId The id of the item which was updated.
      * @param userData The new userData
      */
-    void itemUserDataUpdated(const QString &itemId, const DTO::UserItemDataDto &userData);
+    void itemUserDataUpdated(const QString &itemId, const Jellyfin::DTO::UserItemDataDto &userData);
 
     /**
      * @brief The information about a session has been updated
      * @param sessionId The id of the session
      * @param sessionInfo The associated information
      */
-    void sessionInfoUpdated(const QString &sessionId, const DTO::SessionInfo &sessionInfo);
+    void sessionInfoUpdated(const QString &sessionId, const Jellyfin::DTO::SessionInfoDto &sessionInfo);
 
     /**
      * @brief The server has requested to display an message to the user

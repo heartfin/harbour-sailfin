@@ -35,6 +35,7 @@
 #include <QString>
 #include <optional>
 
+#include "JellyfinQt/dto/personkind.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -46,7 +47,12 @@ namespace DTO {
 
 
 class BaseItemPerson {
-public:	BaseItemPerson();
+public:
+	BaseItemPerson(			
+		QString jellyfinId,					
+		PersonKind type						
+	);
+
 	BaseItemPerson(const BaseItemPerson &other);
 	
 	/**
@@ -78,8 +84,6 @@ public:	BaseItemPerson();
 	* @brief Gets or sets the identifier.
 	*/
 	void setJellyfinId(QString newJellyfinId);
-	bool jellyfinIdNull() const;
-	void setJellyfinIdNull();
 
 	/**
 	 * @brief Gets or sets the role.
@@ -92,16 +96,10 @@ public:	BaseItemPerson();
 	bool roleNull() const;
 	void setRoleNull();
 
-	/**
-	 * @brief Gets or sets the type.
-	 */
-	QString type() const;
-	/**
-	* @brief Gets or sets the type.
-	*/
-	void setType(QString newType);
-	bool typeNull() const;
-	void setTypeNull();
+
+	PersonKind type() const;
+
+	void setType(PersonKind newType);
 
 	/**
 	 * @brief Gets or sets the primary image tag.
@@ -130,11 +128,13 @@ protected:
 	QString m_name;
 	QString m_jellyfinId;
 	QString m_role;
-	QString m_type;
+	PersonKind m_type;
 	QString m_primaryImageTag;
 	QJsonObject m_imageBlurHashes;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing BaseItemPerson::fromJson();
+	BaseItemPerson();
 };
 
 

@@ -40,6 +40,8 @@
 
 #include "JellyfinQt/dto/imagetype.h"
 #include "JellyfinQt/dto/itemfields.h"
+#include "JellyfinQt/dto/itemsortby.h"
+#include "JellyfinQt/dto/sortorder.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -52,10 +54,8 @@ namespace DTO {
 
 class GetProgramsDto {
 public:
-	GetProgramsDto(			
-		QString userId,																																							
-		bool enableTotalRecordCount,											
-		QString librarySeriesId				
+	GetProgramsDto(																																									
+		std::optional<bool> enableTotalRecordCount														
 	);
 
 	GetProgramsDto(const GetProgramsDto &other);
@@ -89,15 +89,15 @@ public:
 	* @brief Gets or sets optional. Filter by user id.
 	*/
 	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
 
 	/**
 	 * @brief Gets or sets the minimum premiere start date.
-Optional.
 	 */
 	QDateTime minStartDate() const;
 	/**
 	* @brief Gets or sets the minimum premiere start date.
-Optional.
 	*/
 	void setMinStartDate(QDateTime newMinStartDate);
 	bool minStartDateNull() const;
@@ -105,12 +105,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets filter by programs that have completed airing, or not.
-Optional.
 	 */
 	std::optional<bool> hasAired() const;
 	/**
 	* @brief Gets or sets filter by programs that have completed airing, or not.
-Optional.
 	*/
 	void setHasAired(std::optional<bool> newHasAired);
 	bool hasAiredNull() const;
@@ -118,12 +116,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets filter by programs that are currently airing, or not.
-Optional.
 	 */
 	std::optional<bool> isAiring() const;
 	/**
 	* @brief Gets or sets filter by programs that are currently airing, or not.
-Optional.
 	*/
 	void setIsAiring(std::optional<bool> newIsAiring);
 	bool isAiringNull() const;
@@ -131,12 +127,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets the maximum premiere start date.
-Optional.
 	 */
 	QDateTime maxStartDate() const;
 	/**
 	* @brief Gets or sets the maximum premiere start date.
-Optional.
 	*/
 	void setMaxStartDate(QDateTime newMaxStartDate);
 	bool maxStartDateNull() const;
@@ -144,12 +138,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets the minimum premiere end date.
-Optional.
 	 */
 	QDateTime minEndDate() const;
 	/**
 	* @brief Gets or sets the minimum premiere end date.
-Optional.
 	*/
 	void setMinEndDate(QDateTime newMinEndDate);
 	bool minEndDateNull() const;
@@ -157,12 +149,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets the maximum premiere end date.
-Optional.
 	 */
 	QDateTime maxEndDate() const;
 	/**
 	* @brief Gets or sets the maximum premiere end date.
-Optional.
 	*/
 	void setMaxEndDate(QDateTime newMaxEndDate);
 	bool maxEndDateNull() const;
@@ -170,12 +160,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets filter for movies.
-Optional.
 	 */
 	std::optional<bool> isMovie() const;
 	/**
 	* @brief Gets or sets filter for movies.
-Optional.
 	*/
 	void setIsMovie(std::optional<bool> newIsMovie);
 	bool isMovieNull() const;
@@ -183,12 +171,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets filter for series.
-Optional.
 	 */
 	std::optional<bool> isSeries() const;
 	/**
 	* @brief Gets or sets filter for series.
-Optional.
 	*/
 	void setIsSeries(std::optional<bool> newIsSeries);
 	bool isSeriesNull() const;
@@ -196,12 +182,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets filter for news.
-Optional.
 	 */
 	std::optional<bool> isNews() const;
 	/**
 	* @brief Gets or sets filter for news.
-Optional.
 	*/
 	void setIsNews(std::optional<bool> newIsNews);
 	bool isNewsNull() const;
@@ -209,12 +193,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets filter for kids.
-Optional.
 	 */
 	std::optional<bool> isKids() const;
 	/**
 	* @brief Gets or sets filter for kids.
-Optional.
 	*/
 	void setIsKids(std::optional<bool> newIsKids);
 	bool isKidsNull() const;
@@ -222,12 +204,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets filter for sports.
-Optional.
 	 */
 	std::optional<bool> isSports() const;
 	/**
 	* @brief Gets or sets filter for sports.
-Optional.
 	*/
 	void setIsSports(std::optional<bool> newIsSports);
 	bool isSportsNull() const;
@@ -235,12 +215,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets the record index to start at. All items with a lower index will be dropped from the results.
-Optional.
 	 */
 	std::optional<qint32> startIndex() const;
 	/**
 	* @brief Gets or sets the record index to start at. All items with a lower index will be dropped from the results.
-Optional.
 	*/
 	void setStartIndex(std::optional<qint32> newStartIndex);
 	bool startIndexNull() const;
@@ -248,12 +226,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets the maximum number of records to return.
-Optional.
 	 */
 	std::optional<qint32> limit() const;
 	/**
 	* @brief Gets or sets the maximum number of records to return.
-Optional.
 	*/
 	void setLimit(std::optional<qint32> newLimit);
 	bool limitNull() const;
@@ -261,25 +237,23 @@ Optional.
 
 	/**
 	 * @brief Gets or sets specify one or more sort orders, comma delimited. Options: Name, StartDate.
-Optional.
 	 */
-	QString sortBy() const;
+	QList<ItemSortBy> sortBy() const;
 	/**
 	* @brief Gets or sets specify one or more sort orders, comma delimited. Options: Name, StartDate.
-Optional.
 	*/
-	void setSortBy(QString newSortBy);
+	void setSortBy(QList<ItemSortBy> newSortBy);
 	bool sortByNull() const;
 	void setSortByNull();
 
 	/**
-	 * @brief Gets or sets sort Order - Ascending,Descending.
+	 * @brief Gets or sets sort order.
 	 */
-	QString sortOrder() const;
+	QList<SortOrder> sortOrder() const;
 	/**
-	* @brief Gets or sets sort Order - Ascending,Descending.
+	* @brief Gets or sets sort order.
 	*/
-	void setSortOrder(QString newSortOrder);
+	void setSortOrder(QList<SortOrder> newSortOrder);
 	bool sortOrderNull() const;
 	void setSortOrderNull();
 
@@ -307,12 +281,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets include image information in output.
-Optional.
 	 */
 	std::optional<bool> enableImages() const;
 	/**
 	* @brief Gets or sets include image information in output.
-Optional.
 	*/
 	void setEnableImages(std::optional<bool> newEnableImages);
 	bool enableImagesNull() const;
@@ -321,20 +293,18 @@ Optional.
 	/**
 	 * @brief Gets or sets a value indicating whether retrieve total record count.
 	 */
-	bool enableTotalRecordCount() const;
+	std::optional<bool> enableTotalRecordCount() const;
 	/**
 	* @brief Gets or sets a value indicating whether retrieve total record count.
 	*/
-	void setEnableTotalRecordCount(bool newEnableTotalRecordCount);
+	void setEnableTotalRecordCount(std::optional<bool> newEnableTotalRecordCount);
 
 	/**
 	 * @brief Gets or sets the max number of images to return, per image type.
-Optional.
 	 */
 	std::optional<qint32> imageTypeLimit() const;
 	/**
 	* @brief Gets or sets the max number of images to return, per image type.
-Optional.
 	*/
 	void setImageTypeLimit(std::optional<qint32> newImageTypeLimit);
 	bool imageTypeLimitNull() const;
@@ -342,12 +312,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets the image types to include in the output.
-Optional.
 	 */
 	QList<ImageType> enableImageTypes() const;
 	/**
 	* @brief Gets or sets the image types to include in the output.
-Optional.
 	*/
 	void setEnableImageTypes(QList<ImageType> newEnableImageTypes);
 	bool enableImageTypesNull() const;
@@ -355,12 +323,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets include user data.
-Optional.
 	 */
 	std::optional<bool> enableUserData() const;
 	/**
 	* @brief Gets or sets include user data.
-Optional.
 	*/
 	void setEnableUserData(std::optional<bool> newEnableUserData);
 	bool enableUserDataNull() const;
@@ -368,12 +334,10 @@ Optional.
 
 	/**
 	 * @brief Gets or sets filter by series timer id.
-Optional.
 	 */
 	QString seriesTimerId() const;
 	/**
 	* @brief Gets or sets filter by series timer id.
-Optional.
 	*/
 	void setSeriesTimerId(QString newSeriesTimerId);
 	bool seriesTimerIdNull() const;
@@ -381,23 +345,21 @@ Optional.
 
 	/**
 	 * @brief Gets or sets filter by library series id.
-Optional.
 	 */
 	QString librarySeriesId() const;
 	/**
 	* @brief Gets or sets filter by library series id.
-Optional.
 	*/
 	void setLibrarySeriesId(QString newLibrarySeriesId);
+	bool librarySeriesIdNull() const;
+	void setLibrarySeriesIdNull();
 
 	/**
-	 * @brief Gets or sets specify additional fields of information to return in the output. This allows multiple, comma delimited. Options: Budget, Chapters, DateCreated, Genres, HomePageUrl, IndexOptions, MediaStreams, Overview, ParentId, Path, People, ProviderIds, PrimaryImageAspectRatio, Revenue, SortName, Studios, Taglines.
-Optional.
+	 * @brief Gets or sets specify additional fields of information to return in the output.
 	 */
 	QList<ItemFields> fields() const;
 	/**
-	* @brief Gets or sets specify additional fields of information to return in the output. This allows multiple, comma delimited. Options: Budget, Chapters, DateCreated, Genres, HomePageUrl, IndexOptions, MediaStreams, Overview, ParentId, Path, People, ProviderIds, PrimaryImageAspectRatio, Revenue, SortName, Studios, Taglines.
-Optional.
+	* @brief Gets or sets specify additional fields of information to return in the output.
 	*/
 	void setFields(QList<ItemFields> newFields);
 	bool fieldsNull() const;
@@ -420,12 +382,12 @@ protected:
 	std::optional<bool> m_isSports = std::nullopt;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
-	QString m_sortBy;
-	QString m_sortOrder;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	QStringList m_genres;
 	QStringList m_genreIds;
 	std::optional<bool> m_enableImages = std::nullopt;
-	bool m_enableTotalRecordCount;
+	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
 	QList<ImageType> m_enableImageTypes;
 	std::optional<bool> m_enableUserData = std::nullopt;

@@ -69,10 +69,10 @@ QUrlQuery GetArtistsLoader::query(const GetArtistsParams &params) const {
 		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QList<BaseItemKind>>(params.excludeItemTypes()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QList<BaseItemKind>>(params.includeItemTypes()));
 	}
 	if (!params.filtersNull()) {
 		result.addQueryItem("filters", Support::toString<QList<ItemFilter>>(params.filters()));
@@ -81,7 +81,7 @@ QUrlQuery GetArtistsLoader::query(const GetArtistsParams &params) const {
 		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
 	}
 	if (!params.mediaTypesNull()) {
-		result.addQueryItem("mediaTypes", Support::toString<QStringList>(params.mediaTypes()));
+		result.addQueryItem("mediaTypes", Support::toString<QList<MediaType>>(params.mediaTypes()));
 	}
 	if (!params.genresNull()) {
 		result.addQueryItem("genres", Support::toString<QStringList>(params.genres()));
@@ -133,6 +133,12 @@ QUrlQuery GetArtistsLoader::query(const GetArtistsParams &params) const {
 	}
 	if (!params.nameLessThanNull()) {
 		result.addQueryItem("nameLessThan", Support::toString<QString>(params.nameLessThan()));
+	}
+	if (!params.sortByNull()) {
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
+	}
+	if (!params.sortOrderNull()) {
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
 	}
 	if (!params.enableImagesNull()) {
 		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
@@ -220,10 +226,10 @@ QUrlQuery GetAlbumArtistsLoader::query(const GetAlbumArtistsParams &params) cons
 		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QList<BaseItemKind>>(params.excludeItemTypes()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QList<BaseItemKind>>(params.includeItemTypes()));
 	}
 	if (!params.filtersNull()) {
 		result.addQueryItem("filters", Support::toString<QList<ItemFilter>>(params.filters()));
@@ -232,7 +238,7 @@ QUrlQuery GetAlbumArtistsLoader::query(const GetAlbumArtistsParams &params) cons
 		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
 	}
 	if (!params.mediaTypesNull()) {
-		result.addQueryItem("mediaTypes", Support::toString<QStringList>(params.mediaTypes()));
+		result.addQueryItem("mediaTypes", Support::toString<QList<MediaType>>(params.mediaTypes()));
 	}
 	if (!params.genresNull()) {
 		result.addQueryItem("genres", Support::toString<QStringList>(params.genres()));
@@ -284,6 +290,12 @@ QUrlQuery GetAlbumArtistsLoader::query(const GetAlbumArtistsParams &params) cons
 	}
 	if (!params.nameLessThanNull()) {
 		result.addQueryItem("nameLessThan", Support::toString<QString>(params.nameLessThan()));
+	}
+	if (!params.sortByNull()) {
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
+	}
+	if (!params.sortOrderNull()) {
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
 	}
 	if (!params.enableImagesNull()) {
 		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));

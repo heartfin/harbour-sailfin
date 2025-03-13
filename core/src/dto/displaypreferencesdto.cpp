@@ -37,6 +37,7 @@ DisplayPreferencesDto::DisplayPreferencesDto (
 		bool rememberIndexing, 
 		qint32 primaryImageHeight, 
 		qint32 primaryImageWidth, 
+		QJsonObject customPrefs, 
 		ScrollDirection scrollDirection, 
 		bool showBackdrop, 
 		bool rememberSorting, 
@@ -46,6 +47,7 @@ DisplayPreferencesDto::DisplayPreferencesDto (
 	m_rememberIndexing(rememberIndexing),
 	m_primaryImageHeight(primaryImageHeight),
 	m_primaryImageWidth(primaryImageWidth),
+	m_customPrefs(customPrefs),
 	m_scrollDirection(scrollDirection),
 	m_showBackdrop(showBackdrop),
 	m_rememberSorting(rememberSorting),
@@ -140,11 +142,7 @@ QJsonObject DisplayPreferencesDto::toJson() const {
 	result["RememberIndexing"] = Jellyfin::Support::toJsonValue<bool>(m_rememberIndexing);		
 	result["PrimaryImageHeight"] = Jellyfin::Support::toJsonValue<qint32>(m_primaryImageHeight);		
 	result["PrimaryImageWidth"] = Jellyfin::Support::toJsonValue<qint32>(m_primaryImageWidth);		
-	
-	if (!(m_customPrefs.isEmpty())) {
-		result["CustomPrefs"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_customPrefs);
-	}
-			
+	result["CustomPrefs"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_customPrefs);		
 	result["ScrollDirection"] = Jellyfin::Support::toJsonValue<ScrollDirection>(m_scrollDirection);		
 	result["ShowBackdrop"] = Jellyfin::Support::toJsonValue<bool>(m_showBackdrop);		
 	result["RememberSorting"] = Jellyfin::Support::toJsonValue<bool>(m_rememberSorting);		
@@ -233,14 +231,7 @@ QJsonObject DisplayPreferencesDto::customPrefs() const { return m_customPrefs; }
 void DisplayPreferencesDto::setCustomPrefs(QJsonObject newCustomPrefs) {
 	m_customPrefs = newCustomPrefs;
 }
-bool DisplayPreferencesDto::customPrefsNull() const {
-	return m_customPrefs.isEmpty();
-}
 
-void DisplayPreferencesDto::setCustomPrefsNull() {
-	m_customPrefs= QJsonObject();
-
-}
 ScrollDirection DisplayPreferencesDto::scrollDirection() const { return m_scrollDirection; }
 
 void DisplayPreferencesDto::setScrollDirection(ScrollDirection newScrollDirection) {

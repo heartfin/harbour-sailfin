@@ -35,6 +35,7 @@
 #include <QString>
 #include <optional>
 
+#include "JellyfinQt/dto/playbackorder.h"
 #include "JellyfinQt/dto/playmethod.h"
 #include "JellyfinQt/dto/repeatmode.h"
 #include "JellyfinQt/support/jsonconv.h"
@@ -54,7 +55,8 @@ public:
 		bool isPaused,			
 		bool isMuted,											
 		PlayMethod playMethod,			
-		RepeatMode repeatMode		
+		RepeatMode repeatMode,			
+		PlaybackOrder playbackOrder				
 	);
 
 	PlayerStateInfo(const PlayerStateInfo &other);
@@ -162,6 +164,22 @@ public:
 	void setRepeatMode(RepeatMode newRepeatMode);
 
 
+	PlaybackOrder playbackOrder() const;
+
+	void setPlaybackOrder(PlaybackOrder newPlaybackOrder);
+
+	/**
+	 * @brief Gets or sets the now playing live stream identifier.
+	 */
+	QString liveStreamId() const;
+	/**
+	* @brief Gets or sets the now playing live stream identifier.
+	*/
+	void setLiveStreamId(QString newLiveStreamId);
+	bool liveStreamIdNull() const;
+	void setLiveStreamIdNull();
+
+
 protected:
 	std::optional<qint64> m_positionTicks = std::nullopt;
 	bool m_canSeek;
@@ -173,6 +191,8 @@ protected:
 	QString m_mediaSourceId;
 	PlayMethod m_playMethod;
 	RepeatMode m_repeatMode;
+	PlaybackOrder m_playbackOrder;
+	QString m_liveStreamId;
 
 private:
 	// Private constructor which generates an invalid object, for use withing PlayerStateInfo::fromJson();

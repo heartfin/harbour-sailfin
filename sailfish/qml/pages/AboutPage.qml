@@ -56,7 +56,7 @@ Page {
                       "You can <a href=\"github\">view its source code on GitHub</a>. " +
                       "Parts of the code of Sailfin are from other libraries. <a href='3rdparty'>View their licenses here</a>.</p>")
                         .arg(apiClient.version)
-                        .arg(2024)
+                        .arg(2025)
                 textFormat: Text.StyledText
                 color: Theme.secondaryHighlightColor
                 linkColor: Theme.primaryColor

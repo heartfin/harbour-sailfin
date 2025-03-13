@@ -34,9 +34,13 @@ namespace DTO {
 
 LiveTvInfo::LiveTvInfo() {}
 LiveTvInfo::LiveTvInfo (
-		bool isEnabled 
+		QList<LiveTvServiceInfo> services, 
+		bool isEnabled, 
+		QStringList enabledUsers 
 		) :
-	m_isEnabled(isEnabled) { }
+	m_services(services),
+	m_isEnabled(isEnabled),
+	m_enabledUsers(enabledUsers) { }
 
 
 
@@ -70,17 +74,9 @@ void LiveTvInfo::setFromJson(QJsonObject source) {
 QJsonObject LiveTvInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_services.size() == 0)) {
-		result["Services"] = Jellyfin::Support::toJsonValue<QList<LiveTvServiceInfo>>(m_services);
-	}
-			
+	result["Services"] = Jellyfin::Support::toJsonValue<QList<LiveTvServiceInfo>>(m_services);		
 	result["IsEnabled"] = Jellyfin::Support::toJsonValue<bool>(m_isEnabled);		
-	
-	if (!(m_enabledUsers.size() == 0)) {
-		result["EnabledUsers"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledUsers);
-	}
-		
+	result["EnabledUsers"] = Jellyfin::Support::toJsonValue<QStringList>(m_enabledUsers);	
 	return result;
 }
 
@@ -89,14 +85,7 @@ QList<LiveTvServiceInfo> LiveTvInfo::services() const { return m_services; }
 void LiveTvInfo::setServices(QList<LiveTvServiceInfo> newServices) {
 	m_services = newServices;
 }
-bool LiveTvInfo::servicesNull() const {
-	return m_services.size() == 0;
-}
 
-void LiveTvInfo::setServicesNull() {
-	m_services.clear();
-
-}
 bool LiveTvInfo::isEnabled() const { return m_isEnabled; }
 
 void LiveTvInfo::setIsEnabled(bool newIsEnabled) {
@@ -108,14 +97,7 @@ QStringList LiveTvInfo::enabledUsers() const { return m_enabledUsers; }
 void LiveTvInfo::setEnabledUsers(QStringList newEnabledUsers) {
 	m_enabledUsers = newEnabledUsers;
 }
-bool LiveTvInfo::enabledUsersNull() const {
-	return m_enabledUsers.size() == 0;
-}
 
-void LiveTvInfo::setEnabledUsersNull() {
-	m_enabledUsers.clear();
-
-}
 
 } // NS DTO
 

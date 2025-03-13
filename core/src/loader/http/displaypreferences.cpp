@@ -48,10 +48,12 @@ QUrlQuery GetDisplayPreferencesLoader::query(const GetDisplayPreferencesParams &
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
-	result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	result.addQueryItem("client", Support::toString<QString>(params.client()));
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	
 	return result;
 }
@@ -79,10 +81,12 @@ QUrlQuery UpdateDisplayPreferencesLoader::query(const UpdateDisplayPreferencesPa
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
-	result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	result.addQueryItem("client", Support::toString<QString>(params.client()));
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	
 	return result;
 }

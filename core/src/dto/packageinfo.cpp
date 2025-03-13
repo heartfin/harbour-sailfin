@@ -33,6 +33,24 @@ namespace Jellyfin {
 namespace DTO {
 
 PackageInfo::PackageInfo() {}
+PackageInfo::PackageInfo (
+		QString name, 
+		QString description, 
+		QString overview, 
+		QString owner, 
+		QString category, 
+		QString guid, 
+		QList<VersionInfo> versions 
+		) :
+	m_name(name),
+	m_description(description),
+	m_overview(overview),
+	m_owner(owner),
+	m_category(category),
+	m_guid(guid),
+	m_versions(versions) { }
+
+
 
 PackageInfo::PackageInfo(const PackageInfo &other) :
 
@@ -79,41 +97,13 @@ void PackageInfo::setFromJson(QJsonObject source) {
 QJsonObject PackageInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_name.isNull())) {
-		result["name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
-	
-	if (!(m_description.isNull())) {
-		result["description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
-	}
-			
-	
-	if (!(m_overview.isNull())) {
-		result["overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
-	}
-			
-	
-	if (!(m_owner.isNull())) {
-		result["owner"] = Jellyfin::Support::toJsonValue<QString>(m_owner);
-	}
-			
-	
-	if (!(m_category.isNull())) {
-		result["category"] = Jellyfin::Support::toJsonValue<QString>(m_category);
-	}
-			
-	
-	if (!(m_guid.isNull())) {
-		result["guid"] = Jellyfin::Support::toJsonValue<QString>(m_guid);
-	}
-			
-	
-	if (!(m_versions.size() == 0)) {
-		result["versions"] = Jellyfin::Support::toJsonValue<QList<VersionInfo>>(m_versions);
-	}
-			
+	result["name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
+	result["description"] = Jellyfin::Support::toJsonValue<QString>(m_description);		
+	result["overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);		
+	result["owner"] = Jellyfin::Support::toJsonValue<QString>(m_owner);		
+	result["category"] = Jellyfin::Support::toJsonValue<QString>(m_category);		
+	result["guid"] = Jellyfin::Support::toJsonValue<QString>(m_guid);		
+	result["versions"] = Jellyfin::Support::toJsonValue<QList<VersionInfo>>(m_versions);		
 	
 	if (!(m_imageUrl.isNull())) {
 		result["imageUrl"] = Jellyfin::Support::toJsonValue<QString>(m_imageUrl);
@@ -127,92 +117,43 @@ QString PackageInfo::name() const { return m_name; }
 void PackageInfo::setName(QString newName) {
 	m_name = newName;
 }
-bool PackageInfo::nameNull() const {
-	return m_name.isNull();
-}
 
-void PackageInfo::setNameNull() {
-	m_name.clear();
-
-}
 QString PackageInfo::description() const { return m_description; }
 
 void PackageInfo::setDescription(QString newDescription) {
 	m_description = newDescription;
 }
-bool PackageInfo::descriptionNull() const {
-	return m_description.isNull();
-}
 
-void PackageInfo::setDescriptionNull() {
-	m_description.clear();
-
-}
 QString PackageInfo::overview() const { return m_overview; }
 
 void PackageInfo::setOverview(QString newOverview) {
 	m_overview = newOverview;
 }
-bool PackageInfo::overviewNull() const {
-	return m_overview.isNull();
-}
 
-void PackageInfo::setOverviewNull() {
-	m_overview.clear();
-
-}
 QString PackageInfo::owner() const { return m_owner; }
 
 void PackageInfo::setOwner(QString newOwner) {
 	m_owner = newOwner;
 }
-bool PackageInfo::ownerNull() const {
-	return m_owner.isNull();
-}
 
-void PackageInfo::setOwnerNull() {
-	m_owner.clear();
-
-}
 QString PackageInfo::category() const { return m_category; }
 
 void PackageInfo::setCategory(QString newCategory) {
 	m_category = newCategory;
 }
-bool PackageInfo::categoryNull() const {
-	return m_category.isNull();
-}
 
-void PackageInfo::setCategoryNull() {
-	m_category.clear();
-
-}
 QString PackageInfo::guid() const { return m_guid; }
 
 void PackageInfo::setGuid(QString newGuid) {
 	m_guid = newGuid;
 }
-bool PackageInfo::guidNull() const {
-	return m_guid.isNull();
-}
 
-void PackageInfo::setGuidNull() {
-	m_guid.clear();
-
-}
 QList<VersionInfo> PackageInfo::versions() const { return m_versions; }
 
 void PackageInfo::setVersions(QList<VersionInfo> newVersions) {
 	m_versions = newVersions;
 }
-bool PackageInfo::versionsNull() const {
-	return m_versions.size() == 0;
-}
 
-void PackageInfo::setVersionsNull() {
-	m_versions.clear();
-
-}
 QString PackageInfo::imageUrl() const { return m_imageUrl; }
 
 void PackageInfo::setImageUrl(QString newImageUrl) {

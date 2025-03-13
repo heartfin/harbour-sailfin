@@ -34,9 +34,13 @@ namespace DTO {
 
 MediaStream::MediaStream() {}
 MediaStream::MediaStream (
+		VideoRange videoRange, 
+		VideoRangeType videoRangeType, 
+		AudioSpatialFormat audioSpatialFormat, 
 		bool isInterlaced, 
 		bool isDefault, 
 		bool isForced, 
+		bool isHearingImpaired, 
 		MediaStreamType type, 
 		qint32 index, 
 		bool isExternal, 
@@ -44,9 +48,13 @@ MediaStream::MediaStream (
 		bool isTextSubtitleStream, 
 		bool supportsExternalStream 
 		) :
+	m_videoRange(videoRange),
+	m_videoRangeType(videoRangeType),
+	m_audioSpatialFormat(audioSpatialFormat),
 	m_isInterlaced(isInterlaced),
 	m_isDefault(isDefault),
 	m_isForced(isForced),
+	m_isHearingImpaired(isHearingImpaired),
 	m_type(type),
 	m_index(index),
 	m_isExternal(isExternal),
@@ -65,14 +73,28 @@ MediaStream::MediaStream(const MediaStream &other) :
 	m_colorSpace(other.m_colorSpace),
 	m_colorTransfer(other.m_colorTransfer),
 	m_colorPrimaries(other.m_colorPrimaries),
+	m_dvVersionMajor(other.m_dvVersionMajor),
+	m_dvVersionMinor(other.m_dvVersionMinor),
+	m_dvProfile(other.m_dvProfile),
+	m_dvLevel(other.m_dvLevel),
+	m_rpuPresentFlag(other.m_rpuPresentFlag),
+	m_elPresentFlag(other.m_elPresentFlag),
+	m_blPresentFlag(other.m_blPresentFlag),
+	m_dvBlSignalCompatibilityId(other.m_dvBlSignalCompatibilityId),
+	m_rotation(other.m_rotation),
 	m_comment(other.m_comment),
 	m_timeBase(other.m_timeBase),
 	m_codecTimeBase(other.m_codecTimeBase),
 	m_title(other.m_title),
 	m_videoRange(other.m_videoRange),
+	m_videoRangeType(other.m_videoRangeType),
+	m_videoDoViTitle(other.m_videoDoViTitle),
+	m_audioSpatialFormat(other.m_audioSpatialFormat),
 	m_localizedUndefined(other.m_localizedUndefined),
 	m_localizedDefault(other.m_localizedDefault),
 	m_localizedForced(other.m_localizedForced),
+	m_localizedExternal(other.m_localizedExternal),
+	m_localizedHearingImpaired(other.m_localizedHearingImpaired),
 	m_displayTitle(other.m_displayTitle),
 	m_nalLengthSize(other.m_nalLengthSize),
 	m_isInterlaced(other.m_isInterlaced),
@@ -86,10 +108,12 @@ MediaStream::MediaStream(const MediaStream &other) :
 	m_sampleRate(other.m_sampleRate),
 	m_isDefault(other.m_isDefault),
 	m_isForced(other.m_isForced),
+	m_isHearingImpaired(other.m_isHearingImpaired),
 	m_height(other.m_height),
 	m_width(other.m_width),
 	m_averageFrameRate(other.m_averageFrameRate),
 	m_realFrameRate(other.m_realFrameRate),
+	m_referenceFrameRate(other.m_referenceFrameRate),
 	m_profile(other.m_profile),
 	m_type(other.m_type),
 	m_aspectRatio(other.m_aspectRatio),
@@ -115,14 +139,28 @@ void MediaStream::replaceData(MediaStream &other) {
 	m_colorSpace = other.m_colorSpace;
 	m_colorTransfer = other.m_colorTransfer;
 	m_colorPrimaries = other.m_colorPrimaries;
+	m_dvVersionMajor = other.m_dvVersionMajor;
+	m_dvVersionMinor = other.m_dvVersionMinor;
+	m_dvProfile = other.m_dvProfile;
+	m_dvLevel = other.m_dvLevel;
+	m_rpuPresentFlag = other.m_rpuPresentFlag;
+	m_elPresentFlag = other.m_elPresentFlag;
+	m_blPresentFlag = other.m_blPresentFlag;
+	m_dvBlSignalCompatibilityId = other.m_dvBlSignalCompatibilityId;
+	m_rotation = other.m_rotation;
 	m_comment = other.m_comment;
 	m_timeBase = other.m_timeBase;
 	m_codecTimeBase = other.m_codecTimeBase;
 	m_title = other.m_title;
 	m_videoRange = other.m_videoRange;
+	m_videoRangeType = other.m_videoRangeType;
+	m_videoDoViTitle = other.m_videoDoViTitle;
+	m_audioSpatialFormat = other.m_audioSpatialFormat;
 	m_localizedUndefined = other.m_localizedUndefined;
 	m_localizedDefault = other.m_localizedDefault;
 	m_localizedForced = other.m_localizedForced;
+	m_localizedExternal = other.m_localizedExternal;
+	m_localizedHearingImpaired = other.m_localizedHearingImpaired;
 	m_displayTitle = other.m_displayTitle;
 	m_nalLengthSize = other.m_nalLengthSize;
 	m_isInterlaced = other.m_isInterlaced;
@@ -136,10 +174,12 @@ void MediaStream::replaceData(MediaStream &other) {
 	m_sampleRate = other.m_sampleRate;
 	m_isDefault = other.m_isDefault;
 	m_isForced = other.m_isForced;
+	m_isHearingImpaired = other.m_isHearingImpaired;
 	m_height = other.m_height;
 	m_width = other.m_width;
 	m_averageFrameRate = other.m_averageFrameRate;
 	m_realFrameRate = other.m_realFrameRate;
+	m_referenceFrameRate = other.m_referenceFrameRate;
 	m_profile = other.m_profile;
 	m_type = other.m_type;
 	m_aspectRatio = other.m_aspectRatio;
@@ -172,14 +212,28 @@ void MediaStream::setFromJson(QJsonObject source) {
 	m_colorSpace = Jellyfin::Support::fromJsonValue<QString>(source["ColorSpace"]);
 	m_colorTransfer = Jellyfin::Support::fromJsonValue<QString>(source["ColorTransfer"]);
 	m_colorPrimaries = Jellyfin::Support::fromJsonValue<QString>(source["ColorPrimaries"]);
+	m_dvVersionMajor = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["DvVersionMajor"]);
+	m_dvVersionMinor = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["DvVersionMinor"]);
+	m_dvProfile = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["DvProfile"]);
+	m_dvLevel = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["DvLevel"]);
+	m_rpuPresentFlag = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["RpuPresentFlag"]);
+	m_elPresentFlag = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ElPresentFlag"]);
+	m_blPresentFlag = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["BlPresentFlag"]);
+	m_dvBlSignalCompatibilityId = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["DvBlSignalCompatibilityId"]);
+	m_rotation = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Rotation"]);
 	m_comment = Jellyfin::Support::fromJsonValue<QString>(source["Comment"]);
 	m_timeBase = Jellyfin::Support::fromJsonValue<QString>(source["TimeBase"]);
 	m_codecTimeBase = Jellyfin::Support::fromJsonValue<QString>(source["CodecTimeBase"]);
 	m_title = Jellyfin::Support::fromJsonValue<QString>(source["Title"]);
-	m_videoRange = Jellyfin::Support::fromJsonValue<QString>(source["VideoRange"]);
-	m_localizedUndefined = Jellyfin::Support::fromJsonValue<QString>(source["localizedUndefined"]);
-	m_localizedDefault = Jellyfin::Support::fromJsonValue<QString>(source["localizedDefault"]);
-	m_localizedForced = Jellyfin::Support::fromJsonValue<QString>(source["localizedForced"]);
+	m_videoRange = Jellyfin::Support::fromJsonValue<VideoRange>(source["VideoRange"]);
+	m_videoRangeType = Jellyfin::Support::fromJsonValue<VideoRangeType>(source["VideoRangeType"]);
+	m_videoDoViTitle = Jellyfin::Support::fromJsonValue<QString>(source["VideoDoViTitle"]);
+	m_audioSpatialFormat = Jellyfin::Support::fromJsonValue<AudioSpatialFormat>(source["AudioSpatialFormat"]);
+	m_localizedUndefined = Jellyfin::Support::fromJsonValue<QString>(source["LocalizedUndefined"]);
+	m_localizedDefault = Jellyfin::Support::fromJsonValue<QString>(source["LocalizedDefault"]);
+	m_localizedForced = Jellyfin::Support::fromJsonValue<QString>(source["LocalizedForced"]);
+	m_localizedExternal = Jellyfin::Support::fromJsonValue<QString>(source["LocalizedExternal"]);
+	m_localizedHearingImpaired = Jellyfin::Support::fromJsonValue<QString>(source["LocalizedHearingImpaired"]);
 	m_displayTitle = Jellyfin::Support::fromJsonValue<QString>(source["DisplayTitle"]);
 	m_nalLengthSize = Jellyfin::Support::fromJsonValue<QString>(source["NalLengthSize"]);
 	m_isInterlaced = Jellyfin::Support::fromJsonValue<bool>(source["IsInterlaced"]);
@@ -193,10 +247,12 @@ void MediaStream::setFromJson(QJsonObject source) {
 	m_sampleRate = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["SampleRate"]);
 	m_isDefault = Jellyfin::Support::fromJsonValue<bool>(source["IsDefault"]);
 	m_isForced = Jellyfin::Support::fromJsonValue<bool>(source["IsForced"]);
+	m_isHearingImpaired = Jellyfin::Support::fromJsonValue<bool>(source["IsHearingImpaired"]);
 	m_height = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Height"]);
 	m_width = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Width"]);
 	m_averageFrameRate = Jellyfin::Support::fromJsonValue<std::optional<float>>(source["AverageFrameRate"]);
 	m_realFrameRate = Jellyfin::Support::fromJsonValue<std::optional<float>>(source["RealFrameRate"]);
+	m_referenceFrameRate = Jellyfin::Support::fromJsonValue<std::optional<float>>(source["ReferenceFrameRate"]);
 	m_profile = Jellyfin::Support::fromJsonValue<QString>(source["Profile"]);
 	m_type = Jellyfin::Support::fromJsonValue<MediaStreamType>(source["Type"]);
 	m_aspectRatio = Jellyfin::Support::fromJsonValue<QString>(source["AspectRatio"]);
@@ -254,6 +310,51 @@ QJsonObject MediaStream::toJson() const {
 	}
 			
 	
+	if (!(!m_dvVersionMajor.has_value())) {
+		result["DvVersionMajor"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_dvVersionMajor);
+	}
+			
+	
+	if (!(!m_dvVersionMinor.has_value())) {
+		result["DvVersionMinor"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_dvVersionMinor);
+	}
+			
+	
+	if (!(!m_dvProfile.has_value())) {
+		result["DvProfile"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_dvProfile);
+	}
+			
+	
+	if (!(!m_dvLevel.has_value())) {
+		result["DvLevel"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_dvLevel);
+	}
+			
+	
+	if (!(!m_rpuPresentFlag.has_value())) {
+		result["RpuPresentFlag"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_rpuPresentFlag);
+	}
+			
+	
+	if (!(!m_elPresentFlag.has_value())) {
+		result["ElPresentFlag"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_elPresentFlag);
+	}
+			
+	
+	if (!(!m_blPresentFlag.has_value())) {
+		result["BlPresentFlag"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_blPresentFlag);
+	}
+			
+	
+	if (!(!m_dvBlSignalCompatibilityId.has_value())) {
+		result["DvBlSignalCompatibilityId"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_dvBlSignalCompatibilityId);
+	}
+			
+	
+	if (!(!m_rotation.has_value())) {
+		result["Rotation"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_rotation);
+	}
+			
+	
 	if (!(m_comment.isNull())) {
 		result["Comment"] = Jellyfin::Support::toJsonValue<QString>(m_comment);
 	}
@@ -273,24 +374,37 @@ QJsonObject MediaStream::toJson() const {
 		result["Title"] = Jellyfin::Support::toJsonValue<QString>(m_title);
 	}
 			
+	result["VideoRange"] = Jellyfin::Support::toJsonValue<VideoRange>(m_videoRange);		
+	result["VideoRangeType"] = Jellyfin::Support::toJsonValue<VideoRangeType>(m_videoRangeType);		
 	
-	if (!(m_videoRange.isNull())) {
-		result["VideoRange"] = Jellyfin::Support::toJsonValue<QString>(m_videoRange);
+	if (!(m_videoDoViTitle.isNull())) {
+		result["VideoDoViTitle"] = Jellyfin::Support::toJsonValue<QString>(m_videoDoViTitle);
 	}
 			
+	result["AudioSpatialFormat"] = Jellyfin::Support::toJsonValue<AudioSpatialFormat>(m_audioSpatialFormat);		
 	
 	if (!(m_localizedUndefined.isNull())) {
-		result["localizedUndefined"] = Jellyfin::Support::toJsonValue<QString>(m_localizedUndefined);
+		result["LocalizedUndefined"] = Jellyfin::Support::toJsonValue<QString>(m_localizedUndefined);
 	}
 			
 	
 	if (!(m_localizedDefault.isNull())) {
-		result["localizedDefault"] = Jellyfin::Support::toJsonValue<QString>(m_localizedDefault);
+		result["LocalizedDefault"] = Jellyfin::Support::toJsonValue<QString>(m_localizedDefault);
 	}
 			
 	
 	if (!(m_localizedForced.isNull())) {
-		result["localizedForced"] = Jellyfin::Support::toJsonValue<QString>(m_localizedForced);
+		result["LocalizedForced"] = Jellyfin::Support::toJsonValue<QString>(m_localizedForced);
+	}
+			
+	
+	if (!(m_localizedExternal.isNull())) {
+		result["LocalizedExternal"] = Jellyfin::Support::toJsonValue<QString>(m_localizedExternal);
+	}
+			
+	
+	if (!(m_localizedHearingImpaired.isNull())) {
+		result["LocalizedHearingImpaired"] = Jellyfin::Support::toJsonValue<QString>(m_localizedHearingImpaired);
 	}
 			
 	
@@ -346,6 +460,7 @@ QJsonObject MediaStream::toJson() const {
 			
 	result["IsDefault"] = Jellyfin::Support::toJsonValue<bool>(m_isDefault);		
 	result["IsForced"] = Jellyfin::Support::toJsonValue<bool>(m_isForced);		
+	result["IsHearingImpaired"] = Jellyfin::Support::toJsonValue<bool>(m_isHearingImpaired);		
 	
 	if (!(!m_height.has_value())) {
 		result["Height"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_height);
@@ -364,6 +479,11 @@ QJsonObject MediaStream::toJson() const {
 	
 	if (!(!m_realFrameRate.has_value())) {
 		result["RealFrameRate"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_realFrameRate);
+	}
+			
+	
+	if (!(!m_referenceFrameRate.has_value())) {
+		result["ReferenceFrameRate"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_referenceFrameRate);
 	}
 			
 	
@@ -511,6 +631,123 @@ void MediaStream::setColorPrimariesNull() {
 	m_colorPrimaries.clear();
 
 }
+std::optional<qint32> MediaStream::dvVersionMajor() const { return m_dvVersionMajor; }
+
+void MediaStream::setDvVersionMajor(std::optional<qint32> newDvVersionMajor) {
+	m_dvVersionMajor = newDvVersionMajor;
+}
+bool MediaStream::dvVersionMajorNull() const {
+	return !m_dvVersionMajor.has_value();
+}
+
+void MediaStream::setDvVersionMajorNull() {
+	m_dvVersionMajor = std::nullopt;
+
+}
+std::optional<qint32> MediaStream::dvVersionMinor() const { return m_dvVersionMinor; }
+
+void MediaStream::setDvVersionMinor(std::optional<qint32> newDvVersionMinor) {
+	m_dvVersionMinor = newDvVersionMinor;
+}
+bool MediaStream::dvVersionMinorNull() const {
+	return !m_dvVersionMinor.has_value();
+}
+
+void MediaStream::setDvVersionMinorNull() {
+	m_dvVersionMinor = std::nullopt;
+
+}
+std::optional<qint32> MediaStream::dvProfile() const { return m_dvProfile; }
+
+void MediaStream::setDvProfile(std::optional<qint32> newDvProfile) {
+	m_dvProfile = newDvProfile;
+}
+bool MediaStream::dvProfileNull() const {
+	return !m_dvProfile.has_value();
+}
+
+void MediaStream::setDvProfileNull() {
+	m_dvProfile = std::nullopt;
+
+}
+std::optional<qint32> MediaStream::dvLevel() const { return m_dvLevel; }
+
+void MediaStream::setDvLevel(std::optional<qint32> newDvLevel) {
+	m_dvLevel = newDvLevel;
+}
+bool MediaStream::dvLevelNull() const {
+	return !m_dvLevel.has_value();
+}
+
+void MediaStream::setDvLevelNull() {
+	m_dvLevel = std::nullopt;
+
+}
+std::optional<qint32> MediaStream::rpuPresentFlag() const { return m_rpuPresentFlag; }
+
+void MediaStream::setRpuPresentFlag(std::optional<qint32> newRpuPresentFlag) {
+	m_rpuPresentFlag = newRpuPresentFlag;
+}
+bool MediaStream::rpuPresentFlagNull() const {
+	return !m_rpuPresentFlag.has_value();
+}
+
+void MediaStream::setRpuPresentFlagNull() {
+	m_rpuPresentFlag = std::nullopt;
+
+}
+std::optional<qint32> MediaStream::elPresentFlag() const { return m_elPresentFlag; }
+
+void MediaStream::setElPresentFlag(std::optional<qint32> newElPresentFlag) {
+	m_elPresentFlag = newElPresentFlag;
+}
+bool MediaStream::elPresentFlagNull() const {
+	return !m_elPresentFlag.has_value();
+}
+
+void MediaStream::setElPresentFlagNull() {
+	m_elPresentFlag = std::nullopt;
+
+}
+std::optional<qint32> MediaStream::blPresentFlag() const { return m_blPresentFlag; }
+
+void MediaStream::setBlPresentFlag(std::optional<qint32> newBlPresentFlag) {
+	m_blPresentFlag = newBlPresentFlag;
+}
+bool MediaStream::blPresentFlagNull() const {
+	return !m_blPresentFlag.has_value();
+}
+
+void MediaStream::setBlPresentFlagNull() {
+	m_blPresentFlag = std::nullopt;
+
+}
+std::optional<qint32> MediaStream::dvBlSignalCompatibilityId() const { return m_dvBlSignalCompatibilityId; }
+
+void MediaStream::setDvBlSignalCompatibilityId(std::optional<qint32> newDvBlSignalCompatibilityId) {
+	m_dvBlSignalCompatibilityId = newDvBlSignalCompatibilityId;
+}
+bool MediaStream::dvBlSignalCompatibilityIdNull() const {
+	return !m_dvBlSignalCompatibilityId.has_value();
+}
+
+void MediaStream::setDvBlSignalCompatibilityIdNull() {
+	m_dvBlSignalCompatibilityId = std::nullopt;
+
+}
+std::optional<qint32> MediaStream::rotation() const { return m_rotation; }
+
+void MediaStream::setRotation(std::optional<qint32> newRotation) {
+	m_rotation = newRotation;
+}
+bool MediaStream::rotationNull() const {
+	return !m_rotation.has_value();
+}
+
+void MediaStream::setRotationNull() {
+	m_rotation = std::nullopt;
+
+}
 QString MediaStream::comment() const { return m_comment; }
 
 void MediaStream::setComment(QString newComment) {
@@ -563,19 +800,37 @@ void MediaStream::setTitleNull() {
 	m_title.clear();
 
 }
-QString MediaStream::videoRange() const { return m_videoRange; }
+VideoRange MediaStream::videoRange() const { return m_videoRange; }
 
-void MediaStream::setVideoRange(QString newVideoRange) {
+void MediaStream::setVideoRange(VideoRange newVideoRange) {
 	m_videoRange = newVideoRange;
 }
-bool MediaStream::videoRangeNull() const {
-	return m_videoRange.isNull();
+
+VideoRangeType MediaStream::videoRangeType() const { return m_videoRangeType; }
+
+void MediaStream::setVideoRangeType(VideoRangeType newVideoRangeType) {
+	m_videoRangeType = newVideoRangeType;
 }
 
-void MediaStream::setVideoRangeNull() {
-	m_videoRange.clear();
+QString MediaStream::videoDoViTitle() const { return m_videoDoViTitle; }
+
+void MediaStream::setVideoDoViTitle(QString newVideoDoViTitle) {
+	m_videoDoViTitle = newVideoDoViTitle;
+}
+bool MediaStream::videoDoViTitleNull() const {
+	return m_videoDoViTitle.isNull();
+}
+
+void MediaStream::setVideoDoViTitleNull() {
+	m_videoDoViTitle.clear();
 
 }
+AudioSpatialFormat MediaStream::audioSpatialFormat() const { return m_audioSpatialFormat; }
+
+void MediaStream::setAudioSpatialFormat(AudioSpatialFormat newAudioSpatialFormat) {
+	m_audioSpatialFormat = newAudioSpatialFormat;
+}
+
 QString MediaStream::localizedUndefined() const { return m_localizedUndefined; }
 
 void MediaStream::setLocalizedUndefined(QString newLocalizedUndefined) {
@@ -613,6 +868,32 @@ bool MediaStream::localizedForcedNull() const {
 
 void MediaStream::setLocalizedForcedNull() {
 	m_localizedForced.clear();
+
+}
+QString MediaStream::localizedExternal() const { return m_localizedExternal; }
+
+void MediaStream::setLocalizedExternal(QString newLocalizedExternal) {
+	m_localizedExternal = newLocalizedExternal;
+}
+bool MediaStream::localizedExternalNull() const {
+	return m_localizedExternal.isNull();
+}
+
+void MediaStream::setLocalizedExternalNull() {
+	m_localizedExternal.clear();
+
+}
+QString MediaStream::localizedHearingImpaired() const { return m_localizedHearingImpaired; }
+
+void MediaStream::setLocalizedHearingImpaired(QString newLocalizedHearingImpaired) {
+	m_localizedHearingImpaired = newLocalizedHearingImpaired;
+}
+bool MediaStream::localizedHearingImpairedNull() const {
+	return m_localizedHearingImpaired.isNull();
+}
+
+void MediaStream::setLocalizedHearingImpairedNull() {
+	m_localizedHearingImpaired.clear();
 
 }
 QString MediaStream::displayTitle() const { return m_displayTitle; }
@@ -763,6 +1044,12 @@ void MediaStream::setIsForced(bool newIsForced) {
 	m_isForced = newIsForced;
 }
 
+bool MediaStream::isHearingImpaired() const { return m_isHearingImpaired; }
+
+void MediaStream::setIsHearingImpaired(bool newIsHearingImpaired) {
+	m_isHearingImpaired = newIsHearingImpaired;
+}
+
 std::optional<qint32> MediaStream::height() const { return m_height; }
 
 void MediaStream::setHeight(std::optional<qint32> newHeight) {
@@ -813,6 +1100,19 @@ bool MediaStream::realFrameRateNull() const {
 
 void MediaStream::setRealFrameRateNull() {
 	m_realFrameRate = std::nullopt;
+
+}
+std::optional<float> MediaStream::referenceFrameRate() const { return m_referenceFrameRate; }
+
+void MediaStream::setReferenceFrameRate(std::optional<float> newReferenceFrameRate) {
+	m_referenceFrameRate = newReferenceFrameRate;
+}
+bool MediaStream::referenceFrameRateNull() const {
+	return !m_referenceFrameRate.has_value();
+}
+
+void MediaStream::setReferenceFrameRateNull() {
+	m_referenceFrameRate = std::nullopt;
 
 }
 QString MediaStream::profile() const { return m_profile; }

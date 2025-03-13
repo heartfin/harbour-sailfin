@@ -139,13 +139,13 @@ QUrlQuery GetChannelItemsLoader::query(const GetChannelItemsParams &params) cons
 		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.sortOrderNull()) {
-		result.addQueryItem("sortOrder", Support::toString<QString>(params.sortOrder()));
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
 	}
 	if (!params.filtersNull()) {
 		result.addQueryItem("filters", Support::toString<QList<ItemFilter>>(params.filters()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString<QString>(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
 	}
 	if (!params.fieldsNull()) {
 		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));

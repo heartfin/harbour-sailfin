@@ -53,8 +53,6 @@ int DeviceProfile::maxStreamingBitrate() {
 }
 
 DTO::DeviceProfile DeviceProfile::generateProfile() {
-    using JsonPair = QPair<QString, QJsonValue>;
-
     QStringList audioCodes = {
         "aac",
         "flac",
@@ -94,130 +92,138 @@ DTO::DeviceProfile DeviceProfile::generateProfile() {
 
 
     // AAC
-    DTO::CodecProfile codecProfile1(DTO::CodecType::VideoAudio);
+    DTO::CodecProfile codecProfile1(
+        DTO::CodecType::VideoAudio,
+        {
+            createCondition(CondVal::IsSecondaryAudio,
+                            Condition::Equals,
+                            "false",
+                            false)
+        },
+        {}
+    );
     codecProfile1.setCodec("aac");
-    QList<DTO::ProfileCondition> codecProfile1Conditions;
-    codecProfile1Conditions.append(createCondition(CondVal::IsSecondaryAudio,
-                                                   Condition::Equals,
-                                                   "false",
-                                                   false));
-    codecProfile1.setConditions(codecProfile1Conditions);
 
-
-    DTO::CodecProfile codecProfile2(DTO::CodecType::Video);
-    codecProfile2.setCodec("h264");
-    codecProfile2.setConditions({
-                    createCondition(CondVal::IsAnamorphic,
+    DTO::CodecProfile codecProfile2(
+        DTO::CodecType::Video,
+        {
+            createCondition(CondVal::IsAnamorphic,
                                     Condition::NotEquals,
                                     "true", false),
-                    createCondition(CondVal::VideoProfile,
-                                    Condition::EqualsAny,
-                                    "baseline|constrained baseline", false), //"high|main|baseline|constrained baseline"
-                    createCondition(CondVal::VideoLevel,
-                                    Condition::LessThanEqual,
-                                    "51", false),
-                    createCondition(CondVal::IsInterlaced,
-                                    Condition::NotEquals,
-                                    "true", false)
-                });
+            createCondition(CondVal::VideoProfile,
+                            Condition::EqualsAny,
+                            "baseline|constrained baseline", false), //"high|main|baseline|constrained baseline"
+            createCondition(CondVal::VideoLevel,
+                            Condition::LessThanEqual,
+                            "51", false),
+            createCondition(CondVal::IsInterlaced,
+                            Condition::NotEquals,
+                            "true", false)
+        },
+        {}
+    );
+    codecProfile2.setCodec("h264");
 
     QList<DTO::CodecProfile> codecProfiles = {
         codecProfile1,
         codecProfile2
     };
     // Hard coded nr 1:
-    DTO::TranscodingProfile transcoding1(DTO::DlnaProfileType::Audio,
-                                         false, // estimeateContentLength
-                                         false,  // enable MPEG2 TS M2 mode
-                                         DTO::TranscodeSeekInfo::Auto,
-                                         false, // copyTimestamps
-                                         DTO::EncodingContext::Streaming,
-                                         false, // enable subtitles in manifest
-                                         0, // minSegments
-                                         0, // minSegmentLength
-                                         true // set break on nonkeyframes
-                                         );
-    transcoding1.setAudioCodec("aac");
-    transcoding1.setContainer("ts");
+    DTO::TranscodingProfile transcoding1(
+        QStringLiteral("ts"),
+        DTO::DlnaProfileType::Audio,
+        QStringLiteral("h264"),
+        QStringLiteral("aac"),
+        DTO::MediaStreamProtocol::Hls,
+        false, // estimeateContentLength
+        false,  // enable MPEG2 TS M2 mode
+        DTO::TranscodeSeekInfo::Auto,
+        false, // copyTimestamps
+        DTO::EncodingContext::Streaming,
+        false, // enable subtitles in manifest
+        0, // minSegments
+        0, // minSegmentLength
+        true, // set break on nonkeyframes,
+        {}, // conditions
+        true // Enable audio VBR encoding
+    );
     transcoding1.setMaxAudioChannels("2");
-    transcoding1.setProtocol("hls");
 
     // Hard code nr 2
-    DTO::TranscodingProfile transcoding2(DTO::DlnaProfileType::Video,
-                                         false, // estimate content length
-                                         false, // enable MPEG2 ts M2 mode
-                                         DTO::TranscodeSeekInfo::Auto,
-                                         false, // copy timestamps
-                                         DTO::EncodingContext::Streaming,
-                                         false, // enable subtitles in manifest
-                                         0, // minSegments
-                                         0, // minSegmentLength
-                                         true // set break on non-keyframes
-                                         );
-    transcoding2.setAudioCodec("mp3,aac");
-    transcoding2.setContainer("ts");
+    DTO::TranscodingProfile transcoding2(
+        QStringLiteral("ts"),
+        DTO::DlnaProfileType::Video,
+        QStringLiteral("h264"),
+        QStringLiteral("mp3,aac"),
+        DTO::MediaStreamProtocol::Hls,
+        false, // estimate content length
+        false, // enable MPEG2 ts M2 mode
+        DTO::TranscodeSeekInfo::Auto,
+        false, // copy timestamps
+        DTO::EncodingContext::Streaming,
+        false, // enable subtitles in manifest
+        0, // minSegments
+        0, // minSegmentLength
+        true, // set break on non-keyframes
+        {}, // conditions
+        true// enableAudioVbrEncoding
+    );
     transcoding2.setMaxAudioChannels("2");
-    transcoding2.setProtocol("hls");
-    transcoding2.setVideoCodec("h264");
 
     // Fallback
-    DTO::TranscodingProfile transcoding3(DTO::DlnaProfileType::Video,
-                                         false, // estimate content length
-                                         false, // enable MPEG2 ts M2 mode
-                                         DTO::TranscodeSeekInfo::Auto,
-                                         false, // copy timestamps
-                                         DTO::EncodingContext::Static,
-                                         false, // enable subtitles in manifest
-                                         0, // minSegments
-                                         0, // minSegmentLength
-                                         true // set break on non-keyframes
-                                         );
-    transcoding3.setContainer("mp4");
-    transcoding3.setAudioCodec(videoAudioCodecs.join(','));
-    transcoding3.setVideoCodec("h264");
-    transcoding3.setProtocol("http");
+    DTO::TranscodingProfile transcoding3(
+        QStringLiteral("mp4"),
+        DTO::DlnaProfileType::Video,
+        QStringLiteral("h264"),
+        videoAudioCodecs.join(","),
+        DTO::MediaStreamProtocol::Http,
+        false, // estimate content length
+        false, // enable MPEG2 ts M2 mode
+        DTO::TranscodeSeekInfo::Auto,
+        false, // copy timestamps
+        DTO::EncodingContext::Static,
+        false, // enable subtitles in manifest
+        0, // minSegments
+        0, // minSegmentLength
+        true, // set break on non-keyframes
+        {},
+        true
+    );
 
     QList<DTO::TranscodingProfile> transcodingProfiles = {
         transcoding1, transcoding2, transcoding3
     };
 
     if (supportsHls() && !hlsVideoAudioCodecs.isEmpty()) {
-        DTO::TranscodingProfile transcoding4(DTO::DlnaProfileType::Video,
-                                             false, // estimate content length
-                                             false, // enable MPEG2 ts M2 mode
-                                             DTO::TranscodeSeekInfo::Auto,
-                                             false, // copy timestamps
-                                             DTO::EncodingContext::Streaming,
-                                             false, // enable subtitles in manifest
-                                             1, // minSegments
-                                             0, // minSegmentLength
-                                             true // set break on non-keyframes
-                                             );
-        transcoding4.setContainer("ts");
-        transcoding4.setAudioCodec(hlsVideoAudioCodecs.join(','));
-        transcoding4.setVideoCodec(hlsVideoCodecs.join(','));
-        transcoding4.setProtocol("hls");
+        DTO::TranscodingProfile transcoding4(
+            QStringLiteral("ts"),
+            DTO::DlnaProfileType::Video,
+            hlsVideoAudioCodecs.join(","),
+            hlsVideoAudioCodecs.join(","),
+            DTO::MediaStreamProtocol::Hls,
+            false, // estimate content length
+            false, // enable MPEG2 ts M2 mode
+            DTO::TranscodeSeekInfo::Auto,
+            false, // copy timestamps
+            DTO::EncodingContext::Streaming,
+            false, // enable subtitles in manifest
+            1, // minSegments
+            0, // minSegmentLength
+            true, // set break on non-keyframes
+            {},
+            true
+         );
         transcoding4.setMaxAudioChannels("2");
         transcodingProfiles.append(transcoding4);
     }
 
-    // Response profiles (or whatever it actually does?)
-    DTO::ResponseProfile responseProfile1(DTO::DlnaProfileType::Video);
-    responseProfile1.setContainer("m4v");
-    responseProfile1.setMimeType("video/mp4");
-    QList<DTO::ResponseProfile> responseProfiles = {
-        responseProfile1
-    };
-
     // Direct play profiles
     // Video
-    DTO::DirectPlayProfile directPlayProfile1(DTO::DlnaProfileType::Video);
-    directPlayProfile1.setContainer("mp4,m4v");
+    DTO::DirectPlayProfile directPlayProfile1("mp4,m4v", DTO::DlnaProfileType::Video);
     directPlayProfile1.setVideoCodec(mp4VideoCodecs.join(','));
     directPlayProfile1.setAudioCodec(videoAudioCodecs.join(','));
 
-    DTO::DirectPlayProfile directPlayProfile2(DTO::DlnaProfileType::Video);
-    directPlayProfile2.setContainer("mkv");
+    DTO::DirectPlayProfile directPlayProfile2("mkv", DTO::DlnaProfileType::Video);
     directPlayProfile2.setVideoCodec(mp4VideoCodecs.join(','));
     directPlayProfile2.setAudioCodec(videoAudioCodecs.join(','));
 
@@ -227,43 +233,36 @@ DTO::DeviceProfile DeviceProfile::generateProfile() {
     // Audio
     for (auto it = audioCodes.begin(); it != audioCodes.end(); it++) {
         if (*it == "mp2") {
-            DTO::DirectPlayProfile profile(DTO::DlnaProfileType::Audio);
-            profile.setContainer("mp2,mp3");
+            DTO::DirectPlayProfile profile("mp2,mp3", DTO::DlnaProfileType::Audio);
             profile.setAudioCodec("mp2");
             directPlayProfiles.append(profile);
         } else if(*it == "mp3") {
-            DTO::DirectPlayProfile profile(DTO::DlnaProfileType::Audio);
-            profile.setContainer("mp3");
+            DTO::DirectPlayProfile profile("mp3", DTO::DlnaProfileType::Audio);
             profile.setAudioCodec("mp3");
             directPlayProfiles.append(profile);
         } else if (*it == "webma") {
-            DTO::DirectPlayProfile profile(DTO::DlnaProfileType::Audio);
-            profile.setContainer("webma,webm");
+            DTO::DirectPlayProfile profile("webma,webm", DTO::DlnaProfileType::Audio);
             directPlayProfiles.append(profile);
         } else {
-            DTO::DirectPlayProfile profile(DTO::DlnaProfileType::Audio);
-            profile.setContainer(*it);
+            DTO::DirectPlayProfile profile(*it, DTO::DlnaProfileType::Audio);
             directPlayProfiles.append(profile);
         }
     }
 
+    QList<DTO::ContainerProfile> containerProfiles = { };
+
+    QList<DTO::SubtitleProfile> subtitleProfiles = {
+        DTO::SubtitleProfile(DTO::SubtitleDeliveryMethodClass::Hls),
+        DTO::SubtitleProfile(DTO::SubtitleDeliveryMethodClass::Encode)
+    };
+
     DTO::DeviceProfile profile(
-                QSharedPointer<DTO::DeviceIdentification>::create(),
-                false, // enableAlbumArtInDidl
-                false, // enableSingleAlbumArtLimit
-                false, // enableSingleSubtitleLimit
-                std::numeric_limits<qint32>().max(), // max album art width
-                std::numeric_limits<qint32>().max(), // max album art height
-                0,     // timeline offset seconds
-                false, // request plain video items
-                false, // request plain folders
-                false, // enableMSMediaReceiverRegistrar,
-                false  //ignoreTranscodeByteRangeRequests
+        directPlayProfiles,
+        transcodingProfiles,
+        containerProfiles,
+        codecProfiles,
+        subtitleProfiles
     );
-    profile.setCodecProfiles(codecProfiles);
-    profile.setDirectPlayProfiles(directPlayProfiles);
-    profile.setResponseProfiles(responseProfiles);
-    profile.setTranscodingProfiles(transcodingProfiles);
     profile.setMaxStreamingBitrate(std::make_optional<qint32>(maxStreamingBitrate()));
     return profile;
 }

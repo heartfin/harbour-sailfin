@@ -110,7 +110,7 @@
     </message>
     <message>
         <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="90"/>
-        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="169"/>
+        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="175"/>
         <source>Sort by</source>
         <extracomment>Menu item for selecting the sort order of a collection</extracomment>
         <translation type="unfinished"></translation>
@@ -126,28 +126,28 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="160"/>
+        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="166"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="161"/>
+        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="167"/>
         <source>Play count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="162"/>
+        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="168"/>
         <source>Date added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="185"/>
+        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="191"/>
         <source>Ascending</source>
         <extracomment>Sort order</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="190"/>
+        <location filename="../qml/pages/itemdetails/CollectionPage.qml" line="196"/>
         <source>Descending</source>
         <extracomment>Sort order</extracomment>
         <translation type="unfinished"></translation>
@@ -268,14 +268,17 @@
 <context>
     <name>LiveTvChannelPage</name>
     <message>
+        <location filename="../qml/pages/itemdetails/LiveTvChannelPage.qml" line="8"/>
         <source>%1 | %2 - %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/pages/itemdetails/LiveTvChannelPage.qml" line="14"/>
         <source>Program info</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qml/pages/itemdetails/LiveTvChannelPage.qml" line="19"/>
         <source>No program info available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -283,6 +286,7 @@
 <context>
     <name>LiveTvChannelsPage</name>
     <message>
+        <location filename="../qml/pages/itemdetails/LiveTvChannelsPage.qml" line="80"/>
         <source>No program information available</source>
         <extracomment>Shown in the channel list when the name of the current program is unknown</extracomment>
         <translation type="unfinished"></translation>
@@ -362,12 +366,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="136"/>
+        <location filename="../qml/pages/MainPage.qml" line="142"/>
         <source>Network error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/MainPage.qml" line="139"/>
+        <location filename="../qml/pages/MainPage.qml" line="145"/>
         <source>Pull down to retry again</source>
         <translation type="unfinished"></translation>
     </message>
@@ -394,7 +398,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/pages/itemdetails/MusicAlbumPage.qml" line="78"/>
+        <location filename="../qml/pages/itemdetails/MusicAlbumPage.qml" line="77"/>
         <source>Disc %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -546,7 +550,7 @@ Page title for the list of all artists within the music library</extracomment>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/harbour-sailfin.cpp" line="53"/>
+        <location filename="../src/harbour-sailfin.cpp" line="54"/>
         <source>Sailfin</source>
         <extracomment>Application display name</extracomment>
         <translation type="unfinished"></translation>
@@ -585,7 +589,7 @@ Placeholder text for textfield for entering the Quick Connect codeyy</extracomme
 <context>
     <name>SeasonPage</name>
     <message>
-        <location filename="../qml/pages/itemdetails/SeasonPage.qml" line="143"/>
+        <location filename="../qml/pages/itemdetails/SeasonPage.qml" line="138"/>
         <source>No overview available</source>
         <extracomment>No overview/summary text of an episode available</extracomment>
         <translation type="unfinished"></translation>
@@ -674,13 +678,13 @@ Placeholder text for textfield for entering the Quick Connect codeyy</extracomme
 <context>
     <name>SongDelegate</name>
     <message>
-        <location filename="../qml/components/music/SongDelegate.qml" line="119"/>
+        <location filename="../qml/components/music/SongDelegate.qml" line="120"/>
         <source>Go to %1</source>
         <extracomment>Context menu item for navigating to the artist of the selected track</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qml/components/music/SongDelegate.qml" line="122"/>
+        <location filename="../qml/components/music/SongDelegate.qml" line="123"/>
         <source>Go to artists</source>
         <extracomment>Context menu item for navigating to one of the artists of the selected track (opens submenu)</extracomment>
         <translation type="unfinished"></translation>
@@ -801,7 +805,7 @@ This is still an alpha version :)</source>
 <context>
     <name>VideoPage</name>
     <message>
-        <location filename="../qml/pages/itemdetails/VideoPage.qml" line="57"/>
+        <location filename="../qml/pages/itemdetails/VideoPage.qml" line="58"/>
         <source>Run time: %2</source>
         <translation type="unfinished"></translation>
     </message>

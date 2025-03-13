@@ -156,7 +156,7 @@ ApplicationWindow {
     }
 
     function navigateToItem(jellyfinId, mediaType, type, isFolder) {
-        if (mediaType === "Audio" && !isFolder) {
+        if (mediaType === MediaType.Audio && !isFolder) {
             playbackManager.playItemId(jellyfinId)
         } else {
             var url = Utils.getPageUrl(mediaType, type, isFolder)

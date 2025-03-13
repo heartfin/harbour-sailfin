@@ -36,11 +36,13 @@ LogFile::LogFile() {}
 LogFile::LogFile (
 		QDateTime dateCreated, 
 		QDateTime dateModified, 
-		qint64 size 
+		qint64 size, 
+		QString name 
 		) :
 	m_dateCreated(dateCreated),
 	m_dateModified(dateModified),
-	m_size(size) { }
+	m_size(size),
+	m_name(name) { }
 
 
 
@@ -80,11 +82,7 @@ QJsonObject LogFile::toJson() const {
 	result["DateCreated"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateCreated);		
 	result["DateModified"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateModified);		
 	result["Size"] = Jellyfin::Support::toJsonValue<qint64>(m_size);		
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-		
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);	
 	return result;
 }
 
@@ -111,14 +109,7 @@ QString LogFile::name() const { return m_name; }
 void LogFile::setName(QString newName) {
 	m_name = newName;
 }
-bool LogFile::nameNull() const {
-	return m_name.isNull();
-}
 
-void LogFile::setNameNull() {
-	m_name.clear();
-
-}
 
 } // NS DTO
 

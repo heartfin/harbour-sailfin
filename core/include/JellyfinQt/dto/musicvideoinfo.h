@@ -50,7 +50,7 @@ namespace DTO {
 
 class MusicVideoInfo {
 public:
-	MusicVideoInfo(																			
+	MusicVideoInfo(																					
 		bool isAutomated				
 	);
 
@@ -76,6 +76,17 @@ public:
 	void setName(QString newName);
 	bool nameNull() const;
 	void setNameNull();
+
+	/**
+	 * @brief Gets or sets the original title.
+	 */
+	QString originalTitle() const;
+	/**
+	* @brief Gets or sets the original title.
+	*/
+	void setOriginalTitle(QString newOriginalTitle);
+	bool originalTitleNull() const;
+	void setOriginalTitleNull();
 
 	/**
 	 * @brief Gets or sets the path.
@@ -168,6 +179,7 @@ public:
 
 protected:
 	QString m_name;
+	QString m_originalTitle;
 	QString m_path;
 	QString m_metadataLanguage;
 	QString m_metadataCountryCode;

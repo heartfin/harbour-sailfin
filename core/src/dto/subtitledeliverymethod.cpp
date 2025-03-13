@@ -57,6 +57,9 @@ SubtitleDeliveryMethod fromJsonValue(const QJsonValue &source, convertType<Subti
 	if (str == QStringLiteral("Hls")) {
 		return SubtitleDeliveryMethod::Hls;
 	}
+	if (str == QStringLiteral("Drop")) {
+		return SubtitleDeliveryMethod::Drop;
+	}
 	
 	return SubtitleDeliveryMethod::EnumNotSet;
 }
@@ -72,6 +75,8 @@ QJsonValue toJsonValue(const SubtitleDeliveryMethod &source, convertType<Subtitl
 		return QStringLiteral("External");
 	case SubtitleDeliveryMethod::Hls:
 		return QStringLiteral("Hls");
+	case SubtitleDeliveryMethod::Drop:
+		return QStringLiteral("Drop");
 
 	case SubtitleDeliveryMethod::EnumNotSet: // Fallthrough
 	default:

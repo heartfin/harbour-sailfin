@@ -39,16 +39,20 @@
 #include <QStringList>
 #include <optional>
 
+#include "JellyfinQt/dto/baseitemkind.h"
 #include "JellyfinQt/dto/baseitemperson.h"
 #include "JellyfinQt/dto/channeltype.h"
 #include "JellyfinQt/dto/chapterinfo.h"
+#include "JellyfinQt/dto/collectiontype.h"
 #include "JellyfinQt/dto/dayofweek.h"
 #include "JellyfinQt/dto/externalurl.h"
+#include "JellyfinQt/dto/extratype.h"
 #include "JellyfinQt/dto/imageorientation.h"
 #include "JellyfinQt/dto/isotype.h"
 #include "JellyfinQt/dto/locationtype.h"
 #include "JellyfinQt/dto/mediasourceinfo.h"
 #include "JellyfinQt/dto/mediastream.h"
+#include "JellyfinQt/dto/mediatype.h"
 #include "JellyfinQt/dto/mediaurl.h"
 #include "JellyfinQt/dto/metadatafield.h"
 #include "JellyfinQt/dto/nameguidpair.h"
@@ -70,16 +74,20 @@ namespace DTO {
 class BaseItemDto {
 public:
 	BaseItemDto(							
-		QString jellyfinId,																																							
+		QString jellyfinId,													
+		ExtraType extraType,																											
 		Video3DFormat video3DFormat,																																					
-		PlayAccess playAccess,																																													
-		QSharedPointer<UserItemDataDto> userData,																																																			
-		VideoType videoType,																																			
+		PlayAccess playAccess,																													
+		BaseItemKind type,																	
+		QSharedPointer<UserItemDataDto> userData,																																	
+		CollectionType collectionType,																			
+		VideoType videoType,																																					
 		LocationType locationType,			
-		IsoType isoType,																																											
+		IsoType isoType,			
+		MediaType mediaType,																																									
 		ImageOrientation imageOrientation,																													
 		ChannelType channelType,			
-		ProgramAudio audio,																			
+		ProgramAudio audio,																					
 		QSharedPointer<BaseItemDto> currentProgram		
 	);
 
@@ -185,11 +193,9 @@ public:
 	void setDateLastMediaAddedNull();
 
 
-	QString extraType() const;
+	ExtraType extraType() const;
 
-	void setExtraType(QString newExtraType);
-	bool extraTypeNull() const;
-	void setExtraTypeNull();
+	void setExtraType(ExtraType newExtraType);
 
 
 	std::optional<qint32> airsBeforeSeasonNumber() const;
@@ -227,6 +233,13 @@ public:
 	void setCanDownloadNull();
 
 
+	std::optional<bool> hasLyrics() const;
+
+	void setHasLyrics(std::optional<bool> newHasLyrics);
+	bool hasLyricsNull() const;
+	void setHasLyricsNull();
+
+
 	std::optional<bool> hasSubtitles() const;
 
 	void setHasSubtitles(std::optional<bool> newHasSubtitles);
@@ -246,17 +259,6 @@ public:
 	void setPreferredMetadataCountryCode(QString newPreferredMetadataCountryCode);
 	bool preferredMetadataCountryCodeNull() const;
 	void setPreferredMetadataCountryCodeNull();
-
-	/**
-	 * @brief Gets or sets a value indicating whether [supports synchronize].
-	 */
-	std::optional<bool> supportsSync() const;
-	/**
-	* @brief Gets or sets a value indicating whether [supports synchronize].
-	*/
-	void setSupportsSync(std::optional<bool> newSupportsSync);
-	bool supportsSyncNull() const;
-	void setSupportsSyncNull();
 
 
 	QString container() const;
@@ -607,16 +609,10 @@ public:
 	bool parentIdNull() const;
 	void setParentIdNull();
 
-	/**
-	 * @brief Gets or sets the type.
-	 */
-	QString type() const;
-	/**
-	* @brief Gets or sets the type.
-	*/
-	void setType(QString newType);
-	bool typeNull() const;
-	void setTypeNull();
+
+	BaseItemKind type() const;
+
+	void setType(BaseItemKind newType);
 
 	/**
 	 * @brief Gets or sets the people.
@@ -648,22 +644,22 @@ public:
 	void setGenreItemsNull();
 
 	/**
-	 * @brief If the item does not have a logo, this will hold the Id of the Parent that has one.
+	 * @brief Gets or sets whether the item has a logo, this will hold the Id of the Parent that has one.
 	 */
 	QString parentLogoItemId() const;
 	/**
-	* @brief If the item does not have a logo, this will hold the Id of the Parent that has one.
+	* @brief Gets or sets whether the item has a logo, this will hold the Id of the Parent that has one.
 	*/
 	void setParentLogoItemId(QString newParentLogoItemId);
 	bool parentLogoItemIdNull() const;
 	void setParentLogoItemIdNull();
 
 	/**
-	 * @brief If the item does not have any backdrops, this will hold the Id of the Parent that has one.
+	 * @brief Gets or sets whether the item has any backdrops, this will hold the Id of the Parent that has one.
 	 */
 	QString parentBackdropItemId() const;
 	/**
-	* @brief If the item does not have any backdrops, this will hold the Id of the Parent that has one.
+	* @brief Gets or sets whether the item has any backdrops, this will hold the Id of the Parent that has one.
 	*/
 	void setParentBackdropItemId(QString newParentBackdropItemId);
 	bool parentBackdropItemIdNull() const;
@@ -861,16 +857,10 @@ public:
 	bool albumNull() const;
 	void setAlbumNull();
 
-	/**
-	 * @brief Gets or sets the type of the collection.
-	 */
-	QString collectionType() const;
-	/**
-	* @brief Gets or sets the type of the collection.
-	*/
-	void setCollectionType(QString newCollectionType);
-	bool collectionTypeNull() const;
-	void setCollectionTypeNull();
+
+	CollectionType collectionType() const;
+
+	void setCollectionType(CollectionType newCollectionType);
 
 	/**
 	 * @brief Gets or sets the display order.
@@ -1028,11 +1018,11 @@ public:
 	void setParentLogoImageTagNull();
 
 	/**
-	 * @brief If the item does not have a art, this will hold the Id of the Parent that has one.
+	 * @brief Gets or sets whether the item has fan art, this will hold the Id of the Parent that has one.
 	 */
 	QString parentArtItemId() const;
 	/**
-	* @brief If the item does not have a art, this will hold the Id of the Parent that has one.
+	* @brief Gets or sets whether the item has fan art, this will hold the Id of the Parent that has one.
 	*/
 	void setParentArtItemId(QString newParentArtItemId);
 	bool parentArtItemIdNull() const;
@@ -1139,6 +1129,17 @@ Maps image type to dictionary mapping image tag to blurhash value.
 	bool chaptersNull() const;
 	void setChaptersNull();
 
+	/**
+	 * @brief Gets or sets the trickplay manifest.
+	 */
+	QJsonObject trickplay() const;
+	/**
+	* @brief Gets or sets the trickplay manifest.
+	*/
+	void setTrickplay(QJsonObject newTrickplay);
+	bool trickplayNull() const;
+	void setTrickplayNull();
+
 
 	LocationType locationType() const;
 
@@ -1149,16 +1150,10 @@ Maps image type to dictionary mapping image tag to blurhash value.
 
 	void setIsoType(IsoType newIsoType);
 
-	/**
-	 * @brief Gets or sets the type of the media.
-	 */
-	QString mediaType() const;
-	/**
-	* @brief Gets or sets the type of the media.
-	*/
-	void setMediaType(QString newMediaType);
-	bool mediaTypeNull() const;
-	void setMediaTypeNull();
+
+	MediaType mediaType() const;
+
+	void setMediaType(MediaType newMediaType);
 
 	/**
 	 * @brief Gets or sets the end date.
@@ -1414,11 +1409,11 @@ Maps image type to dictionary mapping image tag to blurhash value.
 	void setChannelPrimaryImageTagNull();
 
 	/**
-	 * @brief The start date of the recording, in UTC.
+	 * @brief Gets or sets the start date of the recording, in UTC.
 	 */
 	QDateTime startDate() const;
 	/**
-	* @brief The start date of the recording, in UTC.
+	* @brief Gets or sets the start date of the recording, in UTC.
 	*/
 	void setStartDate(QDateTime newStartDate);
 	bool startDateNull() const;
@@ -1555,6 +1550,17 @@ Maps image type to dictionary mapping image tag to blurhash value.
 	bool timerIdNull() const;
 	void setTimerIdNull();
 
+	/**
+	 * @brief Gets or sets the gain required for audio normalization.
+	 */
+	std::optional<float> normalizationGain() const;
+	/**
+	* @brief Gets or sets the gain required for audio normalization.
+	*/
+	void setNormalizationGain(std::optional<float> newNormalizationGain);
+	bool normalizationGainNull() const;
+	void setNormalizationGainNull();
+
 
 	QSharedPointer<BaseItemDto> currentProgram() const;
 
@@ -1571,16 +1577,16 @@ protected:
 	QString m_playlistItemId;
 	QDateTime m_dateCreated;
 	QDateTime m_dateLastMediaAdded;
-	QString m_extraType;
+	ExtraType m_extraType;
 	std::optional<qint32> m_airsBeforeSeasonNumber = std::nullopt;
 	std::optional<qint32> m_airsAfterSeasonNumber = std::nullopt;
 	std::optional<qint32> m_airsBeforeEpisodeNumber = std::nullopt;
 	std::optional<bool> m_canDelete = std::nullopt;
 	std::optional<bool> m_canDownload = std::nullopt;
+	std::optional<bool> m_hasLyrics = std::nullopt;
 	std::optional<bool> m_hasSubtitles = std::nullopt;
 	QString m_preferredMetadataLanguage;
 	QString m_preferredMetadataCountryCode;
-	std::optional<bool> m_supportsSync = std::nullopt;
 	QString m_container;
 	QString m_sortName;
 	QString m_forcedSortName;
@@ -1616,7 +1622,7 @@ protected:
 	std::optional<bool> m_isHD = std::nullopt;
 	std::optional<bool> m_isFolder = std::nullopt;
 	QString m_parentId;
-	QString m_type;
+	BaseItemKind m_type;
 	QList<BaseItemPerson> m_people;
 	QList<NameGuidPair> m_studios;
 	QList<NameGuidPair> m_genreItems;
@@ -1640,7 +1646,7 @@ protected:
 	QStringList m_artists;
 	QList<NameGuidPair> m_artistItems;
 	QString m_album;
-	QString m_collectionType;
+	CollectionType m_collectionType;
 	QString m_displayOrder;
 	QString m_albumId;
 	QString m_albumPrimaryImageTag;
@@ -1666,9 +1672,10 @@ protected:
 	QString m_parentPrimaryImageItemId;
 	QString m_parentPrimaryImageTag;
 	QList<ChapterInfo> m_chapters;
+	QJsonObject m_trickplay;
 	LocationType m_locationType;
 	IsoType m_isoType;
-	QString m_mediaType;
+	MediaType m_mediaType;
 	QDateTime m_endDate;
 	QList<MetadataField> m_lockedFields;
 	std::optional<qint32> m_trailerCount = std::nullopt;
@@ -1712,6 +1719,7 @@ protected:
 	std::optional<bool> m_isKids = std::nullopt;
 	std::optional<bool> m_isPremiere = std::nullopt;
 	QString m_timerId;
+	std::optional<float> m_normalizationGain = std::nullopt;
 	QSharedPointer<BaseItemDto> m_currentProgram = QSharedPointer<BaseItemDto>();
 
 private:

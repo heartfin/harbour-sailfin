@@ -33,16 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaPathInfo::MediaPathInfo() {}
+MediaPathInfo::MediaPathInfo (
+		QString path 
+		) :
+	m_path(path) { }
+
+
 
 MediaPathInfo::MediaPathInfo(const MediaPathInfo &other) :
 
-	m_path(other.m_path),
-	m_networkPath(other.m_networkPath){}
+	m_path(other.m_path){}
 
 
 void MediaPathInfo::replaceData(MediaPathInfo &other) {
 	m_path = other.m_path;
-	m_networkPath = other.m_networkPath;
 }
 
 MediaPathInfo MediaPathInfo::fromJson(QJsonObject source) {
@@ -54,23 +58,13 @@ MediaPathInfo MediaPathInfo::fromJson(QJsonObject source) {
 
 void MediaPathInfo::setFromJson(QJsonObject source) {
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
-	m_networkPath = Jellyfin::Support::fromJsonValue<QString>(source["NetworkPath"]);
 
 }
 	
 QJsonObject MediaPathInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_path.isNull())) {
-		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	}
-			
-	
-	if (!(m_networkPath.isNull())) {
-		result["NetworkPath"] = Jellyfin::Support::toJsonValue<QString>(m_networkPath);
-	}
-		
+	result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);	
 	return result;
 }
 
@@ -79,27 +73,7 @@ QString MediaPathInfo::path() const { return m_path; }
 void MediaPathInfo::setPath(QString newPath) {
 	m_path = newPath;
 }
-bool MediaPathInfo::pathNull() const {
-	return m_path.isNull();
-}
 
-void MediaPathInfo::setPathNull() {
-	m_path.clear();
-
-}
-QString MediaPathInfo::networkPath() const { return m_networkPath; }
-
-void MediaPathInfo::setNetworkPath(QString newNetworkPath) {
-	m_networkPath = newNetworkPath;
-}
-bool MediaPathInfo::networkPathNull() const {
-	return m_networkPath.isNull();
-}
-
-void MediaPathInfo::setNetworkPathNull() {
-	m_networkPath.clear();
-
-}
 
 } // NS DTO
 

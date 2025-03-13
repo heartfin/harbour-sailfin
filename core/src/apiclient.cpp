@@ -430,15 +430,15 @@ void ApiClient::authenticate(QString username, QString password, bool storeCrede
 }
 
 void ApiClient::submitQuickConnectCode(const QString &code) {
-    using QQAuthorizeLoader = Loader::HTTP::AuthorizeLoader;
-    Loader::AuthorizeParams params;
+    using QQAuthorizeLoader = Loader::HTTP::AuthorizeQuickConnectLoader;
+    Loader::AuthorizeQuickConnectParams params;
     params.setCode(code);
 
     QQAuthorizeLoader *loader = new QQAuthorizeLoader(this);
     loader->setParameters(params);
     loader->load();
 
-    loader->connect(loader, &QQAuthorizeLoader::error, this, [this, loader](QString message) {
+    loader->connect(loader, &QQAuthorizeLoader::error, this, [this, loader](const QString &message) {
         qDebug() << "QQ error: " << message;
         emit this->quickConnectRejected();
         loader->deleteLater();
@@ -475,17 +475,18 @@ void ApiClient::generateDeviceProfile() {
     Q_D(ApiClient);
     QSharedPointer<DTO::DeviceProfile> deviceProfile = QSharedPointer<DTO::DeviceProfile>::create(Model::DeviceProfile::generateProfile());
     deviceProfile->setJellyfinId(d->deviceId);
-    deviceProfile->setFriendlyName(QSysInfo::prettyProductName());
+    deviceProfile->setName(QSysInfo::prettyProductName());
     deviceProfile->setMaxStreamingBitrate(d->settings->maxStreamingBitRate());
     d->deviceProfile = deviceProfile;
 
-    QSharedPointer<DTO::ClientCapabilitiesDto> clientCapabilities = QSharedPointer<DTO::ClientCapabilitiesDto>::create(true,  // supports mediaControl
-                                                                                                                       false, // supports content uploading
-                                                                                                                       true,  // supports persistent identifier
-                                                                                                                       false, // supports sync
-                                                                                                                       deviceProfile);
-    clientCapabilities->setPlayableMediaTypes({"Audio", "Video", "Photo"});
-    clientCapabilities->setSupportedCommands(d->supportedCommands);
+    QSharedPointer<DTO::ClientCapabilitiesDto> clientCapabilities = QSharedPointer<DTO::ClientCapabilitiesDto>::create(
+        QList({ MediaType::Audio, MediaType::Video, MediaType::Photo }),
+        d->supportedCommands,
+        true,  // supports mediaControl
+        true,  // supports persistent identifier
+        deviceProfile
+    );
+
     clientCapabilities->setAppStoreUrl("https://chris.netsoj.nl/projects/harbour-sailfin");
     clientCapabilities->setIconUrl("https://chris.netsoj.nl/static/img/logo.png");
 

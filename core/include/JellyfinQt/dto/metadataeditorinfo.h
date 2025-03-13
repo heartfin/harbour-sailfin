@@ -33,10 +33,10 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QString>
 #include <QStringList>
 #include <optional>
 
+#include "JellyfinQt/dto/collectiontype.h"
 #include "JellyfinQt/dto/countryinfo.h"
 #include "JellyfinQt/dto/culturedto.h"
 #include "JellyfinQt/dto/externalidinfo.h"
@@ -53,7 +53,16 @@ namespace DTO {
 
 
 class MetadataEditorInfo {
-public:	MetadataEditorInfo();
+public:
+	MetadataEditorInfo(	
+		QList<ParentalRating> parentalRatingOptions,			
+		QList<CountryInfo> countries,			
+		QList<CultureDto> cultures,			
+		QList<ExternalIdInfo> externalIdInfos,			
+		CollectionType contentType,			
+		QList<NameValuePair> contentTypeOptions		
+	);
+
 	MetadataEditorInfo(const MetadataEditorInfo &other);
 	
 	/**
@@ -70,43 +79,31 @@ public:	MetadataEditorInfo();
 	QList<ParentalRating> parentalRatingOptions() const;
 
 	void setParentalRatingOptions(QList<ParentalRating> newParentalRatingOptions);
-	bool parentalRatingOptionsNull() const;
-	void setParentalRatingOptionsNull();
 
 
 	QList<CountryInfo> countries() const;
 
 	void setCountries(QList<CountryInfo> newCountries);
-	bool countriesNull() const;
-	void setCountriesNull();
 
 
 	QList<CultureDto> cultures() const;
 
 	void setCultures(QList<CultureDto> newCultures);
-	bool culturesNull() const;
-	void setCulturesNull();
 
 
 	QList<ExternalIdInfo> externalIdInfos() const;
 
 	void setExternalIdInfos(QList<ExternalIdInfo> newExternalIdInfos);
-	bool externalIdInfosNull() const;
-	void setExternalIdInfosNull();
 
 
-	QString contentType() const;
+	CollectionType contentType() const;
 
-	void setContentType(QString newContentType);
-	bool contentTypeNull() const;
-	void setContentTypeNull();
+	void setContentType(CollectionType newContentType);
 
 
 	QList<NameValuePair> contentTypeOptions() const;
 
 	void setContentTypeOptions(QList<NameValuePair> newContentTypeOptions);
-	bool contentTypeOptionsNull() const;
-	void setContentTypeOptionsNull();
 
 
 protected:
@@ -114,10 +111,12 @@ protected:
 	QList<CountryInfo> m_countries;
 	QList<CultureDto> m_cultures;
 	QList<ExternalIdInfo> m_externalIdInfos;
-	QString m_contentType;
+	CollectionType m_contentType;
 	QList<NameValuePair> m_contentTypeOptions;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing MetadataEditorInfo::fromJson();
+	MetadataEditorInfo();
 };
 
 

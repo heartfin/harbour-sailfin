@@ -32,11 +32,15 @@
 
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QList>
 #include <QString>
+#include <QStringList>
 #include <optional>
 
 #include "JellyfinQt/dto/dlnaprofiletype.h"
 #include "JellyfinQt/dto/encodingcontext.h"
+#include "JellyfinQt/dto/mediastreamprotocol.h"
+#include "JellyfinQt/dto/profilecondition.h"
 #include "JellyfinQt/dto/transcodeseekinfo.h"
 #include "JellyfinQt/support/jsonconv.h"
 
@@ -50,17 +54,23 @@ namespace DTO {
 
 class TranscodingProfile {
 public:
-	TranscodingProfile(			
-		DlnaProfileType type,									
-		bool estimateContentLength,			
-		bool enableMpegtsM2TsMode,			
+	TranscodingProfile(	
+		QString container,			
+		DlnaProfileType type,			
+		QString videoCodec,			
+		QString audioCodec,			
+		MediaStreamProtocol protocol,			
+		std::optional<bool> estimateContentLength,			
+		std::optional<bool> enableMpegtsM2TsMode,			
 		TranscodeSeekInfo transcodeSeekInfo,			
-		bool copyTimestamps,			
+		std::optional<bool> copyTimestamps,			
 		EncodingContext context,			
-		bool enableSubtitlesInManifest,					
-		qint32 minSegments,			
-		qint32 segmentLength,			
-		bool breakOnNonKeyFrames		
+		std::optional<bool> enableSubtitlesInManifest,					
+		std::optional<qint32> minSegments,			
+		std::optional<qint32> segmentLength,			
+		std::optional<bool> breakOnNonKeyFrames,			
+		QList<ProfileCondition> conditions,			
+		std::optional<bool> enableAudioVbrEncoding		
 	);
 
 	TranscodingProfile(const TranscodingProfile &other);
@@ -75,90 +85,144 @@ public:
 	QJsonObject toJson() const;
 	
 	// Properties
-
+	/**
+	 * @brief Gets or sets the container.
+	 */
 	QString container() const;
-
+	/**
+	* @brief Gets or sets the container.
+	*/
 	void setContainer(QString newContainer);
-	bool containerNull() const;
-	void setContainerNull();
 
 
 	DlnaProfileType type() const;
 
 	void setType(DlnaProfileType newType);
 
-
+	/**
+	 * @brief Gets or sets the video codec.
+	 */
 	QString videoCodec() const;
-
+	/**
+	* @brief Gets or sets the video codec.
+	*/
 	void setVideoCodec(QString newVideoCodec);
-	bool videoCodecNull() const;
-	void setVideoCodecNull();
 
-
+	/**
+	 * @brief Gets or sets the audio codec.
+	 */
 	QString audioCodec() const;
-
+	/**
+	* @brief Gets or sets the audio codec.
+	*/
 	void setAudioCodec(QString newAudioCodec);
-	bool audioCodecNull() const;
-	void setAudioCodecNull();
 
 
-	QString protocol() const;
+	MediaStreamProtocol protocol() const;
 
-	void setProtocol(QString newProtocol);
-	bool protocolNull() const;
-	void setProtocolNull();
+	void setProtocol(MediaStreamProtocol newProtocol);
 
+	/**
+	 * @brief Gets or sets a value indicating whether the content length should be estimated.
+	 */
+	std::optional<bool> estimateContentLength() const;
+	/**
+	* @brief Gets or sets a value indicating whether the content length should be estimated.
+	*/
+	void setEstimateContentLength(std::optional<bool> newEstimateContentLength);
 
-	bool estimateContentLength() const;
-
-	void setEstimateContentLength(bool newEstimateContentLength);
-
-
-	bool enableMpegtsM2TsMode() const;
-
-	void setEnableMpegtsM2TsMode(bool newEnableMpegtsM2TsMode);
+	/**
+	 * @brief Gets or sets a value indicating whether M2TS mode is enabled.
+	 */
+	std::optional<bool> enableMpegtsM2TsMode() const;
+	/**
+	* @brief Gets or sets a value indicating whether M2TS mode is enabled.
+	*/
+	void setEnableMpegtsM2TsMode(std::optional<bool> newEnableMpegtsM2TsMode);
 
 
 	TranscodeSeekInfo transcodeSeekInfo() const;
 
 	void setTranscodeSeekInfo(TranscodeSeekInfo newTranscodeSeekInfo);
 
-
-	bool copyTimestamps() const;
-
-	void setCopyTimestamps(bool newCopyTimestamps);
+	/**
+	 * @brief Gets or sets a value indicating whether timestamps should be copied.
+	 */
+	std::optional<bool> copyTimestamps() const;
+	/**
+	* @brief Gets or sets a value indicating whether timestamps should be copied.
+	*/
+	void setCopyTimestamps(std::optional<bool> newCopyTimestamps);
 
 
 	EncodingContext context() const;
 
 	void setContext(EncodingContext newContext);
 
+	/**
+	 * @brief Gets or sets a value indicating whether subtitles are allowed in the manifest.
+	 */
+	std::optional<bool> enableSubtitlesInManifest() const;
+	/**
+	* @brief Gets or sets a value indicating whether subtitles are allowed in the manifest.
+	*/
+	void setEnableSubtitlesInManifest(std::optional<bool> newEnableSubtitlesInManifest);
 
-	bool enableSubtitlesInManifest() const;
-
-	void setEnableSubtitlesInManifest(bool newEnableSubtitlesInManifest);
-
-
+	/**
+	 * @brief Gets or sets the maximum audio channels.
+	 */
 	QString maxAudioChannels() const;
-
+	/**
+	* @brief Gets or sets the maximum audio channels.
+	*/
 	void setMaxAudioChannels(QString newMaxAudioChannels);
 	bool maxAudioChannelsNull() const;
 	void setMaxAudioChannelsNull();
 
+	/**
+	 * @brief Gets or sets the minimum amount of segments.
+	 */
+	std::optional<qint32> minSegments() const;
+	/**
+	* @brief Gets or sets the minimum amount of segments.
+	*/
+	void setMinSegments(std::optional<qint32> newMinSegments);
 
-	qint32 minSegments() const;
+	/**
+	 * @brief Gets or sets the segment length.
+	 */
+	std::optional<qint32> segmentLength() const;
+	/**
+	* @brief Gets or sets the segment length.
+	*/
+	void setSegmentLength(std::optional<qint32> newSegmentLength);
 
-	void setMinSegments(qint32 newMinSegments);
+	/**
+	 * @brief Gets or sets a value indicating whether breaking the video stream on non-keyframes is supported.
+	 */
+	std::optional<bool> breakOnNonKeyFrames() const;
+	/**
+	* @brief Gets or sets a value indicating whether breaking the video stream on non-keyframes is supported.
+	*/
+	void setBreakOnNonKeyFrames(std::optional<bool> newBreakOnNonKeyFrames);
 
+	/**
+	 * @brief Gets or sets the profile conditions.
+	 */
+	QList<ProfileCondition> conditions() const;
+	/**
+	* @brief Gets or sets the profile conditions.
+	*/
+	void setConditions(QList<ProfileCondition> newConditions);
 
-	qint32 segmentLength() const;
-
-	void setSegmentLength(qint32 newSegmentLength);
-
-
-	bool breakOnNonKeyFrames() const;
-
-	void setBreakOnNonKeyFrames(bool newBreakOnNonKeyFrames);
+	/**
+	 * @brief Gets or sets a value indicating whether variable bitrate encoding is supported.
+	 */
+	std::optional<bool> enableAudioVbrEncoding() const;
+	/**
+	* @brief Gets or sets a value indicating whether variable bitrate encoding is supported.
+	*/
+	void setEnableAudioVbrEncoding(std::optional<bool> newEnableAudioVbrEncoding);
 
 
 protected:
@@ -166,17 +230,19 @@ protected:
 	DlnaProfileType m_type;
 	QString m_videoCodec;
 	QString m_audioCodec;
-	QString m_protocol;
-	bool m_estimateContentLength;
-	bool m_enableMpegtsM2TsMode;
+	MediaStreamProtocol m_protocol;
+	std::optional<bool> m_estimateContentLength = std::nullopt;
+	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	TranscodeSeekInfo m_transcodeSeekInfo;
-	bool m_copyTimestamps;
+	std::optional<bool> m_copyTimestamps = std::nullopt;
 	EncodingContext m_context;
-	bool m_enableSubtitlesInManifest;
+	std::optional<bool> m_enableSubtitlesInManifest = std::nullopt;
 	QString m_maxAudioChannels;
-	qint32 m_minSegments;
-	qint32 m_segmentLength;
-	bool m_breakOnNonKeyFrames;
+	std::optional<qint32> m_minSegments = std::nullopt;
+	std::optional<qint32> m_segmentLength = std::nullopt;
+	std::optional<bool> m_breakOnNonKeyFrames = std::nullopt;
+	QList<ProfileCondition> m_conditions;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 
 private:
 	// Private constructor which generates an invalid object, for use withing TranscodingProfile::fromJson();

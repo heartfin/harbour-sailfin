@@ -34,8 +34,10 @@ namespace DTO {
 
 DirectPlayProfile::DirectPlayProfile() {}
 DirectPlayProfile::DirectPlayProfile (
+		QString container, 
 		DlnaProfileType type 
 		) :
+	m_container(container),
 	m_type(type) { }
 
 
@@ -73,11 +75,7 @@ void DirectPlayProfile::setFromJson(QJsonObject source) {
 QJsonObject DirectPlayProfile::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_container.isNull())) {
-		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-	}
-			
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);		
 	
 	if (!(m_audioCodec.isNull())) {
 		result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
@@ -97,14 +95,7 @@ QString DirectPlayProfile::container() const { return m_container; }
 void DirectPlayProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
 }
-bool DirectPlayProfile::containerNull() const {
-	return m_container.isNull();
-}
 
-void DirectPlayProfile::setContainerNull() {
-	m_container.clear();
-
-}
 QString DirectPlayProfile::audioCodec() const { return m_audioCodec; }
 
 void DirectPlayProfile::setAudioCodec(QString newAudioCodec) {

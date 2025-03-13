@@ -32,11 +32,9 @@
 
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QSharedPointer>
 #include <QString>
 #include <optional>
 
-#include "JellyfinQt/dto/version.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -50,8 +48,7 @@ namespace DTO {
 class IPlugin {
 public:
 	IPlugin(					
-		QString jellyfinId,			
-		QSharedPointer<Version> version,					
+		QString jellyfinId,							
 		bool canUninstall				
 	);
 
@@ -98,10 +95,16 @@ public:
 	*/
 	void setJellyfinId(QString newJellyfinId);
 
-
-	QSharedPointer<Version> version() const;
-
-	void setVersion(QSharedPointer<Version> newVersion);
+	/**
+	 * @brief Gets the plugin version.
+	 */
+	QString version() const;
+	/**
+	* @brief Gets the plugin version.
+	*/
+	void setVersion(QString newVersion);
+	bool versionNull() const;
+	void setVersionNull();
 
 	/**
 	 * @brief Gets the path to the assembly file.
@@ -139,7 +142,7 @@ protected:
 	QString m_name;
 	QString m_description;
 	QString m_jellyfinId;
-	QSharedPointer<Version> m_version = QSharedPointer<Version>();
+	QString m_version;
 	QString m_assemblyFilePath;
 	bool m_canUninstall;
 	QString m_dataFolderPath;

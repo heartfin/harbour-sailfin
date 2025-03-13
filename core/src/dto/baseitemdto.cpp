@@ -35,24 +35,32 @@ namespace DTO {
 BaseItemDto::BaseItemDto() {}
 BaseItemDto::BaseItemDto (
 		QString jellyfinId, 
+		ExtraType extraType, 
 		Video3DFormat video3DFormat, 
 		PlayAccess playAccess, 
+		BaseItemKind type, 
 		QSharedPointer<UserItemDataDto> userData, 
+		CollectionType collectionType, 
 		VideoType videoType, 
 		LocationType locationType, 
 		IsoType isoType, 
+		MediaType mediaType, 
 		ImageOrientation imageOrientation, 
 		ChannelType channelType, 
 		ProgramAudio audio, 
 		QSharedPointer<BaseItemDto> currentProgram 
 		) :
 	m_jellyfinId(jellyfinId),
+	m_extraType(extraType),
 	m_video3DFormat(video3DFormat),
 	m_playAccess(playAccess),
+	m_type(type),
 	m_userData(userData),
+	m_collectionType(collectionType),
 	m_videoType(videoType),
 	m_locationType(locationType),
 	m_isoType(isoType),
+	m_mediaType(mediaType),
 	m_imageOrientation(imageOrientation),
 	m_channelType(channelType),
 	m_audio(audio),
@@ -77,10 +85,10 @@ BaseItemDto::BaseItemDto(const BaseItemDto &other) :
 	m_airsBeforeEpisodeNumber(other.m_airsBeforeEpisodeNumber),
 	m_canDelete(other.m_canDelete),
 	m_canDownload(other.m_canDownload),
+	m_hasLyrics(other.m_hasLyrics),
 	m_hasSubtitles(other.m_hasSubtitles),
 	m_preferredMetadataLanguage(other.m_preferredMetadataLanguage),
 	m_preferredMetadataCountryCode(other.m_preferredMetadataCountryCode),
-	m_supportsSync(other.m_supportsSync),
 	m_container(other.m_container),
 	m_sortName(other.m_sortName),
 	m_forcedSortName(other.m_forcedSortName),
@@ -166,6 +174,7 @@ BaseItemDto::BaseItemDto(const BaseItemDto &other) :
 	m_parentPrimaryImageItemId(other.m_parentPrimaryImageItemId),
 	m_parentPrimaryImageTag(other.m_parentPrimaryImageTag),
 	m_chapters(other.m_chapters),
+	m_trickplay(other.m_trickplay),
 	m_locationType(other.m_locationType),
 	m_isoType(other.m_isoType),
 	m_mediaType(other.m_mediaType),
@@ -212,6 +221,7 @@ BaseItemDto::BaseItemDto(const BaseItemDto &other) :
 	m_isKids(other.m_isKids),
 	m_isPremiere(other.m_isPremiere),
 	m_timerId(other.m_timerId),
+	m_normalizationGain(other.m_normalizationGain),
 	m_currentProgram(other.m_currentProgram){}
 
 
@@ -231,10 +241,10 @@ void BaseItemDto::replaceData(BaseItemDto &other) {
 	m_airsBeforeEpisodeNumber = other.m_airsBeforeEpisodeNumber;
 	m_canDelete = other.m_canDelete;
 	m_canDownload = other.m_canDownload;
+	m_hasLyrics = other.m_hasLyrics;
 	m_hasSubtitles = other.m_hasSubtitles;
 	m_preferredMetadataLanguage = other.m_preferredMetadataLanguage;
 	m_preferredMetadataCountryCode = other.m_preferredMetadataCountryCode;
-	m_supportsSync = other.m_supportsSync;
 	m_container = other.m_container;
 	m_sortName = other.m_sortName;
 	m_forcedSortName = other.m_forcedSortName;
@@ -320,6 +330,7 @@ void BaseItemDto::replaceData(BaseItemDto &other) {
 	m_parentPrimaryImageItemId = other.m_parentPrimaryImageItemId;
 	m_parentPrimaryImageTag = other.m_parentPrimaryImageTag;
 	m_chapters = other.m_chapters;
+	m_trickplay = other.m_trickplay;
 	m_locationType = other.m_locationType;
 	m_isoType = other.m_isoType;
 	m_mediaType = other.m_mediaType;
@@ -366,6 +377,7 @@ void BaseItemDto::replaceData(BaseItemDto &other) {
 	m_isKids = other.m_isKids;
 	m_isPremiere = other.m_isPremiere;
 	m_timerId = other.m_timerId;
+	m_normalizationGain = other.m_normalizationGain;
 	m_currentProgram = other.m_currentProgram;
 }
 
@@ -386,16 +398,16 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_playlistItemId = Jellyfin::Support::fromJsonValue<QString>(source["PlaylistItemId"]);
 	m_dateCreated = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateCreated"]);
 	m_dateLastMediaAdded = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateLastMediaAdded"]);
-	m_extraType = Jellyfin::Support::fromJsonValue<QString>(source["ExtraType"]);
+	m_extraType = Jellyfin::Support::fromJsonValue<ExtraType>(source["ExtraType"]);
 	m_airsBeforeSeasonNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["AirsBeforeSeasonNumber"]);
 	m_airsAfterSeasonNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["AirsAfterSeasonNumber"]);
 	m_airsBeforeEpisodeNumber = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["AirsBeforeEpisodeNumber"]);
 	m_canDelete = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["CanDelete"]);
 	m_canDownload = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["CanDownload"]);
+	m_hasLyrics = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["HasLyrics"]);
 	m_hasSubtitles = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["HasSubtitles"]);
 	m_preferredMetadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["PreferredMetadataLanguage"]);
 	m_preferredMetadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["PreferredMetadataCountryCode"]);
-	m_supportsSync = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["SupportsSync"]);
 	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
 	m_sortName = Jellyfin::Support::fromJsonValue<QString>(source["SortName"]);
 	m_forcedSortName = Jellyfin::Support::fromJsonValue<QString>(source["ForcedSortName"]);
@@ -431,7 +443,7 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_isHD = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsHD"]);
 	m_isFolder = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsFolder"]);
 	m_parentId = Jellyfin::Support::fromJsonValue<QString>(source["ParentId"]);
-	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_type = Jellyfin::Support::fromJsonValue<BaseItemKind>(source["Type"]);
 	m_people = Jellyfin::Support::fromJsonValue<QList<BaseItemPerson>>(source["People"]);
 	m_studios = Jellyfin::Support::fromJsonValue<QList<NameGuidPair>>(source["Studios"]);
 	m_genreItems = Jellyfin::Support::fromJsonValue<QList<NameGuidPair>>(source["GenreItems"]);
@@ -455,7 +467,7 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_artists = Jellyfin::Support::fromJsonValue<QStringList>(source["Artists"]);
 	m_artistItems = Jellyfin::Support::fromJsonValue<QList<NameGuidPair>>(source["ArtistItems"]);
 	m_album = Jellyfin::Support::fromJsonValue<QString>(source["Album"]);
-	m_collectionType = Jellyfin::Support::fromJsonValue<QString>(source["CollectionType"]);
+	m_collectionType = Jellyfin::Support::fromJsonValue<CollectionType>(source["CollectionType"]);
 	m_displayOrder = Jellyfin::Support::fromJsonValue<QString>(source["DisplayOrder"]);
 	m_albumId = Jellyfin::Support::fromJsonValue<QString>(source["AlbumId"]);
 	m_albumPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["AlbumPrimaryImageTag"]);
@@ -481,9 +493,10 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_parentPrimaryImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["ParentPrimaryImageItemId"]);
 	m_parentPrimaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["ParentPrimaryImageTag"]);
 	m_chapters = Jellyfin::Support::fromJsonValue<QList<ChapterInfo>>(source["Chapters"]);
+	m_trickplay = Jellyfin::Support::fromJsonValue<QJsonObject>(source["Trickplay"]);
 	m_locationType = Jellyfin::Support::fromJsonValue<LocationType>(source["LocationType"]);
 	m_isoType = Jellyfin::Support::fromJsonValue<IsoType>(source["IsoType"]);
-	m_mediaType = Jellyfin::Support::fromJsonValue<QString>(source["MediaType"]);
+	m_mediaType = Jellyfin::Support::fromJsonValue<MediaType>(source["MediaType"]);
 	m_endDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["EndDate"]);
 	m_lockedFields = Jellyfin::Support::fromJsonValue<QList<MetadataField>>(source["LockedFields"]);
 	m_trailerCount = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["TrailerCount"]);
@@ -527,6 +540,7 @@ void BaseItemDto::setFromJson(QJsonObject source) {
 	m_isKids = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsKids"]);
 	m_isPremiere = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsPremiere"]);
 	m_timerId = Jellyfin::Support::fromJsonValue<QString>(source["TimerId"]);
+	m_normalizationGain = Jellyfin::Support::fromJsonValue<std::optional<float>>(source["NormalizationGain"]);
 	m_currentProgram = Jellyfin::Support::fromJsonValue<QSharedPointer<BaseItemDto>>(source["CurrentProgram"]);
 
 }
@@ -575,11 +589,7 @@ QJsonObject BaseItemDto::toJson() const {
 		result["DateLastMediaAdded"] = Jellyfin::Support::toJsonValue<QDateTime>(m_dateLastMediaAdded);
 	}
 			
-	
-	if (!(m_extraType.isNull())) {
-		result["ExtraType"] = Jellyfin::Support::toJsonValue<QString>(m_extraType);
-	}
-			
+	result["ExtraType"] = Jellyfin::Support::toJsonValue<ExtraType>(m_extraType);		
 	
 	if (!(!m_airsBeforeSeasonNumber.has_value())) {
 		result["AirsBeforeSeasonNumber"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_airsBeforeSeasonNumber);
@@ -606,6 +616,11 @@ QJsonObject BaseItemDto::toJson() const {
 	}
 			
 	
+	if (!(!m_hasLyrics.has_value())) {
+		result["HasLyrics"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_hasLyrics);
+	}
+			
+	
 	if (!(!m_hasSubtitles.has_value())) {
 		result["HasSubtitles"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_hasSubtitles);
 	}
@@ -618,11 +633,6 @@ QJsonObject BaseItemDto::toJson() const {
 	
 	if (!(m_preferredMetadataCountryCode.isNull())) {
 		result["PreferredMetadataCountryCode"] = Jellyfin::Support::toJsonValue<QString>(m_preferredMetadataCountryCode);
-	}
-			
-	
-	if (!(!m_supportsSync.has_value())) {
-		result["SupportsSync"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_supportsSync);
 	}
 			
 	
@@ -792,11 +802,7 @@ QJsonObject BaseItemDto::toJson() const {
 		result["ParentId"] = Jellyfin::Support::toJsonValue<QString>(m_parentId);
 	}
 			
-	
-	if (!(m_type.isNull())) {
-		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	}
-			
+	result["Type"] = Jellyfin::Support::toJsonValue<BaseItemKind>(m_type);		
 	
 	if (!(m_people.size() == 0)) {
 		result["People"] = Jellyfin::Support::toJsonValue<QList<BaseItemPerson>>(m_people);
@@ -908,11 +914,7 @@ QJsonObject BaseItemDto::toJson() const {
 		result["Album"] = Jellyfin::Support::toJsonValue<QString>(m_album);
 	}
 			
-	
-	if (!(m_collectionType.isNull())) {
-		result["CollectionType"] = Jellyfin::Support::toJsonValue<QString>(m_collectionType);
-	}
-			
+	result["CollectionType"] = Jellyfin::Support::toJsonValue<CollectionType>(m_collectionType);		
 	
 	if (!(m_displayOrder.isNull())) {
 		result["DisplayOrder"] = Jellyfin::Support::toJsonValue<QString>(m_displayOrder);
@@ -1034,13 +1036,14 @@ QJsonObject BaseItemDto::toJson() const {
 		result["Chapters"] = Jellyfin::Support::toJsonValue<QList<ChapterInfo>>(m_chapters);
 	}
 			
-	result["LocationType"] = Jellyfin::Support::toJsonValue<LocationType>(m_locationType);		
-	result["IsoType"] = Jellyfin::Support::toJsonValue<IsoType>(m_isoType);		
 	
-	if (!(m_mediaType.isNull())) {
-		result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
+	if (!(m_trickplay.isEmpty())) {
+		result["Trickplay"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_trickplay);
 	}
 			
+	result["LocationType"] = Jellyfin::Support::toJsonValue<LocationType>(m_locationType);		
+	result["IsoType"] = Jellyfin::Support::toJsonValue<IsoType>(m_isoType);		
+	result["MediaType"] = Jellyfin::Support::toJsonValue<MediaType>(m_mediaType);		
 	
 	if (!(m_endDate.isNull())) {
 		result["EndDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_endDate);
@@ -1244,6 +1247,11 @@ QJsonObject BaseItemDto::toJson() const {
 		result["TimerId"] = Jellyfin::Support::toJsonValue<QString>(m_timerId);
 	}
 			
+	
+	if (!(!m_normalizationGain.has_value())) {
+		result["NormalizationGain"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_normalizationGain);
+	}
+			
 	result["CurrentProgram"] = Jellyfin::Support::toJsonValue<QSharedPointer<BaseItemDto>>(m_currentProgram);	
 	return result;
 }
@@ -1358,19 +1366,12 @@ void BaseItemDto::setDateLastMediaAddedNull() {
 	m_dateLastMediaAdded= QDateTime();
 
 }
-QString BaseItemDto::extraType() const { return m_extraType; }
+ExtraType BaseItemDto::extraType() const { return m_extraType; }
 
-void BaseItemDto::setExtraType(QString newExtraType) {
+void BaseItemDto::setExtraType(ExtraType newExtraType) {
 	m_extraType = newExtraType;
 }
-bool BaseItemDto::extraTypeNull() const {
-	return m_extraType.isNull();
-}
 
-void BaseItemDto::setExtraTypeNull() {
-	m_extraType.clear();
-
-}
 std::optional<qint32> BaseItemDto::airsBeforeSeasonNumber() const { return m_airsBeforeSeasonNumber; }
 
 void BaseItemDto::setAirsBeforeSeasonNumber(std::optional<qint32> newAirsBeforeSeasonNumber) {
@@ -1436,6 +1437,19 @@ void BaseItemDto::setCanDownloadNull() {
 	m_canDownload = std::nullopt;
 
 }
+std::optional<bool> BaseItemDto::hasLyrics() const { return m_hasLyrics; }
+
+void BaseItemDto::setHasLyrics(std::optional<bool> newHasLyrics) {
+	m_hasLyrics = newHasLyrics;
+}
+bool BaseItemDto::hasLyricsNull() const {
+	return !m_hasLyrics.has_value();
+}
+
+void BaseItemDto::setHasLyricsNull() {
+	m_hasLyrics = std::nullopt;
+
+}
 std::optional<bool> BaseItemDto::hasSubtitles() const { return m_hasSubtitles; }
 
 void BaseItemDto::setHasSubtitles(std::optional<bool> newHasSubtitles) {
@@ -1473,19 +1487,6 @@ bool BaseItemDto::preferredMetadataCountryCodeNull() const {
 
 void BaseItemDto::setPreferredMetadataCountryCodeNull() {
 	m_preferredMetadataCountryCode.clear();
-
-}
-std::optional<bool> BaseItemDto::supportsSync() const { return m_supportsSync; }
-
-void BaseItemDto::setSupportsSync(std::optional<bool> newSupportsSync) {
-	m_supportsSync = newSupportsSync;
-}
-bool BaseItemDto::supportsSyncNull() const {
-	return !m_supportsSync.has_value();
-}
-
-void BaseItemDto::setSupportsSyncNull() {
-	m_supportsSync = std::nullopt;
 
 }
 QString BaseItemDto::container() const { return m_container; }
@@ -1929,19 +1930,12 @@ void BaseItemDto::setParentIdNull() {
 	m_parentId.clear();
 
 }
-QString BaseItemDto::type() const { return m_type; }
+BaseItemKind BaseItemDto::type() const { return m_type; }
 
-void BaseItemDto::setType(QString newType) {
+void BaseItemDto::setType(BaseItemKind newType) {
 	m_type = newType;
 }
-bool BaseItemDto::typeNull() const {
-	return m_type.isNull();
-}
 
-void BaseItemDto::setTypeNull() {
-	m_type.clear();
-
-}
 QList<BaseItemPerson> BaseItemDto::people() const { return m_people; }
 
 void BaseItemDto::setPeople(QList<BaseItemPerson> newPeople) {
@@ -2234,19 +2228,12 @@ void BaseItemDto::setAlbumNull() {
 	m_album.clear();
 
 }
-QString BaseItemDto::collectionType() const { return m_collectionType; }
+CollectionType BaseItemDto::collectionType() const { return m_collectionType; }
 
-void BaseItemDto::setCollectionType(QString newCollectionType) {
+void BaseItemDto::setCollectionType(CollectionType newCollectionType) {
 	m_collectionType = newCollectionType;
 }
-bool BaseItemDto::collectionTypeNull() const {
-	return m_collectionType.isNull();
-}
 
-void BaseItemDto::setCollectionTypeNull() {
-	m_collectionType.clear();
-
-}
 QString BaseItemDto::displayOrder() const { return m_displayOrder; }
 
 void BaseItemDto::setDisplayOrder(QString newDisplayOrder) {
@@ -2565,6 +2552,19 @@ void BaseItemDto::setChaptersNull() {
 	m_chapters.clear();
 
 }
+QJsonObject BaseItemDto::trickplay() const { return m_trickplay; }
+
+void BaseItemDto::setTrickplay(QJsonObject newTrickplay) {
+	m_trickplay = newTrickplay;
+}
+bool BaseItemDto::trickplayNull() const {
+	return m_trickplay.isEmpty();
+}
+
+void BaseItemDto::setTrickplayNull() {
+	m_trickplay= QJsonObject();
+
+}
 LocationType BaseItemDto::locationType() const { return m_locationType; }
 
 void BaseItemDto::setLocationType(LocationType newLocationType) {
@@ -2577,19 +2577,12 @@ void BaseItemDto::setIsoType(IsoType newIsoType) {
 	m_isoType = newIsoType;
 }
 
-QString BaseItemDto::mediaType() const { return m_mediaType; }
+MediaType BaseItemDto::mediaType() const { return m_mediaType; }
 
-void BaseItemDto::setMediaType(QString newMediaType) {
+void BaseItemDto::setMediaType(MediaType newMediaType) {
 	m_mediaType = newMediaType;
 }
-bool BaseItemDto::mediaTypeNull() const {
-	return m_mediaType.isNull();
-}
 
-void BaseItemDto::setMediaTypeNull() {
-	m_mediaType.clear();
-
-}
 QDateTime BaseItemDto::endDate() const { return m_endDate; }
 
 void BaseItemDto::setEndDate(QDateTime newEndDate) {
@@ -3126,6 +3119,19 @@ bool BaseItemDto::timerIdNull() const {
 
 void BaseItemDto::setTimerIdNull() {
 	m_timerId.clear();
+
+}
+std::optional<float> BaseItemDto::normalizationGain() const { return m_normalizationGain; }
+
+void BaseItemDto::setNormalizationGain(std::optional<float> newNormalizationGain) {
+	m_normalizationGain = newNormalizationGain;
+}
+bool BaseItemDto::normalizationGainNull() const {
+	return !m_normalizationGain.has_value();
+}
+
+void BaseItemDto::setNormalizationGainNull() {
+	m_normalizationGain = std::nullopt;
 
 }
 QSharedPointer<BaseItemDto> BaseItemDto::currentProgram() const { return m_currentProgram; }

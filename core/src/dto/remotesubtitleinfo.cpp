@@ -45,8 +45,13 @@ RemoteSubtitleInfo::RemoteSubtitleInfo(const RemoteSubtitleInfo &other) :
 	m_comment(other.m_comment),
 	m_dateCreated(other.m_dateCreated),
 	m_communityRating(other.m_communityRating),
+	m_frameRate(other.m_frameRate),
 	m_downloadCount(other.m_downloadCount),
-	m_isHashMatch(other.m_isHashMatch){}
+	m_isHashMatch(other.m_isHashMatch),
+	m_aiTranslated(other.m_aiTranslated),
+	m_machineTranslated(other.m_machineTranslated),
+	m_forced(other.m_forced),
+	m_hearingImpaired(other.m_hearingImpaired){}
 
 
 void RemoteSubtitleInfo::replaceData(RemoteSubtitleInfo &other) {
@@ -59,8 +64,13 @@ void RemoteSubtitleInfo::replaceData(RemoteSubtitleInfo &other) {
 	m_comment = other.m_comment;
 	m_dateCreated = other.m_dateCreated;
 	m_communityRating = other.m_communityRating;
+	m_frameRate = other.m_frameRate;
 	m_downloadCount = other.m_downloadCount;
 	m_isHashMatch = other.m_isHashMatch;
+	m_aiTranslated = other.m_aiTranslated;
+	m_machineTranslated = other.m_machineTranslated;
+	m_forced = other.m_forced;
+	m_hearingImpaired = other.m_hearingImpaired;
 }
 
 RemoteSubtitleInfo RemoteSubtitleInfo::fromJson(QJsonObject source) {
@@ -80,8 +90,13 @@ void RemoteSubtitleInfo::setFromJson(QJsonObject source) {
 	m_comment = Jellyfin::Support::fromJsonValue<QString>(source["Comment"]);
 	m_dateCreated = Jellyfin::Support::fromJsonValue<QDateTime>(source["DateCreated"]);
 	m_communityRating = Jellyfin::Support::fromJsonValue<std::optional<float>>(source["CommunityRating"]);
+	m_frameRate = Jellyfin::Support::fromJsonValue<std::optional<float>>(source["FrameRate"]);
 	m_downloadCount = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["DownloadCount"]);
 	m_isHashMatch = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsHashMatch"]);
+	m_aiTranslated = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["AiTranslated"]);
+	m_machineTranslated = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["MachineTranslated"]);
+	m_forced = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["Forced"]);
+	m_hearingImpaired = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["HearingImpaired"]);
 
 }
 	
@@ -134,6 +149,11 @@ QJsonObject RemoteSubtitleInfo::toJson() const {
 	}
 			
 	
+	if (!(!m_frameRate.has_value())) {
+		result["FrameRate"] = Jellyfin::Support::toJsonValue<std::optional<float>>(m_frameRate);
+	}
+			
+	
 	if (!(!m_downloadCount.has_value())) {
 		result["DownloadCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_downloadCount);
 	}
@@ -141,6 +161,26 @@ QJsonObject RemoteSubtitleInfo::toJson() const {
 	
 	if (!(!m_isHashMatch.has_value())) {
 		result["IsHashMatch"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isHashMatch);
+	}
+			
+	
+	if (!(!m_aiTranslated.has_value())) {
+		result["AiTranslated"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_aiTranslated);
+	}
+			
+	
+	if (!(!m_machineTranslated.has_value())) {
+		result["MachineTranslated"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_machineTranslated);
+	}
+			
+	
+	if (!(!m_forced.has_value())) {
+		result["Forced"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_forced);
+	}
+			
+	
+	if (!(!m_hearingImpaired.has_value())) {
+		result["HearingImpaired"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_hearingImpaired);
 	}
 		
 	return result;
@@ -263,6 +303,19 @@ void RemoteSubtitleInfo::setCommunityRatingNull() {
 	m_communityRating = std::nullopt;
 
 }
+std::optional<float> RemoteSubtitleInfo::frameRate() const { return m_frameRate; }
+
+void RemoteSubtitleInfo::setFrameRate(std::optional<float> newFrameRate) {
+	m_frameRate = newFrameRate;
+}
+bool RemoteSubtitleInfo::frameRateNull() const {
+	return !m_frameRate.has_value();
+}
+
+void RemoteSubtitleInfo::setFrameRateNull() {
+	m_frameRate = std::nullopt;
+
+}
 std::optional<qint32> RemoteSubtitleInfo::downloadCount() const { return m_downloadCount; }
 
 void RemoteSubtitleInfo::setDownloadCount(std::optional<qint32> newDownloadCount) {
@@ -287,6 +340,58 @@ bool RemoteSubtitleInfo::isHashMatchNull() const {
 
 void RemoteSubtitleInfo::setIsHashMatchNull() {
 	m_isHashMatch = std::nullopt;
+
+}
+std::optional<bool> RemoteSubtitleInfo::aiTranslated() const { return m_aiTranslated; }
+
+void RemoteSubtitleInfo::setAiTranslated(std::optional<bool> newAiTranslated) {
+	m_aiTranslated = newAiTranslated;
+}
+bool RemoteSubtitleInfo::aiTranslatedNull() const {
+	return !m_aiTranslated.has_value();
+}
+
+void RemoteSubtitleInfo::setAiTranslatedNull() {
+	m_aiTranslated = std::nullopt;
+
+}
+std::optional<bool> RemoteSubtitleInfo::machineTranslated() const { return m_machineTranslated; }
+
+void RemoteSubtitleInfo::setMachineTranslated(std::optional<bool> newMachineTranslated) {
+	m_machineTranslated = newMachineTranslated;
+}
+bool RemoteSubtitleInfo::machineTranslatedNull() const {
+	return !m_machineTranslated.has_value();
+}
+
+void RemoteSubtitleInfo::setMachineTranslatedNull() {
+	m_machineTranslated = std::nullopt;
+
+}
+std::optional<bool> RemoteSubtitleInfo::forced() const { return m_forced; }
+
+void RemoteSubtitleInfo::setForced(std::optional<bool> newForced) {
+	m_forced = newForced;
+}
+bool RemoteSubtitleInfo::forcedNull() const {
+	return !m_forced.has_value();
+}
+
+void RemoteSubtitleInfo::setForcedNull() {
+	m_forced = std::nullopt;
+
+}
+std::optional<bool> RemoteSubtitleInfo::hearingImpaired() const { return m_hearingImpaired; }
+
+void RemoteSubtitleInfo::setHearingImpaired(std::optional<bool> newHearingImpaired) {
+	m_hearingImpaired = newHearingImpaired;
+}
+bool RemoteSubtitleInfo::hearingImpairedNull() const {
+	return !m_hearingImpaired.has_value();
+}
+
+void RemoteSubtitleInfo::setHearingImpairedNull() {
+	m_hearingImpaired = std::nullopt;
 
 }
 

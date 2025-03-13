@@ -158,7 +158,7 @@ PanelBackground {
                     }
 
                     switch(manager.item.mediaType) {
-                    case "Audio":
+                    case J.MediaType.Audio:
                         var links = [];
                         var items = manager.item.artistItems;
                         console.log(items)
@@ -181,7 +181,7 @@ PanelBackground {
                 color: highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                 linkColor: Theme.secondaryColor
                 onLinkActivated: {
-                    appWindow.navigateToItem(link, "Audio", "MusicArtist", true)
+                    appWindow.navigateToItem(link, J.MediaType.Audio, J.ItemType.MusicArtist, true)
                 }
                 textFormat: Text.StyledText
                 Icon {

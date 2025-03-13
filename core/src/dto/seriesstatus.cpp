@@ -51,6 +51,9 @@ SeriesStatus fromJsonValue(const QJsonValue &source, convertType<SeriesStatus>) 
 	if (str == QStringLiteral("Ended")) {
 		return SeriesStatus::Ended;
 	}
+	if (str == QStringLiteral("Unreleased")) {
+		return SeriesStatus::Unreleased;
+	}
 	
 	return SeriesStatus::EnumNotSet;
 }
@@ -62,6 +65,8 @@ QJsonValue toJsonValue(const SeriesStatus &source, convertType<SeriesStatus>) {
 		return QStringLiteral("Continuing");
 	case SeriesStatus::Ended:
 		return QStringLiteral("Ended");
+	case SeriesStatus::Unreleased:
+		return QStringLiteral("Unreleased");
 
 	case SeriesStatus::EnumNotSet: // Fallthrough
 	default:

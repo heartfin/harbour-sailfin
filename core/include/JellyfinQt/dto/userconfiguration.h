@@ -52,14 +52,18 @@ class UserConfiguration {
 public:
 	UserConfiguration(			
 		bool playDefaultAudioTrack,					
-		bool displayMissingEpisodes,					
+		bool displayMissingEpisodes,			
+		QStringList groupedFolders,			
 		SubtitlePlaybackMode subtitleMode,			
 		bool displayCollectionsView,			
-		bool enableLocalPassword,									
+		bool enableLocalPassword,			
+		QStringList orderedViews,			
+		QStringList latestItemsExcludes,			
+		QStringList myMediaExcludes,			
 		bool hidePlayedInLatest,			
 		bool rememberAudioSelections,			
 		bool rememberSubtitleSelections,			
-		bool enableNextEpisodeAutoPlay		
+		bool enableNextEpisodeAutoPlay				
 	);
 
 	UserConfiguration(const UserConfiguration &other);
@@ -114,8 +118,6 @@ public:
 	QStringList groupedFolders() const;
 
 	void setGroupedFolders(QStringList newGroupedFolders);
-	bool groupedFoldersNull() const;
-	void setGroupedFoldersNull();
 
 
 	SubtitlePlaybackMode subtitleMode() const;
@@ -136,22 +138,16 @@ public:
 	QStringList orderedViews() const;
 
 	void setOrderedViews(QStringList newOrderedViews);
-	bool orderedViewsNull() const;
-	void setOrderedViewsNull();
 
 
 	QStringList latestItemsExcludes() const;
 
 	void setLatestItemsExcludes(QStringList newLatestItemsExcludes);
-	bool latestItemsExcludesNull() const;
-	void setLatestItemsExcludesNull();
 
 
 	QStringList myMediaExcludes() const;
 
 	void setMyMediaExcludes(QStringList newMyMediaExcludes);
-	bool myMediaExcludesNull() const;
-	void setMyMediaExcludesNull();
 
 
 	bool hidePlayedInLatest() const;
@@ -173,6 +169,17 @@ public:
 
 	void setEnableNextEpisodeAutoPlay(bool newEnableNextEpisodeAutoPlay);
 
+	/**
+	 * @brief Gets or sets the id of the selected cast receiver.
+	 */
+	QString castReceiverId() const;
+	/**
+	* @brief Gets or sets the id of the selected cast receiver.
+	*/
+	void setCastReceiverId(QString newCastReceiverId);
+	bool castReceiverIdNull() const;
+	void setCastReceiverIdNull();
+
 
 protected:
 	QString m_audioLanguagePreference;
@@ -190,6 +197,7 @@ protected:
 	bool m_rememberAudioSelections;
 	bool m_rememberSubtitleSelections;
 	bool m_enableNextEpisodeAutoPlay;
+	QString m_castReceiverId;
 
 private:
 	// Private constructor which generates an invalid object, for use withing UserConfiguration::fromJson();

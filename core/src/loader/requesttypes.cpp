@@ -34,7 +34,58 @@ namespace Loader {
 
 using namespace Jellyfin::DTO;
 
-// ActivateParams
+// AddItemToPlaylistParams
+
+const QString &AddItemToPlaylistParams::playlistId() const {
+	return m_playlistId;
+}
+
+void AddItemToPlaylistParams::setPlaylistId(QString newPlaylistId) {
+	m_playlistId = newPlaylistId;
+}
+
+
+const QStringList &AddItemToPlaylistParams::ids() const {
+	return m_ids;
+}
+
+void AddItemToPlaylistParams::setIds(QStringList newIds)  {
+	m_ids = newIds;
+}
+
+bool AddItemToPlaylistParams::idsNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_ids.size() == 0;
+}
+
+void AddItemToPlaylistParams::setIdsNull() {
+	m_ids.clear();
+}
+
+
+const QString &AddItemToPlaylistParams::userId() const {
+	return m_userId;
+}
+
+void AddItemToPlaylistParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool AddItemToPlaylistParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void AddItemToPlaylistParams::setUserIdNull() {
+	m_userId.clear();
+}
+
 
 
 
@@ -170,61 +221,6 @@ void AddToCollectionParams::setIds(QStringList newIds) {
 
 
 
-// AddToPlaylistParams
-
-const QString &AddToPlaylistParams::playlistId() const {
-	return m_playlistId;
-}
-
-void AddToPlaylistParams::setPlaylistId(QString newPlaylistId) {
-	m_playlistId = newPlaylistId;
-}
-
-
-const QStringList &AddToPlaylistParams::ids() const {
-	return m_ids;
-}
-
-void AddToPlaylistParams::setIds(QStringList newIds)  {
-	m_ids = newIds;
-}
-
-bool AddToPlaylistParams::idsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_ids.size() == 0;
-}
-
-void AddToPlaylistParams::setIdsNull() {
-	m_ids.clear();
-}
-
-
-const QString &AddToPlaylistParams::userId() const {
-	return m_userId;
-}
-
-void AddToPlaylistParams::setUserId(QString newUserId)  {
-	m_userId = newUserId;
-}
-
-bool AddToPlaylistParams::userIdNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_userId.isNull();
-}
-
-void AddToPlaylistParams::setUserIdNull() {
-	m_userId.clear();
-}
-
-
-
-
 // AddTunerHostParams
 
 const QSharedPointer<TunerHostInfo> &AddTunerHostParams::body() const {
@@ -262,11 +258,11 @@ void AddUserToSessionParams::setUserId(QString newUserId) {
 
 // AddVirtualFolderParams
 
-const QString &AddVirtualFolderParams::collectionType() const {
+const CollectionTypeOptions &AddVirtualFolderParams::collectionType() const {
 	return m_collectionType;
 }
 
-void AddVirtualFolderParams::setCollectionType(QString newCollectionType)  {
+void AddVirtualFolderParams::setCollectionType(CollectionTypeOptions newCollectionType)  {
 	m_collectionType = newCollectionType;
 }
 
@@ -275,11 +271,11 @@ bool AddVirtualFolderParams::collectionTypeNull() const {
 	// Type Nullable: true
 	
 
-	return m_collectionType.isNull();
+	return m_collectionType== CollectionTypeOptions::EnumNotSet;
 }
 
 void AddVirtualFolderParams::setCollectionTypeNull() {
-	m_collectionType.clear();
+	m_collectionType= CollectionTypeOptions::EnumNotSet;
 }
 
 
@@ -400,49 +396,6 @@ void ApplySearchCriteriaParams::setBody(QSharedPointer<RemoteSearchResult> newBo
 
 
 
-// AuthenticateUserParams
-
-const QString &AuthenticateUserParams::userId() const {
-	return m_userId;
-}
-
-void AuthenticateUserParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-const QString &AuthenticateUserParams::pw() const {
-	return m_pw;
-}
-
-void AuthenticateUserParams::setPw(QString newPw) {
-	m_pw = newPw;
-}
-
-
-const QString &AuthenticateUserParams::password() const {
-	return m_password;
-}
-
-void AuthenticateUserParams::setPassword(QString newPassword)  {
-	m_password = newPassword;
-}
-
-bool AuthenticateUserParams::passwordNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_password.isNull();
-}
-
-void AuthenticateUserParams::setPasswordNull() {
-	m_password.clear();
-}
-
-
-
-
 // AuthenticateUserByNameParams
 
 const QSharedPointer<AuthenticateUserByName> &AuthenticateUserByNameParams::body() const {
@@ -469,39 +422,35 @@ void AuthenticateWithQuickConnectParams::setBody(QSharedPointer<QuickConnectDto>
 
 
 
-// AuthorizeParams
+// AuthorizeQuickConnectParams
 
-const QString &AuthorizeParams::code() const {
+const QString &AuthorizeQuickConnectParams::code() const {
 	return m_code;
 }
 
-void AuthorizeParams::setCode(QString newCode) {
+void AuthorizeQuickConnectParams::setCode(QString newCode) {
 	m_code = newCode;
 }
 
 
-
-
-// AvailableParams
-
-const QuickConnectState &AvailableParams::status() const {
-	return m_status;
+const QString &AuthorizeQuickConnectParams::userId() const {
+	return m_userId;
 }
 
-void AvailableParams::setStatus(QuickConnectState newStatus)  {
-	m_status = newStatus;
+void AuthorizeQuickConnectParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
 }
 
-bool AvailableParams::statusNull() const {
+bool AuthorizeQuickConnectParams::userIdNull() const {
 	// Nullable: true
 	// Type Nullable: true
 	
 
-	return m_status== QuickConnectState::EnumNotSet;
+	return m_userId.isNull();
 }
 
-void AvailableParams::setStatusNull() {
-	m_status= QuickConnectState::EnumNotSet;
+void AuthorizeQuickConnectParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -560,107 +509,6 @@ void CloseLiveStreamParams::setLiveStreamId(QString newLiveStreamId) {
 
 
 // CompleteWizardParams
-
-
-
-// ConnectParams
-
-const QString &ConnectParams::secret() const {
-	return m_secret;
-}
-
-void ConnectParams::setSecret(QString newSecret) {
-	m_secret = newSecret;
-}
-
-
-
-
-// CreateAdminNotificationParams
-
-const QString &CreateAdminNotificationParams::description() const {
-	return m_description;
-}
-
-void CreateAdminNotificationParams::setDescription(QString newDescription)  {
-	m_description = newDescription;
-}
-
-bool CreateAdminNotificationParams::descriptionNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_description.isNull();
-}
-
-void CreateAdminNotificationParams::setDescriptionNull() {
-	m_description.clear();
-}
-
-
-const NotificationLevel &CreateAdminNotificationParams::level() const {
-	return m_level;
-}
-
-void CreateAdminNotificationParams::setLevel(NotificationLevel newLevel)  {
-	m_level = newLevel;
-}
-
-bool CreateAdminNotificationParams::levelNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_level== NotificationLevel::EnumNotSet;
-}
-
-void CreateAdminNotificationParams::setLevelNull() {
-	m_level= NotificationLevel::EnumNotSet;
-}
-
-
-const QString &CreateAdminNotificationParams::name() const {
-	return m_name;
-}
-
-void CreateAdminNotificationParams::setName(QString newName)  {
-	m_name = newName;
-}
-
-bool CreateAdminNotificationParams::nameNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_name.isNull();
-}
-
-void CreateAdminNotificationParams::setNameNull() {
-	m_name.clear();
-}
-
-
-const QString &CreateAdminNotificationParams::url() const {
-	return m_url;
-}
-
-void CreateAdminNotificationParams::setUrl(QString newUrl)  {
-	m_url = newUrl;
-}
-
-bool CreateAdminNotificationParams::urlNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_url.isNull();
-}
-
-void CreateAdminNotificationParams::setUrlNull() {
-	m_url.clear();
-}
-
 
 
 
@@ -788,11 +636,11 @@ void CreatePlaylistParams::setIdsNull() {
 }
 
 
-const QString &CreatePlaylistParams::mediaType() const {
+const MediaType &CreatePlaylistParams::mediaType() const {
 	return m_mediaType;
 }
 
-void CreatePlaylistParams::setMediaType(QString newMediaType)  {
+void CreatePlaylistParams::setMediaType(MediaType newMediaType)  {
 	m_mediaType = newMediaType;
 }
 
@@ -801,11 +649,11 @@ bool CreatePlaylistParams::mediaTypeNull() const {
 	// Type Nullable: true
 	
 
-	return m_mediaType.isNull();
+	return m_mediaType== MediaType::EnumNotSet;
 }
 
 void CreatePlaylistParams::setMediaTypeNull() {
-	m_mediaType.clear();
+	m_mediaType= MediaType::EnumNotSet;
 }
 
 
@@ -862,19 +710,6 @@ void CreatePlaylistParams::setBody(QSharedPointer<CreatePlaylistDto> newBody) {
 
 
 
-// CreateProfileParams
-
-const QSharedPointer<DeviceProfile> &CreateProfileParams::body() const {
-	return m_body;
-}
-
-void CreateProfileParams::setBody(QSharedPointer<DeviceProfile> newBody) {
-	m_body = newBody;
-}
-
-
-
-
 // CreateSeriesTimerParams
 
 const QSharedPointer<SeriesTimerInfoDto> &CreateSeriesTimerParams::body() const {
@@ -914,10 +749,6 @@ void CreateUserByNameParams::setBody(QSharedPointer<CreateUserByName> newBody) {
 
 
 
-// DeauthorizeParams
-
-
-
 // DeleteAlternateSourcesParams
 
 const QString &DeleteAlternateSourcesParams::itemId() const {
@@ -928,6 +759,10 @@ void DeleteAlternateSourcesParams::setItemId(QString newItemId) {
 	m_itemId = newItemId;
 }
 
+
+
+
+// DeleteCustomSplashscreenParams
 
 
 
@@ -1081,14 +916,14 @@ void DeleteListingProviderParams::setJellyfinIdNull() {
 
 
 
-// DeleteProfileParams
+// DeleteLyricsParams
 
-const QString &DeleteProfileParams::profileId() const {
-	return m_profileId;
+const QString &DeleteLyricsParams::itemId() const {
+	return m_itemId;
 }
 
-void DeleteProfileParams::setProfileId(QString newProfileId) {
-	m_profileId = newProfileId;
+void DeleteLyricsParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
 }
 
 
@@ -1169,73 +1004,24 @@ void DeleteUserParams::setUserId(QString newUserId) {
 
 // DeleteUserImageParams
 
-const ImageType &DeleteUserImageParams::imageType() const {
-	return m_imageType;
-}
-
-void DeleteUserImageParams::setImageType(ImageType newImageType) {
-	m_imageType = newImageType;
-}
-
-
 const QString &DeleteUserImageParams::userId() const {
 	return m_userId;
 }
 
-void DeleteUserImageParams::setUserId(QString newUserId) {
+void DeleteUserImageParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
 }
 
-
-const qint32 &DeleteUserImageParams::index() const {
-	return m_index.value();
-}
-
-void DeleteUserImageParams::setIndex(qint32 newIndex)  {
-	m_index = newIndex;
-}
-
-bool DeleteUserImageParams::indexNull() const {
+bool DeleteUserImageParams::userIdNull() const {
 	// Nullable: true
-	// Type Nullable: false
+	// Type Nullable: true
 	
 
-	return !m_index.has_value();
+	return m_userId.isNull();
 }
 
-void DeleteUserImageParams::setIndexNull() {
-	m_index = std::nullopt;
-}
-
-
-
-
-// DeleteUserImageByIndexParams
-
-const ImageType &DeleteUserImageByIndexParams::imageType() const {
-	return m_imageType;
-}
-
-void DeleteUserImageByIndexParams::setImageType(ImageType newImageType) {
-	m_imageType = newImageType;
-}
-
-
-const qint32 &DeleteUserImageByIndexParams::index() const {
-	return m_index;
-}
-
-void DeleteUserImageByIndexParams::setIndex(qint32 newIndex) {
-	m_index = newIndex;
-}
-
-
-const QString &DeleteUserImageByIndexParams::userId() const {
-	return m_userId;
-}
-
-void DeleteUserImageByIndexParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
+void DeleteUserImageParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -1256,8 +1042,20 @@ const QString &DeleteUserItemRatingParams::userId() const {
 	return m_userId;
 }
 
-void DeleteUserItemRatingParams::setUserId(QString newUserId) {
+void DeleteUserItemRatingParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool DeleteUserItemRatingParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void DeleteUserItemRatingParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -1274,11 +1072,11 @@ void DisablePluginParams::setPluginId(QString newPluginId) {
 }
 
 
-const QSharedPointer<Version> &DisablePluginParams::version() const {
+const QString &DisablePluginParams::version() const {
 	return m_version;
 }
 
-void DisablePluginParams::setVersion(QSharedPointer<Version> newVersion) {
+void DisablePluginParams::setVersion(QString newVersion) {
 	m_version = newVersion;
 }
 
@@ -1364,11 +1162,11 @@ void DisplayContentParams::setItemName(QString newItemName) {
 }
 
 
-const QString &DisplayContentParams::itemType() const {
+const BaseItemKind &DisplayContentParams::itemType() const {
 	return m_itemType;
 }
 
-void DisplayContentParams::setItemType(QString newItemType) {
+void DisplayContentParams::setItemType(BaseItemKind newItemType) {
 	m_itemType = newItemType;
 }
 
@@ -1418,6 +1216,28 @@ void DownloadRemoteImageParams::setImageUrlNull() {
 
 
 
+// DownloadRemoteLyricsParams
+
+const QString &DownloadRemoteLyricsParams::itemId() const {
+	return m_itemId;
+}
+
+void DownloadRemoteLyricsParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
+}
+
+
+const QString &DownloadRemoteLyricsParams::lyricId() const {
+	return m_lyricId;
+}
+
+void DownloadRemoteLyricsParams::setLyricId(QString newLyricId) {
+	m_lyricId = newLyricId;
+}
+
+
+
+
 // DownloadRemoteSubtitlesParams
 
 const QString &DownloadRemoteSubtitlesParams::itemId() const {
@@ -1451,11 +1271,11 @@ void EnablePluginParams::setPluginId(QString newPluginId) {
 }
 
 
-const QSharedPointer<Version> &EnablePluginParams::version() const {
+const QString &EnablePluginParams::version() const {
 	return m_version;
 }
 
-void EnablePluginParams::setVersion(QSharedPointer<Version> newVersion) {
+void EnablePluginParams::setVersion(QString newVersion) {
 	m_version = newVersion;
 }
 
@@ -1477,382 +1297,12 @@ void ForgotPasswordParams::setBody(QSharedPointer<ForgotPasswordDto> newBody) {
 
 // ForgotPasswordPinParams
 
-const QString &ForgotPasswordPinParams::body() const {
+const QSharedPointer<ForgotPasswordPinDto> &ForgotPasswordPinParams::body() const {
 	return m_body;
 }
 
-void ForgotPasswordPinParams::setBody(QString newBody) {
+void ForgotPasswordPinParams::setBody(QSharedPointer<ForgotPasswordPinDto> newBody) {
 	m_body = newBody;
-}
-
-
-
-
-// GetParams
-
-const QString &GetParams::searchTerm() const {
-	return m_searchTerm;
-}
-
-void GetParams::setSearchTerm(QString newSearchTerm) {
-	m_searchTerm = newSearchTerm;
-}
-
-
-const QStringList &GetParams::excludeItemTypes() const {
-	return m_excludeItemTypes;
-}
-
-void GetParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
-	m_excludeItemTypes = newExcludeItemTypes;
-}
-
-bool GetParams::excludeItemTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_excludeItemTypes.size() == 0;
-}
-
-void GetParams::setExcludeItemTypesNull() {
-	m_excludeItemTypes.clear();
-}
-
-
-const bool &GetParams::includeArtists() const {
-	return m_includeArtists.value();
-}
-
-void GetParams::setIncludeArtists(bool newIncludeArtists)  {
-	m_includeArtists = newIncludeArtists;
-}
-
-bool GetParams::includeArtistsNull() const {
-	// Nullable: false
-	// Type Nullable: false
-	
-
-	return !m_includeArtists.has_value();
-}
-
-void GetParams::setIncludeArtistsNull() {
-	m_includeArtists = std::nullopt;
-}
-
-
-const bool &GetParams::includeGenres() const {
-	return m_includeGenres.value();
-}
-
-void GetParams::setIncludeGenres(bool newIncludeGenres)  {
-	m_includeGenres = newIncludeGenres;
-}
-
-bool GetParams::includeGenresNull() const {
-	// Nullable: false
-	// Type Nullable: false
-	
-
-	return !m_includeGenres.has_value();
-}
-
-void GetParams::setIncludeGenresNull() {
-	m_includeGenres = std::nullopt;
-}
-
-
-const QStringList &GetParams::includeItemTypes() const {
-	return m_includeItemTypes;
-}
-
-void GetParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
-	m_includeItemTypes = newIncludeItemTypes;
-}
-
-bool GetParams::includeItemTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_includeItemTypes.size() == 0;
-}
-
-void GetParams::setIncludeItemTypesNull() {
-	m_includeItemTypes.clear();
-}
-
-
-const bool &GetParams::includeMedia() const {
-	return m_includeMedia.value();
-}
-
-void GetParams::setIncludeMedia(bool newIncludeMedia)  {
-	m_includeMedia = newIncludeMedia;
-}
-
-bool GetParams::includeMediaNull() const {
-	// Nullable: false
-	// Type Nullable: false
-	
-
-	return !m_includeMedia.has_value();
-}
-
-void GetParams::setIncludeMediaNull() {
-	m_includeMedia = std::nullopt;
-}
-
-
-const bool &GetParams::includePeople() const {
-	return m_includePeople.value();
-}
-
-void GetParams::setIncludePeople(bool newIncludePeople)  {
-	m_includePeople = newIncludePeople;
-}
-
-bool GetParams::includePeopleNull() const {
-	// Nullable: false
-	// Type Nullable: false
-	
-
-	return !m_includePeople.has_value();
-}
-
-void GetParams::setIncludePeopleNull() {
-	m_includePeople = std::nullopt;
-}
-
-
-const bool &GetParams::includeStudios() const {
-	return m_includeStudios.value();
-}
-
-void GetParams::setIncludeStudios(bool newIncludeStudios)  {
-	m_includeStudios = newIncludeStudios;
-}
-
-bool GetParams::includeStudiosNull() const {
-	// Nullable: false
-	// Type Nullable: false
-	
-
-	return !m_includeStudios.has_value();
-}
-
-void GetParams::setIncludeStudiosNull() {
-	m_includeStudios = std::nullopt;
-}
-
-
-const bool &GetParams::isKids() const {
-	return m_isKids.value();
-}
-
-void GetParams::setIsKids(bool newIsKids)  {
-	m_isKids = newIsKids;
-}
-
-bool GetParams::isKidsNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isKids.has_value();
-}
-
-void GetParams::setIsKidsNull() {
-	m_isKids = std::nullopt;
-}
-
-
-const bool &GetParams::isMovie() const {
-	return m_isMovie.value();
-}
-
-void GetParams::setIsMovie(bool newIsMovie)  {
-	m_isMovie = newIsMovie;
-}
-
-bool GetParams::isMovieNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isMovie.has_value();
-}
-
-void GetParams::setIsMovieNull() {
-	m_isMovie = std::nullopt;
-}
-
-
-const bool &GetParams::isNews() const {
-	return m_isNews.value();
-}
-
-void GetParams::setIsNews(bool newIsNews)  {
-	m_isNews = newIsNews;
-}
-
-bool GetParams::isNewsNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isNews.has_value();
-}
-
-void GetParams::setIsNewsNull() {
-	m_isNews = std::nullopt;
-}
-
-
-const bool &GetParams::isSeries() const {
-	return m_isSeries.value();
-}
-
-void GetParams::setIsSeries(bool newIsSeries)  {
-	m_isSeries = newIsSeries;
-}
-
-bool GetParams::isSeriesNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isSeries.has_value();
-}
-
-void GetParams::setIsSeriesNull() {
-	m_isSeries = std::nullopt;
-}
-
-
-const bool &GetParams::isSports() const {
-	return m_isSports.value();
-}
-
-void GetParams::setIsSports(bool newIsSports)  {
-	m_isSports = newIsSports;
-}
-
-bool GetParams::isSportsNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isSports.has_value();
-}
-
-void GetParams::setIsSportsNull() {
-	m_isSports = std::nullopt;
-}
-
-
-const qint32 &GetParams::limit() const {
-	return m_limit.value();
-}
-
-void GetParams::setLimit(qint32 newLimit)  {
-	m_limit = newLimit;
-}
-
-bool GetParams::limitNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_limit.has_value();
-}
-
-void GetParams::setLimitNull() {
-	m_limit = std::nullopt;
-}
-
-
-const QStringList &GetParams::mediaTypes() const {
-	return m_mediaTypes;
-}
-
-void GetParams::setMediaTypes(QStringList newMediaTypes)  {
-	m_mediaTypes = newMediaTypes;
-}
-
-bool GetParams::mediaTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_mediaTypes.size() == 0;
-}
-
-void GetParams::setMediaTypesNull() {
-	m_mediaTypes.clear();
-}
-
-
-const QString &GetParams::parentId() const {
-	return m_parentId;
-}
-
-void GetParams::setParentId(QString newParentId)  {
-	m_parentId = newParentId;
-}
-
-bool GetParams::parentIdNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_parentId.isNull();
-}
-
-void GetParams::setParentIdNull() {
-	m_parentId.clear();
-}
-
-
-const qint32 &GetParams::startIndex() const {
-	return m_startIndex.value();
-}
-
-void GetParams::setStartIndex(qint32 newStartIndex)  {
-	m_startIndex = newStartIndex;
-}
-
-bool GetParams::startIndexNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_startIndex.has_value();
-}
-
-void GetParams::setStartIndexNull() {
-	m_startIndex = std::nullopt;
-}
-
-
-const QString &GetParams::userId() const {
-	return m_userId;
-}
-
-void GetParams::setUserId(QString newUserId)  {
-	m_userId = newUserId;
-}
-
-bool GetParams::userIdNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_userId.isNull();
-}
-
-void GetParams::setUserIdNull() {
-	m_userId.clear();
 }
 
 
@@ -1924,7 +1374,7 @@ void GetAlbumArtistsParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetAlbumArtistsParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -1978,11 +1428,11 @@ void GetAlbumArtistsParams::setEnableUserDataNull() {
 }
 
 
-const QStringList &GetAlbumArtistsParams::excludeItemTypes() const {
+const QList<BaseItemKind> &GetAlbumArtistsParams::excludeItemTypes() const {
 	return m_excludeItemTypes;
 }
 
-void GetAlbumArtistsParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
+void GetAlbumArtistsParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
 	m_excludeItemTypes = newExcludeItemTypes;
 }
 
@@ -2104,11 +1554,11 @@ void GetAlbumArtistsParams::setImageTypeLimitNull() {
 }
 
 
-const QStringList &GetAlbumArtistsParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetAlbumArtistsParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetAlbumArtistsParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetAlbumArtistsParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -2167,11 +1617,11 @@ void GetAlbumArtistsParams::setLimitNull() {
 }
 
 
-const QStringList &GetAlbumArtistsParams::mediaTypes() const {
+const QList<MediaType> &GetAlbumArtistsParams::mediaTypes() const {
 	return m_mediaTypes;
 }
 
-void GetAlbumArtistsParams::setMediaTypes(QStringList newMediaTypes)  {
+void GetAlbumArtistsParams::setMediaTypes(QList<MediaType> newMediaTypes)  {
 	m_mediaTypes = newMediaTypes;
 }
 
@@ -2395,6 +1845,48 @@ bool GetAlbumArtistsParams::searchTermNull() const {
 
 void GetAlbumArtistsParams::setSearchTermNull() {
 	m_searchTerm.clear();
+}
+
+
+const QList<ItemSortBy> &GetAlbumArtistsParams::sortBy() const {
+	return m_sortBy;
+}
+
+void GetAlbumArtistsParams::setSortBy(QList<ItemSortBy> newSortBy)  {
+	m_sortBy = newSortBy;
+}
+
+bool GetAlbumArtistsParams::sortByNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortBy.size() == 0;
+}
+
+void GetAlbumArtistsParams::setSortByNull() {
+	m_sortBy.clear();
+}
+
+
+const QList<SortOrder> &GetAlbumArtistsParams::sortOrder() const {
+	return m_sortOrder;
+}
+
+void GetAlbumArtistsParams::setSortOrder(QList<SortOrder> newSortOrder)  {
+	m_sortOrder = newSortOrder;
+}
+
+bool GetAlbumArtistsParams::sortOrderNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortOrder.size() == 0;
+}
+
+void GetAlbumArtistsParams::setSortOrderNull() {
+	m_sortOrder.clear();
 }
 
 
@@ -2627,27 +2119,6 @@ void GetArtistImageParams::setName(QString newName) {
 }
 
 
-const bool &GetArtistImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetArtistImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetArtistImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetArtistImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetArtistImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -2690,24 +2161,45 @@ void GetArtistImageParams::setBlurNull() {
 }
 
 
-const bool &GetArtistImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetArtistImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetArtistImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetArtistImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetArtistImageParams::cropWhitespaceNull() const {
+bool GetArtistImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetArtistImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetArtistImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetArtistImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetArtistImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetArtistImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetArtistImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -2955,7 +2447,7 @@ void GetArtistsParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetArtistsParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -3009,11 +2501,11 @@ void GetArtistsParams::setEnableUserDataNull() {
 }
 
 
-const QStringList &GetArtistsParams::excludeItemTypes() const {
+const QList<BaseItemKind> &GetArtistsParams::excludeItemTypes() const {
 	return m_excludeItemTypes;
 }
 
-void GetArtistsParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
+void GetArtistsParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
 	m_excludeItemTypes = newExcludeItemTypes;
 }
 
@@ -3135,11 +2627,11 @@ void GetArtistsParams::setImageTypeLimitNull() {
 }
 
 
-const QStringList &GetArtistsParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetArtistsParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetArtistsParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetArtistsParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -3198,11 +2690,11 @@ void GetArtistsParams::setLimitNull() {
 }
 
 
-const QStringList &GetArtistsParams::mediaTypes() const {
+const QList<MediaType> &GetArtistsParams::mediaTypes() const {
 	return m_mediaTypes;
 }
 
-void GetArtistsParams::setMediaTypes(QStringList newMediaTypes)  {
+void GetArtistsParams::setMediaTypes(QList<MediaType> newMediaTypes)  {
 	m_mediaTypes = newMediaTypes;
 }
 
@@ -3426,6 +2918,48 @@ bool GetArtistsParams::searchTermNull() const {
 
 void GetArtistsParams::setSearchTermNull() {
 	m_searchTerm.clear();
+}
+
+
+const QList<ItemSortBy> &GetArtistsParams::sortBy() const {
+	return m_sortBy;
+}
+
+void GetArtistsParams::setSortBy(QList<ItemSortBy> newSortBy)  {
+	m_sortBy = newSortBy;
+}
+
+bool GetArtistsParams::sortByNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortBy.size() == 0;
+}
+
+void GetArtistsParams::setSortByNull() {
+	m_sortBy.clear();
+}
+
+
+const QList<SortOrder> &GetArtistsParams::sortOrder() const {
+	return m_sortOrder;
+}
+
+void GetArtistsParams::setSortOrder(QList<SortOrder> newSortOrder)  {
+	m_sortOrder = newSortOrder;
+}
+
+bool GetArtistsParams::sortOrderNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortOrder.size() == 0;
+}
+
+void GetArtistsParams::setSortOrderNull() {
+	m_sortOrder.clear();
 }
 
 
@@ -3911,6 +3445,27 @@ bool GetAudioStreamParams::deviceProfileIdNull() const {
 
 void GetAudioStreamParams::setDeviceProfileIdNull() {
 	m_deviceProfileId.clear();
+}
+
+
+const bool &GetAudioStreamParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetAudioStreamParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetAudioStreamParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetAudioStreamParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
 }
 
 
@@ -4923,6 +4478,27 @@ void GetAudioStreamByContainerParams::setDeviceProfileIdNull() {
 }
 
 
+const bool &GetAudioStreamByContainerParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetAudioStreamByContainerParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetAudioStreamByContainerParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetAudioStreamByContainerParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &GetAudioStreamByContainerParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -5827,11 +5403,11 @@ void GetChannelItemsParams::setLimitNull() {
 }
 
 
-const QString &GetChannelItemsParams::sortBy() const {
+const QList<ItemSortBy> &GetChannelItemsParams::sortBy() const {
 	return m_sortBy;
 }
 
-void GetChannelItemsParams::setSortBy(QString newSortBy)  {
+void GetChannelItemsParams::setSortBy(QList<ItemSortBy> newSortBy)  {
 	m_sortBy = newSortBy;
 }
 
@@ -5840,7 +5416,7 @@ bool GetChannelItemsParams::sortByNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortBy.isNull();
+	return m_sortBy.size() == 0;
 }
 
 void GetChannelItemsParams::setSortByNull() {
@@ -5848,11 +5424,11 @@ void GetChannelItemsParams::setSortByNull() {
 }
 
 
-const QString &GetChannelItemsParams::sortOrder() const {
+const QList<SortOrder> &GetChannelItemsParams::sortOrder() const {
 	return m_sortOrder;
 }
 
-void GetChannelItemsParams::setSortOrder(QString newSortOrder)  {
+void GetChannelItemsParams::setSortOrder(QList<SortOrder> newSortOrder)  {
 	m_sortOrder = newSortOrder;
 }
 
@@ -5861,7 +5437,7 @@ bool GetChannelItemsParams::sortOrderNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortOrder.isNull();
+	return m_sortOrder.size() == 0;
 }
 
 void GetChannelItemsParams::setSortOrderNull() {
@@ -6095,105 +5671,6 @@ void GetConfigurationPagesParams::setEnableInMainMenuNull() {
 }
 
 
-const ConfigurationPageType &GetConfigurationPagesParams::pageType() const {
-	return m_pageType;
-}
-
-void GetConfigurationPagesParams::setPageType(ConfigurationPageType newPageType)  {
-	m_pageType = newPageType;
-}
-
-bool GetConfigurationPagesParams::pageTypeNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_pageType== ConfigurationPageType::EnumNotSet;
-}
-
-void GetConfigurationPagesParams::setPageTypeNull() {
-	m_pageType= ConfigurationPageType::EnumNotSet;
-}
-
-
-
-
-// GetConnectionManagerParams
-
-const QString &GetConnectionManagerParams::serverId() const {
-	return m_serverId;
-}
-
-void GetConnectionManagerParams::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
-// GetConnectionManager_2Params
-
-const QString &GetConnectionManager_2Params::serverId() const {
-	return m_serverId;
-}
-
-void GetConnectionManager_2Params::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
-// GetConnectionManager_3Params
-
-const QString &GetConnectionManager_3Params::serverId() const {
-	return m_serverId;
-}
-
-void GetConnectionManager_3Params::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
-// GetContentDirectoryParams
-
-const QString &GetContentDirectoryParams::serverId() const {
-	return m_serverId;
-}
-
-void GetContentDirectoryParams::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
-// GetContentDirectory_2Params
-
-const QString &GetContentDirectory_2Params::serverId() const {
-	return m_serverId;
-}
-
-void GetContentDirectory_2Params::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
-// GetContentDirectory_3Params
-
-const QString &GetContentDirectory_3Params::serverId() const {
-	return m_serverId;
-}
-
-void GetContentDirectory_3Params::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
 
 
 // GetCountriesParams
@@ -6258,10 +5735,6 @@ void GetDashboardConfigurationPageParams::setNameNull() {
 
 
 
-// GetDefaultProfileParams
-
-
-
 // GetDefaultTimerParams
 
 const QString &GetDefaultTimerParams::programId() const {
@@ -6282,32 +5755,6 @@ bool GetDefaultTimerParams::programIdNull() const {
 
 void GetDefaultTimerParams::setProgramIdNull() {
 	m_programId.clear();
-}
-
-
-
-
-// GetDescriptionXmlParams
-
-const QString &GetDescriptionXmlParams::serverId() const {
-	return m_serverId;
-}
-
-void GetDescriptionXmlParams::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
-// GetDescriptionXml_2Params
-
-const QString &GetDescriptionXml_2Params::serverId() const {
-	return m_serverId;
-}
-
-void GetDescriptionXml_2Params::setServerId(QString newServerId) {
-	m_serverId = newServerId;
 }
 
 
@@ -6340,27 +5787,6 @@ void GetDeviceOptionsParams::setJellyfinId(QString newJellyfinId) {
 
 
 // GetDevicesParams
-
-const bool &GetDevicesParams::supportsSync() const {
-	return m_supportsSync.value();
-}
-
-void GetDevicesParams::setSupportsSync(bool newSupportsSync)  {
-	m_supportsSync = newSupportsSync;
-}
-
-bool GetDevicesParams::supportsSyncNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_supportsSync.has_value();
-}
-
-void GetDevicesParams::setSupportsSyncNull() {
-	m_supportsSync = std::nullopt;
-}
-
 
 const QString &GetDevicesParams::userId() const {
 	return m_userId;
@@ -6464,8 +5890,20 @@ const QString &GetDisplayPreferencesParams::userId() const {
 	return m_userId;
 }
 
-void GetDisplayPreferencesParams::setUserId(QString newUserId) {
+void GetDisplayPreferencesParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool GetDisplayPreferencesParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetDisplayPreferencesParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -6713,11 +6151,11 @@ void GetEpisodesParams::setSeasonIdNull() {
 }
 
 
-const QString &GetEpisodesParams::sortBy() const {
+const ItemSortBy &GetEpisodesParams::sortBy() const {
 	return m_sortBy;
 }
 
-void GetEpisodesParams::setSortBy(QString newSortBy)  {
+void GetEpisodesParams::setSortBy(ItemSortBy newSortBy)  {
 	m_sortBy = newSortBy;
 }
 
@@ -6726,11 +6164,11 @@ bool GetEpisodesParams::sortByNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortBy.isNull();
+	return m_sortBy== ItemSortBy::EnumNotSet;
 }
 
 void GetEpisodesParams::setSortByNull() {
-	m_sortBy.clear();
+	m_sortBy= ItemSortBy::EnumNotSet;
 }
 
 
@@ -6850,32 +6288,6 @@ void GetFileParams::setItemId(QString newItemId) {
 
 
 
-// GetGeneralImageParams
-
-const QString &GetGeneralImageParams::name() const {
-	return m_name;
-}
-
-void GetGeneralImageParams::setName(QString newName) {
-	m_name = newName;
-}
-
-
-const QString &GetGeneralImageParams::type() const {
-	return m_type;
-}
-
-void GetGeneralImageParams::setType(QString newType) {
-	m_type = newType;
-}
-
-
-
-
-// GetGeneralImagesParams
-
-
-
 // GetGenreParams
 
 const QString &GetGenreParams::genreName() const {
@@ -6930,27 +6342,6 @@ void GetGenreImageParams::setName(QString newName) {
 }
 
 
-const bool &GetGenreImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetGenreImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetGenreImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetGenreImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetGenreImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -6993,24 +6384,45 @@ void GetGenreImageParams::setBlurNull() {
 }
 
 
-const bool &GetGenreImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetGenreImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetGenreImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetGenreImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetGenreImageParams::cropWhitespaceNull() const {
+bool GetGenreImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetGenreImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetGenreImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetGenreImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetGenreImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetGenreImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetGenreImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -7276,27 +6688,6 @@ void GetGenreImageByIndexParams::setName(QString newName) {
 }
 
 
-const bool &GetGenreImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetGenreImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetGenreImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetGenreImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetGenreImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -7339,24 +6730,45 @@ void GetGenreImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &GetGenreImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetGenreImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetGenreImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetGenreImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetGenreImageByIndexParams::cropWhitespaceNull() const {
+bool GetGenreImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetGenreImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetGenreImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetGenreImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetGenreImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetGenreImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetGenreImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -7604,7 +7016,7 @@ void GetGenresParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetGenresParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -7637,11 +7049,11 @@ void GetGenresParams::setEnableTotalRecordCountNull() {
 }
 
 
-const QStringList &GetGenresParams::excludeItemTypes() const {
+const QList<BaseItemKind> &GetGenresParams::excludeItemTypes() const {
 	return m_excludeItemTypes;
 }
 
-void GetGenresParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
+void GetGenresParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
 	m_excludeItemTypes = newExcludeItemTypes;
 }
 
@@ -7700,11 +7112,11 @@ void GetGenresParams::setImageTypeLimitNull() {
 }
 
 
-const QStringList &GetGenresParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetGenresParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetGenresParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetGenresParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -7868,6 +7280,48 @@ void GetGenresParams::setSearchTermNull() {
 }
 
 
+const QList<ItemSortBy> &GetGenresParams::sortBy() const {
+	return m_sortBy;
+}
+
+void GetGenresParams::setSortBy(QList<ItemSortBy> newSortBy)  {
+	m_sortBy = newSortBy;
+}
+
+bool GetGenresParams::sortByNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortBy.size() == 0;
+}
+
+void GetGenresParams::setSortByNull() {
+	m_sortBy.clear();
+}
+
+
+const QList<SortOrder> &GetGenresParams::sortOrder() const {
+	return m_sortOrder;
+}
+
+void GetGenresParams::setSortOrder(QList<SortOrder> newSortOrder)  {
+	m_sortOrder = newSortOrder;
+}
+
+bool GetGenresParams::sortOrderNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortOrder.size() == 0;
+}
+
+void GetGenresParams::setSortOrderNull() {
+	m_sortOrder.clear();
+}
+
+
 const qint32 &GetGenresParams::startIndex() const {
 	return m_startIndex.value();
 }
@@ -7918,8 +7372,20 @@ const QString &GetGroupingOptionsParams::userId() const {
 	return m_userId;
 }
 
-void GetGroupingOptionsParams::setUserId(QString newUserId) {
+void GetGroupingOptionsParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool GetGroupingOptionsParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetGroupingOptionsParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -7964,6 +7430,24 @@ const qint32 &GetHlsAudioSegmentParams::segmentId() const {
 
 void GetHlsAudioSegmentParams::setSegmentId(qint32 newSegmentId) {
 	m_segmentId = newSegmentId;
+}
+
+
+const qint64 &GetHlsAudioSegmentParams::actualSegmentLengthTicks() const {
+	return m_actualSegmentLengthTicks;
+}
+
+void GetHlsAudioSegmentParams::setActualSegmentLengthTicks(qint64 newActualSegmentLengthTicks) {
+	m_actualSegmentLengthTicks = newActualSegmentLengthTicks;
+}
+
+
+const qint64 &GetHlsAudioSegmentParams::runtimeTicks() const {
+	return m_runtimeTicks;
+}
+
+void GetHlsAudioSegmentParams::setRuntimeTicks(qint64 newRuntimeTicks) {
+	m_runtimeTicks = newRuntimeTicks;
 }
 
 
@@ -8258,6 +7742,27 @@ bool GetHlsAudioSegmentParams::deviceProfileIdNull() const {
 
 void GetHlsAudioSegmentParams::setDeviceProfileIdNull() {
 	m_deviceProfileId.clear();
+}
+
+
+const bool &GetHlsAudioSegmentParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetHlsAudioSegmentParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetHlsAudioSegmentParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetHlsAudioSegmentParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
 }
 
 
@@ -9081,6 +8586,24 @@ void GetHlsVideoSegmentParams::setSegmentId(qint32 newSegmentId) {
 }
 
 
+const qint64 &GetHlsVideoSegmentParams::actualSegmentLengthTicks() const {
+	return m_actualSegmentLengthTicks;
+}
+
+void GetHlsVideoSegmentParams::setActualSegmentLengthTicks(qint64 newActualSegmentLengthTicks) {
+	m_actualSegmentLengthTicks = newActualSegmentLengthTicks;
+}
+
+
+const qint64 &GetHlsVideoSegmentParams::runtimeTicks() const {
+	return m_runtimeTicks;
+}
+
+void GetHlsVideoSegmentParams::setRuntimeTicks(qint64 newRuntimeTicks) {
+	m_runtimeTicks = newRuntimeTicks;
+}
+
+
 const bool &GetHlsVideoSegmentParams::allowAudioStreamCopy() const {
 	return m_allowAudioStreamCopy.value();
 }
@@ -9120,6 +8643,27 @@ bool GetHlsVideoSegmentParams::allowVideoStreamCopyNull() const {
 
 void GetHlsVideoSegmentParams::setAllowVideoStreamCopyNull() {
 	m_allowVideoStreamCopy = std::nullopt;
+}
+
+
+const bool &GetHlsVideoSegmentParams::alwaysBurnInSubtitleWhenTranscoding() const {
+	return m_alwaysBurnInSubtitleWhenTranscoding.value();
+}
+
+void GetHlsVideoSegmentParams::setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding)  {
+	m_alwaysBurnInSubtitleWhenTranscoding = newAlwaysBurnInSubtitleWhenTranscoding;
+}
+
+bool GetHlsVideoSegmentParams::alwaysBurnInSubtitleWhenTranscodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_alwaysBurnInSubtitleWhenTranscoding.has_value();
+}
+
+void GetHlsVideoSegmentParams::setAlwaysBurnInSubtitleWhenTranscodingNull() {
+	m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 }
 
 
@@ -9375,6 +8919,27 @@ void GetHlsVideoSegmentParams::setDeviceProfileIdNull() {
 }
 
 
+const bool &GetHlsVideoSegmentParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetHlsVideoSegmentParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetHlsVideoSegmentParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetHlsVideoSegmentParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &GetHlsVideoSegmentParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -9564,6 +9129,27 @@ void GetHlsVideoSegmentParams::setMaxFramerateNull() {
 }
 
 
+const qint32 &GetHlsVideoSegmentParams::maxHeight() const {
+	return m_maxHeight.value();
+}
+
+void GetHlsVideoSegmentParams::setMaxHeight(qint32 newMaxHeight)  {
+	m_maxHeight = newMaxHeight;
+}
+
+bool GetHlsVideoSegmentParams::maxHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxHeight.has_value();
+}
+
+void GetHlsVideoSegmentParams::setMaxHeightNull() {
+	m_maxHeight = std::nullopt;
+}
+
+
 const qint32 &GetHlsVideoSegmentParams::maxRefFrames() const {
 	return m_maxRefFrames.value();
 }
@@ -9603,6 +9189,27 @@ bool GetHlsVideoSegmentParams::maxVideoBitDepthNull() const {
 
 void GetHlsVideoSegmentParams::setMaxVideoBitDepthNull() {
 	m_maxVideoBitDepth = std::nullopt;
+}
+
+
+const qint32 &GetHlsVideoSegmentParams::maxWidth() const {
+	return m_maxWidth.value();
+}
+
+void GetHlsVideoSegmentParams::setMaxWidth(qint32 newMaxWidth)  {
+	m_maxWidth = newMaxWidth;
+}
+
+bool GetHlsVideoSegmentParams::maxWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxWidth.has_value();
+}
+
+void GetHlsVideoSegmentParams::setMaxWidthNull() {
+	m_maxWidth = std::nullopt;
 }
 
 
@@ -10110,49 +9717,14 @@ void GetHlsVideoSegmentLegacyParams::setSegmentId(QString newSegmentId) {
 
 
 
-// GetIconParams
-
-const QString &GetIconParams::fileName() const {
-	return m_fileName;
-}
-
-void GetIconParams::setFileName(QString newFileName) {
-	m_fileName = newFileName;
-}
-
-
-
-
-// GetIconIdParams
-
-const QString &GetIconIdParams::fileName() const {
-	return m_fileName;
-}
-
-void GetIconIdParams::setFileName(QString newFileName) {
-	m_fileName = newFileName;
-}
-
-
-const QString &GetIconIdParams::serverId() const {
-	return m_serverId;
-}
-
-void GetIconIdParams::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
 // GetInstantMixFromAlbumParams
 
-const QString &GetInstantMixFromAlbumParams::jellyfinId() const {
-	return m_jellyfinId;
+const QString &GetInstantMixFromAlbumParams::itemId() const {
+	return m_itemId;
 }
 
-void GetInstantMixFromAlbumParams::setJellyfinId(QString newJellyfinId) {
-	m_jellyfinId = newJellyfinId;
+void GetInstantMixFromAlbumParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
 }
 
 
@@ -10307,12 +9879,12 @@ void GetInstantMixFromAlbumParams::setUserIdNull() {
 
 // GetInstantMixFromArtistsParams
 
-const QString &GetInstantMixFromArtistsParams::jellyfinId() const {
-	return m_jellyfinId;
+const QString &GetInstantMixFromArtistsParams::itemId() const {
+	return m_itemId;
 }
 
-void GetInstantMixFromArtistsParams::setJellyfinId(QString newJellyfinId) {
-	m_jellyfinId = newJellyfinId;
+void GetInstantMixFromArtistsParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
 }
 
 
@@ -10465,14 +10037,174 @@ void GetInstantMixFromArtistsParams::setUserIdNull() {
 
 
 
-// GetInstantMixFromItemParams
+// GetInstantMixFromArtists2Params
 
-const QString &GetInstantMixFromItemParams::jellyfinId() const {
+const QString &GetInstantMixFromArtists2Params::jellyfinId() const {
 	return m_jellyfinId;
 }
 
-void GetInstantMixFromItemParams::setJellyfinId(QString newJellyfinId) {
+void GetInstantMixFromArtists2Params::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
+}
+
+
+const QList<ImageType> &GetInstantMixFromArtists2Params::enableImageTypes() const {
+	return m_enableImageTypes;
+}
+
+void GetInstantMixFromArtists2Params::setEnableImageTypes(QList<ImageType> newEnableImageTypes)  {
+	m_enableImageTypes = newEnableImageTypes;
+}
+
+bool GetInstantMixFromArtists2Params::enableImageTypesNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_enableImageTypes.size() == 0;
+}
+
+void GetInstantMixFromArtists2Params::setEnableImageTypesNull() {
+	m_enableImageTypes.clear();
+}
+
+
+const bool &GetInstantMixFromArtists2Params::enableImages() const {
+	return m_enableImages.value();
+}
+
+void GetInstantMixFromArtists2Params::setEnableImages(bool newEnableImages)  {
+	m_enableImages = newEnableImages;
+}
+
+bool GetInstantMixFromArtists2Params::enableImagesNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_enableImages.has_value();
+}
+
+void GetInstantMixFromArtists2Params::setEnableImagesNull() {
+	m_enableImages = std::nullopt;
+}
+
+
+const bool &GetInstantMixFromArtists2Params::enableUserData() const {
+	return m_enableUserData.value();
+}
+
+void GetInstantMixFromArtists2Params::setEnableUserData(bool newEnableUserData)  {
+	m_enableUserData = newEnableUserData;
+}
+
+bool GetInstantMixFromArtists2Params::enableUserDataNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_enableUserData.has_value();
+}
+
+void GetInstantMixFromArtists2Params::setEnableUserDataNull() {
+	m_enableUserData = std::nullopt;
+}
+
+
+const QList<ItemFields> &GetInstantMixFromArtists2Params::fields() const {
+	return m_fields;
+}
+
+void GetInstantMixFromArtists2Params::setFields(QList<ItemFields> newFields)  {
+	m_fields = newFields;
+}
+
+bool GetInstantMixFromArtists2Params::fieldsNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_fields.size() == 0;
+}
+
+void GetInstantMixFromArtists2Params::setFieldsNull() {
+	m_fields.clear();
+}
+
+
+const qint32 &GetInstantMixFromArtists2Params::imageTypeLimit() const {
+	return m_imageTypeLimit.value();
+}
+
+void GetInstantMixFromArtists2Params::setImageTypeLimit(qint32 newImageTypeLimit)  {
+	m_imageTypeLimit = newImageTypeLimit;
+}
+
+bool GetInstantMixFromArtists2Params::imageTypeLimitNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_imageTypeLimit.has_value();
+}
+
+void GetInstantMixFromArtists2Params::setImageTypeLimitNull() {
+	m_imageTypeLimit = std::nullopt;
+}
+
+
+const qint32 &GetInstantMixFromArtists2Params::limit() const {
+	return m_limit.value();
+}
+
+void GetInstantMixFromArtists2Params::setLimit(qint32 newLimit)  {
+	m_limit = newLimit;
+}
+
+bool GetInstantMixFromArtists2Params::limitNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_limit.has_value();
+}
+
+void GetInstantMixFromArtists2Params::setLimitNull() {
+	m_limit = std::nullopt;
+}
+
+
+const QString &GetInstantMixFromArtists2Params::userId() const {
+	return m_userId;
+}
+
+void GetInstantMixFromArtists2Params::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool GetInstantMixFromArtists2Params::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetInstantMixFromArtists2Params::setUserIdNull() {
+	m_userId.clear();
+}
+
+
+
+
+// GetInstantMixFromItemParams
+
+const QString &GetInstantMixFromItemParams::itemId() const {
+	return m_itemId;
+}
+
+void GetInstantMixFromItemParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
 }
 
 
@@ -10625,26 +10357,26 @@ void GetInstantMixFromItemParams::setUserIdNull() {
 
 
 
-// GetInstantMixFromMusicGenreParams
+// GetInstantMixFromMusicGenreByIdParams
 
-const QString &GetInstantMixFromMusicGenreParams::name() const {
-	return m_name;
+const QString &GetInstantMixFromMusicGenreByIdParams::jellyfinId() const {
+	return m_jellyfinId;
 }
 
-void GetInstantMixFromMusicGenreParams::setName(QString newName) {
-	m_name = newName;
+void GetInstantMixFromMusicGenreByIdParams::setJellyfinId(QString newJellyfinId) {
+	m_jellyfinId = newJellyfinId;
 }
 
 
-const QList<ImageType> &GetInstantMixFromMusicGenreParams::enableImageTypes() const {
+const QList<ImageType> &GetInstantMixFromMusicGenreByIdParams::enableImageTypes() const {
 	return m_enableImageTypes;
 }
 
-void GetInstantMixFromMusicGenreParams::setEnableImageTypes(QList<ImageType> newEnableImageTypes)  {
+void GetInstantMixFromMusicGenreByIdParams::setEnableImageTypes(QList<ImageType> newEnableImageTypes)  {
 	m_enableImageTypes = newEnableImageTypes;
 }
 
-bool GetInstantMixFromMusicGenreParams::enableImageTypesNull() const {
+bool GetInstantMixFromMusicGenreByIdParams::enableImageTypesNull() const {
 	// Nullable: true
 	// Type Nullable: true
 	
@@ -10652,20 +10384,20 @@ bool GetInstantMixFromMusicGenreParams::enableImageTypesNull() const {
 	return m_enableImageTypes.size() == 0;
 }
 
-void GetInstantMixFromMusicGenreParams::setEnableImageTypesNull() {
+void GetInstantMixFromMusicGenreByIdParams::setEnableImageTypesNull() {
 	m_enableImageTypes.clear();
 }
 
 
-const bool &GetInstantMixFromMusicGenreParams::enableImages() const {
+const bool &GetInstantMixFromMusicGenreByIdParams::enableImages() const {
 	return m_enableImages.value();
 }
 
-void GetInstantMixFromMusicGenreParams::setEnableImages(bool newEnableImages)  {
+void GetInstantMixFromMusicGenreByIdParams::setEnableImages(bool newEnableImages)  {
 	m_enableImages = newEnableImages;
 }
 
-bool GetInstantMixFromMusicGenreParams::enableImagesNull() const {
+bool GetInstantMixFromMusicGenreByIdParams::enableImagesNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
@@ -10673,20 +10405,20 @@ bool GetInstantMixFromMusicGenreParams::enableImagesNull() const {
 	return !m_enableImages.has_value();
 }
 
-void GetInstantMixFromMusicGenreParams::setEnableImagesNull() {
+void GetInstantMixFromMusicGenreByIdParams::setEnableImagesNull() {
 	m_enableImages = std::nullopt;
 }
 
 
-const bool &GetInstantMixFromMusicGenreParams::enableUserData() const {
+const bool &GetInstantMixFromMusicGenreByIdParams::enableUserData() const {
 	return m_enableUserData.value();
 }
 
-void GetInstantMixFromMusicGenreParams::setEnableUserData(bool newEnableUserData)  {
+void GetInstantMixFromMusicGenreByIdParams::setEnableUserData(bool newEnableUserData)  {
 	m_enableUserData = newEnableUserData;
 }
 
-bool GetInstantMixFromMusicGenreParams::enableUserDataNull() const {
+bool GetInstantMixFromMusicGenreByIdParams::enableUserDataNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
@@ -10694,20 +10426,20 @@ bool GetInstantMixFromMusicGenreParams::enableUserDataNull() const {
 	return !m_enableUserData.has_value();
 }
 
-void GetInstantMixFromMusicGenreParams::setEnableUserDataNull() {
+void GetInstantMixFromMusicGenreByIdParams::setEnableUserDataNull() {
 	m_enableUserData = std::nullopt;
 }
 
 
-const QList<ItemFields> &GetInstantMixFromMusicGenreParams::fields() const {
+const QList<ItemFields> &GetInstantMixFromMusicGenreByIdParams::fields() const {
 	return m_fields;
 }
 
-void GetInstantMixFromMusicGenreParams::setFields(QList<ItemFields> newFields)  {
+void GetInstantMixFromMusicGenreByIdParams::setFields(QList<ItemFields> newFields)  {
 	m_fields = newFields;
 }
 
-bool GetInstantMixFromMusicGenreParams::fieldsNull() const {
+bool GetInstantMixFromMusicGenreByIdParams::fieldsNull() const {
 	// Nullable: true
 	// Type Nullable: true
 	
@@ -10715,20 +10447,20 @@ bool GetInstantMixFromMusicGenreParams::fieldsNull() const {
 	return m_fields.size() == 0;
 }
 
-void GetInstantMixFromMusicGenreParams::setFieldsNull() {
+void GetInstantMixFromMusicGenreByIdParams::setFieldsNull() {
 	m_fields.clear();
 }
 
 
-const qint32 &GetInstantMixFromMusicGenreParams::imageTypeLimit() const {
+const qint32 &GetInstantMixFromMusicGenreByIdParams::imageTypeLimit() const {
 	return m_imageTypeLimit.value();
 }
 
-void GetInstantMixFromMusicGenreParams::setImageTypeLimit(qint32 newImageTypeLimit)  {
+void GetInstantMixFromMusicGenreByIdParams::setImageTypeLimit(qint32 newImageTypeLimit)  {
 	m_imageTypeLimit = newImageTypeLimit;
 }
 
-bool GetInstantMixFromMusicGenreParams::imageTypeLimitNull() const {
+bool GetInstantMixFromMusicGenreByIdParams::imageTypeLimitNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
@@ -10736,20 +10468,20 @@ bool GetInstantMixFromMusicGenreParams::imageTypeLimitNull() const {
 	return !m_imageTypeLimit.has_value();
 }
 
-void GetInstantMixFromMusicGenreParams::setImageTypeLimitNull() {
+void GetInstantMixFromMusicGenreByIdParams::setImageTypeLimitNull() {
 	m_imageTypeLimit = std::nullopt;
 }
 
 
-const qint32 &GetInstantMixFromMusicGenreParams::limit() const {
+const qint32 &GetInstantMixFromMusicGenreByIdParams::limit() const {
 	return m_limit.value();
 }
 
-void GetInstantMixFromMusicGenreParams::setLimit(qint32 newLimit)  {
+void GetInstantMixFromMusicGenreByIdParams::setLimit(qint32 newLimit)  {
 	m_limit = newLimit;
 }
 
-bool GetInstantMixFromMusicGenreParams::limitNull() const {
+bool GetInstantMixFromMusicGenreByIdParams::limitNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
@@ -10757,20 +10489,20 @@ bool GetInstantMixFromMusicGenreParams::limitNull() const {
 	return !m_limit.has_value();
 }
 
-void GetInstantMixFromMusicGenreParams::setLimitNull() {
+void GetInstantMixFromMusicGenreByIdParams::setLimitNull() {
 	m_limit = std::nullopt;
 }
 
 
-const QString &GetInstantMixFromMusicGenreParams::userId() const {
+const QString &GetInstantMixFromMusicGenreByIdParams::userId() const {
 	return m_userId;
 }
 
-void GetInstantMixFromMusicGenreParams::setUserId(QString newUserId)  {
+void GetInstantMixFromMusicGenreByIdParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
 }
 
-bool GetInstantMixFromMusicGenreParams::userIdNull() const {
+bool GetInstantMixFromMusicGenreByIdParams::userIdNull() const {
 	// Nullable: true
 	// Type Nullable: true
 	
@@ -10778,33 +10510,33 @@ bool GetInstantMixFromMusicGenreParams::userIdNull() const {
 	return m_userId.isNull();
 }
 
-void GetInstantMixFromMusicGenreParams::setUserIdNull() {
+void GetInstantMixFromMusicGenreByIdParams::setUserIdNull() {
 	m_userId.clear();
 }
 
 
 
 
-// GetInstantMixFromMusicGenresParams
+// GetInstantMixFromMusicGenreByNameParams
 
-const QString &GetInstantMixFromMusicGenresParams::jellyfinId() const {
-	return m_jellyfinId;
+const QString &GetInstantMixFromMusicGenreByNameParams::name() const {
+	return m_name;
 }
 
-void GetInstantMixFromMusicGenresParams::setJellyfinId(QString newJellyfinId) {
-	m_jellyfinId = newJellyfinId;
+void GetInstantMixFromMusicGenreByNameParams::setName(QString newName) {
+	m_name = newName;
 }
 
 
-const QList<ImageType> &GetInstantMixFromMusicGenresParams::enableImageTypes() const {
+const QList<ImageType> &GetInstantMixFromMusicGenreByNameParams::enableImageTypes() const {
 	return m_enableImageTypes;
 }
 
-void GetInstantMixFromMusicGenresParams::setEnableImageTypes(QList<ImageType> newEnableImageTypes)  {
+void GetInstantMixFromMusicGenreByNameParams::setEnableImageTypes(QList<ImageType> newEnableImageTypes)  {
 	m_enableImageTypes = newEnableImageTypes;
 }
 
-bool GetInstantMixFromMusicGenresParams::enableImageTypesNull() const {
+bool GetInstantMixFromMusicGenreByNameParams::enableImageTypesNull() const {
 	// Nullable: true
 	// Type Nullable: true
 	
@@ -10812,20 +10544,20 @@ bool GetInstantMixFromMusicGenresParams::enableImageTypesNull() const {
 	return m_enableImageTypes.size() == 0;
 }
 
-void GetInstantMixFromMusicGenresParams::setEnableImageTypesNull() {
+void GetInstantMixFromMusicGenreByNameParams::setEnableImageTypesNull() {
 	m_enableImageTypes.clear();
 }
 
 
-const bool &GetInstantMixFromMusicGenresParams::enableImages() const {
+const bool &GetInstantMixFromMusicGenreByNameParams::enableImages() const {
 	return m_enableImages.value();
 }
 
-void GetInstantMixFromMusicGenresParams::setEnableImages(bool newEnableImages)  {
+void GetInstantMixFromMusicGenreByNameParams::setEnableImages(bool newEnableImages)  {
 	m_enableImages = newEnableImages;
 }
 
-bool GetInstantMixFromMusicGenresParams::enableImagesNull() const {
+bool GetInstantMixFromMusicGenreByNameParams::enableImagesNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
@@ -10833,20 +10565,20 @@ bool GetInstantMixFromMusicGenresParams::enableImagesNull() const {
 	return !m_enableImages.has_value();
 }
 
-void GetInstantMixFromMusicGenresParams::setEnableImagesNull() {
+void GetInstantMixFromMusicGenreByNameParams::setEnableImagesNull() {
 	m_enableImages = std::nullopt;
 }
 
 
-const bool &GetInstantMixFromMusicGenresParams::enableUserData() const {
+const bool &GetInstantMixFromMusicGenreByNameParams::enableUserData() const {
 	return m_enableUserData.value();
 }
 
-void GetInstantMixFromMusicGenresParams::setEnableUserData(bool newEnableUserData)  {
+void GetInstantMixFromMusicGenreByNameParams::setEnableUserData(bool newEnableUserData)  {
 	m_enableUserData = newEnableUserData;
 }
 
-bool GetInstantMixFromMusicGenresParams::enableUserDataNull() const {
+bool GetInstantMixFromMusicGenreByNameParams::enableUserDataNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
@@ -10854,20 +10586,20 @@ bool GetInstantMixFromMusicGenresParams::enableUserDataNull() const {
 	return !m_enableUserData.has_value();
 }
 
-void GetInstantMixFromMusicGenresParams::setEnableUserDataNull() {
+void GetInstantMixFromMusicGenreByNameParams::setEnableUserDataNull() {
 	m_enableUserData = std::nullopt;
 }
 
 
-const QList<ItemFields> &GetInstantMixFromMusicGenresParams::fields() const {
+const QList<ItemFields> &GetInstantMixFromMusicGenreByNameParams::fields() const {
 	return m_fields;
 }
 
-void GetInstantMixFromMusicGenresParams::setFields(QList<ItemFields> newFields)  {
+void GetInstantMixFromMusicGenreByNameParams::setFields(QList<ItemFields> newFields)  {
 	m_fields = newFields;
 }
 
-bool GetInstantMixFromMusicGenresParams::fieldsNull() const {
+bool GetInstantMixFromMusicGenreByNameParams::fieldsNull() const {
 	// Nullable: true
 	// Type Nullable: true
 	
@@ -10875,20 +10607,20 @@ bool GetInstantMixFromMusicGenresParams::fieldsNull() const {
 	return m_fields.size() == 0;
 }
 
-void GetInstantMixFromMusicGenresParams::setFieldsNull() {
+void GetInstantMixFromMusicGenreByNameParams::setFieldsNull() {
 	m_fields.clear();
 }
 
 
-const qint32 &GetInstantMixFromMusicGenresParams::imageTypeLimit() const {
+const qint32 &GetInstantMixFromMusicGenreByNameParams::imageTypeLimit() const {
 	return m_imageTypeLimit.value();
 }
 
-void GetInstantMixFromMusicGenresParams::setImageTypeLimit(qint32 newImageTypeLimit)  {
+void GetInstantMixFromMusicGenreByNameParams::setImageTypeLimit(qint32 newImageTypeLimit)  {
 	m_imageTypeLimit = newImageTypeLimit;
 }
 
-bool GetInstantMixFromMusicGenresParams::imageTypeLimitNull() const {
+bool GetInstantMixFromMusicGenreByNameParams::imageTypeLimitNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
@@ -10896,20 +10628,20 @@ bool GetInstantMixFromMusicGenresParams::imageTypeLimitNull() const {
 	return !m_imageTypeLimit.has_value();
 }
 
-void GetInstantMixFromMusicGenresParams::setImageTypeLimitNull() {
+void GetInstantMixFromMusicGenreByNameParams::setImageTypeLimitNull() {
 	m_imageTypeLimit = std::nullopt;
 }
 
 
-const qint32 &GetInstantMixFromMusicGenresParams::limit() const {
+const qint32 &GetInstantMixFromMusicGenreByNameParams::limit() const {
 	return m_limit.value();
 }
 
-void GetInstantMixFromMusicGenresParams::setLimit(qint32 newLimit)  {
+void GetInstantMixFromMusicGenreByNameParams::setLimit(qint32 newLimit)  {
 	m_limit = newLimit;
 }
 
-bool GetInstantMixFromMusicGenresParams::limitNull() const {
+bool GetInstantMixFromMusicGenreByNameParams::limitNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
@@ -10917,20 +10649,20 @@ bool GetInstantMixFromMusicGenresParams::limitNull() const {
 	return !m_limit.has_value();
 }
 
-void GetInstantMixFromMusicGenresParams::setLimitNull() {
+void GetInstantMixFromMusicGenreByNameParams::setLimitNull() {
 	m_limit = std::nullopt;
 }
 
 
-const QString &GetInstantMixFromMusicGenresParams::userId() const {
+const QString &GetInstantMixFromMusicGenreByNameParams::userId() const {
 	return m_userId;
 }
 
-void GetInstantMixFromMusicGenresParams::setUserId(QString newUserId)  {
+void GetInstantMixFromMusicGenreByNameParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
 }
 
-bool GetInstantMixFromMusicGenresParams::userIdNull() const {
+bool GetInstantMixFromMusicGenreByNameParams::userIdNull() const {
 	// Nullable: true
 	// Type Nullable: true
 	
@@ -10938,7 +10670,7 @@ bool GetInstantMixFromMusicGenresParams::userIdNull() const {
 	return m_userId.isNull();
 }
 
-void GetInstantMixFromMusicGenresParams::setUserIdNull() {
+void GetInstantMixFromMusicGenreByNameParams::setUserIdNull() {
 	m_userId.clear();
 }
 
@@ -10947,12 +10679,12 @@ void GetInstantMixFromMusicGenresParams::setUserIdNull() {
 
 // GetInstantMixFromPlaylistParams
 
-const QString &GetInstantMixFromPlaylistParams::jellyfinId() const {
-	return m_jellyfinId;
+const QString &GetInstantMixFromPlaylistParams::itemId() const {
+	return m_itemId;
 }
 
-void GetInstantMixFromPlaylistParams::setJellyfinId(QString newJellyfinId) {
-	m_jellyfinId = newJellyfinId;
+void GetInstantMixFromPlaylistParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
 }
 
 
@@ -11107,12 +10839,12 @@ void GetInstantMixFromPlaylistParams::setUserIdNull() {
 
 // GetInstantMixFromSongParams
 
-const QString &GetInstantMixFromSongParams::jellyfinId() const {
-	return m_jellyfinId;
+const QString &GetInstantMixFromSongParams::itemId() const {
+	return m_itemId;
 }
 
-void GetInstantMixFromSongParams::setJellyfinId(QString newJellyfinId) {
-	m_jellyfinId = newJellyfinId;
+void GetInstantMixFromSongParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
 }
 
 
@@ -11280,8 +11012,20 @@ const QString &GetIntrosParams::userId() const {
 	return m_userId;
 }
 
-void GetIntrosParams::setUserId(QString newUserId) {
+void GetIntrosParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool GetIntrosParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetIntrosParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -11302,8 +11046,20 @@ const QString &GetItemParams::userId() const {
 	return m_userId;
 }
 
-void GetItemParams::setUserId(QString newUserId) {
+void GetItemParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool GetItemParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetItemParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -11375,27 +11131,6 @@ void GetItemImageParams::setItemId(QString newItemId) {
 }
 
 
-const bool &GetItemImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetItemImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetItemImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetItemImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetItemImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -11438,24 +11173,45 @@ void GetItemImageParams::setBlurNull() {
 }
 
 
-const bool &GetItemImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetItemImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetItemImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetItemImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetItemImageParams::cropWhitespaceNull() const {
+bool GetItemImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetItemImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetItemImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetItemImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetItemImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetItemImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetItemImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -11775,27 +11531,6 @@ void GetItemImage2Params::setUnplayedCount(qint32 newUnplayedCount) {
 }
 
 
-const bool &GetItemImage2Params::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetItemImage2Params::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetItemImage2Params::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetItemImage2Params::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetItemImage2Params::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -11838,24 +11573,45 @@ void GetItemImage2Params::setBlurNull() {
 }
 
 
-const bool &GetItemImage2Params::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetItemImage2Params::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetItemImage2Params::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetItemImage2Params::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetItemImage2Params::cropWhitespaceNull() const {
+bool GetItemImage2Params::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetItemImage2Params::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetItemImage2Params::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetItemImage2Params::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetItemImage2Params::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetItemImage2Params::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetItemImage2Params::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -11974,27 +11730,6 @@ void GetItemImageByIndexParams::setItemId(QString newItemId) {
 }
 
 
-const bool &GetItemImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetItemImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetItemImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetItemImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetItemImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -12037,24 +11772,45 @@ void GetItemImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &GetItemImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetItemImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetItemImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetItemImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetItemImageByIndexParams::cropWhitespaceNull() const {
+bool GetItemImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetItemImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetItemImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetItemImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetItemImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetItemImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetItemImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -12283,6 +12039,74 @@ void GetItemImageInfosParams::setItemId(QString newItemId) {
 
 
 
+// GetItemSegmentsParams
+
+const QString &GetItemSegmentsParams::itemId() const {
+	return m_itemId;
+}
+
+void GetItemSegmentsParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
+}
+
+
+const QList<MediaSegmentType> &GetItemSegmentsParams::includeSegmentTypes() const {
+	return m_includeSegmentTypes;
+}
+
+void GetItemSegmentsParams::setIncludeSegmentTypes(QList<MediaSegmentType> newIncludeSegmentTypes)  {
+	m_includeSegmentTypes = newIncludeSegmentTypes;
+}
+
+bool GetItemSegmentsParams::includeSegmentTypesNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_includeSegmentTypes.size() == 0;
+}
+
+void GetItemSegmentsParams::setIncludeSegmentTypesNull() {
+	m_includeSegmentTypes.clear();
+}
+
+
+
+
+// GetItemUserDataParams
+
+const QString &GetItemUserDataParams::itemId() const {
+	return m_itemId;
+}
+
+void GetItemUserDataParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
+}
+
+
+const QString &GetItemUserDataParams::userId() const {
+	return m_userId;
+}
+
+void GetItemUserDataParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool GetItemUserDataParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetItemUserDataParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
+
+
 // GetItemsParams
 
 const QString &GetItemsParams::adjacentTo() const {
@@ -12483,7 +12307,7 @@ void GetItemsParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetItemsParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -12579,11 +12403,11 @@ void GetItemsParams::setExcludeItemIdsNull() {
 }
 
 
-const QStringList &GetItemsParams::excludeItemTypes() const {
+const QList<BaseItemKind> &GetItemsParams::excludeItemTypes() const {
 	return m_excludeItemTypes;
 }
 
-void GetItemsParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
+void GetItemsParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
 	m_excludeItemTypes = newExcludeItemTypes;
 }
 
@@ -12999,11 +12823,11 @@ void GetItemsParams::setImageTypesNull() {
 }
 
 
-const QStringList &GetItemsParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetItemsParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetItemsParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetItemsParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -13017,6 +12841,27 @@ bool GetItemsParams::includeItemTypesNull() const {
 
 void GetItemsParams::setIncludeItemTypesNull() {
 	m_includeItemTypes.clear();
+}
+
+
+const qint32 &GetItemsParams::indexNumber() const {
+	return m_indexNumber.value();
+}
+
+void GetItemsParams::setIndexNumber(qint32 newIndexNumber)  {
+	m_indexNumber = newIndexNumber;
+}
+
+bool GetItemsParams::indexNumberNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_indexNumber.has_value();
+}
+
+void GetItemsParams::setIndexNumberNull() {
+	m_indexNumber = std::nullopt;
 }
 
 
@@ -13104,6 +12949,27 @@ void GetItemsParams::setIsHdNull() {
 }
 
 
+const bool &GetItemsParams::isKids() const {
+	return m_isKids.value();
+}
+
+void GetItemsParams::setIsKids(bool newIsKids)  {
+	m_isKids = newIsKids;
+}
+
+bool GetItemsParams::isKidsNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isKids.has_value();
+}
+
+void GetItemsParams::setIsKidsNull() {
+	m_isKids = std::nullopt;
+}
+
+
 const bool &GetItemsParams::isLocked() const {
 	return m_isLocked.value();
 }
@@ -13146,6 +13012,48 @@ void GetItemsParams::setIsMissingNull() {
 }
 
 
+const bool &GetItemsParams::isMovie() const {
+	return m_isMovie.value();
+}
+
+void GetItemsParams::setIsMovie(bool newIsMovie)  {
+	m_isMovie = newIsMovie;
+}
+
+bool GetItemsParams::isMovieNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isMovie.has_value();
+}
+
+void GetItemsParams::setIsMovieNull() {
+	m_isMovie = std::nullopt;
+}
+
+
+const bool &GetItemsParams::isNews() const {
+	return m_isNews.value();
+}
+
+void GetItemsParams::setIsNews(bool newIsNews)  {
+	m_isNews = newIsNews;
+}
+
+bool GetItemsParams::isNewsNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isNews.has_value();
+}
+
+void GetItemsParams::setIsNewsNull() {
+	m_isNews = std::nullopt;
+}
+
+
 const bool &GetItemsParams::isPlaceHolder() const {
 	return m_isPlaceHolder.value();
 }
@@ -13185,6 +13093,48 @@ bool GetItemsParams::isPlayedNull() const {
 
 void GetItemsParams::setIsPlayedNull() {
 	m_isPlayed = std::nullopt;
+}
+
+
+const bool &GetItemsParams::isSeries() const {
+	return m_isSeries.value();
+}
+
+void GetItemsParams::setIsSeries(bool newIsSeries)  {
+	m_isSeries = newIsSeries;
+}
+
+bool GetItemsParams::isSeriesNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isSeries.has_value();
+}
+
+void GetItemsParams::setIsSeriesNull() {
+	m_isSeries = std::nullopt;
+}
+
+
+const bool &GetItemsParams::isSports() const {
+	return m_isSports.value();
+}
+
+void GetItemsParams::setIsSports(bool newIsSports)  {
+	m_isSports = newIsSports;
+}
+
+bool GetItemsParams::isSportsNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isSports.has_value();
+}
+
+void GetItemsParams::setIsSportsNull() {
+	m_isSports = std::nullopt;
 }
 
 
@@ -13335,11 +13285,11 @@ void GetItemsParams::setMaxWidthNull() {
 }
 
 
-const QStringList &GetItemsParams::mediaTypes() const {
+const QList<MediaType> &GetItemsParams::mediaTypes() const {
 	return m_mediaTypes;
 }
 
-void GetItemsParams::setMediaTypes(QStringList newMediaTypes)  {
+void GetItemsParams::setMediaTypes(QList<MediaType> newMediaTypes)  {
 	m_mediaTypes = newMediaTypes;
 }
 
@@ -13776,11 +13726,11 @@ void GetItemsParams::setSeriesStatusNull() {
 }
 
 
-const QString &GetItemsParams::sortBy() const {
+const QList<ItemSortBy> &GetItemsParams::sortBy() const {
 	return m_sortBy;
 }
 
-void GetItemsParams::setSortBy(QString newSortBy)  {
+void GetItemsParams::setSortBy(QList<ItemSortBy> newSortBy)  {
 	m_sortBy = newSortBy;
 }
 
@@ -13789,7 +13739,7 @@ bool GetItemsParams::sortByNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortBy.isNull();
+	return m_sortBy.size() == 0;
 }
 
 void GetItemsParams::setSortByNull() {
@@ -13797,11 +13747,11 @@ void GetItemsParams::setSortByNull() {
 }
 
 
-const QString &GetItemsParams::sortOrder() const {
+const QList<SortOrder> &GetItemsParams::sortOrder() const {
 	return m_sortOrder;
 }
 
-void GetItemsParams::setSortOrder(QString newSortOrder)  {
+void GetItemsParams::setSortOrder(QList<SortOrder> newSortOrder)  {
 	m_sortOrder = newSortOrder;
 }
 
@@ -13810,7 +13760,7 @@ bool GetItemsParams::sortOrderNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortOrder.isNull();
+	return m_sortOrder.size() == 0;
 }
 
 void GetItemsParams::setSortOrderNull() {
@@ -13967,1678 +13917,6 @@ void GetItemsParams::setYearsNull() {
 
 
 
-// GetItemsByUserIdParams
-
-const QString &GetItemsByUserIdParams::userId() const {
-	return m_userId;
-}
-
-void GetItemsByUserIdParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-const QString &GetItemsByUserIdParams::adjacentTo() const {
-	return m_adjacentTo;
-}
-
-void GetItemsByUserIdParams::setAdjacentTo(QString newAdjacentTo)  {
-	m_adjacentTo = newAdjacentTo;
-}
-
-bool GetItemsByUserIdParams::adjacentToNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_adjacentTo.isNull();
-}
-
-void GetItemsByUserIdParams::setAdjacentToNull() {
-	m_adjacentTo.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::albumArtistIds() const {
-	return m_albumArtistIds;
-}
-
-void GetItemsByUserIdParams::setAlbumArtistIds(QStringList newAlbumArtistIds)  {
-	m_albumArtistIds = newAlbumArtistIds;
-}
-
-bool GetItemsByUserIdParams::albumArtistIdsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_albumArtistIds.size() == 0;
-}
-
-void GetItemsByUserIdParams::setAlbumArtistIdsNull() {
-	m_albumArtistIds.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::albumIds() const {
-	return m_albumIds;
-}
-
-void GetItemsByUserIdParams::setAlbumIds(QStringList newAlbumIds)  {
-	m_albumIds = newAlbumIds;
-}
-
-bool GetItemsByUserIdParams::albumIdsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_albumIds.size() == 0;
-}
-
-void GetItemsByUserIdParams::setAlbumIdsNull() {
-	m_albumIds.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::albums() const {
-	return m_albums;
-}
-
-void GetItemsByUserIdParams::setAlbums(QStringList newAlbums)  {
-	m_albums = newAlbums;
-}
-
-bool GetItemsByUserIdParams::albumsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_albums.size() == 0;
-}
-
-void GetItemsByUserIdParams::setAlbumsNull() {
-	m_albums.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::artistIds() const {
-	return m_artistIds;
-}
-
-void GetItemsByUserIdParams::setArtistIds(QStringList newArtistIds)  {
-	m_artistIds = newArtistIds;
-}
-
-bool GetItemsByUserIdParams::artistIdsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_artistIds.size() == 0;
-}
-
-void GetItemsByUserIdParams::setArtistIdsNull() {
-	m_artistIds.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::artists() const {
-	return m_artists;
-}
-
-void GetItemsByUserIdParams::setArtists(QStringList newArtists)  {
-	m_artists = newArtists;
-}
-
-bool GetItemsByUserIdParams::artistsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_artists.size() == 0;
-}
-
-void GetItemsByUserIdParams::setArtistsNull() {
-	m_artists.clear();
-}
-
-
-const bool &GetItemsByUserIdParams::collapseBoxSetItems() const {
-	return m_collapseBoxSetItems.value();
-}
-
-void GetItemsByUserIdParams::setCollapseBoxSetItems(bool newCollapseBoxSetItems)  {
-	m_collapseBoxSetItems = newCollapseBoxSetItems;
-}
-
-bool GetItemsByUserIdParams::collapseBoxSetItemsNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_collapseBoxSetItems.has_value();
-}
-
-void GetItemsByUserIdParams::setCollapseBoxSetItemsNull() {
-	m_collapseBoxSetItems = std::nullopt;
-}
-
-
-const QStringList &GetItemsByUserIdParams::contributingArtistIds() const {
-	return m_contributingArtistIds;
-}
-
-void GetItemsByUserIdParams::setContributingArtistIds(QStringList newContributingArtistIds)  {
-	m_contributingArtistIds = newContributingArtistIds;
-}
-
-bool GetItemsByUserIdParams::contributingArtistIdsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_contributingArtistIds.size() == 0;
-}
-
-void GetItemsByUserIdParams::setContributingArtistIdsNull() {
-	m_contributingArtistIds.clear();
-}
-
-
-const QList<ImageType> &GetItemsByUserIdParams::enableImageTypes() const {
-	return m_enableImageTypes;
-}
-
-void GetItemsByUserIdParams::setEnableImageTypes(QList<ImageType> newEnableImageTypes)  {
-	m_enableImageTypes = newEnableImageTypes;
-}
-
-bool GetItemsByUserIdParams::enableImageTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_enableImageTypes.size() == 0;
-}
-
-void GetItemsByUserIdParams::setEnableImageTypesNull() {
-	m_enableImageTypes.clear();
-}
-
-
-const bool &GetItemsByUserIdParams::enableImages() const {
-	return m_enableImages.value();
-}
-
-void GetItemsByUserIdParams::setEnableImages(bool newEnableImages)  {
-	m_enableImages = newEnableImages;
-}
-
-bool GetItemsByUserIdParams::enableImagesNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_enableImages.has_value();
-}
-
-void GetItemsByUserIdParams::setEnableImagesNull() {
-	m_enableImages = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::enableTotalRecordCount() const {
-	return m_enableTotalRecordCount.value();
-}
-
-void GetItemsByUserIdParams::setEnableTotalRecordCount(bool newEnableTotalRecordCount)  {
-	m_enableTotalRecordCount = newEnableTotalRecordCount;
-}
-
-bool GetItemsByUserIdParams::enableTotalRecordCountNull() const {
-	// Nullable: false
-	// Type Nullable: false
-	
-
-	return !m_enableTotalRecordCount.has_value();
-}
-
-void GetItemsByUserIdParams::setEnableTotalRecordCountNull() {
-	m_enableTotalRecordCount = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::enableUserData() const {
-	return m_enableUserData.value();
-}
-
-void GetItemsByUserIdParams::setEnableUserData(bool newEnableUserData)  {
-	m_enableUserData = newEnableUserData;
-}
-
-bool GetItemsByUserIdParams::enableUserDataNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_enableUserData.has_value();
-}
-
-void GetItemsByUserIdParams::setEnableUserDataNull() {
-	m_enableUserData = std::nullopt;
-}
-
-
-const QStringList &GetItemsByUserIdParams::excludeArtistIds() const {
-	return m_excludeArtistIds;
-}
-
-void GetItemsByUserIdParams::setExcludeArtistIds(QStringList newExcludeArtistIds)  {
-	m_excludeArtistIds = newExcludeArtistIds;
-}
-
-bool GetItemsByUserIdParams::excludeArtistIdsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_excludeArtistIds.size() == 0;
-}
-
-void GetItemsByUserIdParams::setExcludeArtistIdsNull() {
-	m_excludeArtistIds.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::excludeItemIds() const {
-	return m_excludeItemIds;
-}
-
-void GetItemsByUserIdParams::setExcludeItemIds(QStringList newExcludeItemIds)  {
-	m_excludeItemIds = newExcludeItemIds;
-}
-
-bool GetItemsByUserIdParams::excludeItemIdsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_excludeItemIds.size() == 0;
-}
-
-void GetItemsByUserIdParams::setExcludeItemIdsNull() {
-	m_excludeItemIds.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::excludeItemTypes() const {
-	return m_excludeItemTypes;
-}
-
-void GetItemsByUserIdParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
-	m_excludeItemTypes = newExcludeItemTypes;
-}
-
-bool GetItemsByUserIdParams::excludeItemTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_excludeItemTypes.size() == 0;
-}
-
-void GetItemsByUserIdParams::setExcludeItemTypesNull() {
-	m_excludeItemTypes.clear();
-}
-
-
-const QList<LocationType> &GetItemsByUserIdParams::excludeLocationTypes() const {
-	return m_excludeLocationTypes;
-}
-
-void GetItemsByUserIdParams::setExcludeLocationTypes(QList<LocationType> newExcludeLocationTypes)  {
-	m_excludeLocationTypes = newExcludeLocationTypes;
-}
-
-bool GetItemsByUserIdParams::excludeLocationTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_excludeLocationTypes.size() == 0;
-}
-
-void GetItemsByUserIdParams::setExcludeLocationTypesNull() {
-	m_excludeLocationTypes.clear();
-}
-
-
-const QList<ItemFields> &GetItemsByUserIdParams::fields() const {
-	return m_fields;
-}
-
-void GetItemsByUserIdParams::setFields(QList<ItemFields> newFields)  {
-	m_fields = newFields;
-}
-
-bool GetItemsByUserIdParams::fieldsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_fields.size() == 0;
-}
-
-void GetItemsByUserIdParams::setFieldsNull() {
-	m_fields.clear();
-}
-
-
-const QList<ItemFilter> &GetItemsByUserIdParams::filters() const {
-	return m_filters;
-}
-
-void GetItemsByUserIdParams::setFilters(QList<ItemFilter> newFilters)  {
-	m_filters = newFilters;
-}
-
-bool GetItemsByUserIdParams::filtersNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_filters.size() == 0;
-}
-
-void GetItemsByUserIdParams::setFiltersNull() {
-	m_filters.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::genreIds() const {
-	return m_genreIds;
-}
-
-void GetItemsByUserIdParams::setGenreIds(QStringList newGenreIds)  {
-	m_genreIds = newGenreIds;
-}
-
-bool GetItemsByUserIdParams::genreIdsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_genreIds.size() == 0;
-}
-
-void GetItemsByUserIdParams::setGenreIdsNull() {
-	m_genreIds.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::genres() const {
-	return m_genres;
-}
-
-void GetItemsByUserIdParams::setGenres(QStringList newGenres)  {
-	m_genres = newGenres;
-}
-
-bool GetItemsByUserIdParams::genresNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_genres.size() == 0;
-}
-
-void GetItemsByUserIdParams::setGenresNull() {
-	m_genres.clear();
-}
-
-
-const bool &GetItemsByUserIdParams::hasImdbId() const {
-	return m_hasImdbId.value();
-}
-
-void GetItemsByUserIdParams::setHasImdbId(bool newHasImdbId)  {
-	m_hasImdbId = newHasImdbId;
-}
-
-bool GetItemsByUserIdParams::hasImdbIdNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasImdbId.has_value();
-}
-
-void GetItemsByUserIdParams::setHasImdbIdNull() {
-	m_hasImdbId = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasOfficialRating() const {
-	return m_hasOfficialRating.value();
-}
-
-void GetItemsByUserIdParams::setHasOfficialRating(bool newHasOfficialRating)  {
-	m_hasOfficialRating = newHasOfficialRating;
-}
-
-bool GetItemsByUserIdParams::hasOfficialRatingNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasOfficialRating.has_value();
-}
-
-void GetItemsByUserIdParams::setHasOfficialRatingNull() {
-	m_hasOfficialRating = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasOverview() const {
-	return m_hasOverview.value();
-}
-
-void GetItemsByUserIdParams::setHasOverview(bool newHasOverview)  {
-	m_hasOverview = newHasOverview;
-}
-
-bool GetItemsByUserIdParams::hasOverviewNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasOverview.has_value();
-}
-
-void GetItemsByUserIdParams::setHasOverviewNull() {
-	m_hasOverview = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasParentalRating() const {
-	return m_hasParentalRating.value();
-}
-
-void GetItemsByUserIdParams::setHasParentalRating(bool newHasParentalRating)  {
-	m_hasParentalRating = newHasParentalRating;
-}
-
-bool GetItemsByUserIdParams::hasParentalRatingNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasParentalRating.has_value();
-}
-
-void GetItemsByUserIdParams::setHasParentalRatingNull() {
-	m_hasParentalRating = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasSpecialFeature() const {
-	return m_hasSpecialFeature.value();
-}
-
-void GetItemsByUserIdParams::setHasSpecialFeature(bool newHasSpecialFeature)  {
-	m_hasSpecialFeature = newHasSpecialFeature;
-}
-
-bool GetItemsByUserIdParams::hasSpecialFeatureNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasSpecialFeature.has_value();
-}
-
-void GetItemsByUserIdParams::setHasSpecialFeatureNull() {
-	m_hasSpecialFeature = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasSubtitles() const {
-	return m_hasSubtitles.value();
-}
-
-void GetItemsByUserIdParams::setHasSubtitles(bool newHasSubtitles)  {
-	m_hasSubtitles = newHasSubtitles;
-}
-
-bool GetItemsByUserIdParams::hasSubtitlesNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasSubtitles.has_value();
-}
-
-void GetItemsByUserIdParams::setHasSubtitlesNull() {
-	m_hasSubtitles = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasThemeSong() const {
-	return m_hasThemeSong.value();
-}
-
-void GetItemsByUserIdParams::setHasThemeSong(bool newHasThemeSong)  {
-	m_hasThemeSong = newHasThemeSong;
-}
-
-bool GetItemsByUserIdParams::hasThemeSongNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasThemeSong.has_value();
-}
-
-void GetItemsByUserIdParams::setHasThemeSongNull() {
-	m_hasThemeSong = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasThemeVideo() const {
-	return m_hasThemeVideo.value();
-}
-
-void GetItemsByUserIdParams::setHasThemeVideo(bool newHasThemeVideo)  {
-	m_hasThemeVideo = newHasThemeVideo;
-}
-
-bool GetItemsByUserIdParams::hasThemeVideoNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasThemeVideo.has_value();
-}
-
-void GetItemsByUserIdParams::setHasThemeVideoNull() {
-	m_hasThemeVideo = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasTmdbId() const {
-	return m_hasTmdbId.value();
-}
-
-void GetItemsByUserIdParams::setHasTmdbId(bool newHasTmdbId)  {
-	m_hasTmdbId = newHasTmdbId;
-}
-
-bool GetItemsByUserIdParams::hasTmdbIdNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasTmdbId.has_value();
-}
-
-void GetItemsByUserIdParams::setHasTmdbIdNull() {
-	m_hasTmdbId = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasTrailer() const {
-	return m_hasTrailer.value();
-}
-
-void GetItemsByUserIdParams::setHasTrailer(bool newHasTrailer)  {
-	m_hasTrailer = newHasTrailer;
-}
-
-bool GetItemsByUserIdParams::hasTrailerNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasTrailer.has_value();
-}
-
-void GetItemsByUserIdParams::setHasTrailerNull() {
-	m_hasTrailer = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::hasTvdbId() const {
-	return m_hasTvdbId.value();
-}
-
-void GetItemsByUserIdParams::setHasTvdbId(bool newHasTvdbId)  {
-	m_hasTvdbId = newHasTvdbId;
-}
-
-bool GetItemsByUserIdParams::hasTvdbIdNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_hasTvdbId.has_value();
-}
-
-void GetItemsByUserIdParams::setHasTvdbIdNull() {
-	m_hasTvdbId = std::nullopt;
-}
-
-
-const QStringList &GetItemsByUserIdParams::ids() const {
-	return m_ids;
-}
-
-void GetItemsByUserIdParams::setIds(QStringList newIds)  {
-	m_ids = newIds;
-}
-
-bool GetItemsByUserIdParams::idsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_ids.size() == 0;
-}
-
-void GetItemsByUserIdParams::setIdsNull() {
-	m_ids.clear();
-}
-
-
-const qint32 &GetItemsByUserIdParams::imageTypeLimit() const {
-	return m_imageTypeLimit.value();
-}
-
-void GetItemsByUserIdParams::setImageTypeLimit(qint32 newImageTypeLimit)  {
-	m_imageTypeLimit = newImageTypeLimit;
-}
-
-bool GetItemsByUserIdParams::imageTypeLimitNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_imageTypeLimit.has_value();
-}
-
-void GetItemsByUserIdParams::setImageTypeLimitNull() {
-	m_imageTypeLimit = std::nullopt;
-}
-
-
-const QList<ImageType> &GetItemsByUserIdParams::imageTypes() const {
-	return m_imageTypes;
-}
-
-void GetItemsByUserIdParams::setImageTypes(QList<ImageType> newImageTypes)  {
-	m_imageTypes = newImageTypes;
-}
-
-bool GetItemsByUserIdParams::imageTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_imageTypes.size() == 0;
-}
-
-void GetItemsByUserIdParams::setImageTypesNull() {
-	m_imageTypes.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::includeItemTypes() const {
-	return m_includeItemTypes;
-}
-
-void GetItemsByUserIdParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
-	m_includeItemTypes = newIncludeItemTypes;
-}
-
-bool GetItemsByUserIdParams::includeItemTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_includeItemTypes.size() == 0;
-}
-
-void GetItemsByUserIdParams::setIncludeItemTypesNull() {
-	m_includeItemTypes.clear();
-}
-
-
-const bool &GetItemsByUserIdParams::is3D() const {
-	return m_is3D.value();
-}
-
-void GetItemsByUserIdParams::setIs3D(bool newIs3D)  {
-	m_is3D = newIs3D;
-}
-
-bool GetItemsByUserIdParams::is3DNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_is3D.has_value();
-}
-
-void GetItemsByUserIdParams::setIs3DNull() {
-	m_is3D = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::is4K() const {
-	return m_is4K.value();
-}
-
-void GetItemsByUserIdParams::setIs4K(bool newIs4K)  {
-	m_is4K = newIs4K;
-}
-
-bool GetItemsByUserIdParams::is4KNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_is4K.has_value();
-}
-
-void GetItemsByUserIdParams::setIs4KNull() {
-	m_is4K = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::isFavorite() const {
-	return m_isFavorite.value();
-}
-
-void GetItemsByUserIdParams::setIsFavorite(bool newIsFavorite)  {
-	m_isFavorite = newIsFavorite;
-}
-
-bool GetItemsByUserIdParams::isFavoriteNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isFavorite.has_value();
-}
-
-void GetItemsByUserIdParams::setIsFavoriteNull() {
-	m_isFavorite = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::isHd() const {
-	return m_isHd.value();
-}
-
-void GetItemsByUserIdParams::setIsHd(bool newIsHd)  {
-	m_isHd = newIsHd;
-}
-
-bool GetItemsByUserIdParams::isHdNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isHd.has_value();
-}
-
-void GetItemsByUserIdParams::setIsHdNull() {
-	m_isHd = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::isLocked() const {
-	return m_isLocked.value();
-}
-
-void GetItemsByUserIdParams::setIsLocked(bool newIsLocked)  {
-	m_isLocked = newIsLocked;
-}
-
-bool GetItemsByUserIdParams::isLockedNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isLocked.has_value();
-}
-
-void GetItemsByUserIdParams::setIsLockedNull() {
-	m_isLocked = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::isMissing() const {
-	return m_isMissing.value();
-}
-
-void GetItemsByUserIdParams::setIsMissing(bool newIsMissing)  {
-	m_isMissing = newIsMissing;
-}
-
-bool GetItemsByUserIdParams::isMissingNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isMissing.has_value();
-}
-
-void GetItemsByUserIdParams::setIsMissingNull() {
-	m_isMissing = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::isPlaceHolder() const {
-	return m_isPlaceHolder.value();
-}
-
-void GetItemsByUserIdParams::setIsPlaceHolder(bool newIsPlaceHolder)  {
-	m_isPlaceHolder = newIsPlaceHolder;
-}
-
-bool GetItemsByUserIdParams::isPlaceHolderNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isPlaceHolder.has_value();
-}
-
-void GetItemsByUserIdParams::setIsPlaceHolderNull() {
-	m_isPlaceHolder = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::isPlayed() const {
-	return m_isPlayed.value();
-}
-
-void GetItemsByUserIdParams::setIsPlayed(bool newIsPlayed)  {
-	m_isPlayed = newIsPlayed;
-}
-
-bool GetItemsByUserIdParams::isPlayedNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isPlayed.has_value();
-}
-
-void GetItemsByUserIdParams::setIsPlayedNull() {
-	m_isPlayed = std::nullopt;
-}
-
-
-const bool &GetItemsByUserIdParams::isUnaired() const {
-	return m_isUnaired.value();
-}
-
-void GetItemsByUserIdParams::setIsUnaired(bool newIsUnaired)  {
-	m_isUnaired = newIsUnaired;
-}
-
-bool GetItemsByUserIdParams::isUnairedNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_isUnaired.has_value();
-}
-
-void GetItemsByUserIdParams::setIsUnairedNull() {
-	m_isUnaired = std::nullopt;
-}
-
-
-const qint32 &GetItemsByUserIdParams::limit() const {
-	return m_limit.value();
-}
-
-void GetItemsByUserIdParams::setLimit(qint32 newLimit)  {
-	m_limit = newLimit;
-}
-
-bool GetItemsByUserIdParams::limitNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_limit.has_value();
-}
-
-void GetItemsByUserIdParams::setLimitNull() {
-	m_limit = std::nullopt;
-}
-
-
-const QList<LocationType> &GetItemsByUserIdParams::locationTypes() const {
-	return m_locationTypes;
-}
-
-void GetItemsByUserIdParams::setLocationTypes(QList<LocationType> newLocationTypes)  {
-	m_locationTypes = newLocationTypes;
-}
-
-bool GetItemsByUserIdParams::locationTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_locationTypes.size() == 0;
-}
-
-void GetItemsByUserIdParams::setLocationTypesNull() {
-	m_locationTypes.clear();
-}
-
-
-const qint32 &GetItemsByUserIdParams::maxHeight() const {
-	return m_maxHeight.value();
-}
-
-void GetItemsByUserIdParams::setMaxHeight(qint32 newMaxHeight)  {
-	m_maxHeight = newMaxHeight;
-}
-
-bool GetItemsByUserIdParams::maxHeightNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_maxHeight.has_value();
-}
-
-void GetItemsByUserIdParams::setMaxHeightNull() {
-	m_maxHeight = std::nullopt;
-}
-
-
-const QString &GetItemsByUserIdParams::maxOfficialRating() const {
-	return m_maxOfficialRating;
-}
-
-void GetItemsByUserIdParams::setMaxOfficialRating(QString newMaxOfficialRating)  {
-	m_maxOfficialRating = newMaxOfficialRating;
-}
-
-bool GetItemsByUserIdParams::maxOfficialRatingNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_maxOfficialRating.isNull();
-}
-
-void GetItemsByUserIdParams::setMaxOfficialRatingNull() {
-	m_maxOfficialRating.clear();
-}
-
-
-const QDateTime &GetItemsByUserIdParams::maxPremiereDate() const {
-	return m_maxPremiereDate;
-}
-
-void GetItemsByUserIdParams::setMaxPremiereDate(QDateTime newMaxPremiereDate)  {
-	m_maxPremiereDate = newMaxPremiereDate;
-}
-
-bool GetItemsByUserIdParams::maxPremiereDateNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_maxPremiereDate.isNull();
-}
-
-void GetItemsByUserIdParams::setMaxPremiereDateNull() {
-	m_maxPremiereDate= QDateTime();
-}
-
-
-const qint32 &GetItemsByUserIdParams::maxWidth() const {
-	return m_maxWidth.value();
-}
-
-void GetItemsByUserIdParams::setMaxWidth(qint32 newMaxWidth)  {
-	m_maxWidth = newMaxWidth;
-}
-
-bool GetItemsByUserIdParams::maxWidthNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_maxWidth.has_value();
-}
-
-void GetItemsByUserIdParams::setMaxWidthNull() {
-	m_maxWidth = std::nullopt;
-}
-
-
-const QStringList &GetItemsByUserIdParams::mediaTypes() const {
-	return m_mediaTypes;
-}
-
-void GetItemsByUserIdParams::setMediaTypes(QStringList newMediaTypes)  {
-	m_mediaTypes = newMediaTypes;
-}
-
-bool GetItemsByUserIdParams::mediaTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_mediaTypes.size() == 0;
-}
-
-void GetItemsByUserIdParams::setMediaTypesNull() {
-	m_mediaTypes.clear();
-}
-
-
-const double &GetItemsByUserIdParams::minCommunityRating() const {
-	return m_minCommunityRating.value();
-}
-
-void GetItemsByUserIdParams::setMinCommunityRating(double newMinCommunityRating)  {
-	m_minCommunityRating = newMinCommunityRating;
-}
-
-bool GetItemsByUserIdParams::minCommunityRatingNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_minCommunityRating.has_value();
-}
-
-void GetItemsByUserIdParams::setMinCommunityRatingNull() {
-	m_minCommunityRating = std::nullopt;
-}
-
-
-const double &GetItemsByUserIdParams::minCriticRating() const {
-	return m_minCriticRating.value();
-}
-
-void GetItemsByUserIdParams::setMinCriticRating(double newMinCriticRating)  {
-	m_minCriticRating = newMinCriticRating;
-}
-
-bool GetItemsByUserIdParams::minCriticRatingNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_minCriticRating.has_value();
-}
-
-void GetItemsByUserIdParams::setMinCriticRatingNull() {
-	m_minCriticRating = std::nullopt;
-}
-
-
-const QDateTime &GetItemsByUserIdParams::minDateLastSaved() const {
-	return m_minDateLastSaved;
-}
-
-void GetItemsByUserIdParams::setMinDateLastSaved(QDateTime newMinDateLastSaved)  {
-	m_minDateLastSaved = newMinDateLastSaved;
-}
-
-bool GetItemsByUserIdParams::minDateLastSavedNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_minDateLastSaved.isNull();
-}
-
-void GetItemsByUserIdParams::setMinDateLastSavedNull() {
-	m_minDateLastSaved= QDateTime();
-}
-
-
-const QDateTime &GetItemsByUserIdParams::minDateLastSavedForUser() const {
-	return m_minDateLastSavedForUser;
-}
-
-void GetItemsByUserIdParams::setMinDateLastSavedForUser(QDateTime newMinDateLastSavedForUser)  {
-	m_minDateLastSavedForUser = newMinDateLastSavedForUser;
-}
-
-bool GetItemsByUserIdParams::minDateLastSavedForUserNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_minDateLastSavedForUser.isNull();
-}
-
-void GetItemsByUserIdParams::setMinDateLastSavedForUserNull() {
-	m_minDateLastSavedForUser= QDateTime();
-}
-
-
-const qint32 &GetItemsByUserIdParams::minHeight() const {
-	return m_minHeight.value();
-}
-
-void GetItemsByUserIdParams::setMinHeight(qint32 newMinHeight)  {
-	m_minHeight = newMinHeight;
-}
-
-bool GetItemsByUserIdParams::minHeightNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_minHeight.has_value();
-}
-
-void GetItemsByUserIdParams::setMinHeightNull() {
-	m_minHeight = std::nullopt;
-}
-
-
-const QString &GetItemsByUserIdParams::minOfficialRating() const {
-	return m_minOfficialRating;
-}
-
-void GetItemsByUserIdParams::setMinOfficialRating(QString newMinOfficialRating)  {
-	m_minOfficialRating = newMinOfficialRating;
-}
-
-bool GetItemsByUserIdParams::minOfficialRatingNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_minOfficialRating.isNull();
-}
-
-void GetItemsByUserIdParams::setMinOfficialRatingNull() {
-	m_minOfficialRating.clear();
-}
-
-
-const QDateTime &GetItemsByUserIdParams::minPremiereDate() const {
-	return m_minPremiereDate;
-}
-
-void GetItemsByUserIdParams::setMinPremiereDate(QDateTime newMinPremiereDate)  {
-	m_minPremiereDate = newMinPremiereDate;
-}
-
-bool GetItemsByUserIdParams::minPremiereDateNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_minPremiereDate.isNull();
-}
-
-void GetItemsByUserIdParams::setMinPremiereDateNull() {
-	m_minPremiereDate= QDateTime();
-}
-
-
-const qint32 &GetItemsByUserIdParams::minWidth() const {
-	return m_minWidth.value();
-}
-
-void GetItemsByUserIdParams::setMinWidth(qint32 newMinWidth)  {
-	m_minWidth = newMinWidth;
-}
-
-bool GetItemsByUserIdParams::minWidthNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_minWidth.has_value();
-}
-
-void GetItemsByUserIdParams::setMinWidthNull() {
-	m_minWidth = std::nullopt;
-}
-
-
-const QString &GetItemsByUserIdParams::nameLessThan() const {
-	return m_nameLessThan;
-}
-
-void GetItemsByUserIdParams::setNameLessThan(QString newNameLessThan)  {
-	m_nameLessThan = newNameLessThan;
-}
-
-bool GetItemsByUserIdParams::nameLessThanNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_nameLessThan.isNull();
-}
-
-void GetItemsByUserIdParams::setNameLessThanNull() {
-	m_nameLessThan.clear();
-}
-
-
-const QString &GetItemsByUserIdParams::nameStartsWith() const {
-	return m_nameStartsWith;
-}
-
-void GetItemsByUserIdParams::setNameStartsWith(QString newNameStartsWith)  {
-	m_nameStartsWith = newNameStartsWith;
-}
-
-bool GetItemsByUserIdParams::nameStartsWithNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_nameStartsWith.isNull();
-}
-
-void GetItemsByUserIdParams::setNameStartsWithNull() {
-	m_nameStartsWith.clear();
-}
-
-
-const QString &GetItemsByUserIdParams::nameStartsWithOrGreater() const {
-	return m_nameStartsWithOrGreater;
-}
-
-void GetItemsByUserIdParams::setNameStartsWithOrGreater(QString newNameStartsWithOrGreater)  {
-	m_nameStartsWithOrGreater = newNameStartsWithOrGreater;
-}
-
-bool GetItemsByUserIdParams::nameStartsWithOrGreaterNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_nameStartsWithOrGreater.isNull();
-}
-
-void GetItemsByUserIdParams::setNameStartsWithOrGreaterNull() {
-	m_nameStartsWithOrGreater.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::officialRatings() const {
-	return m_officialRatings;
-}
-
-void GetItemsByUserIdParams::setOfficialRatings(QStringList newOfficialRatings)  {
-	m_officialRatings = newOfficialRatings;
-}
-
-bool GetItemsByUserIdParams::officialRatingsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_officialRatings.size() == 0;
-}
-
-void GetItemsByUserIdParams::setOfficialRatingsNull() {
-	m_officialRatings.clear();
-}
-
-
-const QString &GetItemsByUserIdParams::parentId() const {
-	return m_parentId;
-}
-
-void GetItemsByUserIdParams::setParentId(QString newParentId)  {
-	m_parentId = newParentId;
-}
-
-bool GetItemsByUserIdParams::parentIdNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_parentId.isNull();
-}
-
-void GetItemsByUserIdParams::setParentIdNull() {
-	m_parentId.clear();
-}
-
-
-const qint32 &GetItemsByUserIdParams::parentIndexNumber() const {
-	return m_parentIndexNumber.value();
-}
-
-void GetItemsByUserIdParams::setParentIndexNumber(qint32 newParentIndexNumber)  {
-	m_parentIndexNumber = newParentIndexNumber;
-}
-
-bool GetItemsByUserIdParams::parentIndexNumberNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_parentIndexNumber.has_value();
-}
-
-void GetItemsByUserIdParams::setParentIndexNumberNull() {
-	m_parentIndexNumber = std::nullopt;
-}
-
-
-const QString &GetItemsByUserIdParams::person() const {
-	return m_person;
-}
-
-void GetItemsByUserIdParams::setPerson(QString newPerson)  {
-	m_person = newPerson;
-}
-
-bool GetItemsByUserIdParams::personNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_person.isNull();
-}
-
-void GetItemsByUserIdParams::setPersonNull() {
-	m_person.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::personIds() const {
-	return m_personIds;
-}
-
-void GetItemsByUserIdParams::setPersonIds(QStringList newPersonIds)  {
-	m_personIds = newPersonIds;
-}
-
-bool GetItemsByUserIdParams::personIdsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_personIds.size() == 0;
-}
-
-void GetItemsByUserIdParams::setPersonIdsNull() {
-	m_personIds.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::personTypes() const {
-	return m_personTypes;
-}
-
-void GetItemsByUserIdParams::setPersonTypes(QStringList newPersonTypes)  {
-	m_personTypes = newPersonTypes;
-}
-
-bool GetItemsByUserIdParams::personTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_personTypes.size() == 0;
-}
-
-void GetItemsByUserIdParams::setPersonTypesNull() {
-	m_personTypes.clear();
-}
-
-
-const bool &GetItemsByUserIdParams::recursive() const {
-	return m_recursive.value();
-}
-
-void GetItemsByUserIdParams::setRecursive(bool newRecursive)  {
-	m_recursive = newRecursive;
-}
-
-bool GetItemsByUserIdParams::recursiveNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_recursive.has_value();
-}
-
-void GetItemsByUserIdParams::setRecursiveNull() {
-	m_recursive = std::nullopt;
-}
-
-
-const QString &GetItemsByUserIdParams::searchTerm() const {
-	return m_searchTerm;
-}
-
-void GetItemsByUserIdParams::setSearchTerm(QString newSearchTerm)  {
-	m_searchTerm = newSearchTerm;
-}
-
-bool GetItemsByUserIdParams::searchTermNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_searchTerm.isNull();
-}
-
-void GetItemsByUserIdParams::setSearchTermNull() {
-	m_searchTerm.clear();
-}
-
-
-const QList<SeriesStatus> &GetItemsByUserIdParams::seriesStatus() const {
-	return m_seriesStatus;
-}
-
-void GetItemsByUserIdParams::setSeriesStatus(QList<SeriesStatus> newSeriesStatus)  {
-	m_seriesStatus = newSeriesStatus;
-}
-
-bool GetItemsByUserIdParams::seriesStatusNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_seriesStatus.size() == 0;
-}
-
-void GetItemsByUserIdParams::setSeriesStatusNull() {
-	m_seriesStatus.clear();
-}
-
-
-const QString &GetItemsByUserIdParams::sortBy() const {
-	return m_sortBy;
-}
-
-void GetItemsByUserIdParams::setSortBy(QString newSortBy)  {
-	m_sortBy = newSortBy;
-}
-
-bool GetItemsByUserIdParams::sortByNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_sortBy.isNull();
-}
-
-void GetItemsByUserIdParams::setSortByNull() {
-	m_sortBy.clear();
-}
-
-
-const QString &GetItemsByUserIdParams::sortOrder() const {
-	return m_sortOrder;
-}
-
-void GetItemsByUserIdParams::setSortOrder(QString newSortOrder)  {
-	m_sortOrder = newSortOrder;
-}
-
-bool GetItemsByUserIdParams::sortOrderNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_sortOrder.isNull();
-}
-
-void GetItemsByUserIdParams::setSortOrderNull() {
-	m_sortOrder.clear();
-}
-
-
-const qint32 &GetItemsByUserIdParams::startIndex() const {
-	return m_startIndex.value();
-}
-
-void GetItemsByUserIdParams::setStartIndex(qint32 newStartIndex)  {
-	m_startIndex = newStartIndex;
-}
-
-bool GetItemsByUserIdParams::startIndexNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_startIndex.has_value();
-}
-
-void GetItemsByUserIdParams::setStartIndexNull() {
-	m_startIndex = std::nullopt;
-}
-
-
-const QStringList &GetItemsByUserIdParams::studioIds() const {
-	return m_studioIds;
-}
-
-void GetItemsByUserIdParams::setStudioIds(QStringList newStudioIds)  {
-	m_studioIds = newStudioIds;
-}
-
-bool GetItemsByUserIdParams::studioIdsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_studioIds.size() == 0;
-}
-
-void GetItemsByUserIdParams::setStudioIdsNull() {
-	m_studioIds.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::studios() const {
-	return m_studios;
-}
-
-void GetItemsByUserIdParams::setStudios(QStringList newStudios)  {
-	m_studios = newStudios;
-}
-
-bool GetItemsByUserIdParams::studiosNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_studios.size() == 0;
-}
-
-void GetItemsByUserIdParams::setStudiosNull() {
-	m_studios.clear();
-}
-
-
-const QStringList &GetItemsByUserIdParams::tags() const {
-	return m_tags;
-}
-
-void GetItemsByUserIdParams::setTags(QStringList newTags)  {
-	m_tags = newTags;
-}
-
-bool GetItemsByUserIdParams::tagsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_tags.size() == 0;
-}
-
-void GetItemsByUserIdParams::setTagsNull() {
-	m_tags.clear();
-}
-
-
-const QList<VideoType> &GetItemsByUserIdParams::videoTypes() const {
-	return m_videoTypes;
-}
-
-void GetItemsByUserIdParams::setVideoTypes(QList<VideoType> newVideoTypes)  {
-	m_videoTypes = newVideoTypes;
-}
-
-bool GetItemsByUserIdParams::videoTypesNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_videoTypes.size() == 0;
-}
-
-void GetItemsByUserIdParams::setVideoTypesNull() {
-	m_videoTypes.clear();
-}
-
-
-const QList<qint32> &GetItemsByUserIdParams::years() const {
-	return m_years;
-}
-
-void GetItemsByUserIdParams::setYears(QList<qint32> newYears)  {
-	m_years = newYears;
-}
-
-bool GetItemsByUserIdParams::yearsNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_years.size() == 0;
-}
-
-void GetItemsByUserIdParams::setYearsNull() {
-	m_years.clear();
-}
-
-
-
-
 // GetKeysParams
 
 
@@ -15775,15 +14053,6 @@ void GetLatestChannelItemsParams::setUserIdNull() {
 
 // GetLatestMediaParams
 
-const QString &GetLatestMediaParams::userId() const {
-	return m_userId;
-}
-
-void GetLatestMediaParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
 const QList<ImageType> &GetLatestMediaParams::enableImageTypes() const {
 	return m_enableImageTypes;
 }
@@ -15910,11 +14179,11 @@ void GetLatestMediaParams::setImageTypeLimitNull() {
 }
 
 
-const QStringList &GetLatestMediaParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetLatestMediaParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetLatestMediaParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetLatestMediaParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -15994,6 +14263,27 @@ void GetLatestMediaParams::setParentIdNull() {
 }
 
 
+const QString &GetLatestMediaParams::userId() const {
+	return m_userId;
+}
+
+void GetLatestMediaParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool GetLatestMediaParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetLatestMediaParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
 
 
 // GetLibraryOptionsInfoParams
@@ -16007,7 +14297,7 @@ void GetLibraryOptionsInfoParams::setIsNewLibrary(bool newIsNewLibrary)  {
 }
 
 bool GetLibraryOptionsInfoParams::isNewLibraryNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -16019,11 +14309,11 @@ void GetLibraryOptionsInfoParams::setIsNewLibraryNull() {
 }
 
 
-const QString &GetLibraryOptionsInfoParams::libraryContentType() const {
+const CollectionType &GetLibraryOptionsInfoParams::libraryContentType() const {
 	return m_libraryContentType;
 }
 
-void GetLibraryOptionsInfoParams::setLibraryContentType(QString newLibraryContentType)  {
+void GetLibraryOptionsInfoParams::setLibraryContentType(CollectionType newLibraryContentType)  {
 	m_libraryContentType = newLibraryContentType;
 }
 
@@ -16032,11 +14322,11 @@ bool GetLibraryOptionsInfoParams::libraryContentTypeNull() const {
 	// Type Nullable: true
 	
 
-	return m_libraryContentType.isNull();
+	return m_libraryContentType== CollectionType::EnumNotSet;
 }
 
 void GetLibraryOptionsInfoParams::setLibraryContentTypeNull() {
-	m_libraryContentType.clear();
+	m_libraryContentType= CollectionType::EnumNotSet;
 }
 
 
@@ -16180,6 +14470,27 @@ bool GetLiveHlsStreamParams::allowVideoStreamCopyNull() const {
 
 void GetLiveHlsStreamParams::setAllowVideoStreamCopyNull() {
 	m_allowVideoStreamCopy = std::nullopt;
+}
+
+
+const bool &GetLiveHlsStreamParams::alwaysBurnInSubtitleWhenTranscoding() const {
+	return m_alwaysBurnInSubtitleWhenTranscoding.value();
+}
+
+void GetLiveHlsStreamParams::setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding)  {
+	m_alwaysBurnInSubtitleWhenTranscoding = newAlwaysBurnInSubtitleWhenTranscoding;
+}
+
+bool GetLiveHlsStreamParams::alwaysBurnInSubtitleWhenTranscodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_alwaysBurnInSubtitleWhenTranscoding.has_value();
+}
+
+void GetLiveHlsStreamParams::setAlwaysBurnInSubtitleWhenTranscodingNull() {
+	m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 }
 
 
@@ -16453,6 +14764,27 @@ bool GetLiveHlsStreamParams::deviceProfileIdNull() const {
 
 void GetLiveHlsStreamParams::setDeviceProfileIdNull() {
 	m_deviceProfileId.clear();
+}
+
+
+const bool &GetLiveHlsStreamParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetLiveHlsStreamParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetLiveHlsStreamParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetLiveHlsStreamParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
 }
 
 
@@ -17587,11 +15919,11 @@ void GetLiveTvChannelsParams::setLimitNull() {
 }
 
 
-const QStringList &GetLiveTvChannelsParams::sortBy() const {
+const QList<ItemSortBy> &GetLiveTvChannelsParams::sortBy() const {
 	return m_sortBy;
 }
 
-void GetLiveTvChannelsParams::setSortBy(QStringList newSortBy)  {
+void GetLiveTvChannelsParams::setSortBy(QList<ItemSortBy> newSortBy)  {
 	m_sortBy = newSortBy;
 }
 
@@ -18183,11 +16515,11 @@ void GetLiveTvProgramsParams::setSeriesTimerIdNull() {
 }
 
 
-const QString &GetLiveTvProgramsParams::sortBy() const {
+const QList<ItemSortBy> &GetLiveTvProgramsParams::sortBy() const {
 	return m_sortBy;
 }
 
-void GetLiveTvProgramsParams::setSortBy(QString newSortBy)  {
+void GetLiveTvProgramsParams::setSortBy(QList<ItemSortBy> newSortBy)  {
 	m_sortBy = newSortBy;
 }
 
@@ -18196,7 +16528,7 @@ bool GetLiveTvProgramsParams::sortByNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortBy.isNull();
+	return m_sortBy.size() == 0;
 }
 
 void GetLiveTvProgramsParams::setSortByNull() {
@@ -18204,11 +16536,11 @@ void GetLiveTvProgramsParams::setSortByNull() {
 }
 
 
-const QString &GetLiveTvProgramsParams::sortOrder() const {
+const QList<SortOrder> &GetLiveTvProgramsParams::sortOrder() const {
 	return m_sortOrder;
 }
 
-void GetLiveTvProgramsParams::setSortOrder(QString newSortOrder)  {
+void GetLiveTvProgramsParams::setSortOrder(QList<SortOrder> newSortOrder)  {
 	m_sortOrder = newSortOrder;
 }
 
@@ -18217,7 +16549,7 @@ bool GetLiveTvProgramsParams::sortOrderNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortOrder.isNull();
+	return m_sortOrder.size() == 0;
 }
 
 void GetLiveTvProgramsParams::setSortOrderNull() {
@@ -18284,8 +16616,20 @@ const QString &GetLocalTrailersParams::userId() const {
 	return m_userId;
 }
 
-void GetLocalTrailersParams::setUserId(QString newUserId) {
+void GetLocalTrailersParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool GetLocalTrailersParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetLocalTrailersParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -18391,6 +16735,19 @@ const QString &GetLogFileParams::name() const {
 
 void GetLogFileParams::setName(QString newName) {
 	m_name = newName;
+}
+
+
+
+
+// GetLyricsParams
+
+const QString &GetLyricsParams::itemId() const {
+	return m_itemId;
+}
+
+void GetLyricsParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
 }
 
 
@@ -18728,6 +17085,27 @@ bool GetMasterHlsAudioPlaylistParams::enableAdaptiveBitrateStreamingNull() const
 
 void GetMasterHlsAudioPlaylistParams::setEnableAdaptiveBitrateStreamingNull() {
 	m_enableAdaptiveBitrateStreaming = std::nullopt;
+}
+
+
+const bool &GetMasterHlsAudioPlaylistParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetMasterHlsAudioPlaylistParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetMasterHlsAudioPlaylistParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetMasterHlsAudioPlaylistParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
 }
 
 
@@ -19488,6 +17866,27 @@ void GetMasterHlsVideoPlaylistParams::setAllowVideoStreamCopyNull() {
 }
 
 
+const bool &GetMasterHlsVideoPlaylistParams::alwaysBurnInSubtitleWhenTranscoding() const {
+	return m_alwaysBurnInSubtitleWhenTranscoding.value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding)  {
+	m_alwaysBurnInSubtitleWhenTranscoding = newAlwaysBurnInSubtitleWhenTranscoding;
+}
+
+bool GetMasterHlsVideoPlaylistParams::alwaysBurnInSubtitleWhenTranscodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_alwaysBurnInSubtitleWhenTranscoding.has_value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setAlwaysBurnInSubtitleWhenTranscodingNull() {
+	m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
+}
+
+
 const qint32 &GetMasterHlsVideoPlaylistParams::audioBitRate() const {
 	return m_audioBitRate.value();
 }
@@ -19761,6 +18160,27 @@ void GetMasterHlsVideoPlaylistParams::setEnableAdaptiveBitrateStreamingNull() {
 }
 
 
+const bool &GetMasterHlsVideoPlaylistParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetMasterHlsVideoPlaylistParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &GetMasterHlsVideoPlaylistParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -19800,6 +18220,27 @@ bool GetMasterHlsVideoPlaylistParams::enableMpegtsM2TsModeNull() const {
 
 void GetMasterHlsVideoPlaylistParams::setEnableMpegtsM2TsModeNull() {
 	m_enableMpegtsM2TsMode = std::nullopt;
+}
+
+
+const bool &GetMasterHlsVideoPlaylistParams::enableTrickplay() const {
+	return m_enableTrickplay.value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setEnableTrickplay(bool newEnableTrickplay)  {
+	m_enableTrickplay = newEnableTrickplay;
+}
+
+bool GetMasterHlsVideoPlaylistParams::enableTrickplayNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableTrickplay.has_value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setEnableTrickplayNull() {
+	m_enableTrickplay = std::nullopt;
 }
 
 
@@ -19950,6 +18391,27 @@ void GetMasterHlsVideoPlaylistParams::setMaxFramerateNull() {
 }
 
 
+const qint32 &GetMasterHlsVideoPlaylistParams::maxHeight() const {
+	return m_maxHeight.value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setMaxHeight(qint32 newMaxHeight)  {
+	m_maxHeight = newMaxHeight;
+}
+
+bool GetMasterHlsVideoPlaylistParams::maxHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxHeight.has_value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setMaxHeightNull() {
+	m_maxHeight = std::nullopt;
+}
+
+
 const qint32 &GetMasterHlsVideoPlaylistParams::maxRefFrames() const {
 	return m_maxRefFrames.value();
 }
@@ -19989,6 +18451,27 @@ bool GetMasterHlsVideoPlaylistParams::maxVideoBitDepthNull() const {
 
 void GetMasterHlsVideoPlaylistParams::setMaxVideoBitDepthNull() {
 	m_maxVideoBitDepth = std::nullopt;
+}
+
+
+const qint32 &GetMasterHlsVideoPlaylistParams::maxWidth() const {
+	return m_maxWidth.value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setMaxWidth(qint32 newMaxWidth)  {
+	m_maxWidth = newMaxWidth;
+}
+
+bool GetMasterHlsVideoPlaylistParams::maxWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxWidth.has_value();
+}
+
+void GetMasterHlsVideoPlaylistParams::setMaxWidthNull() {
+	m_maxWidth = std::nullopt;
 }
 
 
@@ -20460,71 +18943,6 @@ void GetMediaFoldersParams::setIsHiddenNull() {
 
 
 
-// GetMediaInfoImageParams
-
-const QString &GetMediaInfoImageParams::name() const {
-	return m_name;
-}
-
-void GetMediaInfoImageParams::setName(QString newName) {
-	m_name = newName;
-}
-
-
-const QString &GetMediaInfoImageParams::theme() const {
-	return m_theme;
-}
-
-void GetMediaInfoImageParams::setTheme(QString newTheme) {
-	m_theme = newTheme;
-}
-
-
-
-
-// GetMediaInfoImagesParams
-
-
-
-// GetMediaReceiverRegistrarParams
-
-const QString &GetMediaReceiverRegistrarParams::serverId() const {
-	return m_serverId;
-}
-
-void GetMediaReceiverRegistrarParams::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
-// GetMediaReceiverRegistrar_2Params
-
-const QString &GetMediaReceiverRegistrar_2Params::serverId() const {
-	return m_serverId;
-}
-
-void GetMediaReceiverRegistrar_2Params::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
-// GetMediaReceiverRegistrar_3Params
-
-const QString &GetMediaReceiverRegistrar_3Params::serverId() const {
-	return m_serverId;
-}
-
-void GetMediaReceiverRegistrar_3Params::setServerId(QString newServerId) {
-	m_serverId = newServerId;
-}
-
-
-
-
 // GetMetadataEditorInfoParams
 
 const QString &GetMetadataEditorInfoParams::itemId() const {
@@ -20740,27 +19158,6 @@ void GetMusicGenreImageParams::setName(QString newName) {
 }
 
 
-const bool &GetMusicGenreImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetMusicGenreImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetMusicGenreImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetMusicGenreImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetMusicGenreImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -20803,24 +19200,45 @@ void GetMusicGenreImageParams::setBlurNull() {
 }
 
 
-const bool &GetMusicGenreImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetMusicGenreImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetMusicGenreImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetMusicGenreImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetMusicGenreImageParams::cropWhitespaceNull() const {
+bool GetMusicGenreImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetMusicGenreImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetMusicGenreImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetMusicGenreImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetMusicGenreImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetMusicGenreImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetMusicGenreImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -21086,27 +19504,6 @@ void GetMusicGenreImageByIndexParams::setName(QString newName) {
 }
 
 
-const bool &GetMusicGenreImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetMusicGenreImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetMusicGenreImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetMusicGenreImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetMusicGenreImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -21149,24 +19546,45 @@ void GetMusicGenreImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &GetMusicGenreImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetMusicGenreImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetMusicGenreImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetMusicGenreImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetMusicGenreImageByIndexParams::cropWhitespaceNull() const {
+bool GetMusicGenreImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetMusicGenreImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetMusicGenreImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetMusicGenreImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetMusicGenreImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetMusicGenreImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetMusicGenreImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -21414,7 +19832,7 @@ void GetMusicGenresParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetMusicGenresParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -21447,11 +19865,11 @@ void GetMusicGenresParams::setEnableTotalRecordCountNull() {
 }
 
 
-const QStringList &GetMusicGenresParams::excludeItemTypes() const {
+const QList<BaseItemKind> &GetMusicGenresParams::excludeItemTypes() const {
 	return m_excludeItemTypes;
 }
 
-void GetMusicGenresParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
+void GetMusicGenresParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
 	m_excludeItemTypes = newExcludeItemTypes;
 }
 
@@ -21510,11 +19928,11 @@ void GetMusicGenresParams::setImageTypeLimitNull() {
 }
 
 
-const QStringList &GetMusicGenresParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetMusicGenresParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetMusicGenresParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetMusicGenresParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -21678,6 +20096,48 @@ void GetMusicGenresParams::setSearchTermNull() {
 }
 
 
+const QList<ItemSortBy> &GetMusicGenresParams::sortBy() const {
+	return m_sortBy;
+}
+
+void GetMusicGenresParams::setSortBy(QList<ItemSortBy> newSortBy)  {
+	m_sortBy = newSortBy;
+}
+
+bool GetMusicGenresParams::sortByNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortBy.size() == 0;
+}
+
+void GetMusicGenresParams::setSortByNull() {
+	m_sortBy.clear();
+}
+
+
+const QList<SortOrder> &GetMusicGenresParams::sortOrder() const {
+	return m_sortOrder;
+}
+
+void GetMusicGenresParams::setSortOrder(QList<SortOrder> newSortOrder)  {
+	m_sortOrder = newSortOrder;
+}
+
+bool GetMusicGenresParams::sortOrderNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortOrder.size() == 0;
+}
+
+void GetMusicGenresParams::setSortOrderNull() {
+	m_sortOrder.clear();
+}
+
+
 const qint32 &GetMusicGenresParams::startIndex() const {
 	return m_startIndex.value();
 }
@@ -21796,24 +20256,66 @@ void GetNextUpParams::setEnableImageTypesNull() {
 }
 
 
-const bool &GetNextUpParams::enableImges() const {
-	return m_enableImges.value();
+const bool &GetNextUpParams::enableImages() const {
+	return m_enableImages.value();
 }
 
-void GetNextUpParams::setEnableImges(bool newEnableImges)  {
-	m_enableImges = newEnableImges;
+void GetNextUpParams::setEnableImages(bool newEnableImages)  {
+	m_enableImages = newEnableImages;
 }
 
-bool GetNextUpParams::enableImgesNull() const {
+bool GetNextUpParams::enableImagesNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_enableImges.has_value();
+	return !m_enableImages.has_value();
 }
 
-void GetNextUpParams::setEnableImgesNull() {
-	m_enableImges = std::nullopt;
+void GetNextUpParams::setEnableImagesNull() {
+	m_enableImages = std::nullopt;
+}
+
+
+const bool &GetNextUpParams::enableResumable() const {
+	return m_enableResumable.value();
+}
+
+void GetNextUpParams::setEnableResumable(bool newEnableResumable)  {
+	m_enableResumable = newEnableResumable;
+}
+
+bool GetNextUpParams::enableResumableNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableResumable.has_value();
+}
+
+void GetNextUpParams::setEnableResumableNull() {
+	m_enableResumable = std::nullopt;
+}
+
+
+const bool &GetNextUpParams::enableRewatching() const {
+	return m_enableRewatching.value();
+}
+
+void GetNextUpParams::setEnableRewatching(bool newEnableRewatching)  {
+	m_enableRewatching = newEnableRewatching;
+}
+
+bool GetNextUpParams::enableRewatchingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableRewatching.has_value();
+}
+
+void GetNextUpParams::setEnableRewatchingNull() {
+	m_enableRewatching = std::nullopt;
 }
 
 
@@ -21922,6 +20424,27 @@ void GetNextUpParams::setLimitNull() {
 }
 
 
+const QDateTime &GetNextUpParams::nextUpDateCutoff() const {
+	return m_nextUpDateCutoff;
+}
+
+void GetNextUpParams::setNextUpDateCutoff(QDateTime newNextUpDateCutoff)  {
+	m_nextUpDateCutoff = newNextUpDateCutoff;
+}
+
+bool GetNextUpParams::nextUpDateCutoffNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_nextUpDateCutoff.isNull();
+}
+
+void GetNextUpParams::setNextUpDateCutoffNull() {
+	m_nextUpDateCutoff= QDateTime();
+}
+
+
 const QString &GetNextUpParams::parentId() const {
 	return m_parentId;
 }
@@ -22003,40 +20526,6 @@ bool GetNextUpParams::userIdNull() const {
 
 void GetNextUpParams::setUserIdNull() {
 	m_userId.clear();
-}
-
-
-
-
-// GetNotificationServicesParams
-
-
-
-// GetNotificationTypesParams
-
-
-
-// GetNotificationsParams
-
-const QString &GetNotificationsParams::userId() const {
-	return m_userId;
-}
-
-void GetNotificationsParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-
-
-// GetNotificationsSummaryParams
-
-const QString &GetNotificationsSummaryParams::userId() const {
-	return m_userId;
-}
-
-void GetNotificationsSummaryParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
 }
 
 
@@ -22155,27 +20644,6 @@ void GetPersonImageParams::setName(QString newName) {
 }
 
 
-const bool &GetPersonImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetPersonImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetPersonImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetPersonImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetPersonImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -22218,24 +20686,45 @@ void GetPersonImageParams::setBlurNull() {
 }
 
 
-const bool &GetPersonImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetPersonImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetPersonImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetPersonImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetPersonImageParams::cropWhitespaceNull() const {
+bool GetPersonImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetPersonImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetPersonImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetPersonImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetPersonImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetPersonImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetPersonImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -22501,27 +20990,6 @@ void GetPersonImageByIndexParams::setName(QString newName) {
 }
 
 
-const bool &GetPersonImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetPersonImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetPersonImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetPersonImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetPersonImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -22564,24 +21032,45 @@ void GetPersonImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &GetPersonImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetPersonImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetPersonImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetPersonImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetPersonImageByIndexParams::cropWhitespaceNull() const {
+bool GetPersonImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetPersonImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetPersonImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetPersonImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetPersonImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetPersonImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetPersonImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -22863,7 +21352,7 @@ void GetPersonsParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetPersonsParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -23110,8 +21599,33 @@ const QString &GetPlaybackInfoParams::userId() const {
 	return m_userId;
 }
 
-void GetPlaybackInfoParams::setUserId(QString newUserId) {
+void GetPlaybackInfoParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool GetPlaybackInfoParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetPlaybackInfoParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
+
+
+// GetPlaylistParams
+
+const QString &GetPlaylistParams::playlistId() const {
+	return m_playlistId;
+}
+
+void GetPlaylistParams::setPlaylistId(QString newPlaylistId) {
+	m_playlistId = newPlaylistId;
 }
 
 
@@ -23125,15 +21639,6 @@ const QString &GetPlaylistItemsParams::playlistId() const {
 
 void GetPlaylistItemsParams::setPlaylistId(QString newPlaylistId) {
 	m_playlistId = newPlaylistId;
-}
-
-
-const QString &GetPlaylistItemsParams::userId() const {
-	return m_userId;
-}
-
-void GetPlaylistItemsParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
 }
 
 
@@ -23284,6 +21789,62 @@ void GetPlaylistItemsParams::setStartIndexNull() {
 }
 
 
+const QString &GetPlaylistItemsParams::userId() const {
+	return m_userId;
+}
+
+void GetPlaylistItemsParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool GetPlaylistItemsParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetPlaylistItemsParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
+
+
+// GetPlaylistUserParams
+
+const QString &GetPlaylistUserParams::playlistId() const {
+	return m_playlistId;
+}
+
+void GetPlaylistUserParams::setPlaylistId(QString newPlaylistId) {
+	m_playlistId = newPlaylistId;
+}
+
+
+const QString &GetPlaylistUserParams::userId() const {
+	return m_userId;
+}
+
+void GetPlaylistUserParams::setUserId(QString newUserId) {
+	m_userId = newUserId;
+}
+
+
+
+
+// GetPlaylistUsersParams
+
+const QString &GetPlaylistUsersParams::playlistId() const {
+	return m_playlistId;
+}
+
+void GetPlaylistUsersParams::setPlaylistId(QString newPlaylistId) {
+	m_playlistId = newPlaylistId;
+}
+
+
 
 
 // GetPluginConfigurationParams
@@ -23310,11 +21871,11 @@ void GetPluginImageParams::setPluginId(QString newPluginId) {
 }
 
 
-const QSharedPointer<Version> &GetPluginImageParams::version() const {
+const QString &GetPluginImageParams::version() const {
 	return m_version;
 }
 
-void GetPluginImageParams::setVersion(QSharedPointer<Version> newVersion) {
+void GetPluginImageParams::setVersion(QString newVersion) {
 	m_version = newVersion;
 }
 
@@ -23654,23 +22215,6 @@ void GetPostedPlaybackInfoParams::setBody(QSharedPointer<PlaybackInfoDto> newBod
 
 
 
-// GetProfileParams
-
-const QString &GetProfileParams::profileId() const {
-	return m_profileId;
-}
-
-void GetProfileParams::setProfileId(QString newProfileId) {
-	m_profileId = newProfileId;
-}
-
-
-
-
-// GetProfileInfosParams
-
-
-
 // GetProgramParams
 
 const QString &GetProgramParams::programId() const {
@@ -23728,11 +22272,11 @@ void GetProgramsParams::setBody(QSharedPointer<GetProgramsDto> newBody) {
 
 // GetQueryFiltersParams
 
-const QStringList &GetQueryFiltersParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetQueryFiltersParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetQueryFiltersParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetQueryFiltersParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -23942,11 +22486,11 @@ void GetQueryFiltersParams::setUserIdNull() {
 
 // GetQueryFiltersLegacyParams
 
-const QStringList &GetQueryFiltersLegacyParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetQueryFiltersLegacyParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetQueryFiltersLegacyParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetQueryFiltersLegacyParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -23963,11 +22507,11 @@ void GetQueryFiltersLegacyParams::setIncludeItemTypesNull() {
 }
 
 
-const QStringList &GetQueryFiltersLegacyParams::mediaTypes() const {
+const QList<MediaType> &GetQueryFiltersLegacyParams::mediaTypes() const {
 	return m_mediaTypes;
 }
 
-void GetQueryFiltersLegacyParams::setMediaTypes(QStringList newMediaTypes)  {
+void GetQueryFiltersLegacyParams::setMediaTypes(QList<MediaType> newMediaTypes)  {
 	m_mediaTypes = newMediaTypes;
 }
 
@@ -24028,29 +22572,20 @@ void GetQueryFiltersLegacyParams::setUserIdNull() {
 
 
 
-// GetRatingImageParams
+// GetQuickConnectEnabledParams
 
-const QString &GetRatingImageParams::name() const {
-	return m_name;
+
+
+// GetQuickConnectStateParams
+
+const QString &GetQuickConnectStateParams::secret() const {
+	return m_secret;
 }
 
-void GetRatingImageParams::setName(QString newName) {
-	m_name = newName;
+void GetQuickConnectStateParams::setSecret(QString newSecret) {
+	m_secret = newSecret;
 }
 
-
-const QString &GetRatingImageParams::theme() const {
-	return m_theme;
-}
-
-void GetRatingImageParams::setTheme(QString newTheme) {
-	m_theme = newTheme;
-}
-
-
-
-
-// GetRatingImagesParams
 
 
 
@@ -25192,19 +23727,6 @@ void GetRecordingsSeriesParams::setUserIdNull() {
 
 
 
-// GetRemoteImageParams
-
-const QString &GetRemoteImageParams::imageUrl() const {
-	return m_imageUrl;
-}
-
-void GetRemoteImageParams::setImageUrl(QString newImageUrl) {
-	m_imageUrl = newImageUrl;
-}
-
-
-
-
 // GetRemoteImageProvidersParams
 
 const QString &GetRemoteImageProvidersParams::itemId() const {
@@ -25336,23 +23858,14 @@ void GetRemoteImagesParams::setTypeNull() {
 
 
 
-// GetRemoteSearchImageParams
+// GetRemoteLyricsParams
 
-const QString &GetRemoteSearchImageParams::imageUrl() const {
-	return m_imageUrl;
+const QString &GetRemoteLyricsParams::lyricId() const {
+	return m_lyricId;
 }
 
-void GetRemoteSearchImageParams::setImageUrl(QString newImageUrl) {
-	m_imageUrl = newImageUrl;
-}
-
-
-const QString &GetRemoteSearchImageParams::providerName() const {
-	return m_providerName;
-}
-
-void GetRemoteSearchImageParams::setProviderName(QString newProviderName) {
-	m_providerName = newProviderName;
+void GetRemoteLyricsParams::setLyricId(QString newLyricId) {
+	m_lyricId = newLyricId;
 }
 
 
@@ -25360,12 +23873,12 @@ void GetRemoteSearchImageParams::setProviderName(QString newProviderName) {
 
 // GetRemoteSubtitlesParams
 
-const QString &GetRemoteSubtitlesParams::jellyfinId() const {
-	return m_jellyfinId;
+const QString &GetRemoteSubtitlesParams::subtitleId() const {
+	return m_subtitleId;
 }
 
-void GetRemoteSubtitlesParams::setJellyfinId(QString newJellyfinId) {
-	m_jellyfinId = newJellyfinId;
+void GetRemoteSubtitlesParams::setSubtitleId(QString newSubtitleId) {
+	m_subtitleId = newSubtitleId;
 }
 
 
@@ -25376,15 +23889,6 @@ void GetRemoteSubtitlesParams::setJellyfinId(QString newJellyfinId) {
 
 
 // GetResumeItemsParams
-
-const QString &GetResumeItemsParams::userId() const {
-	return m_userId;
-}
-
-void GetResumeItemsParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
 
 const QList<ImageType> &GetResumeItemsParams::enableImageTypes() const {
 	return m_enableImageTypes;
@@ -25416,7 +23920,7 @@ void GetResumeItemsParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetResumeItemsParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -25470,11 +23974,32 @@ void GetResumeItemsParams::setEnableUserDataNull() {
 }
 
 
-const QStringList &GetResumeItemsParams::excludeItemTypes() const {
+const bool &GetResumeItemsParams::excludeActiveSessions() const {
+	return m_excludeActiveSessions.value();
+}
+
+void GetResumeItemsParams::setExcludeActiveSessions(bool newExcludeActiveSessions)  {
+	m_excludeActiveSessions = newExcludeActiveSessions;
+}
+
+bool GetResumeItemsParams::excludeActiveSessionsNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_excludeActiveSessions.has_value();
+}
+
+void GetResumeItemsParams::setExcludeActiveSessionsNull() {
+	m_excludeActiveSessions = std::nullopt;
+}
+
+
+const QList<BaseItemKind> &GetResumeItemsParams::excludeItemTypes() const {
 	return m_excludeItemTypes;
 }
 
-void GetResumeItemsParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
+void GetResumeItemsParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
 	m_excludeItemTypes = newExcludeItemTypes;
 }
 
@@ -25533,11 +24058,11 @@ void GetResumeItemsParams::setImageTypeLimitNull() {
 }
 
 
-const QStringList &GetResumeItemsParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetResumeItemsParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetResumeItemsParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetResumeItemsParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -25575,11 +24100,11 @@ void GetResumeItemsParams::setLimitNull() {
 }
 
 
-const QStringList &GetResumeItemsParams::mediaTypes() const {
+const QList<MediaType> &GetResumeItemsParams::mediaTypes() const {
 	return m_mediaTypes;
 }
 
-void GetResumeItemsParams::setMediaTypes(QStringList newMediaTypes)  {
+void GetResumeItemsParams::setMediaTypes(QList<MediaType> newMediaTypes)  {
 	m_mediaTypes = newMediaTypes;
 }
 
@@ -25659,6 +24184,27 @@ void GetResumeItemsParams::setStartIndexNull() {
 }
 
 
+const QString &GetResumeItemsParams::userId() const {
+	return m_userId;
+}
+
+void GetResumeItemsParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool GetResumeItemsParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetResumeItemsParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
 
 
 // GetRootFolderParams
@@ -25667,14 +24213,396 @@ const QString &GetRootFolderParams::userId() const {
 	return m_userId;
 }
 
-void GetRootFolderParams::setUserId(QString newUserId) {
+void GetRootFolderParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool GetRootFolderParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetRootFolderParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
 
 
 // GetSchedulesDirectCountriesParams
+
+
+
+// GetSearchHintsParams
+
+const QString &GetSearchHintsParams::searchTerm() const {
+	return m_searchTerm;
+}
+
+void GetSearchHintsParams::setSearchTerm(QString newSearchTerm) {
+	m_searchTerm = newSearchTerm;
+}
+
+
+const QList<BaseItemKind> &GetSearchHintsParams::excludeItemTypes() const {
+	return m_excludeItemTypes;
+}
+
+void GetSearchHintsParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
+	m_excludeItemTypes = newExcludeItemTypes;
+}
+
+bool GetSearchHintsParams::excludeItemTypesNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_excludeItemTypes.size() == 0;
+}
+
+void GetSearchHintsParams::setExcludeItemTypesNull() {
+	m_excludeItemTypes.clear();
+}
+
+
+const bool &GetSearchHintsParams::includeArtists() const {
+	return m_includeArtists.value();
+}
+
+void GetSearchHintsParams::setIncludeArtists(bool newIncludeArtists)  {
+	m_includeArtists = newIncludeArtists;
+}
+
+bool GetSearchHintsParams::includeArtistsNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_includeArtists.has_value();
+}
+
+void GetSearchHintsParams::setIncludeArtistsNull() {
+	m_includeArtists = std::nullopt;
+}
+
+
+const bool &GetSearchHintsParams::includeGenres() const {
+	return m_includeGenres.value();
+}
+
+void GetSearchHintsParams::setIncludeGenres(bool newIncludeGenres)  {
+	m_includeGenres = newIncludeGenres;
+}
+
+bool GetSearchHintsParams::includeGenresNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_includeGenres.has_value();
+}
+
+void GetSearchHintsParams::setIncludeGenresNull() {
+	m_includeGenres = std::nullopt;
+}
+
+
+const QList<BaseItemKind> &GetSearchHintsParams::includeItemTypes() const {
+	return m_includeItemTypes;
+}
+
+void GetSearchHintsParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
+	m_includeItemTypes = newIncludeItemTypes;
+}
+
+bool GetSearchHintsParams::includeItemTypesNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_includeItemTypes.size() == 0;
+}
+
+void GetSearchHintsParams::setIncludeItemTypesNull() {
+	m_includeItemTypes.clear();
+}
+
+
+const bool &GetSearchHintsParams::includeMedia() const {
+	return m_includeMedia.value();
+}
+
+void GetSearchHintsParams::setIncludeMedia(bool newIncludeMedia)  {
+	m_includeMedia = newIncludeMedia;
+}
+
+bool GetSearchHintsParams::includeMediaNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_includeMedia.has_value();
+}
+
+void GetSearchHintsParams::setIncludeMediaNull() {
+	m_includeMedia = std::nullopt;
+}
+
+
+const bool &GetSearchHintsParams::includePeople() const {
+	return m_includePeople.value();
+}
+
+void GetSearchHintsParams::setIncludePeople(bool newIncludePeople)  {
+	m_includePeople = newIncludePeople;
+}
+
+bool GetSearchHintsParams::includePeopleNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_includePeople.has_value();
+}
+
+void GetSearchHintsParams::setIncludePeopleNull() {
+	m_includePeople = std::nullopt;
+}
+
+
+const bool &GetSearchHintsParams::includeStudios() const {
+	return m_includeStudios.value();
+}
+
+void GetSearchHintsParams::setIncludeStudios(bool newIncludeStudios)  {
+	m_includeStudios = newIncludeStudios;
+}
+
+bool GetSearchHintsParams::includeStudiosNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_includeStudios.has_value();
+}
+
+void GetSearchHintsParams::setIncludeStudiosNull() {
+	m_includeStudios = std::nullopt;
+}
+
+
+const bool &GetSearchHintsParams::isKids() const {
+	return m_isKids.value();
+}
+
+void GetSearchHintsParams::setIsKids(bool newIsKids)  {
+	m_isKids = newIsKids;
+}
+
+bool GetSearchHintsParams::isKidsNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isKids.has_value();
+}
+
+void GetSearchHintsParams::setIsKidsNull() {
+	m_isKids = std::nullopt;
+}
+
+
+const bool &GetSearchHintsParams::isMovie() const {
+	return m_isMovie.value();
+}
+
+void GetSearchHintsParams::setIsMovie(bool newIsMovie)  {
+	m_isMovie = newIsMovie;
+}
+
+bool GetSearchHintsParams::isMovieNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isMovie.has_value();
+}
+
+void GetSearchHintsParams::setIsMovieNull() {
+	m_isMovie = std::nullopt;
+}
+
+
+const bool &GetSearchHintsParams::isNews() const {
+	return m_isNews.value();
+}
+
+void GetSearchHintsParams::setIsNews(bool newIsNews)  {
+	m_isNews = newIsNews;
+}
+
+bool GetSearchHintsParams::isNewsNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isNews.has_value();
+}
+
+void GetSearchHintsParams::setIsNewsNull() {
+	m_isNews = std::nullopt;
+}
+
+
+const bool &GetSearchHintsParams::isSeries() const {
+	return m_isSeries.value();
+}
+
+void GetSearchHintsParams::setIsSeries(bool newIsSeries)  {
+	m_isSeries = newIsSeries;
+}
+
+bool GetSearchHintsParams::isSeriesNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isSeries.has_value();
+}
+
+void GetSearchHintsParams::setIsSeriesNull() {
+	m_isSeries = std::nullopt;
+}
+
+
+const bool &GetSearchHintsParams::isSports() const {
+	return m_isSports.value();
+}
+
+void GetSearchHintsParams::setIsSports(bool newIsSports)  {
+	m_isSports = newIsSports;
+}
+
+bool GetSearchHintsParams::isSportsNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isSports.has_value();
+}
+
+void GetSearchHintsParams::setIsSportsNull() {
+	m_isSports = std::nullopt;
+}
+
+
+const qint32 &GetSearchHintsParams::limit() const {
+	return m_limit.value();
+}
+
+void GetSearchHintsParams::setLimit(qint32 newLimit)  {
+	m_limit = newLimit;
+}
+
+bool GetSearchHintsParams::limitNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_limit.has_value();
+}
+
+void GetSearchHintsParams::setLimitNull() {
+	m_limit = std::nullopt;
+}
+
+
+const QList<MediaType> &GetSearchHintsParams::mediaTypes() const {
+	return m_mediaTypes;
+}
+
+void GetSearchHintsParams::setMediaTypes(QList<MediaType> newMediaTypes)  {
+	m_mediaTypes = newMediaTypes;
+}
+
+bool GetSearchHintsParams::mediaTypesNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_mediaTypes.size() == 0;
+}
+
+void GetSearchHintsParams::setMediaTypesNull() {
+	m_mediaTypes.clear();
+}
+
+
+const QString &GetSearchHintsParams::parentId() const {
+	return m_parentId;
+}
+
+void GetSearchHintsParams::setParentId(QString newParentId)  {
+	m_parentId = newParentId;
+}
+
+bool GetSearchHintsParams::parentIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_parentId.isNull();
+}
+
+void GetSearchHintsParams::setParentIdNull() {
+	m_parentId.clear();
+}
+
+
+const qint32 &GetSearchHintsParams::startIndex() const {
+	return m_startIndex.value();
+}
+
+void GetSearchHintsParams::setStartIndex(qint32 newStartIndex)  {
+	m_startIndex = newStartIndex;
+}
+
+bool GetSearchHintsParams::startIndexNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_startIndex.has_value();
+}
+
+void GetSearchHintsParams::setStartIndexNull() {
+	m_startIndex = std::nullopt;
+}
+
+
+const QString &GetSearchHintsParams::userId() const {
+	return m_userId;
+}
+
+void GetSearchHintsParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool GetSearchHintsParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetSearchHintsParams::setUserIdNull() {
+	m_userId.clear();
+}
+
 
 
 
@@ -26620,18 +25548,282 @@ const QString &GetSpecialFeaturesParams::userId() const {
 	return m_userId;
 }
 
-void GetSpecialFeaturesParams::setUserId(QString newUserId) {
+void GetSpecialFeaturesParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool GetSpecialFeaturesParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetSpecialFeaturesParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
+
+
+// GetSplashscreenParams
+
+const QString &GetSplashscreenParams::backgroundColor() const {
+	return m_backgroundColor;
+}
+
+void GetSplashscreenParams::setBackgroundColor(QString newBackgroundColor)  {
+	m_backgroundColor = newBackgroundColor;
+}
+
+bool GetSplashscreenParams::backgroundColorNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_backgroundColor.isNull();
+}
+
+void GetSplashscreenParams::setBackgroundColorNull() {
+	m_backgroundColor.clear();
+}
+
+
+const qint32 &GetSplashscreenParams::blur() const {
+	return m_blur.value();
+}
+
+void GetSplashscreenParams::setBlur(qint32 newBlur)  {
+	m_blur = newBlur;
+}
+
+bool GetSplashscreenParams::blurNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_blur.has_value();
+}
+
+void GetSplashscreenParams::setBlurNull() {
+	m_blur = std::nullopt;
+}
+
+
+const qint32 &GetSplashscreenParams::fillHeight() const {
+	return m_fillHeight.value();
+}
+
+void GetSplashscreenParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
+}
+
+bool GetSplashscreenParams::fillHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillHeight.has_value();
+}
+
+void GetSplashscreenParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetSplashscreenParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetSplashscreenParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetSplashscreenParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetSplashscreenParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
+}
+
+
+const QString &GetSplashscreenParams::foregroundLayer() const {
+	return m_foregroundLayer;
+}
+
+void GetSplashscreenParams::setForegroundLayer(QString newForegroundLayer)  {
+	m_foregroundLayer = newForegroundLayer;
+}
+
+bool GetSplashscreenParams::foregroundLayerNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_foregroundLayer.isNull();
+}
+
+void GetSplashscreenParams::setForegroundLayerNull() {
+	m_foregroundLayer.clear();
+}
+
+
+const ImageFormat &GetSplashscreenParams::format() const {
+	return m_format;
+}
+
+void GetSplashscreenParams::setFormat(ImageFormat newFormat)  {
+	m_format = newFormat;
+}
+
+bool GetSplashscreenParams::formatNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_format== ImageFormat::EnumNotSet;
+}
+
+void GetSplashscreenParams::setFormatNull() {
+	m_format= ImageFormat::EnumNotSet;
+}
+
+
+const qint32 &GetSplashscreenParams::height() const {
+	return m_height.value();
+}
+
+void GetSplashscreenParams::setHeight(qint32 newHeight)  {
+	m_height = newHeight;
+}
+
+bool GetSplashscreenParams::heightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_height.has_value();
+}
+
+void GetSplashscreenParams::setHeightNull() {
+	m_height = std::nullopt;
+}
+
+
+const qint32 &GetSplashscreenParams::maxHeight() const {
+	return m_maxHeight.value();
+}
+
+void GetSplashscreenParams::setMaxHeight(qint32 newMaxHeight)  {
+	m_maxHeight = newMaxHeight;
+}
+
+bool GetSplashscreenParams::maxHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxHeight.has_value();
+}
+
+void GetSplashscreenParams::setMaxHeightNull() {
+	m_maxHeight = std::nullopt;
+}
+
+
+const qint32 &GetSplashscreenParams::maxWidth() const {
+	return m_maxWidth.value();
+}
+
+void GetSplashscreenParams::setMaxWidth(qint32 newMaxWidth)  {
+	m_maxWidth = newMaxWidth;
+}
+
+bool GetSplashscreenParams::maxWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxWidth.has_value();
+}
+
+void GetSplashscreenParams::setMaxWidthNull() {
+	m_maxWidth = std::nullopt;
+}
+
+
+const qint32 &GetSplashscreenParams::quality() const {
+	return m_quality.value();
+}
+
+void GetSplashscreenParams::setQuality(qint32 newQuality)  {
+	m_quality = newQuality;
+}
+
+bool GetSplashscreenParams::qualityNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_quality.has_value();
+}
+
+void GetSplashscreenParams::setQualityNull() {
+	m_quality = std::nullopt;
+}
+
+
+const QString &GetSplashscreenParams::tag() const {
+	return m_tag;
+}
+
+void GetSplashscreenParams::setTag(QString newTag)  {
+	m_tag = newTag;
+}
+
+bool GetSplashscreenParams::tagNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_tag.isNull();
+}
+
+void GetSplashscreenParams::setTagNull() {
+	m_tag.clear();
+}
+
+
+const qint32 &GetSplashscreenParams::width() const {
+	return m_width.value();
+}
+
+void GetSplashscreenParams::setWidth(qint32 newWidth)  {
+	m_width = newWidth;
+}
+
+bool GetSplashscreenParams::widthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_width.has_value();
+}
+
+void GetSplashscreenParams::setWidthNull() {
+	m_width = std::nullopt;
 }
 
 
 
 
 // GetStartupConfigurationParams
-
-
-
-// GetStatusParams
 
 
 
@@ -26689,27 +25881,6 @@ void GetStudioImageParams::setName(QString newName) {
 }
 
 
-const bool &GetStudioImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetStudioImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetStudioImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetStudioImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetStudioImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -26752,24 +25923,45 @@ void GetStudioImageParams::setBlurNull() {
 }
 
 
-const bool &GetStudioImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetStudioImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetStudioImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetStudioImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetStudioImageParams::cropWhitespaceNull() const {
+bool GetStudioImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetStudioImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetStudioImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetStudioImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetStudioImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetStudioImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetStudioImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -27035,27 +26227,6 @@ void GetStudioImageByIndexParams::setName(QString newName) {
 }
 
 
-const bool &GetStudioImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetStudioImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetStudioImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetStudioImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetStudioImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -27098,24 +26269,45 @@ void GetStudioImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &GetStudioImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetStudioImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetStudioImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetStudioImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetStudioImageByIndexParams::cropWhitespaceNull() const {
+bool GetStudioImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetStudioImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetStudioImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetStudioImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetStudioImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetStudioImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetStudioImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -27363,7 +26555,7 @@ void GetStudiosParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetStudiosParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -27417,11 +26609,11 @@ void GetStudiosParams::setEnableUserDataNull() {
 }
 
 
-const QStringList &GetStudiosParams::excludeItemTypes() const {
+const QList<BaseItemKind> &GetStudiosParams::excludeItemTypes() const {
 	return m_excludeItemTypes;
 }
 
-void GetStudiosParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
+void GetStudiosParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
 	m_excludeItemTypes = newExcludeItemTypes;
 }
 
@@ -27480,11 +26672,11 @@ void GetStudiosParams::setImageTypeLimitNull() {
 }
 
 
-const QStringList &GetStudiosParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetStudiosParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetStudiosParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetStudiosParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -27694,39 +26886,39 @@ void GetStudiosParams::setUserIdNull() {
 
 // GetSubtitleParams
 
-const QString &GetSubtitleParams::format() const {
-	return m_format;
+const QString &GetSubtitleParams::routeFormat() const {
+	return m_routeFormat;
 }
 
-void GetSubtitleParams::setFormat(QString newFormat) {
-	m_format = newFormat;
-}
-
-
-const qint32 &GetSubtitleParams::index() const {
-	return m_index;
-}
-
-void GetSubtitleParams::setIndex(qint32 newIndex) {
-	m_index = newIndex;
+void GetSubtitleParams::setRouteFormat(QString newRouteFormat) {
+	m_routeFormat = newRouteFormat;
 }
 
 
-const QString &GetSubtitleParams::itemId() const {
-	return m_itemId;
+const qint32 &GetSubtitleParams::routeIndex() const {
+	return m_routeIndex;
 }
 
-void GetSubtitleParams::setItemId(QString newItemId) {
-	m_itemId = newItemId;
+void GetSubtitleParams::setRouteIndex(qint32 newRouteIndex) {
+	m_routeIndex = newRouteIndex;
 }
 
 
-const QString &GetSubtitleParams::mediaSourceId() const {
-	return m_mediaSourceId;
+const QString &GetSubtitleParams::routeItemId() const {
+	return m_routeItemId;
 }
 
-void GetSubtitleParams::setMediaSourceId(QString newMediaSourceId) {
-	m_mediaSourceId = newMediaSourceId;
+void GetSubtitleParams::setRouteItemId(QString newRouteItemId) {
+	m_routeItemId = newRouteItemId;
+}
+
+
+const QString &GetSubtitleParams::routeMediaSourceId() const {
+	return m_routeMediaSourceId;
+}
+
+void GetSubtitleParams::setRouteMediaSourceId(QString newRouteMediaSourceId) {
+	m_routeMediaSourceId = newRouteMediaSourceId;
 }
 
 
@@ -27790,6 +26982,90 @@ bool GetSubtitleParams::endPositionTicksNull() const {
 
 void GetSubtitleParams::setEndPositionTicksNull() {
 	m_endPositionTicks = std::nullopt;
+}
+
+
+const QString &GetSubtitleParams::format() const {
+	return m_format;
+}
+
+void GetSubtitleParams::setFormat(QString newFormat)  {
+	m_format = newFormat;
+}
+
+bool GetSubtitleParams::formatNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_format.isNull();
+}
+
+void GetSubtitleParams::setFormatNull() {
+	m_format.clear();
+}
+
+
+const qint32 &GetSubtitleParams::index() const {
+	return m_index.value();
+}
+
+void GetSubtitleParams::setIndex(qint32 newIndex)  {
+	m_index = newIndex;
+}
+
+bool GetSubtitleParams::indexNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_index.has_value();
+}
+
+void GetSubtitleParams::setIndexNull() {
+	m_index = std::nullopt;
+}
+
+
+const QString &GetSubtitleParams::itemId() const {
+	return m_itemId;
+}
+
+void GetSubtitleParams::setItemId(QString newItemId)  {
+	m_itemId = newItemId;
+}
+
+bool GetSubtitleParams::itemIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_itemId.isNull();
+}
+
+void GetSubtitleParams::setItemIdNull() {
+	m_itemId.clear();
+}
+
+
+const QString &GetSubtitleParams::mediaSourceId() const {
+	return m_mediaSourceId;
+}
+
+void GetSubtitleParams::setMediaSourceId(QString newMediaSourceId)  {
+	m_mediaSourceId = newMediaSourceId;
+}
+
+bool GetSubtitleParams::mediaSourceIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_mediaSourceId.isNull();
+}
+
+void GetSubtitleParams::setMediaSourceIdNull() {
+	m_mediaSourceId.clear();
 }
 
 
@@ -27858,48 +27134,48 @@ void GetSubtitlePlaylistParams::setSegmentLength(qint32 newSegmentLength) {
 
 // GetSubtitleWithTicksParams
 
-const QString &GetSubtitleWithTicksParams::format() const {
-	return m_format;
+const QString &GetSubtitleWithTicksParams::routeFormat() const {
+	return m_routeFormat;
 }
 
-void GetSubtitleWithTicksParams::setFormat(QString newFormat) {
-	m_format = newFormat;
-}
-
-
-const qint32 &GetSubtitleWithTicksParams::index() const {
-	return m_index;
-}
-
-void GetSubtitleWithTicksParams::setIndex(qint32 newIndex) {
-	m_index = newIndex;
+void GetSubtitleWithTicksParams::setRouteFormat(QString newRouteFormat) {
+	m_routeFormat = newRouteFormat;
 }
 
 
-const QString &GetSubtitleWithTicksParams::itemId() const {
-	return m_itemId;
+const qint32 &GetSubtitleWithTicksParams::routeIndex() const {
+	return m_routeIndex;
 }
 
-void GetSubtitleWithTicksParams::setItemId(QString newItemId) {
-	m_itemId = newItemId;
-}
-
-
-const QString &GetSubtitleWithTicksParams::mediaSourceId() const {
-	return m_mediaSourceId;
-}
-
-void GetSubtitleWithTicksParams::setMediaSourceId(QString newMediaSourceId) {
-	m_mediaSourceId = newMediaSourceId;
+void GetSubtitleWithTicksParams::setRouteIndex(qint32 newRouteIndex) {
+	m_routeIndex = newRouteIndex;
 }
 
 
-const qint64 &GetSubtitleWithTicksParams::startPositionTicks() const {
-	return m_startPositionTicks;
+const QString &GetSubtitleWithTicksParams::routeItemId() const {
+	return m_routeItemId;
 }
 
-void GetSubtitleWithTicksParams::setStartPositionTicks(qint64 newStartPositionTicks) {
-	m_startPositionTicks = newStartPositionTicks;
+void GetSubtitleWithTicksParams::setRouteItemId(QString newRouteItemId) {
+	m_routeItemId = newRouteItemId;
+}
+
+
+const QString &GetSubtitleWithTicksParams::routeMediaSourceId() const {
+	return m_routeMediaSourceId;
+}
+
+void GetSubtitleWithTicksParams::setRouteMediaSourceId(QString newRouteMediaSourceId) {
+	m_routeMediaSourceId = newRouteMediaSourceId;
+}
+
+
+const qint64 &GetSubtitleWithTicksParams::routeStartPositionTicks() const {
+	return m_routeStartPositionTicks;
+}
+
+void GetSubtitleWithTicksParams::setRouteStartPositionTicks(qint64 newRouteStartPositionTicks) {
+	m_routeStartPositionTicks = newRouteStartPositionTicks;
 }
 
 
@@ -27966,18 +27242,114 @@ void GetSubtitleWithTicksParams::setEndPositionTicksNull() {
 }
 
 
+const QString &GetSubtitleWithTicksParams::format() const {
+	return m_format;
+}
+
+void GetSubtitleWithTicksParams::setFormat(QString newFormat)  {
+	m_format = newFormat;
+}
+
+bool GetSubtitleWithTicksParams::formatNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_format.isNull();
+}
+
+void GetSubtitleWithTicksParams::setFormatNull() {
+	m_format.clear();
+}
+
+
+const qint32 &GetSubtitleWithTicksParams::index() const {
+	return m_index.value();
+}
+
+void GetSubtitleWithTicksParams::setIndex(qint32 newIndex)  {
+	m_index = newIndex;
+}
+
+bool GetSubtitleWithTicksParams::indexNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_index.has_value();
+}
+
+void GetSubtitleWithTicksParams::setIndexNull() {
+	m_index = std::nullopt;
+}
+
+
+const QString &GetSubtitleWithTicksParams::itemId() const {
+	return m_itemId;
+}
+
+void GetSubtitleWithTicksParams::setItemId(QString newItemId)  {
+	m_itemId = newItemId;
+}
+
+bool GetSubtitleWithTicksParams::itemIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_itemId.isNull();
+}
+
+void GetSubtitleWithTicksParams::setItemIdNull() {
+	m_itemId.clear();
+}
+
+
+const QString &GetSubtitleWithTicksParams::mediaSourceId() const {
+	return m_mediaSourceId;
+}
+
+void GetSubtitleWithTicksParams::setMediaSourceId(QString newMediaSourceId)  {
+	m_mediaSourceId = newMediaSourceId;
+}
+
+bool GetSubtitleWithTicksParams::mediaSourceIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_mediaSourceId.isNull();
+}
+
+void GetSubtitleWithTicksParams::setMediaSourceIdNull() {
+	m_mediaSourceId.clear();
+}
+
+
+const qint64 &GetSubtitleWithTicksParams::startPositionTicks() const {
+	return m_startPositionTicks.value();
+}
+
+void GetSubtitleWithTicksParams::setStartPositionTicks(qint64 newStartPositionTicks)  {
+	m_startPositionTicks = newStartPositionTicks;
+}
+
+bool GetSubtitleWithTicksParams::startPositionTicksNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_startPositionTicks.has_value();
+}
+
+void GetSubtitleWithTicksParams::setStartPositionTicksNull() {
+	m_startPositionTicks = std::nullopt;
+}
+
+
 
 
 // GetSuggestionsParams
-
-const QString &GetSuggestionsParams::userId() const {
-	return m_userId;
-}
-
-void GetSuggestionsParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
 
 const bool &GetSuggestionsParams::enableTotalRecordCount() const {
 	return m_enableTotalRecordCount.value();
@@ -28021,11 +27393,11 @@ void GetSuggestionsParams::setLimitNull() {
 }
 
 
-const QStringList &GetSuggestionsParams::mediaType() const {
+const QList<MediaType> &GetSuggestionsParams::mediaType() const {
 	return m_mediaType;
 }
 
-void GetSuggestionsParams::setMediaType(QStringList newMediaType)  {
+void GetSuggestionsParams::setMediaType(QList<MediaType> newMediaType)  {
 	m_mediaType = newMediaType;
 }
 
@@ -28063,11 +27435,11 @@ void GetSuggestionsParams::setStartIndexNull() {
 }
 
 
-const QStringList &GetSuggestionsParams::type() const {
+const QList<BaseItemKind> &GetSuggestionsParams::type() const {
 	return m_type;
 }
 
-void GetSuggestionsParams::setType(QStringList newType)  {
+void GetSuggestionsParams::setType(QList<BaseItemKind> newType)  {
 	m_type = newType;
 }
 
@@ -28081,6 +27453,27 @@ bool GetSuggestionsParams::typeNull() const {
 
 void GetSuggestionsParams::setTypeNull() {
 	m_type.clear();
+}
+
+
+const QString &GetSuggestionsParams::userId() const {
+	return m_userId;
+}
+
+void GetSuggestionsParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool GetSuggestionsParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetSuggestionsParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -28181,6 +27574,48 @@ void GetThemeMediaParams::setInheritFromParentNull() {
 }
 
 
+const QList<ItemSortBy> &GetThemeMediaParams::sortBy() const {
+	return m_sortBy;
+}
+
+void GetThemeMediaParams::setSortBy(QList<ItemSortBy> newSortBy)  {
+	m_sortBy = newSortBy;
+}
+
+bool GetThemeMediaParams::sortByNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortBy.size() == 0;
+}
+
+void GetThemeMediaParams::setSortByNull() {
+	m_sortBy.clear();
+}
+
+
+const QList<SortOrder> &GetThemeMediaParams::sortOrder() const {
+	return m_sortOrder;
+}
+
+void GetThemeMediaParams::setSortOrder(QList<SortOrder> newSortOrder)  {
+	m_sortOrder = newSortOrder;
+}
+
+bool GetThemeMediaParams::sortOrderNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortOrder.size() == 0;
+}
+
+void GetThemeMediaParams::setSortOrderNull() {
+	m_sortOrder.clear();
+}
+
+
 const QString &GetThemeMediaParams::userId() const {
 	return m_userId;
 }
@@ -28236,6 +27671,48 @@ void GetThemeSongsParams::setInheritFromParentNull() {
 }
 
 
+const QList<ItemSortBy> &GetThemeSongsParams::sortBy() const {
+	return m_sortBy;
+}
+
+void GetThemeSongsParams::setSortBy(QList<ItemSortBy> newSortBy)  {
+	m_sortBy = newSortBy;
+}
+
+bool GetThemeSongsParams::sortByNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortBy.size() == 0;
+}
+
+void GetThemeSongsParams::setSortByNull() {
+	m_sortBy.clear();
+}
+
+
+const QList<SortOrder> &GetThemeSongsParams::sortOrder() const {
+	return m_sortOrder;
+}
+
+void GetThemeSongsParams::setSortOrder(QList<SortOrder> newSortOrder)  {
+	m_sortOrder = newSortOrder;
+}
+
+bool GetThemeSongsParams::sortOrderNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortOrder.size() == 0;
+}
+
+void GetThemeSongsParams::setSortOrderNull() {
+	m_sortOrder.clear();
+}
+
+
 const QString &GetThemeSongsParams::userId() const {
 	return m_userId;
 }
@@ -28288,6 +27765,48 @@ bool GetThemeVideosParams::inheritFromParentNull() const {
 
 void GetThemeVideosParams::setInheritFromParentNull() {
 	m_inheritFromParent = std::nullopt;
+}
+
+
+const QList<ItemSortBy> &GetThemeVideosParams::sortBy() const {
+	return m_sortBy;
+}
+
+void GetThemeVideosParams::setSortBy(QList<ItemSortBy> newSortBy)  {
+	m_sortBy = newSortBy;
+}
+
+bool GetThemeVideosParams::sortByNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortBy.size() == 0;
+}
+
+void GetThemeVideosParams::setSortByNull() {
+	m_sortBy.clear();
+}
+
+
+const QList<SortOrder> &GetThemeVideosParams::sortOrder() const {
+	return m_sortOrder;
+}
+
+void GetThemeVideosParams::setSortOrder(QList<SortOrder> newSortOrder)  {
+	m_sortOrder = newSortOrder;
+}
+
+bool GetThemeVideosParams::sortOrderNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_sortOrder.size() == 0;
+}
+
+void GetThemeVideosParams::setSortOrderNull() {
+	m_sortOrder.clear();
 }
 
 
@@ -28628,7 +28147,7 @@ void GetTrailersParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetTrailersParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -28724,11 +28243,11 @@ void GetTrailersParams::setExcludeItemIdsNull() {
 }
 
 
-const QStringList &GetTrailersParams::excludeItemTypes() const {
+const QList<BaseItemKind> &GetTrailersParams::excludeItemTypes() const {
 	return m_excludeItemTypes;
 }
 
-void GetTrailersParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
+void GetTrailersParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
 	m_excludeItemTypes = newExcludeItemTypes;
 }
 
@@ -29228,6 +28747,27 @@ void GetTrailersParams::setIsHdNull() {
 }
 
 
+const bool &GetTrailersParams::isKids() const {
+	return m_isKids.value();
+}
+
+void GetTrailersParams::setIsKids(bool newIsKids)  {
+	m_isKids = newIsKids;
+}
+
+bool GetTrailersParams::isKidsNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isKids.has_value();
+}
+
+void GetTrailersParams::setIsKidsNull() {
+	m_isKids = std::nullopt;
+}
+
+
 const bool &GetTrailersParams::isLocked() const {
 	return m_isLocked.value();
 }
@@ -29270,6 +28810,48 @@ void GetTrailersParams::setIsMissingNull() {
 }
 
 
+const bool &GetTrailersParams::isMovie() const {
+	return m_isMovie.value();
+}
+
+void GetTrailersParams::setIsMovie(bool newIsMovie)  {
+	m_isMovie = newIsMovie;
+}
+
+bool GetTrailersParams::isMovieNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isMovie.has_value();
+}
+
+void GetTrailersParams::setIsMovieNull() {
+	m_isMovie = std::nullopt;
+}
+
+
+const bool &GetTrailersParams::isNews() const {
+	return m_isNews.value();
+}
+
+void GetTrailersParams::setIsNews(bool newIsNews)  {
+	m_isNews = newIsNews;
+}
+
+bool GetTrailersParams::isNewsNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isNews.has_value();
+}
+
+void GetTrailersParams::setIsNewsNull() {
+	m_isNews = std::nullopt;
+}
+
+
 const bool &GetTrailersParams::isPlaceHolder() const {
 	return m_isPlaceHolder.value();
 }
@@ -29309,6 +28891,48 @@ bool GetTrailersParams::isPlayedNull() const {
 
 void GetTrailersParams::setIsPlayedNull() {
 	m_isPlayed = std::nullopt;
+}
+
+
+const bool &GetTrailersParams::isSeries() const {
+	return m_isSeries.value();
+}
+
+void GetTrailersParams::setIsSeries(bool newIsSeries)  {
+	m_isSeries = newIsSeries;
+}
+
+bool GetTrailersParams::isSeriesNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isSeries.has_value();
+}
+
+void GetTrailersParams::setIsSeriesNull() {
+	m_isSeries = std::nullopt;
+}
+
+
+const bool &GetTrailersParams::isSports() const {
+	return m_isSports.value();
+}
+
+void GetTrailersParams::setIsSports(bool newIsSports)  {
+	m_isSports = newIsSports;
+}
+
+bool GetTrailersParams::isSportsNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_isSports.has_value();
+}
+
+void GetTrailersParams::setIsSportsNull() {
+	m_isSports = std::nullopt;
 }
 
 
@@ -29459,11 +29083,11 @@ void GetTrailersParams::setMaxWidthNull() {
 }
 
 
-const QStringList &GetTrailersParams::mediaTypes() const {
+const QList<MediaType> &GetTrailersParams::mediaTypes() const {
 	return m_mediaTypes;
 }
 
-void GetTrailersParams::setMediaTypes(QStringList newMediaTypes)  {
+void GetTrailersParams::setMediaTypes(QList<MediaType> newMediaTypes)  {
 	m_mediaTypes = newMediaTypes;
 }
 
@@ -29900,11 +29524,11 @@ void GetTrailersParams::setSeriesStatusNull() {
 }
 
 
-const QString &GetTrailersParams::sortBy() const {
+const QList<ItemSortBy> &GetTrailersParams::sortBy() const {
 	return m_sortBy;
 }
 
-void GetTrailersParams::setSortBy(QString newSortBy)  {
+void GetTrailersParams::setSortBy(QList<ItemSortBy> newSortBy)  {
 	m_sortBy = newSortBy;
 }
 
@@ -29913,7 +29537,7 @@ bool GetTrailersParams::sortByNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortBy.isNull();
+	return m_sortBy.size() == 0;
 }
 
 void GetTrailersParams::setSortByNull() {
@@ -29921,11 +29545,11 @@ void GetTrailersParams::setSortByNull() {
 }
 
 
-const QString &GetTrailersParams::sortOrder() const {
+const QList<SortOrder> &GetTrailersParams::sortOrder() const {
 	return m_sortOrder;
 }
 
-void GetTrailersParams::setSortOrder(QString newSortOrder)  {
+void GetTrailersParams::setSortOrder(QList<SortOrder> newSortOrder)  {
 	m_sortOrder = newSortOrder;
 }
 
@@ -29934,7 +29558,7 @@ bool GetTrailersParams::sortOrderNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortOrder.isNull();
+	return m_sortOrder.size() == 0;
 }
 
 void GetTrailersParams::setSortOrderNull() {
@@ -30091,6 +29715,101 @@ void GetTrailersParams::setYearsNull() {
 
 
 
+// GetTrickplayHlsPlaylistParams
+
+const QString &GetTrickplayHlsPlaylistParams::itemId() const {
+	return m_itemId;
+}
+
+void GetTrickplayHlsPlaylistParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
+}
+
+
+const qint32 &GetTrickplayHlsPlaylistParams::width() const {
+	return m_width;
+}
+
+void GetTrickplayHlsPlaylistParams::setWidth(qint32 newWidth) {
+	m_width = newWidth;
+}
+
+
+const QString &GetTrickplayHlsPlaylistParams::mediaSourceId() const {
+	return m_mediaSourceId;
+}
+
+void GetTrickplayHlsPlaylistParams::setMediaSourceId(QString newMediaSourceId)  {
+	m_mediaSourceId = newMediaSourceId;
+}
+
+bool GetTrickplayHlsPlaylistParams::mediaSourceIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_mediaSourceId.isNull();
+}
+
+void GetTrickplayHlsPlaylistParams::setMediaSourceIdNull() {
+	m_mediaSourceId.clear();
+}
+
+
+
+
+// GetTrickplayTileImageParams
+
+const qint32 &GetTrickplayTileImageParams::index() const {
+	return m_index;
+}
+
+void GetTrickplayTileImageParams::setIndex(qint32 newIndex) {
+	m_index = newIndex;
+}
+
+
+const QString &GetTrickplayTileImageParams::itemId() const {
+	return m_itemId;
+}
+
+void GetTrickplayTileImageParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
+}
+
+
+const qint32 &GetTrickplayTileImageParams::width() const {
+	return m_width;
+}
+
+void GetTrickplayTileImageParams::setWidth(qint32 newWidth) {
+	m_width = newWidth;
+}
+
+
+const QString &GetTrickplayTileImageParams::mediaSourceId() const {
+	return m_mediaSourceId;
+}
+
+void GetTrickplayTileImageParams::setMediaSourceId(QString newMediaSourceId)  {
+	m_mediaSourceId = newMediaSourceId;
+}
+
+bool GetTrickplayTileImageParams::mediaSourceIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_mediaSourceId.isNull();
+}
+
+void GetTrickplayTileImageParams::setMediaSourceIdNull() {
+	m_mediaSourceId.clear();
+}
+
+
+
+
 // GetTunerHostTypesParams
 
 
@@ -30157,7 +29876,7 @@ void GetUniversalAudioStreamParams::setBreakOnNonKeyFrames(bool newBreakOnNonKey
 }
 
 bool GetUniversalAudioStreamParams::breakOnNonKeyFramesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -30208,6 +29927,27 @@ bool GetUniversalAudioStreamParams::deviceIdNull() const {
 
 void GetUniversalAudioStreamParams::setDeviceIdNull() {
 	m_deviceId.clear();
+}
+
+
+const bool &GetUniversalAudioStreamParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetUniversalAudioStreamParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetUniversalAudioStreamParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetUniversalAudioStreamParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
 }
 
 
@@ -30421,11 +30161,11 @@ void GetUniversalAudioStreamParams::setTranscodingContainerNull() {
 }
 
 
-const QString &GetUniversalAudioStreamParams::transcodingProtocol() const {
+const MediaStreamProtocol &GetUniversalAudioStreamParams::transcodingProtocol() const {
 	return m_transcodingProtocol;
 }
 
-void GetUniversalAudioStreamParams::setTranscodingProtocol(QString newTranscodingProtocol)  {
+void GetUniversalAudioStreamParams::setTranscodingProtocol(MediaStreamProtocol newTranscodingProtocol)  {
 	m_transcodingProtocol = newTranscodingProtocol;
 }
 
@@ -30434,11 +30174,11 @@ bool GetUniversalAudioStreamParams::transcodingProtocolNull() const {
 	// Type Nullable: true
 	
 
-	return m_transcodingProtocol.isNull();
+	return m_transcodingProtocol== MediaStreamProtocol::EnumNotSet;
 }
 
 void GetUniversalAudioStreamParams::setTranscodingProtocolNull() {
-	m_transcodingProtocol.clear();
+	m_transcodingProtocol= MediaStreamProtocol::EnumNotSet;
 }
 
 
@@ -30488,24 +30228,24 @@ void GetUpcomingEpisodesParams::setEnableImageTypesNull() {
 }
 
 
-const bool &GetUpcomingEpisodesParams::enableImges() const {
-	return m_enableImges.value();
+const bool &GetUpcomingEpisodesParams::enableImages() const {
+	return m_enableImages.value();
 }
 
-void GetUpcomingEpisodesParams::setEnableImges(bool newEnableImges)  {
-	m_enableImges = newEnableImges;
+void GetUpcomingEpisodesParams::setEnableImages(bool newEnableImages)  {
+	m_enableImages = newEnableImages;
 }
 
-bool GetUpcomingEpisodesParams::enableImgesNull() const {
+bool GetUpcomingEpisodesParams::enableImagesNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_enableImges.has_value();
+	return !m_enableImages.has_value();
 }
 
-void GetUpcomingEpisodesParams::setEnableImgesNull() {
-	m_enableImges = std::nullopt;
+void GetUpcomingEpisodesParams::setEnableImagesNull() {
+	m_enableImages = std::nullopt;
 }
 
 
@@ -30673,45 +30413,6 @@ void GetUserByIdParams::setUserId(QString newUserId) {
 
 // GetUserImageParams
 
-const ImageType &GetUserImageParams::imageType() const {
-	return m_imageType;
-}
-
-void GetUserImageParams::setImageType(ImageType newImageType) {
-	m_imageType = newImageType;
-}
-
-
-const QString &GetUserImageParams::userId() const {
-	return m_userId;
-}
-
-void GetUserImageParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-const bool &GetUserImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetUserImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetUserImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetUserImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &GetUserImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -30754,24 +30455,45 @@ void GetUserImageParams::setBlurNull() {
 }
 
 
-const bool &GetUserImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &GetUserImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void GetUserImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void GetUserImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool GetUserImageParams::cropWhitespaceNull() const {
+bool GetUserImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void GetUserImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void GetUserImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &GetUserImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void GetUserImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool GetUserImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void GetUserImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -30985,6 +30707,27 @@ void GetUserImageParams::setUnplayedCountNull() {
 }
 
 
+const QString &GetUserImageParams::userId() const {
+	return m_userId;
+}
+
+void GetUserImageParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool GetUserImageParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetUserImageParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
 const qint32 &GetUserImageParams::width() const {
 	return m_width.value();
 }
@@ -31008,341 +30751,7 @@ void GetUserImageParams::setWidthNull() {
 
 
 
-// GetUserImageByIndexParams
-
-const qint32 &GetUserImageByIndexParams::imageIndex() const {
-	return m_imageIndex;
-}
-
-void GetUserImageByIndexParams::setImageIndex(qint32 newImageIndex) {
-	m_imageIndex = newImageIndex;
-}
-
-
-const ImageType &GetUserImageByIndexParams::imageType() const {
-	return m_imageType;
-}
-
-void GetUserImageByIndexParams::setImageType(ImageType newImageType) {
-	m_imageType = newImageType;
-}
-
-
-const QString &GetUserImageByIndexParams::userId() const {
-	return m_userId;
-}
-
-void GetUserImageByIndexParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-const bool &GetUserImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void GetUserImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool GetUserImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void GetUserImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
-const QString &GetUserImageByIndexParams::backgroundColor() const {
-	return m_backgroundColor;
-}
-
-void GetUserImageByIndexParams::setBackgroundColor(QString newBackgroundColor)  {
-	m_backgroundColor = newBackgroundColor;
-}
-
-bool GetUserImageByIndexParams::backgroundColorNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_backgroundColor.isNull();
-}
-
-void GetUserImageByIndexParams::setBackgroundColorNull() {
-	m_backgroundColor.clear();
-}
-
-
-const qint32 &GetUserImageByIndexParams::blur() const {
-	return m_blur.value();
-}
-
-void GetUserImageByIndexParams::setBlur(qint32 newBlur)  {
-	m_blur = newBlur;
-}
-
-bool GetUserImageByIndexParams::blurNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_blur.has_value();
-}
-
-void GetUserImageByIndexParams::setBlurNull() {
-	m_blur = std::nullopt;
-}
-
-
-const bool &GetUserImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
-}
-
-void GetUserImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
-}
-
-bool GetUserImageByIndexParams::cropWhitespaceNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_cropWhitespace.has_value();
-}
-
-void GetUserImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
-}
-
-
-const QString &GetUserImageByIndexParams::foregroundLayer() const {
-	return m_foregroundLayer;
-}
-
-void GetUserImageByIndexParams::setForegroundLayer(QString newForegroundLayer)  {
-	m_foregroundLayer = newForegroundLayer;
-}
-
-bool GetUserImageByIndexParams::foregroundLayerNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_foregroundLayer.isNull();
-}
-
-void GetUserImageByIndexParams::setForegroundLayerNull() {
-	m_foregroundLayer.clear();
-}
-
-
-const ImageFormat &GetUserImageByIndexParams::format() const {
-	return m_format;
-}
-
-void GetUserImageByIndexParams::setFormat(ImageFormat newFormat)  {
-	m_format = newFormat;
-}
-
-bool GetUserImageByIndexParams::formatNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_format== ImageFormat::EnumNotSet;
-}
-
-void GetUserImageByIndexParams::setFormatNull() {
-	m_format= ImageFormat::EnumNotSet;
-}
-
-
-const qint32 &GetUserImageByIndexParams::height() const {
-	return m_height.value();
-}
-
-void GetUserImageByIndexParams::setHeight(qint32 newHeight)  {
-	m_height = newHeight;
-}
-
-bool GetUserImageByIndexParams::heightNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_height.has_value();
-}
-
-void GetUserImageByIndexParams::setHeightNull() {
-	m_height = std::nullopt;
-}
-
-
-const qint32 &GetUserImageByIndexParams::maxHeight() const {
-	return m_maxHeight.value();
-}
-
-void GetUserImageByIndexParams::setMaxHeight(qint32 newMaxHeight)  {
-	m_maxHeight = newMaxHeight;
-}
-
-bool GetUserImageByIndexParams::maxHeightNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_maxHeight.has_value();
-}
-
-void GetUserImageByIndexParams::setMaxHeightNull() {
-	m_maxHeight = std::nullopt;
-}
-
-
-const qint32 &GetUserImageByIndexParams::maxWidth() const {
-	return m_maxWidth.value();
-}
-
-void GetUserImageByIndexParams::setMaxWidth(qint32 newMaxWidth)  {
-	m_maxWidth = newMaxWidth;
-}
-
-bool GetUserImageByIndexParams::maxWidthNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_maxWidth.has_value();
-}
-
-void GetUserImageByIndexParams::setMaxWidthNull() {
-	m_maxWidth = std::nullopt;
-}
-
-
-const double &GetUserImageByIndexParams::percentPlayed() const {
-	return m_percentPlayed.value();
-}
-
-void GetUserImageByIndexParams::setPercentPlayed(double newPercentPlayed)  {
-	m_percentPlayed = newPercentPlayed;
-}
-
-bool GetUserImageByIndexParams::percentPlayedNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_percentPlayed.has_value();
-}
-
-void GetUserImageByIndexParams::setPercentPlayedNull() {
-	m_percentPlayed = std::nullopt;
-}
-
-
-const qint32 &GetUserImageByIndexParams::quality() const {
-	return m_quality.value();
-}
-
-void GetUserImageByIndexParams::setQuality(qint32 newQuality)  {
-	m_quality = newQuality;
-}
-
-bool GetUserImageByIndexParams::qualityNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_quality.has_value();
-}
-
-void GetUserImageByIndexParams::setQualityNull() {
-	m_quality = std::nullopt;
-}
-
-
-const QString &GetUserImageByIndexParams::tag() const {
-	return m_tag;
-}
-
-void GetUserImageByIndexParams::setTag(QString newTag)  {
-	m_tag = newTag;
-}
-
-bool GetUserImageByIndexParams::tagNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_tag.isNull();
-}
-
-void GetUserImageByIndexParams::setTagNull() {
-	m_tag.clear();
-}
-
-
-const qint32 &GetUserImageByIndexParams::unplayedCount() const {
-	return m_unplayedCount.value();
-}
-
-void GetUserImageByIndexParams::setUnplayedCount(qint32 newUnplayedCount)  {
-	m_unplayedCount = newUnplayedCount;
-}
-
-bool GetUserImageByIndexParams::unplayedCountNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_unplayedCount.has_value();
-}
-
-void GetUserImageByIndexParams::setUnplayedCountNull() {
-	m_unplayedCount = std::nullopt;
-}
-
-
-const qint32 &GetUserImageByIndexParams::width() const {
-	return m_width.value();
-}
-
-void GetUserImageByIndexParams::setWidth(qint32 newWidth)  {
-	m_width = newWidth;
-}
-
-bool GetUserImageByIndexParams::widthNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_width.has_value();
-}
-
-void GetUserImageByIndexParams::setWidthNull() {
-	m_width = std::nullopt;
-}
-
-
-
-
 // GetUserViewsParams
-
-const QString &GetUserViewsParams::userId() const {
-	return m_userId;
-}
-
-void GetUserViewsParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
 
 const bool &GetUserViewsParams::includeExternalContent() const {
 	return m_includeExternalContent.value();
@@ -31386,11 +30795,11 @@ void GetUserViewsParams::setIncludeHiddenNull() {
 }
 
 
-const QStringList &GetUserViewsParams::presetViews() const {
+const QList<CollectionType> &GetUserViewsParams::presetViews() const {
 	return m_presetViews;
 }
 
-void GetUserViewsParams::setPresetViews(QStringList newPresetViews)  {
+void GetUserViewsParams::setPresetViews(QList<CollectionType> newPresetViews)  {
 	m_presetViews = newPresetViews;
 }
 
@@ -31404,6 +30813,27 @@ bool GetUserViewsParams::presetViewsNull() const {
 
 void GetUserViewsParams::setPresetViewsNull() {
 	m_presetViews.clear();
+}
+
+
+const QString &GetUserViewsParams::userId() const {
+	return m_userId;
+}
+
+void GetUserViewsParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool GetUserViewsParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void GetUserViewsParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -31761,6 +31191,27 @@ bool GetVariantHlsAudioPlaylistParams::deviceProfileIdNull() const {
 
 void GetVariantHlsAudioPlaylistParams::setDeviceProfileIdNull() {
 	m_deviceProfileId.clear();
+}
+
+
+const bool &GetVariantHlsAudioPlaylistParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetVariantHlsAudioPlaylistParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetVariantHlsAudioPlaylistParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetVariantHlsAudioPlaylistParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
 }
 
 
@@ -32533,6 +31984,27 @@ void GetVariantHlsVideoPlaylistParams::setAllowVideoStreamCopyNull() {
 }
 
 
+const bool &GetVariantHlsVideoPlaylistParams::alwaysBurnInSubtitleWhenTranscoding() const {
+	return m_alwaysBurnInSubtitleWhenTranscoding.value();
+}
+
+void GetVariantHlsVideoPlaylistParams::setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding)  {
+	m_alwaysBurnInSubtitleWhenTranscoding = newAlwaysBurnInSubtitleWhenTranscoding;
+}
+
+bool GetVariantHlsVideoPlaylistParams::alwaysBurnInSubtitleWhenTranscodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_alwaysBurnInSubtitleWhenTranscoding.has_value();
+}
+
+void GetVariantHlsVideoPlaylistParams::setAlwaysBurnInSubtitleWhenTranscodingNull() {
+	m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
+}
+
+
 const qint32 &GetVariantHlsVideoPlaylistParams::audioBitRate() const {
 	return m_audioBitRate.value();
 }
@@ -32785,6 +32257,27 @@ void GetVariantHlsVideoPlaylistParams::setDeviceProfileIdNull() {
 }
 
 
+const bool &GetVariantHlsVideoPlaylistParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetVariantHlsVideoPlaylistParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetVariantHlsVideoPlaylistParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetVariantHlsVideoPlaylistParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &GetVariantHlsVideoPlaylistParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -32974,6 +32467,27 @@ void GetVariantHlsVideoPlaylistParams::setMaxFramerateNull() {
 }
 
 
+const qint32 &GetVariantHlsVideoPlaylistParams::maxHeight() const {
+	return m_maxHeight.value();
+}
+
+void GetVariantHlsVideoPlaylistParams::setMaxHeight(qint32 newMaxHeight)  {
+	m_maxHeight = newMaxHeight;
+}
+
+bool GetVariantHlsVideoPlaylistParams::maxHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxHeight.has_value();
+}
+
+void GetVariantHlsVideoPlaylistParams::setMaxHeightNull() {
+	m_maxHeight = std::nullopt;
+}
+
+
 const qint32 &GetVariantHlsVideoPlaylistParams::maxRefFrames() const {
 	return m_maxRefFrames.value();
 }
@@ -33013,6 +32527,27 @@ bool GetVariantHlsVideoPlaylistParams::maxVideoBitDepthNull() const {
 
 void GetVariantHlsVideoPlaylistParams::setMaxVideoBitDepthNull() {
 	m_maxVideoBitDepth = std::nullopt;
+}
+
+
+const qint32 &GetVariantHlsVideoPlaylistParams::maxWidth() const {
+	return m_maxWidth.value();
+}
+
+void GetVariantHlsVideoPlaylistParams::setMaxWidth(qint32 newMaxWidth)  {
+	m_maxWidth = newMaxWidth;
+}
+
+bool GetVariantHlsVideoPlaylistParams::maxWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxWidth.has_value();
+}
+
+void GetVariantHlsVideoPlaylistParams::setMaxWidthNull() {
+	m_maxWidth = std::nullopt;
 }
 
 
@@ -33806,6 +33341,27 @@ void GetVideoStreamParams::setDeviceProfileIdNull() {
 }
 
 
+const bool &GetVideoStreamParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetVideoStreamParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetVideoStreamParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetVideoStreamParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &GetVideoStreamParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -33995,6 +33551,27 @@ void GetVideoStreamParams::setMaxFramerateNull() {
 }
 
 
+const qint32 &GetVideoStreamParams::maxHeight() const {
+	return m_maxHeight.value();
+}
+
+void GetVideoStreamParams::setMaxHeight(qint32 newMaxHeight)  {
+	m_maxHeight = newMaxHeight;
+}
+
+bool GetVideoStreamParams::maxHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxHeight.has_value();
+}
+
+void GetVideoStreamParams::setMaxHeightNull() {
+	m_maxHeight = std::nullopt;
+}
+
+
 const qint32 &GetVideoStreamParams::maxRefFrames() const {
 	return m_maxRefFrames.value();
 }
@@ -34034,6 +33611,27 @@ bool GetVideoStreamParams::maxVideoBitDepthNull() const {
 
 void GetVideoStreamParams::setMaxVideoBitDepthNull() {
 	m_maxVideoBitDepth = std::nullopt;
+}
+
+
+const qint32 &GetVideoStreamParams::maxWidth() const {
+	return m_maxWidth.value();
+}
+
+void GetVideoStreamParams::setMaxWidth(qint32 newMaxWidth)  {
+	m_maxWidth = newMaxWidth;
+}
+
+bool GetVideoStreamParams::maxWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxWidth.has_value();
+}
+
+void GetVideoStreamParams::setMaxWidthNull() {
+	m_maxWidth = std::nullopt;
 }
 
 
@@ -34521,15 +34119,6 @@ void GetVideoStreamByContainerParams::setItemId(QString newItemId) {
 }
 
 
-const QString &GetVideoStreamByContainerParams::stream() const {
-	return m_stream;
-}
-
-void GetVideoStreamByContainerParams::setStream(QString newStream) {
-	m_stream = newStream;
-}
-
-
 const bool &GetVideoStreamByContainerParams::allowAudioStreamCopy() const {
 	return m_allowAudioStreamCopy.value();
 }
@@ -34824,6 +34413,27 @@ void GetVideoStreamByContainerParams::setDeviceProfileIdNull() {
 }
 
 
+const bool &GetVideoStreamByContainerParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void GetVideoStreamByContainerParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool GetVideoStreamByContainerParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void GetVideoStreamByContainerParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &GetVideoStreamByContainerParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -35013,6 +34623,27 @@ void GetVideoStreamByContainerParams::setMaxFramerateNull() {
 }
 
 
+const qint32 &GetVideoStreamByContainerParams::maxHeight() const {
+	return m_maxHeight.value();
+}
+
+void GetVideoStreamByContainerParams::setMaxHeight(qint32 newMaxHeight)  {
+	m_maxHeight = newMaxHeight;
+}
+
+bool GetVideoStreamByContainerParams::maxHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxHeight.has_value();
+}
+
+void GetVideoStreamByContainerParams::setMaxHeightNull() {
+	m_maxHeight = std::nullopt;
+}
+
+
 const qint32 &GetVideoStreamByContainerParams::maxRefFrames() const {
 	return m_maxRefFrames.value();
 }
@@ -35052,6 +34683,27 @@ bool GetVideoStreamByContainerParams::maxVideoBitDepthNull() const {
 
 void GetVideoStreamByContainerParams::setMaxVideoBitDepthNull() {
 	m_maxVideoBitDepth = std::nullopt;
+}
+
+
+const qint32 &GetVideoStreamByContainerParams::maxWidth() const {
+	return m_maxWidth.value();
+}
+
+void GetVideoStreamByContainerParams::setMaxWidth(qint32 newMaxWidth)  {
+	m_maxWidth = newMaxWidth;
+}
+
+bool GetVideoStreamByContainerParams::maxWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxWidth.has_value();
+}
+
+void GetVideoStreamByContainerParams::setMaxWidthNull() {
+	m_maxWidth = std::nullopt;
 }
 
 
@@ -35593,7 +35245,7 @@ void GetYearsParams::setEnableImages(bool newEnableImages)  {
 }
 
 bool GetYearsParams::enableImagesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -35626,11 +35278,11 @@ void GetYearsParams::setEnableUserDataNull() {
 }
 
 
-const QStringList &GetYearsParams::excludeItemTypes() const {
+const QList<BaseItemKind> &GetYearsParams::excludeItemTypes() const {
 	return m_excludeItemTypes;
 }
 
-void GetYearsParams::setExcludeItemTypes(QStringList newExcludeItemTypes)  {
+void GetYearsParams::setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes)  {
 	m_excludeItemTypes = newExcludeItemTypes;
 }
 
@@ -35689,11 +35341,11 @@ void GetYearsParams::setImageTypeLimitNull() {
 }
 
 
-const QStringList &GetYearsParams::includeItemTypes() const {
+const QList<BaseItemKind> &GetYearsParams::includeItemTypes() const {
 	return m_includeItemTypes;
 }
 
-void GetYearsParams::setIncludeItemTypes(QStringList newIncludeItemTypes)  {
+void GetYearsParams::setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes)  {
 	m_includeItemTypes = newIncludeItemTypes;
 }
 
@@ -35731,11 +35383,11 @@ void GetYearsParams::setLimitNull() {
 }
 
 
-const QStringList &GetYearsParams::mediaTypes() const {
+const QList<MediaType> &GetYearsParams::mediaTypes() const {
 	return m_mediaTypes;
 }
 
-void GetYearsParams::setMediaTypes(QStringList newMediaTypes)  {
+void GetYearsParams::setMediaTypes(QList<MediaType> newMediaTypes)  {
 	m_mediaTypes = newMediaTypes;
 }
 
@@ -35794,11 +35446,11 @@ void GetYearsParams::setRecursiveNull() {
 }
 
 
-const QString &GetYearsParams::sortBy() const {
+const QList<ItemSortBy> &GetYearsParams::sortBy() const {
 	return m_sortBy;
 }
 
-void GetYearsParams::setSortBy(QString newSortBy)  {
+void GetYearsParams::setSortBy(QList<ItemSortBy> newSortBy)  {
 	m_sortBy = newSortBy;
 }
 
@@ -35807,7 +35459,7 @@ bool GetYearsParams::sortByNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortBy.isNull();
+	return m_sortBy.size() == 0;
 }
 
 void GetYearsParams::setSortByNull() {
@@ -35815,11 +35467,11 @@ void GetYearsParams::setSortByNull() {
 }
 
 
-const QString &GetYearsParams::sortOrder() const {
+const QList<SortOrder> &GetYearsParams::sortOrder() const {
 	return m_sortOrder;
 }
 
-void GetYearsParams::setSortOrder(QString newSortOrder)  {
+void GetYearsParams::setSortOrder(QList<SortOrder> newSortOrder)  {
 	m_sortOrder = newSortOrder;
 }
 
@@ -35828,7 +35480,7 @@ bool GetYearsParams::sortOrderNull() const {
 	// Type Nullable: true
 	
 
-	return m_sortOrder.isNull();
+	return m_sortOrder.size() == 0;
 }
 
 void GetYearsParams::setSortOrderNull() {
@@ -35909,27 +35561,6 @@ void HeadArtistImageParams::setName(QString newName) {
 }
 
 
-const bool &HeadArtistImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadArtistImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadArtistImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadArtistImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadArtistImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -35972,24 +35603,45 @@ void HeadArtistImageParams::setBlurNull() {
 }
 
 
-const bool &HeadArtistImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadArtistImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadArtistImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadArtistImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadArtistImageParams::cropWhitespaceNull() const {
+bool HeadArtistImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadArtistImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadArtistImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadArtistImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadArtistImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadArtistImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadArtistImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -36528,6 +36180,27 @@ bool HeadAudioStreamParams::deviceProfileIdNull() const {
 
 void HeadAudioStreamParams::setDeviceProfileIdNull() {
 	m_deviceProfileId.clear();
+}
+
+
+const bool &HeadAudioStreamParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void HeadAudioStreamParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool HeadAudioStreamParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void HeadAudioStreamParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
 }
 
 
@@ -37540,6 +37213,27 @@ void HeadAudioStreamByContainerParams::setDeviceProfileIdNull() {
 }
 
 
+const bool &HeadAudioStreamByContainerParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void HeadAudioStreamByContainerParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool HeadAudioStreamByContainerParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void HeadAudioStreamByContainerParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &HeadAudioStreamByContainerParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -38255,27 +37949,6 @@ void HeadGenreImageParams::setName(QString newName) {
 }
 
 
-const bool &HeadGenreImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadGenreImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadGenreImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadGenreImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadGenreImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -38318,24 +37991,45 @@ void HeadGenreImageParams::setBlurNull() {
 }
 
 
-const bool &HeadGenreImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadGenreImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadGenreImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadGenreImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadGenreImageParams::cropWhitespaceNull() const {
+bool HeadGenreImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadGenreImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadGenreImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadGenreImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadGenreImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadGenreImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadGenreImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -38601,27 +38295,6 @@ void HeadGenreImageByIndexParams::setName(QString newName) {
 }
 
 
-const bool &HeadGenreImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadGenreImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadGenreImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadGenreImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadGenreImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -38664,24 +38337,45 @@ void HeadGenreImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &HeadGenreImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadGenreImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadGenreImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadGenreImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadGenreImageByIndexParams::cropWhitespaceNull() const {
+bool HeadGenreImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadGenreImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadGenreImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadGenreImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadGenreImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadGenreImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadGenreImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -38917,27 +38611,6 @@ void HeadItemImageParams::setItemId(QString newItemId) {
 }
 
 
-const bool &HeadItemImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadItemImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadItemImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadItemImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadItemImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -38980,24 +38653,45 @@ void HeadItemImageParams::setBlurNull() {
 }
 
 
-const bool &HeadItemImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadItemImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadItemImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadItemImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadItemImageParams::cropWhitespaceNull() const {
+bool HeadItemImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadItemImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadItemImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadItemImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadItemImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadItemImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadItemImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -39317,27 +39011,6 @@ void HeadItemImage2Params::setUnplayedCount(qint32 newUnplayedCount) {
 }
 
 
-const bool &HeadItemImage2Params::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadItemImage2Params::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadItemImage2Params::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadItemImage2Params::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadItemImage2Params::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -39380,24 +39053,45 @@ void HeadItemImage2Params::setBlurNull() {
 }
 
 
-const bool &HeadItemImage2Params::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadItemImage2Params::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadItemImage2Params::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadItemImage2Params::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadItemImage2Params::cropWhitespaceNull() const {
+bool HeadItemImage2Params::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadItemImage2Params::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadItemImage2Params::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadItemImage2Params::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadItemImage2Params::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadItemImage2Params::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadItemImage2Params::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -39516,27 +39210,6 @@ void HeadItemImageByIndexParams::setItemId(QString newItemId) {
 }
 
 
-const bool &HeadItemImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadItemImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadItemImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadItemImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadItemImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -39579,24 +39252,45 @@ void HeadItemImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &HeadItemImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadItemImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadItemImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadItemImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadItemImageByIndexParams::cropWhitespaceNull() const {
+bool HeadItemImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadItemImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadItemImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadItemImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadItemImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadItemImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadItemImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -40144,6 +39838,27 @@ bool HeadMasterHlsAudioPlaylistParams::enableAdaptiveBitrateStreamingNull() cons
 
 void HeadMasterHlsAudioPlaylistParams::setEnableAdaptiveBitrateStreamingNull() {
 	m_enableAdaptiveBitrateStreaming = std::nullopt;
+}
+
+
+const bool &HeadMasterHlsAudioPlaylistParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void HeadMasterHlsAudioPlaylistParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool HeadMasterHlsAudioPlaylistParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void HeadMasterHlsAudioPlaylistParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
 }
 
 
@@ -40904,6 +40619,27 @@ void HeadMasterHlsVideoPlaylistParams::setAllowVideoStreamCopyNull() {
 }
 
 
+const bool &HeadMasterHlsVideoPlaylistParams::alwaysBurnInSubtitleWhenTranscoding() const {
+	return m_alwaysBurnInSubtitleWhenTranscoding.value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding)  {
+	m_alwaysBurnInSubtitleWhenTranscoding = newAlwaysBurnInSubtitleWhenTranscoding;
+}
+
+bool HeadMasterHlsVideoPlaylistParams::alwaysBurnInSubtitleWhenTranscodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_alwaysBurnInSubtitleWhenTranscoding.has_value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setAlwaysBurnInSubtitleWhenTranscodingNull() {
+	m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
+}
+
+
 const qint32 &HeadMasterHlsVideoPlaylistParams::audioBitRate() const {
 	return m_audioBitRate.value();
 }
@@ -41177,6 +40913,27 @@ void HeadMasterHlsVideoPlaylistParams::setEnableAdaptiveBitrateStreamingNull() {
 }
 
 
+const bool &HeadMasterHlsVideoPlaylistParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool HeadMasterHlsVideoPlaylistParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &HeadMasterHlsVideoPlaylistParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -41216,6 +40973,27 @@ bool HeadMasterHlsVideoPlaylistParams::enableMpegtsM2TsModeNull() const {
 
 void HeadMasterHlsVideoPlaylistParams::setEnableMpegtsM2TsModeNull() {
 	m_enableMpegtsM2TsMode = std::nullopt;
+}
+
+
+const bool &HeadMasterHlsVideoPlaylistParams::enableTrickplay() const {
+	return m_enableTrickplay.value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setEnableTrickplay(bool newEnableTrickplay)  {
+	m_enableTrickplay = newEnableTrickplay;
+}
+
+bool HeadMasterHlsVideoPlaylistParams::enableTrickplayNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableTrickplay.has_value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setEnableTrickplayNull() {
+	m_enableTrickplay = std::nullopt;
 }
 
 
@@ -41366,6 +41144,27 @@ void HeadMasterHlsVideoPlaylistParams::setMaxFramerateNull() {
 }
 
 
+const qint32 &HeadMasterHlsVideoPlaylistParams::maxHeight() const {
+	return m_maxHeight.value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setMaxHeight(qint32 newMaxHeight)  {
+	m_maxHeight = newMaxHeight;
+}
+
+bool HeadMasterHlsVideoPlaylistParams::maxHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxHeight.has_value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setMaxHeightNull() {
+	m_maxHeight = std::nullopt;
+}
+
+
 const qint32 &HeadMasterHlsVideoPlaylistParams::maxRefFrames() const {
 	return m_maxRefFrames.value();
 }
@@ -41405,6 +41204,27 @@ bool HeadMasterHlsVideoPlaylistParams::maxVideoBitDepthNull() const {
 
 void HeadMasterHlsVideoPlaylistParams::setMaxVideoBitDepthNull() {
 	m_maxVideoBitDepth = std::nullopt;
+}
+
+
+const qint32 &HeadMasterHlsVideoPlaylistParams::maxWidth() const {
+	return m_maxWidth.value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setMaxWidth(qint32 newMaxWidth)  {
+	m_maxWidth = newMaxWidth;
+}
+
+bool HeadMasterHlsVideoPlaylistParams::maxWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxWidth.has_value();
+}
+
+void HeadMasterHlsVideoPlaylistParams::setMaxWidthNull() {
+	m_maxWidth = std::nullopt;
 }
 
 
@@ -41871,27 +41691,6 @@ void HeadMusicGenreImageParams::setName(QString newName) {
 }
 
 
-const bool &HeadMusicGenreImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadMusicGenreImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadMusicGenreImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadMusicGenreImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadMusicGenreImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -41934,24 +41733,45 @@ void HeadMusicGenreImageParams::setBlurNull() {
 }
 
 
-const bool &HeadMusicGenreImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadMusicGenreImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadMusicGenreImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadMusicGenreImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadMusicGenreImageParams::cropWhitespaceNull() const {
+bool HeadMusicGenreImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadMusicGenreImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadMusicGenreImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadMusicGenreImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadMusicGenreImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadMusicGenreImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadMusicGenreImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -42217,27 +42037,6 @@ void HeadMusicGenreImageByIndexParams::setName(QString newName) {
 }
 
 
-const bool &HeadMusicGenreImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadMusicGenreImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadMusicGenreImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadMusicGenreImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadMusicGenreImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -42280,24 +42079,45 @@ void HeadMusicGenreImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &HeadMusicGenreImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadMusicGenreImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadMusicGenreImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadMusicGenreImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadMusicGenreImageByIndexParams::cropWhitespaceNull() const {
+bool HeadMusicGenreImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadMusicGenreImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadMusicGenreImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadMusicGenreImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadMusicGenreImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadMusicGenreImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadMusicGenreImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -42533,27 +42353,6 @@ void HeadPersonImageParams::setName(QString newName) {
 }
 
 
-const bool &HeadPersonImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadPersonImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadPersonImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadPersonImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadPersonImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -42596,24 +42395,45 @@ void HeadPersonImageParams::setBlurNull() {
 }
 
 
-const bool &HeadPersonImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadPersonImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadPersonImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadPersonImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadPersonImageParams::cropWhitespaceNull() const {
+bool HeadPersonImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadPersonImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadPersonImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadPersonImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadPersonImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadPersonImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadPersonImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -42879,27 +42699,6 @@ void HeadPersonImageByIndexParams::setName(QString newName) {
 }
 
 
-const bool &HeadPersonImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadPersonImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadPersonImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadPersonImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadPersonImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -42942,24 +42741,45 @@ void HeadPersonImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &HeadPersonImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadPersonImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadPersonImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadPersonImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadPersonImageByIndexParams::cropWhitespaceNull() const {
+bool HeadPersonImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadPersonImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadPersonImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadPersonImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadPersonImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadPersonImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadPersonImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -43195,27 +43015,6 @@ void HeadStudioImageParams::setName(QString newName) {
 }
 
 
-const bool &HeadStudioImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadStudioImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadStudioImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadStudioImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadStudioImageParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -43258,24 +43057,45 @@ void HeadStudioImageParams::setBlurNull() {
 }
 
 
-const bool &HeadStudioImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadStudioImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadStudioImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadStudioImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadStudioImageParams::cropWhitespaceNull() const {
+bool HeadStudioImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadStudioImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadStudioImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadStudioImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadStudioImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadStudioImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadStudioImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -43541,27 +43361,6 @@ void HeadStudioImageByIndexParams::setName(QString newName) {
 }
 
 
-const bool &HeadStudioImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadStudioImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadStudioImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadStudioImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
 const QString &HeadStudioImageByIndexParams::backgroundColor() const {
 	return m_backgroundColor;
 }
@@ -43604,24 +43403,45 @@ void HeadStudioImageByIndexParams::setBlurNull() {
 }
 
 
-const bool &HeadStudioImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadStudioImageByIndexParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadStudioImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadStudioImageByIndexParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadStudioImageByIndexParams::cropWhitespaceNull() const {
+bool HeadStudioImageByIndexParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadStudioImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadStudioImageByIndexParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadStudioImageByIndexParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadStudioImageByIndexParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadStudioImageByIndexParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadStudioImageByIndexParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -43899,7 +43719,7 @@ void HeadUniversalAudioStreamParams::setBreakOnNonKeyFrames(bool newBreakOnNonKe
 }
 
 bool HeadUniversalAudioStreamParams::breakOnNonKeyFramesNull() const {
-	// Nullable: true
+	// Nullable: false
 	// Type Nullable: false
 	
 
@@ -43950,6 +43770,27 @@ bool HeadUniversalAudioStreamParams::deviceIdNull() const {
 
 void HeadUniversalAudioStreamParams::setDeviceIdNull() {
 	m_deviceId.clear();
+}
+
+
+const bool &HeadUniversalAudioStreamParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void HeadUniversalAudioStreamParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool HeadUniversalAudioStreamParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void HeadUniversalAudioStreamParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
 }
 
 
@@ -44163,11 +44004,11 @@ void HeadUniversalAudioStreamParams::setTranscodingContainerNull() {
 }
 
 
-const QString &HeadUniversalAudioStreamParams::transcodingProtocol() const {
+const MediaStreamProtocol &HeadUniversalAudioStreamParams::transcodingProtocol() const {
 	return m_transcodingProtocol;
 }
 
-void HeadUniversalAudioStreamParams::setTranscodingProtocol(QString newTranscodingProtocol)  {
+void HeadUniversalAudioStreamParams::setTranscodingProtocol(MediaStreamProtocol newTranscodingProtocol)  {
 	m_transcodingProtocol = newTranscodingProtocol;
 }
 
@@ -44176,11 +44017,11 @@ bool HeadUniversalAudioStreamParams::transcodingProtocolNull() const {
 	// Type Nullable: true
 	
 
-	return m_transcodingProtocol.isNull();
+	return m_transcodingProtocol== MediaStreamProtocol::EnumNotSet;
 }
 
 void HeadUniversalAudioStreamParams::setTranscodingProtocolNull() {
-	m_transcodingProtocol.clear();
+	m_transcodingProtocol= MediaStreamProtocol::EnumNotSet;
 }
 
 
@@ -44208,45 +44049,6 @@ void HeadUniversalAudioStreamParams::setUserIdNull() {
 
 
 // HeadUserImageParams
-
-const ImageType &HeadUserImageParams::imageType() const {
-	return m_imageType;
-}
-
-void HeadUserImageParams::setImageType(ImageType newImageType) {
-	m_imageType = newImageType;
-}
-
-
-const QString &HeadUserImageParams::userId() const {
-	return m_userId;
-}
-
-void HeadUserImageParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-const bool &HeadUserImageParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadUserImageParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadUserImageParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadUserImageParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
 
 const QString &HeadUserImageParams::backgroundColor() const {
 	return m_backgroundColor;
@@ -44290,24 +44092,45 @@ void HeadUserImageParams::setBlurNull() {
 }
 
 
-const bool &HeadUserImageParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
+const qint32 &HeadUserImageParams::fillHeight() const {
+	return m_fillHeight.value();
 }
 
-void HeadUserImageParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
+void HeadUserImageParams::setFillHeight(qint32 newFillHeight)  {
+	m_fillHeight = newFillHeight;
 }
 
-bool HeadUserImageParams::cropWhitespaceNull() const {
+bool HeadUserImageParams::fillHeightNull() const {
 	// Nullable: true
 	// Type Nullable: false
 	
 
-	return !m_cropWhitespace.has_value();
+	return !m_fillHeight.has_value();
 }
 
-void HeadUserImageParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
+void HeadUserImageParams::setFillHeightNull() {
+	m_fillHeight = std::nullopt;
+}
+
+
+const qint32 &HeadUserImageParams::fillWidth() const {
+	return m_fillWidth.value();
+}
+
+void HeadUserImageParams::setFillWidth(qint32 newFillWidth)  {
+	m_fillWidth = newFillWidth;
+}
+
+bool HeadUserImageParams::fillWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_fillWidth.has_value();
+}
+
+void HeadUserImageParams::setFillWidthNull() {
+	m_fillWidth = std::nullopt;
 }
 
 
@@ -44521,6 +44344,27 @@ void HeadUserImageParams::setUnplayedCountNull() {
 }
 
 
+const QString &HeadUserImageParams::userId() const {
+	return m_userId;
+}
+
+void HeadUserImageParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool HeadUserImageParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void HeadUserImageParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
 const qint32 &HeadUserImageParams::width() const {
 	return m_width.value();
 }
@@ -44538,331 +44382,6 @@ bool HeadUserImageParams::widthNull() const {
 }
 
 void HeadUserImageParams::setWidthNull() {
-	m_width = std::nullopt;
-}
-
-
-
-
-// HeadUserImageByIndexParams
-
-const qint32 &HeadUserImageByIndexParams::imageIndex() const {
-	return m_imageIndex;
-}
-
-void HeadUserImageByIndexParams::setImageIndex(qint32 newImageIndex) {
-	m_imageIndex = newImageIndex;
-}
-
-
-const ImageType &HeadUserImageByIndexParams::imageType() const {
-	return m_imageType;
-}
-
-void HeadUserImageByIndexParams::setImageType(ImageType newImageType) {
-	m_imageType = newImageType;
-}
-
-
-const QString &HeadUserImageByIndexParams::userId() const {
-	return m_userId;
-}
-
-void HeadUserImageByIndexParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-const bool &HeadUserImageByIndexParams::addPlayedIndicator() const {
-	return m_addPlayedIndicator.value();
-}
-
-void HeadUserImageByIndexParams::setAddPlayedIndicator(bool newAddPlayedIndicator)  {
-	m_addPlayedIndicator = newAddPlayedIndicator;
-}
-
-bool HeadUserImageByIndexParams::addPlayedIndicatorNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_addPlayedIndicator.has_value();
-}
-
-void HeadUserImageByIndexParams::setAddPlayedIndicatorNull() {
-	m_addPlayedIndicator = std::nullopt;
-}
-
-
-const QString &HeadUserImageByIndexParams::backgroundColor() const {
-	return m_backgroundColor;
-}
-
-void HeadUserImageByIndexParams::setBackgroundColor(QString newBackgroundColor)  {
-	m_backgroundColor = newBackgroundColor;
-}
-
-bool HeadUserImageByIndexParams::backgroundColorNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_backgroundColor.isNull();
-}
-
-void HeadUserImageByIndexParams::setBackgroundColorNull() {
-	m_backgroundColor.clear();
-}
-
-
-const qint32 &HeadUserImageByIndexParams::blur() const {
-	return m_blur.value();
-}
-
-void HeadUserImageByIndexParams::setBlur(qint32 newBlur)  {
-	m_blur = newBlur;
-}
-
-bool HeadUserImageByIndexParams::blurNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_blur.has_value();
-}
-
-void HeadUserImageByIndexParams::setBlurNull() {
-	m_blur = std::nullopt;
-}
-
-
-const bool &HeadUserImageByIndexParams::cropWhitespace() const {
-	return m_cropWhitespace.value();
-}
-
-void HeadUserImageByIndexParams::setCropWhitespace(bool newCropWhitespace)  {
-	m_cropWhitespace = newCropWhitespace;
-}
-
-bool HeadUserImageByIndexParams::cropWhitespaceNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_cropWhitespace.has_value();
-}
-
-void HeadUserImageByIndexParams::setCropWhitespaceNull() {
-	m_cropWhitespace = std::nullopt;
-}
-
-
-const QString &HeadUserImageByIndexParams::foregroundLayer() const {
-	return m_foregroundLayer;
-}
-
-void HeadUserImageByIndexParams::setForegroundLayer(QString newForegroundLayer)  {
-	m_foregroundLayer = newForegroundLayer;
-}
-
-bool HeadUserImageByIndexParams::foregroundLayerNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_foregroundLayer.isNull();
-}
-
-void HeadUserImageByIndexParams::setForegroundLayerNull() {
-	m_foregroundLayer.clear();
-}
-
-
-const ImageFormat &HeadUserImageByIndexParams::format() const {
-	return m_format;
-}
-
-void HeadUserImageByIndexParams::setFormat(ImageFormat newFormat)  {
-	m_format = newFormat;
-}
-
-bool HeadUserImageByIndexParams::formatNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_format== ImageFormat::EnumNotSet;
-}
-
-void HeadUserImageByIndexParams::setFormatNull() {
-	m_format= ImageFormat::EnumNotSet;
-}
-
-
-const qint32 &HeadUserImageByIndexParams::height() const {
-	return m_height.value();
-}
-
-void HeadUserImageByIndexParams::setHeight(qint32 newHeight)  {
-	m_height = newHeight;
-}
-
-bool HeadUserImageByIndexParams::heightNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_height.has_value();
-}
-
-void HeadUserImageByIndexParams::setHeightNull() {
-	m_height = std::nullopt;
-}
-
-
-const qint32 &HeadUserImageByIndexParams::maxHeight() const {
-	return m_maxHeight.value();
-}
-
-void HeadUserImageByIndexParams::setMaxHeight(qint32 newMaxHeight)  {
-	m_maxHeight = newMaxHeight;
-}
-
-bool HeadUserImageByIndexParams::maxHeightNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_maxHeight.has_value();
-}
-
-void HeadUserImageByIndexParams::setMaxHeightNull() {
-	m_maxHeight = std::nullopt;
-}
-
-
-const qint32 &HeadUserImageByIndexParams::maxWidth() const {
-	return m_maxWidth.value();
-}
-
-void HeadUserImageByIndexParams::setMaxWidth(qint32 newMaxWidth)  {
-	m_maxWidth = newMaxWidth;
-}
-
-bool HeadUserImageByIndexParams::maxWidthNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_maxWidth.has_value();
-}
-
-void HeadUserImageByIndexParams::setMaxWidthNull() {
-	m_maxWidth = std::nullopt;
-}
-
-
-const double &HeadUserImageByIndexParams::percentPlayed() const {
-	return m_percentPlayed.value();
-}
-
-void HeadUserImageByIndexParams::setPercentPlayed(double newPercentPlayed)  {
-	m_percentPlayed = newPercentPlayed;
-}
-
-bool HeadUserImageByIndexParams::percentPlayedNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_percentPlayed.has_value();
-}
-
-void HeadUserImageByIndexParams::setPercentPlayedNull() {
-	m_percentPlayed = std::nullopt;
-}
-
-
-const qint32 &HeadUserImageByIndexParams::quality() const {
-	return m_quality.value();
-}
-
-void HeadUserImageByIndexParams::setQuality(qint32 newQuality)  {
-	m_quality = newQuality;
-}
-
-bool HeadUserImageByIndexParams::qualityNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_quality.has_value();
-}
-
-void HeadUserImageByIndexParams::setQualityNull() {
-	m_quality = std::nullopt;
-}
-
-
-const QString &HeadUserImageByIndexParams::tag() const {
-	return m_tag;
-}
-
-void HeadUserImageByIndexParams::setTag(QString newTag)  {
-	m_tag = newTag;
-}
-
-bool HeadUserImageByIndexParams::tagNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_tag.isNull();
-}
-
-void HeadUserImageByIndexParams::setTagNull() {
-	m_tag.clear();
-}
-
-
-const qint32 &HeadUserImageByIndexParams::unplayedCount() const {
-	return m_unplayedCount.value();
-}
-
-void HeadUserImageByIndexParams::setUnplayedCount(qint32 newUnplayedCount)  {
-	m_unplayedCount = newUnplayedCount;
-}
-
-bool HeadUserImageByIndexParams::unplayedCountNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_unplayedCount.has_value();
-}
-
-void HeadUserImageByIndexParams::setUnplayedCountNull() {
-	m_unplayedCount = std::nullopt;
-}
-
-
-const qint32 &HeadUserImageByIndexParams::width() const {
-	return m_width.value();
-}
-
-void HeadUserImageByIndexParams::setWidth(qint32 newWidth)  {
-	m_width = newWidth;
-}
-
-bool HeadUserImageByIndexParams::widthNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_width.has_value();
-}
-
-void HeadUserImageByIndexParams::setWidthNull() {
 	m_width = std::nullopt;
 }
 
@@ -45195,6 +44714,27 @@ void HeadVideoStreamParams::setDeviceProfileIdNull() {
 }
 
 
+const bool &HeadVideoStreamParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void HeadVideoStreamParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool HeadVideoStreamParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void HeadVideoStreamParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &HeadVideoStreamParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -45384,6 +44924,27 @@ void HeadVideoStreamParams::setMaxFramerateNull() {
 }
 
 
+const qint32 &HeadVideoStreamParams::maxHeight() const {
+	return m_maxHeight.value();
+}
+
+void HeadVideoStreamParams::setMaxHeight(qint32 newMaxHeight)  {
+	m_maxHeight = newMaxHeight;
+}
+
+bool HeadVideoStreamParams::maxHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxHeight.has_value();
+}
+
+void HeadVideoStreamParams::setMaxHeightNull() {
+	m_maxHeight = std::nullopt;
+}
+
+
 const qint32 &HeadVideoStreamParams::maxRefFrames() const {
 	return m_maxRefFrames.value();
 }
@@ -45423,6 +44984,27 @@ bool HeadVideoStreamParams::maxVideoBitDepthNull() const {
 
 void HeadVideoStreamParams::setMaxVideoBitDepthNull() {
 	m_maxVideoBitDepth = std::nullopt;
+}
+
+
+const qint32 &HeadVideoStreamParams::maxWidth() const {
+	return m_maxWidth.value();
+}
+
+void HeadVideoStreamParams::setMaxWidth(qint32 newMaxWidth)  {
+	m_maxWidth = newMaxWidth;
+}
+
+bool HeadVideoStreamParams::maxWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxWidth.has_value();
+}
+
+void HeadVideoStreamParams::setMaxWidthNull() {
+	m_maxWidth = std::nullopt;
 }
 
 
@@ -45910,15 +45492,6 @@ void HeadVideoStreamByContainerParams::setItemId(QString newItemId) {
 }
 
 
-const QString &HeadVideoStreamByContainerParams::stream() const {
-	return m_stream;
-}
-
-void HeadVideoStreamByContainerParams::setStream(QString newStream) {
-	m_stream = newStream;
-}
-
-
 const bool &HeadVideoStreamByContainerParams::allowAudioStreamCopy() const {
 	return m_allowAudioStreamCopy.value();
 }
@@ -46213,6 +45786,27 @@ void HeadVideoStreamByContainerParams::setDeviceProfileIdNull() {
 }
 
 
+const bool &HeadVideoStreamByContainerParams::enableAudioVbrEncoding() const {
+	return m_enableAudioVbrEncoding.value();
+}
+
+void HeadVideoStreamByContainerParams::setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding)  {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
+}
+
+bool HeadVideoStreamByContainerParams::enableAudioVbrEncodingNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
+
+	return !m_enableAudioVbrEncoding.has_value();
+}
+
+void HeadVideoStreamByContainerParams::setEnableAudioVbrEncodingNull() {
+	m_enableAudioVbrEncoding = std::nullopt;
+}
+
+
 const bool &HeadVideoStreamByContainerParams::enableAutoStreamCopy() const {
 	return m_enableAutoStreamCopy.value();
 }
@@ -46402,6 +45996,27 @@ void HeadVideoStreamByContainerParams::setMaxFramerateNull() {
 }
 
 
+const qint32 &HeadVideoStreamByContainerParams::maxHeight() const {
+	return m_maxHeight.value();
+}
+
+void HeadVideoStreamByContainerParams::setMaxHeight(qint32 newMaxHeight)  {
+	m_maxHeight = newMaxHeight;
+}
+
+bool HeadVideoStreamByContainerParams::maxHeightNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxHeight.has_value();
+}
+
+void HeadVideoStreamByContainerParams::setMaxHeightNull() {
+	m_maxHeight = std::nullopt;
+}
+
+
 const qint32 &HeadVideoStreamByContainerParams::maxRefFrames() const {
 	return m_maxRefFrames.value();
 }
@@ -46441,6 +46056,27 @@ bool HeadVideoStreamByContainerParams::maxVideoBitDepthNull() const {
 
 void HeadVideoStreamByContainerParams::setMaxVideoBitDepthNull() {
 	m_maxVideoBitDepth = std::nullopt;
+}
+
+
+const qint32 &HeadVideoStreamByContainerParams::maxWidth() const {
+	return m_maxWidth.value();
+}
+
+void HeadVideoStreamByContainerParams::setMaxWidth(qint32 newMaxWidth)  {
+	m_maxWidth = newMaxWidth;
+}
+
+bool HeadVideoStreamByContainerParams::maxWidthNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_maxWidth.has_value();
+}
+
+void HeadVideoStreamByContainerParams::setMaxWidthNull() {
+	m_maxWidth = std::nullopt;
 }
 
 
@@ -46908,7 +46544,7 @@ void HeadVideoStreamByContainerParams::setWidthNull() {
 
 
 
-// InitiateParams
+// InitiateQuickConnectParams
 
 
 
@@ -46988,6 +46624,19 @@ void InstallPackageParams::setVersionNull() {
 
 
 
+// LogFileParams
+
+const QByteArray &LogFileParams::body() const {
+	return m_body;
+}
+
+void LogFileParams::setBody(QByteArray newBody) {
+	m_body = newBody;
+}
+
+
+
+
 // MarkFavoriteItemParams
 
 const QString &MarkFavoriteItemParams::itemId() const {
@@ -47003,8 +46652,20 @@ const QString &MarkFavoriteItemParams::userId() const {
 	return m_userId;
 }
 
-void MarkFavoriteItemParams::setUserId(QString newUserId) {
+void MarkFavoriteItemParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool MarkFavoriteItemParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void MarkFavoriteItemParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -47018,15 +46679,6 @@ const QString &MarkPlayedItemParams::itemId() const {
 
 void MarkPlayedItemParams::setItemId(QString newItemId) {
 	m_itemId = newItemId;
-}
-
-
-const QString &MarkPlayedItemParams::userId() const {
-	return m_userId;
-}
-
-void MarkPlayedItemParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
 }
 
 
@@ -47051,6 +46703,27 @@ void MarkPlayedItemParams::setDatePlayedNull() {
 }
 
 
+const QString &MarkPlayedItemParams::userId() const {
+	return m_userId;
+}
+
+void MarkPlayedItemParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool MarkPlayedItemParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void MarkPlayedItemParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
 
 
 // MarkUnplayedItemParams
@@ -47068,8 +46741,20 @@ const QString &MarkUnplayedItemParams::userId() const {
 	return m_userId;
 }
 
-void MarkUnplayedItemParams::setUserId(QString newUserId) {
+void MarkUnplayedItemParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool MarkUnplayedItemParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void MarkUnplayedItemParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -47127,15 +46812,6 @@ const QString &OnPlaybackProgressParams::itemId() const {
 
 void OnPlaybackProgressParams::setItemId(QString newItemId) {
 	m_itemId = newItemId;
-}
-
-
-const QString &OnPlaybackProgressParams::userId() const {
-	return m_userId;
-}
-
-void OnPlaybackProgressParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
 }
 
 
@@ -47383,15 +47059,6 @@ void OnPlaybackStartParams::setItemId(QString newItemId) {
 }
 
 
-const QString &OnPlaybackStartParams::userId() const {
-	return m_userId;
-}
-
-void OnPlaybackStartParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
 const qint32 &OnPlaybackStartParams::audioStreamIndex() const {
 	return m_audioStreamIndex.value();
 }
@@ -47552,15 +47219,6 @@ void OnPlaybackStoppedParams::setItemId(QString newItemId) {
 }
 
 
-const QString &OnPlaybackStoppedParams::userId() const {
-	return m_userId;
-}
-
-void OnPlaybackStoppedParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
 const QString &OnPlaybackStoppedParams::liveStreamId() const {
 	return m_liveStreamId;
 }
@@ -47669,6 +47327,27 @@ void OnPlaybackStoppedParams::setPositionTicksNull() {
 
 
 // OpenLiveStreamParams
+
+const bool &OpenLiveStreamParams::alwaysBurnInSubtitleWhenTranscoding() const {
+	return m_alwaysBurnInSubtitleWhenTranscoding.value();
+}
+
+void OpenLiveStreamParams::setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding)  {
+	m_alwaysBurnInSubtitleWhenTranscoding = newAlwaysBurnInSubtitleWhenTranscoding;
+}
+
+bool OpenLiveStreamParams::alwaysBurnInSubtitleWhenTranscodingNull() const {
+	// Nullable: true
+	// Type Nullable: false
+	
+
+	return !m_alwaysBurnInSubtitleWhenTranscoding.has_value();
+}
+
+void OpenLiveStreamParams::setAlwaysBurnInSubtitleWhenTranscodingNull() {
+	m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
+}
+
 
 const qint32 &OpenLiveStreamParams::audioStreamIndex() const {
 	return m_audioStreamIndex.value();
@@ -47918,20 +47597,8 @@ const QString &PingPlaybackSessionParams::playSessionId() const {
 	return m_playSessionId;
 }
 
-void PingPlaybackSessionParams::setPlaySessionId(QString newPlaySessionId)  {
+void PingPlaybackSessionParams::setPlaySessionId(QString newPlaySessionId) {
 	m_playSessionId = newPlaySessionId;
-}
-
-bool PingPlaybackSessionParams::playSessionIdNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_playSessionId.isNull();
-}
-
-void PingPlaybackSessionParams::setPlaySessionIdNull() {
-	m_playSessionId.clear();
 }
 
 
@@ -48073,103 +47740,6 @@ void PlayParams::setSubtitleStreamIndexNull() {
 
 
 
-// PostParams
-
-const QString &PostParams::itemId() const {
-	return m_itemId;
-}
-
-void PostParams::setItemId(QString newItemId) {
-	m_itemId = newItemId;
-}
-
-
-const MetadataRefreshMode &PostParams::imageRefreshMode() const {
-	return m_imageRefreshMode;
-}
-
-void PostParams::setImageRefreshMode(MetadataRefreshMode newImageRefreshMode)  {
-	m_imageRefreshMode = newImageRefreshMode;
-}
-
-bool PostParams::imageRefreshModeNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_imageRefreshMode== MetadataRefreshMode::EnumNotSet;
-}
-
-void PostParams::setImageRefreshModeNull() {
-	m_imageRefreshMode= MetadataRefreshMode::EnumNotSet;
-}
-
-
-const MetadataRefreshMode &PostParams::metadataRefreshMode() const {
-	return m_metadataRefreshMode;
-}
-
-void PostParams::setMetadataRefreshMode(MetadataRefreshMode newMetadataRefreshMode)  {
-	m_metadataRefreshMode = newMetadataRefreshMode;
-}
-
-bool PostParams::metadataRefreshModeNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_metadataRefreshMode== MetadataRefreshMode::EnumNotSet;
-}
-
-void PostParams::setMetadataRefreshModeNull() {
-	m_metadataRefreshMode= MetadataRefreshMode::EnumNotSet;
-}
-
-
-const bool &PostParams::replaceAllImages() const {
-	return m_replaceAllImages.value();
-}
-
-void PostParams::setReplaceAllImages(bool newReplaceAllImages)  {
-	m_replaceAllImages = newReplaceAllImages;
-}
-
-bool PostParams::replaceAllImagesNull() const {
-	// Nullable: false
-	// Type Nullable: false
-	
-
-	return !m_replaceAllImages.has_value();
-}
-
-void PostParams::setReplaceAllImagesNull() {
-	m_replaceAllImages = std::nullopt;
-}
-
-
-const bool &PostParams::replaceAllMetadata() const {
-	return m_replaceAllMetadata.value();
-}
-
-void PostParams::setReplaceAllMetadata(bool newReplaceAllMetadata)  {
-	m_replaceAllMetadata = newReplaceAllMetadata;
-}
-
-bool PostParams::replaceAllMetadataNull() const {
-	// Nullable: false
-	// Type Nullable: false
-	
-
-	return !m_replaceAllMetadata.has_value();
-}
-
-void PostParams::setReplaceAllMetadataNull() {
-	m_replaceAllMetadata = std::nullopt;
-}
-
-
-
-
 // PostAddedMoviesParams
 
 const QString &PostAddedMoviesParams::imdbId() const {
@@ -48264,11 +47834,11 @@ void PostCapabilitiesParams::setJellyfinIdNull() {
 }
 
 
-const QStringList &PostCapabilitiesParams::playableMediaTypes() const {
+const QList<MediaType> &PostCapabilitiesParams::playableMediaTypes() const {
 	return m_playableMediaTypes;
 }
 
-void PostCapabilitiesParams::setPlayableMediaTypes(QStringList newPlayableMediaTypes)  {
+void PostCapabilitiesParams::setPlayableMediaTypes(QList<MediaType> newPlayableMediaTypes)  {
 	m_playableMediaTypes = newPlayableMediaTypes;
 }
 
@@ -48348,27 +47918,6 @@ void PostCapabilitiesParams::setSupportsPersistentIdentifierNull() {
 }
 
 
-const bool &PostCapabilitiesParams::supportsSync() const {
-	return m_supportsSync.value();
-}
-
-void PostCapabilitiesParams::setSupportsSync(bool newSupportsSync)  {
-	m_supportsSync = newSupportsSync;
-}
-
-bool PostCapabilitiesParams::supportsSyncNull() const {
-	// Nullable: false
-	// Type Nullable: false
-	
-
-	return !m_supportsSync.has_value();
-}
-
-void PostCapabilitiesParams::setSupportsSyncNull() {
-	m_supportsSync = std::nullopt;
-}
-
-
 
 
 // PostFullCapabilitiesParams
@@ -48411,11 +47960,11 @@ void PostFullCapabilitiesParams::setBody(QSharedPointer<ClientCapabilitiesDto> n
 
 // PostUpdatedMediaParams
 
-const QList<MediaUpdateInfoDto> &PostUpdatedMediaParams::body() const {
+const QSharedPointer<MediaUpdateInfoDto> &PostUpdatedMediaParams::body() const {
 	return m_body;
 }
 
-void PostUpdatedMediaParams::setBody(QList<MediaUpdateInfoDto> newBody) {
+void PostUpdatedMediaParams::setBody(QSharedPointer<MediaUpdateInfoDto> newBody) {
 	m_body = newBody;
 }
 
@@ -48495,112 +48044,151 @@ void PostUpdatedSeriesParams::setTvdbIdNull() {
 
 // PostUserImageParams
 
-const ImageType &PostUserImageParams::imageType() const {
-	return m_imageType;
-}
-
-void PostUserImageParams::setImageType(ImageType newImageType) {
-	m_imageType = newImageType;
-}
-
-
 const QString &PostUserImageParams::userId() const {
 	return m_userId;
 }
 
-void PostUserImageParams::setUserId(QString newUserId) {
+void PostUserImageParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
 }
 
-
-const qint32 &PostUserImageParams::index() const {
-	return m_index.value();
-}
-
-void PostUserImageParams::setIndex(qint32 newIndex)  {
-	m_index = newIndex;
-}
-
-bool PostUserImageParams::indexNull() const {
+bool PostUserImageParams::userIdNull() const {
 	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void PostUserImageParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
+const QByteArray &PostUserImageParams::body() const {
+	return m_body;
+}
+
+void PostUserImageParams::setBody(QByteArray newBody) {
+	m_body = newBody;
+}
+
+
+
+
+// RefreshItemParams
+
+const QString &RefreshItemParams::itemId() const {
+	return m_itemId;
+}
+
+void RefreshItemParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
+}
+
+
+const MetadataRefreshMode &RefreshItemParams::imageRefreshMode() const {
+	return m_imageRefreshMode;
+}
+
+void RefreshItemParams::setImageRefreshMode(MetadataRefreshMode newImageRefreshMode)  {
+	m_imageRefreshMode = newImageRefreshMode;
+}
+
+bool RefreshItemParams::imageRefreshModeNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_imageRefreshMode== MetadataRefreshMode::EnumNotSet;
+}
+
+void RefreshItemParams::setImageRefreshModeNull() {
+	m_imageRefreshMode= MetadataRefreshMode::EnumNotSet;
+}
+
+
+const MetadataRefreshMode &RefreshItemParams::metadataRefreshMode() const {
+	return m_metadataRefreshMode;
+}
+
+void RefreshItemParams::setMetadataRefreshMode(MetadataRefreshMode newMetadataRefreshMode)  {
+	m_metadataRefreshMode = newMetadataRefreshMode;
+}
+
+bool RefreshItemParams::metadataRefreshModeNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_metadataRefreshMode== MetadataRefreshMode::EnumNotSet;
+}
+
+void RefreshItemParams::setMetadataRefreshModeNull() {
+	m_metadataRefreshMode= MetadataRefreshMode::EnumNotSet;
+}
+
+
+const bool &RefreshItemParams::regenerateTrickplay() const {
+	return m_regenerateTrickplay.value();
+}
+
+void RefreshItemParams::setRegenerateTrickplay(bool newRegenerateTrickplay)  {
+	m_regenerateTrickplay = newRegenerateTrickplay;
+}
+
+bool RefreshItemParams::regenerateTrickplayNull() const {
+	// Nullable: false
 	// Type Nullable: false
 	
 
-	return !m_index.has_value();
+	return !m_regenerateTrickplay.has_value();
 }
 
-void PostUserImageParams::setIndexNull() {
-	m_index = std::nullopt;
-}
-
-
-
-
-// PostUserImageByIndexParams
-
-const ImageType &PostUserImageByIndexParams::imageType() const {
-	return m_imageType;
-}
-
-void PostUserImageByIndexParams::setImageType(ImageType newImageType) {
-	m_imageType = newImageType;
+void RefreshItemParams::setRegenerateTrickplayNull() {
+	m_regenerateTrickplay = std::nullopt;
 }
 
 
-const qint32 &PostUserImageByIndexParams::index() const {
-	return m_index;
+const bool &RefreshItemParams::replaceAllImages() const {
+	return m_replaceAllImages.value();
 }
 
-void PostUserImageByIndexParams::setIndex(qint32 newIndex) {
-	m_index = newIndex;
+void RefreshItemParams::setReplaceAllImages(bool newReplaceAllImages)  {
+	m_replaceAllImages = newReplaceAllImages;
 }
 
+bool RefreshItemParams::replaceAllImagesNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
 
-const QString &PostUserImageByIndexParams::userId() const {
-	return m_userId;
+	return !m_replaceAllImages.has_value();
 }
 
-void PostUserImageByIndexParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-
-
-// ProcessConnectionManagerControlRequestParams
-
-const QString &ProcessConnectionManagerControlRequestParams::serverId() const {
-	return m_serverId;
-}
-
-void ProcessConnectionManagerControlRequestParams::setServerId(QString newServerId) {
-	m_serverId = newServerId;
+void RefreshItemParams::setReplaceAllImagesNull() {
+	m_replaceAllImages = std::nullopt;
 }
 
 
-
-
-// ProcessContentDirectoryControlRequestParams
-
-const QString &ProcessContentDirectoryControlRequestParams::serverId() const {
-	return m_serverId;
+const bool &RefreshItemParams::replaceAllMetadata() const {
+	return m_replaceAllMetadata.value();
 }
 
-void ProcessContentDirectoryControlRequestParams::setServerId(QString newServerId) {
-	m_serverId = newServerId;
+void RefreshItemParams::setReplaceAllMetadata(bool newReplaceAllMetadata)  {
+	m_replaceAllMetadata = newReplaceAllMetadata;
 }
 
+bool RefreshItemParams::replaceAllMetadataNull() const {
+	// Nullable: false
+	// Type Nullable: false
+	
 
-
-
-// ProcessMediaReceiverRegistrarControlRequestParams
-
-const QString &ProcessMediaReceiverRegistrarControlRequestParams::serverId() const {
-	return m_serverId;
+	return !m_replaceAllMetadata.has_value();
 }
 
-void ProcessMediaReceiverRegistrarControlRequestParams::setServerId(QString newServerId) {
-	m_serverId = newServerId;
+void RefreshItemParams::setReplaceAllMetadataNull() {
+	m_replaceAllMetadata = std::nullopt;
 }
 
 
@@ -48632,26 +48220,26 @@ void RemoveFromCollectionParams::setIds(QStringList newIds) {
 
 
 
-// RemoveFromPlaylistParams
+// RemoveItemFromPlaylistParams
 
-const QString &RemoveFromPlaylistParams::playlistId() const {
+const QString &RemoveItemFromPlaylistParams::playlistId() const {
 	return m_playlistId;
 }
 
-void RemoveFromPlaylistParams::setPlaylistId(QString newPlaylistId) {
+void RemoveItemFromPlaylistParams::setPlaylistId(QString newPlaylistId) {
 	m_playlistId = newPlaylistId;
 }
 
 
-const QStringList &RemoveFromPlaylistParams::entryIds() const {
+const QStringList &RemoveItemFromPlaylistParams::entryIds() const {
 	return m_entryIds;
 }
 
-void RemoveFromPlaylistParams::setEntryIds(QStringList newEntryIds)  {
+void RemoveItemFromPlaylistParams::setEntryIds(QStringList newEntryIds)  {
 	m_entryIds = newEntryIds;
 }
 
-bool RemoveFromPlaylistParams::entryIdsNull() const {
+bool RemoveItemFromPlaylistParams::entryIdsNull() const {
 	// Nullable: true
 	// Type Nullable: true
 	
@@ -48659,7 +48247,7 @@ bool RemoveFromPlaylistParams::entryIdsNull() const {
 	return m_entryIds.size() == 0;
 }
 
-void RemoveFromPlaylistParams::setEntryIdsNull() {
+void RemoveItemFromPlaylistParams::setEntryIdsNull() {
 	m_entryIds.clear();
 }
 
@@ -48728,6 +48316,28 @@ bool RemoveMediaPathParams::refreshLibraryNull() const {
 
 void RemoveMediaPathParams::setRefreshLibraryNull() {
 	m_refreshLibrary = std::nullopt;
+}
+
+
+
+
+// RemoveUserFromPlaylistParams
+
+const QString &RemoveUserFromPlaylistParams::playlistId() const {
+	return m_playlistId;
+}
+
+void RemoveUserFromPlaylistParams::setPlaylistId(QString newPlaylistId) {
+	m_playlistId = newPlaylistId;
+}
+
+
+const QString &RemoveUserFromPlaylistParams::userId() const {
+	return m_userId;
+}
+
+void RemoveUserFromPlaylistParams::setUserId(QString newUserId) {
+	m_userId = newUserId;
 }
 
 
@@ -48975,6 +48585,19 @@ void RevokeKeyParams::setKey(QString newKey) {
 
 
 
+// SearchRemoteLyricsParams
+
+const QString &SearchRemoteLyricsParams::itemId() const {
+	return m_itemId;
+}
+
+void SearchRemoteLyricsParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
+}
+
+
+
+
 // SearchRemoteSubtitlesParams
 
 const QString &SearchRemoteSubtitlesParams::itemId() const {
@@ -49073,54 +48696,12 @@ void SendMessageCommandParams::setSessionId(QString newSessionId) {
 }
 
 
-const QString &SendMessageCommandParams::text() const {
-	return m_text;
+const QSharedPointer<MessageCommand> &SendMessageCommandParams::body() const {
+	return m_body;
 }
 
-void SendMessageCommandParams::setText(QString newText) {
-	m_text = newText;
-}
-
-
-const QString &SendMessageCommandParams::header() const {
-	return m_header;
-}
-
-void SendMessageCommandParams::setHeader(QString newHeader)  {
-	m_header = newHeader;
-}
-
-bool SendMessageCommandParams::headerNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_header.isNull();
-}
-
-void SendMessageCommandParams::setHeaderNull() {
-	m_header.clear();
-}
-
-
-const qint64 &SendMessageCommandParams::timeoutMs() const {
-	return m_timeoutMs.value();
-}
-
-void SendMessageCommandParams::setTimeoutMs(qint64 newTimeoutMs)  {
-	m_timeoutMs = newTimeoutMs;
-}
-
-bool SendMessageCommandParams::timeoutMsNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
-
-	return !m_timeoutMs.has_value();
-}
-
-void SendMessageCommandParams::setTimeoutMsNull() {
-	m_timeoutMs = std::nullopt;
+void SendMessageCommandParams::setBody(QSharedPointer<MessageCommand> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49245,6 +48826,15 @@ void SetItemImageParams::setItemId(QString newItemId) {
 }
 
 
+const QByteArray &SetItemImageParams::body() const {
+	return m_body;
+}
+
+void SetItemImageParams::setBody(QByteArray newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // SetItemImageByIndexParams
@@ -49276,16 +48866,12 @@ void SetItemImageByIndexParams::setItemId(QString newItemId) {
 }
 
 
-
-
-// SetReadParams
-
-const QString &SetReadParams::userId() const {
-	return m_userId;
+const QByteArray &SetItemImageByIndexParams::body() const {
+	return m_body;
 }
 
-void SetReadParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
+void SetItemImageByIndexParams::setBody(QByteArray newBody) {
+	m_body = newBody;
 }
 
 
@@ -49317,19 +48903,6 @@ void SetRepositoriesParams::setBody(QList<RepositoryInfo> newBody) {
 
 
 
-// SetUnreadParams
-
-const QString &SetUnreadParams::userId() const {
-	return m_userId;
-}
-
-void SetUnreadParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-
-
 // ShutdownApplicationParams
 
 
@@ -49353,20 +48926,8 @@ const QString &StopEncodingProcessParams::deviceId() const {
 	return m_deviceId;
 }
 
-void StopEncodingProcessParams::setDeviceId(QString newDeviceId)  {
+void StopEncodingProcessParams::setDeviceId(QString newDeviceId) {
 	m_deviceId = newDeviceId;
-}
-
-bool StopEncodingProcessParams::deviceIdNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_deviceId.isNull();
-}
-
-void StopEncodingProcessParams::setDeviceIdNull() {
-	m_deviceId.clear();
 }
 
 
@@ -49374,20 +48935,8 @@ const QString &StopEncodingProcessParams::playSessionId() const {
 	return m_playSessionId;
 }
 
-void StopEncodingProcessParams::setPlaySessionId(QString newPlaySessionId)  {
+void StopEncodingProcessParams::setPlaySessionId(QString newPlaySessionId) {
 	m_playSessionId = newPlaySessionId;
-}
-
-bool StopEncodingProcessParams::playSessionIdNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_playSessionId.isNull();
-}
-
-void StopEncodingProcessParams::setPlaySessionIdNull() {
-	m_playSessionId.clear();
 }
 
 
@@ -49634,6 +49183,10 @@ void SyncPlaySetShuffleModeParams::setBody(QSharedPointer<SetShuffleModeRequestD
 
 
 
+// TmdbClientConfigurationParams
+
+
+
 // UninstallPluginParams
 
 const QString &UninstallPluginParams::pluginId() const {
@@ -49658,11 +49211,11 @@ void UninstallPluginByVersionParams::setPluginId(QString newPluginId) {
 }
 
 
-const QSharedPointer<Version> &UninstallPluginByVersionParams::version() const {
+const QString &UninstallPluginByVersionParams::version() const {
 	return m_version;
 }
 
-void UninstallPluginByVersionParams::setVersion(QSharedPointer<Version> newVersion) {
+void UninstallPluginByVersionParams::setVersion(QString newVersion) {
 	m_version = newVersion;
 }
 
@@ -49684,8 +49237,20 @@ const QString &UnmarkFavoriteItemParams::userId() const {
 	return m_userId;
 }
 
-void UnmarkFavoriteItemParams::setUserId(QString newUserId) {
+void UnmarkFavoriteItemParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool UnmarkFavoriteItemParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void UnmarkFavoriteItemParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -49715,11 +49280,11 @@ void UpdateDeviceOptionsParams::setJellyfinId(QString newJellyfinId) {
 }
 
 
-const QSharedPointer<DeviceOptions> &UpdateDeviceOptionsParams::body() const {
+const QSharedPointer<DeviceOptionsDto> &UpdateDeviceOptionsParams::body() const {
 	return m_body;
 }
 
-void UpdateDeviceOptionsParams::setBody(QSharedPointer<DeviceOptions> newBody) {
+void UpdateDeviceOptionsParams::setBody(QSharedPointer<DeviceOptionsDto> newBody) {
 	m_body = newBody;
 }
 
@@ -49750,8 +49315,20 @@ const QString &UpdateDisplayPreferencesParams::userId() const {
 	return m_userId;
 }
 
-void UpdateDisplayPreferencesParams::setUserId(QString newUserId) {
+void UpdateDisplayPreferencesParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool UpdateDisplayPreferencesParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void UpdateDisplayPreferencesParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -49865,23 +49442,54 @@ void UpdateItemImageIndexParams::setItemId(QString newItemId) {
 
 
 const qint32 &UpdateItemImageIndexParams::newIndex() const {
-	return m_newIndex.value();
+	return m_newIndex;
 }
 
-void UpdateItemImageIndexParams::setNewIndex(qint32 newNewIndex)  {
+void UpdateItemImageIndexParams::setNewIndex(qint32 newNewIndex) {
 	m_newIndex = newNewIndex;
 }
 
-bool UpdateItemImageIndexParams::newIndexNull() const {
-	// Nullable: true
-	// Type Nullable: false
-	
 
-	return !m_newIndex.has_value();
+
+
+// UpdateItemUserDataParams
+
+const QString &UpdateItemUserDataParams::itemId() const {
+	return m_itemId;
 }
 
-void UpdateItemImageIndexParams::setNewIndexNull() {
-	m_newIndex = std::nullopt;
+void UpdateItemUserDataParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
+}
+
+
+const QString &UpdateItemUserDataParams::userId() const {
+	return m_userId;
+}
+
+void UpdateItemUserDataParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool UpdateItemUserDataParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void UpdateItemUserDataParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
+const QSharedPointer<UpdateUserItemDataDto> &UpdateItemUserDataParams::body() const {
+	return m_body;
+}
+
+void UpdateItemUserDataParams::setBody(QSharedPointer<UpdateUserItemDataDto> newBody) {
+	m_body = newBody;
 }
 
 
@@ -49900,47 +49508,13 @@ void UpdateLibraryOptionsParams::setBody(QSharedPointer<UpdateLibraryOptionsDto>
 
 
 
-// UpdateMediaEncoderPathParams
-
-const QSharedPointer<MediaEncoderPathDto> &UpdateMediaEncoderPathParams::body() const {
-	return m_body;
-}
-
-void UpdateMediaEncoderPathParams::setBody(QSharedPointer<MediaEncoderPathDto> newBody) {
-	m_body = newBody;
-}
-
-
-
-
 // UpdateMediaPathParams
 
-const QString &UpdateMediaPathParams::name() const {
-	return m_name;
-}
-
-void UpdateMediaPathParams::setName(QString newName)  {
-	m_name = newName;
-}
-
-bool UpdateMediaPathParams::nameNull() const {
-	// Nullable: true
-	// Type Nullable: true
-	
-
-	return m_name.isNull();
-}
-
-void UpdateMediaPathParams::setNameNull() {
-	m_name.clear();
-}
-
-
-const QSharedPointer<MediaPathInfo> &UpdateMediaPathParams::body() const {
+const QSharedPointer<UpdateMediaPathRequestDto> &UpdateMediaPathParams::body() const {
 	return m_body;
 }
 
-void UpdateMediaPathParams::setBody(QSharedPointer<MediaPathInfo> newBody) {
+void UpdateMediaPathParams::setBody(QSharedPointer<UpdateMediaPathRequestDto> newBody) {
 	m_body = newBody;
 }
 
@@ -49958,6 +49532,68 @@ void UpdateNamedConfigurationParams::setKey(QString newKey) {
 }
 
 
+const QVariant &UpdateNamedConfigurationParams::body() const {
+	return m_body;
+}
+
+void UpdateNamedConfigurationParams::setBody(QVariant newBody) {
+	m_body = newBody;
+}
+
+
+
+
+// UpdatePlaylistParams
+
+const QString &UpdatePlaylistParams::playlistId() const {
+	return m_playlistId;
+}
+
+void UpdatePlaylistParams::setPlaylistId(QString newPlaylistId) {
+	m_playlistId = newPlaylistId;
+}
+
+
+const QSharedPointer<UpdatePlaylistDto> &UpdatePlaylistParams::body() const {
+	return m_body;
+}
+
+void UpdatePlaylistParams::setBody(QSharedPointer<UpdatePlaylistDto> newBody) {
+	m_body = newBody;
+}
+
+
+
+
+// UpdatePlaylistUserParams
+
+const QString &UpdatePlaylistUserParams::playlistId() const {
+	return m_playlistId;
+}
+
+void UpdatePlaylistUserParams::setPlaylistId(QString newPlaylistId) {
+	m_playlistId = newPlaylistId;
+}
+
+
+const QString &UpdatePlaylistUserParams::userId() const {
+	return m_userId;
+}
+
+void UpdatePlaylistUserParams::setUserId(QString newUserId) {
+	m_userId = newUserId;
+}
+
+
+const QSharedPointer<UpdatePlaylistUserDto> &UpdatePlaylistUserParams::body() const {
+	return m_body;
+}
+
+void UpdatePlaylistUserParams::setBody(QSharedPointer<UpdatePlaylistUserDto> newBody) {
+	m_body = newBody;
+}
+
+
 
 
 // UpdatePluginConfigurationParams
@@ -49968,41 +49604,6 @@ const QString &UpdatePluginConfigurationParams::pluginId() const {
 
 void UpdatePluginConfigurationParams::setPluginId(QString newPluginId) {
 	m_pluginId = newPluginId;
-}
-
-
-
-
-// UpdatePluginSecurityInfoParams
-
-const QSharedPointer<PluginSecurityInfo> &UpdatePluginSecurityInfoParams::body() const {
-	return m_body;
-}
-
-void UpdatePluginSecurityInfoParams::setBody(QSharedPointer<PluginSecurityInfo> newBody) {
-	m_body = newBody;
-}
-
-
-
-
-// UpdateProfileParams
-
-const QString &UpdateProfileParams::profileId() const {
-	return m_profileId;
-}
-
-void UpdateProfileParams::setProfileId(QString newProfileId) {
-	m_profileId = newProfileId;
-}
-
-
-const QSharedPointer<DeviceProfile> &UpdateProfileParams::body() const {
-	return m_body;
-}
-
-void UpdateProfileParams::setBody(QSharedPointer<DeviceProfile> newBody) {
-	m_body = newBody;
 }
 
 
@@ -50093,8 +49694,20 @@ const QString &UpdateUserParams::userId() const {
 	return m_userId;
 }
 
-void UpdateUserParams::setUserId(QString newUserId) {
+void UpdateUserParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool UpdateUserParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void UpdateUserParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -50115,8 +49728,20 @@ const QString &UpdateUserConfigurationParams::userId() const {
 	return m_userId;
 }
 
-void UpdateUserConfigurationParams::setUserId(QString newUserId) {
+void UpdateUserConfigurationParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool UpdateUserConfigurationParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void UpdateUserConfigurationParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -50131,28 +49756,6 @@ void UpdateUserConfigurationParams::setBody(QSharedPointer<UserConfiguration> ne
 
 
 
-// UpdateUserEasyPasswordParams
-
-const QString &UpdateUserEasyPasswordParams::userId() const {
-	return m_userId;
-}
-
-void UpdateUserEasyPasswordParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
-}
-
-
-const QSharedPointer<UpdateUserEasyPassword> &UpdateUserEasyPasswordParams::body() const {
-	return m_body;
-}
-
-void UpdateUserEasyPasswordParams::setBody(QSharedPointer<UpdateUserEasyPassword> newBody) {
-	m_body = newBody;
-}
-
-
-
-
 // UpdateUserItemRatingParams
 
 const QString &UpdateUserItemRatingParams::itemId() const {
@@ -50161,15 +49764,6 @@ const QString &UpdateUserItemRatingParams::itemId() const {
 
 void UpdateUserItemRatingParams::setItemId(QString newItemId) {
 	m_itemId = newItemId;
-}
-
-
-const QString &UpdateUserItemRatingParams::userId() const {
-	return m_userId;
-}
-
-void UpdateUserItemRatingParams::setUserId(QString newUserId) {
-	m_userId = newUserId;
 }
 
 
@@ -50194,6 +49788,27 @@ void UpdateUserItemRatingParams::setLikesNull() {
 }
 
 
+const QString &UpdateUserItemRatingParams::userId() const {
+	return m_userId;
+}
+
+void UpdateUserItemRatingParams::setUserId(QString newUserId)  {
+	m_userId = newUserId;
+}
+
+bool UpdateUserItemRatingParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void UpdateUserItemRatingParams::setUserIdNull() {
+	m_userId.clear();
+}
+
+
 
 
 // UpdateUserPasswordParams
@@ -50202,8 +49817,20 @@ const QString &UpdateUserPasswordParams::userId() const {
 	return m_userId;
 }
 
-void UpdateUserPasswordParams::setUserId(QString newUserId) {
+void UpdateUserPasswordParams::setUserId(QString newUserId)  {
 	m_userId = newUserId;
+}
+
+bool UpdateUserPasswordParams::userIdNull() const {
+	// Nullable: true
+	// Type Nullable: true
+	
+
+	return m_userId.isNull();
+}
+
+void UpdateUserPasswordParams::setUserIdNull() {
+	m_userId.clear();
 }
 
 
@@ -50234,6 +49861,50 @@ const QSharedPointer<UserPolicy> &UpdateUserPolicyParams::body() const {
 }
 
 void UpdateUserPolicyParams::setBody(QSharedPointer<UserPolicy> newBody) {
+	m_body = newBody;
+}
+
+
+
+
+// UploadCustomSplashscreenParams
+
+const QByteArray &UploadCustomSplashscreenParams::body() const {
+	return m_body;
+}
+
+void UploadCustomSplashscreenParams::setBody(QByteArray newBody) {
+	m_body = newBody;
+}
+
+
+
+
+// UploadLyricsParams
+
+const QString &UploadLyricsParams::itemId() const {
+	return m_itemId;
+}
+
+void UploadLyricsParams::setItemId(QString newItemId) {
+	m_itemId = newItemId;
+}
+
+
+const QString &UploadLyricsParams::fileName() const {
+	return m_fileName;
+}
+
+void UploadLyricsParams::setFileName(QString newFileName) {
+	m_fileName = newFileName;
+}
+
+
+const QByteArray &UploadLyricsParams::body() const {
+	return m_body;
+}
+
+void UploadLyricsParams::setBody(QByteArray newBody) {
 	m_body = newBody;
 }
 

@@ -46,7 +46,12 @@ namespace DTO {
 
 
 class PathSubstitution {
-public:	PathSubstitution();
+public:
+	PathSubstitution(	
+		QString from,			
+		QString to		
+	);
+
 	PathSubstitution(const PathSubstitution &other);
 	
 	/**
@@ -67,8 +72,6 @@ public:	PathSubstitution();
 	* @brief Gets or sets the value to substitute.
 	*/
 	void setFrom(QString newFrom);
-	bool fromNull() const;
-	void setFromNull();
 
 	/**
 	 * @brief Gets or sets the value to substitution with.
@@ -78,15 +81,15 @@ public:	PathSubstitution();
 	* @brief Gets or sets the value to substitution with.
 	*/
 	void setTo(QString newTo);
-	bool toNull() const;
-	void setToNull();
 
 
 protected:
 	QString m_from;
 	QString m_to;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing PathSubstitution::fromJson();
+	PathSubstitution();
 };
 
 

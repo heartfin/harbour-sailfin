@@ -52,7 +52,8 @@ namespace DTO {
 class ContainerProfile {
 public:
 	ContainerProfile(	
-		DlnaProfileType type						
+		DlnaProfileType type,			
+		QList<ProfileCondition> conditions						
 	);
 
 	ContainerProfile(const ContainerProfile &other);
@@ -72,25 +73,43 @@ public:
 
 	void setType(DlnaProfileType newType);
 
-
+	/**
+	 * @brief Gets or sets the list of MediaBrowser.Model.Dlna.ProfileCondition which this container will be applied to.
+	 */
 	QList<ProfileCondition> conditions() const;
-
+	/**
+	* @brief Gets or sets the list of MediaBrowser.Model.Dlna.ProfileCondition which this container will be applied to.
+	*/
 	void setConditions(QList<ProfileCondition> newConditions);
-	bool conditionsNull() const;
-	void setConditionsNull();
 
-
+	/**
+	 * @brief Gets or sets the container(s) which this container must meet.
+	 */
 	QString container() const;
-
+	/**
+	* @brief Gets or sets the container(s) which this container must meet.
+	*/
 	void setContainer(QString newContainer);
 	bool containerNull() const;
 	void setContainerNull();
+
+	/**
+	 * @brief Gets or sets the sub container(s) which this container must meet.
+	 */
+	QString subContainer() const;
+	/**
+	* @brief Gets or sets the sub container(s) which this container must meet.
+	*/
+	void setSubContainer(QString newSubContainer);
+	bool subContainerNull() const;
+	void setSubContainerNull();
 
 
 protected:
 	DlnaProfileType m_type;
 	QList<ProfileCondition> m_conditions;
 	QString m_container;
+	QString m_subContainer;
 
 private:
 	// Private constructor which generates an invalid object, for use withing ContainerProfile::fromJson();

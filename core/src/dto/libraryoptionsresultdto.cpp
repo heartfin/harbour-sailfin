@@ -33,12 +33,27 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryOptionsResultDto::LibraryOptionsResultDto() {}
+LibraryOptionsResultDto::LibraryOptionsResultDto (
+		QList<LibraryOptionInfoDto> metadataSavers, 
+		QList<LibraryOptionInfoDto> metadataReaders, 
+		QList<LibraryOptionInfoDto> subtitleFetchers, 
+		QList<LibraryOptionInfoDto> lyricFetchers, 
+		QList<LibraryTypeOptionsDto> typeOptions 
+		) :
+	m_metadataSavers(metadataSavers),
+	m_metadataReaders(metadataReaders),
+	m_subtitleFetchers(subtitleFetchers),
+	m_lyricFetchers(lyricFetchers),
+	m_typeOptions(typeOptions) { }
+
+
 
 LibraryOptionsResultDto::LibraryOptionsResultDto(const LibraryOptionsResultDto &other) :
 
 	m_metadataSavers(other.m_metadataSavers),
 	m_metadataReaders(other.m_metadataReaders),
 	m_subtitleFetchers(other.m_subtitleFetchers),
+	m_lyricFetchers(other.m_lyricFetchers),
 	m_typeOptions(other.m_typeOptions){}
 
 
@@ -46,6 +61,7 @@ void LibraryOptionsResultDto::replaceData(LibraryOptionsResultDto &other) {
 	m_metadataSavers = other.m_metadataSavers;
 	m_metadataReaders = other.m_metadataReaders;
 	m_subtitleFetchers = other.m_subtitleFetchers;
+	m_lyricFetchers = other.m_lyricFetchers;
 	m_typeOptions = other.m_typeOptions;
 }
 
@@ -60,6 +76,7 @@ void LibraryOptionsResultDto::setFromJson(QJsonObject source) {
 	m_metadataSavers = Jellyfin::Support::fromJsonValue<QList<LibraryOptionInfoDto>>(source["MetadataSavers"]);
 	m_metadataReaders = Jellyfin::Support::fromJsonValue<QList<LibraryOptionInfoDto>>(source["MetadataReaders"]);
 	m_subtitleFetchers = Jellyfin::Support::fromJsonValue<QList<LibraryOptionInfoDto>>(source["SubtitleFetchers"]);
+	m_lyricFetchers = Jellyfin::Support::fromJsonValue<QList<LibraryOptionInfoDto>>(source["LyricFetchers"]);
 	m_typeOptions = Jellyfin::Support::fromJsonValue<QList<LibraryTypeOptionsDto>>(source["TypeOptions"]);
 
 }
@@ -67,26 +84,11 @@ void LibraryOptionsResultDto::setFromJson(QJsonObject source) {
 QJsonObject LibraryOptionsResultDto::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_metadataSavers.size() == 0)) {
-		result["MetadataSavers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataSavers);
-	}
-			
-	
-	if (!(m_metadataReaders.size() == 0)) {
-		result["MetadataReaders"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataReaders);
-	}
-			
-	
-	if (!(m_subtitleFetchers.size() == 0)) {
-		result["SubtitleFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_subtitleFetchers);
-	}
-			
-	
-	if (!(m_typeOptions.size() == 0)) {
-		result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<LibraryTypeOptionsDto>>(m_typeOptions);
-	}
-		
+	result["MetadataSavers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataSavers);		
+	result["MetadataReaders"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataReaders);		
+	result["SubtitleFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_subtitleFetchers);		
+	result["LyricFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_lyricFetchers);		
+	result["TypeOptions"] = Jellyfin::Support::toJsonValue<QList<LibraryTypeOptionsDto>>(m_typeOptions);	
 	return result;
 }
 
@@ -95,53 +97,31 @@ QList<LibraryOptionInfoDto> LibraryOptionsResultDto::metadataSavers() const { re
 void LibraryOptionsResultDto::setMetadataSavers(QList<LibraryOptionInfoDto> newMetadataSavers) {
 	m_metadataSavers = newMetadataSavers;
 }
-bool LibraryOptionsResultDto::metadataSaversNull() const {
-	return m_metadataSavers.size() == 0;
-}
 
-void LibraryOptionsResultDto::setMetadataSaversNull() {
-	m_metadataSavers.clear();
-
-}
 QList<LibraryOptionInfoDto> LibraryOptionsResultDto::metadataReaders() const { return m_metadataReaders; }
 
 void LibraryOptionsResultDto::setMetadataReaders(QList<LibraryOptionInfoDto> newMetadataReaders) {
 	m_metadataReaders = newMetadataReaders;
 }
-bool LibraryOptionsResultDto::metadataReadersNull() const {
-	return m_metadataReaders.size() == 0;
-}
 
-void LibraryOptionsResultDto::setMetadataReadersNull() {
-	m_metadataReaders.clear();
-
-}
 QList<LibraryOptionInfoDto> LibraryOptionsResultDto::subtitleFetchers() const { return m_subtitleFetchers; }
 
 void LibraryOptionsResultDto::setSubtitleFetchers(QList<LibraryOptionInfoDto> newSubtitleFetchers) {
 	m_subtitleFetchers = newSubtitleFetchers;
 }
-bool LibraryOptionsResultDto::subtitleFetchersNull() const {
-	return m_subtitleFetchers.size() == 0;
+
+QList<LibraryOptionInfoDto> LibraryOptionsResultDto::lyricFetchers() const { return m_lyricFetchers; }
+
+void LibraryOptionsResultDto::setLyricFetchers(QList<LibraryOptionInfoDto> newLyricFetchers) {
+	m_lyricFetchers = newLyricFetchers;
 }
 
-void LibraryOptionsResultDto::setSubtitleFetchersNull() {
-	m_subtitleFetchers.clear();
-
-}
 QList<LibraryTypeOptionsDto> LibraryOptionsResultDto::typeOptions() const { return m_typeOptions; }
 
 void LibraryOptionsResultDto::setTypeOptions(QList<LibraryTypeOptionsDto> newTypeOptions) {
 	m_typeOptions = newTypeOptions;
 }
-bool LibraryOptionsResultDto::typeOptionsNull() const {
-	return m_typeOptions.size() == 0;
-}
 
-void LibraryOptionsResultDto::setTypeOptionsNull() {
-	m_typeOptions.clear();
-
-}
 
 } // NS DTO
 

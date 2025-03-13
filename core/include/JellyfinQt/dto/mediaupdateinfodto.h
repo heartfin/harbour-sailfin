@@ -32,9 +32,11 @@
 
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QString>
+#include <QList>
+#include <QStringList>
 #include <optional>
 
+#include "JellyfinQt/dto/mediaupdateinfopathdto.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -46,7 +48,11 @@ namespace DTO {
 
 
 class MediaUpdateInfoDto {
-public:	MediaUpdateInfoDto();
+public:
+	MediaUpdateInfoDto(	
+		QList<MediaUpdateInfoPathDto> updates		
+	);
+
 	MediaUpdateInfoDto(const MediaUpdateInfoDto &other);
 	
 	/**
@@ -60,35 +66,21 @@ public:	MediaUpdateInfoDto();
 	
 	// Properties
 	/**
-	 * @brief Gets or sets media path.
+	 * @brief Gets or sets the list of updates.
 	 */
-	QString path() const;
+	QList<MediaUpdateInfoPathDto> updates() const;
 	/**
-	* @brief Gets or sets media path.
+	* @brief Gets or sets the list of updates.
 	*/
-	void setPath(QString newPath);
-	bool pathNull() const;
-	void setPathNull();
-
-	/**
-	 * @brief Gets or sets media update type.
-Created, Modified, Deleted.
-	 */
-	QString updateType() const;
-	/**
-	* @brief Gets or sets media update type.
-Created, Modified, Deleted.
-	*/
-	void setUpdateType(QString newUpdateType);
-	bool updateTypeNull() const;
-	void setUpdateTypeNull();
+	void setUpdates(QList<MediaUpdateInfoPathDto> newUpdates);
 
 
 protected:
-	QString m_path;
-	QString m_updateType;
+	QList<MediaUpdateInfoPathDto> m_updates;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing MediaUpdateInfoDto::fromJson();
+	MediaUpdateInfoDto();
 };
 
 

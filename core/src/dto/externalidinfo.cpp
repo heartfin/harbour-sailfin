@@ -34,8 +34,12 @@ namespace DTO {
 
 ExternalIdInfo::ExternalIdInfo() {}
 ExternalIdInfo::ExternalIdInfo (
+		QString name, 
+		QString key, 
 		ExternalIdMediaType type 
 		) :
+	m_name(name),
+	m_key(key),
 	m_type(type) { }
 
 
@@ -73,16 +77,8 @@ void ExternalIdInfo::setFromJson(QJsonObject source) {
 QJsonObject ExternalIdInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
-	
-	if (!(m_key.isNull())) {
-		result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
-	}
-			
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
+	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);		
 	result["Type"] = Jellyfin::Support::toJsonValue<ExternalIdMediaType>(m_type);		
 	
 	if (!(m_urlFormatString.isNull())) {
@@ -97,27 +93,13 @@ QString ExternalIdInfo::name() const { return m_name; }
 void ExternalIdInfo::setName(QString newName) {
 	m_name = newName;
 }
-bool ExternalIdInfo::nameNull() const {
-	return m_name.isNull();
-}
 
-void ExternalIdInfo::setNameNull() {
-	m_name.clear();
-
-}
 QString ExternalIdInfo::key() const { return m_key; }
 
 void ExternalIdInfo::setKey(QString newKey) {
 	m_key = newKey;
 }
-bool ExternalIdInfo::keyNull() const {
-	return m_key.isNull();
-}
 
-void ExternalIdInfo::setKeyNull() {
-	m_key.clear();
-
-}
 ExternalIdMediaType ExternalIdInfo::type() const { return m_type; }
 
 void ExternalIdInfo::setType(ExternalIdMediaType newType) {

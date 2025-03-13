@@ -48,14 +48,10 @@ QUrlQuery StopEncodingProcessLoader::query(const StopEncodingProcessParams &para
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
+	result.addQueryItem("deviceId", Support::toString<QString>(params.deviceId()));
+	result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
 
 	// Optional parameters
-	if (!params.deviceIdNull()) {
-		result.addQueryItem("deviceId", Support::toString<QString>(params.deviceId()));
-	}
-	if (!params.playSessionIdNull()) {
-		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
-	}
 	
 	return result;
 }

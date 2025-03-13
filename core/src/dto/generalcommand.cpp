@@ -35,10 +35,12 @@ namespace DTO {
 GeneralCommand::GeneralCommand() {}
 GeneralCommand::GeneralCommand (
 		GeneralCommandType name, 
-		QString controllingUserId 
+		QString controllingUserId, 
+		QJsonObject arguments 
 		) :
 	m_name(name),
-	m_controllingUserId(controllingUserId) { }
+	m_controllingUserId(controllingUserId),
+	m_arguments(arguments) { }
 
 
 
@@ -74,11 +76,7 @@ QJsonObject GeneralCommand::toJson() const {
 	
 	result["Name"] = Jellyfin::Support::toJsonValue<GeneralCommandType>(m_name);		
 	result["ControllingUserId"] = Jellyfin::Support::toJsonValue<QString>(m_controllingUserId);		
-	
-	if (!(m_arguments.isEmpty())) {
-		result["Arguments"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_arguments);
-	}
-		
+	result["Arguments"] = Jellyfin::Support::toJsonValue<QJsonObject>(m_arguments);	
 	return result;
 }
 
@@ -99,14 +97,7 @@ QJsonObject GeneralCommand::arguments() const { return m_arguments; }
 void GeneralCommand::setArguments(QJsonObject newArguments) {
 	m_arguments = newArguments;
 }
-bool GeneralCommand::argumentsNull() const {
-	return m_arguments.isEmpty();
-}
 
-void GeneralCommand::setArgumentsNull() {
-	m_arguments= QJsonObject();
-
-}
 
 } // NS DTO
 

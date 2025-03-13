@@ -35,10 +35,14 @@ namespace DTO {
 TranscodingInfo::TranscodingInfo() {}
 TranscodingInfo::TranscodingInfo (
 		bool isVideoDirect, 
-		bool isAudioDirect 
+		bool isAudioDirect, 
+		HardwareAccelerationType hardwareAccelerationType, 
+		QList<TranscodeReason> transcodeReasons 
 		) :
 	m_isVideoDirect(isVideoDirect),
-	m_isAudioDirect(isAudioDirect) { }
+	m_isAudioDirect(isAudioDirect),
+	m_hardwareAccelerationType(hardwareAccelerationType),
+	m_transcodeReasons(transcodeReasons) { }
 
 
 
@@ -55,6 +59,7 @@ TranscodingInfo::TranscodingInfo(const TranscodingInfo &other) :
 	m_width(other.m_width),
 	m_height(other.m_height),
 	m_audioChannels(other.m_audioChannels),
+	m_hardwareAccelerationType(other.m_hardwareAccelerationType),
 	m_transcodeReasons(other.m_transcodeReasons){}
 
 
@@ -70,6 +75,7 @@ void TranscodingInfo::replaceData(TranscodingInfo &other) {
 	m_width = other.m_width;
 	m_height = other.m_height;
 	m_audioChannels = other.m_audioChannels;
+	m_hardwareAccelerationType = other.m_hardwareAccelerationType;
 	m_transcodeReasons = other.m_transcodeReasons;
 }
 
@@ -92,6 +98,7 @@ void TranscodingInfo::setFromJson(QJsonObject source) {
 	m_width = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Width"]);
 	m_height = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Height"]);
 	m_audioChannels = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["AudioChannels"]);
+	m_hardwareAccelerationType = Jellyfin::Support::fromJsonValue<HardwareAccelerationType>(source["HardwareAccelerationType"]);
 	m_transcodeReasons = Jellyfin::Support::fromJsonValue<QList<TranscodeReason>>(source["TranscodeReasons"]);
 
 }
@@ -146,11 +153,8 @@ QJsonObject TranscodingInfo::toJson() const {
 		result["AudioChannels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_audioChannels);
 	}
 			
-	
-	if (!(m_transcodeReasons.size() == 0)) {
-		result["TranscodeReasons"] = Jellyfin::Support::toJsonValue<QList<TranscodeReason>>(m_transcodeReasons);
-	}
-		
+	result["HardwareAccelerationType"] = Jellyfin::Support::toJsonValue<HardwareAccelerationType>(m_hardwareAccelerationType);		
+	result["TranscodeReasons"] = Jellyfin::Support::toJsonValue<QList<TranscodeReason>>(m_transcodeReasons);	
 	return result;
 }
 
@@ -283,19 +287,18 @@ void TranscodingInfo::setAudioChannelsNull() {
 	m_audioChannels = std::nullopt;
 
 }
+HardwareAccelerationType TranscodingInfo::hardwareAccelerationType() const { return m_hardwareAccelerationType; }
+
+void TranscodingInfo::setHardwareAccelerationType(HardwareAccelerationType newHardwareAccelerationType) {
+	m_hardwareAccelerationType = newHardwareAccelerationType;
+}
+
 QList<TranscodeReason> TranscodingInfo::transcodeReasons() const { return m_transcodeReasons; }
 
 void TranscodingInfo::setTranscodeReasons(QList<TranscodeReason> newTranscodeReasons) {
 	m_transcodeReasons = newTranscodeReasons;
 }
-bool TranscodingInfo::transcodeReasonsNull() const {
-	return m_transcodeReasons.size() == 0;
-}
 
-void TranscodingInfo::setTranscodeReasonsNull() {
-	m_transcodeReasons.clear();
-
-}
 
 } // NS DTO
 

@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 CreateUserByName::CreateUserByName() {}
+CreateUserByName::CreateUserByName (
+		QString name 
+		) :
+	m_name(name) { }
+
+
 
 CreateUserByName::CreateUserByName(const CreateUserByName &other) :
 
@@ -61,11 +67,7 @@ void CreateUserByName::setFromJson(QJsonObject source) {
 QJsonObject CreateUserByName::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
 	
 	if (!(m_password.isNull())) {
 		result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
@@ -79,14 +81,7 @@ QString CreateUserByName::name() const { return m_name; }
 void CreateUserByName::setName(QString newName) {
 	m_name = newName;
 }
-bool CreateUserByName::nameNull() const {
-	return m_name.isNull();
-}
 
-void CreateUserByName::setNameNull() {
-	m_name.clear();
-
-}
 QString CreateUserByName::password() const { return m_password; }
 
 void CreateUserByName::setPassword(QString newPassword) {

@@ -34,9 +34,11 @@ namespace DTO {
 
 AuthenticationInfoQueryResult::AuthenticationInfoQueryResult() {}
 AuthenticationInfoQueryResult::AuthenticationInfoQueryResult (
+		QList<AuthenticationInfo> items, 
 		qint32 totalRecordCount, 
 		qint32 startIndex 
 		) :
+	m_items(items),
 	m_totalRecordCount(totalRecordCount),
 	m_startIndex(startIndex) { }
 
@@ -72,11 +74,7 @@ void AuthenticationInfoQueryResult::setFromJson(QJsonObject source) {
 QJsonObject AuthenticationInfoQueryResult::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_items.size() == 0)) {
-		result["Items"] = Jellyfin::Support::toJsonValue<QList<AuthenticationInfo>>(m_items);
-	}
-			
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<AuthenticationInfo>>(m_items);		
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);		
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);	
 	return result;
@@ -87,14 +85,7 @@ QList<AuthenticationInfo> AuthenticationInfoQueryResult::items() const { return 
 void AuthenticationInfoQueryResult::setItems(QList<AuthenticationInfo> newItems) {
 	m_items = newItems;
 }
-bool AuthenticationInfoQueryResult::itemsNull() const {
-	return m_items.size() == 0;
-}
 
-void AuthenticationInfoQueryResult::setItemsNull() {
-	m_items.clear();
-
-}
 qint32 AuthenticationInfoQueryResult::totalRecordCount() const { return m_totalRecordCount; }
 
 void AuthenticationInfoQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {

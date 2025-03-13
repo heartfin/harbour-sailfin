@@ -36,7 +36,7 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 GetDevicesLoader::GetDevicesLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<DeviceInfoQueryResult, GetDevicesParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<DeviceInfoDtoQueryResult, GetDevicesParams>(apiClient) {}
 
 QString GetDevicesLoader::path(const GetDevicesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -50,9 +50,6 @@ QUrlQuery GetDevicesLoader::query(const GetDevicesParams &params) const {
 	QUrlQuery result;
 
 	// Optional parameters
-	if (!params.supportsSyncNull()) {
-		result.addQueryItem("supportsSync", Support::toString<std::optional<bool>>(params.supportsSync()));
-	}
 	if (!params.userIdNull()) {
 		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
@@ -101,7 +98,7 @@ QNetworkAccessManager::Operation DeleteDeviceLoader::operation() const {
 }
 
 GetDeviceInfoLoader::GetDeviceInfoLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<DeviceInfo, GetDeviceInfoParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<DeviceInfoDto, GetDeviceInfoParams>(apiClient) {}
 
 QString GetDeviceInfoLoader::path(const GetDeviceInfoParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -131,7 +128,7 @@ QNetworkAccessManager::Operation GetDeviceInfoLoader::operation() const {
 }
 
 GetDeviceOptionsLoader::GetDeviceOptionsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<DeviceOptions, GetDeviceOptionsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<DeviceOptionsDto, GetDeviceOptionsParams>(apiClient) {}
 
 QString GetDeviceOptionsLoader::path(const GetDeviceOptionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -181,7 +178,7 @@ QUrlQuery UpdateDeviceOptionsLoader::query(const UpdateDeviceOptionsParams &para
 }
 
 QByteArray UpdateDeviceOptionsLoader::body(const UpdateDeviceOptionsParams &params) const {
-	return Support::toString<QSharedPointer<DeviceOptions>>(params.body()).toUtf8();
+	return Support::toString<QSharedPointer<DeviceOptionsDto>>(params.body()).toUtf8();
 }
 
 QNetworkAccessManager::Operation UpdateDeviceOptionsLoader::operation() const {

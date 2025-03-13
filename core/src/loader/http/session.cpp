@@ -94,7 +94,7 @@ QNetworkAccessManager::Operation GetAuthProvidersLoader::operation() const {
 }
 
 GetSessionsLoader::GetSessionsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<QList<SessionInfo>, GetSessionsParams>(apiClient) {}
+	: Jellyfin::Support::HttpLoader<QList<SessionInfoDto>, GetSessionsParams>(apiClient) {}
 
 QString GetSessionsLoader::path(const GetSessionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
@@ -202,21 +202,14 @@ QUrlQuery SendMessageCommandLoader::query(const SendMessageCommandParams &params
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
-	result.addQueryItem("text", Support::toString<QString>(params.text()));
 
 	// Optional parameters
-	if (!params.headerNull()) {
-		result.addQueryItem("header", Support::toString<QString>(params.header()));
-	}
-	if (!params.timeoutMsNull()) {
-		result.addQueryItem("timeoutMs", Support::toString<std::optional<qint64>>(params.timeoutMs()));
-	}
 	
 	return result;
 }
 
 QByteArray SendMessageCommandLoader::body(const SendMessageCommandParams &params) const {
-	return QByteArray();
+	return Support::toString<QSharedPointer<MessageCommand>>(params.body()).toUtf8();
 }
 
 QNetworkAccessManager::Operation SendMessageCommandLoader::operation() const {
@@ -406,7 +399,7 @@ QUrlQuery DisplayContentLoader::query(const DisplayContentParams &params) const 
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
-	result.addQueryItem("itemType", Support::toString<QString>(params.itemType()));
+	result.addQueryItem("itemType", Support::toString<BaseItemKind>(params.itemType()));
 	result.addQueryItem("itemId", Support::toString<QString>(params.itemId()));
 	result.addQueryItem("itemName", Support::toString<QString>(params.itemName()));
 
@@ -444,16 +437,13 @@ QUrlQuery PostCapabilitiesLoader::query(const PostCapabilitiesParams &params) co
 		result.addQueryItem("id", Support::toString<QString>(params.jellyfinId()));
 	}
 	if (!params.playableMediaTypesNull()) {
-		result.addQueryItem("playableMediaTypes", Support::toString<QStringList>(params.playableMediaTypes()));
+		result.addQueryItem("playableMediaTypes", Support::toString<QList<MediaType>>(params.playableMediaTypes()));
 	}
 	if (!params.supportedCommandsNull()) {
 		result.addQueryItem("supportedCommands", Support::toString<QList<GeneralCommandType>>(params.supportedCommands()));
 	}
 	if (!params.supportsMediaControlNull()) {
 		result.addQueryItem("supportsMediaControl", Support::toString<std::optional<bool>>(params.supportsMediaControl()));
-	}
-	if (!params.supportsSyncNull()) {
-		result.addQueryItem("supportsSync", Support::toString<std::optional<bool>>(params.supportsSync()));
 	}
 	if (!params.supportsPersistentIdentifierNull()) {
 		result.addQueryItem("supportsPersistentIdentifier", Support::toString<std::optional<bool>>(params.supportsPersistentIdentifier()));

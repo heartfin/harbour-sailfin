@@ -50,14 +50,14 @@ using namespace Jellyfin::DTO;
  * @brief Refreshes metadata for an item.
  */
 
-class PostLoader : public Jellyfin::Support::HttpLoader<void, PostParams> {
+class RefreshItemLoader : public Jellyfin::Support::HttpLoader<void, RefreshItemParams> {
 public:
-	explicit PostLoader(ApiClient *apiClient = nullptr);
+	explicit RefreshItemLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const PostParams& parameters) const override;
-	QUrlQuery query(const PostParams& parameters) const override;
-	QByteArray body(const PostParams& parameters) const override;
+	QString path(const RefreshItemParams& parameters) const override;
+	QUrlQuery query(const RefreshItemParams& parameters) const override;
+	QByteArray body(const RefreshItemParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

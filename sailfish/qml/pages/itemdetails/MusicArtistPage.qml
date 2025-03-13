@@ -33,11 +33,11 @@ BaseDetailPage {
         id: albumsModel
         loader: J.UserItemsLoader {
             apiClient: appWindow.apiClient
-            sortBy: "PremiereDate,ProductionYear,SortName"
-            sortOrder: "Descending"
+            sortBy: [J.SortBy.PremiereDate, J.SortBy.ProductionYear, J.SortBy.SortName]
+            sortOrder: [J.SortOrder.Descending]
             fields: [J.ItemFields.ItemCounts, J.ItemFields.PrimaryImageAspectRatio]
-            includeItemTypes: ["MusicAlbum"]
-            albumArtistIds: itemData.jellyfinId
+            includeItemTypes: [J.ItemType.MusicAlbum]
+            albumArtistIds: [itemData.jellyfinId]
             recursive: true
             autoReload: itemData.jellyfinId.length > 0
             limit: _maxItems
@@ -48,10 +48,10 @@ BaseDetailPage {
         id: fullAlbumsModelComponent
         J.UserItemsLoader {
             apiClient: appWindow.apiClient
-            sortBy: "PremiereDate,ProductionYear,SortName"
-            sortOrder: "Descending"
+            sortBy: [J.SortBy.PremiereDate, J.SortBy.ProductionYear, J.SortBy.SortName]
+            sortOrder: [J.SortOrder.Descending]
             fields: [J.ItemFields.ItemCounts, J.ItemFields.PrimaryImageAspectRatio]
-            includeItemTypes: ["MusicAlbum"]
+            includeItemTypes: [J.ItemType.MusicAlbum]
             albumArtistIds: itemData.jellyfinId
             recursive: true
             autoReload: false
@@ -62,10 +62,10 @@ BaseDetailPage {
         id: appearsOnModel
         loader: J.UserItemsLoader {
             apiClient: appWindow.apiClient
-            sortBy: "PremiereDate,ProductionYear,SortName"
-            sortOrder: "Descending"
+            sortBy: [J.SortBy.PremiereDate, J.SortBy.ProductionYear, J.SortBy.SortName]
+            sortOrder: [J.SortOrder.Descending]
             fields: [J.ItemFields.ItemCounts, J.ItemFields.PrimaryImageAspectRatio]
-            includeItemTypes: ["MusicAlbum"]
+            includeItemTypes: [J.ItemType.MusicAlbum]
             contributingArtistIds: itemData.jellyfinId
             recursive: true
             autoReload: itemData.jellyfinId.length > 0
@@ -76,10 +76,10 @@ BaseDetailPage {
         id: fullAppearsOnModelComponent
         J.UserItemsLoader {
             apiClient: appWindow.apiClient
-            sortBy: "PremiereDate,ProductionYear,SortName"
-            sortOrder: "Descending"
+            sortBy: [J.SortBy.PremiereDate, J.SortBy.ProductionYear, J.SortBy.SortName]
+            sortOrder: [J.SortOrder.Descending]
             fields: [J.ItemFields.ItemCounts, J.ItemFields.PrimaryImageAspectRatio]
-            includeItemTypes: ["MusicAlbum"]
+            includeItemTypes: [J.ItemType.MusicAlbum]
             contributingArtistIds: itemData.jellyfinId
             recursive: true
             autoReload: false

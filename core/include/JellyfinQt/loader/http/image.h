@@ -48,6 +48,35 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
+ * @brief Uploads a custom splashscreen.
+The body is expected to the image contents base64 encoded.
+ */
+
+class UploadCustomSplashscreenLoader : public Jellyfin::Support::HttpLoader<void, UploadCustomSplashscreenParams> {
+public:
+	explicit UploadCustomSplashscreenLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UploadCustomSplashscreenParams& parameters) const override;
+	QUrlQuery query(const UploadCustomSplashscreenParams& parameters) const override;
+	QByteArray body(const UploadCustomSplashscreenParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Delete a custom splashscreen.
+ */
+
+class DeleteCustomSplashscreenLoader : public Jellyfin::Support::HttpLoader<void, DeleteCustomSplashscreenParams> {
+public:
+	explicit DeleteCustomSplashscreenLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteCustomSplashscreenParams& parameters) const override;
+	QUrlQuery query(const DeleteCustomSplashscreenParams& parameters) const override;
+	QByteArray body(const DeleteCustomSplashscreenParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Get item image infos.
  */
 
@@ -157,34 +186,6 @@ protected:
 	QString path(const DeleteUserImageParams& parameters) const override;
 	QUrlQuery query(const DeleteUserImageParams& parameters) const override;
 	QByteArray body(const DeleteUserImageParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Sets the user image.
- */
-
-class PostUserImageByIndexLoader : public Jellyfin::Support::HttpLoader<void, PostUserImageByIndexParams> {
-public:
-	explicit PostUserImageByIndexLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const PostUserImageByIndexParams& parameters) const override;
-	QUrlQuery query(const PostUserImageByIndexParams& parameters) const override;
-	QByteArray body(const PostUserImageByIndexParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Delete the user's image.
- */
-
-class DeleteUserImageByIndexLoader : public Jellyfin::Support::HttpLoader<void, DeleteUserImageByIndexParams> {
-public:
-	explicit DeleteUserImageByIndexLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const DeleteUserImageByIndexParams& parameters) const override;
-	QUrlQuery query(const DeleteUserImageByIndexParams& parameters) const override;
-	QByteArray body(const DeleteUserImageByIndexParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

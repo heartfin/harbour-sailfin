@@ -71,6 +71,7 @@ public:
 		IsInterlaced,
 		AudioSampleRate,
 		AudioBitDepth,
+		VideoRangeType,
 	};
 	Q_ENUM(Value)
 private:

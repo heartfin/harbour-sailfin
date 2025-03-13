@@ -51,7 +51,7 @@ BaseDetailPage {
         id: collectionModel
         loader: J.UserItemsLoader {
             apiClient: appWindow.apiClient
-            sortBy: itemData.type === "MusicAlbum" ? "ParentIndexNumber,IndexNumber,SortName" : ""
+            sortBy: itemData.type === J.ItemType.MusicAlbum ? [J.SortBy.ParentIndexNumber, J.SortBy.IndexNumber,J.SortBy.SortName] : []
             fields: [J.ItemFields.ItemCounts, J.ItemFields.PrimaryImageAspectRatio]
             parentId: itemData.jellyfinId
             autoReload: itemData.jellyfinId.length > 0

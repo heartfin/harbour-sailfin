@@ -33,6 +33,16 @@ namespace Jellyfin {
 namespace DTO {
 
 ChannelMappingOptionsDto::ChannelMappingOptionsDto() {}
+ChannelMappingOptionsDto::ChannelMappingOptionsDto (
+		QList<TunerChannelMapping> tunerChannels, 
+		QList<NameIdPair> providerChannels, 
+		QList<NameValuePair> mappings 
+		) :
+	m_tunerChannels(tunerChannels),
+	m_providerChannels(providerChannels),
+	m_mappings(mappings) { }
+
+
 
 ChannelMappingOptionsDto::ChannelMappingOptionsDto(const ChannelMappingOptionsDto &other) :
 
@@ -67,21 +77,9 @@ void ChannelMappingOptionsDto::setFromJson(QJsonObject source) {
 QJsonObject ChannelMappingOptionsDto::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_tunerChannels.size() == 0)) {
-		result["TunerChannels"] = Jellyfin::Support::toJsonValue<QList<TunerChannelMapping>>(m_tunerChannels);
-	}
-			
-	
-	if (!(m_providerChannels.size() == 0)) {
-		result["ProviderChannels"] = Jellyfin::Support::toJsonValue<QList<NameIdPair>>(m_providerChannels);
-	}
-			
-	
-	if (!(m_mappings.size() == 0)) {
-		result["Mappings"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_mappings);
-	}
-			
+	result["TunerChannels"] = Jellyfin::Support::toJsonValue<QList<TunerChannelMapping>>(m_tunerChannels);		
+	result["ProviderChannels"] = Jellyfin::Support::toJsonValue<QList<NameIdPair>>(m_providerChannels);		
+	result["Mappings"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_mappings);		
 	
 	if (!(m_providerName.isNull())) {
 		result["ProviderName"] = Jellyfin::Support::toJsonValue<QString>(m_providerName);
@@ -95,40 +93,19 @@ QList<TunerChannelMapping> ChannelMappingOptionsDto::tunerChannels() const { ret
 void ChannelMappingOptionsDto::setTunerChannels(QList<TunerChannelMapping> newTunerChannels) {
 	m_tunerChannels = newTunerChannels;
 }
-bool ChannelMappingOptionsDto::tunerChannelsNull() const {
-	return m_tunerChannels.size() == 0;
-}
 
-void ChannelMappingOptionsDto::setTunerChannelsNull() {
-	m_tunerChannels.clear();
-
-}
 QList<NameIdPair> ChannelMappingOptionsDto::providerChannels() const { return m_providerChannels; }
 
 void ChannelMappingOptionsDto::setProviderChannels(QList<NameIdPair> newProviderChannels) {
 	m_providerChannels = newProviderChannels;
 }
-bool ChannelMappingOptionsDto::providerChannelsNull() const {
-	return m_providerChannels.size() == 0;
-}
 
-void ChannelMappingOptionsDto::setProviderChannelsNull() {
-	m_providerChannels.clear();
-
-}
 QList<NameValuePair> ChannelMappingOptionsDto::mappings() const { return m_mappings; }
 
 void ChannelMappingOptionsDto::setMappings(QList<NameValuePair> newMappings) {
 	m_mappings = newMappings;
 }
-bool ChannelMappingOptionsDto::mappingsNull() const {
-	return m_mappings.size() == 0;
-}
 
-void ChannelMappingOptionsDto::setMappingsNull() {
-	m_mappings.clear();
-
-}
 QString ChannelMappingOptionsDto::providerName() const { return m_providerName; }
 
 void ChannelMappingOptionsDto::setProviderName(QString newProviderName) {

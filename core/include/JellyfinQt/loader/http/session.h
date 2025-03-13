@@ -37,7 +37,7 @@
 #include "JellyfinQt/loader/requesttypes.h"
 #include "JellyfinQt/dto/nameidpair.h"
 #include "JellyfinQt/dto/nameidpair.h"
-#include "JellyfinQt/dto/sessioninfo.h"
+#include "JellyfinQt/dto/sessioninfodto.h"
 
 namespace Jellyfin {
 // Forward declaration
@@ -81,7 +81,7 @@ protected:
  * @brief Gets a list of sessions.
  */
 
-class GetSessionsLoader : public Jellyfin::Support::HttpLoader<QList<SessionInfo>, GetSessionsParams> {
+class GetSessionsLoader : public Jellyfin::Support::HttpLoader<QList<SessionInfoDto>, GetSessionsParams> {
 public:
 	explicit GetSessionsLoader(ApiClient *apiClient = nullptr);
 

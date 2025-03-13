@@ -38,7 +38,7 @@ CoverBackground {
     Shim {
         // Movies usually show their name on the poster,
         // so showing it here as well is a bit double
-        visible: mData.type !== "Movie"
+        visible: mData.type !== J.ItemType.Movie
         anchors {
             left: parent.left
             right: parent.right

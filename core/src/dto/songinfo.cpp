@@ -43,6 +43,7 @@ SongInfo::SongInfo (
 SongInfo::SongInfo(const SongInfo &other) :
 
 	m_name(other.m_name),
+	m_originalTitle(other.m_originalTitle),
 	m_path(other.m_path),
 	m_metadataLanguage(other.m_metadataLanguage),
 	m_metadataCountryCode(other.m_metadataCountryCode),
@@ -59,6 +60,7 @@ SongInfo::SongInfo(const SongInfo &other) :
 
 void SongInfo::replaceData(SongInfo &other) {
 	m_name = other.m_name;
+	m_originalTitle = other.m_originalTitle;
 	m_path = other.m_path;
 	m_metadataLanguage = other.m_metadataLanguage;
 	m_metadataCountryCode = other.m_metadataCountryCode;
@@ -82,6 +84,7 @@ SongInfo SongInfo::fromJson(QJsonObject source) {
 
 void SongInfo::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_originalTitle = Jellyfin::Support::fromJsonValue<QString>(source["OriginalTitle"]);
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
@@ -103,6 +106,11 @@ QJsonObject SongInfo::toJson() const {
 	
 	if (!(m_name.isNull())) {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_originalTitle.isNull())) {
+		result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
 	}
 			
 	
@@ -175,6 +183,19 @@ bool SongInfo::nameNull() const {
 
 void SongInfo::setNameNull() {
 	m_name.clear();
+
+}
+QString SongInfo::originalTitle() const { return m_originalTitle; }
+
+void SongInfo::setOriginalTitle(QString newOriginalTitle) {
+	m_originalTitle = newOriginalTitle;
+}
+bool SongInfo::originalTitleNull() const {
+	return m_originalTitle.isNull();
+}
+
+void SongInfo::setOriginalTitleNull() {
+	m_originalTitle.clear();
 
 }
 QString SongInfo::path() const { return m_path; }

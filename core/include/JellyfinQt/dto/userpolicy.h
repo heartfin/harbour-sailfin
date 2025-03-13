@@ -55,7 +55,10 @@ public:
 	UserPolicy(	
 		bool isAdministrator,			
 		bool isHidden,			
-		bool isDisabled,							
+		std::optional<bool> enableCollectionManagement,			
+		std::optional<bool> enableSubtitleManagement,			
+		std::optional<bool> enableLyricManagement,			
+		bool isDisabled,									
 		bool enableUserPreferenceAccess,							
 		bool enableRemoteControlOfOtherUsers,			
 		bool enableSharedDeviceControl,			
@@ -78,7 +81,9 @@ public:
 		qint32 loginAttemptsBeforeLockout,			
 		qint32 maxActiveSessions,			
 		bool enablePublicSharing,							
-		qint32 remoteClientBitrateLimit,							
+		qint32 remoteClientBitrateLimit,			
+		QString authenticationProviderId,			
+		QString passwordResetProviderId,			
 		SyncPlayUserAccessType syncPlayAccess		
 	);
 
@@ -113,6 +118,33 @@ public:
 	void setIsHidden(bool newIsHidden);
 
 	/**
+	 * @brief Gets or sets a value indicating whether this instance can manage collections.
+	 */
+	std::optional<bool> enableCollectionManagement() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance can manage collections.
+	*/
+	void setEnableCollectionManagement(std::optional<bool> newEnableCollectionManagement);
+
+	/**
+	 * @brief Gets or sets a value indicating whether this instance can manage subtitles.
+	 */
+	std::optional<bool> enableSubtitleManagement() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance can manage subtitles.
+	*/
+	void setEnableSubtitleManagement(std::optional<bool> newEnableSubtitleManagement);
+
+	/**
+	 * @brief Gets or sets a value indicating whether this user can manage lyrics.
+	 */
+	std::optional<bool> enableLyricManagement() const;
+	/**
+	* @brief Gets or sets a value indicating whether this user can manage lyrics.
+	*/
+	void setEnableLyricManagement(std::optional<bool> newEnableLyricManagement);
+
+	/**
 	 * @brief Gets or sets a value indicating whether this instance is disabled.
 	 */
 	bool isDisabled() const;
@@ -138,6 +170,13 @@ public:
 	void setBlockedTags(QStringList newBlockedTags);
 	bool blockedTagsNull() const;
 	void setBlockedTagsNull();
+
+
+	QStringList allowedTags() const;
+
+	void setAllowedTags(QStringList newAllowedTags);
+	bool allowedTagsNull() const;
+	void setAllowedTagsNull();
 
 
 	bool enableUserPreferenceAccess() const;
@@ -318,15 +357,11 @@ public:
 	QString authenticationProviderId() const;
 
 	void setAuthenticationProviderId(QString newAuthenticationProviderId);
-	bool authenticationProviderIdNull() const;
-	void setAuthenticationProviderIdNull();
 
 
 	QString passwordResetProviderId() const;
 
 	void setPasswordResetProviderId(QString newPasswordResetProviderId);
-	bool passwordResetProviderIdNull() const;
-	void setPasswordResetProviderIdNull();
 
 
 	SyncPlayUserAccessType syncPlayAccess() const;
@@ -337,9 +372,13 @@ public:
 protected:
 	bool m_isAdministrator;
 	bool m_isHidden;
+	std::optional<bool> m_enableCollectionManagement = std::nullopt;
+	std::optional<bool> m_enableSubtitleManagement = std::nullopt;
+	std::optional<bool> m_enableLyricManagement = std::nullopt;
 	bool m_isDisabled;
 	std::optional<qint32> m_maxParentalRating = std::nullopt;
 	QStringList m_blockedTags;
+	QStringList m_allowedTags;
 	bool m_enableUserPreferenceAccess;
 	QList<AccessSchedule> m_accessSchedules;
 	QList<UnratedItem> m_blockUnratedItems;

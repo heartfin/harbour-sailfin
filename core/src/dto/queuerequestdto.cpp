@@ -34,8 +34,10 @@ namespace DTO {
 
 QueueRequestDto::QueueRequestDto() {}
 QueueRequestDto::QueueRequestDto (
+		QStringList itemIds, 
 		GroupQueueMode mode 
 		) :
+	m_itemIds(itemIds),
 	m_mode(mode) { }
 
 
@@ -67,11 +69,7 @@ void QueueRequestDto::setFromJson(QJsonObject source) {
 QJsonObject QueueRequestDto::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_itemIds.size() == 0)) {
-		result["ItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemIds);
-	}
-			
+	result["ItemIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemIds);		
 	result["Mode"] = Jellyfin::Support::toJsonValue<GroupQueueMode>(m_mode);	
 	return result;
 }
@@ -81,14 +79,7 @@ QStringList QueueRequestDto::itemIds() const { return m_itemIds; }
 void QueueRequestDto::setItemIds(QStringList newItemIds) {
 	m_itemIds = newItemIds;
 }
-bool QueueRequestDto::itemIdsNull() const {
-	return m_itemIds.size() == 0;
-}
 
-void QueueRequestDto::setItemIdsNull() {
-	m_itemIds.clear();
-
-}
 GroupQueueMode QueueRequestDto::mode() const { return m_mode; }
 
 void QueueRequestDto::setMode(GroupQueueMode newMode) {

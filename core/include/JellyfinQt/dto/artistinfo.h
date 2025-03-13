@@ -51,8 +51,9 @@ namespace DTO {
 
 class ArtistInfo {
 public:
-	ArtistInfo(																			
-		bool isAutomated				
+	ArtistInfo(																					
+		bool isAutomated,			
+		QList<SongInfo> songInfos		
 	);
 
 	ArtistInfo(const ArtistInfo &other);
@@ -77,6 +78,17 @@ public:
 	void setName(QString newName);
 	bool nameNull() const;
 	void setNameNull();
+
+	/**
+	 * @brief Gets or sets the original title.
+	 */
+	QString originalTitle() const;
+	/**
+	* @brief Gets or sets the original title.
+	*/
+	void setOriginalTitle(QString newOriginalTitle);
+	bool originalTitleNull() const;
+	void setOriginalTitleNull();
 
 	/**
 	 * @brief Gets or sets the path.
@@ -163,12 +175,11 @@ public:
 	QList<SongInfo> songInfos() const;
 
 	void setSongInfos(QList<SongInfo> newSongInfos);
-	bool songInfosNull() const;
-	void setSongInfosNull();
 
 
 protected:
 	QString m_name;
+	QString m_originalTitle;
 	QString m_path;
 	QString m_metadataLanguage;
 	QString m_metadataCountryCode;

@@ -48,7 +48,9 @@ namespace DTO {
 
 class ExternalIdInfo {
 public:
-	ExternalIdInfo(					
+	ExternalIdInfo(	
+		QString name,			
+		QString key,			
 		ExternalIdMediaType type				
 	);
 
@@ -72,8 +74,6 @@ public:
 	* @brief Gets or sets the display name of the external id provider (IE: IMDB, MusicBrainz, etc).
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets or sets the unique key for this id. This key should be unique across all providers.
@@ -83,8 +83,6 @@ public:
 	* @brief Gets or sets the unique key for this id. This key should be unique across all providers.
 	*/
 	void setKey(QString newKey);
-	bool keyNull() const;
-	void setKeyNull();
 
 
 	ExternalIdMediaType type() const;

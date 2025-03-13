@@ -41,7 +41,7 @@ public:
     Q_PROPERTY(QString comment READ comment NOTIFY commentChanged);
     Q_PROPERTY(QString timeBase READ timeBase NOTIFY timeBaseChanged);
     Q_PROPERTY(QString title READ title NOTIFY titleChanged);
-    Q_PROPERTY(QString videoRange READ videoRange NOTIFY videoRangeChanged);
+    Q_PROPERTY(Jellyfin::DTO::VideoRangeClass::Value videoRange READ videoRange NOTIFY videoRangeChanged);
     Q_PROPERTY(QString localizedUndefined READ localizedUndefined NOTIFY localizedUndefinedChanged);
     Q_PROPERTY(QString localizedDefault READ localizedDefault NOTIFY localizedDefaultChanged);
     Q_PROPERTY(QString localizedForced READ localizedForced NOTIFY localizedForcedChanged);
@@ -78,7 +78,7 @@ public:
     QString comment() const { return m_data->comment(); }
     QString timeBase() const { return m_data->timeBase(); }
     QString title() const { return m_data->title(); }
-    QString videoRange() const { return m_data->videoRange(); }
+    DTO::VideoRange videoRange() const { return m_data->videoRange(); }
     QString localizedUndefined() const { return m_data->localizedUndefined(); }
     QString localizedDefault() const { return m_data->localizedDefault(); }
     QString localizedForced() const { return m_data->localizedForced(); }
@@ -116,7 +116,7 @@ signals:
     void commentChanged(const QString &newComment);
     void timeBaseChanged(const QString &newTimeBase);
     void titleChanged(const QString &newTitle);
-    void videoRangeChanged(const QString &newVideoRanged);
+    void videoRangeChanged(const DTO::VideoRange &newVideoRanged);
     void localizedUndefinedChanged(const QString &newLocalizedUndefined);
     void localizedDefaultChanged(const QString &newLocalizedDefault);
     void localizedForcedChanged(const QString &newLocalizedForced);

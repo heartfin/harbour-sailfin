@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 PathSubstitution::PathSubstitution() {}
+PathSubstitution::PathSubstitution (
+		QString from, 
+		QString to 
+		) :
+	m_from(from),
+	m_to(to) { }
+
+
 
 PathSubstitution::PathSubstitution(const PathSubstitution &other) :
 
@@ -61,16 +69,8 @@ void PathSubstitution::setFromJson(QJsonObject source) {
 QJsonObject PathSubstitution::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_from.isNull())) {
-		result["From"] = Jellyfin::Support::toJsonValue<QString>(m_from);
-	}
-			
-	
-	if (!(m_to.isNull())) {
-		result["To"] = Jellyfin::Support::toJsonValue<QString>(m_to);
-	}
-		
+	result["From"] = Jellyfin::Support::toJsonValue<QString>(m_from);		
+	result["To"] = Jellyfin::Support::toJsonValue<QString>(m_to);	
 	return result;
 }
 
@@ -79,27 +79,13 @@ QString PathSubstitution::from() const { return m_from; }
 void PathSubstitution::setFrom(QString newFrom) {
 	m_from = newFrom;
 }
-bool PathSubstitution::fromNull() const {
-	return m_from.isNull();
-}
 
-void PathSubstitution::setFromNull() {
-	m_from.clear();
-
-}
 QString PathSubstitution::to() const { return m_to; }
 
 void PathSubstitution::setTo(QString newTo) {
 	m_to = newTo;
 }
-bool PathSubstitution::toNull() const {
-	return m_to.isNull();
-}
 
-void PathSubstitution::setToNull() {
-	m_to.clear();
-
-}
 
 } // NS DTO
 

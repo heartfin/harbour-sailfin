@@ -114,6 +114,9 @@ ProfileConditionValue fromJsonValue(const QJsonValue &source, convertType<Profil
 	if (str == QStringLiteral("AudioBitDepth")) {
 		return ProfileConditionValue::AudioBitDepth;
 	}
+	if (str == QStringLiteral("VideoRangeType")) {
+		return ProfileConditionValue::VideoRangeType;
+	}
 	
 	return ProfileConditionValue::EnumNotSet;
 }
@@ -167,6 +170,8 @@ QJsonValue toJsonValue(const ProfileConditionValue &source, convertType<ProfileC
 		return QStringLiteral("AudioSampleRate");
 	case ProfileConditionValue::AudioBitDepth:
 		return QStringLiteral("AudioBitDepth");
+	case ProfileConditionValue::VideoRangeType:
+		return QStringLiteral("VideoRangeType");
 
 	case ProfileConditionValue::EnumNotSet: // Fallthrough
 	default:

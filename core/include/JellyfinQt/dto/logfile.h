@@ -51,7 +51,8 @@ public:
 	LogFile(	
 		QDateTime dateCreated,			
 		QDateTime dateModified,			
-		qint64 size				
+		qint64 size,			
+		QString name		
 	);
 
 	LogFile(const LogFile &other);
@@ -101,8 +102,6 @@ public:
 	* @brief Gets or sets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 
 protected:

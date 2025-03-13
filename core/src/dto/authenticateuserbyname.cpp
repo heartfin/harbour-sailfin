@@ -37,14 +37,12 @@ AuthenticateUserByName::AuthenticateUserByName() {}
 AuthenticateUserByName::AuthenticateUserByName(const AuthenticateUserByName &other) :
 
 	m_username(other.m_username),
-	m_pw(other.m_pw),
-	m_password(other.m_password){}
+	m_pw(other.m_pw){}
 
 
 void AuthenticateUserByName::replaceData(AuthenticateUserByName &other) {
 	m_username = other.m_username;
 	m_pw = other.m_pw;
-	m_password = other.m_password;
 }
 
 AuthenticateUserByName AuthenticateUserByName::fromJson(QJsonObject source) {
@@ -57,7 +55,6 @@ AuthenticateUserByName AuthenticateUserByName::fromJson(QJsonObject source) {
 void AuthenticateUserByName::setFromJson(QJsonObject source) {
 	m_username = Jellyfin::Support::fromJsonValue<QString>(source["Username"]);
 	m_pw = Jellyfin::Support::fromJsonValue<QString>(source["Pw"]);
-	m_password = Jellyfin::Support::fromJsonValue<QString>(source["Password"]);
 
 }
 	
@@ -72,11 +69,6 @@ QJsonObject AuthenticateUserByName::toJson() const {
 	
 	if (!(m_pw.isNull())) {
 		result["Pw"] = Jellyfin::Support::toJsonValue<QString>(m_pw);
-	}
-			
-	
-	if (!(m_password.isNull())) {
-		result["Password"] = Jellyfin::Support::toJsonValue<QString>(m_password);
 	}
 		
 	return result;
@@ -106,19 +98,6 @@ bool AuthenticateUserByName::pwNull() const {
 
 void AuthenticateUserByName::setPwNull() {
 	m_pw.clear();
-
-}
-QString AuthenticateUserByName::password() const { return m_password; }
-
-void AuthenticateUserByName::setPassword(QString newPassword) {
-	m_password = newPassword;
-}
-bool AuthenticateUserByName::passwordNull() const {
-	return m_password.isNull();
-}
-
-void AuthenticateUserByName::setPasswordNull() {
-	m_password.clear();
 
 }
 

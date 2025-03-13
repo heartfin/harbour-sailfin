@@ -52,8 +52,9 @@ namespace DTO {
 
 class OpenLiveStreamDto {
 public:
-	OpenLiveStreamDto(																							
-		QSharedPointer<DeviceProfile> deviceProfile				
+	OpenLiveStreamDto(																									
+		QSharedPointer<DeviceProfile> deviceProfile,			
+		QList<MediaProtocol> directPlayProtocols		
 	);
 
 	OpenLiveStreamDto(const OpenLiveStreamDto &other);
@@ -189,6 +190,17 @@ public:
 	bool enableDirectStreamNull() const;
 	void setEnableDirectStreamNull();
 
+	/**
+	 * @brief Gets or sets a value indicating whether always burn in subtitles when transcoding.
+	 */
+	std::optional<bool> alwaysBurnInSubtitleWhenTranscoding() const;
+	/**
+	* @brief Gets or sets a value indicating whether always burn in subtitles when transcoding.
+	*/
+	void setAlwaysBurnInSubtitleWhenTranscoding(std::optional<bool> newAlwaysBurnInSubtitleWhenTranscoding);
+	bool alwaysBurnInSubtitleWhenTranscodingNull() const;
+	void setAlwaysBurnInSubtitleWhenTranscodingNull();
+
 
 	QSharedPointer<DeviceProfile> deviceProfile() const;
 
@@ -202,8 +214,6 @@ public:
 	* @brief Gets or sets the device play protocols.
 	*/
 	void setDirectPlayProtocols(QList<MediaProtocol> newDirectPlayProtocols);
-	bool directPlayProtocolsNull() const;
-	void setDirectPlayProtocolsNull();
 
 
 protected:
@@ -218,6 +228,7 @@ protected:
 	QString m_itemId;
 	std::optional<bool> m_enableDirectPlay = std::nullopt;
 	std::optional<bool> m_enableDirectStream = std::nullopt;
+	std::optional<bool> m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 	QSharedPointer<DeviceProfile> m_deviceProfile = QSharedPointer<DeviceProfile>();
 	QList<MediaProtocol> m_directPlayProtocols;
 

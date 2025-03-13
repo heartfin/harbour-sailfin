@@ -39,7 +39,7 @@ BaseDetailPage {
             id: collectionLoader
             apiClient: appWindow.apiClient
             parentId: itemData.jellyfinId
-            sortBy: "SortName"
+            sortBy: [ J.SortBy.SortName ]
             autoReload: itemData.jellyfinId.length > 0 && (pageRoot.status == PageStatus.Active || _collectionModelLoaded)
         }
     }
@@ -107,7 +107,7 @@ BaseDetailPage {
                 id: itemImage
                 anchors.fill: parent
                 source: Utils.itemModelImageUrl(apiClient.baseUrl, model.jellyfinId, model.imageTags.Primary, "Primary", {"maxWidth": width})
-                blurhash: model.imageBlurHashes.Primary[model.imageTags.Primary]
+                blurhash: model.imageBlurHashes.Primary !== undefined ? model.imageBlurHashes.Primary[model.imageTags.Primary] : undefined
                 fallbackColor: Utils.colorFromString(model.name)
                 fillMode: Image.PreserveAspectCrop
                 clip: true
@@ -152,8 +152,14 @@ BaseDetailPage {
 
     Component {
         id: sortPageComponent
+
         Page {
             id: sortPage
+            readonly property var sortMap: {
+                "SortName": [J.SortBy.SortName],
+                "PlayCount": [J.SortBy.PlayCount],
+                "DateCreated": [J.SortBy.DateCreated]
+            };
 
             ListModel {
                 id: sortOptions
@@ -183,19 +189,19 @@ BaseDetailPage {
                         MenuItem {
                             //: Sort order
                             text: qsTr("Ascending")
-                            onClicked: apply(model.value, "Ascending")
+                            onClicked: apply(model.value, J.SortOrder.Ascending)
                         }
                         MenuItem {
                             //: Sort order
                             text: qsTr("Descending")
-                            onClicked: apply(model.value, "Descending")
+                            onClicked: apply(model.value, J.SortOrder.Descending)
                         }
                     }
                     onClicked: openMenu()
 
                     function apply(field, order) {
-                        collectionModel.loader.sortBy = field;
-                        collectionModel.loader.sortOrder = order;
+                        collectionModel.loader.sortBy = sortMap[field];
+                        collectionModel.loader.sortOrder = [order];
                         collectionModel.loader.reload()
                         pageStack.pop()
                     }

@@ -42,6 +42,7 @@
 #include "JellyfinQt/dto/mediaprotocol.h"
 #include "JellyfinQt/dto/mediasourcetype.h"
 #include "JellyfinQt/dto/mediastream.h"
+#include "JellyfinQt/dto/mediastreamprotocol.h"
 #include "JellyfinQt/dto/transportstreamtimestamp.h"
 #include "JellyfinQt/dto/video3dformat.h"
 #include "JellyfinQt/dto/videotype.h"
@@ -70,14 +71,17 @@ public:
 		bool supportsDirectStream,			
 		bool supportsDirectPlay,			
 		bool isInfiniteStream,			
+		std::optional<bool> useMostCompatibleTranscodingProfile,			
 		bool requiresOpening,					
 		bool requiresClosing,							
 		bool requiresLooping,			
 		bool supportsProbing,			
 		VideoType videoType,			
 		IsoType isoType,			
-		Video3DFormat video3DFormat,											
-		TransportStreamTimestamp timestamp																
+		Video3DFormat video3DFormat,													
+		TransportStreamTimestamp timestamp,							
+		MediaStreamProtocol transcodingSubProtocol,											
+		bool hasSegments		
 	);
 
 	MediaSourceInfo(const MediaSourceInfo &other);
@@ -150,11 +154,13 @@ public:
 	void setNameNull();
 
 	/**
-	 * @brief Differentiate internet url vs local network.
+	 * @brief Gets or sets a value indicating whether the media is remote.
+Differentiate internet url vs local network.
 	 */
 	bool isRemote() const;
 	/**
-	* @brief Differentiate internet url vs local network.
+	* @brief Gets or sets a value indicating whether the media is remote.
+Differentiate internet url vs local network.
 	*/
 	void setIsRemote(bool newIsRemote);
 
@@ -211,6 +217,11 @@ public:
 	bool isInfiniteStream() const;
 
 	void setIsInfiniteStream(bool newIsInfiniteStream);
+
+
+	std::optional<bool> useMostCompatibleTranscodingProfile() const;
+
+	void setUseMostCompatibleTranscodingProfile(std::optional<bool> newUseMostCompatibleTranscodingProfile);
 
 
 	bool requiresOpening() const;
@@ -297,6 +308,13 @@ public:
 	void setBitrateNull();
 
 
+	std::optional<qint32> fallbackMaxStreamingBitrate() const;
+
+	void setFallbackMaxStreamingBitrate(std::optional<qint32> newFallbackMaxStreamingBitrate);
+	bool fallbackMaxStreamingBitrateNull() const;
+	void setFallbackMaxStreamingBitrateNull();
+
+
 	TransportStreamTimestamp timestamp() const;
 
 	void setTimestamp(TransportStreamTimestamp newTimestamp);
@@ -316,11 +334,9 @@ public:
 	void setTranscodingUrlNull();
 
 
-	QString transcodingSubProtocol() const;
+	MediaStreamProtocol transcodingSubProtocol() const;
 
-	void setTranscodingSubProtocol(QString newTranscodingSubProtocol);
-	bool transcodingSubProtocolNull() const;
-	void setTranscodingSubProtocolNull();
+	void setTranscodingSubProtocol(MediaStreamProtocol newTranscodingSubProtocol);
 
 
 	QString transcodingContainer() const;
@@ -351,6 +367,11 @@ public:
 	void setDefaultSubtitleStreamIndexNull();
 
 
+	bool hasSegments() const;
+
+	void setHasSegments(bool newHasSegments);
+
+
 protected:
 	MediaProtocol m_protocol;
 	QString m_jellyfinId;
@@ -372,6 +393,7 @@ protected:
 	bool m_supportsDirectStream;
 	bool m_supportsDirectPlay;
 	bool m_isInfiniteStream;
+	std::optional<bool> m_useMostCompatibleTranscodingProfile = std::nullopt;
 	bool m_requiresOpening;
 	QString m_openToken;
 	bool m_requiresClosing;
@@ -386,14 +408,16 @@ protected:
 	QList<MediaAttachment> m_mediaAttachments;
 	QStringList m_formats;
 	std::optional<qint32> m_bitrate = std::nullopt;
+	std::optional<qint32> m_fallbackMaxStreamingBitrate = std::nullopt;
 	TransportStreamTimestamp m_timestamp;
 	QJsonObject m_requiredHttpHeaders;
 	QString m_transcodingUrl;
-	QString m_transcodingSubProtocol;
+	MediaStreamProtocol m_transcodingSubProtocol;
 	QString m_transcodingContainer;
 	std::optional<qint32> m_analyzeDurationMs = std::nullopt;
 	std::optional<qint32> m_defaultAudioStreamIndex = std::nullopt;
 	std::optional<qint32> m_defaultSubtitleStreamIndex = std::nullopt;
+	bool m_hasSegments;
 
 private:
 	// Private constructor which generates an invalid object, for use withing MediaSourceInfo::fromJson();

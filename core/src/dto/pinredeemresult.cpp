@@ -34,9 +34,11 @@ namespace DTO {
 
 PinRedeemResult::PinRedeemResult() {}
 PinRedeemResult::PinRedeemResult (
-		bool success 
+		bool success, 
+		QStringList usersReset 
 		) :
-	m_success(success) { }
+	m_success(success),
+	m_usersReset(usersReset) { }
 
 
 
@@ -68,11 +70,7 @@ QJsonObject PinRedeemResult::toJson() const {
 	QJsonObject result;
 	
 	result["Success"] = Jellyfin::Support::toJsonValue<bool>(m_success);		
-	
-	if (!(m_usersReset.size() == 0)) {
-		result["UsersReset"] = Jellyfin::Support::toJsonValue<QStringList>(m_usersReset);
-	}
-		
+	result["UsersReset"] = Jellyfin::Support::toJsonValue<QStringList>(m_usersReset);	
 	return result;
 }
 
@@ -87,14 +85,7 @@ QStringList PinRedeemResult::usersReset() const { return m_usersReset; }
 void PinRedeemResult::setUsersReset(QStringList newUsersReset) {
 	m_usersReset = newUsersReset;
 }
-bool PinRedeemResult::usersResetNull() const {
-	return m_usersReset.size() == 0;
-}
 
-void PinRedeemResult::setUsersResetNull() {
-	m_usersReset.clear();
-
-}
 
 } // NS DTO
 

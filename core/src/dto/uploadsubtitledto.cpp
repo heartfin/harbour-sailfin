@@ -37,11 +37,13 @@ UploadSubtitleDto::UploadSubtitleDto (
 		QString language, 
 		QString format, 
 		bool isForced, 
+		bool isHearingImpaired, 
 		QString data 
 		) :
 	m_language(language),
 	m_format(format),
 	m_isForced(isForced),
+	m_isHearingImpaired(isHearingImpaired),
 	m_data(data) { }
 
 
@@ -51,6 +53,7 @@ UploadSubtitleDto::UploadSubtitleDto(const UploadSubtitleDto &other) :
 	m_language(other.m_language),
 	m_format(other.m_format),
 	m_isForced(other.m_isForced),
+	m_isHearingImpaired(other.m_isHearingImpaired),
 	m_data(other.m_data){}
 
 
@@ -58,6 +61,7 @@ void UploadSubtitleDto::replaceData(UploadSubtitleDto &other) {
 	m_language = other.m_language;
 	m_format = other.m_format;
 	m_isForced = other.m_isForced;
+	m_isHearingImpaired = other.m_isHearingImpaired;
 	m_data = other.m_data;
 }
 
@@ -72,6 +76,7 @@ void UploadSubtitleDto::setFromJson(QJsonObject source) {
 	m_language = Jellyfin::Support::fromJsonValue<QString>(source["Language"]);
 	m_format = Jellyfin::Support::fromJsonValue<QString>(source["Format"]);
 	m_isForced = Jellyfin::Support::fromJsonValue<bool>(source["IsForced"]);
+	m_isHearingImpaired = Jellyfin::Support::fromJsonValue<bool>(source["IsHearingImpaired"]);
 	m_data = Jellyfin::Support::fromJsonValue<QString>(source["Data"]);
 
 }
@@ -82,6 +87,7 @@ QJsonObject UploadSubtitleDto::toJson() const {
 	result["Language"] = Jellyfin::Support::toJsonValue<QString>(m_language);		
 	result["Format"] = Jellyfin::Support::toJsonValue<QString>(m_format);		
 	result["IsForced"] = Jellyfin::Support::toJsonValue<bool>(m_isForced);		
+	result["IsHearingImpaired"] = Jellyfin::Support::toJsonValue<bool>(m_isHearingImpaired);		
 	result["Data"] = Jellyfin::Support::toJsonValue<QString>(m_data);	
 	return result;
 }
@@ -102,6 +108,12 @@ bool UploadSubtitleDto::isForced() const { return m_isForced; }
 
 void UploadSubtitleDto::setIsForced(bool newIsForced) {
 	m_isForced = newIsForced;
+}
+
+bool UploadSubtitleDto::isHearingImpaired() const { return m_isHearingImpaired; }
+
+void UploadSubtitleDto::setIsHearingImpaired(bool newIsHearingImpaired) {
+	m_isHearingImpaired = newIsHearingImpaired;
 }
 
 QString UploadSubtitleDto::data() const { return m_data; }

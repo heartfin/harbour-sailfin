@@ -43,6 +43,7 @@ BoxSetInfo::BoxSetInfo (
 BoxSetInfo::BoxSetInfo(const BoxSetInfo &other) :
 
 	m_name(other.m_name),
+	m_originalTitle(other.m_originalTitle),
 	m_path(other.m_path),
 	m_metadataLanguage(other.m_metadataLanguage),
 	m_metadataCountryCode(other.m_metadataCountryCode),
@@ -56,6 +57,7 @@ BoxSetInfo::BoxSetInfo(const BoxSetInfo &other) :
 
 void BoxSetInfo::replaceData(BoxSetInfo &other) {
 	m_name = other.m_name;
+	m_originalTitle = other.m_originalTitle;
 	m_path = other.m_path;
 	m_metadataLanguage = other.m_metadataLanguage;
 	m_metadataCountryCode = other.m_metadataCountryCode;
@@ -76,6 +78,7 @@ BoxSetInfo BoxSetInfo::fromJson(QJsonObject source) {
 
 void BoxSetInfo::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_originalTitle = Jellyfin::Support::fromJsonValue<QString>(source["OriginalTitle"]);
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
@@ -94,6 +97,11 @@ QJsonObject BoxSetInfo::toJson() const {
 	
 	if (!(m_name.isNull())) {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_originalTitle.isNull())) {
+		result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
 	}
 			
 	
@@ -151,6 +159,19 @@ bool BoxSetInfo::nameNull() const {
 
 void BoxSetInfo::setNameNull() {
 	m_name.clear();
+
+}
+QString BoxSetInfo::originalTitle() const { return m_originalTitle; }
+
+void BoxSetInfo::setOriginalTitle(QString newOriginalTitle) {
+	m_originalTitle = newOriginalTitle;
+}
+bool BoxSetInfo::originalTitleNull() const {
+	return m_originalTitle.isNull();
+}
+
+void BoxSetInfo::setOriginalTitleNull() {
+	m_originalTitle.clear();
 
 }
 QString BoxSetInfo::path() const { return m_path; }

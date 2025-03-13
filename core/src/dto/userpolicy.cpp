@@ -36,6 +36,9 @@ UserPolicy::UserPolicy() {}
 UserPolicy::UserPolicy (
 		bool isAdministrator, 
 		bool isHidden, 
+		std::optional<bool> enableCollectionManagement, 
+		std::optional<bool> enableSubtitleManagement, 
+		std::optional<bool> enableLyricManagement, 
 		bool isDisabled, 
 		bool enableUserPreferenceAccess, 
 		bool enableRemoteControlOfOtherUsers, 
@@ -60,10 +63,15 @@ UserPolicy::UserPolicy (
 		qint32 maxActiveSessions, 
 		bool enablePublicSharing, 
 		qint32 remoteClientBitrateLimit, 
+		QString authenticationProviderId, 
+		QString passwordResetProviderId, 
 		SyncPlayUserAccessType syncPlayAccess 
 		) :
 	m_isAdministrator(isAdministrator),
 	m_isHidden(isHidden),
+	m_enableCollectionManagement(enableCollectionManagement),
+	m_enableSubtitleManagement(enableSubtitleManagement),
+	m_enableLyricManagement(enableLyricManagement),
 	m_isDisabled(isDisabled),
 	m_enableUserPreferenceAccess(enableUserPreferenceAccess),
 	m_enableRemoteControlOfOtherUsers(enableRemoteControlOfOtherUsers),
@@ -88,6 +96,8 @@ UserPolicy::UserPolicy (
 	m_maxActiveSessions(maxActiveSessions),
 	m_enablePublicSharing(enablePublicSharing),
 	m_remoteClientBitrateLimit(remoteClientBitrateLimit),
+	m_authenticationProviderId(authenticationProviderId),
+	m_passwordResetProviderId(passwordResetProviderId),
 	m_syncPlayAccess(syncPlayAccess) { }
 
 
@@ -96,9 +106,13 @@ UserPolicy::UserPolicy(const UserPolicy &other) :
 
 	m_isAdministrator(other.m_isAdministrator),
 	m_isHidden(other.m_isHidden),
+	m_enableCollectionManagement(other.m_enableCollectionManagement),
+	m_enableSubtitleManagement(other.m_enableSubtitleManagement),
+	m_enableLyricManagement(other.m_enableLyricManagement),
 	m_isDisabled(other.m_isDisabled),
 	m_maxParentalRating(other.m_maxParentalRating),
 	m_blockedTags(other.m_blockedTags),
+	m_allowedTags(other.m_allowedTags),
 	m_enableUserPreferenceAccess(other.m_enableUserPreferenceAccess),
 	m_accessSchedules(other.m_accessSchedules),
 	m_blockUnratedItems(other.m_blockUnratedItems),
@@ -138,9 +152,13 @@ UserPolicy::UserPolicy(const UserPolicy &other) :
 void UserPolicy::replaceData(UserPolicy &other) {
 	m_isAdministrator = other.m_isAdministrator;
 	m_isHidden = other.m_isHidden;
+	m_enableCollectionManagement = other.m_enableCollectionManagement;
+	m_enableSubtitleManagement = other.m_enableSubtitleManagement;
+	m_enableLyricManagement = other.m_enableLyricManagement;
 	m_isDisabled = other.m_isDisabled;
 	m_maxParentalRating = other.m_maxParentalRating;
 	m_blockedTags = other.m_blockedTags;
+	m_allowedTags = other.m_allowedTags;
 	m_enableUserPreferenceAccess = other.m_enableUserPreferenceAccess;
 	m_accessSchedules = other.m_accessSchedules;
 	m_blockUnratedItems = other.m_blockUnratedItems;
@@ -187,9 +205,13 @@ UserPolicy UserPolicy::fromJson(QJsonObject source) {
 void UserPolicy::setFromJson(QJsonObject source) {
 	m_isAdministrator = Jellyfin::Support::fromJsonValue<bool>(source["IsAdministrator"]);
 	m_isHidden = Jellyfin::Support::fromJsonValue<bool>(source["IsHidden"]);
+	m_enableCollectionManagement = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableCollectionManagement"]);
+	m_enableSubtitleManagement = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableSubtitleManagement"]);
+	m_enableLyricManagement = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableLyricManagement"]);
 	m_isDisabled = Jellyfin::Support::fromJsonValue<bool>(source["IsDisabled"]);
 	m_maxParentalRating = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["MaxParentalRating"]);
 	m_blockedTags = Jellyfin::Support::fromJsonValue<QStringList>(source["BlockedTags"]);
+	m_allowedTags = Jellyfin::Support::fromJsonValue<QStringList>(source["AllowedTags"]);
 	m_enableUserPreferenceAccess = Jellyfin::Support::fromJsonValue<bool>(source["EnableUserPreferenceAccess"]);
 	m_accessSchedules = Jellyfin::Support::fromJsonValue<QList<AccessSchedule>>(source["AccessSchedules"]);
 	m_blockUnratedItems = Jellyfin::Support::fromJsonValue<QList<UnratedItem>>(source["BlockUnratedItems"]);
@@ -232,6 +254,9 @@ QJsonObject UserPolicy::toJson() const {
 	
 	result["IsAdministrator"] = Jellyfin::Support::toJsonValue<bool>(m_isAdministrator);		
 	result["IsHidden"] = Jellyfin::Support::toJsonValue<bool>(m_isHidden);		
+	result["EnableCollectionManagement"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableCollectionManagement);		
+	result["EnableSubtitleManagement"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableSubtitleManagement);		
+	result["EnableLyricManagement"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableLyricManagement);		
 	result["IsDisabled"] = Jellyfin::Support::toJsonValue<bool>(m_isDisabled);		
 	
 	if (!(!m_maxParentalRating.has_value())) {
@@ -241,6 +266,11 @@ QJsonObject UserPolicy::toJson() const {
 	
 	if (!(m_blockedTags.size() == 0)) {
 		result["BlockedTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_blockedTags);
+	}
+			
+	
+	if (!(m_allowedTags.size() == 0)) {
+		result["AllowedTags"] = Jellyfin::Support::toJsonValue<QStringList>(m_allowedTags);
 	}
 			
 	result["EnableUserPreferenceAccess"] = Jellyfin::Support::toJsonValue<bool>(m_enableUserPreferenceAccess);		
@@ -306,16 +336,8 @@ QJsonObject UserPolicy::toJson() const {
 	}
 			
 	result["RemoteClientBitrateLimit"] = Jellyfin::Support::toJsonValue<qint32>(m_remoteClientBitrateLimit);		
-	
-	if (!(m_authenticationProviderId.isNull())) {
-		result["AuthenticationProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_authenticationProviderId);
-	}
-			
-	
-	if (!(m_passwordResetProviderId.isNull())) {
-		result["PasswordResetProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_passwordResetProviderId);
-	}
-			
+	result["AuthenticationProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_authenticationProviderId);		
+	result["PasswordResetProviderId"] = Jellyfin::Support::toJsonValue<QString>(m_passwordResetProviderId);		
 	result["SyncPlayAccess"] = Jellyfin::Support::toJsonValue<SyncPlayUserAccessType>(m_syncPlayAccess);	
 	return result;
 }
@@ -330,6 +352,24 @@ bool UserPolicy::isHidden() const { return m_isHidden; }
 
 void UserPolicy::setIsHidden(bool newIsHidden) {
 	m_isHidden = newIsHidden;
+}
+
+std::optional<bool> UserPolicy::enableCollectionManagement() const { return m_enableCollectionManagement; }
+
+void UserPolicy::setEnableCollectionManagement(std::optional<bool> newEnableCollectionManagement) {
+	m_enableCollectionManagement = newEnableCollectionManagement;
+}
+
+std::optional<bool> UserPolicy::enableSubtitleManagement() const { return m_enableSubtitleManagement; }
+
+void UserPolicy::setEnableSubtitleManagement(std::optional<bool> newEnableSubtitleManagement) {
+	m_enableSubtitleManagement = newEnableSubtitleManagement;
+}
+
+std::optional<bool> UserPolicy::enableLyricManagement() const { return m_enableLyricManagement; }
+
+void UserPolicy::setEnableLyricManagement(std::optional<bool> newEnableLyricManagement) {
+	m_enableLyricManagement = newEnableLyricManagement;
 }
 
 bool UserPolicy::isDisabled() const { return m_isDisabled; }
@@ -362,6 +402,19 @@ bool UserPolicy::blockedTagsNull() const {
 
 void UserPolicy::setBlockedTagsNull() {
 	m_blockedTags.clear();
+
+}
+QStringList UserPolicy::allowedTags() const { return m_allowedTags; }
+
+void UserPolicy::setAllowedTags(QStringList newAllowedTags) {
+	m_allowedTags = newAllowedTags;
+}
+bool UserPolicy::allowedTagsNull() const {
+	return m_allowedTags.size() == 0;
+}
+
+void UserPolicy::setAllowedTagsNull() {
+	m_allowedTags.clear();
 
 }
 bool UserPolicy::enableUserPreferenceAccess() const { return m_enableUserPreferenceAccess; }
@@ -611,27 +664,13 @@ QString UserPolicy::authenticationProviderId() const { return m_authenticationPr
 void UserPolicy::setAuthenticationProviderId(QString newAuthenticationProviderId) {
 	m_authenticationProviderId = newAuthenticationProviderId;
 }
-bool UserPolicy::authenticationProviderIdNull() const {
-	return m_authenticationProviderId.isNull();
-}
 
-void UserPolicy::setAuthenticationProviderIdNull() {
-	m_authenticationProviderId.clear();
-
-}
 QString UserPolicy::passwordResetProviderId() const { return m_passwordResetProviderId; }
 
 void UserPolicy::setPasswordResetProviderId(QString newPasswordResetProviderId) {
 	m_passwordResetProviderId = newPasswordResetProviderId;
 }
-bool UserPolicy::passwordResetProviderIdNull() const {
-	return m_passwordResetProviderId.isNull();
-}
 
-void UserPolicy::setPasswordResetProviderIdNull() {
-	m_passwordResetProviderId.clear();
-
-}
 SyncPlayUserAccessType UserPolicy::syncPlayAccess() const { return m_syncPlayAccess; }
 
 void UserPolicy::setSyncPlayAccess(SyncPlayUserAccessType newSyncPlayAccess) {

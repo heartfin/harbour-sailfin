@@ -41,7 +41,7 @@ CoverBackground {
             apiClient: appWindow.apiClient
             limit: cover.rowCount * 2 - 2
             imageTypes: [J.ImageType.Primary]
-            sortBy: "IsFavoriteOrLiked,Random"
+            sortBy: [J.SortBy.IsFavoriteOrLiked, J.SortBy.Random]
             recursive: true
             parentId: itemId
             autoReload:  false

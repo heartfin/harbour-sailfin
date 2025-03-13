@@ -53,9 +53,6 @@ QUrlQuery GetConfigurationPagesLoader::query(const GetConfigurationPagesParams &
 	if (!params.enableInMainMenuNull()) {
 		result.addQueryItem("enableInMainMenu", Support::toString<std::optional<bool>>(params.enableInMainMenu()));
 	}
-	if (!params.pageTypeNull()) {
-		result.addQueryItem("pageType", Support::toString<ConfigurationPageType>(params.pageType()));
-	}
 	
 	return result;
 }

@@ -46,11 +46,7 @@ namespace DTO {
 
 
 class ParentalRating {
-public:
-	ParentalRating(			
-		qint32 value		
-	);
-
+public:	ParentalRating();
 	ParentalRating(const ParentalRating &other);
 	
 	/**
@@ -77,20 +73,20 @@ public:
 	/**
 	 * @brief Gets or sets the value.
 	 */
-	qint32 value() const;
+	std::optional<qint32> value() const;
 	/**
 	* @brief Gets or sets the value.
 	*/
-	void setValue(qint32 newValue);
+	void setValue(std::optional<qint32> newValue);
+	bool valueNull() const;
+	void setValueNull();
 
 
 protected:
 	QString m_name;
-	qint32 m_value;
+	std::optional<qint32> m_value = std::nullopt;
 
-private:
-	// Private constructor which generates an invalid object, for use withing ParentalRating::fromJson();
-	ParentalRating();
+
 };
 
 

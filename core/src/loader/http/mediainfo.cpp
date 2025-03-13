@@ -48,9 +48,11 @@ QUrlQuery GetPlaybackInfoLoader::query(const GetPlaybackInfoParams &params) cons
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
-	result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	
 	return result;
 }
@@ -213,6 +215,9 @@ QUrlQuery OpenLiveStreamLoader::query(const OpenLiveStreamParams &params) const 
 	}
 	if (!params.enableDirectStreamNull()) {
 		result.addQueryItem("enableDirectStream", Support::toString<std::optional<bool>>(params.enableDirectStream()));
+	}
+	if (!params.alwaysBurnInSubtitleWhenTranscodingNull()) {
+		result.addQueryItem("alwaysBurnInSubtitleWhenTranscoding", Support::toString<std::optional<bool>>(params.alwaysBurnInSubtitleWhenTranscoding()));
 	}
 	
 	return result;

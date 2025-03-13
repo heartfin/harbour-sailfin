@@ -83,7 +83,7 @@ QUrlQuery AddVirtualFolderLoader::query(const AddVirtualFolderParams &params) co
 		result.addQueryItem("name", Support::toString<QString>(params.name()));
 	}
 	if (!params.collectionTypeNull()) {
-		result.addQueryItem("collectionType", Support::toString<QString>(params.collectionType()));
+		result.addQueryItem("collectionType", Support::toString<CollectionTypeOptions>(params.collectionType()));
 	}
 	if (!params.pathsNull()) {
 		result.addQueryItem("paths", Support::toString<QStringList>(params.paths()));
@@ -292,15 +292,12 @@ QUrlQuery UpdateMediaPathLoader::query(const UpdateMediaPathParams &params) cons
 	QUrlQuery result;
 
 	// Optional parameters
-	if (!params.nameNull()) {
-		result.addQueryItem("name", Support::toString<QString>(params.name()));
-	}
 	
 	return result;
 }
 
 QByteArray UpdateMediaPathLoader::body(const UpdateMediaPathParams &params) const {
-	return Support::toString<QSharedPointer<MediaPathInfo>>(params.body()).toUtf8();
+	return Support::toString<QSharedPointer<UpdateMediaPathRequestDto>>(params.body()).toUtf8();
 }
 
 QNetworkAccessManager::Operation UpdateMediaPathLoader::operation() const {

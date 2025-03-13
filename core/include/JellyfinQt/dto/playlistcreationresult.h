@@ -46,7 +46,11 @@ namespace DTO {
 
 
 class PlaylistCreationResult {
-public:	PlaylistCreationResult();
+public:
+	PlaylistCreationResult(	
+		QString jellyfinId		
+	);
+
 	PlaylistCreationResult(const PlaylistCreationResult &other);
 	
 	/**
@@ -63,14 +67,14 @@ public:	PlaylistCreationResult();
 	QString jellyfinId() const;
 
 	void setJellyfinId(QString newJellyfinId);
-	bool jellyfinIdNull() const;
-	void setJellyfinIdNull();
 
 
 protected:
 	QString m_jellyfinId;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing PlaylistCreationResult::fromJson();
+	PlaylistCreationResult();
 };
 
 

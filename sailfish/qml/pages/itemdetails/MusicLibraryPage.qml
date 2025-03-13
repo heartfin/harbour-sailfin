@@ -56,7 +56,7 @@ BaseDetailPage {
             J.LatestMediaLoader {
                 apiClient: appWindow.apiClient
                 parentId: itemData.jellyfinId
-                includeItemTypes: "Audio"
+                includeItemTypes: [J.ItemType.Audio]
                 autoReload: false
             }
         }
@@ -74,9 +74,9 @@ BaseDetailPage {
             J.UserItemsLoader {
                 apiClient: appWindow.apiClient
                 parentId: itemData.jellyfinId
-                includeItemTypes: "MusicAlbum"
+                includeItemTypes: [J.ItemType.MusicAlbum]
                 recursive: true
-                sortBy: "SortName"
+                sortBy: [J.SortBy.SortName]
                 autoReload: false
             }
         }
@@ -85,9 +85,9 @@ BaseDetailPage {
             J.UserItemsLoader {
                 apiClient: appWindow.apiClient
                 parentId: itemData.jellyfinId
-                includeItemTypes: "Playlist"
+                includeItemTypes: [J.ItemType.Playlist]
                 recursive: true
-                sortBy: "SortName"
+                sortBy: [J.SortBy.SortName]
                 autoReload: false
             }
         }
@@ -109,7 +109,7 @@ BaseDetailPage {
                     apiClient: appWindow.apiClient
                     parentId: itemData.jellyfinId
                     autoReload: _firstTimeLoaded && itemData.jellyfinId.length > 0
-                    includeItemTypes: "Audio"
+                    includeItemTypes: [J.ItemType.Audio]
                     limit: 12
                 }
                 onHeaderClicked: pageStack.push(Qt.resolvedUrl("CollectionPage.qml"), {
@@ -128,9 +128,9 @@ BaseDetailPage {
                 loader: J.UserItemsLoader {
                     apiClient: appWindow.apiClient
                     parentId: itemData.jellyfinId
-                    includeItemTypes: "MusicAlbum"
+                    includeItemTypes: [J.ItemType.MusicAlbum]
                     autoReload: _firstTimeLoaded && itemData.jellyfinId.length > 0
-                    sortBy: "Random"
+                    sortBy: [J.SortBy.Random]
                     recursive: true
                     limit: 12
                 }
@@ -148,9 +148,9 @@ BaseDetailPage {
                 loader: J.UserItemsLoader {
                     apiClient: appWindow.apiClient
                     parentId: itemData.jellyfinId
-                    includeItemTypes: "Playlist"
+                    includeItemTypes: [J.ItemType.Playlist]
                     autoReload: _firstTimeLoaded && itemData.jellyfinId.length > 0
-                    sortBy: "Random"
+                    sortBy: [J.SortBy.Random]
                     recursive: true
                     limit: 12
                 }

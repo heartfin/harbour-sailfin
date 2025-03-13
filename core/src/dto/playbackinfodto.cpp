@@ -56,7 +56,8 @@ PlaybackInfoDto::PlaybackInfoDto(const PlaybackInfoDto &other) :
 	m_enableTranscoding(other.m_enableTranscoding),
 	m_allowVideoStreamCopy(other.m_allowVideoStreamCopy),
 	m_allowAudioStreamCopy(other.m_allowAudioStreamCopy),
-	m_autoOpenLiveStream(other.m_autoOpenLiveStream){}
+	m_autoOpenLiveStream(other.m_autoOpenLiveStream),
+	m_alwaysBurnInSubtitleWhenTranscoding(other.m_alwaysBurnInSubtitleWhenTranscoding){}
 
 
 void PlaybackInfoDto::replaceData(PlaybackInfoDto &other) {
@@ -75,6 +76,7 @@ void PlaybackInfoDto::replaceData(PlaybackInfoDto &other) {
 	m_allowVideoStreamCopy = other.m_allowVideoStreamCopy;
 	m_allowAudioStreamCopy = other.m_allowAudioStreamCopy;
 	m_autoOpenLiveStream = other.m_autoOpenLiveStream;
+	m_alwaysBurnInSubtitleWhenTranscoding = other.m_alwaysBurnInSubtitleWhenTranscoding;
 }
 
 PlaybackInfoDto PlaybackInfoDto::fromJson(QJsonObject source) {
@@ -100,6 +102,7 @@ void PlaybackInfoDto::setFromJson(QJsonObject source) {
 	m_allowVideoStreamCopy = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["AllowVideoStreamCopy"]);
 	m_allowAudioStreamCopy = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["AllowAudioStreamCopy"]);
 	m_autoOpenLiveStream = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["AutoOpenLiveStream"]);
+	m_alwaysBurnInSubtitleWhenTranscoding = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["AlwaysBurnInSubtitleWhenTranscoding"]);
 
 }
 	
@@ -175,6 +178,11 @@ QJsonObject PlaybackInfoDto::toJson() const {
 	
 	if (!(!m_autoOpenLiveStream.has_value())) {
 		result["AutoOpenLiveStream"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_autoOpenLiveStream);
+	}
+			
+	
+	if (!(!m_alwaysBurnInSubtitleWhenTranscoding.has_value())) {
+		result["AlwaysBurnInSubtitleWhenTranscoding"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_alwaysBurnInSubtitleWhenTranscoding);
 	}
 		
 	return result;
@@ -366,6 +374,19 @@ bool PlaybackInfoDto::autoOpenLiveStreamNull() const {
 
 void PlaybackInfoDto::setAutoOpenLiveStreamNull() {
 	m_autoOpenLiveStream = std::nullopt;
+
+}
+std::optional<bool> PlaybackInfoDto::alwaysBurnInSubtitleWhenTranscoding() const { return m_alwaysBurnInSubtitleWhenTranscoding; }
+
+void PlaybackInfoDto::setAlwaysBurnInSubtitleWhenTranscoding(std::optional<bool> newAlwaysBurnInSubtitleWhenTranscoding) {
+	m_alwaysBurnInSubtitleWhenTranscoding = newAlwaysBurnInSubtitleWhenTranscoding;
+}
+bool PlaybackInfoDto::alwaysBurnInSubtitleWhenTranscodingNull() const {
+	return !m_alwaysBurnInSubtitleWhenTranscoding.has_value();
+}
+
+void PlaybackInfoDto::setAlwaysBurnInSubtitleWhenTranscodingNull() {
+	m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 
 }
 

@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 CultureDto::CultureDto() {}
+CultureDto::CultureDto (
+		QString name, 
+		QString displayName, 
+		QString twoLetterISOLanguageName, 
+		QStringList threeLetterISOLanguageNames 
+		) :
+	m_name(name),
+	m_displayName(displayName),
+	m_twoLetterISOLanguageName(twoLetterISOLanguageName),
+	m_threeLetterISOLanguageNames(threeLetterISOLanguageNames) { }
+
+
 
 CultureDto::CultureDto(const CultureDto &other) :
 
@@ -70,31 +82,15 @@ void CultureDto::setFromJson(QJsonObject source) {
 QJsonObject CultureDto::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
-	
-	if (!(m_displayName.isNull())) {
-		result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);
-	}
-			
-	
-	if (!(m_twoLetterISOLanguageName.isNull())) {
-		result["TwoLetterISOLanguageName"] = Jellyfin::Support::toJsonValue<QString>(m_twoLetterISOLanguageName);
-	}
-			
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
+	result["DisplayName"] = Jellyfin::Support::toJsonValue<QString>(m_displayName);		
+	result["TwoLetterISOLanguageName"] = Jellyfin::Support::toJsonValue<QString>(m_twoLetterISOLanguageName);		
 	
 	if (!(m_threeLetterISOLanguageName.isNull())) {
 		result["ThreeLetterISOLanguageName"] = Jellyfin::Support::toJsonValue<QString>(m_threeLetterISOLanguageName);
 	}
 			
-	
-	if (!(m_threeLetterISOLanguageNames.size() == 0)) {
-		result["ThreeLetterISOLanguageNames"] = Jellyfin::Support::toJsonValue<QStringList>(m_threeLetterISOLanguageNames);
-	}
-		
+	result["ThreeLetterISOLanguageNames"] = Jellyfin::Support::toJsonValue<QStringList>(m_threeLetterISOLanguageNames);	
 	return result;
 }
 
@@ -103,40 +99,19 @@ QString CultureDto::name() const { return m_name; }
 void CultureDto::setName(QString newName) {
 	m_name = newName;
 }
-bool CultureDto::nameNull() const {
-	return m_name.isNull();
-}
 
-void CultureDto::setNameNull() {
-	m_name.clear();
-
-}
 QString CultureDto::displayName() const { return m_displayName; }
 
 void CultureDto::setDisplayName(QString newDisplayName) {
 	m_displayName = newDisplayName;
 }
-bool CultureDto::displayNameNull() const {
-	return m_displayName.isNull();
-}
 
-void CultureDto::setDisplayNameNull() {
-	m_displayName.clear();
-
-}
 QString CultureDto::twoLetterISOLanguageName() const { return m_twoLetterISOLanguageName; }
 
 void CultureDto::setTwoLetterISOLanguageName(QString newTwoLetterISOLanguageName) {
 	m_twoLetterISOLanguageName = newTwoLetterISOLanguageName;
 }
-bool CultureDto::twoLetterISOLanguageNameNull() const {
-	return m_twoLetterISOLanguageName.isNull();
-}
 
-void CultureDto::setTwoLetterISOLanguageNameNull() {
-	m_twoLetterISOLanguageName.clear();
-
-}
 QString CultureDto::threeLetterISOLanguageName() const { return m_threeLetterISOLanguageName; }
 
 void CultureDto::setThreeLetterISOLanguageName(QString newThreeLetterISOLanguageName) {
@@ -155,14 +130,7 @@ QStringList CultureDto::threeLetterISOLanguageNames() const { return m_threeLett
 void CultureDto::setThreeLetterISOLanguageNames(QStringList newThreeLetterISOLanguageNames) {
 	m_threeLetterISOLanguageNames = newThreeLetterISOLanguageNames;
 }
-bool CultureDto::threeLetterISOLanguageNamesNull() const {
-	return m_threeLetterISOLanguageNames.size() == 0;
-}
 
-void CultureDto::setThreeLetterISOLanguageNamesNull() {
-	m_threeLetterISOLanguageNames.clear();
-
-}
 
 } // NS DTO
 

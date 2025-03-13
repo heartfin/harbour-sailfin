@@ -34,9 +34,11 @@ namespace DTO {
 
 BaseItemDtoQueryResult::BaseItemDtoQueryResult() {}
 BaseItemDtoQueryResult::BaseItemDtoQueryResult (
+		QList<BaseItemDto> items, 
 		qint32 totalRecordCount, 
 		qint32 startIndex 
 		) :
+	m_items(items),
 	m_totalRecordCount(totalRecordCount),
 	m_startIndex(startIndex) { }
 
@@ -72,11 +74,7 @@ void BaseItemDtoQueryResult::setFromJson(QJsonObject source) {
 QJsonObject BaseItemDtoQueryResult::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_items.size() == 0)) {
-		result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
-	}
-			
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);		
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);		
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);	
 	return result;
@@ -87,14 +85,7 @@ QList<BaseItemDto> BaseItemDtoQueryResult::items() const { return m_items; }
 void BaseItemDtoQueryResult::setItems(QList<BaseItemDto> newItems) {
 	m_items = newItems;
 }
-bool BaseItemDtoQueryResult::itemsNull() const {
-	return m_items.size() == 0;
-}
 
-void BaseItemDtoQueryResult::setItemsNull() {
-	m_items.clear();
-
-}
 qint32 BaseItemDtoQueryResult::totalRecordCount() const { return m_totalRecordCount; }
 
 void BaseItemDtoQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {

@@ -48,7 +48,8 @@ namespace DTO {
 
 class DirectPlayProfile {
 public:
-	DirectPlayProfile(							
+	DirectPlayProfile(	
+		QString container,							
 		DlnaProfileType type		
 	);
 
@@ -64,23 +65,33 @@ public:
 	QJsonObject toJson() const;
 	
 	// Properties
-
+	/**
+	 * @brief Gets or sets the container.
+	 */
 	QString container() const;
-
+	/**
+	* @brief Gets or sets the container.
+	*/
 	void setContainer(QString newContainer);
-	bool containerNull() const;
-	void setContainerNull();
 
-
+	/**
+	 * @brief Gets or sets the audio codec.
+	 */
 	QString audioCodec() const;
-
+	/**
+	* @brief Gets or sets the audio codec.
+	*/
 	void setAudioCodec(QString newAudioCodec);
 	bool audioCodecNull() const;
 	void setAudioCodecNull();
 
-
+	/**
+	 * @brief Gets or sets the video codec.
+	 */
 	QString videoCodec() const;
-
+	/**
+	* @brief Gets or sets the video codec.
+	*/
 	void setVideoCodec(QString newVideoCodec);
 	bool videoCodecNull() const;
 	void setVideoCodecNull();

@@ -37,6 +37,7 @@
 #include <QStringList>
 #include <optional>
 
+#include "JellyfinQt/dto/hardwareaccelerationtype.h"
 #include "JellyfinQt/dto/transcodereason.h"
 #include "JellyfinQt/support/jsonconv.h"
 
@@ -52,7 +53,9 @@ class TranscodingInfo {
 public:
 	TranscodingInfo(							
 		bool isVideoDirect,			
-		bool isAudioDirect																
+		bool isAudioDirect,															
+		HardwareAccelerationType hardwareAccelerationType,			
+		QList<TranscodeReason> transcodeReasons		
 	);
 
 	TranscodingInfo(const TranscodingInfo &other);
@@ -67,85 +70,136 @@ public:
 	QJsonObject toJson() const;
 	
 	// Properties
-
+	/**
+	 * @brief Gets or sets the thread count used for encoding.
+	 */
 	QString audioCodec() const;
-
+	/**
+	* @brief Gets or sets the thread count used for encoding.
+	*/
 	void setAudioCodec(QString newAudioCodec);
 	bool audioCodecNull() const;
 	void setAudioCodecNull();
 
-
+	/**
+	 * @brief Gets or sets the thread count used for encoding.
+	 */
 	QString videoCodec() const;
-
+	/**
+	* @brief Gets or sets the thread count used for encoding.
+	*/
 	void setVideoCodec(QString newVideoCodec);
 	bool videoCodecNull() const;
 	void setVideoCodecNull();
 
-
+	/**
+	 * @brief Gets or sets the thread count used for encoding.
+	 */
 	QString container() const;
-
+	/**
+	* @brief Gets or sets the thread count used for encoding.
+	*/
 	void setContainer(QString newContainer);
 	bool containerNull() const;
 	void setContainerNull();
 
-
+	/**
+	 * @brief Gets or sets a value indicating whether the video is passed through.
+	 */
 	bool isVideoDirect() const;
-
+	/**
+	* @brief Gets or sets a value indicating whether the video is passed through.
+	*/
 	void setIsVideoDirect(bool newIsVideoDirect);
 
-
+	/**
+	 * @brief Gets or sets a value indicating whether the audio is passed through.
+	 */
 	bool isAudioDirect() const;
-
+	/**
+	* @brief Gets or sets a value indicating whether the audio is passed through.
+	*/
 	void setIsAudioDirect(bool newIsAudioDirect);
 
-
+	/**
+	 * @brief Gets or sets the bitrate.
+	 */
 	std::optional<qint32> bitrate() const;
-
+	/**
+	* @brief Gets or sets the bitrate.
+	*/
 	void setBitrate(std::optional<qint32> newBitrate);
 	bool bitrateNull() const;
 	void setBitrateNull();
 
-
+	/**
+	 * @brief Gets or sets the framerate.
+	 */
 	std::optional<float> framerate() const;
-
+	/**
+	* @brief Gets or sets the framerate.
+	*/
 	void setFramerate(std::optional<float> newFramerate);
 	bool framerateNull() const;
 	void setFramerateNull();
 
-
+	/**
+	 * @brief Gets or sets the completion percentage.
+	 */
 	std::optional<double> completionPercentage() const;
-
+	/**
+	* @brief Gets or sets the completion percentage.
+	*/
 	void setCompletionPercentage(std::optional<double> newCompletionPercentage);
 	bool completionPercentageNull() const;
 	void setCompletionPercentageNull();
 
-
+	/**
+	 * @brief Gets or sets the video width.
+	 */
 	std::optional<qint32> width() const;
-
+	/**
+	* @brief Gets or sets the video width.
+	*/
 	void setWidth(std::optional<qint32> newWidth);
 	bool widthNull() const;
 	void setWidthNull();
 
-
+	/**
+	 * @brief Gets or sets the video height.
+	 */
 	std::optional<qint32> height() const;
-
+	/**
+	* @brief Gets or sets the video height.
+	*/
 	void setHeight(std::optional<qint32> newHeight);
 	bool heightNull() const;
 	void setHeightNull();
 
-
+	/**
+	 * @brief Gets or sets the audio channels.
+	 */
 	std::optional<qint32> audioChannels() const;
-
+	/**
+	* @brief Gets or sets the audio channels.
+	*/
 	void setAudioChannels(std::optional<qint32> newAudioChannels);
 	bool audioChannelsNull() const;
 	void setAudioChannelsNull();
 
 
-	QList<TranscodeReason> transcodeReasons() const;
+	HardwareAccelerationType hardwareAccelerationType() const;
 
+	void setHardwareAccelerationType(HardwareAccelerationType newHardwareAccelerationType);
+
+	/**
+	 * @brief Gets or sets the transcode reasons.
+	 */
+	QList<TranscodeReason> transcodeReasons() const;
+	/**
+	* @brief Gets or sets the transcode reasons.
+	*/
 	void setTranscodeReasons(QList<TranscodeReason> newTranscodeReasons);
-	bool transcodeReasonsNull() const;
-	void setTranscodeReasonsNull();
 
 
 protected:
@@ -160,6 +214,7 @@ protected:
 	std::optional<qint32> m_width = std::nullopt;
 	std::optional<qint32> m_height = std::nullopt;
 	std::optional<qint32> m_audioChannels = std::nullopt;
+	HardwareAccelerationType m_hardwareAccelerationType;
 	QList<TranscodeReason> m_transcodeReasons;
 
 private:

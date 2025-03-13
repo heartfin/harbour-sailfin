@@ -34,8 +34,10 @@ namespace DTO {
 
 SearchHintResult::SearchHintResult() {}
 SearchHintResult::SearchHintResult (
+		QList<SearchHint> searchHints, 
 		qint32 totalRecordCount 
 		) :
+	m_searchHints(searchHints),
 	m_totalRecordCount(totalRecordCount) { }
 
 
@@ -67,11 +69,7 @@ void SearchHintResult::setFromJson(QJsonObject source) {
 QJsonObject SearchHintResult::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_searchHints.size() == 0)) {
-		result["SearchHints"] = Jellyfin::Support::toJsonValue<QList<SearchHint>>(m_searchHints);
-	}
-			
+	result["SearchHints"] = Jellyfin::Support::toJsonValue<QList<SearchHint>>(m_searchHints);		
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);	
 	return result;
 }
@@ -81,14 +79,7 @@ QList<SearchHint> SearchHintResult::searchHints() const { return m_searchHints; 
 void SearchHintResult::setSearchHints(QList<SearchHint> newSearchHints) {
 	m_searchHints = newSearchHints;
 }
-bool SearchHintResult::searchHintsNull() const {
-	return m_searchHints.size() == 0;
-}
 
-void SearchHintResult::setSearchHintsNull() {
-	m_searchHints.clear();
-
-}
 qint32 SearchHintResult::totalRecordCount() const { return m_totalRecordCount; }
 
 void SearchHintResult::setTotalRecordCount(qint32 newTotalRecordCount) {

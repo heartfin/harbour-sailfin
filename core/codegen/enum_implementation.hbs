@@ -13,9 +13,9 @@ template <>
 
 	QString str = source.toString();
 
-	{{#each values as |value|}}
-	if (str == QStringLiteral("{{value}}")) {
-		return {{className}}::{{value}};
+	{{#each entries as |entry|}}
+	if (str == QStringLiteral("{{entry.value}}")) {
+		return {{className}}::{{entry.name}};
 	}
 
 	{{/each}}
@@ -27,9 +27,9 @@ template <>
 QJsonValue toJsonValue(const {{className}} &source, convertType<{{className}}>) {
 	switch(source) {
 
-	{{#each values as |value|}}
-	case {{className}}::{{value}}:
-		return QStringLiteral("{{value}}");
+	{{#each entries as |entry|}}
+	case {{className}}::{{entry.name}}:
+		return QStringLiteral("{{entry.value}}");
 
 	{{/each}}
 

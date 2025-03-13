@@ -35,8 +35,11 @@
 #include <QString>
 #include <optional>
 
+#include "JellyfinQt/dto/audiospatialformat.h"
 #include "JellyfinQt/dto/mediastreamtype.h"
 #include "JellyfinQt/dto/subtitledeliverymethod.h"
+#include "JellyfinQt/dto/videorange.h"
+#include "JellyfinQt/dto/videorangetype.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -49,10 +52,14 @@ namespace DTO {
 
 class MediaStream {
 public:
-	MediaStream(																																			
+	MediaStream(																																									
+		VideoRange videoRange,			
+		VideoRangeType videoRangeType,					
+		AudioSpatialFormat audioSpatialFormat,																	
 		bool isInterlaced,																			
 		bool isDefault,			
-		bool isForced,													
+		bool isForced,			
+		bool isHearingImpaired,															
 		MediaStreamType type,					
 		qint32 index,					
 		bool isExternal,			
@@ -151,6 +158,105 @@ public:
 	void setColorPrimariesNull();
 
 	/**
+	 * @brief Gets or sets the Dolby Vision version major.
+	 */
+	std::optional<qint32> dvVersionMajor() const;
+	/**
+	* @brief Gets or sets the Dolby Vision version major.
+	*/
+	void setDvVersionMajor(std::optional<qint32> newDvVersionMajor);
+	bool dvVersionMajorNull() const;
+	void setDvVersionMajorNull();
+
+	/**
+	 * @brief Gets or sets the Dolby Vision version minor.
+	 */
+	std::optional<qint32> dvVersionMinor() const;
+	/**
+	* @brief Gets or sets the Dolby Vision version minor.
+	*/
+	void setDvVersionMinor(std::optional<qint32> newDvVersionMinor);
+	bool dvVersionMinorNull() const;
+	void setDvVersionMinorNull();
+
+	/**
+	 * @brief Gets or sets the Dolby Vision profile.
+	 */
+	std::optional<qint32> dvProfile() const;
+	/**
+	* @brief Gets or sets the Dolby Vision profile.
+	*/
+	void setDvProfile(std::optional<qint32> newDvProfile);
+	bool dvProfileNull() const;
+	void setDvProfileNull();
+
+	/**
+	 * @brief Gets or sets the Dolby Vision level.
+	 */
+	std::optional<qint32> dvLevel() const;
+	/**
+	* @brief Gets or sets the Dolby Vision level.
+	*/
+	void setDvLevel(std::optional<qint32> newDvLevel);
+	bool dvLevelNull() const;
+	void setDvLevelNull();
+
+	/**
+	 * @brief Gets or sets the Dolby Vision rpu present flag.
+	 */
+	std::optional<qint32> rpuPresentFlag() const;
+	/**
+	* @brief Gets or sets the Dolby Vision rpu present flag.
+	*/
+	void setRpuPresentFlag(std::optional<qint32> newRpuPresentFlag);
+	bool rpuPresentFlagNull() const;
+	void setRpuPresentFlagNull();
+
+	/**
+	 * @brief Gets or sets the Dolby Vision el present flag.
+	 */
+	std::optional<qint32> elPresentFlag() const;
+	/**
+	* @brief Gets or sets the Dolby Vision el present flag.
+	*/
+	void setElPresentFlag(std::optional<qint32> newElPresentFlag);
+	bool elPresentFlagNull() const;
+	void setElPresentFlagNull();
+
+	/**
+	 * @brief Gets or sets the Dolby Vision bl present flag.
+	 */
+	std::optional<qint32> blPresentFlag() const;
+	/**
+	* @brief Gets or sets the Dolby Vision bl present flag.
+	*/
+	void setBlPresentFlag(std::optional<qint32> newBlPresentFlag);
+	bool blPresentFlagNull() const;
+	void setBlPresentFlagNull();
+
+	/**
+	 * @brief Gets or sets the Dolby Vision bl signal compatibility id.
+	 */
+	std::optional<qint32> dvBlSignalCompatibilityId() const;
+	/**
+	* @brief Gets or sets the Dolby Vision bl signal compatibility id.
+	*/
+	void setDvBlSignalCompatibilityId(std::optional<qint32> newDvBlSignalCompatibilityId);
+	bool dvBlSignalCompatibilityIdNull() const;
+	void setDvBlSignalCompatibilityIdNull();
+
+	/**
+	 * @brief Gets or sets the Rotation in degrees.
+	 */
+	std::optional<qint32> rotation() const;
+	/**
+	* @brief Gets or sets the Rotation in degrees.
+	*/
+	void setRotation(std::optional<qint32> newRotation);
+	bool rotationNull() const;
+	void setRotationNull();
+
+	/**
 	 * @brief Gets or sets the comment.
 	 */
 	QString comment() const;
@@ -194,16 +300,31 @@ public:
 	bool titleNull() const;
 	void setTitleNull();
 
+
+	VideoRange videoRange() const;
+
+	void setVideoRange(VideoRange newVideoRange);
+
+
+	VideoRangeType videoRangeType() const;
+
+	void setVideoRangeType(VideoRangeType newVideoRangeType);
+
 	/**
-	 * @brief Gets or sets the video range.
+	 * @brief Gets the video dovi title.
 	 */
-	QString videoRange() const;
+	QString videoDoViTitle() const;
 	/**
-	* @brief Gets or sets the video range.
+	* @brief Gets the video dovi title.
 	*/
-	void setVideoRange(QString newVideoRange);
-	bool videoRangeNull() const;
-	void setVideoRangeNull();
+	void setVideoDoViTitle(QString newVideoDoViTitle);
+	bool videoDoViTitleNull() const;
+	void setVideoDoViTitleNull();
+
+
+	AudioSpatialFormat audioSpatialFormat() const;
+
+	void setAudioSpatialFormat(AudioSpatialFormat newAudioSpatialFormat);
 
 
 	QString localizedUndefined() const;
@@ -225,6 +346,20 @@ public:
 	void setLocalizedForced(QString newLocalizedForced);
 	bool localizedForcedNull() const;
 	void setLocalizedForcedNull();
+
+
+	QString localizedExternal() const;
+
+	void setLocalizedExternal(QString newLocalizedExternal);
+	bool localizedExternalNull() const;
+	void setLocalizedExternalNull();
+
+
+	QString localizedHearingImpaired() const;
+
+	void setLocalizedHearingImpaired(QString newLocalizedHearingImpaired);
+	bool localizedHearingImpairedNull() const;
+	void setLocalizedHearingImpairedNull();
 
 
 	QString displayTitle() const;
@@ -352,6 +487,15 @@ public:
 	void setIsForced(bool newIsForced);
 
 	/**
+	 * @brief Gets or sets a value indicating whether this instance is for the hearing impaired.
+	 */
+	bool isHearingImpaired() const;
+	/**
+	* @brief Gets or sets a value indicating whether this instance is for the hearing impaired.
+	*/
+	void setIsHearingImpaired(bool newIsHearingImpaired);
+
+	/**
 	 * @brief Gets or sets the height.
 	 */
 	std::optional<qint32> height() const;
@@ -394,6 +538,21 @@ public:
 	void setRealFrameRate(std::optional<float> newRealFrameRate);
 	bool realFrameRateNull() const;
 	void setRealFrameRateNull();
+
+	/**
+	 * @brief Gets the framerate used as reference.
+Prefer AverageFrameRate, if that is null or an unrealistic value
+then fallback to RealFrameRate.
+	 */
+	std::optional<float> referenceFrameRate() const;
+	/**
+	* @brief Gets the framerate used as reference.
+Prefer AverageFrameRate, if that is null or an unrealistic value
+then fallback to RealFrameRate.
+	*/
+	void setReferenceFrameRate(std::optional<float> newReferenceFrameRate);
+	bool referenceFrameRateNull() const;
+	void setReferenceFrameRateNull();
 
 	/**
 	 * @brief Gets or sets the profile.
@@ -526,11 +685,11 @@ public:
 	void setLevelNull();
 
 	/**
-	 * @brief Gets a value indicating whether this instance is anamorphic.
+	 * @brief Gets or sets whether this instance is anamorphic.
 	 */
 	std::optional<bool> isAnamorphic() const;
 	/**
-	* @brief Gets a value indicating whether this instance is anamorphic.
+	* @brief Gets or sets whether this instance is anamorphic.
 	*/
 	void setIsAnamorphic(std::optional<bool> newIsAnamorphic);
 	bool isAnamorphicNull() const;
@@ -545,14 +704,28 @@ protected:
 	QString m_colorSpace;
 	QString m_colorTransfer;
 	QString m_colorPrimaries;
+	std::optional<qint32> m_dvVersionMajor = std::nullopt;
+	std::optional<qint32> m_dvVersionMinor = std::nullopt;
+	std::optional<qint32> m_dvProfile = std::nullopt;
+	std::optional<qint32> m_dvLevel = std::nullopt;
+	std::optional<qint32> m_rpuPresentFlag = std::nullopt;
+	std::optional<qint32> m_elPresentFlag = std::nullopt;
+	std::optional<qint32> m_blPresentFlag = std::nullopt;
+	std::optional<qint32> m_dvBlSignalCompatibilityId = std::nullopt;
+	std::optional<qint32> m_rotation = std::nullopt;
 	QString m_comment;
 	QString m_timeBase;
 	QString m_codecTimeBase;
 	QString m_title;
-	QString m_videoRange;
+	VideoRange m_videoRange;
+	VideoRangeType m_videoRangeType;
+	QString m_videoDoViTitle;
+	AudioSpatialFormat m_audioSpatialFormat;
 	QString m_localizedUndefined;
 	QString m_localizedDefault;
 	QString m_localizedForced;
+	QString m_localizedExternal;
+	QString m_localizedHearingImpaired;
 	QString m_displayTitle;
 	QString m_nalLengthSize;
 	bool m_isInterlaced;
@@ -566,10 +739,12 @@ protected:
 	std::optional<qint32> m_sampleRate = std::nullopt;
 	bool m_isDefault;
 	bool m_isForced;
+	bool m_isHearingImpaired;
 	std::optional<qint32> m_height = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 	std::optional<float> m_averageFrameRate = std::nullopt;
 	std::optional<float> m_realFrameRate = std::nullopt;
+	std::optional<float> m_referenceFrameRate = std::nullopt;
 	QString m_profile;
 	MediaStreamType m_type;
 	QString m_aspectRatio;

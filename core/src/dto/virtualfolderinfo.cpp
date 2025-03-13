@@ -34,8 +34,10 @@ namespace DTO {
 
 VirtualFolderInfo::VirtualFolderInfo() {}
 VirtualFolderInfo::VirtualFolderInfo (
+		CollectionTypeOptions collectionType, 
 		QSharedPointer<LibraryOptions> libraryOptions 
 		) :
+	m_collectionType(collectionType),
 	m_libraryOptions(libraryOptions) { }
 
 
@@ -73,7 +75,7 @@ VirtualFolderInfo VirtualFolderInfo::fromJson(QJsonObject source) {
 void VirtualFolderInfo::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
 	m_locations = Jellyfin::Support::fromJsonValue<QStringList>(source["Locations"]);
-	m_collectionType = Jellyfin::Support::fromJsonValue<QString>(source["CollectionType"]);
+	m_collectionType = Jellyfin::Support::fromJsonValue<CollectionTypeOptions>(source["CollectionType"]);
 	m_libraryOptions = Jellyfin::Support::fromJsonValue<QSharedPointer<LibraryOptions>>(source["LibraryOptions"]);
 	m_itemId = Jellyfin::Support::fromJsonValue<QString>(source["ItemId"]);
 	m_primaryImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["PrimaryImageItemId"]);
@@ -95,11 +97,7 @@ QJsonObject VirtualFolderInfo::toJson() const {
 		result["Locations"] = Jellyfin::Support::toJsonValue<QStringList>(m_locations);
 	}
 			
-	
-	if (!(m_collectionType.isNull())) {
-		result["CollectionType"] = Jellyfin::Support::toJsonValue<QString>(m_collectionType);
-	}
-			
+	result["CollectionType"] = Jellyfin::Support::toJsonValue<CollectionTypeOptions>(m_collectionType);		
 	result["LibraryOptions"] = Jellyfin::Support::toJsonValue<QSharedPointer<LibraryOptions>>(m_libraryOptions);		
 	
 	if (!(m_itemId.isNull())) {
@@ -150,19 +148,12 @@ void VirtualFolderInfo::setLocationsNull() {
 	m_locations.clear();
 
 }
-QString VirtualFolderInfo::collectionType() const { return m_collectionType; }
+CollectionTypeOptions VirtualFolderInfo::collectionType() const { return m_collectionType; }
 
-void VirtualFolderInfo::setCollectionType(QString newCollectionType) {
+void VirtualFolderInfo::setCollectionType(CollectionTypeOptions newCollectionType) {
 	m_collectionType = newCollectionType;
 }
-bool VirtualFolderInfo::collectionTypeNull() const {
-	return m_collectionType.isNull();
-}
 
-void VirtualFolderInfo::setCollectionTypeNull() {
-	m_collectionType.clear();
-
-}
 QSharedPointer<LibraryOptions> VirtualFolderInfo::libraryOptions() const { return m_libraryOptions; }
 
 void VirtualFolderInfo::setLibraryOptions(QSharedPointer<LibraryOptions> newLibraryOptions) {

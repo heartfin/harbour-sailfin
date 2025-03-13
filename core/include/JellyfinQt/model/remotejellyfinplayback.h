@@ -22,7 +22,7 @@
 #include <JellyfinQt/dto/generalcommandtype.h>
 #include <JellyfinQt/dto/playcommand.h>
 #include <JellyfinQt/dto/playstatecommand.h>
-#include <JellyfinQt/dto/sessioninfo.h>
+#include <JellyfinQt/dto/sessioninfodto.h>
 #include <JellyfinQt/model/playbackmanager.h>
 #include <JellyfinQt/support/loader.h>
 
@@ -69,7 +69,7 @@ public slots:
     void seek(qint64 pos) override;
 private slots:
     void onPositionTimerFired();
-    void onSessionInfoUpdated(const QString &sessionId, const DTO::SessionInfo &sessionInfo);
+    void onSessionInfoUpdated(const QString &sessionId, const DTO::SessionInfoDto &sessionInfo);
 private:
     void sendPlaystateCommand(DTO::PlaystateCommand command, qint64 seekTicks = -1);
     void sendGeneralCommand(DTO::GeneralCommandType command, QJsonObject arguments = QJsonObject());
@@ -88,7 +88,7 @@ private:
     void updateQueue(QList<QueueItem> itemIds);
     ApiClient &m_apiClient;
     QString m_sessionId;
-    std::optional<DTO::SessionInfo> m_lastSessionInfo;
+    std::optional<DTO::SessionInfoDto> m_lastSessionInfo;
     QTimer *m_positionTimer;
     qint64 m_position = 0;
 };

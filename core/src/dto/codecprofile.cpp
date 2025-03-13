@@ -34,9 +34,13 @@ namespace DTO {
 
 CodecProfile::CodecProfile() {}
 CodecProfile::CodecProfile (
-		CodecType type 
+		CodecType type, 
+		QList<ProfileCondition> conditions, 
+		QList<ProfileCondition> applyConditions 
 		) :
-	m_type(type) { }
+	m_type(type),
+	m_conditions(conditions),
+	m_applyConditions(applyConditions) { }
 
 
 
@@ -46,7 +50,8 @@ CodecProfile::CodecProfile(const CodecProfile &other) :
 	m_conditions(other.m_conditions),
 	m_applyConditions(other.m_applyConditions),
 	m_codec(other.m_codec),
-	m_container(other.m_container){}
+	m_container(other.m_container),
+	m_subContainer(other.m_subContainer){}
 
 
 void CodecProfile::replaceData(CodecProfile &other) {
@@ -55,6 +60,7 @@ void CodecProfile::replaceData(CodecProfile &other) {
 	m_applyConditions = other.m_applyConditions;
 	m_codec = other.m_codec;
 	m_container = other.m_container;
+	m_subContainer = other.m_subContainer;
 }
 
 CodecProfile CodecProfile::fromJson(QJsonObject source) {
@@ -70,6 +76,7 @@ void CodecProfile::setFromJson(QJsonObject source) {
 	m_applyConditions = Jellyfin::Support::fromJsonValue<QList<ProfileCondition>>(source["ApplyConditions"]);
 	m_codec = Jellyfin::Support::fromJsonValue<QString>(source["Codec"]);
 	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
+	m_subContainer = Jellyfin::Support::fromJsonValue<QString>(source["SubContainer"]);
 
 }
 	
@@ -77,16 +84,8 @@ QJsonObject CodecProfile::toJson() const {
 	QJsonObject result;
 	
 	result["Type"] = Jellyfin::Support::toJsonValue<CodecType>(m_type);		
-	
-	if (!(m_conditions.size() == 0)) {
-		result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
-	}
-			
-	
-	if (!(m_applyConditions.size() == 0)) {
-		result["ApplyConditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_applyConditions);
-	}
-			
+	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);		
+	result["ApplyConditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_applyConditions);		
 	
 	if (!(m_codec.isNull())) {
 		result["Codec"] = Jellyfin::Support::toJsonValue<QString>(m_codec);
@@ -95,6 +94,11 @@ QJsonObject CodecProfile::toJson() const {
 	
 	if (!(m_container.isNull())) {
 		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+			
+	
+	if (!(m_subContainer.isNull())) {
+		result["SubContainer"] = Jellyfin::Support::toJsonValue<QString>(m_subContainer);
 	}
 		
 	return result;
@@ -111,27 +115,13 @@ QList<ProfileCondition> CodecProfile::conditions() const { return m_conditions; 
 void CodecProfile::setConditions(QList<ProfileCondition> newConditions) {
 	m_conditions = newConditions;
 }
-bool CodecProfile::conditionsNull() const {
-	return m_conditions.size() == 0;
-}
 
-void CodecProfile::setConditionsNull() {
-	m_conditions.clear();
-
-}
 QList<ProfileCondition> CodecProfile::applyConditions() const { return m_applyConditions; }
 
 void CodecProfile::setApplyConditions(QList<ProfileCondition> newApplyConditions) {
 	m_applyConditions = newApplyConditions;
 }
-bool CodecProfile::applyConditionsNull() const {
-	return m_applyConditions.size() == 0;
-}
 
-void CodecProfile::setApplyConditionsNull() {
-	m_applyConditions.clear();
-
-}
 QString CodecProfile::codec() const { return m_codec; }
 
 void CodecProfile::setCodec(QString newCodec) {
@@ -156,6 +146,19 @@ bool CodecProfile::containerNull() const {
 
 void CodecProfile::setContainerNull() {
 	m_container.clear();
+
+}
+QString CodecProfile::subContainer() const { return m_subContainer; }
+
+void CodecProfile::setSubContainer(QString newSubContainer) {
+	m_subContainer = newSubContainer;
+}
+bool CodecProfile::subContainerNull() const {
+	return m_subContainer.isNull();
+}
+
+void CodecProfile::setSubContainerNull() {
+	m_subContainer.clear();
 
 }
 

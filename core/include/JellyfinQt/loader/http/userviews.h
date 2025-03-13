@@ -35,8 +35,8 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/dto/specialviewoptiondto.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
+#include "JellyfinQt/dto/specialviewoptiondto.h"
 
 namespace Jellyfin {
 // Forward declaration
@@ -49,20 +49,6 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
- * @brief Get user view grouping options.
- */
-
-class GetGroupingOptionsLoader : public Jellyfin::Support::HttpLoader<QList<SpecialViewOptionDto>, GetGroupingOptionsParams> {
-public:
-	explicit GetGroupingOptionsLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const GetGroupingOptionsParams& parameters) const override;
-	QUrlQuery query(const GetGroupingOptionsParams& parameters) const override;
-	QByteArray body(const GetGroupingOptionsParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
  * @brief Get user views.
  */
 
@@ -74,6 +60,20 @@ protected:
 	QString path(const GetUserViewsParams& parameters) const override;
 	QUrlQuery query(const GetUserViewsParams& parameters) const override;
 	QByteArray body(const GetUserViewsParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Get user view grouping options.
+ */
+
+class GetGroupingOptionsLoader : public Jellyfin::Support::HttpLoader<QList<SpecialViewOptionDto>, GetGroupingOptionsParams> {
+public:
+	explicit GetGroupingOptionsLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetGroupingOptionsParams& parameters) const override;
+	QUrlQuery query(const GetGroupingOptionsParams& parameters) const override;
+	QByteArray body(const GetGroupingOptionsParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

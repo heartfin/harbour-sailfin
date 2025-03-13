@@ -48,7 +48,7 @@ LatestMediaLoader::LatestMediaLoader(QObject *parent)
     : LatestMediaBase(new Jellyfin::Loader::HTTP::GetLatestMediaLoader(), parent){ }
 
 UserItemsLoader::UserItemsLoader(QObject *parent)
-    : UserItemsLoaderBase(new Jellyfin::Loader::HTTP::GetItemsByUserIdLoader(), parent) {}
+    : UserItemsLoaderBase(new Jellyfin::Loader::HTTP::GetItemsLoader(), parent) {}
 
 ResumeItemsLoader::ResumeItemsLoader(QObject *parent)
     : ResumeItemsLoaderBase(new Jellyfin::Loader::HTTP::GetResumeItemsLoader(), parent) {}

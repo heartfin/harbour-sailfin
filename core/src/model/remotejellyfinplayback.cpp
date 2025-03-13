@@ -20,7 +20,7 @@
 #include <JellyfinQt/model/remotejellyfinplayback.h>
 
 #include <JellyfinQt/apiclient.h>
-#include <JellyfinQt/dto/sessioninfo.h>
+#include <JellyfinQt/dto/sessioninfodto.h>
 #include <JellyfinQt/loader/http/items.h>
 #include <JellyfinQt/loader/http/session.h>
 #include <JellyfinQt/loader/requesttypes.h>
@@ -174,7 +174,7 @@ void RemoteJellyfinPlayback::onPositionTimerFired() {
     emit positionChanged(position());
 }
 
-void RemoteJellyfinPlayback::onSessionInfoUpdated(const QString &sessionId, const SessionInfo &sessionInfo) {
+void RemoteJellyfinPlayback::onSessionInfoUpdated(const QString &sessionId, const SessionInfoDto &sessionInfo) {
     if (sessionId != m_sessionId) return;
     m_lastSessionInfo = sessionInfo;
 
@@ -245,8 +245,7 @@ void RemoteJellyfinPlayback::sendGeneralCommand(DTO::GeneralCommandType command,
     using CommandLoader = Loader::HTTP::SendFullGeneralCommandLoader;
 
     Params params;
-    QSharedPointer<DTO::GeneralCommand> fullCommand = QSharedPointer<DTO::GeneralCommand>::create(command, m_apiClient.userId());
-    fullCommand->setArguments(arguments);
+    QSharedPointer<DTO::GeneralCommand> fullCommand = QSharedPointer<DTO::GeneralCommand>::create(command, m_apiClient.userId(), arguments);
     params.setBody(fullCommand);
     params.setSessionId(m_sessionId);
 

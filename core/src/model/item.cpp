@@ -26,12 +26,16 @@ namespace Model {
 Item::Item(ApiClient *apiClient, QObject *parent)
     : Item(DTO::BaseItemDto(
                 QString(), // id
+                ExtraType::Unknown,
                 Video3DFormat::EnumNotSet,
                 PlayAccess::Full,
-                QSharedPointer<UserItemDataDto>::create(0, 0, false, false),
+                BaseItemKind::EnumNotSet,
+                QSharedPointer<UserItemDataDto>::create(0, 0, false, false, QString(), QString()),
+                CollectionType::EnumNotSet,
                 VideoType::EnumNotSet,
                 LocationType::Virtual,
                 IsoType::EnumNotSet,
+                MediaType::EnumNotSet,
                 ImageOrientation::EnumNotSet,
                 ChannelType::EnumNotSet,
                 ProgramAudio::EnumNotSet,

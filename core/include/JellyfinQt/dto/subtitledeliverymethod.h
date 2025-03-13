@@ -52,6 +52,7 @@ public:
 		Embed,
 		External,
 		Hls,
+		Drop,
 	};
 	Q_ENUM(Value)
 private:

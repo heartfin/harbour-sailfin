@@ -33,6 +33,18 @@ namespace Jellyfin {
 namespace DTO {
 
 LibraryTypeOptionsDto::LibraryTypeOptionsDto() {}
+LibraryTypeOptionsDto::LibraryTypeOptionsDto (
+		QList<LibraryOptionInfoDto> metadataFetchers, 
+		QList<LibraryOptionInfoDto> imageFetchers, 
+		QList<ImageType> supportedImageTypes, 
+		QList<ImageOption> defaultImageOptions 
+		) :
+	m_metadataFetchers(metadataFetchers),
+	m_imageFetchers(imageFetchers),
+	m_supportedImageTypes(supportedImageTypes),
+	m_defaultImageOptions(defaultImageOptions) { }
+
+
 
 LibraryTypeOptionsDto::LibraryTypeOptionsDto(const LibraryTypeOptionsDto &other) :
 
@@ -75,26 +87,10 @@ QJsonObject LibraryTypeOptionsDto::toJson() const {
 		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
 	}
 			
-	
-	if (!(m_metadataFetchers.size() == 0)) {
-		result["MetadataFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataFetchers);
-	}
-			
-	
-	if (!(m_imageFetchers.size() == 0)) {
-		result["ImageFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_imageFetchers);
-	}
-			
-	
-	if (!(m_supportedImageTypes.size() == 0)) {
-		result["SupportedImageTypes"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImageTypes);
-	}
-			
-	
-	if (!(m_defaultImageOptions.size() == 0)) {
-		result["DefaultImageOptions"] = Jellyfin::Support::toJsonValue<QList<ImageOption>>(m_defaultImageOptions);
-	}
-		
+	result["MetadataFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_metadataFetchers);		
+	result["ImageFetchers"] = Jellyfin::Support::toJsonValue<QList<LibraryOptionInfoDto>>(m_imageFetchers);		
+	result["SupportedImageTypes"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImageTypes);		
+	result["DefaultImageOptions"] = Jellyfin::Support::toJsonValue<QList<ImageOption>>(m_defaultImageOptions);	
 	return result;
 }
 
@@ -116,53 +112,25 @@ QList<LibraryOptionInfoDto> LibraryTypeOptionsDto::metadataFetchers() const { re
 void LibraryTypeOptionsDto::setMetadataFetchers(QList<LibraryOptionInfoDto> newMetadataFetchers) {
 	m_metadataFetchers = newMetadataFetchers;
 }
-bool LibraryTypeOptionsDto::metadataFetchersNull() const {
-	return m_metadataFetchers.size() == 0;
-}
 
-void LibraryTypeOptionsDto::setMetadataFetchersNull() {
-	m_metadataFetchers.clear();
-
-}
 QList<LibraryOptionInfoDto> LibraryTypeOptionsDto::imageFetchers() const { return m_imageFetchers; }
 
 void LibraryTypeOptionsDto::setImageFetchers(QList<LibraryOptionInfoDto> newImageFetchers) {
 	m_imageFetchers = newImageFetchers;
 }
-bool LibraryTypeOptionsDto::imageFetchersNull() const {
-	return m_imageFetchers.size() == 0;
-}
 
-void LibraryTypeOptionsDto::setImageFetchersNull() {
-	m_imageFetchers.clear();
-
-}
 QList<ImageType> LibraryTypeOptionsDto::supportedImageTypes() const { return m_supportedImageTypes; }
 
 void LibraryTypeOptionsDto::setSupportedImageTypes(QList<ImageType> newSupportedImageTypes) {
 	m_supportedImageTypes = newSupportedImageTypes;
 }
-bool LibraryTypeOptionsDto::supportedImageTypesNull() const {
-	return m_supportedImageTypes.size() == 0;
-}
 
-void LibraryTypeOptionsDto::setSupportedImageTypesNull() {
-	m_supportedImageTypes.clear();
-
-}
 QList<ImageOption> LibraryTypeOptionsDto::defaultImageOptions() const { return m_defaultImageOptions; }
 
 void LibraryTypeOptionsDto::setDefaultImageOptions(QList<ImageOption> newDefaultImageOptions) {
 	m_defaultImageOptions = newDefaultImageOptions;
 }
-bool LibraryTypeOptionsDto::defaultImageOptionsNull() const {
-	return m_defaultImageOptions.size() == 0;
-}
 
-void LibraryTypeOptionsDto::setDefaultImageOptionsNull() {
-	m_defaultImageOptions.clear();
-
-}
 
 } // NS DTO
 

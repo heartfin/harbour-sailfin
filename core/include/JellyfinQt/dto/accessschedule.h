@@ -69,20 +69,20 @@ public:
 	
 	// Properties
 	/**
-	 * @brief Gets or sets the id of this instance.
+	 * @brief Gets the id of this instance.
 	 */
 	qint32 jellyfinId() const;
 	/**
-	* @brief Gets or sets the id of this instance.
+	* @brief Gets the id of this instance.
 	*/
 	void setJellyfinId(qint32 newJellyfinId);
 
 	/**
-	 * @brief Gets or sets the id of the associated user.
+	 * @brief Gets the id of the associated user.
 	 */
 	QString userId() const;
 	/**
-	* @brief Gets or sets the id of the associated user.
+	* @brief Gets the id of the associated user.
 	*/
 	void setUserId(QString newUserId);
 

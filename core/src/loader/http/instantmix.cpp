@@ -41,7 +41,7 @@ GetInstantMixFromAlbumLoader::GetInstantMixFromAlbumLoader(ApiClient *apiClient)
 QString GetInstantMixFromAlbumLoader::path(const GetInstantMixFromAlbumParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Albums/") + Support::toString< QString>(params.jellyfinId()) + QStringLiteral("/InstantMix");
+	return QStringLiteral("/Albums/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/InstantMix");
 }
 
 QUrlQuery GetInstantMixFromAlbumLoader::query(const GetInstantMixFromAlbumParams &params) const {
@@ -91,7 +91,7 @@ GetInstantMixFromArtistsLoader::GetInstantMixFromArtistsLoader(ApiClient *apiCli
 QString GetInstantMixFromArtistsLoader::path(const GetInstantMixFromArtistsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Artists/") + Support::toString< QString>(params.jellyfinId()) + QStringLiteral("/InstantMix");
+	return QStringLiteral("/Artists/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/InstantMix");
 }
 
 QUrlQuery GetInstantMixFromArtistsLoader::query(const GetInstantMixFromArtistsParams &params) const {
@@ -135,13 +135,64 @@ QNetworkAccessManager::Operation GetInstantMixFromArtistsLoader::operation() con
 
 }
 
+GetInstantMixFromArtists2Loader::GetInstantMixFromArtists2Loader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromArtists2Params>(apiClient) {}
+
+QString GetInstantMixFromArtists2Loader::path(const GetInstantMixFromArtists2Params &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Artists/InstantMix");
+}
+
+QUrlQuery GetInstantMixFromArtists2Loader::query(const GetInstantMixFromArtists2Params &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("id", Support::toString<QString>(params.jellyfinId()));
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	if (!params.limitNull()) {
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
+	}
+	if (!params.fieldsNull()) {
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
+	}
+	if (!params.enableImagesNull()) {
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
+	}
+	if (!params.enableUserDataNull()) {
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
+	}
+	if (!params.imageTypeLimitNull()) {
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
+	}
+	if (!params.enableImageTypesNull()) {
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
+	}
+	
+	return result;
+}
+
+QByteArray GetInstantMixFromArtists2Loader::body(const GetInstantMixFromArtists2Params &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetInstantMixFromArtists2Loader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
 GetInstantMixFromItemLoader::GetInstantMixFromItemLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromItemParams>(apiClient) {}
 
 QString GetInstantMixFromItemLoader::path(const GetInstantMixFromItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Items/") + Support::toString< QString>(params.jellyfinId()) + QStringLiteral("/InstantMix");
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/InstantMix");
 }
 
 QUrlQuery GetInstantMixFromItemLoader::query(const GetInstantMixFromItemParams &params) const {
@@ -185,66 +236,16 @@ QNetworkAccessManager::Operation GetInstantMixFromItemLoader::operation() const 
 
 }
 
-GetInstantMixFromMusicGenresLoader::GetInstantMixFromMusicGenresLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromMusicGenresParams>(apiClient) {}
+GetInstantMixFromMusicGenreByNameLoader::GetInstantMixFromMusicGenreByNameLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromMusicGenreByNameParams>(apiClient) {}
 
-QString GetInstantMixFromMusicGenresLoader::path(const GetInstantMixFromMusicGenresParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/MusicGenres/") + Support::toString< QString>(params.jellyfinId()) + QStringLiteral("/InstantMix");
-}
-
-QUrlQuery GetInstantMixFromMusicGenresLoader::query(const GetInstantMixFromMusicGenresParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	if (!params.userIdNull()) {
-		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
-	}
-	if (!params.limitNull()) {
-		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
-	}
-	if (!params.fieldsNull()) {
-		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
-	}
-	if (!params.enableImagesNull()) {
-		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
-	}
-	if (!params.enableUserDataNull()) {
-		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
-	}
-	if (!params.imageTypeLimitNull()) {
-		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
-	}
-	if (!params.enableImageTypesNull()) {
-		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
-	}
-	
-	return result;
-}
-
-QByteArray GetInstantMixFromMusicGenresLoader::body(const GetInstantMixFromMusicGenresParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation GetInstantMixFromMusicGenresLoader::operation() const {
-	// HTTP method Get
-	return QNetworkAccessManager::GetOperation;
-
-}
-
-GetInstantMixFromMusicGenreLoader::GetInstantMixFromMusicGenreLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromMusicGenreParams>(apiClient) {}
-
-QString GetInstantMixFromMusicGenreLoader::path(const GetInstantMixFromMusicGenreParams &params) const {
+QString GetInstantMixFromMusicGenreByNameLoader::path(const GetInstantMixFromMusicGenreByNameParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/MusicGenres/") + Support::toString< QString>(params.name()) + QStringLiteral("/InstantMix");
 }
 
-QUrlQuery GetInstantMixFromMusicGenreLoader::query(const GetInstantMixFromMusicGenreParams &params) const {
+QUrlQuery GetInstantMixFromMusicGenreByNameLoader::query(const GetInstantMixFromMusicGenreByNameParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
@@ -275,11 +276,62 @@ QUrlQuery GetInstantMixFromMusicGenreLoader::query(const GetInstantMixFromMusicG
 	return result;
 }
 
-QByteArray GetInstantMixFromMusicGenreLoader::body(const GetInstantMixFromMusicGenreParams &params) const {
+QByteArray GetInstantMixFromMusicGenreByNameLoader::body(const GetInstantMixFromMusicGenreByNameParams &params) const {
 	return QByteArray();
 }
 
-QNetworkAccessManager::Operation GetInstantMixFromMusicGenreLoader::operation() const {
+QNetworkAccessManager::Operation GetInstantMixFromMusicGenreByNameLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
+GetInstantMixFromMusicGenreByIdLoader::GetInstantMixFromMusicGenreByIdLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromMusicGenreByIdParams>(apiClient) {}
+
+QString GetInstantMixFromMusicGenreByIdLoader::path(const GetInstantMixFromMusicGenreByIdParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/MusicGenres/InstantMix");
+}
+
+QUrlQuery GetInstantMixFromMusicGenreByIdLoader::query(const GetInstantMixFromMusicGenreByIdParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+	result.addQueryItem("id", Support::toString<QString>(params.jellyfinId()));
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	if (!params.limitNull()) {
+		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
+	}
+	if (!params.fieldsNull()) {
+		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
+	}
+	if (!params.enableImagesNull()) {
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
+	}
+	if (!params.enableUserDataNull()) {
+		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
+	}
+	if (!params.imageTypeLimitNull()) {
+		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
+	}
+	if (!params.enableImageTypesNull()) {
+		result.addQueryItem("enableImageTypes", Support::toString<QList<ImageType>>(params.enableImageTypes()));
+	}
+	
+	return result;
+}
+
+QByteArray GetInstantMixFromMusicGenreByIdLoader::body(const GetInstantMixFromMusicGenreByIdParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetInstantMixFromMusicGenreByIdLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
 
@@ -291,7 +343,7 @@ GetInstantMixFromPlaylistLoader::GetInstantMixFromPlaylistLoader(ApiClient *apiC
 QString GetInstantMixFromPlaylistLoader::path(const GetInstantMixFromPlaylistParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Playlists/") + Support::toString< QString>(params.jellyfinId()) + QStringLiteral("/InstantMix");
+	return QStringLiteral("/Playlists/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/InstantMix");
 }
 
 QUrlQuery GetInstantMixFromPlaylistLoader::query(const GetInstantMixFromPlaylistParams &params) const {
@@ -341,7 +393,7 @@ GetInstantMixFromSongLoader::GetInstantMixFromSongLoader(ApiClient *apiClient)
 QString GetInstantMixFromSongLoader::path(const GetInstantMixFromSongParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Songs/") + Support::toString< QString>(params.jellyfinId()) + QStringLiteral("/InstantMix");
+	return QStringLiteral("/Songs/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/InstantMix");
 }
 
 QUrlQuery GetInstantMixFromSongLoader::query(const GetInstantMixFromSongParams &params) const {

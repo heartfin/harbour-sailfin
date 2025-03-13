@@ -35,7 +35,6 @@
 #include <QString>
 #include <optional>
 
-#include "JellyfinQt/dto/configurationpagetype.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -48,9 +47,9 @@ namespace DTO {
 
 class ConfigurationPageInfo {
 public:
-	ConfigurationPageInfo(			
-		bool enableInMainMenu,									
-		ConfigurationPageType configurationPageType				
+	ConfigurationPageInfo(	
+		QString name,			
+		bool enableInMainMenu										
 	);
 
 	ConfigurationPageInfo(const ConfigurationPageInfo &other);
@@ -73,8 +72,6 @@ public:
 	* @brief Gets or sets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets or sets a value indicating whether the configurations page is enabled in the main menu.
@@ -118,11 +115,6 @@ public:
 	bool displayNameNull() const;
 	void setDisplayNameNull();
 
-
-	ConfigurationPageType configurationPageType() const;
-
-	void setConfigurationPageType(ConfigurationPageType newConfigurationPageType);
-
 	/**
 	 * @brief Gets or sets the plugin id.
 	 */
@@ -141,7 +133,6 @@ protected:
 	QString m_menuSection;
 	QString m_menuIcon;
 	QString m_displayName;
-	ConfigurationPageType m_configurationPageType;
 	QString m_pluginId;
 
 private:

@@ -51,7 +51,14 @@ namespace DTO {
 
 
 class LibraryTypeOptionsDto {
-public:	LibraryTypeOptionsDto();
+public:
+	LibraryTypeOptionsDto(			
+		QList<LibraryOptionInfoDto> metadataFetchers,			
+		QList<LibraryOptionInfoDto> imageFetchers,			
+		QList<ImageType> supportedImageTypes,			
+		QList<ImageOption> defaultImageOptions		
+	);
+
 	LibraryTypeOptionsDto(const LibraryTypeOptionsDto &other);
 	
 	/**
@@ -83,8 +90,6 @@ public:	LibraryTypeOptionsDto();
 	* @brief Gets or sets the metadata fetchers.
 	*/
 	void setMetadataFetchers(QList<LibraryOptionInfoDto> newMetadataFetchers);
-	bool metadataFetchersNull() const;
-	void setMetadataFetchersNull();
 
 	/**
 	 * @brief Gets or sets the image fetchers.
@@ -94,8 +99,6 @@ public:	LibraryTypeOptionsDto();
 	* @brief Gets or sets the image fetchers.
 	*/
 	void setImageFetchers(QList<LibraryOptionInfoDto> newImageFetchers);
-	bool imageFetchersNull() const;
-	void setImageFetchersNull();
 
 	/**
 	 * @brief Gets or sets the supported image types.
@@ -105,8 +108,6 @@ public:	LibraryTypeOptionsDto();
 	* @brief Gets or sets the supported image types.
 	*/
 	void setSupportedImageTypes(QList<ImageType> newSupportedImageTypes);
-	bool supportedImageTypesNull() const;
-	void setSupportedImageTypesNull();
 
 	/**
 	 * @brief Gets or sets the default image options.
@@ -116,8 +117,6 @@ public:	LibraryTypeOptionsDto();
 	* @brief Gets or sets the default image options.
 	*/
 	void setDefaultImageOptions(QList<ImageOption> newDefaultImageOptions);
-	bool defaultImageOptionsNull() const;
-	void setDefaultImageOptionsNull();
 
 
 protected:
@@ -127,7 +126,9 @@ protected:
 	QList<ImageType> m_supportedImageTypes;
 	QList<ImageOption> m_defaultImageOptions;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing LibraryTypeOptionsDto::fromJson();
+	LibraryTypeOptionsDto();
 };
 
 

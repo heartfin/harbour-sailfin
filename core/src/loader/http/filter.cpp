@@ -57,10 +57,10 @@ QUrlQuery GetQueryFiltersLegacyLoader::query(const GetQueryFiltersLegacyParams &
 		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QList<BaseItemKind>>(params.includeItemTypes()));
 	}
 	if (!params.mediaTypesNull()) {
-		result.addQueryItem("mediaTypes", Support::toString<QStringList>(params.mediaTypes()));
+		result.addQueryItem("mediaTypes", Support::toString<QList<MediaType>>(params.mediaTypes()));
 	}
 	
 	return result;
@@ -98,7 +98,7 @@ QUrlQuery GetQueryFiltersLoader::query(const GetQueryFiltersParams &params) cons
 		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QList<BaseItemKind>>(params.includeItemTypes()));
 	}
 	if (!params.isAiringNull()) {
 		result.addQueryItem("isAiring", Support::toString<std::optional<bool>>(params.isAiring()));

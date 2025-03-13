@@ -54,6 +54,12 @@ DlnaProfileType fromJsonValue(const QJsonValue &source, convertType<DlnaProfileT
 	if (str == QStringLiteral("Photo")) {
 		return DlnaProfileType::Photo;
 	}
+	if (str == QStringLiteral("Subtitle")) {
+		return DlnaProfileType::Subtitle;
+	}
+	if (str == QStringLiteral("Lyric")) {
+		return DlnaProfileType::Lyric;
+	}
 	
 	return DlnaProfileType::EnumNotSet;
 }
@@ -67,6 +73,10 @@ QJsonValue toJsonValue(const DlnaProfileType &source, convertType<DlnaProfileTyp
 		return QStringLiteral("Video");
 	case DlnaProfileType::Photo:
 		return QStringLiteral("Photo");
+	case DlnaProfileType::Subtitle:
+		return QStringLiteral("Subtitle");
+	case DlnaProfileType::Lyric:
+		return QStringLiteral("Lyric");
 
 	case DlnaProfileType::EnumNotSet: // Fallthrough
 	default:

@@ -32,11 +32,9 @@
 
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QSharedPointer>
 #include <QString>
 #include <optional>
 
-#include "JellyfinQt/dto/version.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -49,8 +47,11 @@ namespace DTO {
 
 class VersionInfo {
 public:
-	VersionInfo(			
-		QSharedPointer<Version> versionNumber																
+	VersionInfo(	
+		QString version,			
+		QString versionNumber,													
+		QString repositoryName,			
+		QString repositoryUrl		
 	);
 
 	VersionInfo(const VersionInfo &other);
@@ -73,13 +74,15 @@ public:
 	* @brief Gets or sets the version.
 	*/
 	void setVersion(QString newVersion);
-	bool versionNull() const;
-	void setVersionNull();
 
-
-	QSharedPointer<Version> versionNumber() const;
-
-	void setVersionNumber(QSharedPointer<Version> newVersionNumber);
+	/**
+	 * @brief Gets the version as a System.Version.
+	 */
+	QString versionNumber() const;
+	/**
+	* @brief Gets the version as a System.Version.
+	*/
+	void setVersionNumber(QString newVersionNumber);
 
 	/**
 	 * @brief Gets or sets the changelog for this version.
@@ -144,8 +147,6 @@ public:
 	* @brief Gets or sets the repository name.
 	*/
 	void setRepositoryName(QString newRepositoryName);
-	bool repositoryNameNull() const;
-	void setRepositoryNameNull();
 
 	/**
 	 * @brief Gets or sets the repository url.
@@ -155,13 +156,11 @@ public:
 	* @brief Gets or sets the repository url.
 	*/
 	void setRepositoryUrl(QString newRepositoryUrl);
-	bool repositoryUrlNull() const;
-	void setRepositoryUrlNull();
 
 
 protected:
 	QString m_version;
-	QSharedPointer<Version> m_versionNumber = QSharedPointer<Version>();
+	QString m_versionNumber;
 	QString m_changelog;
 	QString m_targetAbi;
 	QString m_sourceUrl;

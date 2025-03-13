@@ -52,8 +52,10 @@ namespace DTO {
 class GroupInfoDto {
 public:
 	GroupInfoDto(	
-		QString groupId,					
-		GroupStateType state,					
+		QString groupId,			
+		QString groupName,			
+		GroupStateType state,			
+		QStringList participants,			
 		QDateTime lastUpdatedAt		
 	);
 
@@ -86,8 +88,6 @@ public:
 	* @brief Gets the group name.
 	*/
 	void setGroupName(QString newGroupName);
-	bool groupNameNull() const;
-	void setGroupNameNull();
 
 
 	GroupStateType state() const;
@@ -102,8 +102,6 @@ public:
 	* @brief Gets the participants.
 	*/
 	void setParticipants(QStringList newParticipants);
-	bool participantsNull() const;
-	void setParticipantsNull();
 
 	/**
 	 * @brief Gets the date when this DTO has been created.

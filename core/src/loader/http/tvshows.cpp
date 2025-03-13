@@ -90,7 +90,7 @@ QUrlQuery GetEpisodesLoader::query(const GetEpisodesParams &params) const {
 		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString<QString>(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<ItemSortBy>(params.sortBy()));
 	}
 	
 	return result;
@@ -195,8 +195,8 @@ QUrlQuery GetNextUpLoader::query(const GetNextUpParams &params) const {
 	if (!params.parentIdNull()) {
 		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
-	if (!params.enableImgesNull()) {
-		result.addQueryItem("enableImges", Support::toString<std::optional<bool>>(params.enableImges()));
+	if (!params.enableImagesNull()) {
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	if (!params.imageTypeLimitNull()) {
 		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));
@@ -207,11 +207,20 @@ QUrlQuery GetNextUpLoader::query(const GetNextUpParams &params) const {
 	if (!params.enableUserDataNull()) {
 		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
+	if (!params.nextUpDateCutoffNull()) {
+		result.addQueryItem("nextUpDateCutoff", Support::toString<QDateTime>(params.nextUpDateCutoff()));
+	}
 	if (!params.enableTotalRecordCountNull()) {
 		result.addQueryItem("enableTotalRecordCount", Support::toString<std::optional<bool>>(params.enableTotalRecordCount()));
 	}
 	if (!params.disableFirstEpisodeNull()) {
 		result.addQueryItem("disableFirstEpisode", Support::toString<std::optional<bool>>(params.disableFirstEpisode()));
+	}
+	if (!params.enableResumableNull()) {
+		result.addQueryItem("enableResumable", Support::toString<std::optional<bool>>(params.enableResumable()));
+	}
+	if (!params.enableRewatchingNull()) {
+		result.addQueryItem("enableRewatching", Support::toString<std::optional<bool>>(params.enableRewatching()));
 	}
 	
 	return result;
@@ -257,8 +266,8 @@ QUrlQuery GetUpcomingEpisodesLoader::query(const GetUpcomingEpisodesParams &para
 	if (!params.parentIdNull()) {
 		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
-	if (!params.enableImgesNull()) {
-		result.addQueryItem("enableImges", Support::toString<std::optional<bool>>(params.enableImges()));
+	if (!params.enableImagesNull()) {
+		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));
 	}
 	if (!params.imageTypeLimitNull()) {
 		result.addQueryItem("imageTypeLimit", Support::toString<std::optional<qint32>>(params.imageTypeLimit()));

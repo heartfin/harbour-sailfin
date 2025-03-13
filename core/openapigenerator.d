@@ -1,6 +1,6 @@
 #!/usr/bin/env dub
 /+ dub.sdl:
-	name "openapigenerator.d"
+	name "openapigenerator"
 	dependency "dyaml" version="~>0.8.0"
     dependency "handlebars" version="~>0.2.2"
     stringImportPaths "codegen"
@@ -115,6 +115,7 @@ string[string] memberAliases;
 static this() {
 	memberAliases["id"] = "jellyfinId";
 	memberAliases["static"] = "staticStreaming";
+	memberAliases["auto"] = "automatic";
 }
 
 CasePolicy OPENAPI_CASING = CasePolicy.PASCAL;
@@ -577,17 +578,25 @@ void generateFileForSchema(ref const string name, ref const Node scheme, Node al
 		string[3] imports = ["QJsonValue", "QObject", "QString"];
 		string[1] userImports = [buildPath(SUPPORT_FOLDER, "jsonconv.h")];
 		
-		Appender!(string[]) values;
+		Appender!(EnumEntry[]) entries;
 		foreach (string value; scheme["enum"]) {
-			values ~= value;
+			EnumEntry entry = { value, value };
+			if (string* correctedName = value in memberAliases) {
+				entry.name = *correctedName;
+			}
+			if (entry.name[0].isLower()) {
+				// QML does not like enumeration starting with a lower case letter
+				entry.name = ([entry.name[0].toUpper()] ~ entry.name[1..$].to!(dchar[])).to!string;
+			}
+			entries ~= entry;
 		}
 		
 		writeHeaderPreamble(headerFile, CPP_NAMESPACE_DTO, name, imports, userImports);
-		writeEnumHeader(headerFile, name, values[]);
+		writeEnumHeader(headerFile, name, entries[]);
 		writeHeaderPostamble(headerFile, CPP_NAMESPACE_DTO, name);
 		
 		writeImplementationPreamble(implementationFile, CPP_NAMESPACE_DTO, MODEL_FOLDER, name);
-		writeEnumImplementation(implementationFile, name, values[]);
+		writeEnumImplementation(implementationFile, name, entries[]);
 		writeImplementationPostamble(implementationFile, CPP_NAMESPACE_DTO, name);
 	}
 	
@@ -679,9 +688,26 @@ void generateFileForSchema(ref const string name, ref const Node scheme, Node al
  *                  parameter could refrence.
  */
 MetaTypeInfo getType(ref const string name, const ref Node node, const ref Node allSchemas) {
+	MetaTypeInfo[] allOf = [];
+	
 	MetaTypeInfo info = new MetaTypeInfo();
 	info.originalName = name;
 	info.name = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_MEMBER_CASING);
+	
+	if (const Node* allOfNodes = "allOf" in node) {
+		writeln(name, " contains allOf:");
+		allOf.reserve(node.length);
+		foreach (const ref Node anotherType; *allOfNodes) {
+			allOf ~= getType(name, anotherType, allSchemas);
+			writeln(" - ", allOf[$ - 1].name);
+		}
+	}
+	
+	if (allOf.length == 1 && allOf[0].name == info.name) {
+		// If it contains a single allOf value, just replace our current type with it.
+		return allOf[0];
+	}
+	
 	info.defaultValue = node.getOr!string("default", "");
 	
 	if ("description" in node) {
@@ -703,7 +729,6 @@ MetaTypeInfo getType(ref const string name, const ref Node node, const ref Node 
 				info.typeNullableSetter = "= " ~ info.typeName ~ "::EnumNotSet";
 			} else if ("type" in allSchemas[type] 
 					&& allSchemas[type]["type"].as!string == "object") {
-				writefln("Type %s is an object", type);
 				info.needsPointer = true;
 				info.isTypeNullable = true;
 				info.typeNullableCheck = ".isNull()";
@@ -714,7 +739,7 @@ MetaTypeInfo getType(ref const string name, const ref Node node, const ref Node 
 	}
 	
 	// Type is an enumeration
-	if ("enum" in node) {
+	if ("enum" in node && !("type" in node)) {
 		info.isTypeNullable = true;
 		info.typeNullableCheck = "== " ~ info.typeName ~ "::EnumNotSet";
 		info.typeNullableSetter = "= " ~ info.typeName ~ "::EnumNotSet";
@@ -857,27 +882,27 @@ void writeObjectImplementation(File output, string name, MetaTypeInfo[] properti
 }
 
 // Enum
-void writeEnumHeader(File output, string name, string[] values, string doc = "") {
+void writeEnumHeader(File output, string name, EnumEntry[] entries, string doc = "") {
 	class Controller {
 		string className;
-		string[] values;
+		EnumEntry[] entries;
 		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
 	}
 	Controller controller = new Controller();
 	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
-	controller.values = values;
+	controller.entries = entries;
 	output.writeln(render!(import("enum_header.hbs"), Controller)(controller));
 }
 
-void writeEnumImplementation(File output, string name, string[] values) {
+void writeEnumImplementation(File output, string name, EnumEntry[] entries) {
 	class Controller {
 		string className;
-		string[] values;
+		EnumEntry[] entries;
 		string supportNamespace = namespaceString!CPP_NAMESPACE_SUPPORT;
 	}
 	Controller controller = new Controller();
 	controller.className = name.applyCasePolicy(OPENAPI_CASING, CPP_CLASS_CASING);
-	controller.values = values;
+	controller.entries = entries;
 	output.writeln(render!(import("enum_implementation.hbs"), Controller)(controller));
 }
 
@@ -1145,6 +1170,11 @@ class RequestParameter {
 	MetaTypeInfo type;
 	// Only for body parameters.
 	string mimeType;
+}
+
+struct EnumEntry {
+	string name;
+	string value;
 }
 
 /**

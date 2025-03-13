@@ -34,10 +34,21 @@ Page {
         Column {
             id: content
             width: parent.width
-            CheckBox {
-                checked: ApiClient.settings.allowTranscoding
-                text: "allow transcoding"
-                onCheckedChanged: ApiClient.settings.allowTranscoding = checked
+            Row {
+                CheckBox {
+                    checked: ApiClient.settings.allowTranscoding
+                    text: "allow transcoding"
+                    onCheckedChanged: ApiClient.settings.allowTranscoding = checked
+                }
+                ComboBox {
+                    model: J.RemoteDeviceList {
+                        id: deviceList
+                        apiClient: ApiClient
+                        scanning: _modelsLoaded == true
+                    }
+                    textRole: "deviceName"
+                    width: 400
+                }
             }
             Repeater {
                 model: mediaLibraryModel

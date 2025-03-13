@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 .pragma library
+.import nl.netsoj.chris.Jellyfin 1.0 as J
 
 /**
  * Converts miliseconds to a h:mm:ss format
@@ -89,54 +90,60 @@ function itemModelImageUrl(baseUrl, itemId, tag, type, options) {
 }
 
 function usePortraitCover(itemType) {
-    return ["Series", "Movie", "tvshows", "movies"].indexOf(itemType) >= 0
+    var portraitTypes = [J.ItemType.Series, J.ItemType.Movie, J.CollectionType.Tvshows, J.CollectionType.Movies]
+    console.log("UsePortraitCover itemType: ", itemType)
+    return portraitTypes.indexOf(itemType) >= 0
 }
 
 /**
  * Returns the page url for a certain item type.
  */
 function getPageUrl(mediaType, itemType, isFolder) {
-    switch (itemType.toLowerCase()) {
-    case "series":
+    switch (itemType) {
+    case J.ItemType.Series:
         return Qt.resolvedUrl("pages/itemdetails/SeriesPage.qml")
-    case "movie":
+    case J.ItemType.Movie:
         return Qt.resolvedUrl("pages/itemdetails/FilmPage.qml")
-    case "collection":
-    case "photoalbum":
+    case J.ItemType.Folder:
+    case J.ItemType.PhotoAlbum:
         return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
-    case "season":
+    case J.ItemType.Season:
         return Qt.resolvedUrl("pages/itemdetails/SeasonPage.qml")
-    case "episode":
+    case J.ItemType.Episode:
         return Qt.resolvedUrl("pages/itemdetails/EpisodePage.qml")
-    case "musicartist":
+    case J.ItemType.MusicArtist:
         return Qt.resolvedUrl("pages/itemdetails/MusicArtistPage.qml")
-    case "musicalbum":
-    case "playlist":
+    case J.ItemType.MusicAlbum:
+    case J.ItemType.Playlist:
         return Qt.resolvedUrl("pages/itemdetails/MusicAlbumPage.qml")
-    case "photo":
+    case J.ItemType.Photo:
         return Qt.resolvedUrl("pages/itemdetails/PhotoPage.qml")
-    case "tvchannel":
+    case J.ItemType.TvChannel:
         return Qt.resolvedUrl("pages/itemdetails/LiveTvChannelPage.qml")
-    case "collectionfolder":
+    case J.ItemType.CollectionFolder:
         // TODO: support for other collection folders
-        switch(mediaType.toLowerCase()) {
-        case "music":
+        switch(mediaType) {
+        case J.CollectionType.Music:
             return Qt.resolvedUrl("pages/itemdetails/MusicLibraryPage.qml")
         }
         // FALLTRHOUGH
     default:
-        switch (mediaType ? mediaType.toLowerCase() : isFolder ? "folder" : "") {
-        case "livetv":
-            return Qt.resolvedUrl("pages/itemdetails/LiveTvChannelsPage.qml")
-        case "folder":
-            return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
-        case "video":
-            return Qt.resolvedUrl("pages/itemdetails/VideoPage.qml")
-        case "photo":
-            return Qt.resolvedUrl("pages/itemdetails/PhotoPage.qml")
-        default:
-            if (isFolder) return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
-            return Qt.resolvedUrl("pages/itemdetails/UnsupportedPage.qml")
+        if (isFolder) {
+            switch (mediaType) {
+            case J.CollectionType.Livetv:
+                return Qt.resolvedUrl("pages/itemdetails/LiveTvChannelsPage.qml")
+            default:
+                return Qt.resolvedUrl("pages/itemdetails/CollectionPage.qml")
+            }
+        } else {
+            switch (mediaType) {
+            case J.MediaType.Photo:
+                return Qt.resolvedUrl("pages/itemdetails/PhotoPage.qml")
+            case J.MediaType.Video:
+                return Qt.resolvedUrl("pages/itemdetails/VideoPage.qml")
+            default:
+                return Qt.resolvedUrl("pages/itemdetails/UnsupportedPage.qml")
+            }
         }
     }
 }

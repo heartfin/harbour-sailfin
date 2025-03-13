@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <JellyfinQt/dto/generalcommand.h>
 #include <JellyfinQt/dto/generalcommandtype.h>
 #include <JellyfinQt/dto/playstaterequest.h>
-#include <JellyfinQt/dto/sessioninfo.h>
+#include <JellyfinQt/dto/sessioninfodto.h>
 #include <JellyfinQt/dto/useritemdatadto.h>
 
 Q_LOGGING_CATEGORY(jellyfinWebSocket, "jellyfin.websocket");
@@ -157,7 +157,7 @@ void WebSocket::textMessageReceived(const QString &message) {
         }
     } else if (messageType == QStringLiteral("Sessions")) {
         try {
-            QList<DTO::SessionInfo> sessionInfoList = Support::fromJsonValue<QList<DTO::SessionInfo>>(data);
+            QList<DTO::SessionInfoDto> sessionInfoList = Support::fromJsonValue<QList<DTO::SessionInfoDto>>(data);
             for (auto it = sessionInfoList.cbegin(); it != sessionInfoList.cend(); it++) {
                 emit m_apiClient->eventbus()->sessionInfoUpdated(it->jellyfinId(), *it);
             }

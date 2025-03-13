@@ -232,7 +232,7 @@ public:
     void requestItemUrl(QSharedPointer<Model::Item> item);
 
     // slots
-    void handlePlaybackInfoResponse(QString itemId, QString mediaType, DTO::PlaybackInfoResponse &response);
+    void handlePlaybackInfoResponse(QString itemId, MediaType mediaType, DTO::PlaybackInfoResponse &response);
     /// Called when we have fetched the playback URL and playSession
     void onItemUrlReceived(const QString &itemId, const QUrl &url, const QString &playSession,
                                  // Fully specify class to please MOC
@@ -352,7 +352,7 @@ void LocalPlaybackManagerPrivate::setItem(QSharedPointer<Model::Item> newItem) {
     }
 }
 
-void LocalPlaybackManagerPrivate::handlePlaybackInfoResponse(QString itemId, QString mediaType, DTO::PlaybackInfoResponse &response) {
+void LocalPlaybackManagerPrivate::handlePlaybackInfoResponse(QString itemId, MediaType mediaType, DTO::PlaybackInfoResponse &response) {
     Q_Q(LocalPlaybackManager);
     //TODO: move the item URL fetching logic out of this function, into MediaSourceInfo?
     QList<DTO::MediaSourceInfo> mediaSources = response.mediaSources();
@@ -394,15 +394,16 @@ void LocalPlaybackManagerPrivate::handlePlaybackInfoResponse(QString itemId, QSt
             resultingUrl = QUrl::fromLocalFile(source.path());
             playMethod = PlayMethod::DirectPlay;
         } else if (source.supportsDirectStream() && !transcodePreferred) {
-            if (mediaType == "Video") {
-                mediaType.append('s');
+            QString mediaTypeUrl = Support::toString(mediaType);
+            if (mediaType == MediaType::Video) {
+                mediaTypeUrl.append('s');
             }
             QUrlQuery query;
             query.addQueryItem("mediaSourceId", source.jellyfinId());
             query.addQueryItem("deviceId", m_apiClient->deviceId());
             query.addQueryItem("api_key", m_apiClient->token());
             query.addQueryItem("Static", "True");
-            resultingUrl = QUrl(m_apiClient->baseUrl() + "/" + mediaType + "/" + itemId
+            resultingUrl = QUrl(m_apiClient->baseUrl() + "/" + mediaTypeUrl + "/" + itemId
                     + "/stream." + source.container() + "?" + query.toString(QUrl::EncodeReserved));
             playMethod = PlayMethod::DirectStream;
         } else if (source.supportsTranscoding() && !source.transcodingUrlNull() && transcodingAllowed) {

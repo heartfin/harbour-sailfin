@@ -116,7 +116,7 @@ public:
     Q_PROPERTY(QString playlistItemId READ playlistItemId NOTIFY playlistItemIdChanged)
     Q_PROPERTY(QDateTime dateCreated READ dateCreated NOTIFY dateCreatedChanged)
     Q_PROPERTY(QDateTime dateLastMediaAdded READ dateLastMediaAdded NOTIFY dateLastMediaAddedChanged)
-    Q_PROPERTY(QString extraType READ extraType NOTIFY extraTypeChanged)
+    Q_PROPERTY(Jellyfin::DTO::ExtraTypeClass::Value extraType READ extraType NOTIFY extraTypeChanged)
     Q_PROPERTY(int airsBeforeSeasonNumber READ airsBeforeSeasonNumber NOTIFY airsBeforeSeasonNumberChanged)
     Q_PROPERTY(int airsAfterSeasonNumber READ airsAfterSeasonNumber NOTIFY airsAfterSeasonNumberChanged)
     Q_PROPERTY(int airsBeforeEpisodeNumber READ airsBeforeEpisodeNumber NOTIFY airsBeforeEpisodeNumberChanged)
@@ -143,7 +143,7 @@ public:
     Q_PROPERTY(int indexNumber READ indexNumber NOTIFY indexNumberChanged)
     Q_PROPERTY(int indexNumberEnd READ indexNumberEnd NOTIFY indexNumberEndChanged)
     Q_PROPERTY(bool isFolder READ isFolder NOTIFY isFolderChanged)
-    Q_PROPERTY(QString type READ type NOTIFY typeChanged)
+    Q_PROPERTY(Jellyfin::DTO::BaseItemKindClass::Value type READ type NOTIFY typeChanged)
     Q_PROPERTY(QString parentBackdropItemId READ parentBackdropItemId NOTIFY parentBackdropItemIdChanged)
     Q_PROPERTY(QStringList parentBackdropImageTags READ parentBackdropImageTags NOTIFY parentBackdropImageTagsChanged)
     Q_PROPERTY(Jellyfin::ViewModel::UserData *userData READ userData NOTIFY userDataChanged)
@@ -163,7 +163,7 @@ public:
     Q_PROPERTY(double primaryImageAspectRatio READ primaryImageAspectRatio NOTIFY primaryImageAspectRatioChanged)
     Q_PROPERTY(QStringList artists READ artists NOTIFY artistsChanged)
     Q_PROPERTY(QList<QObject *> artistItems READ artistItems NOTIFY artistItemsChanged);
-    Q_PROPERTY(QString collectionType READ collectionType NOTIFY collectionTypeChanged)
+    Q_PROPERTY(Jellyfin::DTO::CollectionTypeClass::Value collectionType READ collectionType NOTIFY collectionTypeChanged)
     // Why is this a QJsonObject? Well, because I couldn't be bothered to implement the deserialisations of
     // a QHash at the moment.
     Q_PROPERTY(QJsonObject imageTags READ imageTags NOTIFY imageTagsChanged)
@@ -178,7 +178,7 @@ public:
     Q_PROPERTY(int albumCount READ albumCount NOTIFY albumCountChanged)
     Q_PROPERTY(int artistCount READ artistCount NOTIFY artistCountChanged)
     Q_PROPERTY(int musicVideoCount READ musicVideoCount NOTIFY musicVideoCountChanged)
-    Q_PROPERTY(QString mediaType READ mediaType NOTIFY mediaTypeChanged)
+    Q_PROPERTY(Jellyfin::DTO::MediaTypeClass::Value mediaType READ mediaType NOTIFY mediaTypeChanged)
     Q_PROPERTY(QDateTime endDate READ endDate NOTIFY endDateChanged)
     Q_PROPERTY(QDateTime startDate READ startDate NOTIFY startDateChanged)
     Q_PROPERTY(int width READ width NOTIFY widthChanged)
@@ -194,7 +194,7 @@ public:
     QString playlistItemId() const { return m_data->playlistItemId(); }
     QDateTime dateCreated() const { return m_data->dateCreated(); }
     QDateTime dateLastMediaAdded() const { return m_data->dateLastMediaAdded(); }
-    QString extraType() const { return m_data->extraType(); }
+    ExtraType extraType() const { return m_data->extraType(); }
     int airsBeforeSeasonNumber() const { return m_data->airsBeforeSeasonNumber().value_or(0); }
     int airsAfterSeasonNumber() const { return m_data->airsAfterSeasonNumber().value_or(999); }
     int airsBeforeEpisodeNumber() const { return m_data->airsBeforeEpisodeNumber().value_or(0); }
@@ -204,7 +204,7 @@ public:
     int indexNumber() const { return m_data->indexNumber().value_or(-1); }
     int indexNumberEnd() const { return m_data->indexNumberEnd().value_or(-1); }
     bool isFolder() const { return m_data->isFolder().value_or(false); }
-    QString type() const { return m_data->type(); }
+    BaseItemKind type() const { return m_data->type(); }
     QString parentBackdropItemId() const { return m_data->parentBackdropItemId(); }
     QStringList parentBackdropImageTags() const { return m_data->parentBackdropImageTags(); }
     UserData *userData() const { return m_userData; }
@@ -223,11 +223,11 @@ public:
     double primaryImageAspectRatio() const { return m_data->primaryImageAspectRatio().value_or(1.0); }
     QStringList artists() const { return m_data->artists(); }
     QList<QObject *> artistItems() const{ return this->m_artistItems; }
-    QString collectionType() const { return this->m_data->collectionType(); }
+    CollectionType collectionType() const { return this->m_data->collectionType(); }
     QJsonObject imageTags() const { return m_data->imageTags(); }
     QStringList backdropImageTags() const { return m_data->backdropImageTags(); }
     QJsonObject imageBlurHashes() const { return m_data->imageBlurHashes(); }
-    QString mediaType() const { return m_data->mediaType(); }
+    MediaType mediaType() const { return m_data->mediaType(); }
     QDateTime endDate() const { return m_data->endDate(); }
     QDateTime startDate() const { return m_data->startDate(); }
     Item *currentProgram() const { return m_currentProgram; }
@@ -281,7 +281,7 @@ signals:
     void indexNumberChanged(int newIndexNumber);
     void indexNumberEndChanged(int newIndexNumberEnd);
     void isFolderChanged(bool newIsFolder);
-    void typeChanged(const QString &newType);
+    void typeChanged(const BaseItemKind &newType);
     void parentBackdropItemIdChanged();
     void parentBackdropImageTagsChanged();
     void userDataChanged(UserData *newUserData);
@@ -313,7 +313,7 @@ signals:
     void albumCountChanged(int newAlbumCount);
     void artistCountChanged(int newArtistCount);
     void musicVideoCountChanged(int newMusicVideoCount);
-    void mediaTypeChanged(const QString &newMediaType);
+    void mediaTypeChanged(const MediaType &newMediaType);
     void endDateChanged();
     void startDateChanged();
     void widthChanged(int newWidth);

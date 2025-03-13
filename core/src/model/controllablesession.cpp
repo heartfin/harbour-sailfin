@@ -46,7 +46,7 @@ PlaybackManager *LocalSession::createPlaybackManager() const {
 }
 
 // ControllableJellyfinSession
-ControllableJellyfinSession::ControllableJellyfinSession(const QSharedPointer<DTO::SessionInfo> info, ApiClient &apiClient, QObject *parent)
+ControllableJellyfinSession::ControllableJellyfinSession(const QSharedPointer<DTO::SessionInfoDto> info, ApiClient &apiClient, QObject *parent)
     : ControllableSession(parent),
       m_data(info),
       m_apiClient(apiClient){}
@@ -147,14 +147,15 @@ void RemoteJellyfinSessionScanner::startScanning() {
     d->loader->setParameters(params);
     connect(d->loader, &Loader::HTTP::GetSessionsLoader::ready, this, [this, d, localSession]() {
         if (d->loader == nullptr) return;
-        QList<DTO::SessionInfo> sessions = d->loader->result();
+        QList<DTO::SessionInfoDto> sessions = d->loader->result();
+        qDebug() << "Found " << sessions.count() << " sessions";
 
         for(auto it = sessions.begin(); it != sessions.end(); it++) {
 
             // Skip this device
             if (it->deviceId() == localSession->id()) continue;
 
-            emit sessionFound(new ControllableJellyfinSession(QSharedPointer<DTO::SessionInfo>::create(*it), *d->apiClient));
+            emit sessionFound(new ControllableJellyfinSession(QSharedPointer<DTO::SessionInfoDto>::create(*it), *d->apiClient));
         }
     });
     d->loader->load();

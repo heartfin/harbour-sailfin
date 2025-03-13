@@ -4,8 +4,8 @@ public:
 	enum Value {
 		EnumNotSet,
 
-		{{#each values as |value|}}
-		{{value}},
+		{{#each entries as |entry|}}
+		{{entry.name}},
 
 		{{/each}}
 	};

@@ -18,6 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 import QtQuick 2.6
 import Sailfish.Silica 1.0
+import nl.netsoj.chris.Jellyfin 1.0 as J
 
 import "../.."
 
@@ -106,7 +107,7 @@ ListItem {
     }
 
     function goToArtist(id) {
-        appWindow.navigateToItem(id, "audio", "MusicArtist", true)
+        appWindow.navigateToItem(id, J.MediaType.Audio, J.ItemType.MusicArtist, true)
     }
 
     Component {

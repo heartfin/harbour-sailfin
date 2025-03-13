@@ -64,7 +64,6 @@ void BaseModelLoader::setApiClient(ApiClient *newApiClient) {
 
 void BaseModelLoader::setLimit(int newLimit) {
     m_explicitLimitSet = newLimit >= 0;
-    qCDebug(jellyfinApiModel) << "Limit explicitly set to " << newLimit;
     this->m_limit = newLimit;
     emit limitChanged(newLimit);
 }
@@ -144,12 +143,12 @@ bool setRequestStartIndex(Loader::GetLatestMediaParams &params, int offset) {
 }
 
 template<>
-void setRequestLimit(Loader::GetItemsByUserIdParams &params, int limit) {
+void setRequestLimit(Loader::GetItemsParams &params, int limit) {
     params.setLimit(limit);
 }
 
 template<>
-bool setRequestStartIndex(Loader::GetItemsByUserIdParams &params, int index) {
+bool setRequestStartIndex(Loader::GetItemsParams &params, int index) {
     params.setStartIndex(index);
     return true;
 }

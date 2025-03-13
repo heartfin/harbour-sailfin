@@ -18,7 +18,9 @@
 */
 #include "JellyfinQt/jellyfin.h"
 
+#include "JellyfinQt/dto/collectiontype.h"
 #include "JellyfinQt/model/item.h"
+#include "JellyfinQt/dto/itemsortby.h"
 #include "JellyfinQt/dto/itemfields.h"
 #include "JellyfinQt/dto/mediastream.h"
 #include "JellyfinQt/dto/nameguidpair.h"
@@ -92,11 +94,16 @@ void JellyfinPlugin::registerTypes(const char *uri) {
     qmlRegisterType<ViewModel::LiveTvChannelsLoader>(uri, 1, 0, "LiveTvChannelsLoader");
 
     // Enumerations
+    qmlRegisterUncreatableType<Jellyfin::DTO::CollectionTypeClass>(uri, 1, 0, "CollectionType", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::DTO::GeneralCommandTypeClass>(uri, 1, 0, "GeneralCommandType", "Is an enum");
-    qmlRegisterUncreatableType<Jellyfin::ViewModel::ModelStatusClass>(uri, 1, 0, "ModelStatus", "Is an enum");
-    qmlRegisterUncreatableType<Jellyfin::DTO::PlayMethodClass>(uri, 1, 0, "PlayMethod", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::DTO::ItemFieldsClass>(uri, 1, 0, "ItemFields", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::DTO::ImageTypeClass>(uri, 1, 0, "ImageType", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::DTO::MediaTypeClass>(uri, 1, 0, "MediaType", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::DTO::BaseItemKindClass>(uri, 1, 0, "ItemType", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::DTO::PlayMethodClass>(uri, 1, 0, "PlayMethod", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::DTO::ItemSortByClass>(uri, 1, 0, "SortBy", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::DTO::SortOrderClass>(uri, 1, 0, "SortOrder", "Is an enum");
+    qmlRegisterUncreatableType<Jellyfin::ViewModel::ModelStatusClass>(uri, 1, 0, "ModelStatus", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::ViewModel::NowPlayingSection>(uri, 1, 0, "NowPlayingSection", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::Model::PlayerStateClass>(uri, 1, 0, "PlayerState", "Is an enum");
     qmlRegisterUncreatableType<Jellyfin::Model::MediaStatusClass>(uri, 1, 0, "MediaStatus", "Is an enum");

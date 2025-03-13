@@ -10,7 +10,7 @@ MoreSection {
     busy: itemModel.loader.status === J.ModelStatus.Loading || extraBusy
     property bool extraBusy: false
     property alias loader: itemModel.loader
-    property string collectionType
+    property int collectionType
     property bool collapseWhenEmpty: true
 
     J.ItemModel {

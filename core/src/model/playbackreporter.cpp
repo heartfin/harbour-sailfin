@@ -149,7 +149,9 @@ void PlaybackReporterPrivate::postPlaybackInfo(PlaybackInfoType type) {
                 m_playbackManager->player()->state() == PlayerState::Paused,
                 false, // is muted?
                 m_playbackManager->playMethod(),
-                DTO::RepeatMode::RepeatNone);
+                DTO::RepeatMode::RepeatNone,
+                DTO::PlaybackOrder::Default
+                );
 
     progress.setSessionId(m_playbackManager->sessionId());
 

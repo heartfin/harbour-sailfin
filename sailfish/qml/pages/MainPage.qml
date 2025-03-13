@@ -109,13 +109,13 @@ Page {
                 ItemChildrenShowcase {
                     text: model.name
                     onHeaderClicked: appWindow.navigateToItem(model.jellyfinId, model.collectionType, model.type, model.isFolder);
-                    collectionType: model.collectionType || ""
+                    collectionType: model.collectionType || 0
                     loader: J.LatestMediaLoader {
                         apiClient: appWindow.apiClient
                         parentId: jellyfinId
                     }
                     Binding on loader {
-                        when: model.collectionType == "livetv"
+                        when: model.collectionType == J.CollectionType.Livetv
                         value: J.LiveTvChannelsLoader{
                             apiClient: appWindow.apiClient
                         }

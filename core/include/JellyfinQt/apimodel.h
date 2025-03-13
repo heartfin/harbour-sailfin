@@ -248,8 +248,8 @@ extern template int extractTotalRecordCount(const QList<DTO::BaseItemDto> &resul
 extern template void setRequestLimit(Loader::GetLatestMediaParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetLatestMediaParams &params, int offset);
 
-extern template void setRequestLimit(Loader::GetItemsByUserIdParams &params, int limit);
-extern template bool setRequestStartIndex(Loader::GetItemsByUserIdParams &params, int offset);
+extern template void setRequestLimit(Loader::GetItemsParams &params, int limit);
+extern template bool setRequestStartIndex(Loader::GetItemsParams &params, int offset);
 
 extern template void setRequestLimit(Loader::GetResumeItemsParams &params, int limit);
 extern template bool setRequestStartIndex(Loader::GetResumeItemsParams &params, int offset);
@@ -332,7 +332,6 @@ protected:
             R result = m_loader->result();
             QList<D> records = extractRecords<D, R>(result);
             int totalRecordCount = extractTotalRecordCount<R>(result);
-            qDebug() << "Total record count: " << totalRecordCount << ", records in request: " << records.size();
             // If totalRecordCount < 0, it is not supported for this endpoint
             if (totalRecordCount < 0) {
                 totalRecordCount = records.size();
@@ -549,7 +548,6 @@ protected:
     void loadingFinished() override {
         Q_ASSERT(m_loader != nullptr);
         std::pair<QList<T*>, int> result = m_loader->result();
-        qDebug() << "Results loaded: index: " << result.second << ", count: " << result.first.size();
         if (result.second == -1) {
             clear();
         } else if (result.second == m_array.size()) {

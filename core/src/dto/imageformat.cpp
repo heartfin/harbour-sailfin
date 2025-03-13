@@ -60,6 +60,9 @@ ImageFormat fromJsonValue(const QJsonValue &source, convertType<ImageFormat>) {
 	if (str == QStringLiteral("Webp")) {
 		return ImageFormat::Webp;
 	}
+	if (str == QStringLiteral("Svg")) {
+		return ImageFormat::Svg;
+	}
 	
 	return ImageFormat::EnumNotSet;
 }
@@ -77,6 +80,8 @@ QJsonValue toJsonValue(const ImageFormat &source, convertType<ImageFormat>) {
 		return QStringLiteral("Png");
 	case ImageFormat::Webp:
 		return QStringLiteral("Webp");
+	case ImageFormat::Svg:
+		return QStringLiteral("Svg");
 
 	case ImageFormat::EnumNotSet: // Fallthrough
 	default:

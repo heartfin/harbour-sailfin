@@ -49,7 +49,15 @@ namespace DTO {
 
 
 class LibraryOptionsResultDto {
-public:	LibraryOptionsResultDto();
+public:
+	LibraryOptionsResultDto(	
+		QList<LibraryOptionInfoDto> metadataSavers,			
+		QList<LibraryOptionInfoDto> metadataReaders,			
+		QList<LibraryOptionInfoDto> subtitleFetchers,			
+		QList<LibraryOptionInfoDto> lyricFetchers,			
+		QList<LibraryTypeOptionsDto> typeOptions		
+	);
+
 	LibraryOptionsResultDto(const LibraryOptionsResultDto &other);
 	
 	/**
@@ -70,8 +78,6 @@ public:	LibraryOptionsResultDto();
 	* @brief Gets or sets the metadata savers.
 	*/
 	void setMetadataSavers(QList<LibraryOptionInfoDto> newMetadataSavers);
-	bool metadataSaversNull() const;
-	void setMetadataSaversNull();
 
 	/**
 	 * @brief Gets or sets the metadata readers.
@@ -81,8 +87,6 @@ public:	LibraryOptionsResultDto();
 	* @brief Gets or sets the metadata readers.
 	*/
 	void setMetadataReaders(QList<LibraryOptionInfoDto> newMetadataReaders);
-	bool metadataReadersNull() const;
-	void setMetadataReadersNull();
 
 	/**
 	 * @brief Gets or sets the subtitle fetchers.
@@ -92,8 +96,15 @@ public:	LibraryOptionsResultDto();
 	* @brief Gets or sets the subtitle fetchers.
 	*/
 	void setSubtitleFetchers(QList<LibraryOptionInfoDto> newSubtitleFetchers);
-	bool subtitleFetchersNull() const;
-	void setSubtitleFetchersNull();
+
+	/**
+	 * @brief Gets or sets the list of lyric fetchers.
+	 */
+	QList<LibraryOptionInfoDto> lyricFetchers() const;
+	/**
+	* @brief Gets or sets the list of lyric fetchers.
+	*/
+	void setLyricFetchers(QList<LibraryOptionInfoDto> newLyricFetchers);
 
 	/**
 	 * @brief Gets or sets the type options.
@@ -103,17 +114,18 @@ public:	LibraryOptionsResultDto();
 	* @brief Gets or sets the type options.
 	*/
 	void setTypeOptions(QList<LibraryTypeOptionsDto> newTypeOptions);
-	bool typeOptionsNull() const;
-	void setTypeOptionsNull();
 
 
 protected:
 	QList<LibraryOptionInfoDto> m_metadataSavers;
 	QList<LibraryOptionInfoDto> m_metadataReaders;
 	QList<LibraryOptionInfoDto> m_subtitleFetchers;
+	QList<LibraryOptionInfoDto> m_lyricFetchers;
 	QList<LibraryTypeOptionsDto> m_typeOptions;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing LibraryOptionsResultDto::fromJson();
+	LibraryOptionsResultDto();
 };
 
 

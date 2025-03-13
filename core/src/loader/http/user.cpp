@@ -70,6 +70,38 @@ QNetworkAccessManager::Operation GetUsersLoader::operation() const {
 
 }
 
+UpdateUserLoader::UpdateUserLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateUserParams>(apiClient) {}
+
+QString UpdateUserLoader::path(const UpdateUserParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users");
+}
+
+QUrlQuery UpdateUserLoader::query(const UpdateUserParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	
+	return result;
+}
+
+QByteArray UpdateUserLoader::body(const UpdateUserParams &params) const {
+	return Support::toString<QSharedPointer<UserDto>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateUserLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 GetUserByIdLoader::GetUserByIdLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<UserDto, GetUserByIdParams>(apiClient) {}
 
@@ -125,155 +157,6 @@ QByteArray DeleteUserLoader::body(const DeleteUserParams &params) const {
 QNetworkAccessManager::Operation DeleteUserLoader::operation() const {
 	// HTTP method Delete
 	return QNetworkAccessManager::DeleteOperation;
-
-}
-
-UpdateUserLoader::UpdateUserLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, UpdateUserParams>(apiClient) {}
-
-QString UpdateUserLoader::path(const UpdateUserParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) ;
-}
-
-QUrlQuery UpdateUserLoader::query(const UpdateUserParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray UpdateUserLoader::body(const UpdateUserParams &params) const {
-	return Support::toString<QSharedPointer<UserDto>>(params.body()).toUtf8();
-}
-
-QNetworkAccessManager::Operation UpdateUserLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-AuthenticateUserLoader::AuthenticateUserLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<AuthenticationResult, AuthenticateUserParams>(apiClient) {}
-
-QString AuthenticateUserLoader::path(const AuthenticateUserParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Authenticate");
-}
-
-QUrlQuery AuthenticateUserLoader::query(const AuthenticateUserParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-	result.addQueryItem("pw", Support::toString<QString>(params.pw()));
-
-	// Optional parameters
-	if (!params.passwordNull()) {
-		result.addQueryItem("password", Support::toString<QString>(params.password()));
-	}
-	
-	return result;
-}
-
-QByteArray AuthenticateUserLoader::body(const AuthenticateUserParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation AuthenticateUserLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-UpdateUserConfigurationLoader::UpdateUserConfigurationLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, UpdateUserConfigurationParams>(apiClient) {}
-
-QString UpdateUserConfigurationLoader::path(const UpdateUserConfigurationParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Configuration");
-}
-
-QUrlQuery UpdateUserConfigurationLoader::query(const UpdateUserConfigurationParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray UpdateUserConfigurationLoader::body(const UpdateUserConfigurationParams &params) const {
-	return Support::toString<QSharedPointer<UserConfiguration>>(params.body()).toUtf8();
-}
-
-QNetworkAccessManager::Operation UpdateUserConfigurationLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-UpdateUserEasyPasswordLoader::UpdateUserEasyPasswordLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, UpdateUserEasyPasswordParams>(apiClient) {}
-
-QString UpdateUserEasyPasswordLoader::path(const UpdateUserEasyPasswordParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/EasyPassword");
-}
-
-QUrlQuery UpdateUserEasyPasswordLoader::query(const UpdateUserEasyPasswordParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray UpdateUserEasyPasswordLoader::body(const UpdateUserEasyPasswordParams &params) const {
-	return Support::toString<QSharedPointer<UpdateUserEasyPassword>>(params.body()).toUtf8();
-}
-
-QNetworkAccessManager::Operation UpdateUserEasyPasswordLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-UpdateUserPasswordLoader::UpdateUserPasswordLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, UpdateUserPasswordParams>(apiClient) {}
-
-QString UpdateUserPasswordLoader::path(const UpdateUserPasswordParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Password");
-}
-
-QUrlQuery UpdateUserPasswordLoader::query(const UpdateUserPasswordParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray UpdateUserPasswordLoader::body(const UpdateUserPasswordParams &params) const {
-	return Support::toString<QSharedPointer<UpdateUserPassword>>(params.body()).toUtf8();
-}
-
-QNetworkAccessManager::Operation UpdateUserPasswordLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
 
 }
 
@@ -364,6 +247,38 @@ QNetworkAccessManager::Operation AuthenticateWithQuickConnectLoader::operation()
 
 }
 
+UpdateUserConfigurationLoader::UpdateUserConfigurationLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateUserConfigurationParams>(apiClient) {}
+
+QString UpdateUserConfigurationLoader::path(const UpdateUserConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/Configuration");
+}
+
+QUrlQuery UpdateUserConfigurationLoader::query(const UpdateUserConfigurationParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	
+	return result;
+}
+
+QByteArray UpdateUserConfigurationLoader::body(const UpdateUserConfigurationParams &params) const {
+	return Support::toString<QSharedPointer<UserConfiguration>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateUserConfigurationLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 ForgotPasswordLoader::ForgotPasswordLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<ForgotPasswordResult, ForgotPasswordParams>(apiClient) {}
 
@@ -413,7 +328,7 @@ QUrlQuery ForgotPasswordPinLoader::query(const ForgotPasswordPinParams &params) 
 }
 
 QByteArray ForgotPasswordPinLoader::body(const ForgotPasswordPinParams &params) const {
-	return Support::toString<QString>(params.body()).toUtf8();
+	return Support::toString<QSharedPointer<ForgotPasswordPinDto>>(params.body()).toUtf8();
 }
 
 QNetworkAccessManager::Operation ForgotPasswordPinLoader::operation() const {
@@ -475,6 +390,38 @@ QByteArray CreateUserByNameLoader::body(const CreateUserByNameParams &params) co
 }
 
 QNetworkAccessManager::Operation CreateUserByNameLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+UpdateUserPasswordLoader::UpdateUserPasswordLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UpdateUserPasswordParams>(apiClient) {}
+
+QString UpdateUserPasswordLoader::path(const UpdateUserPasswordParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Users/Password");
+}
+
+QUrlQuery UpdateUserPasswordLoader::query(const UpdateUserPasswordParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	
+	return result;
+}
+
+QByteArray UpdateUserPasswordLoader::body(const UpdateUserPasswordParams &params) const {
+	return Support::toString<QSharedPointer<UpdateUserPassword>>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UpdateUserPasswordLoader::operation() const {
 	// HTTP method Post
 	return QNetworkAccessManager::PostOperation;
 

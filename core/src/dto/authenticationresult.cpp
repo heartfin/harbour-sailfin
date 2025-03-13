@@ -35,7 +35,7 @@ namespace DTO {
 AuthenticationResult::AuthenticationResult() {}
 AuthenticationResult::AuthenticationResult (
 		QSharedPointer<UserDto> user, 
-		QSharedPointer<SessionInfo> sessionInfo 
+		QSharedPointer<SessionInfoDto> sessionInfo 
 		) :
 	m_user(user),
 	m_sessionInfo(sessionInfo) { }
@@ -66,7 +66,7 @@ AuthenticationResult AuthenticationResult::fromJson(QJsonObject source) {
 
 void AuthenticationResult::setFromJson(QJsonObject source) {
 	m_user = Jellyfin::Support::fromJsonValue<QSharedPointer<UserDto>>(source["User"]);
-	m_sessionInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<SessionInfo>>(source["SessionInfo"]);
+	m_sessionInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<SessionInfoDto>>(source["SessionInfo"]);
 	m_accessToken = Jellyfin::Support::fromJsonValue<QString>(source["AccessToken"]);
 	m_serverId = Jellyfin::Support::fromJsonValue<QString>(source["ServerId"]);
 
@@ -76,7 +76,7 @@ QJsonObject AuthenticationResult::toJson() const {
 	QJsonObject result;
 	
 	result["User"] = Jellyfin::Support::toJsonValue<QSharedPointer<UserDto>>(m_user);		
-	result["SessionInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<SessionInfo>>(m_sessionInfo);		
+	result["SessionInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<SessionInfoDto>>(m_sessionInfo);		
 	
 	if (!(m_accessToken.isNull())) {
 		result["AccessToken"] = Jellyfin::Support::toJsonValue<QString>(m_accessToken);
@@ -96,9 +96,9 @@ void AuthenticationResult::setUser(QSharedPointer<UserDto> newUser) {
 	m_user = newUser;
 }
 
-QSharedPointer<SessionInfo> AuthenticationResult::sessionInfo() const { return m_sessionInfo; }
+QSharedPointer<SessionInfoDto> AuthenticationResult::sessionInfo() const { return m_sessionInfo; }
 
-void AuthenticationResult::setSessionInfo(QSharedPointer<SessionInfo> newSessionInfo) {
+void AuthenticationResult::setSessionInfo(QSharedPointer<SessionInfoDto> newSessionInfo) {
 	m_sessionInfo = newSessionInfo;
 }
 

@@ -37,12 +37,16 @@ UserItemDataDto::UserItemDataDto (
 		qint64 playbackPositionTicks, 
 		qint32 playCount, 
 		bool isFavorite, 
-		bool played 
+		bool played, 
+		QString key, 
+		QString itemId 
 		) :
 	m_playbackPositionTicks(playbackPositionTicks),
 	m_playCount(playCount),
 	m_isFavorite(isFavorite),
-	m_played(played) { }
+	m_played(played),
+	m_key(key),
+	m_itemId(itemId) { }
 
 
 
@@ -129,16 +133,8 @@ QJsonObject UserItemDataDto::toJson() const {
 	}
 			
 	result["Played"] = Jellyfin::Support::toJsonValue<bool>(m_played);		
-	
-	if (!(m_key.isNull())) {
-		result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);
-	}
-			
-	
-	if (!(m_itemId.isNull())) {
-		result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
-	}
-		
+	result["Key"] = Jellyfin::Support::toJsonValue<QString>(m_key);		
+	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);	
 	return result;
 }
 
@@ -236,27 +232,13 @@ QString UserItemDataDto::key() const { return m_key; }
 void UserItemDataDto::setKey(QString newKey) {
 	m_key = newKey;
 }
-bool UserItemDataDto::keyNull() const {
-	return m_key.isNull();
-}
 
-void UserItemDataDto::setKeyNull() {
-	m_key.clear();
-
-}
 QString UserItemDataDto::itemId() const { return m_itemId; }
 
 void UserItemDataDto::setItemId(QString newItemId) {
 	m_itemId = newItemId;
 }
-bool UserItemDataDto::itemIdNull() const {
-	return m_itemId.isNull();
-}
 
-void UserItemDataDto::setItemIdNull() {
-	m_itemId.clear();
-
-}
 
 } // NS DTO
 

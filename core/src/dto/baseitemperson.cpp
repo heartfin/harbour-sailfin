@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 BaseItemPerson::BaseItemPerson() {}
+BaseItemPerson::BaseItemPerson (
+		QString jellyfinId, 
+		PersonKind type 
+		) :
+	m_jellyfinId(jellyfinId),
+	m_type(type) { }
+
+
 
 BaseItemPerson::BaseItemPerson(const BaseItemPerson &other) :
 
@@ -64,7 +72,7 @@ void BaseItemPerson::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
 	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
 	m_role = Jellyfin::Support::fromJsonValue<QString>(source["Role"]);
-	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_type = Jellyfin::Support::fromJsonValue<PersonKind>(source["Type"]);
 	m_primaryImageTag = Jellyfin::Support::fromJsonValue<QString>(source["PrimaryImageTag"]);
 	m_imageBlurHashes = Jellyfin::Support::fromJsonValue<QJsonObject>(source["ImageBlurHashes"]);
 
@@ -78,21 +86,13 @@ QJsonObject BaseItemPerson::toJson() const {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	}
 			
-	
-	if (!(m_jellyfinId.isNull())) {
-		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	}
-			
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
 	
 	if (!(m_role.isNull())) {
 		result["Role"] = Jellyfin::Support::toJsonValue<QString>(m_role);
 	}
 			
-	
-	if (!(m_type.isNull())) {
-		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	}
-			
+	result["Type"] = Jellyfin::Support::toJsonValue<PersonKind>(m_type);		
 	
 	if (!(m_primaryImageTag.isNull())) {
 		result["PrimaryImageTag"] = Jellyfin::Support::toJsonValue<QString>(m_primaryImageTag);
@@ -124,14 +124,7 @@ QString BaseItemPerson::jellyfinId() const { return m_jellyfinId; }
 void BaseItemPerson::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
 }
-bool BaseItemPerson::jellyfinIdNull() const {
-	return m_jellyfinId.isNull();
-}
 
-void BaseItemPerson::setJellyfinIdNull() {
-	m_jellyfinId.clear();
-
-}
 QString BaseItemPerson::role() const { return m_role; }
 
 void BaseItemPerson::setRole(QString newRole) {
@@ -145,19 +138,12 @@ void BaseItemPerson::setRoleNull() {
 	m_role.clear();
 
 }
-QString BaseItemPerson::type() const { return m_type; }
+PersonKind BaseItemPerson::type() const { return m_type; }
 
-void BaseItemPerson::setType(QString newType) {
+void BaseItemPerson::setType(PersonKind newType) {
 	m_type = newType;
 }
-bool BaseItemPerson::typeNull() const {
-	return m_type.isNull();
-}
 
-void BaseItemPerson::setTypeNull() {
-	m_type.clear();
-
-}
 QString BaseItemPerson::primaryImageTag() const { return m_primaryImageTag; }
 
 void BaseItemPerson::setPrimaryImageTag(QString newPrimaryImageTag) {

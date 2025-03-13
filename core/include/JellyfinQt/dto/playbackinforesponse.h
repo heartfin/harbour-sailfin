@@ -51,7 +51,8 @@ namespace DTO {
 
 class PlaybackInfoResponse {
 public:
-	PlaybackInfoResponse(					
+	PlaybackInfoResponse(	
+		QList<MediaSourceInfo> mediaSources,					
 		PlaybackErrorCode errorCode		
 	);
 
@@ -75,8 +76,6 @@ public:
 	* @brief Gets or sets the media sources.
 	*/
 	void setMediaSources(QList<MediaSourceInfo> newMediaSources);
-	bool mediaSourcesNull() const;
-	void setMediaSourcesNull();
 
 	/**
 	 * @brief Gets or sets the play session identifier.

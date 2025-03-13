@@ -33,13 +33,29 @@ namespace Jellyfin {
 namespace DTO {
 
 CreatePlaylistDto::CreatePlaylistDto() {}
+CreatePlaylistDto::CreatePlaylistDto (
+		QString name, 
+		QStringList ids, 
+		MediaType mediaType, 
+		QList<PlaylistUserPermissions> users, 
+		bool isPublic 
+		) :
+	m_name(name),
+	m_ids(ids),
+	m_mediaType(mediaType),
+	m_users(users),
+	m_isPublic(isPublic) { }
+
+
 
 CreatePlaylistDto::CreatePlaylistDto(const CreatePlaylistDto &other) :
 
 	m_name(other.m_name),
 	m_ids(other.m_ids),
 	m_userId(other.m_userId),
-	m_mediaType(other.m_mediaType){}
+	m_mediaType(other.m_mediaType),
+	m_users(other.m_users),
+	m_isPublic(other.m_isPublic){}
 
 
 void CreatePlaylistDto::replaceData(CreatePlaylistDto &other) {
@@ -47,6 +63,8 @@ void CreatePlaylistDto::replaceData(CreatePlaylistDto &other) {
 	m_ids = other.m_ids;
 	m_userId = other.m_userId;
 	m_mediaType = other.m_mediaType;
+	m_users = other.m_users;
+	m_isPublic = other.m_isPublic;
 }
 
 CreatePlaylistDto CreatePlaylistDto::fromJson(QJsonObject source) {
@@ -60,33 +78,25 @@ void CreatePlaylistDto::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
 	m_ids = Jellyfin::Support::fromJsonValue<QStringList>(source["Ids"]);
 	m_userId = Jellyfin::Support::fromJsonValue<QString>(source["UserId"]);
-	m_mediaType = Jellyfin::Support::fromJsonValue<QString>(source["MediaType"]);
+	m_mediaType = Jellyfin::Support::fromJsonValue<MediaType>(source["MediaType"]);
+	m_users = Jellyfin::Support::fromJsonValue<QList<PlaylistUserPermissions>>(source["Users"]);
+	m_isPublic = Jellyfin::Support::fromJsonValue<bool>(source["IsPublic"]);
 
 }
 	
 QJsonObject CreatePlaylistDto::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
-	
-	if (!(m_ids.size() == 0)) {
-		result["Ids"] = Jellyfin::Support::toJsonValue<QStringList>(m_ids);
-	}
-			
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
+	result["Ids"] = Jellyfin::Support::toJsonValue<QStringList>(m_ids);		
 	
 	if (!(m_userId.isNull())) {
 		result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
 	}
 			
-	
-	if (!(m_mediaType.isNull())) {
-		result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
-	}
-		
+	result["MediaType"] = Jellyfin::Support::toJsonValue<MediaType>(m_mediaType);		
+	result["Users"] = Jellyfin::Support::toJsonValue<QList<PlaylistUserPermissions>>(m_users);		
+	result["IsPublic"] = Jellyfin::Support::toJsonValue<bool>(m_isPublic);	
 	return result;
 }
 
@@ -95,27 +105,13 @@ QString CreatePlaylistDto::name() const { return m_name; }
 void CreatePlaylistDto::setName(QString newName) {
 	m_name = newName;
 }
-bool CreatePlaylistDto::nameNull() const {
-	return m_name.isNull();
-}
 
-void CreatePlaylistDto::setNameNull() {
-	m_name.clear();
-
-}
 QStringList CreatePlaylistDto::ids() const { return m_ids; }
 
 void CreatePlaylistDto::setIds(QStringList newIds) {
 	m_ids = newIds;
 }
-bool CreatePlaylistDto::idsNull() const {
-	return m_ids.size() == 0;
-}
 
-void CreatePlaylistDto::setIdsNull() {
-	m_ids.clear();
-
-}
 QString CreatePlaylistDto::userId() const { return m_userId; }
 
 void CreatePlaylistDto::setUserId(QString newUserId) {
@@ -129,19 +125,24 @@ void CreatePlaylistDto::setUserIdNull() {
 	m_userId.clear();
 
 }
-QString CreatePlaylistDto::mediaType() const { return m_mediaType; }
+MediaType CreatePlaylistDto::mediaType() const { return m_mediaType; }
 
-void CreatePlaylistDto::setMediaType(QString newMediaType) {
+void CreatePlaylistDto::setMediaType(MediaType newMediaType) {
 	m_mediaType = newMediaType;
 }
-bool CreatePlaylistDto::mediaTypeNull() const {
-	return m_mediaType.isNull();
+
+QList<PlaylistUserPermissions> CreatePlaylistDto::users() const { return m_users; }
+
+void CreatePlaylistDto::setUsers(QList<PlaylistUserPermissions> newUsers) {
+	m_users = newUsers;
 }
 
-void CreatePlaylistDto::setMediaTypeNull() {
-	m_mediaType.clear();
+bool CreatePlaylistDto::isPublic() const { return m_isPublic; }
 
+void CreatePlaylistDto::setIsPublic(bool newIsPublic) {
+	m_isPublic = newIsPublic;
 }
+
 
 } // NS DTO
 

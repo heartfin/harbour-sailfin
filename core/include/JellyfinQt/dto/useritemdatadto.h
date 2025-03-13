@@ -52,7 +52,9 @@ public:
 		qint64 playbackPositionTicks,			
 		qint32 playCount,			
 		bool isFavorite,							
-		bool played						
+		bool played,			
+		QString key,			
+		QString itemId		
 	);
 
 	UserItemDataDto(const UserItemDataDto &other);
@@ -166,8 +168,6 @@ public:
 	* @brief Gets or sets the key.
 	*/
 	void setKey(QString newKey);
-	bool keyNull() const;
-	void setKeyNull();
 
 	/**
 	 * @brief Gets or sets the item identifier.
@@ -177,8 +177,6 @@ public:
 	* @brief Gets or sets the item identifier.
 	*/
 	void setItemId(QString newItemId);
-	bool itemIdNull() const;
-	void setItemIdNull();
 
 
 protected:

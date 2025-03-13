@@ -34,18 +34,28 @@ namespace DTO {
 
 TranscodingProfile::TranscodingProfile() {}
 TranscodingProfile::TranscodingProfile (
+		QString container, 
 		DlnaProfileType type, 
-		bool estimateContentLength, 
-		bool enableMpegtsM2TsMode, 
+		QString videoCodec, 
+		QString audioCodec, 
+		MediaStreamProtocol protocol, 
+		std::optional<bool> estimateContentLength, 
+		std::optional<bool> enableMpegtsM2TsMode, 
 		TranscodeSeekInfo transcodeSeekInfo, 
-		bool copyTimestamps, 
+		std::optional<bool> copyTimestamps, 
 		EncodingContext context, 
-		bool enableSubtitlesInManifest, 
-		qint32 minSegments, 
-		qint32 segmentLength, 
-		bool breakOnNonKeyFrames 
+		std::optional<bool> enableSubtitlesInManifest, 
+		std::optional<qint32> minSegments, 
+		std::optional<qint32> segmentLength, 
+		std::optional<bool> breakOnNonKeyFrames, 
+		QList<ProfileCondition> conditions, 
+		std::optional<bool> enableAudioVbrEncoding 
 		) :
+	m_container(container),
 	m_type(type),
+	m_videoCodec(videoCodec),
+	m_audioCodec(audioCodec),
+	m_protocol(protocol),
 	m_estimateContentLength(estimateContentLength),
 	m_enableMpegtsM2TsMode(enableMpegtsM2TsMode),
 	m_transcodeSeekInfo(transcodeSeekInfo),
@@ -54,7 +64,9 @@ TranscodingProfile::TranscodingProfile (
 	m_enableSubtitlesInManifest(enableSubtitlesInManifest),
 	m_minSegments(minSegments),
 	m_segmentLength(segmentLength),
-	m_breakOnNonKeyFrames(breakOnNonKeyFrames) { }
+	m_breakOnNonKeyFrames(breakOnNonKeyFrames),
+	m_conditions(conditions),
+	m_enableAudioVbrEncoding(enableAudioVbrEncoding) { }
 
 
 
@@ -74,7 +86,9 @@ TranscodingProfile::TranscodingProfile(const TranscodingProfile &other) :
 	m_maxAudioChannels(other.m_maxAudioChannels),
 	m_minSegments(other.m_minSegments),
 	m_segmentLength(other.m_segmentLength),
-	m_breakOnNonKeyFrames(other.m_breakOnNonKeyFrames){}
+	m_breakOnNonKeyFrames(other.m_breakOnNonKeyFrames),
+	m_conditions(other.m_conditions),
+	m_enableAudioVbrEncoding(other.m_enableAudioVbrEncoding){}
 
 
 void TranscodingProfile::replaceData(TranscodingProfile &other) {
@@ -93,6 +107,8 @@ void TranscodingProfile::replaceData(TranscodingProfile &other) {
 	m_minSegments = other.m_minSegments;
 	m_segmentLength = other.m_segmentLength;
 	m_breakOnNonKeyFrames = other.m_breakOnNonKeyFrames;
+	m_conditions = other.m_conditions;
+	m_enableAudioVbrEncoding = other.m_enableAudioVbrEncoding;
 }
 
 TranscodingProfile TranscodingProfile::fromJson(QJsonObject source) {
@@ -107,58 +123,46 @@ void TranscodingProfile::setFromJson(QJsonObject source) {
 	m_type = Jellyfin::Support::fromJsonValue<DlnaProfileType>(source["Type"]);
 	m_videoCodec = Jellyfin::Support::fromJsonValue<QString>(source["VideoCodec"]);
 	m_audioCodec = Jellyfin::Support::fromJsonValue<QString>(source["AudioCodec"]);
-	m_protocol = Jellyfin::Support::fromJsonValue<QString>(source["Protocol"]);
-	m_estimateContentLength = Jellyfin::Support::fromJsonValue<bool>(source["EstimateContentLength"]);
-	m_enableMpegtsM2TsMode = Jellyfin::Support::fromJsonValue<bool>(source["EnableMpegtsM2TsMode"]);
+	m_protocol = Jellyfin::Support::fromJsonValue<MediaStreamProtocol>(source["Protocol"]);
+	m_estimateContentLength = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EstimateContentLength"]);
+	m_enableMpegtsM2TsMode = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableMpegtsM2TsMode"]);
 	m_transcodeSeekInfo = Jellyfin::Support::fromJsonValue<TranscodeSeekInfo>(source["TranscodeSeekInfo"]);
-	m_copyTimestamps = Jellyfin::Support::fromJsonValue<bool>(source["CopyTimestamps"]);
+	m_copyTimestamps = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["CopyTimestamps"]);
 	m_context = Jellyfin::Support::fromJsonValue<EncodingContext>(source["Context"]);
-	m_enableSubtitlesInManifest = Jellyfin::Support::fromJsonValue<bool>(source["EnableSubtitlesInManifest"]);
+	m_enableSubtitlesInManifest = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableSubtitlesInManifest"]);
 	m_maxAudioChannels = Jellyfin::Support::fromJsonValue<QString>(source["MaxAudioChannels"]);
-	m_minSegments = Jellyfin::Support::fromJsonValue<qint32>(source["MinSegments"]);
-	m_segmentLength = Jellyfin::Support::fromJsonValue<qint32>(source["SegmentLength"]);
-	m_breakOnNonKeyFrames = Jellyfin::Support::fromJsonValue<bool>(source["BreakOnNonKeyFrames"]);
+	m_minSegments = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["MinSegments"]);
+	m_segmentLength = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["SegmentLength"]);
+	m_breakOnNonKeyFrames = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["BreakOnNonKeyFrames"]);
+	m_conditions = Jellyfin::Support::fromJsonValue<QList<ProfileCondition>>(source["Conditions"]);
+	m_enableAudioVbrEncoding = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableAudioVbrEncoding"]);
 
 }
 	
 QJsonObject TranscodingProfile::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_container.isNull())) {
-		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
-	}
-			
+	result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);		
 	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);		
-	
-	if (!(m_videoCodec.isNull())) {
-		result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);
-	}
-			
-	
-	if (!(m_audioCodec.isNull())) {
-		result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);
-	}
-			
-	
-	if (!(m_protocol.isNull())) {
-		result["Protocol"] = Jellyfin::Support::toJsonValue<QString>(m_protocol);
-	}
-			
-	result["EstimateContentLength"] = Jellyfin::Support::toJsonValue<bool>(m_estimateContentLength);		
-	result["EnableMpegtsM2TsMode"] = Jellyfin::Support::toJsonValue<bool>(m_enableMpegtsM2TsMode);		
+	result["VideoCodec"] = Jellyfin::Support::toJsonValue<QString>(m_videoCodec);		
+	result["AudioCodec"] = Jellyfin::Support::toJsonValue<QString>(m_audioCodec);		
+	result["Protocol"] = Jellyfin::Support::toJsonValue<MediaStreamProtocol>(m_protocol);		
+	result["EstimateContentLength"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_estimateContentLength);		
+	result["EnableMpegtsM2TsMode"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableMpegtsM2TsMode);		
 	result["TranscodeSeekInfo"] = Jellyfin::Support::toJsonValue<TranscodeSeekInfo>(m_transcodeSeekInfo);		
-	result["CopyTimestamps"] = Jellyfin::Support::toJsonValue<bool>(m_copyTimestamps);		
+	result["CopyTimestamps"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_copyTimestamps);		
 	result["Context"] = Jellyfin::Support::toJsonValue<EncodingContext>(m_context);		
-	result["EnableSubtitlesInManifest"] = Jellyfin::Support::toJsonValue<bool>(m_enableSubtitlesInManifest);		
+	result["EnableSubtitlesInManifest"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableSubtitlesInManifest);		
 	
 	if (!(m_maxAudioChannels.isNull())) {
 		result["MaxAudioChannels"] = Jellyfin::Support::toJsonValue<QString>(m_maxAudioChannels);
 	}
 			
-	result["MinSegments"] = Jellyfin::Support::toJsonValue<qint32>(m_minSegments);		
-	result["SegmentLength"] = Jellyfin::Support::toJsonValue<qint32>(m_segmentLength);		
-	result["BreakOnNonKeyFrames"] = Jellyfin::Support::toJsonValue<bool>(m_breakOnNonKeyFrames);	
+	result["MinSegments"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_minSegments);		
+	result["SegmentLength"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_segmentLength);		
+	result["BreakOnNonKeyFrames"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_breakOnNonKeyFrames);		
+	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);		
+	result["EnableAudioVbrEncoding"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableAudioVbrEncoding);	
 	return result;
 }
 
@@ -167,14 +171,7 @@ QString TranscodingProfile::container() const { return m_container; }
 void TranscodingProfile::setContainer(QString newContainer) {
 	m_container = newContainer;
 }
-bool TranscodingProfile::containerNull() const {
-	return m_container.isNull();
-}
 
-void TranscodingProfile::setContainerNull() {
-	m_container.clear();
-
-}
 DlnaProfileType TranscodingProfile::type() const { return m_type; }
 
 void TranscodingProfile::setType(DlnaProfileType newType) {
@@ -186,49 +183,28 @@ QString TranscodingProfile::videoCodec() const { return m_videoCodec; }
 void TranscodingProfile::setVideoCodec(QString newVideoCodec) {
 	m_videoCodec = newVideoCodec;
 }
-bool TranscodingProfile::videoCodecNull() const {
-	return m_videoCodec.isNull();
-}
 
-void TranscodingProfile::setVideoCodecNull() {
-	m_videoCodec.clear();
-
-}
 QString TranscodingProfile::audioCodec() const { return m_audioCodec; }
 
 void TranscodingProfile::setAudioCodec(QString newAudioCodec) {
 	m_audioCodec = newAudioCodec;
 }
-bool TranscodingProfile::audioCodecNull() const {
-	return m_audioCodec.isNull();
-}
 
-void TranscodingProfile::setAudioCodecNull() {
-	m_audioCodec.clear();
+MediaStreamProtocol TranscodingProfile::protocol() const { return m_protocol; }
 
-}
-QString TranscodingProfile::protocol() const { return m_protocol; }
-
-void TranscodingProfile::setProtocol(QString newProtocol) {
+void TranscodingProfile::setProtocol(MediaStreamProtocol newProtocol) {
 	m_protocol = newProtocol;
 }
-bool TranscodingProfile::protocolNull() const {
-	return m_protocol.isNull();
-}
 
-void TranscodingProfile::setProtocolNull() {
-	m_protocol.clear();
+std::optional<bool> TranscodingProfile::estimateContentLength() const { return m_estimateContentLength; }
 
-}
-bool TranscodingProfile::estimateContentLength() const { return m_estimateContentLength; }
-
-void TranscodingProfile::setEstimateContentLength(bool newEstimateContentLength) {
+void TranscodingProfile::setEstimateContentLength(std::optional<bool> newEstimateContentLength) {
 	m_estimateContentLength = newEstimateContentLength;
 }
 
-bool TranscodingProfile::enableMpegtsM2TsMode() const { return m_enableMpegtsM2TsMode; }
+std::optional<bool> TranscodingProfile::enableMpegtsM2TsMode() const { return m_enableMpegtsM2TsMode; }
 
-void TranscodingProfile::setEnableMpegtsM2TsMode(bool newEnableMpegtsM2TsMode) {
+void TranscodingProfile::setEnableMpegtsM2TsMode(std::optional<bool> newEnableMpegtsM2TsMode) {
 	m_enableMpegtsM2TsMode = newEnableMpegtsM2TsMode;
 }
 
@@ -238,9 +214,9 @@ void TranscodingProfile::setTranscodeSeekInfo(TranscodeSeekInfo newTranscodeSeek
 	m_transcodeSeekInfo = newTranscodeSeekInfo;
 }
 
-bool TranscodingProfile::copyTimestamps() const { return m_copyTimestamps; }
+std::optional<bool> TranscodingProfile::copyTimestamps() const { return m_copyTimestamps; }
 
-void TranscodingProfile::setCopyTimestamps(bool newCopyTimestamps) {
+void TranscodingProfile::setCopyTimestamps(std::optional<bool> newCopyTimestamps) {
 	m_copyTimestamps = newCopyTimestamps;
 }
 
@@ -250,9 +226,9 @@ void TranscodingProfile::setContext(EncodingContext newContext) {
 	m_context = newContext;
 }
 
-bool TranscodingProfile::enableSubtitlesInManifest() const { return m_enableSubtitlesInManifest; }
+std::optional<bool> TranscodingProfile::enableSubtitlesInManifest() const { return m_enableSubtitlesInManifest; }
 
-void TranscodingProfile::setEnableSubtitlesInManifest(bool newEnableSubtitlesInManifest) {
+void TranscodingProfile::setEnableSubtitlesInManifest(std::optional<bool> newEnableSubtitlesInManifest) {
 	m_enableSubtitlesInManifest = newEnableSubtitlesInManifest;
 }
 
@@ -269,22 +245,34 @@ void TranscodingProfile::setMaxAudioChannelsNull() {
 	m_maxAudioChannels.clear();
 
 }
-qint32 TranscodingProfile::minSegments() const { return m_minSegments; }
+std::optional<qint32> TranscodingProfile::minSegments() const { return m_minSegments; }
 
-void TranscodingProfile::setMinSegments(qint32 newMinSegments) {
+void TranscodingProfile::setMinSegments(std::optional<qint32> newMinSegments) {
 	m_minSegments = newMinSegments;
 }
 
-qint32 TranscodingProfile::segmentLength() const { return m_segmentLength; }
+std::optional<qint32> TranscodingProfile::segmentLength() const { return m_segmentLength; }
 
-void TranscodingProfile::setSegmentLength(qint32 newSegmentLength) {
+void TranscodingProfile::setSegmentLength(std::optional<qint32> newSegmentLength) {
 	m_segmentLength = newSegmentLength;
 }
 
-bool TranscodingProfile::breakOnNonKeyFrames() const { return m_breakOnNonKeyFrames; }
+std::optional<bool> TranscodingProfile::breakOnNonKeyFrames() const { return m_breakOnNonKeyFrames; }
 
-void TranscodingProfile::setBreakOnNonKeyFrames(bool newBreakOnNonKeyFrames) {
+void TranscodingProfile::setBreakOnNonKeyFrames(std::optional<bool> newBreakOnNonKeyFrames) {
 	m_breakOnNonKeyFrames = newBreakOnNonKeyFrames;
+}
+
+QList<ProfileCondition> TranscodingProfile::conditions() const { return m_conditions; }
+
+void TranscodingProfile::setConditions(QList<ProfileCondition> newConditions) {
+	m_conditions = newConditions;
+}
+
+std::optional<bool> TranscodingProfile::enableAudioVbrEncoding() const { return m_enableAudioVbrEncoding; }
+
+void TranscodingProfile::setEnableAudioVbrEncoding(std::optional<bool> newEnableAudioVbrEncoding) {
+	m_enableAudioVbrEncoding = newEnableAudioVbrEncoding;
 }
 
 

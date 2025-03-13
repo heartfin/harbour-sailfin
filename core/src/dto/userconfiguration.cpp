@@ -36,9 +36,13 @@ UserConfiguration::UserConfiguration() {}
 UserConfiguration::UserConfiguration (
 		bool playDefaultAudioTrack, 
 		bool displayMissingEpisodes, 
+		QStringList groupedFolders, 
 		SubtitlePlaybackMode subtitleMode, 
 		bool displayCollectionsView, 
 		bool enableLocalPassword, 
+		QStringList orderedViews, 
+		QStringList latestItemsExcludes, 
+		QStringList myMediaExcludes, 
 		bool hidePlayedInLatest, 
 		bool rememberAudioSelections, 
 		bool rememberSubtitleSelections, 
@@ -46,9 +50,13 @@ UserConfiguration::UserConfiguration (
 		) :
 	m_playDefaultAudioTrack(playDefaultAudioTrack),
 	m_displayMissingEpisodes(displayMissingEpisodes),
+	m_groupedFolders(groupedFolders),
 	m_subtitleMode(subtitleMode),
 	m_displayCollectionsView(displayCollectionsView),
 	m_enableLocalPassword(enableLocalPassword),
+	m_orderedViews(orderedViews),
+	m_latestItemsExcludes(latestItemsExcludes),
+	m_myMediaExcludes(myMediaExcludes),
 	m_hidePlayedInLatest(hidePlayedInLatest),
 	m_rememberAudioSelections(rememberAudioSelections),
 	m_rememberSubtitleSelections(rememberSubtitleSelections),
@@ -72,7 +80,8 @@ UserConfiguration::UserConfiguration(const UserConfiguration &other) :
 	m_hidePlayedInLatest(other.m_hidePlayedInLatest),
 	m_rememberAudioSelections(other.m_rememberAudioSelections),
 	m_rememberSubtitleSelections(other.m_rememberSubtitleSelections),
-	m_enableNextEpisodeAutoPlay(other.m_enableNextEpisodeAutoPlay){}
+	m_enableNextEpisodeAutoPlay(other.m_enableNextEpisodeAutoPlay),
+	m_castReceiverId(other.m_castReceiverId){}
 
 
 void UserConfiguration::replaceData(UserConfiguration &other) {
@@ -91,6 +100,7 @@ void UserConfiguration::replaceData(UserConfiguration &other) {
 	m_rememberAudioSelections = other.m_rememberAudioSelections;
 	m_rememberSubtitleSelections = other.m_rememberSubtitleSelections;
 	m_enableNextEpisodeAutoPlay = other.m_enableNextEpisodeAutoPlay;
+	m_castReceiverId = other.m_castReceiverId;
 }
 
 UserConfiguration UserConfiguration::fromJson(QJsonObject source) {
@@ -116,6 +126,7 @@ void UserConfiguration::setFromJson(QJsonObject source) {
 	m_rememberAudioSelections = Jellyfin::Support::fromJsonValue<bool>(source["RememberAudioSelections"]);
 	m_rememberSubtitleSelections = Jellyfin::Support::fromJsonValue<bool>(source["RememberSubtitleSelections"]);
 	m_enableNextEpisodeAutoPlay = Jellyfin::Support::fromJsonValue<bool>(source["EnableNextEpisodeAutoPlay"]);
+	m_castReceiverId = Jellyfin::Support::fromJsonValue<QString>(source["CastReceiverId"]);
 
 }
 	
@@ -134,33 +145,22 @@ QJsonObject UserConfiguration::toJson() const {
 	}
 			
 	result["DisplayMissingEpisodes"] = Jellyfin::Support::toJsonValue<bool>(m_displayMissingEpisodes);		
-	
-	if (!(m_groupedFolders.size() == 0)) {
-		result["GroupedFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_groupedFolders);
-	}
-			
+	result["GroupedFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_groupedFolders);		
 	result["SubtitleMode"] = Jellyfin::Support::toJsonValue<SubtitlePlaybackMode>(m_subtitleMode);		
 	result["DisplayCollectionsView"] = Jellyfin::Support::toJsonValue<bool>(m_displayCollectionsView);		
 	result["EnableLocalPassword"] = Jellyfin::Support::toJsonValue<bool>(m_enableLocalPassword);		
-	
-	if (!(m_orderedViews.size() == 0)) {
-		result["OrderedViews"] = Jellyfin::Support::toJsonValue<QStringList>(m_orderedViews);
-	}
-			
-	
-	if (!(m_latestItemsExcludes.size() == 0)) {
-		result["LatestItemsExcludes"] = Jellyfin::Support::toJsonValue<QStringList>(m_latestItemsExcludes);
-	}
-			
-	
-	if (!(m_myMediaExcludes.size() == 0)) {
-		result["MyMediaExcludes"] = Jellyfin::Support::toJsonValue<QStringList>(m_myMediaExcludes);
-	}
-			
+	result["OrderedViews"] = Jellyfin::Support::toJsonValue<QStringList>(m_orderedViews);		
+	result["LatestItemsExcludes"] = Jellyfin::Support::toJsonValue<QStringList>(m_latestItemsExcludes);		
+	result["MyMediaExcludes"] = Jellyfin::Support::toJsonValue<QStringList>(m_myMediaExcludes);		
 	result["HidePlayedInLatest"] = Jellyfin::Support::toJsonValue<bool>(m_hidePlayedInLatest);		
 	result["RememberAudioSelections"] = Jellyfin::Support::toJsonValue<bool>(m_rememberAudioSelections);		
 	result["RememberSubtitleSelections"] = Jellyfin::Support::toJsonValue<bool>(m_rememberSubtitleSelections);		
-	result["EnableNextEpisodeAutoPlay"] = Jellyfin::Support::toJsonValue<bool>(m_enableNextEpisodeAutoPlay);	
+	result["EnableNextEpisodeAutoPlay"] = Jellyfin::Support::toJsonValue<bool>(m_enableNextEpisodeAutoPlay);		
+	
+	if (!(m_castReceiverId.isNull())) {
+		result["CastReceiverId"] = Jellyfin::Support::toJsonValue<QString>(m_castReceiverId);
+	}
+		
 	return result;
 }
 
@@ -207,14 +207,7 @@ QStringList UserConfiguration::groupedFolders() const { return m_groupedFolders;
 void UserConfiguration::setGroupedFolders(QStringList newGroupedFolders) {
 	m_groupedFolders = newGroupedFolders;
 }
-bool UserConfiguration::groupedFoldersNull() const {
-	return m_groupedFolders.size() == 0;
-}
 
-void UserConfiguration::setGroupedFoldersNull() {
-	m_groupedFolders.clear();
-
-}
 SubtitlePlaybackMode UserConfiguration::subtitleMode() const { return m_subtitleMode; }
 
 void UserConfiguration::setSubtitleMode(SubtitlePlaybackMode newSubtitleMode) {
@@ -238,40 +231,19 @@ QStringList UserConfiguration::orderedViews() const { return m_orderedViews; }
 void UserConfiguration::setOrderedViews(QStringList newOrderedViews) {
 	m_orderedViews = newOrderedViews;
 }
-bool UserConfiguration::orderedViewsNull() const {
-	return m_orderedViews.size() == 0;
-}
 
-void UserConfiguration::setOrderedViewsNull() {
-	m_orderedViews.clear();
-
-}
 QStringList UserConfiguration::latestItemsExcludes() const { return m_latestItemsExcludes; }
 
 void UserConfiguration::setLatestItemsExcludes(QStringList newLatestItemsExcludes) {
 	m_latestItemsExcludes = newLatestItemsExcludes;
 }
-bool UserConfiguration::latestItemsExcludesNull() const {
-	return m_latestItemsExcludes.size() == 0;
-}
 
-void UserConfiguration::setLatestItemsExcludesNull() {
-	m_latestItemsExcludes.clear();
-
-}
 QStringList UserConfiguration::myMediaExcludes() const { return m_myMediaExcludes; }
 
 void UserConfiguration::setMyMediaExcludes(QStringList newMyMediaExcludes) {
 	m_myMediaExcludes = newMyMediaExcludes;
 }
-bool UserConfiguration::myMediaExcludesNull() const {
-	return m_myMediaExcludes.size() == 0;
-}
 
-void UserConfiguration::setMyMediaExcludesNull() {
-	m_myMediaExcludes.clear();
-
-}
 bool UserConfiguration::hidePlayedInLatest() const { return m_hidePlayedInLatest; }
 
 void UserConfiguration::setHidePlayedInLatest(bool newHidePlayedInLatest) {
@@ -296,6 +268,19 @@ void UserConfiguration::setEnableNextEpisodeAutoPlay(bool newEnableNextEpisodeAu
 	m_enableNextEpisodeAutoPlay = newEnableNextEpisodeAutoPlay;
 }
 
+QString UserConfiguration::castReceiverId() const { return m_castReceiverId; }
+
+void UserConfiguration::setCastReceiverId(QString newCastReceiverId) {
+	m_castReceiverId = newCastReceiverId;
+}
+bool UserConfiguration::castReceiverIdNull() const {
+	return m_castReceiverId.isNull();
+}
+
+void UserConfiguration::setCastReceiverIdNull() {
+	m_castReceiverId.clear();
+
+}
 
 } // NS DTO
 

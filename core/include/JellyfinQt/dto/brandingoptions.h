@@ -46,7 +46,11 @@ namespace DTO {
 
 
 class BrandingOptions {
-public:	BrandingOptions();
+public:
+	BrandingOptions(					
+		bool splashscreenEnabled		
+	);
+
 	BrandingOptions(const BrandingOptions &other);
 	
 	/**
@@ -81,12 +85,24 @@ public:	BrandingOptions();
 	bool customCssNull() const;
 	void setCustomCssNull();
 
+	/**
+	 * @brief Gets or sets a value indicating whether to enable the splashscreen.
+	 */
+	bool splashscreenEnabled() const;
+	/**
+	* @brief Gets or sets a value indicating whether to enable the splashscreen.
+	*/
+	void setSplashscreenEnabled(bool newSplashscreenEnabled);
+
 
 protected:
 	QString m_loginDisclaimer;
 	QString m_customCss;
+	bool m_splashscreenEnabled;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing BrandingOptions::fromJson();
+	BrandingOptions();
 };
 
 

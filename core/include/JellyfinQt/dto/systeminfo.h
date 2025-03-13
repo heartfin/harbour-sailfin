@@ -37,8 +37,7 @@
 #include <QStringList>
 #include <optional>
 
-#include "JellyfinQt/dto/architecture.h"
-#include "JellyfinQt/dto/ffmpeglocation.h"
+#include "JellyfinQt/dto/castreceiverapplication.h"
 #include "JellyfinQt/dto/installationinfo.h"
 #include "JellyfinQt/support/jsonconv.h"
 
@@ -57,11 +56,9 @@ public:
 		bool isShuttingDown,			
 		bool supportsLibraryMonitor,			
 		qint32 webSocketPortNumber,					
-		bool canSelfRestart,			
-		bool canLaunchWebBrowser,																	
-		bool hasUpdateAvailable,			
-		FFmpegLocation encoderLocation,			
-		Architecture systemArchitecture		
+		std::optional<bool> canSelfRestart,			
+		std::optional<bool> canLaunchWebBrowser,																			
+		std::optional<bool> hasUpdateAvailable						
 	);
 
 	SystemInfo(const SystemInfo &other);
@@ -165,11 +162,11 @@ public:
 	void setOperatingSystemDisplayNameNull();
 
 	/**
-	 * @brief Get or sets the package name.
+	 * @brief Gets or sets the package name.
 	 */
 	QString packageName() const;
 	/**
-	* @brief Get or sets the package name.
+	* @brief Gets or sets the package name.
 	*/
 	void setPackageName(QString newPackageName);
 	bool packageNameNull() const;
@@ -221,16 +218,16 @@ public:
 	/**
 	 * @brief Gets or sets a value indicating whether this instance can self restart.
 	 */
-	bool canSelfRestart() const;
+	std::optional<bool> canSelfRestart() const;
 	/**
 	* @brief Gets or sets a value indicating whether this instance can self restart.
 	*/
-	void setCanSelfRestart(bool newCanSelfRestart);
+	void setCanSelfRestart(std::optional<bool> newCanSelfRestart);
 
 
-	bool canLaunchWebBrowser() const;
+	std::optional<bool> canLaunchWebBrowser() const;
 
-	void setCanLaunchWebBrowser(bool newCanLaunchWebBrowser);
+	void setCanLaunchWebBrowser(std::optional<bool> newCanLaunchWebBrowser);
 
 	/**
 	 * @brief Gets or sets the program data path.
@@ -310,23 +307,38 @@ public:
 	void setTranscodingTempPathNull();
 
 	/**
+	 * @brief Gets or sets the list of cast receiver applications.
+	 */
+	QList<CastReceiverApplication> castReceiverApplications() const;
+	/**
+	* @brief Gets or sets the list of cast receiver applications.
+	*/
+	void setCastReceiverApplications(QList<CastReceiverApplication> newCastReceiverApplications);
+	bool castReceiverApplicationsNull() const;
+	void setCastReceiverApplicationsNull();
+
+	/**
 	 * @brief Gets or sets a value indicating whether this instance has update available.
 	 */
-	bool hasUpdateAvailable() const;
+	std::optional<bool> hasUpdateAvailable() const;
 	/**
 	* @brief Gets or sets a value indicating whether this instance has update available.
 	*/
-	void setHasUpdateAvailable(bool newHasUpdateAvailable);
+	void setHasUpdateAvailable(std::optional<bool> newHasUpdateAvailable);
 
 
-	FFmpegLocation encoderLocation() const;
+	QString encoderLocation() const;
 
-	void setEncoderLocation(FFmpegLocation newEncoderLocation);
+	void setEncoderLocation(QString newEncoderLocation);
+	bool encoderLocationNull() const;
+	void setEncoderLocationNull();
 
 
-	Architecture systemArchitecture() const;
+	QString systemArchitecture() const;
 
-	void setSystemArchitecture(Architecture newSystemArchitecture);
+	void setSystemArchitecture(QString newSystemArchitecture);
+	bool systemArchitectureNull() const;
+	void setSystemArchitectureNull();
 
 
 protected:
@@ -344,8 +356,8 @@ protected:
 	bool m_supportsLibraryMonitor;
 	qint32 m_webSocketPortNumber;
 	QList<InstallationInfo> m_completedInstallations;
-	bool m_canSelfRestart;
-	bool m_canLaunchWebBrowser;
+	std::optional<bool> m_canSelfRestart = std::nullopt;
+	std::optional<bool> m_canLaunchWebBrowser = std::nullopt;
 	QString m_programDataPath;
 	QString m_webPath;
 	QString m_itemsByNamePath;
@@ -353,9 +365,10 @@ protected:
 	QString m_logPath;
 	QString m_internalMetadataPath;
 	QString m_transcodingTempPath;
-	bool m_hasUpdateAvailable;
-	FFmpegLocation m_encoderLocation;
-	Architecture m_systemArchitecture;
+	QList<CastReceiverApplication> m_castReceiverApplications;
+	std::optional<bool> m_hasUpdateAvailable = std::nullopt;
+	QString m_encoderLocation;
+	QString m_systemArchitecture;
 
 private:
 	// Private constructor which generates an invalid object, for use withing SystemInfo::fromJson();

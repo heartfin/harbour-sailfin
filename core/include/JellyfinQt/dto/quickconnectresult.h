@@ -49,7 +49,14 @@ namespace DTO {
 class QuickConnectResult {
 public:
 	QuickConnectResult(	
-		bool authenticated												
+		bool authenticated,			
+		QString secret,			
+		QString code,			
+		QString deviceId,			
+		QString deviceName,			
+		QString appName,			
+		QString appVersion,			
+		QDateTime dateAdded		
 	);
 
 	QuickConnectResult(const QuickConnectResult &other);
@@ -65,57 +72,67 @@ public:
 	
 	// Properties
 	/**
-	 * @brief Gets a value indicating whether this request is authorized.
+	 * @brief Gets or sets a value indicating whether this request is authorized.
 	 */
 	bool authenticated() const;
 	/**
-	* @brief Gets a value indicating whether this request is authorized.
+	* @brief Gets or sets a value indicating whether this request is authorized.
 	*/
 	void setAuthenticated(bool newAuthenticated);
 
 	/**
-	 * @brief Gets or sets the secret value used to uniquely identify this request. Can be used to retrieve authentication information.
+	 * @brief Gets the secret value used to uniquely identify this request. Can be used to retrieve authentication information.
 	 */
 	QString secret() const;
 	/**
-	* @brief Gets or sets the secret value used to uniquely identify this request. Can be used to retrieve authentication information.
+	* @brief Gets the secret value used to uniquely identify this request. Can be used to retrieve authentication information.
 	*/
 	void setSecret(QString newSecret);
-	bool secretNull() const;
-	void setSecretNull();
 
 	/**
-	 * @brief Gets or sets the user facing code used so the user can quickly differentiate this request from others.
+	 * @brief Gets the user facing code used so the user can quickly differentiate this request from others.
 	 */
 	QString code() const;
 	/**
-	* @brief Gets or sets the user facing code used so the user can quickly differentiate this request from others.
+	* @brief Gets the user facing code used so the user can quickly differentiate this request from others.
 	*/
 	void setCode(QString newCode);
-	bool codeNull() const;
-	void setCodeNull();
 
 	/**
-	 * @brief Gets or sets the private access token.
+	 * @brief Gets the requesting device id.
 	 */
-	QString authentication() const;
+	QString deviceId() const;
 	/**
-	* @brief Gets or sets the private access token.
+	* @brief Gets the requesting device id.
 	*/
-	void setAuthentication(QString newAuthentication);
-	bool authenticationNull() const;
-	void setAuthenticationNull();
+	void setDeviceId(QString newDeviceId);
 
 	/**
-	 * @brief Gets or sets an error message.
+	 * @brief Gets the requesting device name.
 	 */
-	QString error() const;
+	QString deviceName() const;
 	/**
-	* @brief Gets or sets an error message.
+	* @brief Gets the requesting device name.
 	*/
-	void setError(QString newError);
-	bool errorNull() const;
-	void setErrorNull();
+	void setDeviceName(QString newDeviceName);
+
+	/**
+	 * @brief Gets the requesting app name.
+	 */
+	QString appName() const;
+	/**
+	* @brief Gets the requesting app name.
+	*/
+	void setAppName(QString newAppName);
+
+	/**
+	 * @brief Gets the requesting app version.
+	 */
+	QString appVersion() const;
+	/**
+	* @brief Gets the requesting app version.
+	*/
+	void setAppVersion(QString newAppVersion);
 
 	/**
 	 * @brief Gets or sets the DateTime that this request was created.
@@ -125,16 +142,16 @@ public:
 	* @brief Gets or sets the DateTime that this request was created.
 	*/
 	void setDateAdded(QDateTime newDateAdded);
-	bool dateAddedNull() const;
-	void setDateAddedNull();
 
 
 protected:
 	bool m_authenticated;
 	QString m_secret;
 	QString m_code;
-	QString m_authentication;
-	QString m_error;
+	QString m_deviceId;
+	QString m_deviceName;
+	QString m_appName;
+	QString m_appVersion;
 	QDateTime m_dateAdded;
 
 private:

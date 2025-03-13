@@ -160,20 +160,6 @@ protected:
 	QByteArray body(const GetPluginManifestParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
-/**
- * @brief Updates plugin security info.
- */
-
-class UpdatePluginSecurityInfoLoader : public Jellyfin::Support::HttpLoader<void, UpdatePluginSecurityInfoParams> {
-public:
-	explicit UpdatePluginSecurityInfoLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const UpdatePluginSecurityInfoParams& parameters) const override;
-	QUrlQuery query(const UpdatePluginSecurityInfoParams& parameters) const override;
-	QByteArray body(const UpdatePluginSecurityInfoParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
 
 } // NS HTTP
 } // NS Loader

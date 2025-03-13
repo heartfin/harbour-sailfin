@@ -50,7 +50,8 @@ namespace DTO {
 
 class QueueRequestDto {
 public:
-	QueueRequestDto(			
+	QueueRequestDto(	
+		QStringList itemIds,			
 		GroupQueueMode mode		
 	);
 
@@ -74,8 +75,6 @@ public:
 	* @brief Gets or sets the items to enqueue.
 	*/
 	void setItemIds(QStringList newItemIds);
-	bool itemIdsNull() const;
-	void setItemIdsNull();
 
 
 	GroupQueueMode mode() const;

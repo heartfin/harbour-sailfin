@@ -50,8 +50,12 @@ public:
 	TunerHostInfo(											
 		bool importFavoritesOnly,			
 		bool allowHWTranscoding,			
+		bool allowFmp4TranscodingContainer,			
+		bool allowStreamSharing,			
+		qint32 fallbackMaxStreamingBitrate,			
 		bool enableStreamLooping,					
-		qint32 tunerCount				
+		qint32 tunerCount,					
+		bool ignoreDts		
 	);
 
 	TunerHostInfo(const TunerHostInfo &other);
@@ -112,6 +116,21 @@ public:
 	void setAllowHWTranscoding(bool newAllowHWTranscoding);
 
 
+	bool allowFmp4TranscodingContainer() const;
+
+	void setAllowFmp4TranscodingContainer(bool newAllowFmp4TranscodingContainer);
+
+
+	bool allowStreamSharing() const;
+
+	void setAllowStreamSharing(bool newAllowStreamSharing);
+
+
+	qint32 fallbackMaxStreamingBitrate() const;
+
+	void setFallbackMaxStreamingBitrate(qint32 newFallbackMaxStreamingBitrate);
+
+
 	bool enableStreamLooping() const;
 
 	void setEnableStreamLooping(bool newEnableStreamLooping);
@@ -136,6 +155,11 @@ public:
 	void setUserAgentNull();
 
 
+	bool ignoreDts() const;
+
+	void setIgnoreDts(bool newIgnoreDts);
+
+
 protected:
 	QString m_jellyfinId;
 	QString m_url;
@@ -144,10 +168,14 @@ protected:
 	QString m_friendlyName;
 	bool m_importFavoritesOnly;
 	bool m_allowHWTranscoding;
+	bool m_allowFmp4TranscodingContainer;
+	bool m_allowStreamSharing;
+	qint32 m_fallbackMaxStreamingBitrate;
 	bool m_enableStreamLooping;
 	QString m_source;
 	qint32 m_tunerCount;
 	QString m_userAgent;
+	bool m_ignoreDts;
 
 private:
 	// Private constructor which generates an invalid object, for use withing TunerHostInfo::fromJson();

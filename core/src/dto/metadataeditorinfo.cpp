@@ -33,6 +33,22 @@ namespace Jellyfin {
 namespace DTO {
 
 MetadataEditorInfo::MetadataEditorInfo() {}
+MetadataEditorInfo::MetadataEditorInfo (
+		QList<ParentalRating> parentalRatingOptions, 
+		QList<CountryInfo> countries, 
+		QList<CultureDto> cultures, 
+		QList<ExternalIdInfo> externalIdInfos, 
+		CollectionType contentType, 
+		QList<NameValuePair> contentTypeOptions 
+		) :
+	m_parentalRatingOptions(parentalRatingOptions),
+	m_countries(countries),
+	m_cultures(cultures),
+	m_externalIdInfos(externalIdInfos),
+	m_contentType(contentType),
+	m_contentTypeOptions(contentTypeOptions) { }
+
+
 
 MetadataEditorInfo::MetadataEditorInfo(const MetadataEditorInfo &other) :
 
@@ -65,7 +81,7 @@ void MetadataEditorInfo::setFromJson(QJsonObject source) {
 	m_countries = Jellyfin::Support::fromJsonValue<QList<CountryInfo>>(source["Countries"]);
 	m_cultures = Jellyfin::Support::fromJsonValue<QList<CultureDto>>(source["Cultures"]);
 	m_externalIdInfos = Jellyfin::Support::fromJsonValue<QList<ExternalIdInfo>>(source["ExternalIdInfos"]);
-	m_contentType = Jellyfin::Support::fromJsonValue<QString>(source["ContentType"]);
+	m_contentType = Jellyfin::Support::fromJsonValue<CollectionType>(source["ContentType"]);
 	m_contentTypeOptions = Jellyfin::Support::fromJsonValue<QList<NameValuePair>>(source["ContentTypeOptions"]);
 
 }
@@ -73,36 +89,12 @@ void MetadataEditorInfo::setFromJson(QJsonObject source) {
 QJsonObject MetadataEditorInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_parentalRatingOptions.size() == 0)) {
-		result["ParentalRatingOptions"] = Jellyfin::Support::toJsonValue<QList<ParentalRating>>(m_parentalRatingOptions);
-	}
-			
-	
-	if (!(m_countries.size() == 0)) {
-		result["Countries"] = Jellyfin::Support::toJsonValue<QList<CountryInfo>>(m_countries);
-	}
-			
-	
-	if (!(m_cultures.size() == 0)) {
-		result["Cultures"] = Jellyfin::Support::toJsonValue<QList<CultureDto>>(m_cultures);
-	}
-			
-	
-	if (!(m_externalIdInfos.size() == 0)) {
-		result["ExternalIdInfos"] = Jellyfin::Support::toJsonValue<QList<ExternalIdInfo>>(m_externalIdInfos);
-	}
-			
-	
-	if (!(m_contentType.isNull())) {
-		result["ContentType"] = Jellyfin::Support::toJsonValue<QString>(m_contentType);
-	}
-			
-	
-	if (!(m_contentTypeOptions.size() == 0)) {
-		result["ContentTypeOptions"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_contentTypeOptions);
-	}
-		
+	result["ParentalRatingOptions"] = Jellyfin::Support::toJsonValue<QList<ParentalRating>>(m_parentalRatingOptions);		
+	result["Countries"] = Jellyfin::Support::toJsonValue<QList<CountryInfo>>(m_countries);		
+	result["Cultures"] = Jellyfin::Support::toJsonValue<QList<CultureDto>>(m_cultures);		
+	result["ExternalIdInfos"] = Jellyfin::Support::toJsonValue<QList<ExternalIdInfo>>(m_externalIdInfos);		
+	result["ContentType"] = Jellyfin::Support::toJsonValue<CollectionType>(m_contentType);		
+	result["ContentTypeOptions"] = Jellyfin::Support::toJsonValue<QList<NameValuePair>>(m_contentTypeOptions);	
 	return result;
 }
 
@@ -111,79 +103,37 @@ QList<ParentalRating> MetadataEditorInfo::parentalRatingOptions() const { return
 void MetadataEditorInfo::setParentalRatingOptions(QList<ParentalRating> newParentalRatingOptions) {
 	m_parentalRatingOptions = newParentalRatingOptions;
 }
-bool MetadataEditorInfo::parentalRatingOptionsNull() const {
-	return m_parentalRatingOptions.size() == 0;
-}
 
-void MetadataEditorInfo::setParentalRatingOptionsNull() {
-	m_parentalRatingOptions.clear();
-
-}
 QList<CountryInfo> MetadataEditorInfo::countries() const { return m_countries; }
 
 void MetadataEditorInfo::setCountries(QList<CountryInfo> newCountries) {
 	m_countries = newCountries;
 }
-bool MetadataEditorInfo::countriesNull() const {
-	return m_countries.size() == 0;
-}
 
-void MetadataEditorInfo::setCountriesNull() {
-	m_countries.clear();
-
-}
 QList<CultureDto> MetadataEditorInfo::cultures() const { return m_cultures; }
 
 void MetadataEditorInfo::setCultures(QList<CultureDto> newCultures) {
 	m_cultures = newCultures;
 }
-bool MetadataEditorInfo::culturesNull() const {
-	return m_cultures.size() == 0;
-}
 
-void MetadataEditorInfo::setCulturesNull() {
-	m_cultures.clear();
-
-}
 QList<ExternalIdInfo> MetadataEditorInfo::externalIdInfos() const { return m_externalIdInfos; }
 
 void MetadataEditorInfo::setExternalIdInfos(QList<ExternalIdInfo> newExternalIdInfos) {
 	m_externalIdInfos = newExternalIdInfos;
 }
-bool MetadataEditorInfo::externalIdInfosNull() const {
-	return m_externalIdInfos.size() == 0;
-}
 
-void MetadataEditorInfo::setExternalIdInfosNull() {
-	m_externalIdInfos.clear();
+CollectionType MetadataEditorInfo::contentType() const { return m_contentType; }
 
-}
-QString MetadataEditorInfo::contentType() const { return m_contentType; }
-
-void MetadataEditorInfo::setContentType(QString newContentType) {
+void MetadataEditorInfo::setContentType(CollectionType newContentType) {
 	m_contentType = newContentType;
 }
-bool MetadataEditorInfo::contentTypeNull() const {
-	return m_contentType.isNull();
-}
 
-void MetadataEditorInfo::setContentTypeNull() {
-	m_contentType.clear();
-
-}
 QList<NameValuePair> MetadataEditorInfo::contentTypeOptions() const { return m_contentTypeOptions; }
 
 void MetadataEditorInfo::setContentTypeOptions(QList<NameValuePair> newContentTypeOptions) {
 	m_contentTypeOptions = newContentTypeOptions;
 }
-bool MetadataEditorInfo::contentTypeOptionsNull() const {
-	return m_contentTypeOptions.size() == 0;
-}
 
-void MetadataEditorInfo::setContentTypeOptionsNull() {
-	m_contentTypeOptions.clear();
-
-}
 
 } // NS DTO
 

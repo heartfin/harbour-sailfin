@@ -163,7 +163,7 @@ QUrlQuery GetLiveTvChannelsLoader::query(const GetLiveTvChannelsParams &params) 
 		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString<QStringList>(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
 	}
 	if (!params.sortOrderNull()) {
 		result.addQueryItem("sortOrder", Support::toString<SortOrder>(params.sortOrder()));
@@ -508,10 +508,10 @@ QUrlQuery GetLiveTvProgramsLoader::query(const GetLiveTvProgramsParams &params) 
 		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString<QString>(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
 	}
 	if (!params.sortOrderNull()) {
-		result.addQueryItem("sortOrder", Support::toString<QString>(params.sortOrder()));
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
 	}
 	if (!params.genresNull()) {
 		result.addQueryItem("genres", Support::toString<QStringList>(params.genres()));

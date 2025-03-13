@@ -49,7 +49,8 @@ namespace DTO {
 
 class SearchHintResult {
 public:
-	SearchHintResult(			
+	SearchHintResult(	
+		QList<SearchHint> searchHints,			
 		qint32 totalRecordCount		
 	);
 
@@ -66,22 +67,20 @@ public:
 	
 	// Properties
 	/**
-	 * @brief Gets or sets the search hints.
+	 * @brief Gets the search hints.
 	 */
 	QList<SearchHint> searchHints() const;
 	/**
-	* @brief Gets or sets the search hints.
+	* @brief Gets the search hints.
 	*/
 	void setSearchHints(QList<SearchHint> newSearchHints);
-	bool searchHintsNull() const;
-	void setSearchHintsNull();
 
 	/**
-	 * @brief Gets or sets the total record count.
+	 * @brief Gets the total record count.
 	 */
 	qint32 totalRecordCount() const;
 	/**
-	* @brief Gets or sets the total record count.
+	* @brief Gets the total record count.
 	*/
 	void setTotalRecordCount(qint32 newTotalRecordCount);
 

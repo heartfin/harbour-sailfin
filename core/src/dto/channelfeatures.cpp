@@ -34,13 +34,23 @@ namespace DTO {
 
 ChannelFeatures::ChannelFeatures() {}
 ChannelFeatures::ChannelFeatures (
+		QString name, 
+		QString jellyfinId, 
 		bool canSearch, 
+		QList<ChannelMediaType> mediaTypes, 
+		QList<ChannelMediaContentType> contentTypes, 
+		QList<ChannelItemSortField> defaultSortFields, 
 		bool supportsSortOrderToggle, 
 		bool supportsLatestMedia, 
 		bool canFilter, 
 		bool supportsContentDownloading 
 		) :
+	m_name(name),
+	m_jellyfinId(jellyfinId),
 	m_canSearch(canSearch),
+	m_mediaTypes(mediaTypes),
+	m_contentTypes(contentTypes),
+	m_defaultSortFields(defaultSortFields),
 	m_supportsSortOrderToggle(supportsSortOrderToggle),
 	m_supportsLatestMedia(supportsLatestMedia),
 	m_canFilter(canFilter),
@@ -105,27 +115,11 @@ void ChannelFeatures::setFromJson(QJsonObject source) {
 QJsonObject ChannelFeatures::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
-	
-	if (!(m_jellyfinId.isNull())) {
-		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	}
-			
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
 	result["CanSearch"] = Jellyfin::Support::toJsonValue<bool>(m_canSearch);		
-	
-	if (!(m_mediaTypes.size() == 0)) {
-		result["MediaTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaType>>(m_mediaTypes);
-	}
-			
-	
-	if (!(m_contentTypes.size() == 0)) {
-		result["ContentTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaContentType>>(m_contentTypes);
-	}
-			
+	result["MediaTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaType>>(m_mediaTypes);		
+	result["ContentTypes"] = Jellyfin::Support::toJsonValue<QList<ChannelMediaContentType>>(m_contentTypes);		
 	
 	if (!(!m_maxPageSize.has_value())) {
 		result["MaxPageSize"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_maxPageSize);
@@ -136,11 +130,7 @@ QJsonObject ChannelFeatures::toJson() const {
 		result["AutoRefreshLevels"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_autoRefreshLevels);
 	}
 			
-	
-	if (!(m_defaultSortFields.size() == 0)) {
-		result["DefaultSortFields"] = Jellyfin::Support::toJsonValue<QList<ChannelItemSortField>>(m_defaultSortFields);
-	}
-			
+	result["DefaultSortFields"] = Jellyfin::Support::toJsonValue<QList<ChannelItemSortField>>(m_defaultSortFields);		
 	result["SupportsSortOrderToggle"] = Jellyfin::Support::toJsonValue<bool>(m_supportsSortOrderToggle);		
 	result["SupportsLatestMedia"] = Jellyfin::Support::toJsonValue<bool>(m_supportsLatestMedia);		
 	result["CanFilter"] = Jellyfin::Support::toJsonValue<bool>(m_canFilter);		
@@ -153,27 +143,13 @@ QString ChannelFeatures::name() const { return m_name; }
 void ChannelFeatures::setName(QString newName) {
 	m_name = newName;
 }
-bool ChannelFeatures::nameNull() const {
-	return m_name.isNull();
-}
 
-void ChannelFeatures::setNameNull() {
-	m_name.clear();
-
-}
 QString ChannelFeatures::jellyfinId() const { return m_jellyfinId; }
 
 void ChannelFeatures::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
 }
-bool ChannelFeatures::jellyfinIdNull() const {
-	return m_jellyfinId.isNull();
-}
 
-void ChannelFeatures::setJellyfinIdNull() {
-	m_jellyfinId.clear();
-
-}
 bool ChannelFeatures::canSearch() const { return m_canSearch; }
 
 void ChannelFeatures::setCanSearch(bool newCanSearch) {
@@ -185,27 +161,13 @@ QList<ChannelMediaType> ChannelFeatures::mediaTypes() const { return m_mediaType
 void ChannelFeatures::setMediaTypes(QList<ChannelMediaType> newMediaTypes) {
 	m_mediaTypes = newMediaTypes;
 }
-bool ChannelFeatures::mediaTypesNull() const {
-	return m_mediaTypes.size() == 0;
-}
 
-void ChannelFeatures::setMediaTypesNull() {
-	m_mediaTypes.clear();
-
-}
 QList<ChannelMediaContentType> ChannelFeatures::contentTypes() const { return m_contentTypes; }
 
 void ChannelFeatures::setContentTypes(QList<ChannelMediaContentType> newContentTypes) {
 	m_contentTypes = newContentTypes;
 }
-bool ChannelFeatures::contentTypesNull() const {
-	return m_contentTypes.size() == 0;
-}
 
-void ChannelFeatures::setContentTypesNull() {
-	m_contentTypes.clear();
-
-}
 std::optional<qint32> ChannelFeatures::maxPageSize() const { return m_maxPageSize; }
 
 void ChannelFeatures::setMaxPageSize(std::optional<qint32> newMaxPageSize) {
@@ -237,14 +199,7 @@ QList<ChannelItemSortField> ChannelFeatures::defaultSortFields() const { return 
 void ChannelFeatures::setDefaultSortFields(QList<ChannelItemSortField> newDefaultSortFields) {
 	m_defaultSortFields = newDefaultSortFields;
 }
-bool ChannelFeatures::defaultSortFieldsNull() const {
-	return m_defaultSortFields.size() == 0;
-}
 
-void ChannelFeatures::setDefaultSortFieldsNull() {
-	m_defaultSortFields.clear();
-
-}
 bool ChannelFeatures::supportsSortOrderToggle() const { return m_supportsSortOrderToggle; }
 
 void ChannelFeatures::setSupportsSortOrderToggle(bool newSupportsSortOrderToggle) {

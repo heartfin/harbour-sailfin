@@ -34,9 +34,11 @@ namespace DTO {
 
 ActivityLogEntryQueryResult::ActivityLogEntryQueryResult() {}
 ActivityLogEntryQueryResult::ActivityLogEntryQueryResult (
+		QList<ActivityLogEntry> items, 
 		qint32 totalRecordCount, 
 		qint32 startIndex 
 		) :
+	m_items(items),
 	m_totalRecordCount(totalRecordCount),
 	m_startIndex(startIndex) { }
 
@@ -72,11 +74,7 @@ void ActivityLogEntryQueryResult::setFromJson(QJsonObject source) {
 QJsonObject ActivityLogEntryQueryResult::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_items.size() == 0)) {
-		result["Items"] = Jellyfin::Support::toJsonValue<QList<ActivityLogEntry>>(m_items);
-	}
-			
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<ActivityLogEntry>>(m_items);		
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);		
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);	
 	return result;
@@ -87,14 +85,7 @@ QList<ActivityLogEntry> ActivityLogEntryQueryResult::items() const { return m_it
 void ActivityLogEntryQueryResult::setItems(QList<ActivityLogEntry> newItems) {
 	m_items = newItems;
 }
-bool ActivityLogEntryQueryResult::itemsNull() const {
-	return m_items.size() == 0;
-}
 
-void ActivityLogEntryQueryResult::setItemsNull() {
-	m_items.clear();
-
-}
 qint32 ActivityLogEntryQueryResult::totalRecordCount() const { return m_totalRecordCount; }
 
 void ActivityLogEntryQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {

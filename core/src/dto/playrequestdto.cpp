@@ -34,9 +34,11 @@ namespace DTO {
 
 PlayRequestDto::PlayRequestDto() {}
 PlayRequestDto::PlayRequestDto (
+		QStringList playingQueue, 
 		qint32 playingItemPosition, 
 		qint64 startPositionTicks 
 		) :
+	m_playingQueue(playingQueue),
 	m_playingItemPosition(playingItemPosition),
 	m_startPositionTicks(startPositionTicks) { }
 
@@ -72,11 +74,7 @@ void PlayRequestDto::setFromJson(QJsonObject source) {
 QJsonObject PlayRequestDto::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_playingQueue.size() == 0)) {
-		result["PlayingQueue"] = Jellyfin::Support::toJsonValue<QStringList>(m_playingQueue);
-	}
-			
+	result["PlayingQueue"] = Jellyfin::Support::toJsonValue<QStringList>(m_playingQueue);		
 	result["PlayingItemPosition"] = Jellyfin::Support::toJsonValue<qint32>(m_playingItemPosition);		
 	result["StartPositionTicks"] = Jellyfin::Support::toJsonValue<qint64>(m_startPositionTicks);	
 	return result;
@@ -87,14 +85,7 @@ QStringList PlayRequestDto::playingQueue() const { return m_playingQueue; }
 void PlayRequestDto::setPlayingQueue(QStringList newPlayingQueue) {
 	m_playingQueue = newPlayingQueue;
 }
-bool PlayRequestDto::playingQueueNull() const {
-	return m_playingQueue.size() == 0;
-}
 
-void PlayRequestDto::setPlayingQueueNull() {
-	m_playingQueue.clear();
-
-}
 qint32 PlayRequestDto::playingItemPosition() const { return m_playingItemPosition; }
 
 void PlayRequestDto::setPlayingItemPosition(qint32 newPlayingItemPosition) {

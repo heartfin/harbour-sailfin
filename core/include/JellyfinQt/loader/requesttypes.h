@@ -30,8 +30,10 @@
 #ifndef JELLYFIN_LOADER_REQUESTTYPES_H
 #define JELLYFIN_LOADER_REQUESTTYPES_H
 
+#include <QByteArray>
 #include <QDateTime>
 #include <QString>
+#include <QVariant>
 #include <QList>
 #include <QStringList>
 #include <optional>
@@ -41,19 +43,21 @@
 #include "JellyfinQt/dto/artistinforemotesearchquery.h"
 #include "JellyfinQt/dto/authenticateuserbyname.h"
 #include "JellyfinQt/dto/baseitemdto.h"
+#include "JellyfinQt/dto/baseitemkind.h"
 #include "JellyfinQt/dto/bookinforemotesearchquery.h"
 #include "JellyfinQt/dto/boxsetinforemotesearchquery.h"
 #include "JellyfinQt/dto/bufferrequestdto.h"
 #include "JellyfinQt/dto/channeltype.h"
 #include "JellyfinQt/dto/clientcapabilitiesdto.h"
-#include "JellyfinQt/dto/configurationpagetype.h"
+#include "JellyfinQt/dto/collectiontype.h"
+#include "JellyfinQt/dto/collectiontypeoptions.h"
 #include "JellyfinQt/dto/createplaylistdto.h"
 #include "JellyfinQt/dto/createuserbyname.h"
-#include "JellyfinQt/dto/deviceoptions.h"
-#include "JellyfinQt/dto/deviceprofile.h"
+#include "JellyfinQt/dto/deviceoptionsdto.h"
 #include "JellyfinQt/dto/displaypreferencesdto.h"
 #include "JellyfinQt/dto/encodingcontext.h"
 #include "JellyfinQt/dto/forgotpassworddto.h"
+#include "JellyfinQt/dto/forgotpasswordpindto.h"
 #include "JellyfinQt/dto/generalcommand.h"
 #include "JellyfinQt/dto/generalcommandtype.h"
 #include "JellyfinQt/dto/getprogramsdto.h"
@@ -62,20 +66,22 @@
 #include "JellyfinQt/dto/imagetype.h"
 #include "JellyfinQt/dto/itemfields.h"
 #include "JellyfinQt/dto/itemfilter.h"
+#include "JellyfinQt/dto/itemsortby.h"
 #include "JellyfinQt/dto/joingrouprequestdto.h"
 #include "JellyfinQt/dto/listingsproviderinfo.h"
 #include "JellyfinQt/dto/locationtype.h"
-#include "JellyfinQt/dto/mediaencoderpathdto.h"
 #include "JellyfinQt/dto/mediapathdto.h"
-#include "JellyfinQt/dto/mediapathinfo.h"
+#include "JellyfinQt/dto/mediasegmenttype.h"
+#include "JellyfinQt/dto/mediastreamprotocol.h"
+#include "JellyfinQt/dto/mediatype.h"
 #include "JellyfinQt/dto/mediaupdateinfodto.h"
+#include "JellyfinQt/dto/messagecommand.h"
 #include "JellyfinQt/dto/metadatarefreshmode.h"
 #include "JellyfinQt/dto/moveplaylistitemrequestdto.h"
 #include "JellyfinQt/dto/movieinforemotesearchquery.h"
 #include "JellyfinQt/dto/musicvideoinforemotesearchquery.h"
 #include "JellyfinQt/dto/newgrouprequestdto.h"
 #include "JellyfinQt/dto/nextitemrequestdto.h"
-#include "JellyfinQt/dto/notificationlevel.h"
 #include "JellyfinQt/dto/openlivestreamdto.h"
 #include "JellyfinQt/dto/personlookupinforemotesearchquery.h"
 #include "JellyfinQt/dto/pingrequestdto.h"
@@ -87,11 +93,9 @@
 #include "JellyfinQt/dto/playbackstartinfo.h"
 #include "JellyfinQt/dto/playbackstopinfo.h"
 #include "JellyfinQt/dto/playstatecommand.h"
-#include "JellyfinQt/dto/pluginsecurityinfo.h"
 #include "JellyfinQt/dto/previousitemrequestdto.h"
 #include "JellyfinQt/dto/queuerequestdto.h"
 #include "JellyfinQt/dto/quickconnectdto.h"
-#include "JellyfinQt/dto/quickconnectstate.h"
 #include "JellyfinQt/dto/readyrequestdto.h"
 #include "JellyfinQt/dto/recordingstatus.h"
 #include "JellyfinQt/dto/remotesearchresult.h"
@@ -117,14 +121,16 @@
 #include "JellyfinQt/dto/trailerinforemotesearchquery.h"
 #include "JellyfinQt/dto/tunerhostinfo.h"
 #include "JellyfinQt/dto/updatelibraryoptionsdto.h"
-#include "JellyfinQt/dto/updateusereasypassword.h"
+#include "JellyfinQt/dto/updatemediapathrequestdto.h"
+#include "JellyfinQt/dto/updateplaylistdto.h"
+#include "JellyfinQt/dto/updateplaylistuserdto.h"
+#include "JellyfinQt/dto/updateuseritemdatadto.h"
 #include "JellyfinQt/dto/updateuserpassword.h"
 #include "JellyfinQt/dto/uploadsubtitledto.h"
 #include "JellyfinQt/dto/userconfiguration.h"
 #include "JellyfinQt/dto/userdto.h"
 #include "JellyfinQt/dto/userpolicy.h"
 #include "JellyfinQt/dto/validatepathdto.h"
-#include "JellyfinQt/dto/version.h"
 #include "JellyfinQt/dto/videotype.h"
 
 namespace Jellyfin {
@@ -135,15 +141,43 @@ namespace Jellyfin {
 namespace Loader {
 
 using namespace Jellyfin::DTO;
-class ActivateParams {
+class AddItemToPlaylistParams {
 public:
 
+	/**
+	 * @brief The playlist id.	
+	 */
+	const QString &playlistId() const;
+	void setPlaylistId(QString newPlaylistId);
+
+	
+	/**
+	 * @brief Item id, comma delimited.	
+	 */
+	const QStringList &ids() const;
+	void setIds(QStringList newIds);
+	bool idsNull() const;
+	void setIdsNull();
+	
+	
+	/**
+	 * @brief The userId.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
 private:
 	// Required path parameters
+	QString m_playlistId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QStringList m_ids;
+	QString m_userId;
 
 
 };
@@ -261,47 +295,6 @@ private:
 
 };
 
-class AddToPlaylistParams {
-public:
-
-	/**
-	 * @brief The playlist id.	
-	 */
-	const QString &playlistId() const;
-	void setPlaylistId(QString newPlaylistId);
-
-	
-	/**
-	 * @brief Item id, comma delimited.	
-	 */
-	const QStringList &ids() const;
-	void setIds(QStringList newIds);
-	bool idsNull() const;
-	void setIdsNull();
-	
-	
-	/**
-	 * @brief The userId.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-	bool userIdNull() const;
-	void setUserIdNull();
-	
-	
-private:
-	// Required path parameters
-	QString m_playlistId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-	QStringList m_ids;
-	QString m_userId;
-
-
-};
-
 class AddTunerHostParams {
 public:
 
@@ -359,8 +352,8 @@ public:
 	/**
 	 * @brief The type of the collection.	
 	 */
-	const QString &collectionType() const;
-	void setCollectionType(QString newCollectionType);
+	const CollectionTypeOptions &collectionType() const;
+	void setCollectionType(CollectionTypeOptions newCollectionType);
 	bool collectionTypeNull() const;
 	void setCollectionTypeNull();
 	
@@ -405,7 +398,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	QString m_collectionType;
+	CollectionTypeOptions m_collectionType;
 	QString m_name;
 	QStringList m_paths;
 	std::optional<bool> m_refreshLibrary = std::nullopt;
@@ -455,45 +448,6 @@ private:
 
 };
 
-class AuthenticateUserParams {
-public:
-
-	/**
-	 * @brief The user id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
-	 * @brief The password as plain text.	
-	 */
-	const QString &pw() const;
-	void setPw(QString newPw);
-
-	
-	/**
-	 * @brief The password sha1-hash.	
-	 */
-	const QString &password() const;
-	void setPassword(QString newPassword);
-	bool passwordNull() const;
-	void setPasswordNull();
-	
-	
-private:
-	// Required path parameters
-	QString m_userId;
-	
-	// Required query parameters
-	QString m_pw;
-
-	// Optional query parameters
-	QString m_password;
-
-
-};
-
 class AuthenticateUserByNameParams {
 public:
 
@@ -538,7 +492,7 @@ private:
 
 };
 
-class AuthorizeParams {
+class AuthorizeQuickConnectParams {
 public:
 
 	/**
@@ -548,6 +502,15 @@ public:
 	void setCode(QString newCode);
 
 	
+	/**
+	 * @brief The user the authorize. Access to the requested user is required.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
 private:
 	// Required path parameters
 	
@@ -555,29 +518,7 @@ private:
 	QString m_code;
 
 	// Optional query parameters
-
-
-};
-
-class AvailableParams {
-public:
-
-	/**
-	 * @brief New MediaBrowser.Model.QuickConnect.QuickConnectState.	
-	 */
-	const QuickConnectState &status() const;
-	void setStatus(QuickConnectState newStatus);
-	bool statusNull() const;
-	void setStatusNull();
-	
-	
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-	QuickConnectState m_status;
+	QString m_userId;
 
 
 };
@@ -679,80 +620,6 @@ private:
 
 };
 
-class ConnectParams {
-public:
-
-	/**
-	 * @brief Secret previously returned from the Initiate endpoint.	
-	 */
-	const QString &secret() const;
-	void setSecret(QString newSecret);
-
-	
-private:
-	// Required path parameters
-	
-	// Required query parameters
-	QString m_secret;
-
-	// Optional query parameters
-
-
-};
-
-class CreateAdminNotificationParams {
-public:
-
-	/**
-	 * @brief The description of the notification.	
-	 */
-	const QString &description() const;
-	void setDescription(QString newDescription);
-	bool descriptionNull() const;
-	void setDescriptionNull();
-	
-	
-	/**
-	 * @brief The level of the notification.	
-	 */
-	const NotificationLevel &level() const;
-	void setLevel(NotificationLevel newLevel);
-	bool levelNull() const;
-	void setLevelNull();
-	
-	
-	/**
-	 * @brief The name of the notification.	
-	 */
-	const QString &name() const;
-	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
-	
-	
-	/**
-	 * @brief The URL of the notification.	
-	 */
-	const QString &url() const;
-	void setUrl(QString newUrl);
-	bool urlNull() const;
-	void setUrlNull();
-	
-	
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-	QString m_description;
-	NotificationLevel m_level;
-	QString m_name;
-	QString m_url;
-
-
-};
-
 class CreateCollectionParams {
 public:
 
@@ -842,8 +709,8 @@ public:
 	/**
 	 * @brief The media type.	
 	 */
-	const QString &mediaType() const;
-	void setMediaType(QString newMediaType);
+	const MediaType &mediaType() const;
+	void setMediaType(MediaType newMediaType);
 	bool mediaTypeNull() const;
 	void setMediaTypeNull();
 	
@@ -880,34 +747,12 @@ private:
 
 	// Optional query parameters
 	QStringList m_ids;
-	QString m_mediaType;
+	MediaType m_mediaType;
 	QString m_name;
 	QString m_userId;
 
 	// Body parameters
 	QSharedPointer<CreatePlaylistDto> m_body;
-
-};
-
-class CreateProfileParams {
-public:
-
-	/**
-	 * @brief Device profile.	
-	 */
-	const QSharedPointer<DeviceProfile> &body() const;
-	void setBody(QSharedPointer<DeviceProfile> newBody);
-
-	
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-	// Body parameters
-	QSharedPointer<DeviceProfile> m_body;
 
 };
 
@@ -977,19 +822,6 @@ private:
 
 };
 
-class DeauthorizeParams {
-public:
-
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
 class DeleteAlternateSourcesParams {
 public:
 
@@ -1003,6 +835,19 @@ public:
 private:
 	// Required path parameters
 	QString m_itemId;
+	
+	// Required query parameters
+
+	// Optional query parameters
+
+
+};
+
+class DeleteCustomSplashscreenParams {
+public:
+
+private:
+	// Required path parameters
 	
 	// Required query parameters
 
@@ -1175,19 +1020,19 @@ private:
 
 };
 
-class DeleteProfileParams {
+class DeleteLyricsParams {
 public:
 
 	/**
-	 * @brief Profile id.	
+	 * @brief The item id.	
 	 */
-	const QString &profileId() const;
-	void setProfileId(QString newProfileId);
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
 
 	
 private:
 	// Required path parameters
-	QString m_profileId;
+	QString m_itemId;
 	
 	// Required query parameters
 
@@ -1294,74 +1139,21 @@ class DeleteUserImageParams {
 public:
 
 	/**
-	 * @brief (Unused) Image type.	
-	 */
-	const ImageType &imageType() const;
-	void setImageType(ImageType newImageType);
-
-	
-	/**
 	 * @brief User Id.	
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
-	
-	/**
-	 * @brief (Unused) Image index.	
-	 */
-	const qint32 &index() const;
-	void setIndex(qint32 newIndex);
-	bool indexNull() const;
-	void setIndexNull();
+	bool userIdNull() const;
+	void setUserIdNull();
 	
 	
 private:
 	// Required path parameters
-	ImageType m_imageType;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<qint32> m_index = std::nullopt;
-
-
-};
-
-class DeleteUserImageByIndexParams {
-public:
-
-	/**
-	 * @brief (Unused) Image type.	
-	 */
-	const ImageType &imageType() const;
-	void setImageType(ImageType newImageType);
-
-	
-	/**
-	 * @brief (Unused) Image index.	
-	 */
-	const qint32 &index() const;
-	void setIndex(qint32 newIndex);
-
-	
-	/**
-	 * @brief User Id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-private:
-	// Required path parameters
-	ImageType m_imageType;
-	qint32 m_index;
 	QString m_userId;
-	
-	// Required query parameters
-
-	// Optional query parameters
 
 
 };
@@ -1381,16 +1173,18 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -1408,14 +1202,14 @@ public:
 	/**
 	 * @brief Plugin version.	
 	 */
-	const QSharedPointer<Version> &version() const;
-	void setVersion(QSharedPointer<Version> newVersion);
+	const QString &version() const;
+	void setVersion(QString newVersion);
 
 	
 private:
 	// Required path parameters
 	QString m_pluginId;
-	QSharedPointer<Version> m_version;
+	QString m_version;
 	
 	// Required query parameters
 
@@ -1497,8 +1291,8 @@ public:
 	/**
 	 * @brief The type of item to browse to.	
 	 */
-	const QString &itemType() const;
-	void setItemType(QString newItemType);
+	const BaseItemKind &itemType() const;
+	void setItemType(BaseItemKind newItemType);
 
 	
 private:
@@ -1508,7 +1302,7 @@ private:
 	// Required query parameters
 	QString m_itemId;
 	QString m_itemName;
-	QString m_itemType;
+	BaseItemKind m_itemType;
 
 	// Optional query parameters
 
@@ -1550,6 +1344,35 @@ private:
 
 	// Optional query parameters
 	QString m_imageUrl;
+
+
+};
+
+class DownloadRemoteLyricsParams {
+public:
+
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+	/**
+	 * @brief The lyric id.	
+	 */
+	const QString &lyricId() const;
+	void setLyricId(QString newLyricId);
+
+	
+private:
+	// Required path parameters
+	QString m_itemId;
+	QString m_lyricId;
+	
+	// Required query parameters
+
+	// Optional query parameters
 
 
 };
@@ -1596,14 +1419,14 @@ public:
 	/**
 	 * @brief Plugin version.	
 	 */
-	const QSharedPointer<Version> &version() const;
-	void setVersion(QSharedPointer<Version> newVersion);
+	const QString &version() const;
+	void setVersion(QString newVersion);
 
 	
 private:
 	// Required path parameters
 	QString m_pluginId;
-	QSharedPointer<Version> m_version;
+	QString m_version;
 	
 	// Required query parameters
 
@@ -1638,10 +1461,10 @@ class ForgotPasswordPinParams {
 public:
 
 	/**
-	 * @brief The pin.	
+	 * @brief The forgot password pin request containing the entered pin.	
 	 */
-	const QString &body() const;
-	void setBody(QString newBody);
+	const QSharedPointer<ForgotPasswordPinDto> &body() const;
+	void setBody(QSharedPointer<ForgotPasswordPinDto> newBody);
 
 	
 private:
@@ -1652,198 +1475,7 @@ private:
 	// Optional query parameters
 
 	// Body parameters
-	QString m_body;
-
-};
-
-class GetParams {
-public:
-
-	/**
-	 * @brief The search term to filter on.	
-	 */
-	const QString &searchTerm() const;
-	void setSearchTerm(QString newSearchTerm);
-
-	
-	/**
-	 * @brief If specified, results with these item types are filtered out. This allows multiple, comma delimeted.	
-	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
-	bool excludeItemTypesNull() const;
-	void setExcludeItemTypesNull();
-	
-	
-	/**
-	 * @brief Optional filter whether to include artists.	
-	 */
-	const bool &includeArtists() const;
-	void setIncludeArtists(bool newIncludeArtists);
-	bool includeArtistsNull() const;
-	void setIncludeArtistsNull();
-	
-	
-	/**
-	 * @brief Optional filter whether to include genres.	
-	 */
-	const bool &includeGenres() const;
-	void setIncludeGenres(bool newIncludeGenres);
-	bool includeGenresNull() const;
-	void setIncludeGenresNull();
-	
-	
-	/**
-	 * @brief If specified, only results with the specified item types are returned. This allows multiple, comma delimeted.	
-	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
-	bool includeItemTypesNull() const;
-	void setIncludeItemTypesNull();
-	
-	
-	/**
-	 * @brief Optional filter whether to include media.	
-	 */
-	const bool &includeMedia() const;
-	void setIncludeMedia(bool newIncludeMedia);
-	bool includeMediaNull() const;
-	void setIncludeMediaNull();
-	
-	
-	/**
-	 * @brief Optional filter whether to include people.	
-	 */
-	const bool &includePeople() const;
-	void setIncludePeople(bool newIncludePeople);
-	bool includePeopleNull() const;
-	void setIncludePeopleNull();
-	
-	
-	/**
-	 * @brief Optional filter whether to include studios.	
-	 */
-	const bool &includeStudios() const;
-	void setIncludeStudios(bool newIncludeStudios);
-	bool includeStudiosNull() const;
-	void setIncludeStudiosNull();
-	
-	
-	/**
-	 * @brief Optional filter for kids.	
-	 */
-	const bool &isKids() const;
-	void setIsKids(bool newIsKids);
-	bool isKidsNull() const;
-	void setIsKidsNull();
-	
-	
-	/**
-	 * @brief Optional filter for movies.	
-	 */
-	const bool &isMovie() const;
-	void setIsMovie(bool newIsMovie);
-	bool isMovieNull() const;
-	void setIsMovieNull();
-	
-	
-	/**
-	 * @brief Optional filter for news.	
-	 */
-	const bool &isNews() const;
-	void setIsNews(bool newIsNews);
-	bool isNewsNull() const;
-	void setIsNewsNull();
-	
-	
-	/**
-	 * @brief Optional filter for series.	
-	 */
-	const bool &isSeries() const;
-	void setIsSeries(bool newIsSeries);
-	bool isSeriesNull() const;
-	void setIsSeriesNull();
-	
-	
-	/**
-	 * @brief Optional filter for sports.	
-	 */
-	const bool &isSports() const;
-	void setIsSports(bool newIsSports);
-	bool isSportsNull() const;
-	void setIsSportsNull();
-	
-	
-	/**
-	 * @brief Optional. The maximum number of records to return.	
-	 */
-	const qint32 &limit() const;
-	void setLimit(qint32 newLimit);
-	bool limitNull() const;
-	void setLimitNull();
-	
-	
-	/**
-	 * @brief If specified, only results with the specified media types are returned. This allows multiple, comma delimeted.	
-	 */
-	const QStringList &mediaTypes() const;
-	void setMediaTypes(QStringList newMediaTypes);
-	bool mediaTypesNull() const;
-	void setMediaTypesNull();
-	
-	
-	/**
-	 * @brief If specified, only children of the parent are returned.	
-	 */
-	const QString &parentId() const;
-	void setParentId(QString newParentId);
-	bool parentIdNull() const;
-	void setParentIdNull();
-	
-	
-	/**
-	 * @brief Optional. The record index to start at. All items with a lower index will be dropped from the results.	
-	 */
-	const qint32 &startIndex() const;
-	void setStartIndex(qint32 newStartIndex);
-	bool startIndexNull() const;
-	void setStartIndexNull();
-	
-	
-	/**
-	 * @brief Optional. Supply a user id to search within a user's library or omit to search all.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-	bool userIdNull() const;
-	void setUserIdNull();
-	
-	
-private:
-	// Required path parameters
-	
-	// Required query parameters
-	QString m_searchTerm;
-
-	// Optional query parameters
-	QStringList m_excludeItemTypes;
-	std::optional<bool> m_includeArtists = std::nullopt;
-	std::optional<bool> m_includeGenres = std::nullopt;
-	QStringList m_includeItemTypes;
-	std::optional<bool> m_includeMedia = std::nullopt;
-	std::optional<bool> m_includePeople = std::nullopt;
-	std::optional<bool> m_includeStudios = std::nullopt;
-	std::optional<bool> m_isKids = std::nullopt;
-	std::optional<bool> m_isMovie = std::nullopt;
-	std::optional<bool> m_isNews = std::nullopt;
-	std::optional<bool> m_isSeries = std::nullopt;
-	std::optional<bool> m_isSports = std::nullopt;
-	std::optional<qint32> m_limit = std::nullopt;
-	QStringList m_mediaTypes;
-	QString m_parentId;
-	std::optional<qint32> m_startIndex = std::nullopt;
-	QString m_userId;
-
+	QSharedPointer<ForgotPasswordPinDto> m_body;
 
 };
 
@@ -1920,8 +1552,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered out based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
 	bool excludeItemTypesNull() const;
 	void setExcludeItemTypesNull();
 	
@@ -1974,8 +1606,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -2001,8 +1633,8 @@ public:
 	/**
 	 * @brief Optional filter by MediaType. Allows multiple, comma delimited.	
 	 */
-	const QStringList &mediaTypes() const;
-	void setMediaTypes(QStringList newMediaTypes);
+	const QList<MediaType> &mediaTypes() const;
+	void setMediaTypes(QList<MediaType> newMediaTypes);
 	bool mediaTypesNull() const;
 	void setMediaTypesNull();
 	
@@ -2098,6 +1730,24 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Specify one or more sort orders, comma delimited.	
+	 */
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
+	bool sortByNull() const;
+	void setSortByNull();
+	
+	
+	/**
+	 * @brief Sort Order - Ascending,Descending.	
+	 */
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
+	bool sortOrderNull() const;
+	void setSortOrderNull();
+	
+	
+	/**
 	 * @brief Optional. The record index to start at. All items with a lower index will be dropped from the results.	
 	 */
 	const qint32 &startIndex() const;
@@ -2161,16 +1811,16 @@ private:
 	std::optional<bool> m_enableImages = std::nullopt;
 	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
 	std::optional<bool> m_enableUserData = std::nullopt;
-	QStringList m_excludeItemTypes;
+	QList<BaseItemKind> m_excludeItemTypes;
 	QList<ItemFields> m_fields;
 	QList<ItemFilter> m_filters;
 	QStringList m_genreIds;
 	QStringList m_genres;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
 	std::optional<bool> m_isFavorite = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
-	QStringList m_mediaTypes;
+	QList<MediaType> m_mediaTypes;
 	std::optional<double> m_minCommunityRating = std::nullopt;
 	QString m_nameLessThan;
 	QString m_nameStartsWith;
@@ -2181,6 +1831,8 @@ private:
 	QStringList m_personIds;
 	QStringList m_personTypes;
 	QString m_searchTerm;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QStringList m_studioIds;
 	QStringList m_studios;
@@ -2291,15 +1943,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -2318,12 +1961,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -2425,10 +2077,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -2485,8 +2137,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered out based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
 	bool excludeItemTypesNull() const;
 	void setExcludeItemTypesNull();
 	
@@ -2539,8 +2191,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -2566,8 +2218,8 @@ public:
 	/**
 	 * @brief Optional filter by MediaType. Allows multiple, comma delimited.	
 	 */
-	const QStringList &mediaTypes() const;
-	void setMediaTypes(QStringList newMediaTypes);
+	const QList<MediaType> &mediaTypes() const;
+	void setMediaTypes(QList<MediaType> newMediaTypes);
 	bool mediaTypesNull() const;
 	void setMediaTypesNull();
 	
@@ -2663,6 +2315,24 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Specify one or more sort orders, comma delimited.	
+	 */
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
+	bool sortByNull() const;
+	void setSortByNull();
+	
+	
+	/**
+	 * @brief Sort Order - Ascending,Descending.	
+	 */
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
+	bool sortOrderNull() const;
+	void setSortOrderNull();
+	
+	
+	/**
 	 * @brief Optional. The record index to start at. All items with a lower index will be dropped from the results.	
 	 */
 	const qint32 &startIndex() const;
@@ -2726,16 +2396,16 @@ private:
 	std::optional<bool> m_enableImages = std::nullopt;
 	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
 	std::optional<bool> m_enableUserData = std::nullopt;
-	QStringList m_excludeItemTypes;
+	QList<BaseItemKind> m_excludeItemTypes;
 	QList<ItemFields> m_fields;
 	QList<ItemFilter> m_filters;
 	QStringList m_genreIds;
 	QStringList m_genres;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
 	std::optional<bool> m_isFavorite = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
-	QStringList m_mediaTypes;
+	QList<MediaType> m_mediaTypes;
 	std::optional<double> m_minCommunityRating = std::nullopt;
 	QString m_nameLessThan;
 	QString m_nameStartsWith;
@@ -2746,6 +2416,8 @@ private:
 	QStringList m_personIds;
 	QStringList m_personTypes;
 	QString m_searchTerm;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QStringList m_studioIds;
 	QStringList m_studios;
@@ -2840,7 +2512,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -2936,6 +2608,15 @@ public:
 	void setDeviceProfileId(QString newDeviceProfileId);
 	bool deviceProfileIdNull() const;
 	void setDeviceProfileIdNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -3209,7 +2890,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -3257,6 +2938,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -3348,7 +3030,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -3435,6 +3117,15 @@ public:
 	void setDeviceProfileId(QString newDeviceProfileId);
 	bool deviceProfileIdNull() const;
 	void setDeviceProfileIdNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -3609,7 +3300,7 @@ public:
 	
 	
 	/**
-	 * @brief The segment lenght.	
+	 * @brief The segment length.	
 	 */
 	const qint32 &segmentLength() const;
 	void setSegmentLength(qint32 newSegmentLength);
@@ -3708,7 +3399,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -3756,6 +3447,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -4013,8 +3705,8 @@ public:
 	/**
 	 * @brief Optional. Specify one or more sort orders, comma delimited. Options: Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating, DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear, SortName, Random, Revenue, Runtime.	
 	 */
-	const QString &sortBy() const;
-	void setSortBy(QString newSortBy);
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
 	bool sortByNull() const;
 	void setSortByNull();
 	
@@ -4022,8 +3714,8 @@ public:
 	/**
 	 * @brief Optional. Sort Order - Ascending,Descending.	
 	 */
-	const QString &sortOrder() const;
-	void setSortOrder(QString newSortOrder);
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
 	bool sortOrderNull() const;
 	void setSortOrderNull();
 	
@@ -4057,8 +3749,8 @@ private:
 	QList<ItemFilter> m_filters;
 	QString m_folderId;
 	std::optional<qint32> m_limit = std::nullopt;
-	QString m_sortBy;
-	QString m_sortOrder;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
@@ -4186,15 +3878,6 @@ public:
 	void setEnableInMainMenuNull();
 	
 	
-	/**
-	 * @brief The Jellyfin.Api.Models.ConfigurationPageInfo.	
-	 */
-	const ConfigurationPageType &pageType() const;
-	void setPageType(ConfigurationPageType newPageType);
-	bool pageTypeNull() const;
-	void setPageTypeNull();
-	
-	
 private:
 	// Required path parameters
 	
@@ -4202,133 +3885,6 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_enableInMainMenu = std::nullopt;
-	ConfigurationPageType m_pageType;
-
-
-};
-
-class GetConnectionManagerParams {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetConnectionManager_2Params {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetConnectionManager_3Params {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetContentDirectoryParams {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetContentDirectory_2Params {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetContentDirectory_3Params {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
 
 
 };
@@ -4455,19 +4011,6 @@ private:
 
 };
 
-class GetDefaultProfileParams {
-public:
-
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
 class GetDefaultTimerParams {
 public:
 
@@ -4487,48 +4030,6 @@ private:
 
 	// Optional query parameters
 	QString m_programId;
-
-
-};
-
-class GetDescriptionXmlParams {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetDescriptionXml_2Params {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
 
 
 };
@@ -4579,15 +4080,6 @@ class GetDevicesParams {
 public:
 
 	/**
-	 * @brief Gets or sets a value indicating whether [supports synchronize].	
-	 */
-	const bool &supportsSync() const;
-	void setSupportsSync(bool newSupportsSync);
-	bool supportsSyncNull() const;
-	void setSupportsSyncNull();
-	
-	
-	/**
 	 * @brief Gets or sets the user identifier.	
 	 */
 	const QString &userId() const;
@@ -4602,7 +4094,6 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_supportsSync = std::nullopt;
 	QString m_userId;
 
 
@@ -4671,7 +4162,9 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
@@ -4679,9 +4172,9 @@ private:
 	
 	// Required query parameters
 	QString m_client;
-	QString m_userId;
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -4836,8 +4329,8 @@ public:
 	/**
 	 * @brief Optional. Specify one or more sort orders, comma delimited. Options: Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating, DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear, SortName, Random, Revenue, Runtime.	
 	 */
-	const QString &sortBy() const;
-	void setSortBy(QString newSortBy);
+	const ItemSortBy &sortBy() const;
+	void setSortBy(ItemSortBy newSortBy);
 	bool sortByNull() const;
 	void setSortByNull();
 	
@@ -4886,7 +4379,7 @@ private:
 	std::optional<qint32> m_limit = std::nullopt;
 	std::optional<qint32> m_season = std::nullopt;
 	QString m_seasonId;
-	QString m_sortBy;
+	ItemSortBy m_sortBy;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_startItemId;
 	QString m_userId;
@@ -4996,48 +4489,6 @@ private:
 
 };
 
-class GetGeneralImageParams {
-public:
-
-	/**
-	 * @brief The name of the image.	
-	 */
-	const QString &name() const;
-	void setName(QString newName);
-
-	
-	/**
-	 * @brief Image Type (primary, backdrop, logo, etc).	
-	 */
-	const QString &type() const;
-	void setType(QString newType);
-
-	
-private:
-	// Required path parameters
-	QString m_name;
-	QString m_type;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetGeneralImagesParams {
-public:
-
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
 class GetGenreParams {
 public:
 
@@ -5087,15 +4538,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -5114,12 +4556,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -5229,10 +4680,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -5273,15 +4724,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -5300,12 +4742,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -5407,10 +4858,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -5458,8 +4909,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered out based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
 	bool excludeItemTypesNull() const;
 	void setExcludeItemTypesNull();
 	
@@ -5485,8 +4936,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered in based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -5555,6 +5006,24 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Specify one or more sort orders, comma delimited.	
+	 */
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
+	bool sortByNull() const;
+	void setSortByNull();
+	
+	
+	/**
+	 * @brief Sort Order - Ascending,Descending.	
+	 */
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
+	bool sortOrderNull() const;
+	void setSortOrderNull();
+	
+	
+	/**
 	 * @brief Optional. The record index to start at. All items with a lower index will be dropped from the results.	
 	 */
 	const qint32 &startIndex() const;
@@ -5581,10 +5050,10 @@ private:
 	QList<ImageType> m_enableImageTypes;
 	std::optional<bool> m_enableImages = std::nullopt;
 	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
-	QStringList m_excludeItemTypes;
+	QList<BaseItemKind> m_excludeItemTypes;
 	QList<ItemFields> m_fields;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
 	std::optional<bool> m_isFavorite = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_nameLessThan;
@@ -5592,6 +5061,8 @@ private:
 	QString m_nameStartsWithOrGreater;
 	QString m_parentId;
 	QString m_searchTerm;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
@@ -5606,15 +5077,17 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -5664,6 +5137,20 @@ public:
 
 	
 	/**
+	 * @brief The length of the requested segment in ticks.	
+	 */
+	const qint64 &actualSegmentLengthTicks() const;
+	void setActualSegmentLengthTicks(qint64 newActualSegmentLengthTicks);
+
+	
+	/**
+	 * @brief The position of the requested segment in ticks.	
+	 */
+	const qint64 &runtimeTicks() const;
+	void setRuntimeTicks(qint64 newRuntimeTicks);
+
+	
+	/**
 	 * @brief Whether or not to allow copying of the audio stream url.	
 	 */
 	const bool &allowAudioStreamCopy() const;
@@ -5700,7 +5187,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -5787,6 +5274,15 @@ public:
 	void setDeviceProfileId(QString newDeviceProfileId);
 	bool deviceProfileIdNull() const;
 	void setDeviceProfileIdNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -6069,7 +5565,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -6103,6 +5599,8 @@ private:
 	qint32 m_segmentId;
 	
 	// Required query parameters
+	qint64 m_actualSegmentLengthTicks;
+	qint64 m_runtimeTicks;
 
 	// Optional query parameters
 	std::optional<bool> m_allowAudioStreamCopy = std::nullopt;
@@ -6119,6 +5617,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -6276,6 +5775,20 @@ public:
 
 	
 	/**
+	 * @brief The length of the requested segment in ticks.	
+	 */
+	const qint64 &actualSegmentLengthTicks() const;
+	void setActualSegmentLengthTicks(qint64 newActualSegmentLengthTicks);
+
+	
+	/**
+	 * @brief The position of the requested segment in ticks.	
+	 */
+	const qint64 &runtimeTicks() const;
+	void setRuntimeTicks(qint64 newRuntimeTicks);
+
+	
+	/**
 	 * @brief Whether or not to allow copying of the audio stream url.	
 	 */
 	const bool &allowAudioStreamCopy() const;
@@ -6291,6 +5804,15 @@ public:
 	void setAllowVideoStreamCopy(bool newAllowVideoStreamCopy);
 	bool allowVideoStreamCopyNull() const;
 	void setAllowVideoStreamCopyNull();
+	
+	
+	/**
+	 * @brief Whether to always burn in subtitles when transcoding.	
+	 */
+	const bool &alwaysBurnInSubtitleWhenTranscoding() const;
+	void setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding);
+	bool alwaysBurnInSubtitleWhenTranscodingNull() const;
+	void setAlwaysBurnInSubtitleWhenTranscodingNull();
 	
 	
 	/**
@@ -6312,7 +5834,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -6402,6 +5924,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
+	
+	
+	/**
 	 * @brief Whether or not to allow automatic stream copy if requested values match the original source. Defaults to true.	
 	 */
 	const bool &enableAutoStreamCopy() const;
@@ -6483,6 +6014,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. The maximum vertical resolution of the encoded video.	
+	 */
+	const qint32 &maxHeight() const;
+	void setMaxHeight(qint32 newMaxHeight);
+	bool maxHeightNull() const;
+	void setMaxHeightNull();
+	
+	
+	/**
 	 * @brief Optional.	
 	 */
 	const qint32 &maxRefFrames() const;
@@ -6498,6 +6038,15 @@ public:
 	void setMaxVideoBitDepth(qint32 newMaxVideoBitDepth);
 	bool maxVideoBitDepthNull() const;
 	void setMaxVideoBitDepthNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum horizontal resolution of the encoded video.	
+	 */
+	const qint32 &maxWidth() const;
+	void setMaxWidth(qint32 newMaxWidth);
+	bool maxWidthNull() const;
+	void setMaxWidthNull();
 	
 	
 	/**
@@ -6573,7 +6122,7 @@ public:
 	
 	
 	/**
-	 * @brief The segment lenght.	
+	 * @brief The desired segment length.	
 	 */
 	const qint32 &segmentLength() const;
 	void setSegmentLength(qint32 newSegmentLength);
@@ -6672,7 +6221,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -6706,10 +6255,13 @@ private:
 	qint32 m_segmentId;
 	
 	// Required query parameters
+	qint64 m_actualSegmentLengthTicks;
+	qint64 m_runtimeTicks;
 
 	// Optional query parameters
 	std::optional<bool> m_allowAudioStreamCopy = std::nullopt;
 	std::optional<bool> m_allowVideoStreamCopy = std::nullopt;
+	std::optional<bool> m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 	std::optional<qint32> m_audioBitRate = std::nullopt;
 	std::optional<qint32> m_audioChannels = std::nullopt;
 	QString m_audioCodec;
@@ -6722,6 +6274,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -6731,8 +6284,10 @@ private:
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
 	std::optional<qint32> m_maxAudioChannels = std::nullopt;
 	std::optional<float> m_maxFramerate = std::nullopt;
+	std::optional<qint32> m_maxHeight = std::nullopt;
 	std::optional<qint32> m_maxRefFrames = std::nullopt;
 	std::optional<qint32> m_maxVideoBitDepth = std::nullopt;
+	std::optional<qint32> m_maxWidth = std::nullopt;
 	QString m_mediaSourceId;
 	std::optional<qint32> m_minSegments = std::nullopt;
 	QString m_params;
@@ -6804,64 +6359,14 @@ private:
 
 };
 
-class GetIconParams {
-public:
-
-	/**
-	 * @brief The icon filename.	
-	 */
-	const QString &fileName() const;
-	void setFileName(QString newFileName);
-
-	
-private:
-	// Required path parameters
-	QString m_fileName;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetIconIdParams {
-public:
-
-	/**
-	 * @brief The icon filename.	
-	 */
-	const QString &fileName() const;
-	void setFileName(QString newFileName);
-
-	
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_fileName;
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
 class GetInstantMixFromAlbumParams {
 public:
 
 	/**
 	 * @brief The item id.	
 	 */
-	const QString &jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
 
 	
 	/**
@@ -6929,7 +6434,7 @@ public:
 	
 private:
 	// Required path parameters
-	QString m_jellyfinId;
+	QString m_itemId;
 	
 	// Required query parameters
 
@@ -6951,8 +6456,8 @@ public:
 	/**
 	 * @brief The item id.	
 	 */
-	const QString &jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
 
 	
 	/**
@@ -7020,7 +6525,7 @@ public:
 	
 private:
 	// Required path parameters
-	QString m_jellyfinId;
+	QString m_itemId;
 	
 	// Required query parameters
 
@@ -7036,7 +6541,7 @@ private:
 
 };
 
-class GetInstantMixFromItemParams {
+class GetInstantMixFromArtists2Params {
 public:
 
 	/**
@@ -7111,7 +6616,98 @@ public:
 	
 private:
 	// Required path parameters
+	
+	// Required query parameters
 	QString m_jellyfinId;
+
+	// Optional query parameters
+	QList<ImageType> m_enableImageTypes;
+	std::optional<bool> m_enableImages = std::nullopt;
+	std::optional<bool> m_enableUserData = std::nullopt;
+	QList<ItemFields> m_fields;
+	std::optional<qint32> m_imageTypeLimit = std::nullopt;
+	std::optional<qint32> m_limit = std::nullopt;
+	QString m_userId;
+
+
+};
+
+class GetInstantMixFromItemParams {
+public:
+
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+	/**
+	 * @brief Optional. The image types to include in the output.	
+	 */
+	const QList<ImageType> &enableImageTypes() const;
+	void setEnableImageTypes(QList<ImageType> newEnableImageTypes);
+	bool enableImageTypesNull() const;
+	void setEnableImageTypesNull();
+	
+	
+	/**
+	 * @brief Optional. Include image information in output.	
+	 */
+	const bool &enableImages() const;
+	void setEnableImages(bool newEnableImages);
+	bool enableImagesNull() const;
+	void setEnableImagesNull();
+	
+	
+	/**
+	 * @brief Optional. Include user data.	
+	 */
+	const bool &enableUserData() const;
+	void setEnableUserData(bool newEnableUserData);
+	bool enableUserDataNull() const;
+	void setEnableUserDataNull();
+	
+	
+	/**
+	 * @brief Optional. Specify additional fields of information to return in the output.	
+	 */
+	const QList<ItemFields> &fields() const;
+	void setFields(QList<ItemFields> newFields);
+	bool fieldsNull() const;
+	void setFieldsNull();
+	
+	
+	/**
+	 * @brief Optional. The max number of images to return, per image type.	
+	 */
+	const qint32 &imageTypeLimit() const;
+	void setImageTypeLimit(qint32 newImageTypeLimit);
+	bool imageTypeLimitNull() const;
+	void setImageTypeLimitNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum number of records to return.	
+	 */
+	const qint32 &limit() const;
+	void setLimit(qint32 newLimit);
+	bool limitNull() const;
+	void setLimitNull();
+	
+	
+	/**
+	 * @brief Optional. Filter by user id, and attach user data.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
+private:
+	// Required path parameters
+	QString m_itemId;
 	
 	// Required query parameters
 
@@ -7127,7 +6723,98 @@ private:
 
 };
 
-class GetInstantMixFromMusicGenreParams {
+class GetInstantMixFromMusicGenreByIdParams {
+public:
+
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &jellyfinId() const;
+	void setJellyfinId(QString newJellyfinId);
+
+	
+	/**
+	 * @brief Optional. The image types to include in the output.	
+	 */
+	const QList<ImageType> &enableImageTypes() const;
+	void setEnableImageTypes(QList<ImageType> newEnableImageTypes);
+	bool enableImageTypesNull() const;
+	void setEnableImageTypesNull();
+	
+	
+	/**
+	 * @brief Optional. Include image information in output.	
+	 */
+	const bool &enableImages() const;
+	void setEnableImages(bool newEnableImages);
+	bool enableImagesNull() const;
+	void setEnableImagesNull();
+	
+	
+	/**
+	 * @brief Optional. Include user data.	
+	 */
+	const bool &enableUserData() const;
+	void setEnableUserData(bool newEnableUserData);
+	bool enableUserDataNull() const;
+	void setEnableUserDataNull();
+	
+	
+	/**
+	 * @brief Optional. Specify additional fields of information to return in the output.	
+	 */
+	const QList<ItemFields> &fields() const;
+	void setFields(QList<ItemFields> newFields);
+	bool fieldsNull() const;
+	void setFieldsNull();
+	
+	
+	/**
+	 * @brief Optional. The max number of images to return, per image type.	
+	 */
+	const qint32 &imageTypeLimit() const;
+	void setImageTypeLimit(qint32 newImageTypeLimit);
+	bool imageTypeLimitNull() const;
+	void setImageTypeLimitNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum number of records to return.	
+	 */
+	const qint32 &limit() const;
+	void setLimit(qint32 newLimit);
+	bool limitNull() const;
+	void setLimitNull();
+	
+	
+	/**
+	 * @brief Optional. Filter by user id, and attach user data.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
+private:
+	// Required path parameters
+	
+	// Required query parameters
+	QString m_jellyfinId;
+
+	// Optional query parameters
+	QList<ImageType> m_enableImageTypes;
+	std::optional<bool> m_enableImages = std::nullopt;
+	std::optional<bool> m_enableUserData = std::nullopt;
+	QList<ItemFields> m_fields;
+	std::optional<qint32> m_imageTypeLimit = std::nullopt;
+	std::optional<qint32> m_limit = std::nullopt;
+	QString m_userId;
+
+
+};
+
+class GetInstantMixFromMusicGenreByNameParams {
 public:
 
 	/**
@@ -7218,105 +6905,14 @@ private:
 
 };
 
-class GetInstantMixFromMusicGenresParams {
-public:
-
-	/**
-	 * @brief The item id.	
-	 */
-	const QString &jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
-
-	
-	/**
-	 * @brief Optional. The image types to include in the output.	
-	 */
-	const QList<ImageType> &enableImageTypes() const;
-	void setEnableImageTypes(QList<ImageType> newEnableImageTypes);
-	bool enableImageTypesNull() const;
-	void setEnableImageTypesNull();
-	
-	
-	/**
-	 * @brief Optional. Include image information in output.	
-	 */
-	const bool &enableImages() const;
-	void setEnableImages(bool newEnableImages);
-	bool enableImagesNull() const;
-	void setEnableImagesNull();
-	
-	
-	/**
-	 * @brief Optional. Include user data.	
-	 */
-	const bool &enableUserData() const;
-	void setEnableUserData(bool newEnableUserData);
-	bool enableUserDataNull() const;
-	void setEnableUserDataNull();
-	
-	
-	/**
-	 * @brief Optional. Specify additional fields of information to return in the output.	
-	 */
-	const QList<ItemFields> &fields() const;
-	void setFields(QList<ItemFields> newFields);
-	bool fieldsNull() const;
-	void setFieldsNull();
-	
-	
-	/**
-	 * @brief Optional. The max number of images to return, per image type.	
-	 */
-	const qint32 &imageTypeLimit() const;
-	void setImageTypeLimit(qint32 newImageTypeLimit);
-	bool imageTypeLimitNull() const;
-	void setImageTypeLimitNull();
-	
-	
-	/**
-	 * @brief Optional. The maximum number of records to return.	
-	 */
-	const qint32 &limit() const;
-	void setLimit(qint32 newLimit);
-	bool limitNull() const;
-	void setLimitNull();
-	
-	
-	/**
-	 * @brief Optional. Filter by user id, and attach user data.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-	bool userIdNull() const;
-	void setUserIdNull();
-	
-	
-private:
-	// Required path parameters
-	QString m_jellyfinId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-	QList<ImageType> m_enableImageTypes;
-	std::optional<bool> m_enableImages = std::nullopt;
-	std::optional<bool> m_enableUserData = std::nullopt;
-	QList<ItemFields> m_fields;
-	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	std::optional<qint32> m_limit = std::nullopt;
-	QString m_userId;
-
-
-};
-
 class GetInstantMixFromPlaylistParams {
 public:
 
 	/**
 	 * @brief The item id.	
 	 */
-	const QString &jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
 
 	
 	/**
@@ -7384,7 +6980,7 @@ public:
 	
 private:
 	// Required path parameters
-	QString m_jellyfinId;
+	QString m_itemId;
 	
 	// Required query parameters
 
@@ -7406,8 +7002,8 @@ public:
 	/**
 	 * @brief The item id.	
 	 */
-	const QString &jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
 
 	
 	/**
@@ -7475,7 +7071,7 @@ public:
 	
 private:
 	// Required path parameters
-	QString m_jellyfinId;
+	QString m_itemId;
 	
 	// Required query parameters
 
@@ -7506,16 +7102,18 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -7535,16 +7133,18 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -7600,15 +7200,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -7627,12 +7218,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -7742,10 +7342,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -7828,15 +7428,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -7855,12 +7446,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -7914,10 +7514,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	std::optional<qint32> m_height = std::nullopt;
 	std::optional<qint32> m_quality = std::nullopt;
@@ -7951,15 +7551,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -7978,12 +7569,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -8085,10 +7685,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -8120,6 +7720,68 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+
+};
+
+class GetItemSegmentsParams {
+public:
+
+	/**
+	 * @brief The ItemId.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+	/**
+	 * @brief Optional filter of requested segment types.	
+	 */
+	const QList<MediaSegmentType> &includeSegmentTypes() const;
+	void setIncludeSegmentTypes(QList<MediaSegmentType> newIncludeSegmentTypes);
+	bool includeSegmentTypesNull() const;
+	void setIncludeSegmentTypesNull();
+	
+	
+private:
+	// Required path parameters
+	QString m_itemId;
+	
+	// Required query parameters
+
+	// Optional query parameters
+	QList<MediaSegmentType> m_includeSegmentTypes;
+
+
+};
+
+class GetItemUserDataParams {
+public:
+
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+	/**
+	 * @brief The user id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
+private:
+	// Required path parameters
+	QString m_itemId;
+	
+	// Required query parameters
+
+	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -8256,8 +7918,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
 	bool excludeItemTypesNull() const;
 	void setExcludeItemTypesNull();
 	
@@ -8308,7 +7970,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional filter by items that have an imdb id or not.	
+	 * @brief Optional filter by items that have an IMDb id or not.	
 	 */
 	const bool &hasImdbId() const;
 	void setHasImdbId(bool newHasImdbId);
@@ -8380,7 +8042,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional filter by items that have a tmdb id or not.	
+	 * @brief Optional filter by items that have a TMDb id or not.	
 	 */
 	const bool &hasTmdbId() const;
 	void setHasTmdbId(bool newHasTmdbId);
@@ -8398,7 +8060,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional filter by items that have a tvdb id or not.	
+	 * @brief Optional filter by items that have a TVDb id or not.	
 	 */
 	const bool &hasTvdbId() const;
 	void setHasTvdbId(bool newHasTvdbId);
@@ -8436,10 +8098,19 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on the item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
+	
+	
+	/**
+	 * @brief Optional filter by index number.	
+	 */
+	const qint32 &indexNumber() const;
+	void setIndexNumber(qint32 newIndexNumber);
+	bool indexNumberNull() const;
+	void setIndexNumberNull();
 	
 	
 	/**
@@ -8479,6 +8150,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional filter for live tv kids.	
+	 */
+	const bool &isKids() const;
+	void setIsKids(bool newIsKids);
+	bool isKidsNull() const;
+	void setIsKidsNull();
+	
+	
+	/**
 	 * @brief Optional filter by items that are locked.	
 	 */
 	const bool &isLocked() const;
@@ -8497,6 +8177,24 @@ public:
 	
 	
 	/**
+	 * @brief Optional filter for live tv movies.	
+	 */
+	const bool &isMovie() const;
+	void setIsMovie(bool newIsMovie);
+	bool isMovieNull() const;
+	void setIsMovieNull();
+	
+	
+	/**
+	 * @brief Optional filter for live tv news.	
+	 */
+	const bool &isNews() const;
+	void setIsNews(bool newIsNews);
+	bool isNewsNull() const;
+	void setIsNewsNull();
+	
+	
+	/**
 	 * @brief Optional filter by items that are placeholders.	
 	 */
 	const bool &isPlaceHolder() const;
@@ -8512,6 +8210,24 @@ public:
 	void setIsPlayed(bool newIsPlayed);
 	bool isPlayedNull() const;
 	void setIsPlayedNull();
+	
+	
+	/**
+	 * @brief Optional filter for live tv series.	
+	 */
+	const bool &isSeries() const;
+	void setIsSeries(bool newIsSeries);
+	bool isSeriesNull() const;
+	void setIsSeriesNull();
+	
+	
+	/**
+	 * @brief Optional filter for live tv sports.	
+	 */
+	const bool &isSports() const;
+	void setIsSports(bool newIsSports);
+	bool isSportsNull() const;
+	void setIsSportsNull();
 	
 	
 	/**
@@ -8580,8 +8296,8 @@ public:
 	/**
 	 * @brief Optional filter by MediaType. Allows multiple, comma delimited.	
 	 */
-	const QStringList &mediaTypes() const;
-	void setMediaTypes(QStringList newMediaTypes);
+	const QList<MediaType> &mediaTypes() const;
+	void setMediaTypes(QList<MediaType> newMediaTypes);
 	bool mediaTypesNull() const;
 	void setMediaTypesNull();
 	
@@ -8769,17 +8485,17 @@ public:
 	/**
 	 * @brief Optional. Specify one or more sort orders, comma delimited. Options: Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating, DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear, SortName, Random, Revenue, Runtime.	
 	 */
-	const QString &sortBy() const;
-	void setSortBy(QString newSortBy);
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
 	bool sortByNull() const;
 	void setSortByNull();
 	
 	
 	/**
-	 * @brief Sort Order - Ascending,Descending.	
+	 * @brief Sort Order - Ascending, Descending.	
 	 */
-	const QString &sortOrder() const;
-	void setSortOrder(QString newSortOrder);
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
 	bool sortOrderNull() const;
 	void setSortOrderNull();
 	
@@ -8821,7 +8537,7 @@ public:
 	
 	
 	/**
-	 * @brief The user id supplied as query parameter.	
+	 * @brief The user id supplied as query parameter; this is required when not using an API key.	
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
@@ -8867,7 +8583,7 @@ private:
 	std::optional<bool> m_enableUserData = std::nullopt;
 	QStringList m_excludeArtistIds;
 	QStringList m_excludeItemIds;
-	QStringList m_excludeItemTypes;
+	QList<BaseItemKind> m_excludeItemTypes;
 	QList<LocationType> m_excludeLocationTypes;
 	QList<ItemFields> m_fields;
 	QList<ItemFilter> m_filters;
@@ -8887,15 +8603,21 @@ private:
 	QStringList m_ids;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
 	QList<ImageType> m_imageTypes;
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
+	std::optional<qint32> m_indexNumber = std::nullopt;
 	std::optional<bool> m_is3D = std::nullopt;
 	std::optional<bool> m_is4K = std::nullopt;
 	std::optional<bool> m_isFavorite = std::nullopt;
 	std::optional<bool> m_isHd = std::nullopt;
+	std::optional<bool> m_isKids = std::nullopt;
 	std::optional<bool> m_isLocked = std::nullopt;
 	std::optional<bool> m_isMissing = std::nullopt;
+	std::optional<bool> m_isMovie = std::nullopt;
+	std::optional<bool> m_isNews = std::nullopt;
 	std::optional<bool> m_isPlaceHolder = std::nullopt;
 	std::optional<bool> m_isPlayed = std::nullopt;
+	std::optional<bool> m_isSeries = std::nullopt;
+	std::optional<bool> m_isSports = std::nullopt;
 	std::optional<bool> m_isUnaired = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	QList<LocationType> m_locationTypes;
@@ -8903,7 +8625,7 @@ private:
 	QString m_maxOfficialRating;
 	QDateTime m_maxPremiereDate;
 	std::optional<qint32> m_maxWidth = std::nullopt;
-	QStringList m_mediaTypes;
+	QList<MediaType> m_mediaTypes;
 	std::optional<double> m_minCommunityRating = std::nullopt;
 	std::optional<double> m_minCriticRating = std::nullopt;
 	QDateTime m_minDateLastSaved;
@@ -8924,824 +8646,13 @@ private:
 	std::optional<bool> m_recursive = std::nullopt;
 	QString m_searchTerm;
 	QList<SeriesStatus> m_seriesStatus;
-	QString m_sortBy;
-	QString m_sortOrder;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QStringList m_studioIds;
 	QStringList m_studios;
 	QStringList m_tags;
 	QString m_userId;
-	QList<VideoType> m_videoTypes;
-	QList<qint32> m_years;
-
-
-};
-
-class GetItemsByUserIdParams {
-public:
-
-	/**
-	 * @brief The user id supplied as query parameter.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
-	 * @brief Optional. Return items that are siblings of a supplied item.	
-	 */
-	const QString &adjacentTo() const;
-	void setAdjacentTo(QString newAdjacentTo);
-	bool adjacentToNull() const;
-	void setAdjacentToNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered to include only those containing the specified album artist id.	
-	 */
-	const QStringList &albumArtistIds() const;
-	void setAlbumArtistIds(QStringList newAlbumArtistIds);
-	bool albumArtistIdsNull() const;
-	void setAlbumArtistIdsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on album id. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &albumIds() const;
-	void setAlbumIds(QStringList newAlbumIds);
-	bool albumIdsNull() const;
-	void setAlbumIdsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on album. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &albums() const;
-	void setAlbums(QStringList newAlbums);
-	bool albumsNull() const;
-	void setAlbumsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered to include only those containing the specified artist id.	
-	 */
-	const QStringList &artistIds() const;
-	void setArtistIds(QStringList newArtistIds);
-	bool artistIdsNull() const;
-	void setArtistIdsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on artists. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &artists() const;
-	void setArtists(QStringList newArtists);
-	bool artistsNull() const;
-	void setArtistsNull();
-	
-	
-	/**
-	 * @brief Whether or not to hide items behind their boxsets.	
-	 */
-	const bool &collapseBoxSetItems() const;
-	void setCollapseBoxSetItems(bool newCollapseBoxSetItems);
-	bool collapseBoxSetItemsNull() const;
-	void setCollapseBoxSetItemsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered to include only those containing the specified contributing artist id.	
-	 */
-	const QStringList &contributingArtistIds() const;
-	void setContributingArtistIds(QStringList newContributingArtistIds);
-	bool contributingArtistIdsNull() const;
-	void setContributingArtistIdsNull();
-	
-	
-	/**
-	 * @brief Optional. The image types to include in the output.	
-	 */
-	const QList<ImageType> &enableImageTypes() const;
-	void setEnableImageTypes(QList<ImageType> newEnableImageTypes);
-	bool enableImageTypesNull() const;
-	void setEnableImageTypesNull();
-	
-	
-	/**
-	 * @brief Optional, include image information in output.	
-	 */
-	const bool &enableImages() const;
-	void setEnableImages(bool newEnableImages);
-	bool enableImagesNull() const;
-	void setEnableImagesNull();
-	
-	
-	/**
-	 * @brief Optional. Enable the total record count.	
-	 */
-	const bool &enableTotalRecordCount() const;
-	void setEnableTotalRecordCount(bool newEnableTotalRecordCount);
-	bool enableTotalRecordCountNull() const;
-	void setEnableTotalRecordCountNull();
-	
-	
-	/**
-	 * @brief Optional, include user data.	
-	 */
-	const bool &enableUserData() const;
-	void setEnableUserData(bool newEnableUserData);
-	bool enableUserDataNull() const;
-	void setEnableUserDataNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on artist id. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &excludeArtistIds() const;
-	void setExcludeArtistIds(QStringList newExcludeArtistIds);
-	bool excludeArtistIdsNull() const;
-	void setExcludeArtistIdsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered by exxcluding item ids. This allows multiple, comma delimeted.	
-	 */
-	const QStringList &excludeItemIds() const;
-	void setExcludeItemIds(QStringList newExcludeItemIds);
-	bool excludeItemIdsNull() const;
-	void setExcludeItemIdsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimeted.	
-	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
-	bool excludeItemTypesNull() const;
-	void setExcludeItemTypesNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on the LocationType. This allows multiple, comma delimeted.	
-	 */
-	const QList<LocationType> &excludeLocationTypes() const;
-	void setExcludeLocationTypes(QList<LocationType> newExcludeLocationTypes);
-	bool excludeLocationTypesNull() const;
-	void setExcludeLocationTypesNull();
-	
-	
-	/**
-	 * @brief Optional. Specify additional fields of information to return in the output. This allows multiple, comma delimeted. Options: Budget, Chapters, DateCreated, Genres, HomePageUrl, IndexOptions, MediaStreams, Overview, ParentId, Path, People, ProviderIds, PrimaryImageAspectRatio, Revenue, SortName, Studios, Taglines.	
-	 */
-	const QList<ItemFields> &fields() const;
-	void setFields(QList<ItemFields> newFields);
-	bool fieldsNull() const;
-	void setFieldsNull();
-	
-	
-	/**
-	 * @brief Optional. Specify additional filters to apply. This allows multiple, comma delimeted. Options: IsFolder, IsNotFolder, IsUnplayed, IsPlayed, IsFavorite, IsResumable, Likes, Dislikes.	
-	 */
-	const QList<ItemFilter> &filters() const;
-	void setFilters(QList<ItemFilter> newFilters);
-	bool filtersNull() const;
-	void setFiltersNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on genre id. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &genreIds() const;
-	void setGenreIds(QStringList newGenreIds);
-	bool genreIdsNull() const;
-	void setGenreIdsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on genre. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &genres() const;
-	void setGenres(QStringList newGenres);
-	bool genresNull() const;
-	void setGenresNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that have an imdb id or not.	
-	 */
-	const bool &hasImdbId() const;
-	void setHasImdbId(bool newHasImdbId);
-	bool hasImdbIdNull() const;
-	void setHasImdbIdNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that have official ratings.	
-	 */
-	const bool &hasOfficialRating() const;
-	void setHasOfficialRating(bool newHasOfficialRating);
-	bool hasOfficialRatingNull() const;
-	void setHasOfficialRatingNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that have an overview or not.	
-	 */
-	const bool &hasOverview() const;
-	void setHasOverview(bool newHasOverview);
-	bool hasOverviewNull() const;
-	void setHasOverviewNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that have or do not have a parental rating.	
-	 */
-	const bool &hasParentalRating() const;
-	void setHasParentalRating(bool newHasParentalRating);
-	bool hasParentalRatingNull() const;
-	void setHasParentalRatingNull();
-	
-	
-	/**
-	 * @brief Optional filter by items with special features.	
-	 */
-	const bool &hasSpecialFeature() const;
-	void setHasSpecialFeature(bool newHasSpecialFeature);
-	bool hasSpecialFeatureNull() const;
-	void setHasSpecialFeatureNull();
-	
-	
-	/**
-	 * @brief Optional filter by items with subtitles.	
-	 */
-	const bool &hasSubtitles() const;
-	void setHasSubtitles(bool newHasSubtitles);
-	bool hasSubtitlesNull() const;
-	void setHasSubtitlesNull();
-	
-	
-	/**
-	 * @brief Optional filter by items with theme songs.	
-	 */
-	const bool &hasThemeSong() const;
-	void setHasThemeSong(bool newHasThemeSong);
-	bool hasThemeSongNull() const;
-	void setHasThemeSongNull();
-	
-	
-	/**
-	 * @brief Optional filter by items with theme videos.	
-	 */
-	const bool &hasThemeVideo() const;
-	void setHasThemeVideo(bool newHasThemeVideo);
-	bool hasThemeVideoNull() const;
-	void setHasThemeVideoNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that have a tmdb id or not.	
-	 */
-	const bool &hasTmdbId() const;
-	void setHasTmdbId(bool newHasTmdbId);
-	bool hasTmdbIdNull() const;
-	void setHasTmdbIdNull();
-	
-	
-	/**
-	 * @brief Optional filter by items with trailers.	
-	 */
-	const bool &hasTrailer() const;
-	void setHasTrailer(bool newHasTrailer);
-	bool hasTrailerNull() const;
-	void setHasTrailerNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that have a tvdb id or not.	
-	 */
-	const bool &hasTvdbId() const;
-	void setHasTvdbId(bool newHasTvdbId);
-	bool hasTvdbIdNull() const;
-	void setHasTvdbIdNull();
-	
-	
-	/**
-	 * @brief Optional. If specific items are needed, specify a list of item id's to retrieve. This allows multiple, comma delimited.	
-	 */
-	const QStringList &ids() const;
-	void setIds(QStringList newIds);
-	bool idsNull() const;
-	void setIdsNull();
-	
-	
-	/**
-	 * @brief Optional, the max number of images to return, per image type.	
-	 */
-	const qint32 &imageTypeLimit() const;
-	void setImageTypeLimit(qint32 newImageTypeLimit);
-	bool imageTypeLimitNull() const;
-	void setImageTypeLimitNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on those containing image types. This allows multiple, comma delimited.	
-	 */
-	const QList<ImageType> &imageTypes() const;
-	void setImageTypes(QList<ImageType> newImageTypes);
-	bool imageTypesNull() const;
-	void setImageTypesNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on the item type. This allows multiple, comma delimeted.	
-	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
-	bool includeItemTypesNull() const;
-	void setIncludeItemTypesNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that are 3D, or not.	
-	 */
-	const bool &is3D() const;
-	void setIs3D(bool newIs3D);
-	bool is3DNull() const;
-	void setIs3DNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that are 4K or not.	
-	 */
-	const bool &is4K() const;
-	void setIs4K(bool newIs4K);
-	bool is4KNull() const;
-	void setIs4KNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that are marked as favorite, or not.	
-	 */
-	const bool &isFavorite() const;
-	void setIsFavorite(bool newIsFavorite);
-	bool isFavoriteNull() const;
-	void setIsFavoriteNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that are HD or not.	
-	 */
-	const bool &isHd() const;
-	void setIsHd(bool newIsHd);
-	bool isHdNull() const;
-	void setIsHdNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that are locked.	
-	 */
-	const bool &isLocked() const;
-	void setIsLocked(bool newIsLocked);
-	bool isLockedNull() const;
-	void setIsLockedNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that are missing episodes or not.	
-	 */
-	const bool &isMissing() const;
-	void setIsMissing(bool newIsMissing);
-	bool isMissingNull() const;
-	void setIsMissingNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that are placeholders.	
-	 */
-	const bool &isPlaceHolder() const;
-	void setIsPlaceHolder(bool newIsPlaceHolder);
-	bool isPlaceHolderNull() const;
-	void setIsPlaceHolderNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that are played, or not.	
-	 */
-	const bool &isPlayed() const;
-	void setIsPlayed(bool newIsPlayed);
-	bool isPlayedNull() const;
-	void setIsPlayedNull();
-	
-	
-	/**
-	 * @brief Optional filter by items that are unaired episodes or not.	
-	 */
-	const bool &isUnaired() const;
-	void setIsUnaired(bool newIsUnaired);
-	bool isUnairedNull() const;
-	void setIsUnairedNull();
-	
-	
-	/**
-	 * @brief Optional. The maximum number of records to return.	
-	 */
-	const qint32 &limit() const;
-	void setLimit(qint32 newLimit);
-	bool limitNull() const;
-	void setLimitNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on LocationType. This allows multiple, comma delimeted.	
-	 */
-	const QList<LocationType> &locationTypes() const;
-	void setLocationTypes(QList<LocationType> newLocationTypes);
-	bool locationTypesNull() const;
-	void setLocationTypesNull();
-	
-	
-	/**
-	 * @brief Optional. Filter by the maximum height of the item.	
-	 */
-	const qint32 &maxHeight() const;
-	void setMaxHeight(qint32 newMaxHeight);
-	bool maxHeightNull() const;
-	void setMaxHeightNull();
-	
-	
-	/**
-	 * @brief Optional filter by maximum official rating (PG, PG-13, TV-MA, etc).	
-	 */
-	const QString &maxOfficialRating() const;
-	void setMaxOfficialRating(QString newMaxOfficialRating);
-	bool maxOfficialRatingNull() const;
-	void setMaxOfficialRatingNull();
-	
-	
-	/**
-	 * @brief Optional. The maximum premiere date. Format = ISO.	
-	 */
-	const QDateTime &maxPremiereDate() const;
-	void setMaxPremiereDate(QDateTime newMaxPremiereDate);
-	bool maxPremiereDateNull() const;
-	void setMaxPremiereDateNull();
-	
-	
-	/**
-	 * @brief Optional. Filter by the maximum width of the item.	
-	 */
-	const qint32 &maxWidth() const;
-	void setMaxWidth(qint32 newMaxWidth);
-	bool maxWidthNull() const;
-	void setMaxWidthNull();
-	
-	
-	/**
-	 * @brief Optional filter by MediaType. Allows multiple, comma delimited.	
-	 */
-	const QStringList &mediaTypes() const;
-	void setMediaTypes(QStringList newMediaTypes);
-	bool mediaTypesNull() const;
-	void setMediaTypesNull();
-	
-	
-	/**
-	 * @brief Optional filter by minimum community rating.	
-	 */
-	const double &minCommunityRating() const;
-	void setMinCommunityRating(double newMinCommunityRating);
-	bool minCommunityRatingNull() const;
-	void setMinCommunityRatingNull();
-	
-	
-	/**
-	 * @brief Optional filter by minimum critic rating.	
-	 */
-	const double &minCriticRating() const;
-	void setMinCriticRating(double newMinCriticRating);
-	bool minCriticRatingNull() const;
-	void setMinCriticRatingNull();
-	
-	
-	/**
-	 * @brief Optional. The minimum last saved date. Format = ISO.	
-	 */
-	const QDateTime &minDateLastSaved() const;
-	void setMinDateLastSaved(QDateTime newMinDateLastSaved);
-	bool minDateLastSavedNull() const;
-	void setMinDateLastSavedNull();
-	
-	
-	/**
-	 * @brief Optional. The minimum last saved date for the current user. Format = ISO.	
-	 */
-	const QDateTime &minDateLastSavedForUser() const;
-	void setMinDateLastSavedForUser(QDateTime newMinDateLastSavedForUser);
-	bool minDateLastSavedForUserNull() const;
-	void setMinDateLastSavedForUserNull();
-	
-	
-	/**
-	 * @brief Optional. Filter by the minimum height of the item.	
-	 */
-	const qint32 &minHeight() const;
-	void setMinHeight(qint32 newMinHeight);
-	bool minHeightNull() const;
-	void setMinHeightNull();
-	
-	
-	/**
-	 * @brief Optional filter by minimum official rating (PG, PG-13, TV-MA, etc).	
-	 */
-	const QString &minOfficialRating() const;
-	void setMinOfficialRating(QString newMinOfficialRating);
-	bool minOfficialRatingNull() const;
-	void setMinOfficialRatingNull();
-	
-	
-	/**
-	 * @brief Optional. The minimum premiere date. Format = ISO.	
-	 */
-	const QDateTime &minPremiereDate() const;
-	void setMinPremiereDate(QDateTime newMinPremiereDate);
-	bool minPremiereDateNull() const;
-	void setMinPremiereDateNull();
-	
-	
-	/**
-	 * @brief Optional. Filter by the minimum width of the item.	
-	 */
-	const qint32 &minWidth() const;
-	void setMinWidth(qint32 newMinWidth);
-	bool minWidthNull() const;
-	void setMinWidthNull();
-	
-	
-	/**
-	 * @brief Optional filter by items whose name is equally or lesser than a given input string.	
-	 */
-	const QString &nameLessThan() const;
-	void setNameLessThan(QString newNameLessThan);
-	bool nameLessThanNull() const;
-	void setNameLessThanNull();
-	
-	
-	/**
-	 * @brief Optional filter by items whose name is sorted equally than a given input string.	
-	 */
-	const QString &nameStartsWith() const;
-	void setNameStartsWith(QString newNameStartsWith);
-	bool nameStartsWithNull() const;
-	void setNameStartsWithNull();
-	
-	
-	/**
-	 * @brief Optional filter by items whose name is sorted equally or greater than a given input string.	
-	 */
-	const QString &nameStartsWithOrGreater() const;
-	void setNameStartsWithOrGreater(QString newNameStartsWithOrGreater);
-	bool nameStartsWithOrGreaterNull() const;
-	void setNameStartsWithOrGreaterNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on OfficialRating. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &officialRatings() const;
-	void setOfficialRatings(QStringList newOfficialRatings);
-	bool officialRatingsNull() const;
-	void setOfficialRatingsNull();
-	
-	
-	/**
-	 * @brief Specify this to localize the search to a specific item or folder. Omit to use the root.	
-	 */
-	const QString &parentId() const;
-	void setParentId(QString newParentId);
-	bool parentIdNull() const;
-	void setParentIdNull();
-	
-	
-	/**
-	 * @brief Optional filter by parent index number.	
-	 */
-	const qint32 &parentIndexNumber() const;
-	void setParentIndexNumber(qint32 newParentIndexNumber);
-	bool parentIndexNumberNull() const;
-	void setParentIndexNumberNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered to include only those containing the specified person.	
-	 */
-	const QString &person() const;
-	void setPerson(QString newPerson);
-	bool personNull() const;
-	void setPersonNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered to include only those containing the specified person id.	
-	 */
-	const QStringList &personIds() const;
-	void setPersonIds(QStringList newPersonIds);
-	bool personIdsNull() const;
-	void setPersonIdsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, along with Person, results will be filtered to include only those containing the specified person and PersonType. Allows multiple, comma-delimited.	
-	 */
-	const QStringList &personTypes() const;
-	void setPersonTypes(QStringList newPersonTypes);
-	bool personTypesNull() const;
-	void setPersonTypesNull();
-	
-	
-	/**
-	 * @brief When searching within folders, this determines whether or not the search will be recursive. true/false.	
-	 */
-	const bool &recursive() const;
-	void setRecursive(bool newRecursive);
-	bool recursiveNull() const;
-	void setRecursiveNull();
-	
-	
-	/**
-	 * @brief Optional. Filter based on a search term.	
-	 */
-	const QString &searchTerm() const;
-	void setSearchTerm(QString newSearchTerm);
-	bool searchTermNull() const;
-	void setSearchTermNull();
-	
-	
-	/**
-	 * @brief Optional filter by Series Status. Allows multiple, comma delimeted.	
-	 */
-	const QList<SeriesStatus> &seriesStatus() const;
-	void setSeriesStatus(QList<SeriesStatus> newSeriesStatus);
-	bool seriesStatusNull() const;
-	void setSeriesStatusNull();
-	
-	
-	/**
-	 * @brief Optional. Specify one or more sort orders, comma delimeted. Options: Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating, DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear, SortName, Random, Revenue, Runtime.	
-	 */
-	const QString &sortBy() const;
-	void setSortBy(QString newSortBy);
-	bool sortByNull() const;
-	void setSortByNull();
-	
-	
-	/**
-	 * @brief Sort Order - Ascending,Descending.	
-	 */
-	const QString &sortOrder() const;
-	void setSortOrder(QString newSortOrder);
-	bool sortOrderNull() const;
-	void setSortOrderNull();
-	
-	
-	/**
-	 * @brief Optional. The record index to start at. All items with a lower index will be dropped from the results.	
-	 */
-	const qint32 &startIndex() const;
-	void setStartIndex(qint32 newStartIndex);
-	bool startIndexNull() const;
-	void setStartIndexNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on studio id. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &studioIds() const;
-	void setStudioIds(QStringList newStudioIds);
-	bool studioIdsNull() const;
-	void setStudioIdsNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on studio. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &studios() const;
-	void setStudios(QStringList newStudios);
-	bool studiosNull() const;
-	void setStudiosNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on tag. This allows multiple, pipe delimeted.	
-	 */
-	const QStringList &tags() const;
-	void setTags(QStringList newTags);
-	bool tagsNull() const;
-	void setTagsNull();
-	
-	
-	/**
-	 * @brief Optional filter by VideoType (videofile, dvd, bluray, iso). Allows multiple, comma delimeted.	
-	 */
-	const QList<VideoType> &videoTypes() const;
-	void setVideoTypes(QList<VideoType> newVideoTypes);
-	bool videoTypesNull() const;
-	void setVideoTypesNull();
-	
-	
-	/**
-	 * @brief Optional. If specified, results will be filtered based on production year. This allows multiple, comma delimeted.	
-	 */
-	const QList<qint32> &years() const;
-	void setYears(QList<qint32> newYears);
-	bool yearsNull() const;
-	void setYearsNull();
-	
-	
-private:
-	// Required path parameters
-	QString m_userId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-	QString m_adjacentTo;
-	QStringList m_albumArtistIds;
-	QStringList m_albumIds;
-	QStringList m_albums;
-	QStringList m_artistIds;
-	QStringList m_artists;
-	std::optional<bool> m_collapseBoxSetItems = std::nullopt;
-	QStringList m_contributingArtistIds;
-	QList<ImageType> m_enableImageTypes;
-	std::optional<bool> m_enableImages = std::nullopt;
-	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
-	std::optional<bool> m_enableUserData = std::nullopt;
-	QStringList m_excludeArtistIds;
-	QStringList m_excludeItemIds;
-	QStringList m_excludeItemTypes;
-	QList<LocationType> m_excludeLocationTypes;
-	QList<ItemFields> m_fields;
-	QList<ItemFilter> m_filters;
-	QStringList m_genreIds;
-	QStringList m_genres;
-	std::optional<bool> m_hasImdbId = std::nullopt;
-	std::optional<bool> m_hasOfficialRating = std::nullopt;
-	std::optional<bool> m_hasOverview = std::nullopt;
-	std::optional<bool> m_hasParentalRating = std::nullopt;
-	std::optional<bool> m_hasSpecialFeature = std::nullopt;
-	std::optional<bool> m_hasSubtitles = std::nullopt;
-	std::optional<bool> m_hasThemeSong = std::nullopt;
-	std::optional<bool> m_hasThemeVideo = std::nullopt;
-	std::optional<bool> m_hasTmdbId = std::nullopt;
-	std::optional<bool> m_hasTrailer = std::nullopt;
-	std::optional<bool> m_hasTvdbId = std::nullopt;
-	QStringList m_ids;
-	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	QList<ImageType> m_imageTypes;
-	QStringList m_includeItemTypes;
-	std::optional<bool> m_is3D = std::nullopt;
-	std::optional<bool> m_is4K = std::nullopt;
-	std::optional<bool> m_isFavorite = std::nullopt;
-	std::optional<bool> m_isHd = std::nullopt;
-	std::optional<bool> m_isLocked = std::nullopt;
-	std::optional<bool> m_isMissing = std::nullopt;
-	std::optional<bool> m_isPlaceHolder = std::nullopt;
-	std::optional<bool> m_isPlayed = std::nullopt;
-	std::optional<bool> m_isUnaired = std::nullopt;
-	std::optional<qint32> m_limit = std::nullopt;
-	QList<LocationType> m_locationTypes;
-	std::optional<qint32> m_maxHeight = std::nullopt;
-	QString m_maxOfficialRating;
-	QDateTime m_maxPremiereDate;
-	std::optional<qint32> m_maxWidth = std::nullopt;
-	QStringList m_mediaTypes;
-	std::optional<double> m_minCommunityRating = std::nullopt;
-	std::optional<double> m_minCriticRating = std::nullopt;
-	QDateTime m_minDateLastSaved;
-	QDateTime m_minDateLastSavedForUser;
-	std::optional<qint32> m_minHeight = std::nullopt;
-	QString m_minOfficialRating;
-	QDateTime m_minPremiereDate;
-	std::optional<qint32> m_minWidth = std::nullopt;
-	QString m_nameLessThan;
-	QString m_nameStartsWith;
-	QString m_nameStartsWithOrGreater;
-	QStringList m_officialRatings;
-	QString m_parentId;
-	std::optional<qint32> m_parentIndexNumber = std::nullopt;
-	QString m_person;
-	QStringList m_personIds;
-	QStringList m_personTypes;
-	std::optional<bool> m_recursive = std::nullopt;
-	QString m_searchTerm;
-	QList<SeriesStatus> m_seriesStatus;
-	QString m_sortBy;
-	QString m_sortOrder;
-	std::optional<qint32> m_startIndex = std::nullopt;
-	QStringList m_studioIds;
-	QStringList m_studios;
-	QStringList m_tags;
 	QList<VideoType> m_videoTypes;
 	QList<qint32> m_years;
 
@@ -9838,13 +8749,6 @@ class GetLatestMediaParams {
 public:
 
 	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
 	 * @brief Optional. The image types to include in the output.	
 	 */
 	const QList<ImageType> &enableImageTypes() const;
@@ -9901,8 +8805,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -9934,9 +8838,17 @@ public:
 	void setParentIdNull();
 	
 	
+	/**
+	 * @brief User id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
 private:
 	// Required path parameters
-	QString m_userId;
 	
 	// Required query parameters
 
@@ -9947,10 +8859,11 @@ private:
 	QList<ItemFields> m_fields;
 	std::optional<bool> m_groupItems = std::nullopt;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
 	std::optional<bool> m_isPlayed = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_parentId;
+	QString m_userId;
 
 
 };
@@ -9970,8 +8883,8 @@ public:
 	/**
 	 * @brief Library content type.	
 	 */
-	const QString &libraryContentType() const;
-	void setLibraryContentType(QString newLibraryContentType);
+	const CollectionType &libraryContentType() const;
+	void setLibraryContentType(CollectionType newLibraryContentType);
 	bool libraryContentTypeNull() const;
 	void setLibraryContentTypeNull();
 	
@@ -9983,7 +8896,7 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_isNewLibrary = std::nullopt;
-	QString m_libraryContentType;
+	CollectionType m_libraryContentType;
 
 
 };
@@ -10070,6 +8983,15 @@ public:
 	
 	
 	/**
+	 * @brief Whether to always burn in subtitles when transcoding.	
+	 */
+	const bool &alwaysBurnInSubtitleWhenTranscoding() const;
+	void setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding);
+	bool alwaysBurnInSubtitleWhenTranscodingNull() const;
+	void setAlwaysBurnInSubtitleWhenTranscodingNull();
+	
+	
+	/**
 	 * @brief Optional. Specify an audio bitrate to encode to, e.g. 128000. If omitted this will be left to encoder defaults.	
 	 */
 	const qint32 &audioBitRate() const;
@@ -10088,7 +9010,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -10184,6 +9106,15 @@ public:
 	void setDeviceProfileId(QString newDeviceProfileId);
 	bool deviceProfileIdNull() const;
 	void setDeviceProfileIdNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -10385,7 +9316,7 @@ public:
 	
 	
 	/**
-	 * @brief The segment lenght.	
+	 * @brief The segment length.	
 	 */
 	const qint32 &segmentLength() const;
 	void setSegmentLength(qint32 newSegmentLength);
@@ -10484,7 +9415,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -10519,6 +9450,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_allowAudioStreamCopy = std::nullopt;
 	std::optional<bool> m_allowVideoStreamCopy = std::nullopt;
+	std::optional<bool> m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 	std::optional<qint32> m_audioBitRate = std::nullopt;
 	std::optional<qint32> m_audioChannels = std::nullopt;
 	QString m_audioCodec;
@@ -10532,6 +9464,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<bool> m_enableSubtitlesInManifest = std::nullopt;
@@ -10772,8 +9705,8 @@ public:
 	/**
 	 * @brief Optional. Key to sort by.	
 	 */
-	const QStringList &sortBy() const;
-	void setSortBy(QStringList newSortBy);
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
 	bool sortByNull() const;
 	void setSortByNull();
 	
@@ -10836,7 +9769,7 @@ private:
 	std::optional<bool> m_isSeries = std::nullopt;
 	std::optional<bool> m_isSports = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
-	QStringList m_sortBy;
+	QList<ItemSortBy> m_sortBy;
 	SortOrder m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	ChannelType m_type;
@@ -11071,8 +10004,8 @@ public:
 	/**
 	 * @brief Optional. Specify one or more sort orders, comma delimited. Options: Name, StartDate.	
 	 */
-	const QString &sortBy() const;
-	void setSortBy(QString newSortBy);
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
 	bool sortByNull() const;
 	void setSortByNull();
 	
@@ -11080,8 +10013,8 @@ public:
 	/**
 	 * @brief Sort Order - Ascending,Descending.	
 	 */
-	const QString &sortOrder() const;
-	void setSortOrder(QString newSortOrder);
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
 	bool sortOrderNull() const;
 	void setSortOrderNull();
 	
@@ -11133,8 +10066,8 @@ private:
 	QDateTime m_minEndDate;
 	QDateTime m_minStartDate;
 	QString m_seriesTimerId;
-	QString m_sortBy;
-	QString m_sortOrder;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
@@ -11156,16 +10089,18 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -11257,6 +10192,27 @@ private:
 
 };
 
+class GetLyricsParams {
+public:
+
+	/**
+	 * @brief Item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+private:
+	// Required path parameters
+	QString m_itemId;
+	
+	// Required query parameters
+
+	// Optional query parameters
+
+
+};
+
 class GetMasterHlsAudioPlaylistParams {
 public:
 
@@ -11311,7 +10267,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -11407,6 +10363,15 @@ public:
 	void setEnableAdaptiveBitrateStreaming(bool newEnableAdaptiveBitrateStreaming);
 	bool enableAdaptiveBitrateStreamingNull() const;
 	void setEnableAdaptiveBitrateStreamingNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -11680,7 +10645,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -11729,6 +10694,7 @@ private:
 	QString m_deviceId;
 	QString m_deviceProfileId;
 	std::optional<bool> m_enableAdaptiveBitrateStreaming = std::nullopt;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -11802,6 +10768,15 @@ public:
 	
 	
 	/**
+	 * @brief Whether to always burn in subtitles when transcoding.	
+	 */
+	const bool &alwaysBurnInSubtitleWhenTranscoding() const;
+	void setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding);
+	bool alwaysBurnInSubtitleWhenTranscodingNull() const;
+	void setAlwaysBurnInSubtitleWhenTranscodingNull();
+	
+	
+	/**
 	 * @brief Optional. Specify an audio bitrate to encode to, e.g. 128000. If omitted this will be left to encoder defaults.	
 	 */
 	const qint32 &audioBitRate() const;
@@ -11820,7 +10795,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -11919,6 +10894,15 @@ public:
 	
 	
 	/**
+	 * @brief Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
+	
+	
+	/**
 	 * @brief Whether or not to allow automatic stream copy if requested values match the original source. Defaults to true.	
 	 */
 	const bool &enableAutoStreamCopy() const;
@@ -11934,6 +10918,15 @@ public:
 	void setEnableMpegtsM2TsMode(bool newEnableMpegtsM2TsMode);
 	bool enableMpegtsM2TsModeNull() const;
 	void setEnableMpegtsM2TsModeNull();
+	
+	
+	/**
+	 * @brief Enable trickplay image playlists being added to master playlist.	
+	 */
+	const bool &enableTrickplay() const;
+	void setEnableTrickplay(bool newEnableTrickplay);
+	bool enableTrickplayNull() const;
+	void setEnableTrickplayNull();
 	
 	
 	/**
@@ -12000,6 +10993,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. The maximum vertical resolution of the encoded video.	
+	 */
+	const qint32 &maxHeight() const;
+	void setMaxHeight(qint32 newMaxHeight);
+	bool maxHeightNull() const;
+	void setMaxHeightNull();
+	
+	
+	/**
 	 * @brief Optional.	
 	 */
 	const qint32 &maxRefFrames() const;
@@ -12015,6 +11017,15 @@ public:
 	void setMaxVideoBitDepth(qint32 newMaxVideoBitDepth);
 	bool maxVideoBitDepthNull() const;
 	void setMaxVideoBitDepthNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum horizontal resolution of the encoded video.	
+	 */
+	const qint32 &maxWidth() const;
+	void setMaxWidth(qint32 newMaxWidth);
+	bool maxWidthNull() const;
+	void setMaxWidthNull();
 	
 	
 	/**
@@ -12180,7 +11191,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -12216,6 +11227,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_allowAudioStreamCopy = std::nullopt;
 	std::optional<bool> m_allowVideoStreamCopy = std::nullopt;
+	std::optional<bool> m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 	std::optional<qint32> m_audioBitRate = std::nullopt;
 	std::optional<qint32> m_audioChannels = std::nullopt;
 	QString m_audioCodec;
@@ -12229,8 +11241,10 @@ private:
 	QString m_deviceId;
 	QString m_deviceProfileId;
 	std::optional<bool> m_enableAdaptiveBitrateStreaming = std::nullopt;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
+	std::optional<bool> m_enableTrickplay = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
 	std::optional<qint32> m_height = std::nullopt;
 	QString m_level;
@@ -12238,8 +11252,10 @@ private:
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
 	std::optional<qint32> m_maxAudioChannels = std::nullopt;
 	std::optional<float> m_maxFramerate = std::nullopt;
+	std::optional<qint32> m_maxHeight = std::nullopt;
 	std::optional<qint32> m_maxRefFrames = std::nullopt;
 	std::optional<qint32> m_maxVideoBitDepth = std::nullopt;
+	std::optional<qint32> m_maxWidth = std::nullopt;
 	std::optional<qint32> m_minSegments = std::nullopt;
 	QString m_params;
 	QString m_playSessionId;
@@ -12284,111 +11300,6 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_isHidden = std::nullopt;
-
-
-};
-
-class GetMediaInfoImageParams {
-public:
-
-	/**
-	 * @brief The name of the image.	
-	 */
-	const QString &name() const;
-	void setName(QString newName);
-
-	
-	/**
-	 * @brief The theme to get the image from.	
-	 */
-	const QString &theme() const;
-	void setTheme(QString newTheme);
-
-	
-private:
-	// Required path parameters
-	QString m_name;
-	QString m_theme;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetMediaInfoImagesParams {
-public:
-
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetMediaReceiverRegistrarParams {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetMediaReceiverRegistrar_2Params {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetMediaReceiverRegistrar_3Params {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
 
 
 };
@@ -12592,15 +11503,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -12619,12 +11521,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -12734,10 +11645,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -12778,15 +11689,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -12805,12 +11707,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -12912,10 +11823,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -12963,8 +11874,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered out based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
 	bool excludeItemTypesNull() const;
 	void setExcludeItemTypesNull();
 	
@@ -12990,8 +11901,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered in based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -13060,6 +11971,24 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Specify one or more sort orders, comma delimited.	
+	 */
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
+	bool sortByNull() const;
+	void setSortByNull();
+	
+	
+	/**
+	 * @brief Sort Order - Ascending,Descending.	
+	 */
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
+	bool sortOrderNull() const;
+	void setSortOrderNull();
+	
+	
+	/**
 	 * @brief Optional. The record index to start at. All items with a lower index will be dropped from the results.	
 	 */
 	const qint32 &startIndex() const;
@@ -13086,10 +12015,10 @@ private:
 	QList<ImageType> m_enableImageTypes;
 	std::optional<bool> m_enableImages = std::nullopt;
 	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
-	QStringList m_excludeItemTypes;
+	QList<BaseItemKind> m_excludeItemTypes;
 	QList<ItemFields> m_fields;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
 	std::optional<bool> m_isFavorite = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_nameLessThan;
@@ -13097,6 +12026,8 @@ private:
 	QString m_nameStartsWithOrGreater;
 	QString m_parentId;
 	QString m_searchTerm;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
@@ -13183,10 +12114,28 @@ public:
 	/**
 	 * @brief Optional. Include image information in output.	
 	 */
-	const bool &enableImges() const;
-	void setEnableImges(bool newEnableImges);
-	bool enableImgesNull() const;
-	void setEnableImgesNull();
+	const bool &enableImages() const;
+	void setEnableImages(bool newEnableImages);
+	bool enableImagesNull() const;
+	void setEnableImagesNull();
+	
+	
+	/**
+	 * @brief Whether to include resumable episodes in next up results.	
+	 */
+	const bool &enableResumable() const;
+	void setEnableResumable(bool newEnableResumable);
+	bool enableResumableNull() const;
+	void setEnableResumableNull();
+	
+	
+	/**
+	 * @brief Whether to include watched episodes in next up results.	
+	 */
+	const bool &enableRewatching() const;
+	void setEnableRewatching(bool newEnableRewatching);
+	bool enableRewatchingNull() const;
+	void setEnableRewatchingNull();
 	
 	
 	/**
@@ -13235,6 +12184,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Starting date of shows to show in Next Up section.	
+	 */
+	const QDateTime &nextUpDateCutoff() const;
+	void setNextUpDateCutoff(QDateTime newNextUpDateCutoff);
+	bool nextUpDateCutoffNull() const;
+	void setNextUpDateCutoffNull();
+	
+	
+	/**
 	 * @brief Optional. Specify this to localize the search to a specific item or folder. Omit to use the root.	
 	 */
 	const QString &parentId() const;
@@ -13278,84 +12236,19 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_disableFirstEpisode = std::nullopt;
 	QList<ImageType> m_enableImageTypes;
-	std::optional<bool> m_enableImges = std::nullopt;
+	std::optional<bool> m_enableImages = std::nullopt;
+	std::optional<bool> m_enableResumable = std::nullopt;
+	std::optional<bool> m_enableRewatching = std::nullopt;
 	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
 	std::optional<bool> m_enableUserData = std::nullopt;
 	QList<ItemFields> m_fields;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
+	QDateTime m_nextUpDateCutoff;
 	QString m_parentId;
 	QString m_seriesId;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
-
-
-};
-
-class GetNotificationServicesParams {
-public:
-
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetNotificationTypesParams {
-public:
-
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetNotificationsParams {
-public:
-
-	/**
-	 * @brief 	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-private:
-	// Required path parameters
-	QString m_userId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetNotificationsSummaryParams {
-public:
-
-	/**
-	 * @brief 	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-private:
-	// Required path parameters
-	QString m_userId;
-	
-	// Required query parameters
-
-	// Optional query parameters
 
 
 };
@@ -13500,15 +12393,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -13527,12 +12411,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -13642,10 +12535,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -13686,15 +12579,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -13713,12 +12597,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -13820,10 +12713,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -14044,14 +12937,37 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
 	QString m_itemId;
 	
 	// Required query parameters
+
+	// Optional query parameters
 	QString m_userId;
+
+
+};
+
+class GetPlaylistParams {
+public:
+
+	/**
+	 * @brief The playlist id.	
+	 */
+	const QString &playlistId() const;
+	void setPlaylistId(QString newPlaylistId);
+
+	
+private:
+	// Required path parameters
+	QString m_playlistId;
+	
+	// Required query parameters
 
 	// Optional query parameters
 
@@ -14066,13 +12982,6 @@ public:
 	 */
 	const QString &playlistId() const;
 	void setPlaylistId(QString newPlaylistId);
-
-	
-	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
 
 	
 	/**
@@ -14138,12 +13047,20 @@ public:
 	void setStartIndexNull();
 	
 	
+	/**
+	 * @brief User id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
 private:
 	// Required path parameters
 	QString m_playlistId;
 	
 	// Required query parameters
-	QString m_userId;
 
 	// Optional query parameters
 	QList<ImageType> m_enableImageTypes;
@@ -14153,6 +13070,57 @@ private:
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	std::optional<qint32> m_startIndex = std::nullopt;
+	QString m_userId;
+
+
+};
+
+class GetPlaylistUserParams {
+public:
+
+	/**
+	 * @brief The playlist id.	
+	 */
+	const QString &playlistId() const;
+	void setPlaylistId(QString newPlaylistId);
+
+	
+	/**
+	 * @brief The user id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+
+	
+private:
+	// Required path parameters
+	QString m_playlistId;
+	QString m_userId;
+	
+	// Required query parameters
+
+	// Optional query parameters
+
+
+};
+
+class GetPlaylistUsersParams {
+public:
+
+	/**
+	 * @brief The playlist id.	
+	 */
+	const QString &playlistId() const;
+	void setPlaylistId(QString newPlaylistId);
+
+	
+private:
+	// Required path parameters
+	QString m_playlistId;
+	
+	// Required query parameters
+
+	// Optional query parameters
 
 
 };
@@ -14191,14 +13159,14 @@ public:
 	/**
 	 * @brief Plugin version.	
 	 */
-	const QSharedPointer<Version> &version() const;
-	void setVersion(QSharedPointer<Version> newVersion);
+	const QString &version() const;
+	void setVersion(QString newVersion);
 
 	
 private:
 	// Required path parameters
 	QString m_pluginId;
-	QSharedPointer<Version> m_version;
+	QString m_version;
 	
 	// Required query parameters
 
@@ -14411,40 +13379,6 @@ private:
 
 };
 
-class GetProfileParams {
-public:
-
-	/**
-	 * @brief Profile Id.	
-	 */
-	const QString &profileId() const;
-	void setProfileId(QString newProfileId);
-
-	
-private:
-	// Required path parameters
-	QString m_profileId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetProfileInfosParams {
-public:
-
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
 class GetProgramParams {
 public:
 
@@ -14530,8 +13464,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -14623,7 +13557,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
 	std::optional<bool> m_isAiring = std::nullopt;
 	std::optional<bool> m_isKids = std::nullopt;
 	std::optional<bool> m_isMovie = std::nullopt;
@@ -14643,8 +13577,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -14652,8 +13586,8 @@ public:
 	/**
 	 * @brief Optional. Filter by MediaType. Allows multiple, comma delimited.	
 	 */
-	const QStringList &mediaTypes() const;
-	void setMediaTypes(QStringList newMediaTypes);
+	const QList<MediaType> &mediaTypes() const;
+	void setMediaTypes(QList<MediaType> newMediaTypes);
 	bool mediaTypesNull() const;
 	void setMediaTypesNull();
 	
@@ -14682,35 +13616,19 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	QStringList m_includeItemTypes;
-	QStringList m_mediaTypes;
+	QList<BaseItemKind> m_includeItemTypes;
+	QList<MediaType> m_mediaTypes;
 	QString m_parentId;
 	QString m_userId;
 
 
 };
 
-class GetRatingImageParams {
+class GetQuickConnectEnabledParams {
 public:
 
-	/**
-	 * @brief The name of the image.	
-	 */
-	const QString &name() const;
-	void setName(QString newName);
-
-	
-	/**
-	 * @brief The theme to get the image from.	
-	 */
-	const QString &theme() const;
-	void setTheme(QString newTheme);
-
-	
 private:
 	// Required path parameters
-	QString m_name;
-	QString m_theme;
 	
 	// Required query parameters
 
@@ -14719,13 +13637,21 @@ private:
 
 };
 
-class GetRatingImagesParams {
+class GetQuickConnectStateParams {
 public:
 
+	/**
+	 * @brief Secret previously returned from the Initiate endpoint.	
+	 */
+	const QString &secret() const;
+	void setSecret(QString newSecret);
+
+	
 private:
 	// Required path parameters
 	
 	// Required query parameters
+	QString m_secret;
 
 	// Optional query parameters
 
@@ -15359,27 +14285,6 @@ private:
 
 };
 
-class GetRemoteImageParams {
-public:
-
-	/**
-	 * @brief The image url.	
-	 */
-	const QString &imageUrl() const;
-	void setImageUrl(QString newImageUrl);
-
-	
-private:
-	// Required path parameters
-	
-	// Required query parameters
-	QString m_imageUrl;
-
-	// Optional query parameters
-
-
-};
-
 class GetRemoteImageProvidersParams {
 public:
 
@@ -15472,29 +14377,21 @@ private:
 
 };
 
-class GetRemoteSearchImageParams {
+class GetRemoteLyricsParams {
 public:
 
 	/**
-	 * @brief The image url.	
+	 * @brief The remote provider item id.	
 	 */
-	const QString &imageUrl() const;
-	void setImageUrl(QString newImageUrl);
-
-	
-	/**
-	 * @brief The provider name.	
-	 */
-	const QString &providerName() const;
-	void setProviderName(QString newProviderName);
+	const QString &lyricId() const;
+	void setLyricId(QString newLyricId);
 
 	
 private:
 	// Required path parameters
+	QString m_lyricId;
 	
 	// Required query parameters
-	QString m_imageUrl;
-	QString m_providerName;
 
 	// Optional query parameters
 
@@ -15507,13 +14404,13 @@ public:
 	/**
 	 * @brief The item id.	
 	 */
-	const QString &jellyfinId() const;
-	void setJellyfinId(QString newJellyfinId);
+	const QString &subtitleId() const;
+	void setSubtitleId(QString newSubtitleId);
 
 	
 private:
 	// Required path parameters
-	QString m_jellyfinId;
+	QString m_subtitleId;
 	
 	// Required query parameters
 
@@ -15538,13 +14435,6 @@ private:
 class GetResumeItemsParams {
 public:
 
-	/**
-	 * @brief The user id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
 	/**
 	 * @brief Optional. The image types to include in the output.	
 	 */
@@ -15582,10 +14472,19 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Whether to exclude the currently active sessions.	
+	 */
+	const bool &excludeActiveSessions() const;
+	void setExcludeActiveSessions(bool newExcludeActiveSessions);
+	bool excludeActiveSessionsNull() const;
+	void setExcludeActiveSessionsNull();
+	
+	
+	/**
 	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
 	bool excludeItemTypesNull() const;
 	void setExcludeItemTypesNull();
 	
@@ -15611,8 +14510,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on the item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -15629,8 +14528,8 @@ public:
 	/**
 	 * @brief Optional. Filter by MediaType. Allows multiple, comma delimited.	
 	 */
-	const QStringList &mediaTypes() const;
-	void setMediaTypes(QStringList newMediaTypes);
+	const QList<MediaType> &mediaTypes() const;
+	void setMediaTypes(QList<MediaType> newMediaTypes);
 	bool mediaTypesNull() const;
 	void setMediaTypesNull();
 	
@@ -15662,9 +14561,17 @@ public:
 	void setStartIndexNull();
 	
 	
+	/**
+	 * @brief The user id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
 private:
 	// Required path parameters
-	QString m_userId;
 	
 	// Required query parameters
 
@@ -15673,15 +14580,17 @@ private:
 	std::optional<bool> m_enableImages = std::nullopt;
 	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
 	std::optional<bool> m_enableUserData = std::nullopt;
-	QStringList m_excludeItemTypes;
+	std::optional<bool> m_excludeActiveSessions = std::nullopt;
+	QList<BaseItemKind> m_excludeItemTypes;
 	QList<ItemFields> m_fields;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
 	std::optional<qint32> m_limit = std::nullopt;
-	QStringList m_mediaTypes;
+	QList<MediaType> m_mediaTypes;
 	QString m_parentId;
 	QString m_searchTerm;
 	std::optional<qint32> m_startIndex = std::nullopt;
+	QString m_userId;
 
 
 };
@@ -15694,15 +14603,17 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -15716,6 +14627,197 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+
+
+};
+
+class GetSearchHintsParams {
+public:
+
+	/**
+	 * @brief The search term to filter on.	
+	 */
+	const QString &searchTerm() const;
+	void setSearchTerm(QString newSearchTerm);
+
+	
+	/**
+	 * @brief If specified, results with these item types are filtered out. This allows multiple, comma delimited.	
+	 */
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
+	bool excludeItemTypesNull() const;
+	void setExcludeItemTypesNull();
+	
+	
+	/**
+	 * @brief Optional filter whether to include artists.	
+	 */
+	const bool &includeArtists() const;
+	void setIncludeArtists(bool newIncludeArtists);
+	bool includeArtistsNull() const;
+	void setIncludeArtistsNull();
+	
+	
+	/**
+	 * @brief Optional filter whether to include genres.	
+	 */
+	const bool &includeGenres() const;
+	void setIncludeGenres(bool newIncludeGenres);
+	bool includeGenresNull() const;
+	void setIncludeGenresNull();
+	
+	
+	/**
+	 * @brief If specified, only results with the specified item types are returned. This allows multiple, comma delimited.	
+	 */
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
+	bool includeItemTypesNull() const;
+	void setIncludeItemTypesNull();
+	
+	
+	/**
+	 * @brief Optional filter whether to include media.	
+	 */
+	const bool &includeMedia() const;
+	void setIncludeMedia(bool newIncludeMedia);
+	bool includeMediaNull() const;
+	void setIncludeMediaNull();
+	
+	
+	/**
+	 * @brief Optional filter whether to include people.	
+	 */
+	const bool &includePeople() const;
+	void setIncludePeople(bool newIncludePeople);
+	bool includePeopleNull() const;
+	void setIncludePeopleNull();
+	
+	
+	/**
+	 * @brief Optional filter whether to include studios.	
+	 */
+	const bool &includeStudios() const;
+	void setIncludeStudios(bool newIncludeStudios);
+	bool includeStudiosNull() const;
+	void setIncludeStudiosNull();
+	
+	
+	/**
+	 * @brief Optional filter for kids.	
+	 */
+	const bool &isKids() const;
+	void setIsKids(bool newIsKids);
+	bool isKidsNull() const;
+	void setIsKidsNull();
+	
+	
+	/**
+	 * @brief Optional filter for movies.	
+	 */
+	const bool &isMovie() const;
+	void setIsMovie(bool newIsMovie);
+	bool isMovieNull() const;
+	void setIsMovieNull();
+	
+	
+	/**
+	 * @brief Optional filter for news.	
+	 */
+	const bool &isNews() const;
+	void setIsNews(bool newIsNews);
+	bool isNewsNull() const;
+	void setIsNewsNull();
+	
+	
+	/**
+	 * @brief Optional filter for series.	
+	 */
+	const bool &isSeries() const;
+	void setIsSeries(bool newIsSeries);
+	bool isSeriesNull() const;
+	void setIsSeriesNull();
+	
+	
+	/**
+	 * @brief Optional filter for sports.	
+	 */
+	const bool &isSports() const;
+	void setIsSports(bool newIsSports);
+	bool isSportsNull() const;
+	void setIsSportsNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum number of records to return.	
+	 */
+	const qint32 &limit() const;
+	void setLimit(qint32 newLimit);
+	bool limitNull() const;
+	void setLimitNull();
+	
+	
+	/**
+	 * @brief If specified, only results with the specified media types are returned. This allows multiple, comma delimited.	
+	 */
+	const QList<MediaType> &mediaTypes() const;
+	void setMediaTypes(QList<MediaType> newMediaTypes);
+	bool mediaTypesNull() const;
+	void setMediaTypesNull();
+	
+	
+	/**
+	 * @brief If specified, only children of the parent are returned.	
+	 */
+	const QString &parentId() const;
+	void setParentId(QString newParentId);
+	bool parentIdNull() const;
+	void setParentIdNull();
+	
+	
+	/**
+	 * @brief Optional. The record index to start at. All items with a lower index will be dropped from the results.	
+	 */
+	const qint32 &startIndex() const;
+	void setStartIndex(qint32 newStartIndex);
+	bool startIndexNull() const;
+	void setStartIndexNull();
+	
+	
+	/**
+	 * @brief Optional. Supply a user id to search within a user's library or omit to search all.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
+private:
+	// Required path parameters
+	
+	// Required query parameters
+	QString m_searchTerm;
+
+	// Optional query parameters
+	QList<BaseItemKind> m_excludeItemTypes;
+	std::optional<bool> m_includeArtists = std::nullopt;
+	std::optional<bool> m_includeGenres = std::nullopt;
+	QList<BaseItemKind> m_includeItemTypes;
+	std::optional<bool> m_includeMedia = std::nullopt;
+	std::optional<bool> m_includePeople = std::nullopt;
+	std::optional<bool> m_includeStudios = std::nullopt;
+	std::optional<bool> m_isKids = std::nullopt;
+	std::optional<bool> m_isMovie = std::nullopt;
+	std::optional<bool> m_isNews = std::nullopt;
+	std::optional<bool> m_isSeries = std::nullopt;
+	std::optional<bool> m_isSports = std::nullopt;
+	std::optional<qint32> m_limit = std::nullopt;
+	QList<MediaType> m_mediaTypes;
+	QString m_parentId;
+	std::optional<qint32> m_startIndex = std::nullopt;
+	QString m_userId;
 
 
 };
@@ -16344,34 +15446,156 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
+
+
+};
+
+class GetSplashscreenParams {
+public:
+
+	/**
+	 * @brief Apply a background color for transparent images.	
+	 */
+	const QString &backgroundColor() const;
+	void setBackgroundColor(QString newBackgroundColor);
+	bool backgroundColorNull() const;
+	void setBackgroundColorNull();
+	
+	
+	/**
+	 * @brief Blur image.	
+	 */
+	const qint32 &blur() const;
+	void setBlur(qint32 newBlur);
+	bool blurNull() const;
+	void setBlurNull();
+	
+	
+	/**
+	 * @brief Height of box to fill.	
+	 */
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
+	
+	
+	/**
+	 * @brief Apply a foreground layer on top of the image.	
+	 */
+	const QString &foregroundLayer() const;
+	void setForegroundLayer(QString newForegroundLayer);
+	bool foregroundLayerNull() const;
+	void setForegroundLayerNull();
+	
+	
+	/**
+	 * @brief Determines the output format of the image - original,gif,jpg,png.	
+	 */
+	const ImageFormat &format() const;
+	void setFormat(ImageFormat newFormat);
+	bool formatNull() const;
+	void setFormatNull();
+	
+	
+	/**
+	 * @brief The fixed image height to return.	
+	 */
+	const qint32 &height() const;
+	void setHeight(qint32 newHeight);
+	bool heightNull() const;
+	void setHeightNull();
+	
+	
+	/**
+	 * @brief The maximum image height to return.	
+	 */
+	const qint32 &maxHeight() const;
+	void setMaxHeight(qint32 newMaxHeight);
+	bool maxHeightNull() const;
+	void setMaxHeightNull();
+	
+	
+	/**
+	 * @brief The maximum image width to return.	
+	 */
+	const qint32 &maxWidth() const;
+	void setMaxWidth(qint32 newMaxWidth);
+	bool maxWidthNull() const;
+	void setMaxWidthNull();
+	
+	
+	/**
+	 * @brief Quality setting, from 0-100.	
+	 */
+	const qint32 &quality() const;
+	void setQuality(qint32 newQuality);
+	bool qualityNull() const;
+	void setQualityNull();
+	
+	
+	/**
+	 * @brief Supply the cache tag from the item object to receive strong caching headers.	
+	 */
+	const QString &tag() const;
+	void setTag(QString newTag);
+	bool tagNull() const;
+	void setTagNull();
+	
+	
+	/**
+	 * @brief The fixed image width to return.	
+	 */
+	const qint32 &width() const;
+	void setWidth(qint32 newWidth);
+	bool widthNull() const;
+	void setWidthNull();
+	
+	
+private:
+	// Required path parameters
+	
+	// Required query parameters
+
+	// Optional query parameters
+	QString m_backgroundColor;
+	std::optional<qint32> m_blur = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
+	QString m_foregroundLayer;
+	ImageFormat m_format;
+	std::optional<qint32> m_height = std::nullopt;
+	std::optional<qint32> m_maxHeight = std::nullopt;
+	std::optional<qint32> m_maxWidth = std::nullopt;
+	std::optional<qint32> m_quality = std::nullopt;
+	QString m_tag;
+	std::optional<qint32> m_width = std::nullopt;
 
 
 };
 
 class GetStartupConfigurationParams {
-public:
-
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class GetStatusParams {
 public:
 
 private:
@@ -16433,15 +15657,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -16460,12 +15675,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -16575,10 +15799,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -16619,15 +15843,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -16646,12 +15861,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -16753,10 +15977,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -16813,8 +16037,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered out based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
 	bool excludeItemTypesNull() const;
 	void setExcludeItemTypesNull();
 	
@@ -16840,8 +16064,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -16937,10 +16161,10 @@ private:
 	std::optional<bool> m_enableImages = std::nullopt;
 	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
 	std::optional<bool> m_enableUserData = std::nullopt;
-	QStringList m_excludeItemTypes;
+	QList<BaseItemKind> m_excludeItemTypes;
 	QList<ItemFields> m_fields;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
 	std::optional<bool> m_isFavorite = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	QString m_nameLessThan;
@@ -16958,31 +16182,31 @@ class GetSubtitleParams {
 public:
 
 	/**
-	 * @brief The format of the returned subtitle.	
+	 * @brief The (route) format of the returned subtitle.	
 	 */
-	const QString &format() const;
-	void setFormat(QString newFormat);
+	const QString &routeFormat() const;
+	void setRouteFormat(QString newRouteFormat);
 
 	
 	/**
-	 * @brief The subtitle stream index.	
+	 * @brief The (route) subtitle stream index.	
 	 */
-	const qint32 &index() const;
-	void setIndex(qint32 newIndex);
+	const qint32 &routeIndex() const;
+	void setRouteIndex(qint32 newRouteIndex);
 
 	
 	/**
-	 * @brief The item id.	
+	 * @brief The (route) item id.	
 	 */
-	const QString &itemId() const;
-	void setItemId(QString newItemId);
+	const QString &routeItemId() const;
+	void setRouteItemId(QString newRouteItemId);
 
 	
 	/**
-	 * @brief The media source id.	
+	 * @brief The (route) media source id.	
 	 */
-	const QString &mediaSourceId() const;
-	void setMediaSourceId(QString newMediaSourceId);
+	const QString &routeMediaSourceId() const;
+	void setRouteMediaSourceId(QString newRouteMediaSourceId);
 
 	
 	/**
@@ -17013,7 +16237,43 @@ public:
 	
 	
 	/**
-	 * @brief Optional. The start position of the subtitle in ticks.	
+	 * @brief The format of the returned subtitle.	
+	 */
+	const QString &format() const;
+	void setFormat(QString newFormat);
+	bool formatNull() const;
+	void setFormatNull();
+	
+	
+	/**
+	 * @brief The subtitle stream index.	
+	 */
+	const qint32 &index() const;
+	void setIndex(qint32 newIndex);
+	bool indexNull() const;
+	void setIndexNull();
+	
+	
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+	bool itemIdNull() const;
+	void setItemIdNull();
+	
+	
+	/**
+	 * @brief The media source id.	
+	 */
+	const QString &mediaSourceId() const;
+	void setMediaSourceId(QString newMediaSourceId);
+	bool mediaSourceIdNull() const;
+	void setMediaSourceIdNull();
+	
+	
+	/**
+	 * @brief The start position of the subtitle in ticks.	
 	 */
 	const qint64 &startPositionTicks() const;
 	void setStartPositionTicks(qint64 newStartPositionTicks);
@@ -17023,10 +16283,10 @@ public:
 	
 private:
 	// Required path parameters
-	QString m_format;
-	qint32 m_index;
-	QString m_itemId;
-	QString m_mediaSourceId;
+	QString m_routeFormat;
+	qint32 m_routeIndex;
+	QString m_routeItemId;
+	QString m_routeMediaSourceId;
 	
 	// Required query parameters
 
@@ -17034,6 +16294,10 @@ private:
 	std::optional<bool> m_addVttTimeMap = std::nullopt;
 	std::optional<bool> m_copyTimestamps = std::nullopt;
 	std::optional<qint64> m_endPositionTicks = std::nullopt;
+	QString m_format;
+	std::optional<qint32> m_index = std::nullopt;
+	QString m_itemId;
+	QString m_mediaSourceId;
 	std::optional<qint64> m_startPositionTicks = std::nullopt;
 
 
@@ -17088,38 +16352,38 @@ class GetSubtitleWithTicksParams {
 public:
 
 	/**
-	 * @brief The format of the returned subtitle.	
+	 * @brief The (route) format of the returned subtitle.	
 	 */
-	const QString &format() const;
-	void setFormat(QString newFormat);
+	const QString &routeFormat() const;
+	void setRouteFormat(QString newRouteFormat);
 
 	
 	/**
-	 * @brief The subtitle stream index.	
+	 * @brief The (route) subtitle stream index.	
 	 */
-	const qint32 &index() const;
-	void setIndex(qint32 newIndex);
+	const qint32 &routeIndex() const;
+	void setRouteIndex(qint32 newRouteIndex);
 
 	
 	/**
-	 * @brief The item id.	
+	 * @brief The (route) item id.	
 	 */
-	const QString &itemId() const;
-	void setItemId(QString newItemId);
+	const QString &routeItemId() const;
+	void setRouteItemId(QString newRouteItemId);
 
 	
 	/**
-	 * @brief The media source id.	
+	 * @brief The (route) media source id.	
 	 */
-	const QString &mediaSourceId() const;
-	void setMediaSourceId(QString newMediaSourceId);
+	const QString &routeMediaSourceId() const;
+	void setRouteMediaSourceId(QString newRouteMediaSourceId);
 
 	
 	/**
-	 * @brief Optional. The start position of the subtitle in ticks.	
+	 * @brief The (route) start position of the subtitle in ticks.	
 	 */
-	const qint64 &startPositionTicks() const;
-	void setStartPositionTicks(qint64 newStartPositionTicks);
+	const qint64 &routeStartPositionTicks() const;
+	void setRouteStartPositionTicks(qint64 newRouteStartPositionTicks);
 
 	
 	/**
@@ -17149,13 +16413,58 @@ public:
 	void setEndPositionTicksNull();
 	
 	
+	/**
+	 * @brief The format of the returned subtitle.	
+	 */
+	const QString &format() const;
+	void setFormat(QString newFormat);
+	bool formatNull() const;
+	void setFormatNull();
+	
+	
+	/**
+	 * @brief The subtitle stream index.	
+	 */
+	const qint32 &index() const;
+	void setIndex(qint32 newIndex);
+	bool indexNull() const;
+	void setIndexNull();
+	
+	
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+	bool itemIdNull() const;
+	void setItemIdNull();
+	
+	
+	/**
+	 * @brief The media source id.	
+	 */
+	const QString &mediaSourceId() const;
+	void setMediaSourceId(QString newMediaSourceId);
+	bool mediaSourceIdNull() const;
+	void setMediaSourceIdNull();
+	
+	
+	/**
+	 * @brief The start position of the subtitle in ticks.	
+	 */
+	const qint64 &startPositionTicks() const;
+	void setStartPositionTicks(qint64 newStartPositionTicks);
+	bool startPositionTicksNull() const;
+	void setStartPositionTicksNull();
+	
+	
 private:
 	// Required path parameters
-	QString m_format;
-	qint32 m_index;
-	QString m_itemId;
-	QString m_mediaSourceId;
-	qint64 m_startPositionTicks;
+	QString m_routeFormat;
+	qint32 m_routeIndex;
+	QString m_routeItemId;
+	QString m_routeMediaSourceId;
+	qint64 m_routeStartPositionTicks;
 	
 	// Required query parameters
 
@@ -17163,6 +16472,11 @@ private:
 	std::optional<bool> m_addVttTimeMap = std::nullopt;
 	std::optional<bool> m_copyTimestamps = std::nullopt;
 	std::optional<qint64> m_endPositionTicks = std::nullopt;
+	QString m_format;
+	std::optional<qint32> m_index = std::nullopt;
+	QString m_itemId;
+	QString m_mediaSourceId;
+	std::optional<qint64> m_startPositionTicks = std::nullopt;
 
 
 };
@@ -17170,13 +16484,6 @@ private:
 class GetSuggestionsParams {
 public:
 
-	/**
-	 * @brief The user id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
 	/**
 	 * @brief Whether to enable the total record count.	
 	 */
@@ -17198,8 +16505,8 @@ public:
 	/**
 	 * @brief The media types.	
 	 */
-	const QStringList &mediaType() const;
-	void setMediaType(QStringList newMediaType);
+	const QList<MediaType> &mediaType() const;
+	void setMediaType(QList<MediaType> newMediaType);
 	bool mediaTypeNull() const;
 	void setMediaTypeNull();
 	
@@ -17216,24 +16523,33 @@ public:
 	/**
 	 * @brief The type.	
 	 */
-	const QStringList &type() const;
-	void setType(QStringList newType);
+	const QList<BaseItemKind> &type() const;
+	void setType(QList<BaseItemKind> newType);
 	bool typeNull() const;
 	void setTypeNull();
 	
 	
+	/**
+	 * @brief The user id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
 private:
 	// Required path parameters
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
 	std::optional<bool> m_enableTotalRecordCount = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
-	QStringList m_mediaType;
+	QList<MediaType> m_mediaType;
 	std::optional<qint32> m_startIndex = std::nullopt;
-	QStringList m_type;
+	QList<BaseItemKind> m_type;
+	QString m_userId;
 
 
 };
@@ -17325,6 +16641,24 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Specify one or more sort orders, comma delimited. Options: Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating, DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear, SortName, Random, Revenue, Runtime.	
+	 */
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
+	bool sortByNull() const;
+	void setSortByNull();
+	
+	
+	/**
+	 * @brief Optional. Sort Order - Ascending, Descending.	
+	 */
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
+	bool sortOrderNull() const;
+	void setSortOrderNull();
+	
+	
+	/**
 	 * @brief Optional. Filter by user id, and attach user data.	
 	 */
 	const QString &userId() const;
@@ -17341,6 +16675,8 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_inheritFromParent = std::nullopt;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	QString m_userId;
 
 
@@ -17366,6 +16702,24 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Specify one or more sort orders, comma delimited. Options: Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating, DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear, SortName, Random, Revenue, Runtime.	
+	 */
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
+	bool sortByNull() const;
+	void setSortByNull();
+	
+	
+	/**
+	 * @brief Optional. Sort Order - Ascending, Descending.	
+	 */
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
+	bool sortOrderNull() const;
+	void setSortOrderNull();
+	
+	
+	/**
 	 * @brief Optional. Filter by user id, and attach user data.	
 	 */
 	const QString &userId() const;
@@ -17382,6 +16736,8 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_inheritFromParent = std::nullopt;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	QString m_userId;
 
 
@@ -17407,6 +16763,24 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Specify one or more sort orders, comma delimited. Options: Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating, DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear, SortName, Random, Revenue, Runtime.	
+	 */
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
+	bool sortByNull() const;
+	void setSortByNull();
+	
+	
+	/**
+	 * @brief Optional. Sort Order - Ascending, Descending.	
+	 */
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
+	bool sortOrderNull() const;
+	void setSortOrderNull();
+	
+	
+	/**
 	 * @brief Optional. Filter by user id, and attach user data.	
 	 */
 	const QString &userId() const;
@@ -17423,6 +16797,8 @@ private:
 
 	// Optional query parameters
 	std::optional<bool> m_inheritFromParent = std::nullopt;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	QString m_userId;
 
 
@@ -17656,8 +17032,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be filtered based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
 	bool excludeItemTypesNull() const;
 	void setExcludeItemTypesNull();
 	
@@ -17708,7 +17084,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional filter by items that have an imdb id or not.	
+	 * @brief Optional filter by items that have an IMDb id or not.	
 	 */
 	const bool &hasImdbId() const;
 	void setHasImdbId(bool newHasImdbId);
@@ -17780,7 +17156,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional filter by items that have a tmdb id or not.	
+	 * @brief Optional filter by items that have a TMDb id or not.	
 	 */
 	const bool &hasTmdbId() const;
 	void setHasTmdbId(bool newHasTmdbId);
@@ -17798,7 +17174,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional filter by items that have a tvdb id or not.	
+	 * @brief Optional filter by items that have a TVDb id or not.	
 	 */
 	const bool &hasTvdbId() const;
 	void setHasTvdbId(bool newHasTvdbId);
@@ -17870,6 +17246,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional filter for live tv kids.	
+	 */
+	const bool &isKids() const;
+	void setIsKids(bool newIsKids);
+	bool isKidsNull() const;
+	void setIsKidsNull();
+	
+	
+	/**
 	 * @brief Optional filter by items that are locked.	
 	 */
 	const bool &isLocked() const;
@@ -17888,6 +17273,24 @@ public:
 	
 	
 	/**
+	 * @brief Optional filter for live tv movies.	
+	 */
+	const bool &isMovie() const;
+	void setIsMovie(bool newIsMovie);
+	bool isMovieNull() const;
+	void setIsMovieNull();
+	
+	
+	/**
+	 * @brief Optional filter for live tv news.	
+	 */
+	const bool &isNews() const;
+	void setIsNews(bool newIsNews);
+	bool isNewsNull() const;
+	void setIsNewsNull();
+	
+	
+	/**
 	 * @brief Optional filter by items that are placeholders.	
 	 */
 	const bool &isPlaceHolder() const;
@@ -17903,6 +17306,24 @@ public:
 	void setIsPlayed(bool newIsPlayed);
 	bool isPlayedNull() const;
 	void setIsPlayedNull();
+	
+	
+	/**
+	 * @brief Optional filter for live tv series.	
+	 */
+	const bool &isSeries() const;
+	void setIsSeries(bool newIsSeries);
+	bool isSeriesNull() const;
+	void setIsSeriesNull();
+	
+	
+	/**
+	 * @brief Optional filter for live tv sports.	
+	 */
+	const bool &isSports() const;
+	void setIsSports(bool newIsSports);
+	bool isSportsNull() const;
+	void setIsSportsNull();
 	
 	
 	/**
@@ -17971,8 +17392,8 @@ public:
 	/**
 	 * @brief Optional filter by MediaType. Allows multiple, comma delimited.	
 	 */
-	const QStringList &mediaTypes() const;
-	void setMediaTypes(QStringList newMediaTypes);
+	const QList<MediaType> &mediaTypes() const;
+	void setMediaTypes(QList<MediaType> newMediaTypes);
 	bool mediaTypesNull() const;
 	void setMediaTypesNull();
 	
@@ -18160,17 +17581,17 @@ public:
 	/**
 	 * @brief Optional. Specify one or more sort orders, comma delimited. Options: Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating, DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear, SortName, Random, Revenue, Runtime.	
 	 */
-	const QString &sortBy() const;
-	void setSortBy(QString newSortBy);
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
 	bool sortByNull() const;
 	void setSortByNull();
 	
 	
 	/**
-	 * @brief Sort Order - Ascending,Descending.	
+	 * @brief Sort Order - Ascending, Descending.	
 	 */
-	const QString &sortOrder() const;
-	void setSortOrder(QString newSortOrder);
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
 	bool sortOrderNull() const;
 	void setSortOrderNull();
 	
@@ -18212,7 +17633,7 @@ public:
 	
 	
 	/**
-	 * @brief The user id.	
+	 * @brief The user id supplied as query parameter; this is required when not using an API key.	
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
@@ -18258,7 +17679,7 @@ private:
 	std::optional<bool> m_enableUserData = std::nullopt;
 	QStringList m_excludeArtistIds;
 	QStringList m_excludeItemIds;
-	QStringList m_excludeItemTypes;
+	QList<BaseItemKind> m_excludeItemTypes;
 	QList<LocationType> m_excludeLocationTypes;
 	QList<ItemFields> m_fields;
 	QList<ItemFilter> m_filters;
@@ -18282,10 +17703,15 @@ private:
 	std::optional<bool> m_is4K = std::nullopt;
 	std::optional<bool> m_isFavorite = std::nullopt;
 	std::optional<bool> m_isHd = std::nullopt;
+	std::optional<bool> m_isKids = std::nullopt;
 	std::optional<bool> m_isLocked = std::nullopt;
 	std::optional<bool> m_isMissing = std::nullopt;
+	std::optional<bool> m_isMovie = std::nullopt;
+	std::optional<bool> m_isNews = std::nullopt;
 	std::optional<bool> m_isPlaceHolder = std::nullopt;
 	std::optional<bool> m_isPlayed = std::nullopt;
+	std::optional<bool> m_isSeries = std::nullopt;
+	std::optional<bool> m_isSports = std::nullopt;
 	std::optional<bool> m_isUnaired = std::nullopt;
 	std::optional<qint32> m_limit = std::nullopt;
 	QList<LocationType> m_locationTypes;
@@ -18293,7 +17719,7 @@ private:
 	QString m_maxOfficialRating;
 	QDateTime m_maxPremiereDate;
 	std::optional<qint32> m_maxWidth = std::nullopt;
-	QStringList m_mediaTypes;
+	QList<MediaType> m_mediaTypes;
 	std::optional<double> m_minCommunityRating = std::nullopt;
 	std::optional<double> m_minCriticRating = std::nullopt;
 	QDateTime m_minDateLastSaved;
@@ -18314,8 +17740,8 @@ private:
 	std::optional<bool> m_recursive = std::nullopt;
 	QString m_searchTerm;
 	QList<SeriesStatus> m_seriesStatus;
-	QString m_sortBy;
-	QString m_sortOrder;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QStringList m_studioIds;
 	QStringList m_studios;
@@ -18323,6 +17749,92 @@ private:
 	QString m_userId;
 	QList<VideoType> m_videoTypes;
 	QList<qint32> m_years;
+
+
+};
+
+class GetTrickplayHlsPlaylistParams {
+public:
+
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+	/**
+	 * @brief The width of a single tile.	
+	 */
+	const qint32 &width() const;
+	void setWidth(qint32 newWidth);
+
+	
+	/**
+	 * @brief The media version id, if using an alternate version.	
+	 */
+	const QString &mediaSourceId() const;
+	void setMediaSourceId(QString newMediaSourceId);
+	bool mediaSourceIdNull() const;
+	void setMediaSourceIdNull();
+	
+	
+private:
+	// Required path parameters
+	QString m_itemId;
+	qint32 m_width;
+	
+	// Required query parameters
+
+	// Optional query parameters
+	QString m_mediaSourceId;
+
+
+};
+
+class GetTrickplayTileImageParams {
+public:
+
+	/**
+	 * @brief The index of the desired tile.	
+	 */
+	const qint32 &index() const;
+	void setIndex(qint32 newIndex);
+
+	
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+	/**
+	 * @brief The width of a single tile.	
+	 */
+	const qint32 &width() const;
+	void setWidth(qint32 newWidth);
+
+	
+	/**
+	 * @brief The media version id, if using an alternate version.	
+	 */
+	const QString &mediaSourceId() const;
+	void setMediaSourceId(QString newMediaSourceId);
+	bool mediaSourceIdNull() const;
+	void setMediaSourceIdNull();
+	
+	
+private:
+	// Required path parameters
+	qint32 m_index;
+	QString m_itemId;
+	qint32 m_width;
+	
+	// Required query parameters
+
+	// Optional query parameters
+	QString m_mediaSourceId;
 
 
 };
@@ -18393,6 +17905,15 @@ public:
 	void setDeviceId(QString newDeviceId);
 	bool deviceIdNull() const;
 	void setDeviceIdNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -18488,8 +18009,8 @@ public:
 	/**
 	 * @brief Optional. The transcoding protocol.	
 	 */
-	const QString &transcodingProtocol() const;
-	void setTranscodingProtocol(QString newTranscodingProtocol);
+	const MediaStreamProtocol &transcodingProtocol() const;
+	void setTranscodingProtocol(MediaStreamProtocol newTranscodingProtocol);
 	bool transcodingProtocolNull() const;
 	void setTranscodingProtocolNull();
 	
@@ -18515,6 +18036,7 @@ private:
 	std::optional<bool> m_breakOnNonKeyFrames = std::nullopt;
 	QStringList m_container;
 	QString m_deviceId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableRedirection = std::nullopt;
 	std::optional<bool> m_enableRemoteMedia = std::nullopt;
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
@@ -18525,7 +18047,7 @@ private:
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<qint32> m_transcodingAudioChannels = std::nullopt;
 	QString m_transcodingContainer;
-	QString m_transcodingProtocol;
+	MediaStreamProtocol m_transcodingProtocol;
 	QString m_userId;
 
 
@@ -18546,10 +18068,10 @@ public:
 	/**
 	 * @brief Optional. Include image information in output.	
 	 */
-	const bool &enableImges() const;
-	void setEnableImges(bool newEnableImges);
-	bool enableImgesNull() const;
-	void setEnableImgesNull();
+	const bool &enableImages() const;
+	void setEnableImages(bool newEnableImages);
+	bool enableImagesNull() const;
+	void setEnableImagesNull();
 	
 	
 	/**
@@ -18622,7 +18144,7 @@ private:
 
 	// Optional query parameters
 	QList<ImageType> m_enableImageTypes;
-	std::optional<bool> m_enableImges = std::nullopt;
+	std::optional<bool> m_enableImages = std::nullopt;
 	std::optional<bool> m_enableUserData = std::nullopt;
 	QList<ItemFields> m_fields;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
@@ -18659,29 +18181,6 @@ class GetUserImageParams {
 public:
 
 	/**
-	 * @brief Image type.	
-	 */
-	const ImageType &imageType() const;
-	void setImageType(ImageType newImageType);
-
-	
-	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -18700,12 +18199,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -18799,6 +18307,15 @@ public:
 	
 	
 	/**
+	 * @brief User id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
+	/**
 	 * @brief The fixed image width to return.	
 	 */
 	const qint32 &width() const;
@@ -18809,16 +18326,14 @@ public:
 	
 private:
 	// Required path parameters
-	ImageType m_imageType;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -18829,183 +18344,7 @@ private:
 	std::optional<qint32> m_quality = std::nullopt;
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
-	std::optional<qint32> m_width = std::nullopt;
-
-
-};
-
-class GetUserImageByIndexParams {
-public:
-
-	/**
-	 * @brief Image index.	
-	 */
-	const qint32 &imageIndex() const;
-	void setImageIndex(qint32 newImageIndex);
-
-	
-	/**
-	 * @brief Image type.	
-	 */
-	const ImageType &imageType() const;
-	void setImageType(ImageType newImageType);
-
-	
-	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
-	 * @brief Optional. Apply a background color for transparent images.	
-	 */
-	const QString &backgroundColor() const;
-	void setBackgroundColor(QString newBackgroundColor);
-	bool backgroundColorNull() const;
-	void setBackgroundColorNull();
-	
-	
-	/**
-	 * @brief Optional. Blur image.	
-	 */
-	const qint32 &blur() const;
-	void setBlur(qint32 newBlur);
-	bool blurNull() const;
-	void setBlurNull();
-	
-	
-	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
-	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
-	
-	
-	/**
-	 * @brief Optional. Apply a foreground layer on top of the image.	
-	 */
-	const QString &foregroundLayer() const;
-	void setForegroundLayer(QString newForegroundLayer);
-	bool foregroundLayerNull() const;
-	void setForegroundLayerNull();
-	
-	
-	/**
-	 * @brief Determines the output format of the image - original,gif,jpg,png.	
-	 */
-	const ImageFormat &format() const;
-	void setFormat(ImageFormat newFormat);
-	bool formatNull() const;
-	void setFormatNull();
-	
-	
-	/**
-	 * @brief The fixed image height to return.	
-	 */
-	const qint32 &height() const;
-	void setHeight(qint32 newHeight);
-	bool heightNull() const;
-	void setHeightNull();
-	
-	
-	/**
-	 * @brief The maximum image height to return.	
-	 */
-	const qint32 &maxHeight() const;
-	void setMaxHeight(qint32 newMaxHeight);
-	bool maxHeightNull() const;
-	void setMaxHeightNull();
-	
-	
-	/**
-	 * @brief The maximum image width to return.	
-	 */
-	const qint32 &maxWidth() const;
-	void setMaxWidth(qint32 newMaxWidth);
-	bool maxWidthNull() const;
-	void setMaxWidthNull();
-	
-	
-	/**
-	 * @brief Optional. Percent to render for the percent played overlay.	
-	 */
-	const double &percentPlayed() const;
-	void setPercentPlayed(double newPercentPlayed);
-	bool percentPlayedNull() const;
-	void setPercentPlayedNull();
-	
-	
-	/**
-	 * @brief Optional. Quality setting, from 0-100. Defaults to 90 and should suffice in most cases.	
-	 */
-	const qint32 &quality() const;
-	void setQuality(qint32 newQuality);
-	bool qualityNull() const;
-	void setQualityNull();
-	
-	
-	/**
-	 * @brief Optional. Supply the cache tag from the item object to receive strong caching headers.	
-	 */
-	const QString &tag() const;
-	void setTag(QString newTag);
-	bool tagNull() const;
-	void setTagNull();
-	
-	
-	/**
-	 * @brief Optional. Unplayed count overlay to render.	
-	 */
-	const qint32 &unplayedCount() const;
-	void setUnplayedCount(qint32 newUnplayedCount);
-	bool unplayedCountNull() const;
-	void setUnplayedCountNull();
-	
-	
-	/**
-	 * @brief The fixed image width to return.	
-	 */
-	const qint32 &width() const;
-	void setWidth(qint32 newWidth);
-	bool widthNull() const;
-	void setWidthNull();
-	
-	
-private:
-	// Required path parameters
-	qint32 m_imageIndex;
-	ImageType m_imageType;
 	QString m_userId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
-	QString m_backgroundColor;
-	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
-	QString m_foregroundLayer;
-	ImageFormat m_format;
-	std::optional<qint32> m_height = std::nullopt;
-	std::optional<qint32> m_maxHeight = std::nullopt;
-	std::optional<qint32> m_maxWidth = std::nullopt;
-	std::optional<double> m_percentPlayed = std::nullopt;
-	std::optional<qint32> m_quality = std::nullopt;
-	QString m_tag;
-	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
 
@@ -19014,13 +18353,6 @@ private:
 class GetUserViewsParams {
 public:
 
-	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
 	/**
 	 * @brief Whether or not to include external views such as channels or live tv.	
 	 */
@@ -19042,22 +18374,31 @@ public:
 	/**
 	 * @brief Preset views.	
 	 */
-	const QStringList &presetViews() const;
-	void setPresetViews(QStringList newPresetViews);
+	const QList<CollectionType> &presetViews() const;
+	void setPresetViews(QList<CollectionType> newPresetViews);
 	bool presetViewsNull() const;
 	void setPresetViewsNull();
 	
 	
+	/**
+	 * @brief User id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
 private:
 	// Required path parameters
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
 	std::optional<bool> m_includeExternalContent = std::nullopt;
 	std::optional<bool> m_includeHidden = std::nullopt;
-	QStringList m_presetViews;
+	QList<CollectionType> m_presetViews;
+	QString m_userId;
 
 
 };
@@ -19155,7 +18496,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -19242,6 +18583,15 @@ public:
 	void setDeviceProfileId(QString newDeviceProfileId);
 	bool deviceProfileIdNull() const;
 	void setDeviceProfileIdNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -19524,7 +18874,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -19571,6 +18921,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -19638,6 +18989,15 @@ public:
 	
 	
 	/**
+	 * @brief Whether to always burn in subtitles when transcoding.	
+	 */
+	const bool &alwaysBurnInSubtitleWhenTranscoding() const;
+	void setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding);
+	bool alwaysBurnInSubtitleWhenTranscodingNull() const;
+	void setAlwaysBurnInSubtitleWhenTranscodingNull();
+	
+	
+	/**
 	 * @brief Optional. Specify an audio bitrate to encode to, e.g. 128000. If omitted this will be left to encoder defaults.	
 	 */
 	const qint32 &audioBitRate() const;
@@ -19656,7 +19016,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -19746,6 +19106,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
+	
+	
+	/**
 	 * @brief Whether or not to allow automatic stream copy if requested values match the original source. Defaults to true.	
 	 */
 	const bool &enableAutoStreamCopy() const;
@@ -19827,6 +19196,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. The maximum vertical resolution of the encoded video.	
+	 */
+	const qint32 &maxHeight() const;
+	void setMaxHeight(qint32 newMaxHeight);
+	bool maxHeightNull() const;
+	void setMaxHeightNull();
+	
+	
+	/**
 	 * @brief Optional.	
 	 */
 	const qint32 &maxRefFrames() const;
@@ -19842,6 +19220,15 @@ public:
 	void setMaxVideoBitDepth(qint32 newMaxVideoBitDepth);
 	bool maxVideoBitDepthNull() const;
 	void setMaxVideoBitDepthNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum horizontal resolution of the encoded video.	
+	 */
+	const qint32 &maxWidth() const;
+	void setMaxWidth(qint32 newMaxWidth);
+	bool maxWidthNull() const;
+	void setMaxWidthNull();
 	
 	
 	/**
@@ -20016,7 +19403,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -20051,6 +19438,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_allowAudioStreamCopy = std::nullopt;
 	std::optional<bool> m_allowVideoStreamCopy = std::nullopt;
+	std::optional<bool> m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 	std::optional<qint32> m_audioBitRate = std::nullopt;
 	std::optional<qint32> m_audioChannels = std::nullopt;
 	QString m_audioCodec;
@@ -20063,6 +19451,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -20072,8 +19461,10 @@ private:
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
 	std::optional<qint32> m_maxAudioChannels = std::nullopt;
 	std::optional<float> m_maxFramerate = std::nullopt;
+	std::optional<qint32> m_maxHeight = std::nullopt;
 	std::optional<qint32> m_maxRefFrames = std::nullopt;
 	std::optional<qint32> m_maxVideoBitDepth = std::nullopt;
+	std::optional<qint32> m_maxWidth = std::nullopt;
 	QString m_mediaSourceId;
 	std::optional<qint32> m_minSegments = std::nullopt;
 	QString m_params;
@@ -20147,7 +19538,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -20246,6 +19637,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
+	
+	
+	/**
 	 * @brief Whether or not to allow automatic stream copy if requested values match the original source. Defaults to true.	
 	 */
 	const bool &enableAutoStreamCopy() const;
@@ -20327,6 +19727,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. The maximum vertical resolution of the encoded video.	
+	 */
+	const qint32 &maxHeight() const;
+	void setMaxHeight(qint32 newMaxHeight);
+	bool maxHeightNull() const;
+	void setMaxHeightNull();
+	
+	
+	/**
 	 * @brief Optional.	
 	 */
 	const qint32 &maxRefFrames() const;
@@ -20342,6 +19751,15 @@ public:
 	void setMaxVideoBitDepth(qint32 newMaxVideoBitDepth);
 	bool maxVideoBitDepthNull() const;
 	void setMaxVideoBitDepthNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum horizontal resolution of the encoded video.	
+	 */
+	const qint32 &maxWidth() const;
+	void setMaxWidth(qint32 newMaxWidth);
+	bool maxWidthNull() const;
+	void setMaxWidthNull();
 	
 	
 	/**
@@ -20516,7 +19934,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -20564,6 +19982,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -20573,8 +19992,10 @@ private:
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
 	std::optional<qint32> m_maxAudioChannels = std::nullopt;
 	std::optional<float> m_maxFramerate = std::nullopt;
+	std::optional<qint32> m_maxHeight = std::nullopt;
 	std::optional<qint32> m_maxRefFrames = std::nullopt;
 	std::optional<qint32> m_maxVideoBitDepth = std::nullopt;
+	std::optional<qint32> m_maxWidth = std::nullopt;
 	QString m_mediaSourceId;
 	std::optional<qint32> m_minSegments = std::nullopt;
 	QString m_params;
@@ -20619,13 +20040,6 @@ public:
 
 	
 	/**
-	 * @brief 	
-	 */
-	const QString &stream() const;
-	void setStream(QString newStream);
-
-	
-	/**
 	 * @brief Whether or not to allow copying of the audio stream url.	
 	 */
 	const bool &allowAudioStreamCopy() const;
@@ -20662,7 +20076,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -20752,6 +20166,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
+	
+	
+	/**
 	 * @brief Whether or not to allow automatic stream copy if requested values match the original source. Defaults to true.	
 	 */
 	const bool &enableAutoStreamCopy() const;
@@ -20833,6 +20256,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. The maximum vertical resolution of the encoded video.	
+	 */
+	const qint32 &maxHeight() const;
+	void setMaxHeight(qint32 newMaxHeight);
+	bool maxHeightNull() const;
+	void setMaxHeightNull();
+	
+	
+	/**
 	 * @brief Optional.	
 	 */
 	const qint32 &maxRefFrames() const;
@@ -20848,6 +20280,15 @@ public:
 	void setMaxVideoBitDepth(qint32 newMaxVideoBitDepth);
 	bool maxVideoBitDepthNull() const;
 	void setMaxVideoBitDepthNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum horizontal resolution of the encoded video.	
+	 */
+	const qint32 &maxWidth() const;
+	void setMaxWidth(qint32 newMaxWidth);
+	bool maxWidthNull() const;
+	void setMaxWidthNull();
 	
 	
 	/**
@@ -20905,7 +20346,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Whether to require a non anamporphic stream.	
+	 * @brief Optional. Whether to require a non anamorphic stream.	
 	 */
 	const bool &requireNonAnamorphic() const;
 	void setRequireNonAnamorphic(bool newRequireNonAnamorphic);
@@ -20923,7 +20364,7 @@ public:
 	
 	
 	/**
-	 * @brief The segment lenght.	
+	 * @brief The segment length.	
 	 */
 	const qint32 &segmentLength() const;
 	void setSegmentLength(qint32 newSegmentLength);
@@ -21022,7 +20463,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -21052,7 +20493,6 @@ private:
 	// Required path parameters
 	QString m_container;
 	QString m_itemId;
-	QString m_stream;
 	
 	// Required query parameters
 
@@ -21071,6 +20511,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -21080,8 +20521,10 @@ private:
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
 	std::optional<qint32> m_maxAudioChannels = std::nullopt;
 	std::optional<float> m_maxFramerate = std::nullopt;
+	std::optional<qint32> m_maxHeight = std::nullopt;
 	std::optional<qint32> m_maxRefFrames = std::nullopt;
 	std::optional<qint32> m_maxVideoBitDepth = std::nullopt;
+	std::optional<qint32> m_maxWidth = std::nullopt;
 	QString m_mediaSourceId;
 	std::optional<qint32> m_minSegments = std::nullopt;
 	QString m_params;
@@ -21198,8 +20641,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be excluded based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &excludeItemTypes() const;
-	void setExcludeItemTypes(QStringList newExcludeItemTypes);
+	const QList<BaseItemKind> &excludeItemTypes() const;
+	void setExcludeItemTypes(QList<BaseItemKind> newExcludeItemTypes);
 	bool excludeItemTypesNull() const;
 	void setExcludeItemTypesNull();
 	
@@ -21225,8 +20668,8 @@ public:
 	/**
 	 * @brief Optional. If specified, results will be included based on item type. This allows multiple, comma delimited.	
 	 */
-	const QStringList &includeItemTypes() const;
-	void setIncludeItemTypes(QStringList newIncludeItemTypes);
+	const QList<BaseItemKind> &includeItemTypes() const;
+	void setIncludeItemTypes(QList<BaseItemKind> newIncludeItemTypes);
 	bool includeItemTypesNull() const;
 	void setIncludeItemTypesNull();
 	
@@ -21243,8 +20686,8 @@ public:
 	/**
 	 * @brief Optional. Filter by MediaType. Allows multiple, comma delimited.	
 	 */
-	const QStringList &mediaTypes() const;
-	void setMediaTypes(QStringList newMediaTypes);
+	const QList<MediaType> &mediaTypes() const;
+	void setMediaTypes(QList<MediaType> newMediaTypes);
 	bool mediaTypesNull() const;
 	void setMediaTypesNull();
 	
@@ -21270,8 +20713,8 @@ public:
 	/**
 	 * @brief Optional. Specify one or more sort orders, comma delimited. Options: Album, AlbumArtist, Artist, Budget, CommunityRating, CriticRating, DateCreated, DatePlayed, PlayCount, PremiereDate, ProductionYear, SortName, Random, Revenue, Runtime.	
 	 */
-	const QString &sortBy() const;
-	void setSortBy(QString newSortBy);
+	const QList<ItemSortBy> &sortBy() const;
+	void setSortBy(QList<ItemSortBy> newSortBy);
 	bool sortByNull() const;
 	void setSortByNull();
 	
@@ -21279,8 +20722,8 @@ public:
 	/**
 	 * @brief Sort Order - Ascending,Descending.	
 	 */
-	const QString &sortOrder() const;
-	void setSortOrder(QString newSortOrder);
+	const QList<SortOrder> &sortOrder() const;
+	void setSortOrder(QList<SortOrder> newSortOrder);
 	bool sortOrderNull() const;
 	void setSortOrderNull();
 	
@@ -21312,16 +20755,16 @@ private:
 	QList<ImageType> m_enableImageTypes;
 	std::optional<bool> m_enableImages = std::nullopt;
 	std::optional<bool> m_enableUserData = std::nullopt;
-	QStringList m_excludeItemTypes;
+	QList<BaseItemKind> m_excludeItemTypes;
 	QList<ItemFields> m_fields;
 	std::optional<qint32> m_imageTypeLimit = std::nullopt;
-	QStringList m_includeItemTypes;
+	QList<BaseItemKind> m_includeItemTypes;
 	std::optional<qint32> m_limit = std::nullopt;
-	QStringList m_mediaTypes;
+	QList<MediaType> m_mediaTypes;
 	QString m_parentId;
 	std::optional<bool> m_recursive = std::nullopt;
-	QString m_sortBy;
-	QString m_sortOrder;
+	QList<ItemSortBy> m_sortBy;
+	QList<SortOrder> m_sortOrder;
 	std::optional<qint32> m_startIndex = std::nullopt;
 	QString m_userId;
 
@@ -21353,15 +20796,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -21380,12 +20814,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -21487,10 +20930,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -21552,7 +20995,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -21648,6 +21091,15 @@ public:
 	void setDeviceProfileId(QString newDeviceProfileId);
 	bool deviceProfileIdNull() const;
 	void setDeviceProfileIdNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -21921,7 +21373,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -21969,6 +21421,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -22060,7 +21513,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -22147,6 +21600,15 @@ public:
 	void setDeviceProfileId(QString newDeviceProfileId);
 	bool deviceProfileIdNull() const;
 	void setDeviceProfileIdNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -22321,7 +21783,7 @@ public:
 	
 	
 	/**
-	 * @brief The segment lenght.	
+	 * @brief The segment length.	
 	 */
 	const qint32 &segmentLength() const;
 	void setSegmentLength(qint32 newSegmentLength);
@@ -22420,7 +21882,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -22468,6 +21930,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -22523,15 +21986,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -22550,12 +22004,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -22665,10 +22128,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -22709,15 +22172,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -22736,12 +22190,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -22843,10 +22306,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -22879,15 +22342,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -22906,12 +22360,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -23021,10 +22484,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -23107,15 +22570,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -23134,12 +22588,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -23193,10 +22656,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	std::optional<qint32> m_height = std::nullopt;
 	std::optional<qint32> m_quality = std::nullopt;
@@ -23230,15 +22693,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -23257,12 +22711,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -23364,10 +22827,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -23436,7 +22899,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -23532,6 +22995,15 @@ public:
 	void setEnableAdaptiveBitrateStreaming(bool newEnableAdaptiveBitrateStreaming);
 	bool enableAdaptiveBitrateStreamingNull() const;
 	void setEnableAdaptiveBitrateStreamingNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -23805,7 +23277,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -23854,6 +23326,7 @@ private:
 	QString m_deviceId;
 	QString m_deviceProfileId;
 	std::optional<bool> m_enableAdaptiveBitrateStreaming = std::nullopt;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -23927,6 +23400,15 @@ public:
 	
 	
 	/**
+	 * @brief Whether to always burn in subtitles when transcoding.	
+	 */
+	const bool &alwaysBurnInSubtitleWhenTranscoding() const;
+	void setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding);
+	bool alwaysBurnInSubtitleWhenTranscodingNull() const;
+	void setAlwaysBurnInSubtitleWhenTranscodingNull();
+	
+	
+	/**
 	 * @brief Optional. Specify an audio bitrate to encode to, e.g. 128000. If omitted this will be left to encoder defaults.	
 	 */
 	const qint32 &audioBitRate() const;
@@ -23945,7 +23427,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -24044,6 +23526,15 @@ public:
 	
 	
 	/**
+	 * @brief Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
+	
+	
+	/**
 	 * @brief Whether or not to allow automatic stream copy if requested values match the original source. Defaults to true.	
 	 */
 	const bool &enableAutoStreamCopy() const;
@@ -24059,6 +23550,15 @@ public:
 	void setEnableMpegtsM2TsMode(bool newEnableMpegtsM2TsMode);
 	bool enableMpegtsM2TsModeNull() const;
 	void setEnableMpegtsM2TsModeNull();
+	
+	
+	/**
+	 * @brief Enable trickplay image playlists being added to master playlist.	
+	 */
+	const bool &enableTrickplay() const;
+	void setEnableTrickplay(bool newEnableTrickplay);
+	bool enableTrickplayNull() const;
+	void setEnableTrickplayNull();
 	
 	
 	/**
@@ -24125,6 +23625,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. The maximum vertical resolution of the encoded video.	
+	 */
+	const qint32 &maxHeight() const;
+	void setMaxHeight(qint32 newMaxHeight);
+	bool maxHeightNull() const;
+	void setMaxHeightNull();
+	
+	
+	/**
 	 * @brief Optional.	
 	 */
 	const qint32 &maxRefFrames() const;
@@ -24140,6 +23649,15 @@ public:
 	void setMaxVideoBitDepth(qint32 newMaxVideoBitDepth);
 	bool maxVideoBitDepthNull() const;
 	void setMaxVideoBitDepthNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum horizontal resolution of the encoded video.	
+	 */
+	const qint32 &maxWidth() const;
+	void setMaxWidth(qint32 newMaxWidth);
+	bool maxWidthNull() const;
+	void setMaxWidthNull();
 	
 	
 	/**
@@ -24305,7 +23823,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -24341,6 +23859,7 @@ private:
 	// Optional query parameters
 	std::optional<bool> m_allowAudioStreamCopy = std::nullopt;
 	std::optional<bool> m_allowVideoStreamCopy = std::nullopt;
+	std::optional<bool> m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 	std::optional<qint32> m_audioBitRate = std::nullopt;
 	std::optional<qint32> m_audioChannels = std::nullopt;
 	QString m_audioCodec;
@@ -24354,8 +23873,10 @@ private:
 	QString m_deviceId;
 	QString m_deviceProfileId;
 	std::optional<bool> m_enableAdaptiveBitrateStreaming = std::nullopt;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
+	std::optional<bool> m_enableTrickplay = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
 	std::optional<qint32> m_height = std::nullopt;
 	QString m_level;
@@ -24363,8 +23884,10 @@ private:
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
 	std::optional<qint32> m_maxAudioChannels = std::nullopt;
 	std::optional<float> m_maxFramerate = std::nullopt;
+	std::optional<qint32> m_maxHeight = std::nullopt;
 	std::optional<qint32> m_maxRefFrames = std::nullopt;
 	std::optional<qint32> m_maxVideoBitDepth = std::nullopt;
+	std::optional<qint32> m_maxWidth = std::nullopt;
 	std::optional<qint32> m_minSegments = std::nullopt;
 	QString m_params;
 	QString m_playSessionId;
@@ -24408,15 +23931,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -24435,12 +23949,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -24550,10 +24073,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -24594,15 +24117,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -24621,12 +24135,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -24728,10 +24251,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -24764,15 +24287,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -24791,12 +24305,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -24906,10 +24429,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -24950,15 +24473,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -24977,12 +24491,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -25084,10 +24607,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -25120,15 +24643,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -25147,12 +24661,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -25262,10 +24785,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -25306,15 +24829,6 @@ public:
 
 	
 	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
 	const QString &backgroundColor() const;
@@ -25333,12 +24847,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -25440,10 +24963,10 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -25511,6 +25034,15 @@ public:
 	void setDeviceId(QString newDeviceId);
 	bool deviceIdNull() const;
 	void setDeviceIdNull();
+	
+	
+	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
 	
 	
 	/**
@@ -25606,8 +25138,8 @@ public:
 	/**
 	 * @brief Optional. The transcoding protocol.	
 	 */
-	const QString &transcodingProtocol() const;
-	void setTranscodingProtocol(QString newTranscodingProtocol);
+	const MediaStreamProtocol &transcodingProtocol() const;
+	void setTranscodingProtocol(MediaStreamProtocol newTranscodingProtocol);
 	bool transcodingProtocolNull() const;
 	void setTranscodingProtocolNull();
 	
@@ -25633,6 +25165,7 @@ private:
 	std::optional<bool> m_breakOnNonKeyFrames = std::nullopt;
 	QStringList m_container;
 	QString m_deviceId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableRedirection = std::nullopt;
 	std::optional<bool> m_enableRemoteMedia = std::nullopt;
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
@@ -25643,7 +25176,7 @@ private:
 	std::optional<qint64> m_startTimeTicks = std::nullopt;
 	std::optional<qint32> m_transcodingAudioChannels = std::nullopt;
 	QString m_transcodingContainer;
-	QString m_transcodingProtocol;
+	MediaStreamProtocol m_transcodingProtocol;
 	QString m_userId;
 
 
@@ -25652,29 +25185,6 @@ private:
 class HeadUserImageParams {
 public:
 
-	/**
-	 * @brief Image type.	
-	 */
-	const ImageType &imageType() const;
-	void setImageType(ImageType newImageType);
-
-	
-	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
 	/**
 	 * @brief Optional. Apply a background color for transparent images.	
 	 */
@@ -25694,12 +25204,21 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
+	 * @brief Height of box to fill.	
 	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
+	const qint32 &fillHeight() const;
+	void setFillHeight(qint32 newFillHeight);
+	bool fillHeightNull() const;
+	void setFillHeightNull();
+	
+	
+	/**
+	 * @brief Width of box to fill.	
+	 */
+	const qint32 &fillWidth() const;
+	void setFillWidth(qint32 newFillWidth);
+	bool fillWidthNull() const;
+	void setFillWidthNull();
 	
 	
 	/**
@@ -25793,6 +25312,15 @@ public:
 	
 	
 	/**
+	 * @brief User id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
+	/**
 	 * @brief The fixed image width to return.	
 	 */
 	const qint32 &width() const;
@@ -25803,16 +25331,14 @@ public:
 	
 private:
 	// Required path parameters
-	ImageType m_imageType;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
 	QString m_backgroundColor;
 	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
+	std::optional<qint32> m_fillHeight = std::nullopt;
+	std::optional<qint32> m_fillWidth = std::nullopt;
 	QString m_foregroundLayer;
 	ImageFormat m_format;
 	std::optional<qint32> m_height = std::nullopt;
@@ -25823,183 +25349,7 @@ private:
 	std::optional<qint32> m_quality = std::nullopt;
 	QString m_tag;
 	std::optional<qint32> m_unplayedCount = std::nullopt;
-	std::optional<qint32> m_width = std::nullopt;
-
-
-};
-
-class HeadUserImageByIndexParams {
-public:
-
-	/**
-	 * @brief Image index.	
-	 */
-	const qint32 &imageIndex() const;
-	void setImageIndex(qint32 newImageIndex);
-
-	
-	/**
-	 * @brief Image type.	
-	 */
-	const ImageType &imageType() const;
-	void setImageType(ImageType newImageType);
-
-	
-	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
-	 * @brief Optional. Add a played indicator.	
-	 */
-	const bool &addPlayedIndicator() const;
-	void setAddPlayedIndicator(bool newAddPlayedIndicator);
-	bool addPlayedIndicatorNull() const;
-	void setAddPlayedIndicatorNull();
-	
-	
-	/**
-	 * @brief Optional. Apply a background color for transparent images.	
-	 */
-	const QString &backgroundColor() const;
-	void setBackgroundColor(QString newBackgroundColor);
-	bool backgroundColorNull() const;
-	void setBackgroundColorNull();
-	
-	
-	/**
-	 * @brief Optional. Blur image.	
-	 */
-	const qint32 &blur() const;
-	void setBlur(qint32 newBlur);
-	bool blurNull() const;
-	void setBlurNull();
-	
-	
-	/**
-	 * @brief Optional. Specify if whitespace should be cropped out of the image. True/False. If unspecified, whitespace will be cropped from logos and clear art.	
-	 */
-	const bool &cropWhitespace() const;
-	void setCropWhitespace(bool newCropWhitespace);
-	bool cropWhitespaceNull() const;
-	void setCropWhitespaceNull();
-	
-	
-	/**
-	 * @brief Optional. Apply a foreground layer on top of the image.	
-	 */
-	const QString &foregroundLayer() const;
-	void setForegroundLayer(QString newForegroundLayer);
-	bool foregroundLayerNull() const;
-	void setForegroundLayerNull();
-	
-	
-	/**
-	 * @brief Determines the output format of the image - original,gif,jpg,png.	
-	 */
-	const ImageFormat &format() const;
-	void setFormat(ImageFormat newFormat);
-	bool formatNull() const;
-	void setFormatNull();
-	
-	
-	/**
-	 * @brief The fixed image height to return.	
-	 */
-	const qint32 &height() const;
-	void setHeight(qint32 newHeight);
-	bool heightNull() const;
-	void setHeightNull();
-	
-	
-	/**
-	 * @brief The maximum image height to return.	
-	 */
-	const qint32 &maxHeight() const;
-	void setMaxHeight(qint32 newMaxHeight);
-	bool maxHeightNull() const;
-	void setMaxHeightNull();
-	
-	
-	/**
-	 * @brief The maximum image width to return.	
-	 */
-	const qint32 &maxWidth() const;
-	void setMaxWidth(qint32 newMaxWidth);
-	bool maxWidthNull() const;
-	void setMaxWidthNull();
-	
-	
-	/**
-	 * @brief Optional. Percent to render for the percent played overlay.	
-	 */
-	const double &percentPlayed() const;
-	void setPercentPlayed(double newPercentPlayed);
-	bool percentPlayedNull() const;
-	void setPercentPlayedNull();
-	
-	
-	/**
-	 * @brief Optional. Quality setting, from 0-100. Defaults to 90 and should suffice in most cases.	
-	 */
-	const qint32 &quality() const;
-	void setQuality(qint32 newQuality);
-	bool qualityNull() const;
-	void setQualityNull();
-	
-	
-	/**
-	 * @brief Optional. Supply the cache tag from the item object to receive strong caching headers.	
-	 */
-	const QString &tag() const;
-	void setTag(QString newTag);
-	bool tagNull() const;
-	void setTagNull();
-	
-	
-	/**
-	 * @brief Optional. Unplayed count overlay to render.	
-	 */
-	const qint32 &unplayedCount() const;
-	void setUnplayedCount(qint32 newUnplayedCount);
-	bool unplayedCountNull() const;
-	void setUnplayedCountNull();
-	
-	
-	/**
-	 * @brief The fixed image width to return.	
-	 */
-	const qint32 &width() const;
-	void setWidth(qint32 newWidth);
-	bool widthNull() const;
-	void setWidthNull();
-	
-	
-private:
-	// Required path parameters
-	qint32 m_imageIndex;
-	ImageType m_imageType;
 	QString m_userId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-	std::optional<bool> m_addPlayedIndicator = std::nullopt;
-	QString m_backgroundColor;
-	std::optional<qint32> m_blur = std::nullopt;
-	std::optional<bool> m_cropWhitespace = std::nullopt;
-	QString m_foregroundLayer;
-	ImageFormat m_format;
-	std::optional<qint32> m_height = std::nullopt;
-	std::optional<qint32> m_maxHeight = std::nullopt;
-	std::optional<qint32> m_maxWidth = std::nullopt;
-	std::optional<double> m_percentPlayed = std::nullopt;
-	std::optional<qint32> m_quality = std::nullopt;
-	QString m_tag;
-	std::optional<qint32> m_unplayedCount = std::nullopt;
 	std::optional<qint32> m_width = std::nullopt;
 
 
@@ -26052,7 +25402,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -26151,6 +25501,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
+	
+	
+	/**
 	 * @brief Whether or not to allow automatic stream copy if requested values match the original source. Defaults to true.	
 	 */
 	const bool &enableAutoStreamCopy() const;
@@ -26232,6 +25591,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. The maximum vertical resolution of the encoded video.	
+	 */
+	const qint32 &maxHeight() const;
+	void setMaxHeight(qint32 newMaxHeight);
+	bool maxHeightNull() const;
+	void setMaxHeightNull();
+	
+	
+	/**
 	 * @brief Optional.	
 	 */
 	const qint32 &maxRefFrames() const;
@@ -26247,6 +25615,15 @@ public:
 	void setMaxVideoBitDepth(qint32 newMaxVideoBitDepth);
 	bool maxVideoBitDepthNull() const;
 	void setMaxVideoBitDepthNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum horizontal resolution of the encoded video.	
+	 */
+	const qint32 &maxWidth() const;
+	void setMaxWidth(qint32 newMaxWidth);
+	bool maxWidthNull() const;
+	void setMaxWidthNull();
 	
 	
 	/**
@@ -26421,7 +25798,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -26469,6 +25846,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -26478,8 +25856,10 @@ private:
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
 	std::optional<qint32> m_maxAudioChannels = std::nullopt;
 	std::optional<float> m_maxFramerate = std::nullopt;
+	std::optional<qint32> m_maxHeight = std::nullopt;
 	std::optional<qint32> m_maxRefFrames = std::nullopt;
 	std::optional<qint32> m_maxVideoBitDepth = std::nullopt;
+	std::optional<qint32> m_maxWidth = std::nullopt;
 	QString m_mediaSourceId;
 	std::optional<qint32> m_minSegments = std::nullopt;
 	QString m_params;
@@ -26524,13 +25904,6 @@ public:
 
 	
 	/**
-	 * @brief 	
-	 */
-	const QString &stream() const;
-	void setStream(QString newStream);
-
-	
-	/**
 	 * @brief Whether or not to allow copying of the audio stream url.	
 	 */
 	const bool &allowAudioStreamCopy() const;
@@ -26567,7 +25940,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension. Options: aac, mp3, vorbis, wma.	
+	 * @brief Optional. Specify an audio codec to encode to, e.g. mp3. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &audioCodec() const;
 	void setAudioCodec(QString newAudioCodec);
@@ -26657,6 +26030,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. Whether to enable Audio Encoding.	
+	 */
+	const bool &enableAudioVbrEncoding() const;
+	void setEnableAudioVbrEncoding(bool newEnableAudioVbrEncoding);
+	bool enableAudioVbrEncodingNull() const;
+	void setEnableAudioVbrEncodingNull();
+	
+	
+	/**
 	 * @brief Whether or not to allow automatic stream copy if requested values match the original source. Defaults to true.	
 	 */
 	const bool &enableAutoStreamCopy() const;
@@ -26738,6 +26120,15 @@ public:
 	
 	
 	/**
+	 * @brief Optional. The maximum vertical resolution of the encoded video.	
+	 */
+	const qint32 &maxHeight() const;
+	void setMaxHeight(qint32 newMaxHeight);
+	bool maxHeightNull() const;
+	void setMaxHeightNull();
+	
+	
+	/**
 	 * @brief Optional.	
 	 */
 	const qint32 &maxRefFrames() const;
@@ -26753,6 +26144,15 @@ public:
 	void setMaxVideoBitDepth(qint32 newMaxVideoBitDepth);
 	bool maxVideoBitDepthNull() const;
 	void setMaxVideoBitDepthNull();
+	
+	
+	/**
+	 * @brief Optional. The maximum horizontal resolution of the encoded video.	
+	 */
+	const qint32 &maxWidth() const;
+	void setMaxWidth(qint32 newMaxWidth);
+	bool maxWidthNull() const;
+	void setMaxWidthNull();
 	
 	
 	/**
@@ -26810,7 +26210,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Whether to require a non anamporphic stream.	
+	 * @brief Optional. Whether to require a non anamorphic stream.	
 	 */
 	const bool &requireNonAnamorphic() const;
 	void setRequireNonAnamorphic(bool newRequireNonAnamorphic);
@@ -26828,7 +26228,7 @@ public:
 	
 	
 	/**
-	 * @brief The segment lenght.	
+	 * @brief The segment length.	
 	 */
 	const qint32 &segmentLength() const;
 	void setSegmentLength(qint32 newSegmentLength);
@@ -26927,7 +26327,7 @@ public:
 	
 	
 	/**
-	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension. Options: h265, h264, mpeg4, theora, vpx, wmv.	
+	 * @brief Optional. Specify a video codec to encode to, e.g. h264. If omitted the server will auto-select using the url's extension.	
 	 */
 	const QString &videoCodec() const;
 	void setVideoCodec(QString newVideoCodec);
@@ -26957,7 +26357,6 @@ private:
 	// Required path parameters
 	QString m_container;
 	QString m_itemId;
-	QString m_stream;
 	
 	// Required query parameters
 
@@ -26976,6 +26375,7 @@ private:
 	std::optional<bool> m_deInterlace = std::nullopt;
 	QString m_deviceId;
 	QString m_deviceProfileId;
+	std::optional<bool> m_enableAudioVbrEncoding = std::nullopt;
 	std::optional<bool> m_enableAutoStreamCopy = std::nullopt;
 	std::optional<bool> m_enableMpegtsM2TsMode = std::nullopt;
 	std::optional<float> m_framerate = std::nullopt;
@@ -26985,8 +26385,10 @@ private:
 	std::optional<qint32> m_maxAudioBitDepth = std::nullopt;
 	std::optional<qint32> m_maxAudioChannels = std::nullopt;
 	std::optional<float> m_maxFramerate = std::nullopt;
+	std::optional<qint32> m_maxHeight = std::nullopt;
 	std::optional<qint32> m_maxRefFrames = std::nullopt;
 	std::optional<qint32> m_maxVideoBitDepth = std::nullopt;
+	std::optional<qint32> m_maxWidth = std::nullopt;
 	QString m_mediaSourceId;
 	std::optional<qint32> m_minSegments = std::nullopt;
 	QString m_params;
@@ -27013,7 +26415,7 @@ private:
 
 };
 
-class InitiateParams {
+class InitiateQuickConnectParams {
 public:
 
 private:
@@ -27077,6 +26479,28 @@ private:
 
 };
 
+class LogFileParams {
+public:
+
+	/**
+	 * @brief 	
+	 */
+	const QByteArray &body() const;
+	void setBody(QByteArray newBody);
+
+	
+private:
+	// Required path parameters
+	
+	// Required query parameters
+
+	// Optional query parameters
+
+	// Body parameters
+	QByteArray m_body;
+
+};
+
 class MarkFavoriteItemParams {
 public:
 
@@ -27092,16 +26516,18 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -27117,13 +26543,6 @@ public:
 
 	
 	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
 	 * @brief Optional. The date the item was played.	
 	 */
 	const QDateTime &datePlayed() const;
@@ -27132,15 +26551,24 @@ public:
 	void setDatePlayedNull();
 	
 	
+	/**
+	 * @brief User id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
 	QDateTime m_datePlayed;
+	QString m_userId;
 
 
 };
@@ -27160,16 +26588,18 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -27240,13 +26670,6 @@ public:
 	 */
 	const QString &itemId() const;
 	void setItemId(QString newItemId);
-
-	
-	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
 
 	
 	/**
@@ -27351,7 +26774,6 @@ public:
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
@@ -27379,13 +26801,6 @@ public:
 	 */
 	const QString &itemId() const;
 	void setItemId(QString newItemId);
-
-	
-	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
 
 	
 	/**
@@ -27454,7 +26869,6 @@ public:
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
@@ -27478,13 +26892,6 @@ public:
 	 */
 	const QString &itemId() const;
 	void setItemId(QString newItemId);
-
-	
-	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
 
 	
 	/**
@@ -27535,7 +26942,6 @@ public:
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
@@ -27552,6 +26958,15 @@ private:
 class OpenLiveStreamParams {
 public:
 
+	/**
+	 * @brief Always burn-in subtitle when transcoding.	
+	 */
+	const bool &alwaysBurnInSubtitleWhenTranscoding() const;
+	void setAlwaysBurnInSubtitleWhenTranscoding(bool newAlwaysBurnInSubtitleWhenTranscoding);
+	bool alwaysBurnInSubtitleWhenTranscodingNull() const;
+	void setAlwaysBurnInSubtitleWhenTranscodingNull();
+	
+	
 	/**
 	 * @brief The audio stream index.	
 	 */
@@ -27664,6 +27079,7 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
+	std::optional<bool> m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 	std::optional<qint32> m_audioStreamIndex = std::nullopt;
 	std::optional<bool> m_enableDirectPlay = std::nullopt;
 	std::optional<bool> m_enableDirectStream = std::nullopt;
@@ -27689,17 +27105,15 @@ public:
 	 */
 	const QString &playSessionId() const;
 	void setPlaySessionId(QString newPlaySessionId);
-	bool playSessionIdNull() const;
-	void setPlaySessionIdNull();
-	
+
 	
 private:
 	// Required path parameters
 	
 	// Required query parameters
+	QString m_playSessionId;
 
 	// Optional query parameters
-	QString m_playSessionId;
 
 
 };
@@ -27791,67 +27205,6 @@ private:
 
 };
 
-class PostParams {
-public:
-
-	/**
-	 * @brief Item id.	
-	 */
-	const QString &itemId() const;
-	void setItemId(QString newItemId);
-
-	
-	/**
-	 * @brief (Optional) Specifies the image refresh mode.	
-	 */
-	const MetadataRefreshMode &imageRefreshMode() const;
-	void setImageRefreshMode(MetadataRefreshMode newImageRefreshMode);
-	bool imageRefreshModeNull() const;
-	void setImageRefreshModeNull();
-	
-	
-	/**
-	 * @brief (Optional) Specifies the metadata refresh mode.	
-	 */
-	const MetadataRefreshMode &metadataRefreshMode() const;
-	void setMetadataRefreshMode(MetadataRefreshMode newMetadataRefreshMode);
-	bool metadataRefreshModeNull() const;
-	void setMetadataRefreshModeNull();
-	
-	
-	/**
-	 * @brief (Optional) Determines if images should be replaced. Only applicable if mode is FullRefresh.	
-	 */
-	const bool &replaceAllImages() const;
-	void setReplaceAllImages(bool newReplaceAllImages);
-	bool replaceAllImagesNull() const;
-	void setReplaceAllImagesNull();
-	
-	
-	/**
-	 * @brief (Optional) Determines if metadata should be replaced. Only applicable if mode is FullRefresh.	
-	 */
-	const bool &replaceAllMetadata() const;
-	void setReplaceAllMetadata(bool newReplaceAllMetadata);
-	bool replaceAllMetadataNull() const;
-	void setReplaceAllMetadataNull();
-	
-	
-private:
-	// Required path parameters
-	QString m_itemId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-	MetadataRefreshMode m_imageRefreshMode;
-	MetadataRefreshMode m_metadataRefreshMode;
-	std::optional<bool> m_replaceAllImages = std::nullopt;
-	std::optional<bool> m_replaceAllMetadata = std::nullopt;
-
-
-};
-
 class PostAddedMoviesParams {
 public:
 
@@ -27923,8 +27276,8 @@ public:
 	/**
 	 * @brief A list of playable media types, comma delimited. Audio, Video, Book, Photo.	
 	 */
-	const QStringList &playableMediaTypes() const;
-	void setPlayableMediaTypes(QStringList newPlayableMediaTypes);
+	const QList<MediaType> &playableMediaTypes() const;
+	void setPlayableMediaTypes(QList<MediaType> newPlayableMediaTypes);
 	bool playableMediaTypesNull() const;
 	void setPlayableMediaTypesNull();
 	
@@ -27956,15 +27309,6 @@ public:
 	void setSupportsPersistentIdentifierNull();
 	
 	
-	/**
-	 * @brief Determines whether sync is supported.	
-	 */
-	const bool &supportsSync() const;
-	void setSupportsSync(bool newSupportsSync);
-	bool supportsSyncNull() const;
-	void setSupportsSyncNull();
-	
-	
 private:
 	// Required path parameters
 	
@@ -27972,11 +27316,10 @@ private:
 
 	// Optional query parameters
 	QString m_jellyfinId;
-	QStringList m_playableMediaTypes;
+	QList<MediaType> m_playableMediaTypes;
 	QList<GeneralCommandType> m_supportedCommands;
 	std::optional<bool> m_supportsMediaControl = std::nullopt;
 	std::optional<bool> m_supportsPersistentIdentifier = std::nullopt;
-	std::optional<bool> m_supportsSync = std::nullopt;
 
 
 };
@@ -28030,10 +27373,10 @@ class PostUpdatedMediaParams {
 public:
 
 	/**
-	 * @brief A list of updated media paths.	
+	 * @brief The update paths.	
 	 */
-	const QList<MediaUpdateInfoDto> &body() const;
-	void setBody(QList<MediaUpdateInfoDto> newBody);
+	const QSharedPointer<MediaUpdateInfoDto> &body() const;
+	void setBody(QSharedPointer<MediaUpdateInfoDto> newBody);
 
 	
 private:
@@ -28044,7 +27387,7 @@ private:
 	// Optional query parameters
 
 	// Body parameters
-	QList<MediaUpdateInfoDto> m_body;
+	QSharedPointer<MediaUpdateInfoDto> m_body;
 
 };
 
@@ -28108,137 +27451,101 @@ class PostUserImageParams {
 public:
 
 	/**
-	 * @brief (Unused) Image type.	
-	 */
-	const ImageType &imageType() const;
-	void setImageType(ImageType newImageType);
-
-	
-	/**
 	 * @brief User Id.	
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 	/**
-	 * @brief (Unused) Image index.	
+	 * @brief 	
 	 */
-	const qint32 &index() const;
-	void setIndex(qint32 newIndex);
-	bool indexNull() const;
-	void setIndexNull();
-	
+	const QByteArray &body() const;
+	void setBody(QByteArray newBody);
+
 	
 private:
 	// Required path parameters
-	ImageType m_imageType;
+	
+	// Required query parameters
+
+	// Optional query parameters
 	QString m_userId;
-	
-	// Required query parameters
 
-	// Optional query parameters
-	std::optional<qint32> m_index = std::nullopt;
-
+	// Body parameters
+	QByteArray m_body;
 
 };
 
-class PostUserImageByIndexParams {
+class RefreshItemParams {
 public:
 
 	/**
-	 * @brief (Unused) Image type.	
+	 * @brief Item id.	
 	 */
-	const ImageType &imageType() const;
-	void setImageType(ImageType newImageType);
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
 
 	
 	/**
-	 * @brief (Unused) Image index.	
+	 * @brief (Optional) Specifies the image refresh mode.	
 	 */
-	const qint32 &index() const;
-	void setIndex(qint32 newIndex);
-
+	const MetadataRefreshMode &imageRefreshMode() const;
+	void setImageRefreshMode(MetadataRefreshMode newImageRefreshMode);
+	bool imageRefreshModeNull() const;
+	void setImageRefreshModeNull();
+	
 	
 	/**
-	 * @brief User Id.	
+	 * @brief (Optional) Specifies the metadata refresh mode.	
 	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
+	const MetadataRefreshMode &metadataRefreshMode() const;
+	void setMetadataRefreshMode(MetadataRefreshMode newMetadataRefreshMode);
+	bool metadataRefreshModeNull() const;
+	void setMetadataRefreshModeNull();
+	
+	
+	/**
+	 * @brief (Optional) Determines if trickplay images should be replaced. Only applicable if mode is FullRefresh.	
+	 */
+	const bool &regenerateTrickplay() const;
+	void setRegenerateTrickplay(bool newRegenerateTrickplay);
+	bool regenerateTrickplayNull() const;
+	void setRegenerateTrickplayNull();
+	
+	
+	/**
+	 * @brief (Optional) Determines if images should be replaced. Only applicable if mode is FullRefresh.	
+	 */
+	const bool &replaceAllImages() const;
+	void setReplaceAllImages(bool newReplaceAllImages);
+	bool replaceAllImagesNull() const;
+	void setReplaceAllImagesNull();
+	
+	
+	/**
+	 * @brief (Optional) Determines if metadata should be replaced. Only applicable if mode is FullRefresh.	
+	 */
+	const bool &replaceAllMetadata() const;
+	void setReplaceAllMetadata(bool newReplaceAllMetadata);
+	bool replaceAllMetadataNull() const;
+	void setReplaceAllMetadataNull();
+	
 	
 private:
 	// Required path parameters
-	ImageType m_imageType;
-	qint32 m_index;
-	QString m_userId;
+	QString m_itemId;
 	
 	// Required query parameters
 
 	// Optional query parameters
-
-
-};
-
-class ProcessConnectionManagerControlRequestParams {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class ProcessContentDirectoryControlRequestParams {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
-class ProcessMediaReceiverRegistrarControlRequestParams {
-public:
-
-	/**
-	 * @brief Server UUID.	
-	 */
-	const QString &serverId() const;
-	void setServerId(QString newServerId);
-
-	
-private:
-	// Required path parameters
-	QString m_serverId;
-	
-	// Required query parameters
-
-	// Optional query parameters
+	MetadataRefreshMode m_imageRefreshMode;
+	MetadataRefreshMode m_metadataRefreshMode;
+	std::optional<bool> m_regenerateTrickplay = std::nullopt;
+	std::optional<bool> m_replaceAllImages = std::nullopt;
+	std::optional<bool> m_replaceAllMetadata = std::nullopt;
 
 
 };
@@ -28285,7 +27592,7 @@ private:
 
 };
 
-class RemoveFromPlaylistParams {
+class RemoveItemFromPlaylistParams {
 public:
 
 	/**
@@ -28355,6 +27662,35 @@ private:
 	QString m_name;
 	QString m_path;
 	std::optional<bool> m_refreshLibrary = std::nullopt;
+
+
+};
+
+class RemoveUserFromPlaylistParams {
+public:
+
+	/**
+	 * @brief The playlist id.	
+	 */
+	const QString &playlistId() const;
+	void setPlaylistId(QString newPlaylistId);
+
+	
+	/**
+	 * @brief The user id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+
+	
+private:
+	// Required path parameters
+	QString m_playlistId;
+	QString m_userId;
+	
+	// Required query parameters
+
+	// Optional query parameters
 
 
 };
@@ -28629,6 +27965,27 @@ private:
 
 };
 
+class SearchRemoteLyricsParams {
+public:
+
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+private:
+	// Required path parameters
+	QString m_itemId;
+	
+	// Required query parameters
+
+	// Optional query parameters
+
+
+};
+
 class SearchRemoteSubtitlesParams {
 public:
 
@@ -28738,41 +28095,22 @@ public:
 
 	
 	/**
-	 * @brief The message test.	
+	 * @brief The MediaBrowser.Model.Session.MessageCommand object containing Header, Message Text, and TimeoutMs.	
 	 */
-	const QString &text() const;
-	void setText(QString newText);
+	const QSharedPointer<MessageCommand> &body() const;
+	void setBody(QSharedPointer<MessageCommand> newBody);
 
-	
-	/**
-	 * @brief The message header.	
-	 */
-	const QString &header() const;
-	void setHeader(QString newHeader);
-	bool headerNull() const;
-	void setHeaderNull();
-	
-	
-	/**
-	 * @brief The message timeout. If omitted the user will have to confirm viewing the message.	
-	 */
-	const qint64 &timeoutMs() const;
-	void setTimeoutMs(qint64 newTimeoutMs);
-	bool timeoutMsNull() const;
-	void setTimeoutMsNull();
-	
 	
 private:
 	// Required path parameters
 	QString m_sessionId;
 	
 	// Required query parameters
-	QString m_text;
 
 	// Optional query parameters
-	QString m_header;
-	std::optional<qint64> m_timeoutMs = std::nullopt;
 
+	// Body parameters
+	QSharedPointer<MessageCommand> m_body;
 
 };
 
@@ -28893,6 +28231,13 @@ public:
 	void setItemId(QString newItemId);
 
 	
+	/**
+	 * @brief 	
+	 */
+	const QByteArray &body() const;
+	void setBody(QByteArray newBody);
+
+	
 private:
 	// Required path parameters
 	ImageType m_imageType;
@@ -28902,6 +28247,8 @@ private:
 
 	// Optional query parameters
 
+	// Body parameters
+	QByteArray m_body;
 
 };
 
@@ -28929,6 +28276,13 @@ public:
 	void setItemId(QString newItemId);
 
 	
+	/**
+	 * @brief 	
+	 */
+	const QByteArray &body() const;
+	void setBody(QByteArray newBody);
+
+	
 private:
 	// Required path parameters
 	qint32 m_imageIndex;
@@ -28939,27 +28293,8 @@ private:
 
 	// Optional query parameters
 
-
-};
-
-class SetReadParams {
-public:
-
-	/**
-	 * @brief 	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-private:
-	// Required path parameters
-	QString m_userId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
+	// Body parameters
+	QByteArray m_body;
 
 };
 
@@ -29007,27 +28342,6 @@ private:
 
 };
 
-class SetUnreadParams {
-public:
-
-	/**
-	 * @brief 	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-private:
-	// Required path parameters
-	QString m_userId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-
-};
-
 class ShutdownApplicationParams {
 public:
 
@@ -29070,27 +28384,23 @@ public:
 	 */
 	const QString &deviceId() const;
 	void setDeviceId(QString newDeviceId);
-	bool deviceIdNull() const;
-	void setDeviceIdNull();
-	
+
 	
 	/**
 	 * @brief The play session id.	
 	 */
 	const QString &playSessionId() const;
 	void setPlaySessionId(QString newPlaySessionId);
-	bool playSessionIdNull() const;
-	void setPlaySessionIdNull();
-	
+
 	
 private:
 	// Required path parameters
 	
 	// Required query parameters
-
-	// Optional query parameters
 	QString m_deviceId;
 	QString m_playSessionId;
+
+	// Optional query parameters
 
 
 };
@@ -29533,6 +28843,19 @@ private:
 
 };
 
+class TmdbClientConfigurationParams {
+public:
+
+private:
+	// Required path parameters
+	
+	// Required query parameters
+
+	// Optional query parameters
+
+
+};
+
 class UninstallPluginParams {
 public:
 
@@ -29567,14 +28890,14 @@ public:
 	/**
 	 * @brief Plugin version.	
 	 */
-	const QSharedPointer<Version> &version() const;
-	void setVersion(QSharedPointer<Version> newVersion);
+	const QString &version() const;
+	void setVersion(QString newVersion);
 
 	
 private:
 	// Required path parameters
 	QString m_pluginId;
-	QSharedPointer<Version> m_version;
+	QString m_version;
 	
 	// Required query parameters
 
@@ -29598,16 +28921,18 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 
 };
@@ -29647,8 +28972,8 @@ public:
 	/**
 	 * @brief Device Options.	
 	 */
-	const QSharedPointer<DeviceOptions> &body() const;
-	void setBody(QSharedPointer<DeviceOptions> newBody);
+	const QSharedPointer<DeviceOptionsDto> &body() const;
+	void setBody(QSharedPointer<DeviceOptionsDto> newBody);
 
 	
 private:
@@ -29660,7 +28985,7 @@ private:
 	// Optional query parameters
 
 	// Body parameters
-	QSharedPointer<DeviceOptions> m_body;
+	QSharedPointer<DeviceOptionsDto> m_body;
 
 };
 
@@ -29686,7 +29011,9 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 	/**
 	 * @brief New Display Preferences object.	
@@ -29701,9 +29028,9 @@ private:
 	
 	// Required query parameters
 	QString m_client;
-	QString m_userId;
 
 	// Optional query parameters
+	QString m_userId;
 
 	// Body parameters
 	QSharedPointer<DisplayPreferencesDto> m_body;
@@ -29822,9 +29149,7 @@ public:
 	 */
 	const qint32 &newIndex() const;
 	void setNewIndex(qint32 newNewIndex);
-	bool newIndexNull() const;
-	void setNewIndexNull();
-	
+
 	
 private:
 	// Required path parameters
@@ -29833,10 +29158,50 @@ private:
 	QString m_itemId;
 	
 	// Required query parameters
+	qint32 m_newIndex;
 
 	// Optional query parameters
-	std::optional<qint32> m_newIndex = std::nullopt;
 
+
+};
+
+class UpdateItemUserDataParams {
+public:
+
+	/**
+	 * @brief The item id.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+	/**
+	 * @brief The user id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
+	/**
+	 * @brief New user data object.	
+	 */
+	const QSharedPointer<UpdateUserItemDataDto> &body() const;
+	void setBody(QSharedPointer<UpdateUserItemDataDto> newBody);
+
+	
+private:
+	// Required path parameters
+	QString m_itemId;
+	
+	// Required query parameters
+
+	// Optional query parameters
+	QString m_userId;
+
+	// Body parameters
+	QSharedPointer<UpdateUserItemDataDto> m_body;
 
 };
 
@@ -29862,45 +29227,14 @@ private:
 
 };
 
-class UpdateMediaEncoderPathParams {
-public:
-
-	/**
-	 * @brief Media encoder path form body.	
-	 */
-	const QSharedPointer<MediaEncoderPathDto> &body() const;
-	void setBody(QSharedPointer<MediaEncoderPathDto> newBody);
-
-	
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-	// Body parameters
-	QSharedPointer<MediaEncoderPathDto> m_body;
-
-};
-
 class UpdateMediaPathParams {
 public:
 
 	/**
-	 * @brief The name of the library.	
+	 * @brief The name of the library and path infos.	
 	 */
-	const QString &name() const;
-	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
-	
-	
-	/**
-	 * @brief The path info.	
-	 */
-	const QSharedPointer<MediaPathInfo> &body() const;
-	void setBody(QSharedPointer<MediaPathInfo> newBody);
+	const QSharedPointer<UpdateMediaPathRequestDto> &body() const;
+	void setBody(QSharedPointer<UpdateMediaPathRequestDto> newBody);
 
 	
 private:
@@ -29909,10 +29243,9 @@ private:
 	// Required query parameters
 
 	// Optional query parameters
-	QString m_name;
 
 	// Body parameters
-	QSharedPointer<MediaPathInfo> m_body;
+	QSharedPointer<UpdateMediaPathRequestDto> m_body;
 
 };
 
@@ -29926,6 +29259,13 @@ public:
 	void setKey(QString newKey);
 
 	
+	/**
+	 * @brief Configuration.	
+	 */
+	const QVariant &body() const;
+	void setBody(QVariant newBody);
+
+	
 private:
 	// Required path parameters
 	QString m_key;
@@ -29934,6 +29274,76 @@ private:
 
 	// Optional query parameters
 
+	// Body parameters
+	QVariant m_body;
+
+};
+
+class UpdatePlaylistParams {
+public:
+
+	/**
+	 * @brief The playlist id.	
+	 */
+	const QString &playlistId() const;
+	void setPlaylistId(QString newPlaylistId);
+
+	
+	/**
+	 * @brief The Jellyfin.Api.Models.PlaylistDtos.UpdatePlaylistDto id.	
+	 */
+	const QSharedPointer<UpdatePlaylistDto> &body() const;
+	void setBody(QSharedPointer<UpdatePlaylistDto> newBody);
+
+	
+private:
+	// Required path parameters
+	QString m_playlistId;
+	
+	// Required query parameters
+
+	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<UpdatePlaylistDto> m_body;
+
+};
+
+class UpdatePlaylistUserParams {
+public:
+
+	/**
+	 * @brief The playlist id.	
+	 */
+	const QString &playlistId() const;
+	void setPlaylistId(QString newPlaylistId);
+
+	
+	/**
+	 * @brief The user id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+
+	
+	/**
+	 * @brief The Jellyfin.Api.Models.PlaylistDtos.UpdatePlaylistUserDto.	
+	 */
+	const QSharedPointer<UpdatePlaylistUserDto> &body() const;
+	void setBody(QSharedPointer<UpdatePlaylistUserDto> newBody);
+
+	
+private:
+	// Required path parameters
+	QString m_playlistId;
+	QString m_userId;
+	
+	// Required query parameters
+
+	// Optional query parameters
+
+	// Body parameters
+	QSharedPointer<UpdatePlaylistUserDto> m_body;
 
 };
 
@@ -29955,58 +29365,6 @@ private:
 
 	// Optional query parameters
 
-
-};
-
-class UpdatePluginSecurityInfoParams {
-public:
-
-	/**
-	 * @brief Plugin security info.	
-	 */
-	const QSharedPointer<PluginSecurityInfo> &body() const;
-	void setBody(QSharedPointer<PluginSecurityInfo> newBody);
-
-	
-private:
-	// Required path parameters
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-	// Body parameters
-	QSharedPointer<PluginSecurityInfo> m_body;
-
-};
-
-class UpdateProfileParams {
-public:
-
-	/**
-	 * @brief Profile id.	
-	 */
-	const QString &profileId() const;
-	void setProfileId(QString newProfileId);
-
-	
-	/**
-	 * @brief Device profile.	
-	 */
-	const QSharedPointer<DeviceProfile> &body() const;
-	void setBody(QSharedPointer<DeviceProfile> newBody);
-
-	
-private:
-	// Required path parameters
-	QString m_profileId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-	// Body parameters
-	QSharedPointer<DeviceProfile> m_body;
 
 };
 
@@ -30130,7 +29488,9 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 	/**
 	 * @brief The updated user model.	
@@ -30141,11 +29501,11 @@ public:
 	
 private:
 	// Required path parameters
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 	// Body parameters
 	QSharedPointer<UserDto> m_body;
@@ -30160,7 +29520,9 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 	/**
 	 * @brief The new user configuration.	
@@ -30171,44 +29533,14 @@ public:
 	
 private:
 	// Required path parameters
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 	// Body parameters
 	QSharedPointer<UserConfiguration> m_body;
-
-};
-
-class UpdateUserEasyPasswordParams {
-public:
-
-	/**
-	 * @brief The user id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
-	 * @brief The M:Jellyfin.Api.Controllers.UserController.UpdateUserEasyPassword(System.Guid,Jellyfin.Api.Models.UserDtos.UpdateUserEasyPassword) request.	
-	 */
-	const QSharedPointer<UpdateUserEasyPassword> &body() const;
-	void setBody(QSharedPointer<UpdateUserEasyPassword> newBody);
-
-	
-private:
-	// Required path parameters
-	QString m_userId;
-	
-	// Required query parameters
-
-	// Optional query parameters
-
-	// Body parameters
-	QSharedPointer<UpdateUserEasyPassword> m_body;
 
 };
 
@@ -30223,14 +29555,7 @@ public:
 
 	
 	/**
-	 * @brief User id.	
-	 */
-	const QString &userId() const;
-	void setUserId(QString newUserId);
-
-	
-	/**
-	 * @brief Whether this M:Jellyfin.Api.Controllers.UserLibraryController.UpdateUserItemRating(System.Guid,System.Guid,System.Nullable{System.Boolean}) is likes.	
+	 * @brief Whether this M:Jellyfin.Api.Controllers.UserLibraryController.UpdateUserItemRating(System.Nullable{System.Guid},System.Guid,System.Nullable{System.Boolean}) is likes.	
 	 */
 	const bool &likes() const;
 	void setLikes(bool newLikes);
@@ -30238,15 +29563,24 @@ public:
 	void setLikesNull();
 	
 	
+	/**
+	 * @brief User id.	
+	 */
+	const QString &userId() const;
+	void setUserId(QString newUserId);
+	bool userIdNull() const;
+	void setUserIdNull();
+	
+	
 private:
 	// Required path parameters
 	QString m_itemId;
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
 	std::optional<bool> m_likes = std::nullopt;
+	QString m_userId;
 
 
 };
@@ -30259,10 +29593,12 @@ public:
 	 */
 	const QString &userId() const;
 	void setUserId(QString newUserId);
-
+	bool userIdNull() const;
+	void setUserIdNull();
+	
 	
 	/**
-	 * @brief The M:Jellyfin.Api.Controllers.UserController.UpdateUserPassword(System.Guid,Jellyfin.Api.Models.UserDtos.UpdateUserPassword) request.	
+	 * @brief The M:Jellyfin.Api.Controllers.UserController.UpdateUserPassword(System.Nullable{System.Guid},Jellyfin.Api.Models.UserDtos.UpdateUserPassword) request.	
 	 */
 	const QSharedPointer<UpdateUserPassword> &body() const;
 	void setBody(QSharedPointer<UpdateUserPassword> newBody);
@@ -30270,11 +29606,11 @@ public:
 	
 private:
 	// Required path parameters
-	QString m_userId;
 	
 	// Required query parameters
 
 	// Optional query parameters
+	QString m_userId;
 
 	// Body parameters
 	QSharedPointer<UpdateUserPassword> m_body;
@@ -30308,6 +29644,66 @@ private:
 
 	// Body parameters
 	QSharedPointer<UserPolicy> m_body;
+
+};
+
+class UploadCustomSplashscreenParams {
+public:
+
+	/**
+	 * @brief 	
+	 */
+	const QByteArray &body() const;
+	void setBody(QByteArray newBody);
+
+	
+private:
+	// Required path parameters
+	
+	// Required query parameters
+
+	// Optional query parameters
+
+	// Body parameters
+	QByteArray m_body;
+
+};
+
+class UploadLyricsParams {
+public:
+
+	/**
+	 * @brief The item the lyric belongs to.	
+	 */
+	const QString &itemId() const;
+	void setItemId(QString newItemId);
+
+	
+	/**
+	 * @brief Name of the file being uploaded.	
+	 */
+	const QString &fileName() const;
+	void setFileName(QString newFileName);
+
+	
+	/**
+	 * @brief 	
+	 */
+	const QByteArray &body() const;
+	void setBody(QByteArray newBody);
+
+	
+private:
+	// Required path parameters
+	QString m_itemId;
+	
+	// Required query parameters
+	QString m_fileName;
+
+	// Optional query parameters
+
+	// Body parameters
+	QByteArray m_body;
 
 };
 

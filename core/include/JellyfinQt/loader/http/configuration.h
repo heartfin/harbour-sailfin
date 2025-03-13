@@ -118,20 +118,6 @@ protected:
 	QByteArray body(const GetDefaultMetadataOptionsParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
-/**
- * @brief Updates the path to the media encoder.
- */
-
-class UpdateMediaEncoderPathLoader : public Jellyfin::Support::HttpLoader<void, UpdateMediaEncoderPathParams> {
-public:
-	explicit UpdateMediaEncoderPathLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const UpdateMediaEncoderPathParams& parameters) const override;
-	QUrlQuery query(const UpdateMediaEncoderPathParams& parameters) const override;
-	QByteArray body(const UpdateMediaEncoderPathParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
 
 } // NS HTTP
 } // NS Loader

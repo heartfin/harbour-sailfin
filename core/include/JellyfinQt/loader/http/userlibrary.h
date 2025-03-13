@@ -35,16 +35,16 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/dto/useritemdatadto.h"
-#include "JellyfinQt/dto/useritemdatadto.h"
 #include "JellyfinQt/dto/baseitemdto.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 #include "JellyfinQt/dto/baseitemdto.h"
+#include "JellyfinQt/dto/baseitemdto.h"
+#include "JellyfinQt/dto/baseitemdto.h"
+#include "JellyfinQt/dto/baseitemdto.h"
 #include "JellyfinQt/dto/useritemdatadto.h"
 #include "JellyfinQt/dto/useritemdatadto.h"
-#include "JellyfinQt/dto/baseitemdto.h"
-#include "JellyfinQt/dto/baseitemdto.h"
-#include "JellyfinQt/dto/baseitemdto.h"
+#include "JellyfinQt/dto/useritemdatadto.h"
+#include "JellyfinQt/dto/useritemdatadto.h"
 
 namespace Jellyfin {
 // Forward declaration
@@ -56,34 +56,6 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
-/**
- * @brief Marks an item as a favorite.
- */
-
-class MarkFavoriteItemLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, MarkFavoriteItemParams> {
-public:
-	explicit MarkFavoriteItemLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const MarkFavoriteItemParams& parameters) const override;
-	QUrlQuery query(const MarkFavoriteItemParams& parameters) const override;
-	QByteArray body(const MarkFavoriteItemParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Unmarks item as a favorite.
- */
-
-class UnmarkFavoriteItemLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, UnmarkFavoriteItemParams> {
-public:
-	explicit UnmarkFavoriteItemLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const UnmarkFavoriteItemParams& parameters) const override;
-	QUrlQuery query(const UnmarkFavoriteItemParams& parameters) const override;
-	QByteArray body(const UnmarkFavoriteItemParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
 /**
  * @brief Gets an item from a user's library.
  */
@@ -127,34 +99,6 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
- * @brief Deletes a user's saved personal rating for an item.
- */
-
-class DeleteUserItemRatingLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, DeleteUserItemRatingParams> {
-public:
-	explicit DeleteUserItemRatingLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const DeleteUserItemRatingParams& parameters) const override;
-	QUrlQuery query(const DeleteUserItemRatingParams& parameters) const override;
-	QByteArray body(const DeleteUserItemRatingParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Updates a user's rating for an item.
- */
-
-class UpdateUserItemRatingLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, UpdateUserItemRatingParams> {
-public:
-	explicit UpdateUserItemRatingLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const UpdateUserItemRatingParams& parameters) const override;
-	QUrlQuery query(const UpdateUserItemRatingParams& parameters) const override;
-	QByteArray body(const UpdateUserItemRatingParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
  * @brief Gets special features for an item.
  */
 
@@ -194,6 +138,62 @@ protected:
 	QString path(const GetRootFolderParams& parameters) const override;
 	QUrlQuery query(const GetRootFolderParams& parameters) const override;
 	QByteArray body(const GetRootFolderParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Marks an item as a favorite.
+ */
+
+class MarkFavoriteItemLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, MarkFavoriteItemParams> {
+public:
+	explicit MarkFavoriteItemLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const MarkFavoriteItemParams& parameters) const override;
+	QUrlQuery query(const MarkFavoriteItemParams& parameters) const override;
+	QByteArray body(const MarkFavoriteItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Unmarks item as a favorite.
+ */
+
+class UnmarkFavoriteItemLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, UnmarkFavoriteItemParams> {
+public:
+	explicit UnmarkFavoriteItemLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UnmarkFavoriteItemParams& parameters) const override;
+	QUrlQuery query(const UnmarkFavoriteItemParams& parameters) const override;
+	QByteArray body(const UnmarkFavoriteItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Deletes a user's saved personal rating for an item.
+ */
+
+class DeleteUserItemRatingLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, DeleteUserItemRatingParams> {
+public:
+	explicit DeleteUserItemRatingLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const DeleteUserItemRatingParams& parameters) const override;
+	QUrlQuery query(const DeleteUserItemRatingParams& parameters) const override;
+	QByteArray body(const DeleteUserItemRatingParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Updates a user's rating for an item.
+ */
+
+class UpdateUserItemRatingLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, UpdateUserItemRatingParams> {
+public:
+	explicit UpdateUserItemRatingLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateUserItemRatingParams& parameters) const override;
+	QUrlQuery query(const UpdateUserItemRatingParams& parameters) const override;
+	QByteArray body(const UpdateUserItemRatingParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

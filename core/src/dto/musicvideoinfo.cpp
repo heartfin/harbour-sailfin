@@ -43,6 +43,7 @@ MusicVideoInfo::MusicVideoInfo (
 MusicVideoInfo::MusicVideoInfo(const MusicVideoInfo &other) :
 
 	m_name(other.m_name),
+	m_originalTitle(other.m_originalTitle),
 	m_path(other.m_path),
 	m_metadataLanguage(other.m_metadataLanguage),
 	m_metadataCountryCode(other.m_metadataCountryCode),
@@ -57,6 +58,7 @@ MusicVideoInfo::MusicVideoInfo(const MusicVideoInfo &other) :
 
 void MusicVideoInfo::replaceData(MusicVideoInfo &other) {
 	m_name = other.m_name;
+	m_originalTitle = other.m_originalTitle;
 	m_path = other.m_path;
 	m_metadataLanguage = other.m_metadataLanguage;
 	m_metadataCountryCode = other.m_metadataCountryCode;
@@ -78,6 +80,7 @@ MusicVideoInfo MusicVideoInfo::fromJson(QJsonObject source) {
 
 void MusicVideoInfo::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_originalTitle = Jellyfin::Support::fromJsonValue<QString>(source["OriginalTitle"]);
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
@@ -97,6 +100,11 @@ QJsonObject MusicVideoInfo::toJson() const {
 	
 	if (!(m_name.isNull())) {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_originalTitle.isNull())) {
+		result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
 	}
 			
 	
@@ -159,6 +167,19 @@ bool MusicVideoInfo::nameNull() const {
 
 void MusicVideoInfo::setNameNull() {
 	m_name.clear();
+
+}
+QString MusicVideoInfo::originalTitle() const { return m_originalTitle; }
+
+void MusicVideoInfo::setOriginalTitle(QString newOriginalTitle) {
+	m_originalTitle = newOriginalTitle;
+}
+bool MusicVideoInfo::originalTitleNull() const {
+	return m_originalTitle.isNull();
+}
+
+void MusicVideoInfo::setOriginalTitleNull() {
+	m_originalTitle.clear();
 
 }
 QString MusicVideoInfo::path() const { return m_path; }

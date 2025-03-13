@@ -34,8 +34,10 @@ namespace DTO {
 
 PlaybackInfoResponse::PlaybackInfoResponse() {}
 PlaybackInfoResponse::PlaybackInfoResponse (
+		QList<MediaSourceInfo> mediaSources, 
 		PlaybackErrorCode errorCode 
 		) :
+	m_mediaSources(mediaSources),
 	m_errorCode(errorCode) { }
 
 
@@ -70,11 +72,7 @@ void PlaybackInfoResponse::setFromJson(QJsonObject source) {
 QJsonObject PlaybackInfoResponse::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_mediaSources.size() == 0)) {
-		result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<MediaSourceInfo>>(m_mediaSources);
-	}
-			
+	result["MediaSources"] = Jellyfin::Support::toJsonValue<QList<MediaSourceInfo>>(m_mediaSources);		
 	
 	if (!(m_playSessionId.isNull())) {
 		result["PlaySessionId"] = Jellyfin::Support::toJsonValue<QString>(m_playSessionId);
@@ -89,14 +87,7 @@ QList<MediaSourceInfo> PlaybackInfoResponse::mediaSources() const { return m_med
 void PlaybackInfoResponse::setMediaSources(QList<MediaSourceInfo> newMediaSources) {
 	m_mediaSources = newMediaSources;
 }
-bool PlaybackInfoResponse::mediaSourcesNull() const {
-	return m_mediaSources.size() == 0;
-}
 
-void PlaybackInfoResponse::setMediaSourcesNull() {
-	m_mediaSources.clear();
-
-}
 QString PlaybackInfoResponse::playSessionId() const { return m_playSessionId; }
 
 void PlaybackInfoResponse::setPlaySessionId(QString newPlaySessionId) {

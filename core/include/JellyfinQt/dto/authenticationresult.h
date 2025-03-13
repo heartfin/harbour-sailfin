@@ -36,7 +36,7 @@
 #include <QString>
 #include <optional>
 
-#include "JellyfinQt/dto/sessioninfo.h"
+#include "JellyfinQt/dto/sessioninfodto.h"
 #include "JellyfinQt/dto/userdto.h"
 #include "JellyfinQt/support/jsonconv.h"
 
@@ -52,7 +52,7 @@ class AuthenticationResult {
 public:
 	AuthenticationResult(	
 		QSharedPointer<UserDto> user,			
-		QSharedPointer<SessionInfo> sessionInfo						
+		QSharedPointer<SessionInfoDto> sessionInfo						
 	);
 
 	AuthenticationResult(const AuthenticationResult &other);
@@ -73,20 +73,28 @@ public:
 	void setUser(QSharedPointer<UserDto> newUser);
 
 
-	QSharedPointer<SessionInfo> sessionInfo() const;
+	QSharedPointer<SessionInfoDto> sessionInfo() const;
 
-	void setSessionInfo(QSharedPointer<SessionInfo> newSessionInfo);
+	void setSessionInfo(QSharedPointer<SessionInfoDto> newSessionInfo);
 
-
+	/**
+	 * @brief Gets or sets the access token.
+	 */
 	QString accessToken() const;
-
+	/**
+	* @brief Gets or sets the access token.
+	*/
 	void setAccessToken(QString newAccessToken);
 	bool accessTokenNull() const;
 	void setAccessTokenNull();
 
-
+	/**
+	 * @brief Gets or sets the server id.
+	 */
 	QString serverId() const;
-
+	/**
+	* @brief Gets or sets the server id.
+	*/
 	void setServerId(QString newServerId);
 	bool serverIdNull() const;
 	void setServerIdNull();
@@ -94,7 +102,7 @@ public:
 
 protected:
 	QSharedPointer<UserDto> m_user = QSharedPointer<UserDto>();
-	QSharedPointer<SessionInfo> m_sessionInfo = QSharedPointer<SessionInfo>();
+	QSharedPointer<SessionInfoDto> m_sessionInfo = QSharedPointer<SessionInfoDto>();
 	QString m_accessToken;
 	QString m_serverId;
 

@@ -168,6 +168,12 @@ GeneralCommandType fromJsonValue(const QJsonValue &source, convertType<GeneralCo
 	if (str == QStringLiteral("Play")) {
 		return GeneralCommandType::Play;
 	}
+	if (str == QStringLiteral("SetMaxStreamingBitrate")) {
+		return GeneralCommandType::SetMaxStreamingBitrate;
+	}
+	if (str == QStringLiteral("SetPlaybackOrder")) {
+		return GeneralCommandType::SetPlaybackOrder;
+	}
 	
 	return GeneralCommandType::EnumNotSet;
 }
@@ -257,6 +263,10 @@ QJsonValue toJsonValue(const GeneralCommandType &source, convertType<GeneralComm
 		return QStringLiteral("ToggleOsdMenu");
 	case GeneralCommandType::Play:
 		return QStringLiteral("Play");
+	case GeneralCommandType::SetMaxStreamingBitrate:
+		return QStringLiteral("SetMaxStreamingBitrate");
+	case GeneralCommandType::SetPlaybackOrder:
+		return QStringLiteral("SetPlaybackOrder");
 
 	case GeneralCommandType::EnumNotSet: // Fallthrough
 	default:

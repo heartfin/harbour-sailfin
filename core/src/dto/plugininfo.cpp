@@ -34,13 +34,17 @@ namespace DTO {
 
 PluginInfo::PluginInfo() {}
 PluginInfo::PluginInfo (
-		QSharedPointer<Version> version, 
+		QString name, 
+		QString version, 
+		QString description, 
 		QString jellyfinId, 
 		bool canUninstall, 
 		bool hasImage, 
 		PluginStatus status 
 		) :
+	m_name(name),
 	m_version(version),
+	m_description(description),
 	m_jellyfinId(jellyfinId),
 	m_canUninstall(canUninstall),
 	m_hasImage(hasImage),
@@ -80,7 +84,7 @@ PluginInfo PluginInfo::fromJson(QJsonObject source) {
 
 void PluginInfo::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
-	m_version = Jellyfin::Support::fromJsonValue<QSharedPointer<Version>>(source["Version"]);
+	m_version = Jellyfin::Support::fromJsonValue<QString>(source["Version"]);
 	m_configurationFileName = Jellyfin::Support::fromJsonValue<QString>(source["ConfigurationFileName"]);
 	m_description = Jellyfin::Support::fromJsonValue<QString>(source["Description"]);
 	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
@@ -93,22 +97,14 @@ void PluginInfo::setFromJson(QJsonObject source) {
 QJsonObject PluginInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
-	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);		
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
+	result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);		
 	
 	if (!(m_configurationFileName.isNull())) {
 		result["ConfigurationFileName"] = Jellyfin::Support::toJsonValue<QString>(m_configurationFileName);
 	}
 			
-	
-	if (!(m_description.isNull())) {
-		result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);
-	}
-			
+	result["Description"] = Jellyfin::Support::toJsonValue<QString>(m_description);		
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
 	result["CanUninstall"] = Jellyfin::Support::toJsonValue<bool>(m_canUninstall);		
 	result["HasImage"] = Jellyfin::Support::toJsonValue<bool>(m_hasImage);		
@@ -121,17 +117,10 @@ QString PluginInfo::name() const { return m_name; }
 void PluginInfo::setName(QString newName) {
 	m_name = newName;
 }
-bool PluginInfo::nameNull() const {
-	return m_name.isNull();
-}
 
-void PluginInfo::setNameNull() {
-	m_name.clear();
+QString PluginInfo::version() const { return m_version; }
 
-}
-QSharedPointer<Version> PluginInfo::version() const { return m_version; }
-
-void PluginInfo::setVersion(QSharedPointer<Version> newVersion) {
+void PluginInfo::setVersion(QString newVersion) {
 	m_version = newVersion;
 }
 
@@ -153,14 +142,7 @@ QString PluginInfo::description() const { return m_description; }
 void PluginInfo::setDescription(QString newDescription) {
 	m_description = newDescription;
 }
-bool PluginInfo::descriptionNull() const {
-	return m_description.isNull();
-}
 
-void PluginInfo::setDescriptionNull() {
-	m_description.clear();
-
-}
 QString PluginInfo::jellyfinId() const { return m_jellyfinId; }
 
 void PluginInfo::setJellyfinId(QString newJellyfinId) {

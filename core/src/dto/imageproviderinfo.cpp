@@ -33,6 +33,14 @@ namespace Jellyfin {
 namespace DTO {
 
 ImageProviderInfo::ImageProviderInfo() {}
+ImageProviderInfo::ImageProviderInfo (
+		QString name, 
+		QList<ImageType> supportedImages 
+		) :
+	m_name(name),
+	m_supportedImages(supportedImages) { }
+
+
 
 ImageProviderInfo::ImageProviderInfo(const ImageProviderInfo &other) :
 
@@ -61,16 +69,8 @@ void ImageProviderInfo::setFromJson(QJsonObject source) {
 QJsonObject ImageProviderInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
-	
-	if (!(m_supportedImages.size() == 0)) {
-		result["SupportedImages"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImages);
-	}
-		
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
+	result["SupportedImages"] = Jellyfin::Support::toJsonValue<QList<ImageType>>(m_supportedImages);	
 	return result;
 }
 
@@ -79,27 +79,13 @@ QString ImageProviderInfo::name() const { return m_name; }
 void ImageProviderInfo::setName(QString newName) {
 	m_name = newName;
 }
-bool ImageProviderInfo::nameNull() const {
-	return m_name.isNull();
-}
 
-void ImageProviderInfo::setNameNull() {
-	m_name.clear();
-
-}
 QList<ImageType> ImageProviderInfo::supportedImages() const { return m_supportedImages; }
 
 void ImageProviderInfo::setSupportedImages(QList<ImageType> newSupportedImages) {
 	m_supportedImages = newSupportedImages;
 }
-bool ImageProviderInfo::supportedImagesNull() const {
-	return m_supportedImages.size() == 0;
-}
 
-void ImageProviderInfo::setSupportedImagesNull() {
-	m_supportedImages.clear();
-
-}
 
 } // NS DTO
 

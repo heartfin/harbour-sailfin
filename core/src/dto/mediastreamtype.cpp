@@ -57,6 +57,12 @@ MediaStreamType fromJsonValue(const QJsonValue &source, convertType<MediaStreamT
 	if (str == QStringLiteral("EmbeddedImage")) {
 		return MediaStreamType::EmbeddedImage;
 	}
+	if (str == QStringLiteral("Data")) {
+		return MediaStreamType::Data;
+	}
+	if (str == QStringLiteral("Lyric")) {
+		return MediaStreamType::Lyric;
+	}
 	
 	return MediaStreamType::EnumNotSet;
 }
@@ -72,6 +78,10 @@ QJsonValue toJsonValue(const MediaStreamType &source, convertType<MediaStreamTyp
 		return QStringLiteral("Subtitle");
 	case MediaStreamType::EmbeddedImage:
 		return QStringLiteral("EmbeddedImage");
+	case MediaStreamType::Data:
+		return QStringLiteral("Data");
+	case MediaStreamType::Lyric:
+		return QStringLiteral("Lyric");
 
 	case MediaStreamType::EnumNotSet: // Fallthrough
 	default:

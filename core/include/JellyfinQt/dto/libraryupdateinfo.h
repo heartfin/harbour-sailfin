@@ -49,7 +49,13 @@ namespace DTO {
 
 class LibraryUpdateInfo {
 public:
-	LibraryUpdateInfo(													
+	LibraryUpdateInfo(	
+		QStringList foldersAddedTo,			
+		QStringList foldersRemovedFrom,			
+		QStringList itemsAdded,			
+		QStringList itemsRemoved,			
+		QStringList itemsUpdated,			
+		QStringList collectionFolders,			
 		bool isEmpty		
 	);
 
@@ -73,8 +79,6 @@ public:
 	* @brief Gets or sets the folders added to.
 	*/
 	void setFoldersAddedTo(QStringList newFoldersAddedTo);
-	bool foldersAddedToNull() const;
-	void setFoldersAddedToNull();
 
 	/**
 	 * @brief Gets or sets the folders removed from.
@@ -84,8 +88,6 @@ public:
 	* @brief Gets or sets the folders removed from.
 	*/
 	void setFoldersRemovedFrom(QStringList newFoldersRemovedFrom);
-	bool foldersRemovedFromNull() const;
-	void setFoldersRemovedFromNull();
 
 	/**
 	 * @brief Gets or sets the items added.
@@ -95,8 +97,6 @@ public:
 	* @brief Gets or sets the items added.
 	*/
 	void setItemsAdded(QStringList newItemsAdded);
-	bool itemsAddedNull() const;
-	void setItemsAddedNull();
 
 	/**
 	 * @brief Gets or sets the items removed.
@@ -106,8 +106,6 @@ public:
 	* @brief Gets or sets the items removed.
 	*/
 	void setItemsRemoved(QStringList newItemsRemoved);
-	bool itemsRemovedNull() const;
-	void setItemsRemovedNull();
 
 	/**
 	 * @brief Gets or sets the items updated.
@@ -117,15 +115,11 @@ public:
 	* @brief Gets or sets the items updated.
 	*/
 	void setItemsUpdated(QStringList newItemsUpdated);
-	bool itemsUpdatedNull() const;
-	void setItemsUpdatedNull();
 
 
 	QStringList collectionFolders() const;
 
 	void setCollectionFolders(QStringList newCollectionFolders);
-	bool collectionFoldersNull() const;
-	void setCollectionFoldersNull();
 
 
 	bool isEmpty() const;

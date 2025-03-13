@@ -34,13 +34,9 @@ namespace DTO {
 
 GetProgramsDto::GetProgramsDto() {}
 GetProgramsDto::GetProgramsDto (
-		QString userId, 
-		bool enableTotalRecordCount, 
-		QString librarySeriesId 
+		std::optional<bool> enableTotalRecordCount 
 		) :
-	m_userId(userId),
-	m_enableTotalRecordCount(enableTotalRecordCount),
-	m_librarySeriesId(librarySeriesId) { }
+	m_enableTotalRecordCount(enableTotalRecordCount) { }
 
 
 
@@ -128,12 +124,12 @@ void GetProgramsDto::setFromJson(QJsonObject source) {
 	m_isSports = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsSports"]);
 	m_startIndex = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["StartIndex"]);
 	m_limit = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Limit"]);
-	m_sortBy = Jellyfin::Support::fromJsonValue<QString>(source["SortBy"]);
-	m_sortOrder = Jellyfin::Support::fromJsonValue<QString>(source["SortOrder"]);
+	m_sortBy = Jellyfin::Support::fromJsonValue<QList<ItemSortBy>>(source["SortBy"]);
+	m_sortOrder = Jellyfin::Support::fromJsonValue<QList<SortOrder>>(source["SortOrder"]);
 	m_genres = Jellyfin::Support::fromJsonValue<QStringList>(source["Genres"]);
 	m_genreIds = Jellyfin::Support::fromJsonValue<QStringList>(source["GenreIds"]);
 	m_enableImages = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableImages"]);
-	m_enableTotalRecordCount = Jellyfin::Support::fromJsonValue<bool>(source["EnableTotalRecordCount"]);
+	m_enableTotalRecordCount = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableTotalRecordCount"]);
 	m_imageTypeLimit = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["ImageTypeLimit"]);
 	m_enableImageTypes = Jellyfin::Support::fromJsonValue<QList<ImageType>>(source["EnableImageTypes"]);
 	m_enableUserData = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableUserData"]);
@@ -151,7 +147,11 @@ QJsonObject GetProgramsDto::toJson() const {
 		result["ChannelIds"] = Jellyfin::Support::toJsonValue<QStringList>(m_channelIds);
 	}
 			
-	result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);		
+	
+	if (!(m_userId.isNull())) {
+		result["UserId"] = Jellyfin::Support::toJsonValue<QString>(m_userId);
+	}
+			
 	
 	if (!(m_minStartDate.isNull())) {
 		result["MinStartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_minStartDate);
@@ -218,13 +218,13 @@ QJsonObject GetProgramsDto::toJson() const {
 	}
 			
 	
-	if (!(m_sortBy.isNull())) {
-		result["SortBy"] = Jellyfin::Support::toJsonValue<QString>(m_sortBy);
+	if (!(m_sortBy.size() == 0)) {
+		result["SortBy"] = Jellyfin::Support::toJsonValue<QList<ItemSortBy>>(m_sortBy);
 	}
 			
 	
-	if (!(m_sortOrder.isNull())) {
-		result["SortOrder"] = Jellyfin::Support::toJsonValue<QString>(m_sortOrder);
+	if (!(m_sortOrder.size() == 0)) {
+		result["SortOrder"] = Jellyfin::Support::toJsonValue<QList<SortOrder>>(m_sortOrder);
 	}
 			
 	
@@ -242,7 +242,7 @@ QJsonObject GetProgramsDto::toJson() const {
 		result["EnableImages"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableImages);
 	}
 			
-	result["EnableTotalRecordCount"] = Jellyfin::Support::toJsonValue<bool>(m_enableTotalRecordCount);		
+	result["EnableTotalRecordCount"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableTotalRecordCount);		
 	
 	if (!(!m_imageTypeLimit.has_value())) {
 		result["ImageTypeLimit"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_imageTypeLimit);
@@ -263,7 +263,11 @@ QJsonObject GetProgramsDto::toJson() const {
 		result["SeriesTimerId"] = Jellyfin::Support::toJsonValue<QString>(m_seriesTimerId);
 	}
 			
-	result["LibrarySeriesId"] = Jellyfin::Support::toJsonValue<QString>(m_librarySeriesId);		
+	
+	if (!(m_librarySeriesId.isNull())) {
+		result["LibrarySeriesId"] = Jellyfin::Support::toJsonValue<QString>(m_librarySeriesId);
+	}
+			
 	
 	if (!(m_fields.size() == 0)) {
 		result["Fields"] = Jellyfin::Support::toJsonValue<QList<ItemFields>>(m_fields);
@@ -290,7 +294,14 @@ QString GetProgramsDto::userId() const { return m_userId; }
 void GetProgramsDto::setUserId(QString newUserId) {
 	m_userId = newUserId;
 }
+bool GetProgramsDto::userIdNull() const {
+	return m_userId.isNull();
+}
 
+void GetProgramsDto::setUserIdNull() {
+	m_userId.clear();
+
+}
 QDateTime GetProgramsDto::minStartDate() const { return m_minStartDate; }
 
 void GetProgramsDto::setMinStartDate(QDateTime newMinStartDate) {
@@ -460,26 +471,26 @@ void GetProgramsDto::setLimitNull() {
 	m_limit = std::nullopt;
 
 }
-QString GetProgramsDto::sortBy() const { return m_sortBy; }
+QList<ItemSortBy> GetProgramsDto::sortBy() const { return m_sortBy; }
 
-void GetProgramsDto::setSortBy(QString newSortBy) {
+void GetProgramsDto::setSortBy(QList<ItemSortBy> newSortBy) {
 	m_sortBy = newSortBy;
 }
 bool GetProgramsDto::sortByNull() const {
-	return m_sortBy.isNull();
+	return m_sortBy.size() == 0;
 }
 
 void GetProgramsDto::setSortByNull() {
 	m_sortBy.clear();
 
 }
-QString GetProgramsDto::sortOrder() const { return m_sortOrder; }
+QList<SortOrder> GetProgramsDto::sortOrder() const { return m_sortOrder; }
 
-void GetProgramsDto::setSortOrder(QString newSortOrder) {
+void GetProgramsDto::setSortOrder(QList<SortOrder> newSortOrder) {
 	m_sortOrder = newSortOrder;
 }
 bool GetProgramsDto::sortOrderNull() const {
-	return m_sortOrder.isNull();
+	return m_sortOrder.size() == 0;
 }
 
 void GetProgramsDto::setSortOrderNull() {
@@ -525,9 +536,9 @@ void GetProgramsDto::setEnableImagesNull() {
 	m_enableImages = std::nullopt;
 
 }
-bool GetProgramsDto::enableTotalRecordCount() const { return m_enableTotalRecordCount; }
+std::optional<bool> GetProgramsDto::enableTotalRecordCount() const { return m_enableTotalRecordCount; }
 
-void GetProgramsDto::setEnableTotalRecordCount(bool newEnableTotalRecordCount) {
+void GetProgramsDto::setEnableTotalRecordCount(std::optional<bool> newEnableTotalRecordCount) {
 	m_enableTotalRecordCount = newEnableTotalRecordCount;
 }
 
@@ -588,7 +599,14 @@ QString GetProgramsDto::librarySeriesId() const { return m_librarySeriesId; }
 void GetProgramsDto::setLibrarySeriesId(QString newLibrarySeriesId) {
 	m_librarySeriesId = newLibrarySeriesId;
 }
+bool GetProgramsDto::librarySeriesIdNull() const {
+	return m_librarySeriesId.isNull();
+}
 
+void GetProgramsDto::setLibrarySeriesIdNull() {
+	m_librarySeriesId.clear();
+
+}
 QList<ItemFields> GetProgramsDto::fields() const { return m_fields; }
 
 void GetProgramsDto::setFields(QList<ItemFields> newFields) {

@@ -43,6 +43,7 @@ PersonLookupInfo::PersonLookupInfo (
 PersonLookupInfo::PersonLookupInfo(const PersonLookupInfo &other) :
 
 	m_name(other.m_name),
+	m_originalTitle(other.m_originalTitle),
 	m_path(other.m_path),
 	m_metadataLanguage(other.m_metadataLanguage),
 	m_metadataCountryCode(other.m_metadataCountryCode),
@@ -56,6 +57,7 @@ PersonLookupInfo::PersonLookupInfo(const PersonLookupInfo &other) :
 
 void PersonLookupInfo::replaceData(PersonLookupInfo &other) {
 	m_name = other.m_name;
+	m_originalTitle = other.m_originalTitle;
 	m_path = other.m_path;
 	m_metadataLanguage = other.m_metadataLanguage;
 	m_metadataCountryCode = other.m_metadataCountryCode;
@@ -76,6 +78,7 @@ PersonLookupInfo PersonLookupInfo::fromJson(QJsonObject source) {
 
 void PersonLookupInfo::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_originalTitle = Jellyfin::Support::fromJsonValue<QString>(source["OriginalTitle"]);
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
@@ -94,6 +97,11 @@ QJsonObject PersonLookupInfo::toJson() const {
 	
 	if (!(m_name.isNull())) {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_originalTitle.isNull())) {
+		result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
 	}
 			
 	
@@ -151,6 +159,19 @@ bool PersonLookupInfo::nameNull() const {
 
 void PersonLookupInfo::setNameNull() {
 	m_name.clear();
+
+}
+QString PersonLookupInfo::originalTitle() const { return m_originalTitle; }
+
+void PersonLookupInfo::setOriginalTitle(QString newOriginalTitle) {
+	m_originalTitle = newOriginalTitle;
+}
+bool PersonLookupInfo::originalTitleNull() const {
+	return m_originalTitle.isNull();
+}
+
+void PersonLookupInfo::setOriginalTitleNull() {
+	m_originalTitle.clear();
 
 }
 QString PersonLookupInfo::path() const { return m_path; }

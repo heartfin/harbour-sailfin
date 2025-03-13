@@ -33,19 +33,15 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QList>
-#include <QSharedPointer>
 #include <QString>
 #include <QStringList>
 #include <optional>
 
 #include "JellyfinQt/dto/codecprofile.h"
 #include "JellyfinQt/dto/containerprofile.h"
-#include "JellyfinQt/dto/deviceidentification.h"
 #include "JellyfinQt/dto/directplayprofile.h"
-#include "JellyfinQt/dto/responseprofile.h"
 #include "JellyfinQt/dto/subtitleprofile.h"
 #include "JellyfinQt/dto/transcodingprofile.h"
-#include "JellyfinQt/dto/xmlattribute.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -58,18 +54,12 @@ namespace DTO {
 
 class DeviceProfile {
 public:
-	DeviceProfile(					
-		QSharedPointer<DeviceIdentification> identification,																			
-		bool enableAlbumArtInDidl,			
-		bool enableSingleAlbumArtLimit,			
-		bool enableSingleSubtitleLimit,									
-		qint32 maxAlbumArtWidth,			
-		qint32 maxAlbumArtHeight,																			
-		qint32 timelineOffsetSeconds,			
-		bool requiresPlainVideoItems,			
-		bool requiresPlainFolders,			
-		bool enableMSMediaReceiverRegistrar,			
-		bool ignoreTranscodeByteRangeRequests																
+	DeviceProfile(													
+		QList<DirectPlayProfile> directPlayProfiles,			
+		QList<TranscodingProfile> transcodingProfiles,			
+		QList<ContainerProfile> containerProfiles,			
+		QList<CodecProfile> codecProfiles,			
+		QList<SubtitleProfile> subtitleProfiles		
 	);
 
 	DeviceProfile(const DeviceProfile &other);
@@ -85,341 +75,70 @@ public:
 	
 	// Properties
 	/**
-	 * @brief Gets or sets the Name.
+	 * @brief Gets or sets the name of this device profile. User profiles must have a unique name.
 	 */
 	QString name() const;
 	/**
-	* @brief Gets or sets the Name.
+	* @brief Gets or sets the name of this device profile. User profiles must have a unique name.
 	*/
 	void setName(QString newName);
 	bool nameNull() const;
 	void setNameNull();
 
 	/**
-	 * @brief Gets or sets the Id.
+	 * @brief Gets or sets the unique internal identifier.
 	 */
 	QString jellyfinId() const;
 	/**
-	* @brief Gets or sets the Id.
+	* @brief Gets or sets the unique internal identifier.
 	*/
 	void setJellyfinId(QString newJellyfinId);
 	bool jellyfinIdNull() const;
 	void setJellyfinIdNull();
 
-
-	QSharedPointer<DeviceIdentification> identification() const;
-
-	void setIdentification(QSharedPointer<DeviceIdentification> newIdentification);
-
 	/**
-	 * @brief Gets or sets the FriendlyName.
-	 */
-	QString friendlyName() const;
-	/**
-	* @brief Gets or sets the FriendlyName.
-	*/
-	void setFriendlyName(QString newFriendlyName);
-	bool friendlyNameNull() const;
-	void setFriendlyNameNull();
-
-	/**
-	 * @brief Gets or sets the Manufacturer.
-	 */
-	QString manufacturer() const;
-	/**
-	* @brief Gets or sets the Manufacturer.
-	*/
-	void setManufacturer(QString newManufacturer);
-	bool manufacturerNull() const;
-	void setManufacturerNull();
-
-	/**
-	 * @brief Gets or sets the ManufacturerUrl.
-	 */
-	QString manufacturerUrl() const;
-	/**
-	* @brief Gets or sets the ManufacturerUrl.
-	*/
-	void setManufacturerUrl(QString newManufacturerUrl);
-	bool manufacturerUrlNull() const;
-	void setManufacturerUrlNull();
-
-	/**
-	 * @brief Gets or sets the ModelName.
-	 */
-	QString modelName() const;
-	/**
-	* @brief Gets or sets the ModelName.
-	*/
-	void setModelName(QString newModelName);
-	bool modelNameNull() const;
-	void setModelNameNull();
-
-	/**
-	 * @brief Gets or sets the ModelDescription.
-	 */
-	QString modelDescription() const;
-	/**
-	* @brief Gets or sets the ModelDescription.
-	*/
-	void setModelDescription(QString newModelDescription);
-	bool modelDescriptionNull() const;
-	void setModelDescriptionNull();
-
-	/**
-	 * @brief Gets or sets the ModelNumber.
-	 */
-	QString modelNumber() const;
-	/**
-	* @brief Gets or sets the ModelNumber.
-	*/
-	void setModelNumber(QString newModelNumber);
-	bool modelNumberNull() const;
-	void setModelNumberNull();
-
-	/**
-	 * @brief Gets or sets the ModelUrl.
-	 */
-	QString modelUrl() const;
-	/**
-	* @brief Gets or sets the ModelUrl.
-	*/
-	void setModelUrl(QString newModelUrl);
-	bool modelUrlNull() const;
-	void setModelUrlNull();
-
-	/**
-	 * @brief Gets or sets the SerialNumber.
-	 */
-	QString serialNumber() const;
-	/**
-	* @brief Gets or sets the SerialNumber.
-	*/
-	void setSerialNumber(QString newSerialNumber);
-	bool serialNumberNull() const;
-	void setSerialNumberNull();
-
-	/**
-	 * @brief Gets or sets a value indicating whether EnableAlbumArtInDidl.
-	 */
-	bool enableAlbumArtInDidl() const;
-	/**
-	* @brief Gets or sets a value indicating whether EnableAlbumArtInDidl.
-	*/
-	void setEnableAlbumArtInDidl(bool newEnableAlbumArtInDidl);
-
-	/**
-	 * @brief Gets or sets a value indicating whether EnableSingleAlbumArtLimit.
-	 */
-	bool enableSingleAlbumArtLimit() const;
-	/**
-	* @brief Gets or sets a value indicating whether EnableSingleAlbumArtLimit.
-	*/
-	void setEnableSingleAlbumArtLimit(bool newEnableSingleAlbumArtLimit);
-
-	/**
-	 * @brief Gets or sets a value indicating whether EnableSingleSubtitleLimit.
-	 */
-	bool enableSingleSubtitleLimit() const;
-	/**
-	* @brief Gets or sets a value indicating whether EnableSingleSubtitleLimit.
-	*/
-	void setEnableSingleSubtitleLimit(bool newEnableSingleSubtitleLimit);
-
-	/**
-	 * @brief Gets or sets the SupportedMediaTypes.
-	 */
-	QString supportedMediaTypes() const;
-	/**
-	* @brief Gets or sets the SupportedMediaTypes.
-	*/
-	void setSupportedMediaTypes(QString newSupportedMediaTypes);
-	bool supportedMediaTypesNull() const;
-	void setSupportedMediaTypesNull();
-
-	/**
-	 * @brief Gets or sets the UserId.
-	 */
-	QString userId() const;
-	/**
-	* @brief Gets or sets the UserId.
-	*/
-	void setUserId(QString newUserId);
-	bool userIdNull() const;
-	void setUserIdNull();
-
-	/**
-	 * @brief Gets or sets the AlbumArtPn.
-	 */
-	QString albumArtPn() const;
-	/**
-	* @brief Gets or sets the AlbumArtPn.
-	*/
-	void setAlbumArtPn(QString newAlbumArtPn);
-	bool albumArtPnNull() const;
-	void setAlbumArtPnNull();
-
-	/**
-	 * @brief Gets or sets the MaxAlbumArtWidth.
-	 */
-	qint32 maxAlbumArtWidth() const;
-	/**
-	* @brief Gets or sets the MaxAlbumArtWidth.
-	*/
-	void setMaxAlbumArtWidth(qint32 newMaxAlbumArtWidth);
-
-	/**
-	 * @brief Gets or sets the MaxAlbumArtHeight.
-	 */
-	qint32 maxAlbumArtHeight() const;
-	/**
-	* @brief Gets or sets the MaxAlbumArtHeight.
-	*/
-	void setMaxAlbumArtHeight(qint32 newMaxAlbumArtHeight);
-
-	/**
-	 * @brief Gets or sets the MaxIconWidth.
-	 */
-	std::optional<qint32> maxIconWidth() const;
-	/**
-	* @brief Gets or sets the MaxIconWidth.
-	*/
-	void setMaxIconWidth(std::optional<qint32> newMaxIconWidth);
-	bool maxIconWidthNull() const;
-	void setMaxIconWidthNull();
-
-	/**
-	 * @brief Gets or sets the MaxIconHeight.
-	 */
-	std::optional<qint32> maxIconHeight() const;
-	/**
-	* @brief Gets or sets the MaxIconHeight.
-	*/
-	void setMaxIconHeight(std::optional<qint32> newMaxIconHeight);
-	bool maxIconHeightNull() const;
-	void setMaxIconHeightNull();
-
-	/**
-	 * @brief Gets or sets the MaxStreamingBitrate.
+	 * @brief Gets or sets the maximum allowed bitrate for all streamed content.
 	 */
 	std::optional<qint32> maxStreamingBitrate() const;
 	/**
-	* @brief Gets or sets the MaxStreamingBitrate.
+	* @brief Gets or sets the maximum allowed bitrate for all streamed content.
 	*/
 	void setMaxStreamingBitrate(std::optional<qint32> newMaxStreamingBitrate);
 	bool maxStreamingBitrateNull() const;
 	void setMaxStreamingBitrateNull();
 
 	/**
-	 * @brief Gets or sets the MaxStaticBitrate.
+	 * @brief Gets or sets the maximum allowed bitrate for statically streamed content (= direct played files).
 	 */
 	std::optional<qint32> maxStaticBitrate() const;
 	/**
-	* @brief Gets or sets the MaxStaticBitrate.
+	* @brief Gets or sets the maximum allowed bitrate for statically streamed content (= direct played files).
 	*/
 	void setMaxStaticBitrate(std::optional<qint32> newMaxStaticBitrate);
 	bool maxStaticBitrateNull() const;
 	void setMaxStaticBitrateNull();
 
 	/**
-	 * @brief Gets or sets the MusicStreamingTranscodingBitrate.
+	 * @brief Gets or sets the maximum allowed bitrate for transcoded music streams.
 	 */
 	std::optional<qint32> musicStreamingTranscodingBitrate() const;
 	/**
-	* @brief Gets or sets the MusicStreamingTranscodingBitrate.
+	* @brief Gets or sets the maximum allowed bitrate for transcoded music streams.
 	*/
 	void setMusicStreamingTranscodingBitrate(std::optional<qint32> newMusicStreamingTranscodingBitrate);
 	bool musicStreamingTranscodingBitrateNull() const;
 	void setMusicStreamingTranscodingBitrateNull();
 
 	/**
-	 * @brief Gets or sets the MaxStaticMusicBitrate.
+	 * @brief Gets or sets the maximum allowed bitrate for statically streamed (= direct played) music files.
 	 */
 	std::optional<qint32> maxStaticMusicBitrate() const;
 	/**
-	* @brief Gets or sets the MaxStaticMusicBitrate.
+	* @brief Gets or sets the maximum allowed bitrate for statically streamed (= direct played) music files.
 	*/
 	void setMaxStaticMusicBitrate(std::optional<qint32> newMaxStaticMusicBitrate);
 	bool maxStaticMusicBitrateNull() const;
 	void setMaxStaticMusicBitrateNull();
-
-	/**
-	 * @brief Gets or sets the content of the aggregationFlags element in the urn:schemas-sonycom:av namespace.
-	 */
-	QString sonyAggregationFlags() const;
-	/**
-	* @brief Gets or sets the content of the aggregationFlags element in the urn:schemas-sonycom:av namespace.
-	*/
-	void setSonyAggregationFlags(QString newSonyAggregationFlags);
-	bool sonyAggregationFlagsNull() const;
-	void setSonyAggregationFlagsNull();
-
-	/**
-	 * @brief Gets or sets the ProtocolInfo.
-	 */
-	QString protocolInfo() const;
-	/**
-	* @brief Gets or sets the ProtocolInfo.
-	*/
-	void setProtocolInfo(QString newProtocolInfo);
-	bool protocolInfoNull() const;
-	void setProtocolInfoNull();
-
-	/**
-	 * @brief Gets or sets the TimelineOffsetSeconds.
-	 */
-	qint32 timelineOffsetSeconds() const;
-	/**
-	* @brief Gets or sets the TimelineOffsetSeconds.
-	*/
-	void setTimelineOffsetSeconds(qint32 newTimelineOffsetSeconds);
-
-	/**
-	 * @brief Gets or sets a value indicating whether RequiresPlainVideoItems.
-	 */
-	bool requiresPlainVideoItems() const;
-	/**
-	* @brief Gets or sets a value indicating whether RequiresPlainVideoItems.
-	*/
-	void setRequiresPlainVideoItems(bool newRequiresPlainVideoItems);
-
-	/**
-	 * @brief Gets or sets a value indicating whether RequiresPlainFolders.
-	 */
-	bool requiresPlainFolders() const;
-	/**
-	* @brief Gets or sets a value indicating whether RequiresPlainFolders.
-	*/
-	void setRequiresPlainFolders(bool newRequiresPlainFolders);
-
-	/**
-	 * @brief Gets or sets a value indicating whether EnableMSMediaReceiverRegistrar.
-	 */
-	bool enableMSMediaReceiverRegistrar() const;
-	/**
-	* @brief Gets or sets a value indicating whether EnableMSMediaReceiverRegistrar.
-	*/
-	void setEnableMSMediaReceiverRegistrar(bool newEnableMSMediaReceiverRegistrar);
-
-	/**
-	 * @brief Gets or sets a value indicating whether IgnoreTranscodeByteRangeRequests.
-	 */
-	bool ignoreTranscodeByteRangeRequests() const;
-	/**
-	* @brief Gets or sets a value indicating whether IgnoreTranscodeByteRangeRequests.
-	*/
-	void setIgnoreTranscodeByteRangeRequests(bool newIgnoreTranscodeByteRangeRequests);
-
-	/**
-	 * @brief Gets or sets the XmlRootAttributes.
-	 */
-	QList<XmlAttribute> xmlRootAttributes() const;
-	/**
-	* @brief Gets or sets the XmlRootAttributes.
-	*/
-	void setXmlRootAttributes(QList<XmlAttribute> newXmlRootAttributes);
-	bool xmlRootAttributesNull() const;
-	void setXmlRootAttributesNull();
 
 	/**
 	 * @brief Gets or sets the direct play profiles.
@@ -429,8 +148,6 @@ public:
 	* @brief Gets or sets the direct play profiles.
 	*/
 	void setDirectPlayProfiles(QList<DirectPlayProfile> newDirectPlayProfiles);
-	bool directPlayProfilesNull() const;
-	void setDirectPlayProfilesNull();
 
 	/**
 	 * @brief Gets or sets the transcoding profiles.
@@ -440,93 +157,46 @@ public:
 	* @brief Gets or sets the transcoding profiles.
 	*/
 	void setTranscodingProfiles(QList<TranscodingProfile> newTranscodingProfiles);
-	bool transcodingProfilesNull() const;
-	void setTranscodingProfilesNull();
 
 	/**
-	 * @brief Gets or sets the ContainerProfiles.
+	 * @brief Gets or sets the container profiles. Failing to meet these optional conditions causes transcoding to occur.
 	 */
 	QList<ContainerProfile> containerProfiles() const;
 	/**
-	* @brief Gets or sets the ContainerProfiles.
+	* @brief Gets or sets the container profiles. Failing to meet these optional conditions causes transcoding to occur.
 	*/
 	void setContainerProfiles(QList<ContainerProfile> newContainerProfiles);
-	bool containerProfilesNull() const;
-	void setContainerProfilesNull();
 
 	/**
-	 * @brief Gets or sets the CodecProfiles.
+	 * @brief Gets or sets the codec profiles.
 	 */
 	QList<CodecProfile> codecProfiles() const;
 	/**
-	* @brief Gets or sets the CodecProfiles.
+	* @brief Gets or sets the codec profiles.
 	*/
 	void setCodecProfiles(QList<CodecProfile> newCodecProfiles);
-	bool codecProfilesNull() const;
-	void setCodecProfilesNull();
 
 	/**
-	 * @brief Gets or sets the ResponseProfiles.
-	 */
-	QList<ResponseProfile> responseProfiles() const;
-	/**
-	* @brief Gets or sets the ResponseProfiles.
-	*/
-	void setResponseProfiles(QList<ResponseProfile> newResponseProfiles);
-	bool responseProfilesNull() const;
-	void setResponseProfilesNull();
-
-	/**
-	 * @brief Gets or sets the SubtitleProfiles.
+	 * @brief Gets or sets the subtitle profiles.
 	 */
 	QList<SubtitleProfile> subtitleProfiles() const;
 	/**
-	* @brief Gets or sets the SubtitleProfiles.
+	* @brief Gets or sets the subtitle profiles.
 	*/
 	void setSubtitleProfiles(QList<SubtitleProfile> newSubtitleProfiles);
-	bool subtitleProfilesNull() const;
-	void setSubtitleProfilesNull();
 
 
 protected:
 	QString m_name;
 	QString m_jellyfinId;
-	QSharedPointer<DeviceIdentification> m_identification = QSharedPointer<DeviceIdentification>();
-	QString m_friendlyName;
-	QString m_manufacturer;
-	QString m_manufacturerUrl;
-	QString m_modelName;
-	QString m_modelDescription;
-	QString m_modelNumber;
-	QString m_modelUrl;
-	QString m_serialNumber;
-	bool m_enableAlbumArtInDidl;
-	bool m_enableSingleAlbumArtLimit;
-	bool m_enableSingleSubtitleLimit;
-	QString m_supportedMediaTypes;
-	QString m_userId;
-	QString m_albumArtPn;
-	qint32 m_maxAlbumArtWidth;
-	qint32 m_maxAlbumArtHeight;
-	std::optional<qint32> m_maxIconWidth = std::nullopt;
-	std::optional<qint32> m_maxIconHeight = std::nullopt;
 	std::optional<qint32> m_maxStreamingBitrate = std::nullopt;
 	std::optional<qint32> m_maxStaticBitrate = std::nullopt;
 	std::optional<qint32> m_musicStreamingTranscodingBitrate = std::nullopt;
 	std::optional<qint32> m_maxStaticMusicBitrate = std::nullopt;
-	QString m_sonyAggregationFlags;
-	QString m_protocolInfo;
-	qint32 m_timelineOffsetSeconds;
-	bool m_requiresPlainVideoItems;
-	bool m_requiresPlainFolders;
-	bool m_enableMSMediaReceiverRegistrar;
-	bool m_ignoreTranscodeByteRangeRequests;
-	QList<XmlAttribute> m_xmlRootAttributes;
 	QList<DirectPlayProfile> m_directPlayProfiles;
 	QList<TranscodingProfile> m_transcodingProfiles;
 	QList<ContainerProfile> m_containerProfiles;
 	QList<CodecProfile> m_codecProfiles;
-	QList<ResponseProfile> m_responseProfiles;
 	QList<SubtitleProfile> m_subtitleProfiles;
 
 private:

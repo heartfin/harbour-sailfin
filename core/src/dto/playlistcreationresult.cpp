@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 PlaylistCreationResult::PlaylistCreationResult() {}
+PlaylistCreationResult::PlaylistCreationResult (
+		QString jellyfinId 
+		) :
+	m_jellyfinId(jellyfinId) { }
+
+
 
 PlaylistCreationResult::PlaylistCreationResult(const PlaylistCreationResult &other) :
 
@@ -58,11 +64,7 @@ void PlaylistCreationResult::setFromJson(QJsonObject source) {
 QJsonObject PlaylistCreationResult::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_jellyfinId.isNull())) {
-		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	}
-		
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);	
 	return result;
 }
 
@@ -71,14 +73,7 @@ QString PlaylistCreationResult::jellyfinId() const { return m_jellyfinId; }
 void PlaylistCreationResult::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
 }
-bool PlaylistCreationResult::jellyfinIdNull() const {
-	return m_jellyfinId.isNull();
-}
 
-void PlaylistCreationResult::setJellyfinIdNull() {
-	m_jellyfinId.clear();
-
-}
 
 } // NS DTO
 

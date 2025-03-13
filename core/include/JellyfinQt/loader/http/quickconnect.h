@@ -37,7 +37,6 @@
 #include "JellyfinQt/loader/requesttypes.h"
 #include "JellyfinQt/dto/quickconnectresult.h"
 #include "JellyfinQt/dto/quickconnectresult.h"
-#include "JellyfinQt/dto/quickconnectstate.h"
 
 namespace Jellyfin {
 // Forward declaration
@@ -50,101 +49,59 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
- * @brief Temporarily activates quick connect for five minutes.
- */
-
-class ActivateLoader : public Jellyfin::Support::HttpLoader<void, ActivateParams> {
-public:
-	explicit ActivateLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const ActivateParams& parameters) const override;
-	QUrlQuery query(const ActivateParams& parameters) const override;
-	QByteArray body(const ActivateParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
  * @brief Authorizes a pending quick connect request.
  */
 
-class AuthorizeLoader : public Jellyfin::Support::HttpLoader<bool, AuthorizeParams> {
+class AuthorizeQuickConnectLoader : public Jellyfin::Support::HttpLoader<bool, AuthorizeQuickConnectParams> {
 public:
-	explicit AuthorizeLoader(ApiClient *apiClient = nullptr);
+	explicit AuthorizeQuickConnectLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const AuthorizeParams& parameters) const override;
-	QUrlQuery query(const AuthorizeParams& parameters) const override;
-	QByteArray body(const AuthorizeParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Enables or disables quick connect.
- */
-
-class AvailableLoader : public Jellyfin::Support::HttpLoader<void, AvailableParams> {
-public:
-	explicit AvailableLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const AvailableParams& parameters) const override;
-	QUrlQuery query(const AvailableParams& parameters) const override;
-	QByteArray body(const AvailableParams& parameters) const override;
+	QString path(const AuthorizeQuickConnectParams& parameters) const override;
+	QUrlQuery query(const AuthorizeQuickConnectParams& parameters) const override;
+	QByteArray body(const AuthorizeQuickConnectParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Attempts to retrieve authentication information.
  */
 
-class ConnectLoader : public Jellyfin::Support::HttpLoader<QuickConnectResult, ConnectParams> {
+class GetQuickConnectStateLoader : public Jellyfin::Support::HttpLoader<QuickConnectResult, GetQuickConnectStateParams> {
 public:
-	explicit ConnectLoader(ApiClient *apiClient = nullptr);
+	explicit GetQuickConnectStateLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const ConnectParams& parameters) const override;
-	QUrlQuery query(const ConnectParams& parameters) const override;
-	QByteArray body(const ConnectParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Deauthorize all quick connect devices for the current user.
- */
-
-class DeauthorizeLoader : public Jellyfin::Support::HttpLoader<qint32, DeauthorizeParams> {
-public:
-	explicit DeauthorizeLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const DeauthorizeParams& parameters) const override;
-	QUrlQuery query(const DeauthorizeParams& parameters) const override;
-	QByteArray body(const DeauthorizeParams& parameters) const override;
-	QNetworkAccessManager::Operation operation() const override;
-};
-/**
- * @brief Initiate a new quick connect request.
- */
-
-class InitiateLoader : public Jellyfin::Support::HttpLoader<QuickConnectResult, InitiateParams> {
-public:
-	explicit InitiateLoader(ApiClient *apiClient = nullptr);
-
-protected:
-	QString path(const InitiateParams& parameters) const override;
-	QUrlQuery query(const InitiateParams& parameters) const override;
-	QByteArray body(const InitiateParams& parameters) const override;
+	QString path(const GetQuickConnectStateParams& parameters) const override;
+	QUrlQuery query(const GetQuickConnectStateParams& parameters) const override;
+	QByteArray body(const GetQuickConnectStateParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Gets the current quick connect state.
  */
 
-class GetStatusLoader : public Jellyfin::Support::HttpLoader<QuickConnectState, GetStatusParams> {
+class GetQuickConnectEnabledLoader : public Jellyfin::Support::HttpLoader<bool, GetQuickConnectEnabledParams> {
 public:
-	explicit GetStatusLoader(ApiClient *apiClient = nullptr);
+	explicit GetQuickConnectEnabledLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const GetStatusParams& parameters) const override;
-	QUrlQuery query(const GetStatusParams& parameters) const override;
-	QByteArray body(const GetStatusParams& parameters) const override;
+	QString path(const GetQuickConnectEnabledParams& parameters) const override;
+	QUrlQuery query(const GetQuickConnectEnabledParams& parameters) const override;
+	QByteArray body(const GetQuickConnectEnabledParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Initiate a new quick connect request.
+ */
+
+class InitiateQuickConnectLoader : public Jellyfin::Support::HttpLoader<QuickConnectResult, InitiateQuickConnectParams> {
+public:
+	explicit InitiateQuickConnectLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const InitiateQuickConnectParams& parameters) const override;
+	QUrlQuery query(const InitiateQuickConnectParams& parameters) const override;
+	QByteArray body(const InitiateQuickConnectParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

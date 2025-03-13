@@ -49,7 +49,8 @@ namespace DTO {
 
 class PlayRequestDto {
 public:
-	PlayRequestDto(			
+	PlayRequestDto(	
+		QStringList playingQueue,			
 		qint32 playingItemPosition,			
 		qint64 startPositionTicks		
 	);
@@ -74,8 +75,6 @@ public:
 	* @brief Gets or sets the playing queue.
 	*/
 	void setPlayingQueue(QStringList newPlayingQueue);
-	bool playingQueueNull() const;
-	void setPlayingQueueNull();
 
 	/**
 	 * @brief Gets or sets the position of the playing item in the queue.

@@ -46,7 +46,11 @@ namespace DTO {
 
 
 class TimerEventInfo {
-public:	TimerEventInfo();
+public:
+	TimerEventInfo(	
+		QString jellyfinId				
+	);
+
 	TimerEventInfo(const TimerEventInfo &other);
 	
 	/**
@@ -63,8 +67,6 @@ public:	TimerEventInfo();
 	QString jellyfinId() const;
 
 	void setJellyfinId(QString newJellyfinId);
-	bool jellyfinIdNull() const;
-	void setJellyfinIdNull();
 
 
 	QString programId() const;
@@ -78,7 +80,9 @@ protected:
 	QString m_jellyfinId;
 	QString m_programId;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing TimerEventInfo::fromJson();
+	TimerEventInfo();
 };
 
 

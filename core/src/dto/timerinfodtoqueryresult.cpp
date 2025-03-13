@@ -34,9 +34,11 @@ namespace DTO {
 
 TimerInfoDtoQueryResult::TimerInfoDtoQueryResult() {}
 TimerInfoDtoQueryResult::TimerInfoDtoQueryResult (
+		QList<TimerInfoDto> items, 
 		qint32 totalRecordCount, 
 		qint32 startIndex 
 		) :
+	m_items(items),
 	m_totalRecordCount(totalRecordCount),
 	m_startIndex(startIndex) { }
 
@@ -72,11 +74,7 @@ void TimerInfoDtoQueryResult::setFromJson(QJsonObject source) {
 QJsonObject TimerInfoDtoQueryResult::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_items.size() == 0)) {
-		result["Items"] = Jellyfin::Support::toJsonValue<QList<TimerInfoDto>>(m_items);
-	}
-			
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<TimerInfoDto>>(m_items);		
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);		
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);	
 	return result;
@@ -87,14 +85,7 @@ QList<TimerInfoDto> TimerInfoDtoQueryResult::items() const { return m_items; }
 void TimerInfoDtoQueryResult::setItems(QList<TimerInfoDto> newItems) {
 	m_items = newItems;
 }
-bool TimerInfoDtoQueryResult::itemsNull() const {
-	return m_items.size() == 0;
-}
 
-void TimerInfoDtoQueryResult::setItemsNull() {
-	m_items.clear();
-
-}
 qint32 TimerInfoDtoQueryResult::totalRecordCount() const { return m_totalRecordCount; }
 
 void TimerInfoDtoQueryResult::setTotalRecordCount(qint32 newTotalRecordCount) {

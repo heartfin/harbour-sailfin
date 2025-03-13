@@ -81,6 +81,9 @@ ExternalIdMediaType fromJsonValue(const QJsonValue &source, convertType<External
 	if (str == QStringLiteral("Track")) {
 		return ExternalIdMediaType::Track;
 	}
+	if (str == QStringLiteral("Book")) {
+		return ExternalIdMediaType::Book;
+	}
 	
 	return ExternalIdMediaType::EnumNotSet;
 }
@@ -112,6 +115,8 @@ QJsonValue toJsonValue(const ExternalIdMediaType &source, convertType<ExternalId
 		return QStringLiteral("Series");
 	case ExternalIdMediaType::Track:
 		return QStringLiteral("Track");
+	case ExternalIdMediaType::Book:
+		return QStringLiteral("Book");
 
 	case ExternalIdMediaType::EnumNotSet: // Fallthrough
 	default:

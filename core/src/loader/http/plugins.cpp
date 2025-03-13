@@ -99,7 +99,7 @@ UninstallPluginByVersionLoader::UninstallPluginByVersionLoader(ApiClient *apiCli
 QString UninstallPluginByVersionLoader::path(const UninstallPluginByVersionParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/") + Support::toString< QSharedPointer<Version>>(params.version()) ;
+	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/") + Support::toString< QString>(params.version()) ;
 }
 
 QUrlQuery UninstallPluginByVersionLoader::query(const UninstallPluginByVersionParams &params) const {
@@ -128,7 +128,7 @@ DisablePluginLoader::DisablePluginLoader(ApiClient *apiClient)
 QString DisablePluginLoader::path(const DisablePluginParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/") + Support::toString< QSharedPointer<Version>>(params.version()) + QStringLiteral("/Disable");
+	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/") + Support::toString< QString>(params.version()) + QStringLiteral("/Disable");
 }
 
 QUrlQuery DisablePluginLoader::query(const DisablePluginParams &params) const {
@@ -157,7 +157,7 @@ EnablePluginLoader::EnablePluginLoader(ApiClient *apiClient)
 QString EnablePluginLoader::path(const EnablePluginParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/") + Support::toString< QSharedPointer<Version>>(params.version()) + QStringLiteral("/Enable");
+	return QStringLiteral("/Plugins/") + Support::toString< QString>(params.pluginId()) + QStringLiteral("/") + Support::toString< QString>(params.version()) + QStringLiteral("/Enable");
 }
 
 QUrlQuery EnablePluginLoader::query(const EnablePluginParams &params) const {
@@ -262,35 +262,6 @@ QByteArray GetPluginManifestLoader::body(const GetPluginManifestParams &params) 
 }
 
 QNetworkAccessManager::Operation GetPluginManifestLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-UpdatePluginSecurityInfoLoader::UpdatePluginSecurityInfoLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, UpdatePluginSecurityInfoParams>(apiClient) {}
-
-QString UpdatePluginSecurityInfoLoader::path(const UpdatePluginSecurityInfoParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Plugins/SecurityInfo");
-}
-
-QUrlQuery UpdatePluginSecurityInfoLoader::query(const UpdatePluginSecurityInfoParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray UpdatePluginSecurityInfoLoader::body(const UpdatePluginSecurityInfoParams &params) const {
-	return Support::toString<QSharedPointer<PluginSecurityInfo>>(params.body()).toUtf8();
-}
-
-QNetworkAccessManager::Operation UpdatePluginSecurityInfoLoader::operation() const {
 	// HTTP method Post
 	return QNetworkAccessManager::PostOperation;
 

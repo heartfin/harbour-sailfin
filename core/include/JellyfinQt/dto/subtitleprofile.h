@@ -64,9 +64,13 @@ public:
 	QJsonObject toJson() const;
 	
 	// Properties
-
+	/**
+	 * @brief Gets or sets the format.
+	 */
 	QString format() const;
-
+	/**
+	* @brief Gets or sets the format.
+	*/
 	void setFormat(QString newFormat);
 	bool formatNull() const;
 	void setFormatNull();
@@ -76,23 +80,35 @@ public:
 
 	void setMethod(SubtitleDeliveryMethod newMethod);
 
-
+	/**
+	 * @brief Gets or sets the DIDL mode.
+	 */
 	QString didlMode() const;
-
+	/**
+	* @brief Gets or sets the DIDL mode.
+	*/
 	void setDidlMode(QString newDidlMode);
 	bool didlModeNull() const;
 	void setDidlModeNull();
 
-
+	/**
+	 * @brief Gets or sets the language.
+	 */
 	QString language() const;
-
+	/**
+	* @brief Gets or sets the language.
+	*/
 	void setLanguage(QString newLanguage);
 	bool languageNull() const;
 	void setLanguageNull();
 
-
+	/**
+	 * @brief Gets or sets the container.
+	 */
 	QString container() const;
-
+	/**
+	* @brief Gets or sets the container.
+	*/
 	void setContainer(QString newContainer);
 	bool containerNull() const;
 	void setContainerNull();

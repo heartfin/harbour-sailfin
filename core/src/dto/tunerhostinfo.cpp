@@ -36,13 +36,21 @@ TunerHostInfo::TunerHostInfo() {}
 TunerHostInfo::TunerHostInfo (
 		bool importFavoritesOnly, 
 		bool allowHWTranscoding, 
+		bool allowFmp4TranscodingContainer, 
+		bool allowStreamSharing, 
+		qint32 fallbackMaxStreamingBitrate, 
 		bool enableStreamLooping, 
-		qint32 tunerCount 
+		qint32 tunerCount, 
+		bool ignoreDts 
 		) :
 	m_importFavoritesOnly(importFavoritesOnly),
 	m_allowHWTranscoding(allowHWTranscoding),
+	m_allowFmp4TranscodingContainer(allowFmp4TranscodingContainer),
+	m_allowStreamSharing(allowStreamSharing),
+	m_fallbackMaxStreamingBitrate(fallbackMaxStreamingBitrate),
 	m_enableStreamLooping(enableStreamLooping),
-	m_tunerCount(tunerCount) { }
+	m_tunerCount(tunerCount),
+	m_ignoreDts(ignoreDts) { }
 
 
 
@@ -55,10 +63,14 @@ TunerHostInfo::TunerHostInfo(const TunerHostInfo &other) :
 	m_friendlyName(other.m_friendlyName),
 	m_importFavoritesOnly(other.m_importFavoritesOnly),
 	m_allowHWTranscoding(other.m_allowHWTranscoding),
+	m_allowFmp4TranscodingContainer(other.m_allowFmp4TranscodingContainer),
+	m_allowStreamSharing(other.m_allowStreamSharing),
+	m_fallbackMaxStreamingBitrate(other.m_fallbackMaxStreamingBitrate),
 	m_enableStreamLooping(other.m_enableStreamLooping),
 	m_source(other.m_source),
 	m_tunerCount(other.m_tunerCount),
-	m_userAgent(other.m_userAgent){}
+	m_userAgent(other.m_userAgent),
+	m_ignoreDts(other.m_ignoreDts){}
 
 
 void TunerHostInfo::replaceData(TunerHostInfo &other) {
@@ -69,10 +81,14 @@ void TunerHostInfo::replaceData(TunerHostInfo &other) {
 	m_friendlyName = other.m_friendlyName;
 	m_importFavoritesOnly = other.m_importFavoritesOnly;
 	m_allowHWTranscoding = other.m_allowHWTranscoding;
+	m_allowFmp4TranscodingContainer = other.m_allowFmp4TranscodingContainer;
+	m_allowStreamSharing = other.m_allowStreamSharing;
+	m_fallbackMaxStreamingBitrate = other.m_fallbackMaxStreamingBitrate;
 	m_enableStreamLooping = other.m_enableStreamLooping;
 	m_source = other.m_source;
 	m_tunerCount = other.m_tunerCount;
 	m_userAgent = other.m_userAgent;
+	m_ignoreDts = other.m_ignoreDts;
 }
 
 TunerHostInfo TunerHostInfo::fromJson(QJsonObject source) {
@@ -90,10 +106,14 @@ void TunerHostInfo::setFromJson(QJsonObject source) {
 	m_friendlyName = Jellyfin::Support::fromJsonValue<QString>(source["FriendlyName"]);
 	m_importFavoritesOnly = Jellyfin::Support::fromJsonValue<bool>(source["ImportFavoritesOnly"]);
 	m_allowHWTranscoding = Jellyfin::Support::fromJsonValue<bool>(source["AllowHWTranscoding"]);
+	m_allowFmp4TranscodingContainer = Jellyfin::Support::fromJsonValue<bool>(source["AllowFmp4TranscodingContainer"]);
+	m_allowStreamSharing = Jellyfin::Support::fromJsonValue<bool>(source["AllowStreamSharing"]);
+	m_fallbackMaxStreamingBitrate = Jellyfin::Support::fromJsonValue<qint32>(source["FallbackMaxStreamingBitrate"]);
 	m_enableStreamLooping = Jellyfin::Support::fromJsonValue<bool>(source["EnableStreamLooping"]);
 	m_source = Jellyfin::Support::fromJsonValue<QString>(source["Source"]);
 	m_tunerCount = Jellyfin::Support::fromJsonValue<qint32>(source["TunerCount"]);
 	m_userAgent = Jellyfin::Support::fromJsonValue<QString>(source["UserAgent"]);
+	m_ignoreDts = Jellyfin::Support::fromJsonValue<bool>(source["IgnoreDts"]);
 
 }
 	
@@ -127,6 +147,9 @@ QJsonObject TunerHostInfo::toJson() const {
 			
 	result["ImportFavoritesOnly"] = Jellyfin::Support::toJsonValue<bool>(m_importFavoritesOnly);		
 	result["AllowHWTranscoding"] = Jellyfin::Support::toJsonValue<bool>(m_allowHWTranscoding);		
+	result["AllowFmp4TranscodingContainer"] = Jellyfin::Support::toJsonValue<bool>(m_allowFmp4TranscodingContainer);		
+	result["AllowStreamSharing"] = Jellyfin::Support::toJsonValue<bool>(m_allowStreamSharing);		
+	result["FallbackMaxStreamingBitrate"] = Jellyfin::Support::toJsonValue<qint32>(m_fallbackMaxStreamingBitrate);		
 	result["EnableStreamLooping"] = Jellyfin::Support::toJsonValue<bool>(m_enableStreamLooping);		
 	
 	if (!(m_source.isNull())) {
@@ -138,7 +161,8 @@ QJsonObject TunerHostInfo::toJson() const {
 	if (!(m_userAgent.isNull())) {
 		result["UserAgent"] = Jellyfin::Support::toJsonValue<QString>(m_userAgent);
 	}
-		
+			
+	result["IgnoreDts"] = Jellyfin::Support::toJsonValue<bool>(m_ignoreDts);	
 	return result;
 }
 
@@ -219,6 +243,24 @@ void TunerHostInfo::setAllowHWTranscoding(bool newAllowHWTranscoding) {
 	m_allowHWTranscoding = newAllowHWTranscoding;
 }
 
+bool TunerHostInfo::allowFmp4TranscodingContainer() const { return m_allowFmp4TranscodingContainer; }
+
+void TunerHostInfo::setAllowFmp4TranscodingContainer(bool newAllowFmp4TranscodingContainer) {
+	m_allowFmp4TranscodingContainer = newAllowFmp4TranscodingContainer;
+}
+
+bool TunerHostInfo::allowStreamSharing() const { return m_allowStreamSharing; }
+
+void TunerHostInfo::setAllowStreamSharing(bool newAllowStreamSharing) {
+	m_allowStreamSharing = newAllowStreamSharing;
+}
+
+qint32 TunerHostInfo::fallbackMaxStreamingBitrate() const { return m_fallbackMaxStreamingBitrate; }
+
+void TunerHostInfo::setFallbackMaxStreamingBitrate(qint32 newFallbackMaxStreamingBitrate) {
+	m_fallbackMaxStreamingBitrate = newFallbackMaxStreamingBitrate;
+}
+
 bool TunerHostInfo::enableStreamLooping() const { return m_enableStreamLooping; }
 
 void TunerHostInfo::setEnableStreamLooping(bool newEnableStreamLooping) {
@@ -257,6 +299,12 @@ void TunerHostInfo::setUserAgentNull() {
 	m_userAgent.clear();
 
 }
+bool TunerHostInfo::ignoreDts() const { return m_ignoreDts; }
+
+void TunerHostInfo::setIgnoreDts(bool newIgnoreDts) {
+	m_ignoreDts = newIgnoreDts;
+}
+
 
 } // NS DTO
 

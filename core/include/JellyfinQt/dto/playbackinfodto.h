@@ -50,7 +50,7 @@ namespace DTO {
 class PlaybackInfoDto {
 public:
 	PlaybackInfoDto(																	
-		QSharedPointer<DeviceProfile> deviceProfile														
+		QSharedPointer<DeviceProfile> deviceProfile																
 	);
 
 	PlaybackInfoDto(const PlaybackInfoDto &other);
@@ -224,6 +224,17 @@ public:
 	bool autoOpenLiveStreamNull() const;
 	void setAutoOpenLiveStreamNull();
 
+	/**
+	 * @brief Gets or sets a value indicating whether always burn in subtitles when transcoding.
+	 */
+	std::optional<bool> alwaysBurnInSubtitleWhenTranscoding() const;
+	/**
+	* @brief Gets or sets a value indicating whether always burn in subtitles when transcoding.
+	*/
+	void setAlwaysBurnInSubtitleWhenTranscoding(std::optional<bool> newAlwaysBurnInSubtitleWhenTranscoding);
+	bool alwaysBurnInSubtitleWhenTranscodingNull() const;
+	void setAlwaysBurnInSubtitleWhenTranscodingNull();
+
 
 protected:
 	QString m_userId;
@@ -241,6 +252,7 @@ protected:
 	std::optional<bool> m_allowVideoStreamCopy = std::nullopt;
 	std::optional<bool> m_allowAudioStreamCopy = std::nullopt;
 	std::optional<bool> m_autoOpenLiveStream = std::nullopt;
+	std::optional<bool> m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
 
 private:
 	// Private constructor which generates an invalid object, for use withing PlaybackInfoDto::fromJson();

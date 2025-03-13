@@ -66,10 +66,10 @@ QUrlQuery GetStudiosLoader::query(const GetStudiosParams &params) const {
 		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QList<BaseItemKind>>(params.excludeItemTypes()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QList<BaseItemKind>>(params.includeItemTypes()));
 	}
 	if (!params.isFavoriteNull()) {
 		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));

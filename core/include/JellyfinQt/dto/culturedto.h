@@ -48,7 +48,14 @@ namespace DTO {
 
 
 class CultureDto {
-public:	CultureDto();
+public:
+	CultureDto(	
+		QString name,			
+		QString displayName,			
+		QString twoLetterISOLanguageName,					
+		QStringList threeLetterISOLanguageNames		
+	);
+
 	CultureDto(const CultureDto &other);
 	
 	/**
@@ -62,44 +69,38 @@ public:	CultureDto();
 	
 	// Properties
 	/**
-	 * @brief Gets or sets the name.
+	 * @brief Gets the name.
 	 */
 	QString name() const;
 	/**
-	* @brief Gets or sets the name.
+	* @brief Gets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
-	 * @brief Gets or sets the display name.
+	 * @brief Gets the display name.
 	 */
 	QString displayName() const;
 	/**
-	* @brief Gets or sets the display name.
+	* @brief Gets the display name.
 	*/
 	void setDisplayName(QString newDisplayName);
-	bool displayNameNull() const;
-	void setDisplayNameNull();
 
 	/**
-	 * @brief Gets or sets the name of the two letter ISO language.
+	 * @brief Gets the name of the two letter ISO language.
 	 */
 	QString twoLetterISOLanguageName() const;
 	/**
-	* @brief Gets or sets the name of the two letter ISO language.
+	* @brief Gets the name of the two letter ISO language.
 	*/
 	void setTwoLetterISOLanguageName(QString newTwoLetterISOLanguageName);
-	bool twoLetterISOLanguageNameNull() const;
-	void setTwoLetterISOLanguageNameNull();
 
 	/**
-	 * @brief Gets or sets the name of the three letter ISO language.
+	 * @brief Gets the name of the three letter ISO language.
 	 */
 	QString threeLetterISOLanguageName() const;
 	/**
-	* @brief Gets or sets the name of the three letter ISO language.
+	* @brief Gets the name of the three letter ISO language.
 	*/
 	void setThreeLetterISOLanguageName(QString newThreeLetterISOLanguageName);
 	bool threeLetterISOLanguageNameNull() const;
@@ -109,8 +110,6 @@ public:	CultureDto();
 	QStringList threeLetterISOLanguageNames() const;
 
 	void setThreeLetterISOLanguageNames(QStringList newThreeLetterISOLanguageNames);
-	bool threeLetterISOLanguageNamesNull() const;
-	void setThreeLetterISOLanguageNamesNull();
 
 
 protected:
@@ -120,7 +119,9 @@ protected:
 	QString m_threeLetterISOLanguageName;
 	QStringList m_threeLetterISOLanguageNames;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing CultureDto::fromJson();
+	CultureDto();
 };
 
 

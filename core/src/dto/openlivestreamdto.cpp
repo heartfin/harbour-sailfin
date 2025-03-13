@@ -34,9 +34,11 @@ namespace DTO {
 
 OpenLiveStreamDto::OpenLiveStreamDto() {}
 OpenLiveStreamDto::OpenLiveStreamDto (
-		QSharedPointer<DeviceProfile> deviceProfile 
+		QSharedPointer<DeviceProfile> deviceProfile, 
+		QList<MediaProtocol> directPlayProtocols 
 		) :
-	m_deviceProfile(deviceProfile) { }
+	m_deviceProfile(deviceProfile),
+	m_directPlayProtocols(directPlayProtocols) { }
 
 
 
@@ -53,6 +55,7 @@ OpenLiveStreamDto::OpenLiveStreamDto(const OpenLiveStreamDto &other) :
 	m_itemId(other.m_itemId),
 	m_enableDirectPlay(other.m_enableDirectPlay),
 	m_enableDirectStream(other.m_enableDirectStream),
+	m_alwaysBurnInSubtitleWhenTranscoding(other.m_alwaysBurnInSubtitleWhenTranscoding),
 	m_deviceProfile(other.m_deviceProfile),
 	m_directPlayProtocols(other.m_directPlayProtocols){}
 
@@ -69,6 +72,7 @@ void OpenLiveStreamDto::replaceData(OpenLiveStreamDto &other) {
 	m_itemId = other.m_itemId;
 	m_enableDirectPlay = other.m_enableDirectPlay;
 	m_enableDirectStream = other.m_enableDirectStream;
+	m_alwaysBurnInSubtitleWhenTranscoding = other.m_alwaysBurnInSubtitleWhenTranscoding;
 	m_deviceProfile = other.m_deviceProfile;
 	m_directPlayProtocols = other.m_directPlayProtocols;
 }
@@ -92,6 +96,7 @@ void OpenLiveStreamDto::setFromJson(QJsonObject source) {
 	m_itemId = Jellyfin::Support::fromJsonValue<QString>(source["ItemId"]);
 	m_enableDirectPlay = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableDirectPlay"]);
 	m_enableDirectStream = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["EnableDirectStream"]);
+	m_alwaysBurnInSubtitleWhenTranscoding = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["AlwaysBurnInSubtitleWhenTranscoding"]);
 	m_deviceProfile = Jellyfin::Support::fromJsonValue<QSharedPointer<DeviceProfile>>(source["DeviceProfile"]);
 	m_directPlayProtocols = Jellyfin::Support::fromJsonValue<QList<MediaProtocol>>(source["DirectPlayProtocols"]);
 
@@ -155,12 +160,13 @@ QJsonObject OpenLiveStreamDto::toJson() const {
 		result["EnableDirectStream"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_enableDirectStream);
 	}
 			
-	result["DeviceProfile"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);		
 	
-	if (!(m_directPlayProtocols.size() == 0)) {
-		result["DirectPlayProtocols"] = Jellyfin::Support::toJsonValue<QList<MediaProtocol>>(m_directPlayProtocols);
+	if (!(!m_alwaysBurnInSubtitleWhenTranscoding.has_value())) {
+		result["AlwaysBurnInSubtitleWhenTranscoding"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_alwaysBurnInSubtitleWhenTranscoding);
 	}
-		
+			
+	result["DeviceProfile"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);		
+	result["DirectPlayProtocols"] = Jellyfin::Support::toJsonValue<QList<MediaProtocol>>(m_directPlayProtocols);	
 	return result;
 }
 
@@ -307,6 +313,19 @@ void OpenLiveStreamDto::setEnableDirectStreamNull() {
 	m_enableDirectStream = std::nullopt;
 
 }
+std::optional<bool> OpenLiveStreamDto::alwaysBurnInSubtitleWhenTranscoding() const { return m_alwaysBurnInSubtitleWhenTranscoding; }
+
+void OpenLiveStreamDto::setAlwaysBurnInSubtitleWhenTranscoding(std::optional<bool> newAlwaysBurnInSubtitleWhenTranscoding) {
+	m_alwaysBurnInSubtitleWhenTranscoding = newAlwaysBurnInSubtitleWhenTranscoding;
+}
+bool OpenLiveStreamDto::alwaysBurnInSubtitleWhenTranscodingNull() const {
+	return !m_alwaysBurnInSubtitleWhenTranscoding.has_value();
+}
+
+void OpenLiveStreamDto::setAlwaysBurnInSubtitleWhenTranscodingNull() {
+	m_alwaysBurnInSubtitleWhenTranscoding = std::nullopt;
+
+}
 QSharedPointer<DeviceProfile> OpenLiveStreamDto::deviceProfile() const { return m_deviceProfile; }
 
 void OpenLiveStreamDto::setDeviceProfile(QSharedPointer<DeviceProfile> newDeviceProfile) {
@@ -318,14 +337,7 @@ QList<MediaProtocol> OpenLiveStreamDto::directPlayProtocols() const { return m_d
 void OpenLiveStreamDto::setDirectPlayProtocols(QList<MediaProtocol> newDirectPlayProtocols) {
 	m_directPlayProtocols = newDirectPlayProtocols;
 }
-bool OpenLiveStreamDto::directPlayProtocolsNull() const {
-	return m_directPlayProtocols.size() == 0;
-}
 
-void OpenLiveStreamDto::setDirectPlayProtocolsNull() {
-	m_directPlayProtocols.clear();
-
-}
 
 } // NS DTO
 

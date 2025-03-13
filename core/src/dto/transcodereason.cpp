@@ -54,29 +54,32 @@ TranscodeReason fromJsonValue(const QJsonValue &source, convertType<TranscodeRea
 	if (str == QStringLiteral("AudioCodecNotSupported")) {
 		return TranscodeReason::AudioCodecNotSupported;
 	}
-	if (str == QStringLiteral("ContainerBitrateExceedsLimit")) {
-		return TranscodeReason::ContainerBitrateExceedsLimit;
+	if (str == QStringLiteral("SubtitleCodecNotSupported")) {
+		return TranscodeReason::SubtitleCodecNotSupported;
 	}
-	if (str == QStringLiteral("AudioBitrateNotSupported")) {
-		return TranscodeReason::AudioBitrateNotSupported;
+	if (str == QStringLiteral("AudioIsExternal")) {
+		return TranscodeReason::AudioIsExternal;
 	}
-	if (str == QStringLiteral("AudioChannelsNotSupported")) {
-		return TranscodeReason::AudioChannelsNotSupported;
+	if (str == QStringLiteral("SecondaryAudioNotSupported")) {
+		return TranscodeReason::SecondaryAudioNotSupported;
+	}
+	if (str == QStringLiteral("VideoProfileNotSupported")) {
+		return TranscodeReason::VideoProfileNotSupported;
+	}
+	if (str == QStringLiteral("VideoLevelNotSupported")) {
+		return TranscodeReason::VideoLevelNotSupported;
 	}
 	if (str == QStringLiteral("VideoResolutionNotSupported")) {
 		return TranscodeReason::VideoResolutionNotSupported;
 	}
-	if (str == QStringLiteral("UnknownVideoStreamInfo")) {
-		return TranscodeReason::UnknownVideoStreamInfo;
+	if (str == QStringLiteral("VideoBitDepthNotSupported")) {
+		return TranscodeReason::VideoBitDepthNotSupported;
 	}
-	if (str == QStringLiteral("UnknownAudioStreamInfo")) {
-		return TranscodeReason::UnknownAudioStreamInfo;
+	if (str == QStringLiteral("VideoFramerateNotSupported")) {
+		return TranscodeReason::VideoFramerateNotSupported;
 	}
-	if (str == QStringLiteral("AudioProfileNotSupported")) {
-		return TranscodeReason::AudioProfileNotSupported;
-	}
-	if (str == QStringLiteral("AudioSampleRateNotSupported")) {
-		return TranscodeReason::AudioSampleRateNotSupported;
+	if (str == QStringLiteral("RefFramesNotSupported")) {
+		return TranscodeReason::RefFramesNotSupported;
 	}
 	if (str == QStringLiteral("AnamorphicVideoNotSupported")) {
 		return TranscodeReason::AnamorphicVideoNotSupported;
@@ -84,35 +87,41 @@ TranscodeReason fromJsonValue(const QJsonValue &source, convertType<TranscodeRea
 	if (str == QStringLiteral("InterlacedVideoNotSupported")) {
 		return TranscodeReason::InterlacedVideoNotSupported;
 	}
-	if (str == QStringLiteral("SecondaryAudioNotSupported")) {
-		return TranscodeReason::SecondaryAudioNotSupported;
+	if (str == QStringLiteral("AudioChannelsNotSupported")) {
+		return TranscodeReason::AudioChannelsNotSupported;
 	}
-	if (str == QStringLiteral("RefFramesNotSupported")) {
-		return TranscodeReason::RefFramesNotSupported;
+	if (str == QStringLiteral("AudioProfileNotSupported")) {
+		return TranscodeReason::AudioProfileNotSupported;
 	}
-	if (str == QStringLiteral("VideoBitDepthNotSupported")) {
-		return TranscodeReason::VideoBitDepthNotSupported;
-	}
-	if (str == QStringLiteral("VideoBitrateNotSupported")) {
-		return TranscodeReason::VideoBitrateNotSupported;
-	}
-	if (str == QStringLiteral("VideoFramerateNotSupported")) {
-		return TranscodeReason::VideoFramerateNotSupported;
-	}
-	if (str == QStringLiteral("VideoLevelNotSupported")) {
-		return TranscodeReason::VideoLevelNotSupported;
-	}
-	if (str == QStringLiteral("VideoProfileNotSupported")) {
-		return TranscodeReason::VideoProfileNotSupported;
+	if (str == QStringLiteral("AudioSampleRateNotSupported")) {
+		return TranscodeReason::AudioSampleRateNotSupported;
 	}
 	if (str == QStringLiteral("AudioBitDepthNotSupported")) {
 		return TranscodeReason::AudioBitDepthNotSupported;
 	}
-	if (str == QStringLiteral("SubtitleCodecNotSupported")) {
-		return TranscodeReason::SubtitleCodecNotSupported;
+	if (str == QStringLiteral("ContainerBitrateExceedsLimit")) {
+		return TranscodeReason::ContainerBitrateExceedsLimit;
+	}
+	if (str == QStringLiteral("VideoBitrateNotSupported")) {
+		return TranscodeReason::VideoBitrateNotSupported;
+	}
+	if (str == QStringLiteral("AudioBitrateNotSupported")) {
+		return TranscodeReason::AudioBitrateNotSupported;
+	}
+	if (str == QStringLiteral("UnknownVideoStreamInfo")) {
+		return TranscodeReason::UnknownVideoStreamInfo;
+	}
+	if (str == QStringLiteral("UnknownAudioStreamInfo")) {
+		return TranscodeReason::UnknownAudioStreamInfo;
 	}
 	if (str == QStringLiteral("DirectPlayError")) {
 		return TranscodeReason::DirectPlayError;
+	}
+	if (str == QStringLiteral("VideoRangeTypeNotSupported")) {
+		return TranscodeReason::VideoRangeTypeNotSupported;
+	}
+	if (str == QStringLiteral("VideoCodecTagNotSupported")) {
+		return TranscodeReason::VideoCodecTagNotSupported;
 	}
 	
 	return TranscodeReason::EnumNotSet;
@@ -127,46 +136,52 @@ QJsonValue toJsonValue(const TranscodeReason &source, convertType<TranscodeReaso
 		return QStringLiteral("VideoCodecNotSupported");
 	case TranscodeReason::AudioCodecNotSupported:
 		return QStringLiteral("AudioCodecNotSupported");
-	case TranscodeReason::ContainerBitrateExceedsLimit:
-		return QStringLiteral("ContainerBitrateExceedsLimit");
-	case TranscodeReason::AudioBitrateNotSupported:
-		return QStringLiteral("AudioBitrateNotSupported");
-	case TranscodeReason::AudioChannelsNotSupported:
-		return QStringLiteral("AudioChannelsNotSupported");
+	case TranscodeReason::SubtitleCodecNotSupported:
+		return QStringLiteral("SubtitleCodecNotSupported");
+	case TranscodeReason::AudioIsExternal:
+		return QStringLiteral("AudioIsExternal");
+	case TranscodeReason::SecondaryAudioNotSupported:
+		return QStringLiteral("SecondaryAudioNotSupported");
+	case TranscodeReason::VideoProfileNotSupported:
+		return QStringLiteral("VideoProfileNotSupported");
+	case TranscodeReason::VideoLevelNotSupported:
+		return QStringLiteral("VideoLevelNotSupported");
 	case TranscodeReason::VideoResolutionNotSupported:
 		return QStringLiteral("VideoResolutionNotSupported");
-	case TranscodeReason::UnknownVideoStreamInfo:
-		return QStringLiteral("UnknownVideoStreamInfo");
-	case TranscodeReason::UnknownAudioStreamInfo:
-		return QStringLiteral("UnknownAudioStreamInfo");
-	case TranscodeReason::AudioProfileNotSupported:
-		return QStringLiteral("AudioProfileNotSupported");
-	case TranscodeReason::AudioSampleRateNotSupported:
-		return QStringLiteral("AudioSampleRateNotSupported");
+	case TranscodeReason::VideoBitDepthNotSupported:
+		return QStringLiteral("VideoBitDepthNotSupported");
+	case TranscodeReason::VideoFramerateNotSupported:
+		return QStringLiteral("VideoFramerateNotSupported");
+	case TranscodeReason::RefFramesNotSupported:
+		return QStringLiteral("RefFramesNotSupported");
 	case TranscodeReason::AnamorphicVideoNotSupported:
 		return QStringLiteral("AnamorphicVideoNotSupported");
 	case TranscodeReason::InterlacedVideoNotSupported:
 		return QStringLiteral("InterlacedVideoNotSupported");
-	case TranscodeReason::SecondaryAudioNotSupported:
-		return QStringLiteral("SecondaryAudioNotSupported");
-	case TranscodeReason::RefFramesNotSupported:
-		return QStringLiteral("RefFramesNotSupported");
-	case TranscodeReason::VideoBitDepthNotSupported:
-		return QStringLiteral("VideoBitDepthNotSupported");
-	case TranscodeReason::VideoBitrateNotSupported:
-		return QStringLiteral("VideoBitrateNotSupported");
-	case TranscodeReason::VideoFramerateNotSupported:
-		return QStringLiteral("VideoFramerateNotSupported");
-	case TranscodeReason::VideoLevelNotSupported:
-		return QStringLiteral("VideoLevelNotSupported");
-	case TranscodeReason::VideoProfileNotSupported:
-		return QStringLiteral("VideoProfileNotSupported");
+	case TranscodeReason::AudioChannelsNotSupported:
+		return QStringLiteral("AudioChannelsNotSupported");
+	case TranscodeReason::AudioProfileNotSupported:
+		return QStringLiteral("AudioProfileNotSupported");
+	case TranscodeReason::AudioSampleRateNotSupported:
+		return QStringLiteral("AudioSampleRateNotSupported");
 	case TranscodeReason::AudioBitDepthNotSupported:
 		return QStringLiteral("AudioBitDepthNotSupported");
-	case TranscodeReason::SubtitleCodecNotSupported:
-		return QStringLiteral("SubtitleCodecNotSupported");
+	case TranscodeReason::ContainerBitrateExceedsLimit:
+		return QStringLiteral("ContainerBitrateExceedsLimit");
+	case TranscodeReason::VideoBitrateNotSupported:
+		return QStringLiteral("VideoBitrateNotSupported");
+	case TranscodeReason::AudioBitrateNotSupported:
+		return QStringLiteral("AudioBitrateNotSupported");
+	case TranscodeReason::UnknownVideoStreamInfo:
+		return QStringLiteral("UnknownVideoStreamInfo");
+	case TranscodeReason::UnknownAudioStreamInfo:
+		return QStringLiteral("UnknownAudioStreamInfo");
 	case TranscodeReason::DirectPlayError:
 		return QStringLiteral("DirectPlayError");
+	case TranscodeReason::VideoRangeTypeNotSupported:
+		return QStringLiteral("VideoRangeTypeNotSupported");
+	case TranscodeReason::VideoCodecTagNotSupported:
+		return QStringLiteral("VideoCodecTagNotSupported");
 
 	case TranscodeReason::EnumNotSet: // Fallthrough
 	default:

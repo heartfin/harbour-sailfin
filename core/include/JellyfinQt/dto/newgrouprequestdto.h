@@ -46,7 +46,11 @@ namespace DTO {
 
 
 class NewGroupRequestDto {
-public:	NewGroupRequestDto();
+public:
+	NewGroupRequestDto(	
+		QString groupName		
+	);
+
 	NewGroupRequestDto(const NewGroupRequestDto &other);
 	
 	/**
@@ -67,14 +71,14 @@ public:	NewGroupRequestDto();
 	* @brief Gets or sets the group name.
 	*/
 	void setGroupName(QString newGroupName);
-	bool groupNameNull() const;
-	void setGroupNameNull();
 
 
 protected:
 	QString m_groupName;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing NewGroupRequestDto::fromJson();
+	NewGroupRequestDto();
 };
 
 

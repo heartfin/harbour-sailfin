@@ -53,6 +53,7 @@ public:
 		Jpg,
 		Png,
 		Webp,
+		Svg,
 	};
 	Q_ENUM(Value)
 private:

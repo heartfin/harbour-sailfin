@@ -48,7 +48,13 @@ namespace DTO {
 
 
 class RemoveFromPlaylistRequestDto {
-public:	RemoveFromPlaylistRequestDto();
+public:
+	RemoveFromPlaylistRequestDto(	
+		QStringList playlistItemIds,			
+		bool clearPlaylist,			
+		bool clearPlayingItem		
+	);
+
 	RemoveFromPlaylistRequestDto(const RemoveFromPlaylistRequestDto &other);
 	
 	/**
@@ -62,21 +68,41 @@ public:	RemoveFromPlaylistRequestDto();
 	
 	// Properties
 	/**
-	 * @brief Gets or sets the playlist identifiers ot the items.
+	 * @brief Gets or sets the playlist identifiers of the items. Ignored when clearing the playlist.
 	 */
 	QStringList playlistItemIds() const;
 	/**
-	* @brief Gets or sets the playlist identifiers ot the items.
+	* @brief Gets or sets the playlist identifiers of the items. Ignored when clearing the playlist.
 	*/
 	void setPlaylistItemIds(QStringList newPlaylistItemIds);
-	bool playlistItemIdsNull() const;
-	void setPlaylistItemIdsNull();
+
+	/**
+	 * @brief Gets or sets a value indicating whether the entire playlist should be cleared.
+	 */
+	bool clearPlaylist() const;
+	/**
+	* @brief Gets or sets a value indicating whether the entire playlist should be cleared.
+	*/
+	void setClearPlaylist(bool newClearPlaylist);
+
+	/**
+	 * @brief Gets or sets a value indicating whether the playing item should be removed as well. Used only when clearing the playlist.
+	 */
+	bool clearPlayingItem() const;
+	/**
+	* @brief Gets or sets a value indicating whether the playing item should be removed as well. Used only when clearing the playlist.
+	*/
+	void setClearPlayingItem(bool newClearPlayingItem);
 
 
 protected:
 	QStringList m_playlistItemIds;
+	bool m_clearPlaylist;
+	bool m_clearPlayingItem;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing RemoveFromPlaylistRequestDto::fromJson();
+	RemoveFromPlaylistRequestDto();
 };
 
 

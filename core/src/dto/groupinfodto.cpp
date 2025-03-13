@@ -35,11 +35,15 @@ namespace DTO {
 GroupInfoDto::GroupInfoDto() {}
 GroupInfoDto::GroupInfoDto (
 		QString groupId, 
+		QString groupName, 
 		GroupStateType state, 
+		QStringList participants, 
 		QDateTime lastUpdatedAt 
 		) :
 	m_groupId(groupId),
+	m_groupName(groupName),
 	m_state(state),
+	m_participants(participants),
 	m_lastUpdatedAt(lastUpdatedAt) { }
 
 
@@ -81,17 +85,9 @@ QJsonObject GroupInfoDto::toJson() const {
 	QJsonObject result;
 	
 	result["GroupId"] = Jellyfin::Support::toJsonValue<QString>(m_groupId);		
-	
-	if (!(m_groupName.isNull())) {
-		result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);
-	}
-			
+	result["GroupName"] = Jellyfin::Support::toJsonValue<QString>(m_groupName);		
 	result["State"] = Jellyfin::Support::toJsonValue<GroupStateType>(m_state);		
-	
-	if (!(m_participants.size() == 0)) {
-		result["Participants"] = Jellyfin::Support::toJsonValue<QStringList>(m_participants);
-	}
-			
+	result["Participants"] = Jellyfin::Support::toJsonValue<QStringList>(m_participants);		
 	result["LastUpdatedAt"] = Jellyfin::Support::toJsonValue<QDateTime>(m_lastUpdatedAt);	
 	return result;
 }
@@ -107,14 +103,7 @@ QString GroupInfoDto::groupName() const { return m_groupName; }
 void GroupInfoDto::setGroupName(QString newGroupName) {
 	m_groupName = newGroupName;
 }
-bool GroupInfoDto::groupNameNull() const {
-	return m_groupName.isNull();
-}
 
-void GroupInfoDto::setGroupNameNull() {
-	m_groupName.clear();
-
-}
 GroupStateType GroupInfoDto::state() const { return m_state; }
 
 void GroupInfoDto::setState(GroupStateType newState) {
@@ -126,14 +115,7 @@ QStringList GroupInfoDto::participants() const { return m_participants; }
 void GroupInfoDto::setParticipants(QStringList newParticipants) {
 	m_participants = newParticipants;
 }
-bool GroupInfoDto::participantsNull() const {
-	return m_participants.size() == 0;
-}
 
-void GroupInfoDto::setParticipantsNull() {
-	m_participants.clear();
-
-}
 QDateTime GroupInfoDto::lastUpdatedAt() const { return m_lastUpdatedAt; }
 
 void GroupInfoDto::setLastUpdatedAt(QDateTime newLastUpdatedAt) {

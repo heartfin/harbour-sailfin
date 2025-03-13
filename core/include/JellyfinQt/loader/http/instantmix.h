@@ -42,6 +42,7 @@
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
+#include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
 // Forward declaration
@@ -54,7 +55,7 @@ namespace HTTP {
 using namespace Jellyfin::DTO;
 
 /**
- * @brief Creates an instant playlist based on a given song.
+ * @brief Creates an instant playlist based on a given album.
  */
 
 class GetInstantMixFromAlbumLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromAlbumParams> {
@@ -68,7 +69,7 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
- * @brief Creates an instant playlist based on a given song.
+ * @brief Creates an instant playlist based on a given artist.
  */
 
 class GetInstantMixFromArtistsLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromArtistsParams> {
@@ -82,7 +83,21 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
- * @brief Creates an instant playlist based on a given song.
+ * @brief Creates an instant playlist based on a given artist.
+ */
+
+class GetInstantMixFromArtists2Loader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromArtists2Params> {
+public:
+	explicit GetInstantMixFromArtists2Loader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetInstantMixFromArtists2Params& parameters) const override;
+	QUrlQuery query(const GetInstantMixFromArtists2Params& parameters) const override;
+	QByteArray body(const GetInstantMixFromArtists2Params& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Creates an instant playlist based on a given item.
  */
 
 class GetInstantMixFromItemLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromItemParams> {
@@ -96,35 +111,35 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
- * @brief Creates an instant playlist based on a given song.
+ * @brief Creates an instant playlist based on a given genre.
  */
 
-class GetInstantMixFromMusicGenresLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromMusicGenresParams> {
+class GetInstantMixFromMusicGenreByNameLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromMusicGenreByNameParams> {
 public:
-	explicit GetInstantMixFromMusicGenresLoader(ApiClient *apiClient = nullptr);
+	explicit GetInstantMixFromMusicGenreByNameLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const GetInstantMixFromMusicGenresParams& parameters) const override;
-	QUrlQuery query(const GetInstantMixFromMusicGenresParams& parameters) const override;
-	QByteArray body(const GetInstantMixFromMusicGenresParams& parameters) const override;
+	QString path(const GetInstantMixFromMusicGenreByNameParams& parameters) const override;
+	QUrlQuery query(const GetInstantMixFromMusicGenreByNameParams& parameters) const override;
+	QByteArray body(const GetInstantMixFromMusicGenreByNameParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
- * @brief Creates an instant playlist based on a given song.
+ * @brief Creates an instant playlist based on a given genre.
  */
 
-class GetInstantMixFromMusicGenreLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromMusicGenreParams> {
+class GetInstantMixFromMusicGenreByIdLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromMusicGenreByIdParams> {
 public:
-	explicit GetInstantMixFromMusicGenreLoader(ApiClient *apiClient = nullptr);
+	explicit GetInstantMixFromMusicGenreByIdLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const GetInstantMixFromMusicGenreParams& parameters) const override;
-	QUrlQuery query(const GetInstantMixFromMusicGenreParams& parameters) const override;
-	QByteArray body(const GetInstantMixFromMusicGenreParams& parameters) const override;
+	QString path(const GetInstantMixFromMusicGenreByIdParams& parameters) const override;
+	QUrlQuery query(const GetInstantMixFromMusicGenreByIdParams& parameters) const override;
+	QByteArray body(const GetInstantMixFromMusicGenreByIdParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
- * @brief Creates an instant playlist based on a given song.
+ * @brief Creates an instant playlist based on a given playlist.
  */
 
 class GetInstantMixFromPlaylistLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetInstantMixFromPlaylistParams> {

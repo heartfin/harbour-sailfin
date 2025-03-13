@@ -38,11 +38,9 @@ SystemInfo::SystemInfo (
 		bool isShuttingDown, 
 		bool supportsLibraryMonitor, 
 		qint32 webSocketPortNumber, 
-		bool canSelfRestart, 
-		bool canLaunchWebBrowser, 
-		bool hasUpdateAvailable, 
-		FFmpegLocation encoderLocation, 
-		Architecture systemArchitecture 
+		std::optional<bool> canSelfRestart, 
+		std::optional<bool> canLaunchWebBrowser, 
+		std::optional<bool> hasUpdateAvailable 
 		) :
 	m_hasPendingRestart(hasPendingRestart),
 	m_isShuttingDown(isShuttingDown),
@@ -50,9 +48,7 @@ SystemInfo::SystemInfo (
 	m_webSocketPortNumber(webSocketPortNumber),
 	m_canSelfRestart(canSelfRestart),
 	m_canLaunchWebBrowser(canLaunchWebBrowser),
-	m_hasUpdateAvailable(hasUpdateAvailable),
-	m_encoderLocation(encoderLocation),
-	m_systemArchitecture(systemArchitecture) { }
+	m_hasUpdateAvailable(hasUpdateAvailable) { }
 
 
 
@@ -81,6 +77,7 @@ SystemInfo::SystemInfo(const SystemInfo &other) :
 	m_logPath(other.m_logPath),
 	m_internalMetadataPath(other.m_internalMetadataPath),
 	m_transcodingTempPath(other.m_transcodingTempPath),
+	m_castReceiverApplications(other.m_castReceiverApplications),
 	m_hasUpdateAvailable(other.m_hasUpdateAvailable),
 	m_encoderLocation(other.m_encoderLocation),
 	m_systemArchitecture(other.m_systemArchitecture){}
@@ -110,6 +107,7 @@ void SystemInfo::replaceData(SystemInfo &other) {
 	m_logPath = other.m_logPath;
 	m_internalMetadataPath = other.m_internalMetadataPath;
 	m_transcodingTempPath = other.m_transcodingTempPath;
+	m_castReceiverApplications = other.m_castReceiverApplications;
 	m_hasUpdateAvailable = other.m_hasUpdateAvailable;
 	m_encoderLocation = other.m_encoderLocation;
 	m_systemArchitecture = other.m_systemArchitecture;
@@ -137,8 +135,8 @@ void SystemInfo::setFromJson(QJsonObject source) {
 	m_supportsLibraryMonitor = Jellyfin::Support::fromJsonValue<bool>(source["SupportsLibraryMonitor"]);
 	m_webSocketPortNumber = Jellyfin::Support::fromJsonValue<qint32>(source["WebSocketPortNumber"]);
 	m_completedInstallations = Jellyfin::Support::fromJsonValue<QList<InstallationInfo>>(source["CompletedInstallations"]);
-	m_canSelfRestart = Jellyfin::Support::fromJsonValue<bool>(source["CanSelfRestart"]);
-	m_canLaunchWebBrowser = Jellyfin::Support::fromJsonValue<bool>(source["CanLaunchWebBrowser"]);
+	m_canSelfRestart = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["CanSelfRestart"]);
+	m_canLaunchWebBrowser = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["CanLaunchWebBrowser"]);
 	m_programDataPath = Jellyfin::Support::fromJsonValue<QString>(source["ProgramDataPath"]);
 	m_webPath = Jellyfin::Support::fromJsonValue<QString>(source["WebPath"]);
 	m_itemsByNamePath = Jellyfin::Support::fromJsonValue<QString>(source["ItemsByNamePath"]);
@@ -146,9 +144,10 @@ void SystemInfo::setFromJson(QJsonObject source) {
 	m_logPath = Jellyfin::Support::fromJsonValue<QString>(source["LogPath"]);
 	m_internalMetadataPath = Jellyfin::Support::fromJsonValue<QString>(source["InternalMetadataPath"]);
 	m_transcodingTempPath = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingTempPath"]);
-	m_hasUpdateAvailable = Jellyfin::Support::fromJsonValue<bool>(source["HasUpdateAvailable"]);
-	m_encoderLocation = Jellyfin::Support::fromJsonValue<FFmpegLocation>(source["EncoderLocation"]);
-	m_systemArchitecture = Jellyfin::Support::fromJsonValue<Architecture>(source["SystemArchitecture"]);
+	m_castReceiverApplications = Jellyfin::Support::fromJsonValue<QList<CastReceiverApplication>>(source["CastReceiverApplications"]);
+	m_hasUpdateAvailable = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["HasUpdateAvailable"]);
+	m_encoderLocation = Jellyfin::Support::fromJsonValue<QString>(source["EncoderLocation"]);
+	m_systemArchitecture = Jellyfin::Support::fromJsonValue<QString>(source["SystemArchitecture"]);
 
 }
 	
@@ -209,8 +208,8 @@ QJsonObject SystemInfo::toJson() const {
 		result["CompletedInstallations"] = Jellyfin::Support::toJsonValue<QList<InstallationInfo>>(m_completedInstallations);
 	}
 			
-	result["CanSelfRestart"] = Jellyfin::Support::toJsonValue<bool>(m_canSelfRestart);		
-	result["CanLaunchWebBrowser"] = Jellyfin::Support::toJsonValue<bool>(m_canLaunchWebBrowser);		
+	result["CanSelfRestart"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_canSelfRestart);		
+	result["CanLaunchWebBrowser"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_canLaunchWebBrowser);		
 	
 	if (!(m_programDataPath.isNull())) {
 		result["ProgramDataPath"] = Jellyfin::Support::toJsonValue<QString>(m_programDataPath);
@@ -246,9 +245,22 @@ QJsonObject SystemInfo::toJson() const {
 		result["TranscodingTempPath"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingTempPath);
 	}
 			
-	result["HasUpdateAvailable"] = Jellyfin::Support::toJsonValue<bool>(m_hasUpdateAvailable);		
-	result["EncoderLocation"] = Jellyfin::Support::toJsonValue<FFmpegLocation>(m_encoderLocation);		
-	result["SystemArchitecture"] = Jellyfin::Support::toJsonValue<Architecture>(m_systemArchitecture);	
+	
+	if (!(m_castReceiverApplications.size() == 0)) {
+		result["CastReceiverApplications"] = Jellyfin::Support::toJsonValue<QList<CastReceiverApplication>>(m_castReceiverApplications);
+	}
+			
+	result["HasUpdateAvailable"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_hasUpdateAvailable);		
+	
+	if (!(m_encoderLocation.isNull())) {
+		result["EncoderLocation"] = Jellyfin::Support::toJsonValue<QString>(m_encoderLocation);
+	}
+			
+	
+	if (!(m_systemArchitecture.isNull())) {
+		result["SystemArchitecture"] = Jellyfin::Support::toJsonValue<QString>(m_systemArchitecture);
+	}
+		
 	return result;
 }
 
@@ -406,15 +418,15 @@ void SystemInfo::setCompletedInstallationsNull() {
 	m_completedInstallations.clear();
 
 }
-bool SystemInfo::canSelfRestart() const { return m_canSelfRestart; }
+std::optional<bool> SystemInfo::canSelfRestart() const { return m_canSelfRestart; }
 
-void SystemInfo::setCanSelfRestart(bool newCanSelfRestart) {
+void SystemInfo::setCanSelfRestart(std::optional<bool> newCanSelfRestart) {
 	m_canSelfRestart = newCanSelfRestart;
 }
 
-bool SystemInfo::canLaunchWebBrowser() const { return m_canLaunchWebBrowser; }
+std::optional<bool> SystemInfo::canLaunchWebBrowser() const { return m_canLaunchWebBrowser; }
 
-void SystemInfo::setCanLaunchWebBrowser(bool newCanLaunchWebBrowser) {
+void SystemInfo::setCanLaunchWebBrowser(std::optional<bool> newCanLaunchWebBrowser) {
 	m_canLaunchWebBrowser = newCanLaunchWebBrowser;
 }
 
@@ -509,24 +521,51 @@ void SystemInfo::setTranscodingTempPathNull() {
 	m_transcodingTempPath.clear();
 
 }
-bool SystemInfo::hasUpdateAvailable() const { return m_hasUpdateAvailable; }
+QList<CastReceiverApplication> SystemInfo::castReceiverApplications() const { return m_castReceiverApplications; }
 
-void SystemInfo::setHasUpdateAvailable(bool newHasUpdateAvailable) {
+void SystemInfo::setCastReceiverApplications(QList<CastReceiverApplication> newCastReceiverApplications) {
+	m_castReceiverApplications = newCastReceiverApplications;
+}
+bool SystemInfo::castReceiverApplicationsNull() const {
+	return m_castReceiverApplications.size() == 0;
+}
+
+void SystemInfo::setCastReceiverApplicationsNull() {
+	m_castReceiverApplications.clear();
+
+}
+std::optional<bool> SystemInfo::hasUpdateAvailable() const { return m_hasUpdateAvailable; }
+
+void SystemInfo::setHasUpdateAvailable(std::optional<bool> newHasUpdateAvailable) {
 	m_hasUpdateAvailable = newHasUpdateAvailable;
 }
 
-FFmpegLocation SystemInfo::encoderLocation() const { return m_encoderLocation; }
+QString SystemInfo::encoderLocation() const { return m_encoderLocation; }
 
-void SystemInfo::setEncoderLocation(FFmpegLocation newEncoderLocation) {
+void SystemInfo::setEncoderLocation(QString newEncoderLocation) {
 	m_encoderLocation = newEncoderLocation;
 }
-
-Architecture SystemInfo::systemArchitecture() const { return m_systemArchitecture; }
-
-void SystemInfo::setSystemArchitecture(Architecture newSystemArchitecture) {
-	m_systemArchitecture = newSystemArchitecture;
+bool SystemInfo::encoderLocationNull() const {
+	return m_encoderLocation.isNull();
 }
 
+void SystemInfo::setEncoderLocationNull() {
+	m_encoderLocation.clear();
+
+}
+QString SystemInfo::systemArchitecture() const { return m_systemArchitecture; }
+
+void SystemInfo::setSystemArchitecture(QString newSystemArchitecture) {
+	m_systemArchitecture = newSystemArchitecture;
+}
+bool SystemInfo::systemArchitectureNull() const {
+	return m_systemArchitecture.isNull();
+}
+
+void SystemInfo::setSystemArchitectureNull() {
+	m_systemArchitecture.clear();
+
+}
 
 } // NS DTO
 

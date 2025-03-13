@@ -40,6 +40,7 @@
 
 #include "JellyfinQt/dto/deviceprofile.h"
 #include "JellyfinQt/dto/generalcommandtype.h"
+#include "JellyfinQt/dto/mediatype.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -52,11 +53,11 @@ namespace DTO {
 
 class ClientCapabilitiesDto {
 public:
-	ClientCapabilitiesDto(					
+	ClientCapabilitiesDto(	
+		QList<MediaType> playableMediaTypes,			
+		QList<GeneralCommandType> supportedCommands,			
 		bool supportsMediaControl,			
-		bool supportsContentUploading,					
 		bool supportsPersistentIdentifier,			
-		bool supportsSync,			
 		QSharedPointer<DeviceProfile> deviceProfile						
 	);
 
@@ -75,13 +76,11 @@ public:
 	/**
 	 * @brief Gets or sets the list of playable media types.
 	 */
-	QStringList playableMediaTypes() const;
+	QList<MediaType> playableMediaTypes() const;
 	/**
 	* @brief Gets or sets the list of playable media types.
 	*/
-	void setPlayableMediaTypes(QStringList newPlayableMediaTypes);
-	bool playableMediaTypesNull() const;
-	void setPlayableMediaTypesNull();
+	void setPlayableMediaTypes(QList<MediaType> newPlayableMediaTypes);
 
 	/**
 	 * @brief Gets or sets the list of supported commands.
@@ -91,8 +90,6 @@ public:
 	* @brief Gets or sets the list of supported commands.
 	*/
 	void setSupportedCommands(QList<GeneralCommandType> newSupportedCommands);
-	bool supportedCommandsNull() const;
-	void setSupportedCommandsNull();
 
 	/**
 	 * @brief Gets or sets a value indicating whether session supports media control.
@@ -104,26 +101,6 @@ public:
 	void setSupportsMediaControl(bool newSupportsMediaControl);
 
 	/**
-	 * @brief Gets or sets a value indicating whether session supports content uploading.
-	 */
-	bool supportsContentUploading() const;
-	/**
-	* @brief Gets or sets a value indicating whether session supports content uploading.
-	*/
-	void setSupportsContentUploading(bool newSupportsContentUploading);
-
-	/**
-	 * @brief Gets or sets the message callback url.
-	 */
-	QString messageCallbackUrl() const;
-	/**
-	* @brief Gets or sets the message callback url.
-	*/
-	void setMessageCallbackUrl(QString newMessageCallbackUrl);
-	bool messageCallbackUrlNull() const;
-	void setMessageCallbackUrlNull();
-
-	/**
 	 * @brief Gets or sets a value indicating whether session supports a persistent identifier.
 	 */
 	bool supportsPersistentIdentifier() const;
@@ -131,15 +108,6 @@ public:
 	* @brief Gets or sets a value indicating whether session supports a persistent identifier.
 	*/
 	void setSupportsPersistentIdentifier(bool newSupportsPersistentIdentifier);
-
-	/**
-	 * @brief Gets or sets a value indicating whether session supports sync.
-	 */
-	bool supportsSync() const;
-	/**
-	* @brief Gets or sets a value indicating whether session supports sync.
-	*/
-	void setSupportsSync(bool newSupportsSync);
 
 
 	QSharedPointer<DeviceProfile> deviceProfile() const;
@@ -170,13 +138,10 @@ public:
 
 
 protected:
-	QStringList m_playableMediaTypes;
+	QList<MediaType> m_playableMediaTypes;
 	QList<GeneralCommandType> m_supportedCommands;
 	bool m_supportsMediaControl;
-	bool m_supportsContentUploading;
-	QString m_messageCallbackUrl;
 	bool m_supportsPersistentIdentifier;
-	bool m_supportsSync;
 	QSharedPointer<DeviceProfile> m_deviceProfile = QSharedPointer<DeviceProfile>();
 	QString m_appStoreUrl;
 	QString m_iconUrl;

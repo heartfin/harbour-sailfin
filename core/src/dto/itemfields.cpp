@@ -60,6 +60,9 @@ ItemFields fromJsonValue(const QJsonValue &source, convertType<ItemFields>) {
 	if (str == QStringLiteral("Chapters")) {
 		return ItemFields::Chapters;
 	}
+	if (str == QStringLiteral("Trickplay")) {
+		return ItemFields::Trickplay;
+	}
 	if (str == QStringLiteral("ChildCount")) {
 		return ItemFields::ChildCount;
 	}
@@ -150,12 +153,6 @@ ItemFields fromJsonValue(const QJsonValue &source, convertType<ItemFields>) {
 	if (str == QStringLiteral("Studios")) {
 		return ItemFields::Studios;
 	}
-	if (str == QStringLiteral("BasicSyncInfo")) {
-		return ItemFields::BasicSyncInfo;
-	}
-	if (str == QStringLiteral("SyncInfo")) {
-		return ItemFields::SyncInfo;
-	}
 	if (str == QStringLiteral("Taglines")) {
 		return ItemFields::Taglines;
 	}
@@ -245,6 +242,8 @@ QJsonValue toJsonValue(const ItemFields &source, convertType<ItemFields>) {
 		return QStringLiteral("ChannelInfo");
 	case ItemFields::Chapters:
 		return QStringLiteral("Chapters");
+	case ItemFields::Trickplay:
+		return QStringLiteral("Trickplay");
 	case ItemFields::ChildCount:
 		return QStringLiteral("ChildCount");
 	case ItemFields::CumulativeRunTimeTicks:
@@ -305,10 +304,6 @@ QJsonValue toJsonValue(const ItemFields &source, convertType<ItemFields>) {
 		return QStringLiteral("SpecialEpisodeNumbers");
 	case ItemFields::Studios:
 		return QStringLiteral("Studios");
-	case ItemFields::BasicSyncInfo:
-		return QStringLiteral("BasicSyncInfo");
-	case ItemFields::SyncInfo:
-		return QStringLiteral("SyncInfo");
 	case ItemFields::Taglines:
 		return QStringLiteral("Taglines");
 	case ItemFields::Tags:

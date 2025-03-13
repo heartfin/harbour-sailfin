@@ -35,71 +35,13 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
-MarkFavoriteItemLoader::MarkFavoriteItemLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<UserItemDataDto, MarkFavoriteItemParams>(apiClient) {}
-
-QString MarkFavoriteItemLoader::path(const MarkFavoriteItemParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/FavoriteItems/") + Support::toString< QString>(params.itemId()) ;
-}
-
-QUrlQuery MarkFavoriteItemLoader::query(const MarkFavoriteItemParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray MarkFavoriteItemLoader::body(const MarkFavoriteItemParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation MarkFavoriteItemLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-UnmarkFavoriteItemLoader::UnmarkFavoriteItemLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<UserItemDataDto, UnmarkFavoriteItemParams>(apiClient) {}
-
-QString UnmarkFavoriteItemLoader::path(const UnmarkFavoriteItemParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/FavoriteItems/") + Support::toString< QString>(params.itemId()) ;
-}
-
-QUrlQuery UnmarkFavoriteItemLoader::query(const UnmarkFavoriteItemParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray UnmarkFavoriteItemLoader::body(const UnmarkFavoriteItemParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation UnmarkFavoriteItemLoader::operation() const {
-	// HTTP method Delete
-	return QNetworkAccessManager::DeleteOperation;
-
-}
-
 GetItemLoader::GetItemLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDto, GetItemParams>(apiClient) {}
 
 QString GetItemLoader::path(const GetItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) ;
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) ;
 }
 
 QUrlQuery GetItemLoader::query(const GetItemParams &params) const {
@@ -108,6 +50,9 @@ QUrlQuery GetItemLoader::query(const GetItemParams &params) const {
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	
 	return result;
 }
@@ -128,7 +73,7 @@ GetIntrosLoader::GetIntrosLoader(ApiClient *apiClient)
 QString GetIntrosLoader::path(const GetIntrosParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Intros");
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Intros");
 }
 
 QUrlQuery GetIntrosLoader::query(const GetIntrosParams &params) const {
@@ -137,6 +82,9 @@ QUrlQuery GetIntrosLoader::query(const GetIntrosParams &params) const {
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	
 	return result;
 }
@@ -157,7 +105,7 @@ GetLocalTrailersLoader::GetLocalTrailersLoader(ApiClient *apiClient)
 QString GetLocalTrailersLoader::path(const GetLocalTrailersParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/LocalTrailers");
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/LocalTrailers");
 }
 
 QUrlQuery GetLocalTrailersLoader::query(const GetLocalTrailersParams &params) const {
@@ -166,6 +114,9 @@ QUrlQuery GetLocalTrailersLoader::query(const GetLocalTrailersParams &params) co
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	
 	return result;
 }
@@ -180,74 +131,13 @@ QNetworkAccessManager::Operation GetLocalTrailersLoader::operation() const {
 
 }
 
-DeleteUserItemRatingLoader::DeleteUserItemRatingLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<UserItemDataDto, DeleteUserItemRatingParams>(apiClient) {}
-
-QString DeleteUserItemRatingLoader::path(const DeleteUserItemRatingParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Rating");
-}
-
-QUrlQuery DeleteUserItemRatingLoader::query(const DeleteUserItemRatingParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray DeleteUserItemRatingLoader::body(const DeleteUserItemRatingParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation DeleteUserItemRatingLoader::operation() const {
-	// HTTP method Delete
-	return QNetworkAccessManager::DeleteOperation;
-
-}
-
-UpdateUserItemRatingLoader::UpdateUserItemRatingLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<UserItemDataDto, UpdateUserItemRatingParams>(apiClient) {}
-
-QString UpdateUserItemRatingLoader::path(const UpdateUserItemRatingParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Rating");
-}
-
-QUrlQuery UpdateUserItemRatingLoader::query(const UpdateUserItemRatingParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	if (!params.likesNull()) {
-		result.addQueryItem("likes", Support::toString<std::optional<bool>>(params.likes()));
-	}
-	
-	return result;
-}
-
-QByteArray UpdateUserItemRatingLoader::body(const UpdateUserItemRatingParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation UpdateUserItemRatingLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
 GetSpecialFeaturesLoader::GetSpecialFeaturesLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<BaseItemDto>, GetSpecialFeaturesParams>(apiClient) {}
 
 QString GetSpecialFeaturesLoader::path(const GetSpecialFeaturesParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/SpecialFeatures");
+	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/SpecialFeatures");
 }
 
 QUrlQuery GetSpecialFeaturesLoader::query(const GetSpecialFeaturesParams &params) const {
@@ -256,6 +146,9 @@ QUrlQuery GetSpecialFeaturesLoader::query(const GetSpecialFeaturesParams &params
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	
 	return result;
 }
@@ -276,7 +169,7 @@ GetLatestMediaLoader::GetLatestMediaLoader(ApiClient *apiClient)
 QString GetLatestMediaLoader::path(const GetLatestMediaParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/Latest");
+	return QStringLiteral("/Items/Latest");
 }
 
 QUrlQuery GetLatestMediaLoader::query(const GetLatestMediaParams &params) const {
@@ -285,6 +178,9 @@ QUrlQuery GetLatestMediaLoader::query(const GetLatestMediaParams &params) const 
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	if (!params.parentIdNull()) {
 		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
 	}
@@ -292,7 +188,7 @@ QUrlQuery GetLatestMediaLoader::query(const GetLatestMediaParams &params) const 
 		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QList<BaseItemKind>>(params.includeItemTypes()));
 	}
 	if (!params.isPlayedNull()) {
 		result.addQueryItem("isPlayed", Support::toString<std::optional<bool>>(params.isPlayed()));
@@ -335,7 +231,7 @@ GetRootFolderLoader::GetRootFolderLoader(ApiClient *apiClient)
 QString GetRootFolderLoader::path(const GetRootFolderParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Items/Root");
+	return QStringLiteral("/Items/Root");
 }
 
 QUrlQuery GetRootFolderLoader::query(const GetRootFolderParams &params) const {
@@ -344,6 +240,9 @@ QUrlQuery GetRootFolderLoader::query(const GetRootFolderParams &params) const {
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	
 	return result;
 }
@@ -355,6 +254,137 @@ QByteArray GetRootFolderLoader::body(const GetRootFolderParams &params) const {
 QNetworkAccessManager::Operation GetRootFolderLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
+
+}
+
+MarkFavoriteItemLoader::MarkFavoriteItemLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<UserItemDataDto, MarkFavoriteItemParams>(apiClient) {}
+
+QString MarkFavoriteItemLoader::path(const MarkFavoriteItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/UserFavoriteItems/") + Support::toString< QString>(params.itemId()) ;
+}
+
+QUrlQuery MarkFavoriteItemLoader::query(const MarkFavoriteItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	
+	return result;
+}
+
+QByteArray MarkFavoriteItemLoader::body(const MarkFavoriteItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation MarkFavoriteItemLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+UnmarkFavoriteItemLoader::UnmarkFavoriteItemLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<UserItemDataDto, UnmarkFavoriteItemParams>(apiClient) {}
+
+QString UnmarkFavoriteItemLoader::path(const UnmarkFavoriteItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/UserFavoriteItems/") + Support::toString< QString>(params.itemId()) ;
+}
+
+QUrlQuery UnmarkFavoriteItemLoader::query(const UnmarkFavoriteItemParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	
+	return result;
+}
+
+QByteArray UnmarkFavoriteItemLoader::body(const UnmarkFavoriteItemParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation UnmarkFavoriteItemLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+DeleteUserItemRatingLoader::DeleteUserItemRatingLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<UserItemDataDto, DeleteUserItemRatingParams>(apiClient) {}
+
+QString DeleteUserItemRatingLoader::path(const DeleteUserItemRatingParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/UserItems/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Rating");
+}
+
+QUrlQuery DeleteUserItemRatingLoader::query(const DeleteUserItemRatingParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	
+	return result;
+}
+
+QByteArray DeleteUserItemRatingLoader::body(const DeleteUserItemRatingParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteUserItemRatingLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+UpdateUserItemRatingLoader::UpdateUserItemRatingLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<UserItemDataDto, UpdateUserItemRatingParams>(apiClient) {}
+
+QString UpdateUserItemRatingLoader::path(const UpdateUserItemRatingParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/UserItems/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Rating");
+}
+
+QUrlQuery UpdateUserItemRatingLoader::query(const UpdateUserItemRatingParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	if (!params.likesNull()) {
+		result.addQueryItem("likes", Support::toString<std::optional<bool>>(params.likes()));
+	}
+	
+	return result;
+}
+
+QByteArray UpdateUserItemRatingLoader::body(const UpdateUserItemRatingParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation UpdateUserItemRatingLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

@@ -32,12 +32,10 @@
 
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QSharedPointer>
 #include <QString>
 #include <optional>
 
 #include "JellyfinQt/dto/pluginstatus.h"
-#include "JellyfinQt/dto/version.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -50,8 +48,10 @@ namespace DTO {
 
 class PluginInfo {
 public:
-	PluginInfo(			
-		QSharedPointer<Version> version,							
+	PluginInfo(	
+		QString name,			
+		QString version,					
+		QString description,			
 		QString jellyfinId,			
 		bool canUninstall,			
 		bool hasImage,			
@@ -78,13 +78,15 @@ public:
 	* @brief Gets or sets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
-
-	QSharedPointer<Version> version() const;
-
-	void setVersion(QSharedPointer<Version> newVersion);
+	/**
+	 * @brief Gets or sets the version.
+	 */
+	QString version() const;
+	/**
+	* @brief Gets or sets the version.
+	*/
+	void setVersion(QString newVersion);
 
 	/**
 	 * @brief Gets or sets the name of the configuration file.
@@ -105,8 +107,6 @@ public:
 	* @brief Gets or sets the description.
 	*/
 	void setDescription(QString newDescription);
-	bool descriptionNull() const;
-	void setDescriptionNull();
 
 	/**
 	 * @brief Gets or sets the unique id.
@@ -143,7 +143,7 @@ public:
 
 protected:
 	QString m_name;
-	QSharedPointer<Version> m_version = QSharedPointer<Version>();
+	QString m_version;
 	QString m_configurationFileName;
 	QString m_description;
 	QString m_jellyfinId;

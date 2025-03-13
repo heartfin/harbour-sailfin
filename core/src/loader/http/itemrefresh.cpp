@@ -35,16 +35,16 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
-PostLoader::PostLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, PostParams>(apiClient) {}
+RefreshItemLoader::RefreshItemLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, RefreshItemParams>(apiClient) {}
 
-QString PostLoader::path(const PostParams &params) const {
+QString RefreshItemLoader::path(const RefreshItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Items/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Refresh");
 }
 
-QUrlQuery PostLoader::query(const PostParams &params) const {
+QUrlQuery RefreshItemLoader::query(const RefreshItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
@@ -62,15 +62,18 @@ QUrlQuery PostLoader::query(const PostParams &params) const {
 	if (!params.replaceAllImagesNull()) {
 		result.addQueryItem("replaceAllImages", Support::toString<std::optional<bool>>(params.replaceAllImages()));
 	}
+	if (!params.regenerateTrickplayNull()) {
+		result.addQueryItem("regenerateTrickplay", Support::toString<std::optional<bool>>(params.regenerateTrickplay()));
+	}
 	
 	return result;
 }
 
-QByteArray PostLoader::body(const PostParams &params) const {
+QByteArray RefreshItemLoader::body(const RefreshItemParams &params) const {
 	return QByteArray();
 }
 
-QNetworkAccessManager::Operation PostLoader::operation() const {
+QNetworkAccessManager::Operation RefreshItemLoader::operation() const {
 	// HTTP method Post
 	return QNetworkAccessManager::PostOperation;
 

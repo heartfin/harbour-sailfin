@@ -36,7 +36,8 @@
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
-#include "JellyfinQt/dto/baseitemdtoqueryresult.h"
+#include "JellyfinQt/dto/useritemdatadto.h"
+#include "JellyfinQt/dto/useritemdatadto.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
 
 namespace Jellyfin {
@@ -64,17 +65,31 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
- * @brief Gets items based on a query.
+ * @brief Get Item User Data.
  */
 
-class GetItemsByUserIdLoader : public Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetItemsByUserIdParams> {
+class GetItemUserDataLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, GetItemUserDataParams> {
 public:
-	explicit GetItemsByUserIdLoader(ApiClient *apiClient = nullptr);
+	explicit GetItemUserDataLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const GetItemsByUserIdParams& parameters) const override;
-	QUrlQuery query(const GetItemsByUserIdParams& parameters) const override;
-	QByteArray body(const GetItemsByUserIdParams& parameters) const override;
+	QString path(const GetItemUserDataParams& parameters) const override;
+	QUrlQuery query(const GetItemUserDataParams& parameters) const override;
+	QByteArray body(const GetItemUserDataParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Update Item User Data.
+ */
+
+class UpdateItemUserDataLoader : public Jellyfin::Support::HttpLoader<UserItemDataDto, UpdateItemUserDataParams> {
+public:
+	explicit UpdateItemUserDataLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdateItemUserDataParams& parameters) const override;
+	QUrlQuery query(const UpdateItemUserDataParams& parameters) const override;
+	QByteArray body(const UpdateItemUserDataParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**

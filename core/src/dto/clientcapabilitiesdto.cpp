@@ -34,16 +34,16 @@ namespace DTO {
 
 ClientCapabilitiesDto::ClientCapabilitiesDto() {}
 ClientCapabilitiesDto::ClientCapabilitiesDto (
+		QList<MediaType> playableMediaTypes, 
+		QList<GeneralCommandType> supportedCommands, 
 		bool supportsMediaControl, 
-		bool supportsContentUploading, 
 		bool supportsPersistentIdentifier, 
-		bool supportsSync, 
 		QSharedPointer<DeviceProfile> deviceProfile 
 		) :
+	m_playableMediaTypes(playableMediaTypes),
+	m_supportedCommands(supportedCommands),
 	m_supportsMediaControl(supportsMediaControl),
-	m_supportsContentUploading(supportsContentUploading),
 	m_supportsPersistentIdentifier(supportsPersistentIdentifier),
-	m_supportsSync(supportsSync),
 	m_deviceProfile(deviceProfile) { }
 
 
@@ -53,10 +53,7 @@ ClientCapabilitiesDto::ClientCapabilitiesDto(const ClientCapabilitiesDto &other)
 	m_playableMediaTypes(other.m_playableMediaTypes),
 	m_supportedCommands(other.m_supportedCommands),
 	m_supportsMediaControl(other.m_supportsMediaControl),
-	m_supportsContentUploading(other.m_supportsContentUploading),
-	m_messageCallbackUrl(other.m_messageCallbackUrl),
 	m_supportsPersistentIdentifier(other.m_supportsPersistentIdentifier),
-	m_supportsSync(other.m_supportsSync),
 	m_deviceProfile(other.m_deviceProfile),
 	m_appStoreUrl(other.m_appStoreUrl),
 	m_iconUrl(other.m_iconUrl){}
@@ -66,10 +63,7 @@ void ClientCapabilitiesDto::replaceData(ClientCapabilitiesDto &other) {
 	m_playableMediaTypes = other.m_playableMediaTypes;
 	m_supportedCommands = other.m_supportedCommands;
 	m_supportsMediaControl = other.m_supportsMediaControl;
-	m_supportsContentUploading = other.m_supportsContentUploading;
-	m_messageCallbackUrl = other.m_messageCallbackUrl;
 	m_supportsPersistentIdentifier = other.m_supportsPersistentIdentifier;
-	m_supportsSync = other.m_supportsSync;
 	m_deviceProfile = other.m_deviceProfile;
 	m_appStoreUrl = other.m_appStoreUrl;
 	m_iconUrl = other.m_iconUrl;
@@ -83,13 +77,10 @@ ClientCapabilitiesDto ClientCapabilitiesDto::fromJson(QJsonObject source) {
 
 
 void ClientCapabilitiesDto::setFromJson(QJsonObject source) {
-	m_playableMediaTypes = Jellyfin::Support::fromJsonValue<QStringList>(source["PlayableMediaTypes"]);
+	m_playableMediaTypes = Jellyfin::Support::fromJsonValue<QList<MediaType>>(source["PlayableMediaTypes"]);
 	m_supportedCommands = Jellyfin::Support::fromJsonValue<QList<GeneralCommandType>>(source["SupportedCommands"]);
 	m_supportsMediaControl = Jellyfin::Support::fromJsonValue<bool>(source["SupportsMediaControl"]);
-	m_supportsContentUploading = Jellyfin::Support::fromJsonValue<bool>(source["SupportsContentUploading"]);
-	m_messageCallbackUrl = Jellyfin::Support::fromJsonValue<QString>(source["MessageCallbackUrl"]);
 	m_supportsPersistentIdentifier = Jellyfin::Support::fromJsonValue<bool>(source["SupportsPersistentIdentifier"]);
-	m_supportsSync = Jellyfin::Support::fromJsonValue<bool>(source["SupportsSync"]);
 	m_deviceProfile = Jellyfin::Support::fromJsonValue<QSharedPointer<DeviceProfile>>(source["DeviceProfile"]);
 	m_appStoreUrl = Jellyfin::Support::fromJsonValue<QString>(source["AppStoreUrl"]);
 	m_iconUrl = Jellyfin::Support::fromJsonValue<QString>(source["IconUrl"]);
@@ -99,25 +90,10 @@ void ClientCapabilitiesDto::setFromJson(QJsonObject source) {
 QJsonObject ClientCapabilitiesDto::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_playableMediaTypes.size() == 0)) {
-		result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QStringList>(m_playableMediaTypes);
-	}
-			
-	
-	if (!(m_supportedCommands.size() == 0)) {
-		result["SupportedCommands"] = Jellyfin::Support::toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);
-	}
-			
+	result["PlayableMediaTypes"] = Jellyfin::Support::toJsonValue<QList<MediaType>>(m_playableMediaTypes);		
+	result["SupportedCommands"] = Jellyfin::Support::toJsonValue<QList<GeneralCommandType>>(m_supportedCommands);		
 	result["SupportsMediaControl"] = Jellyfin::Support::toJsonValue<bool>(m_supportsMediaControl);		
-	result["SupportsContentUploading"] = Jellyfin::Support::toJsonValue<bool>(m_supportsContentUploading);		
-	
-	if (!(m_messageCallbackUrl.isNull())) {
-		result["MessageCallbackUrl"] = Jellyfin::Support::toJsonValue<QString>(m_messageCallbackUrl);
-	}
-			
 	result["SupportsPersistentIdentifier"] = Jellyfin::Support::toJsonValue<bool>(m_supportsPersistentIdentifier);		
-	result["SupportsSync"] = Jellyfin::Support::toJsonValue<bool>(m_supportsSync);		
 	result["DeviceProfile"] = Jellyfin::Support::toJsonValue<QSharedPointer<DeviceProfile>>(m_deviceProfile);		
 	
 	if (!(m_appStoreUrl.isNull())) {
@@ -132,67 +108,28 @@ QJsonObject ClientCapabilitiesDto::toJson() const {
 	return result;
 }
 
-QStringList ClientCapabilitiesDto::playableMediaTypes() const { return m_playableMediaTypes; }
+QList<MediaType> ClientCapabilitiesDto::playableMediaTypes() const { return m_playableMediaTypes; }
 
-void ClientCapabilitiesDto::setPlayableMediaTypes(QStringList newPlayableMediaTypes) {
+void ClientCapabilitiesDto::setPlayableMediaTypes(QList<MediaType> newPlayableMediaTypes) {
 	m_playableMediaTypes = newPlayableMediaTypes;
 }
-bool ClientCapabilitiesDto::playableMediaTypesNull() const {
-	return m_playableMediaTypes.size() == 0;
-}
 
-void ClientCapabilitiesDto::setPlayableMediaTypesNull() {
-	m_playableMediaTypes.clear();
-
-}
 QList<GeneralCommandType> ClientCapabilitiesDto::supportedCommands() const { return m_supportedCommands; }
 
 void ClientCapabilitiesDto::setSupportedCommands(QList<GeneralCommandType> newSupportedCommands) {
 	m_supportedCommands = newSupportedCommands;
 }
-bool ClientCapabilitiesDto::supportedCommandsNull() const {
-	return m_supportedCommands.size() == 0;
-}
 
-void ClientCapabilitiesDto::setSupportedCommandsNull() {
-	m_supportedCommands.clear();
-
-}
 bool ClientCapabilitiesDto::supportsMediaControl() const { return m_supportsMediaControl; }
 
 void ClientCapabilitiesDto::setSupportsMediaControl(bool newSupportsMediaControl) {
 	m_supportsMediaControl = newSupportsMediaControl;
 }
 
-bool ClientCapabilitiesDto::supportsContentUploading() const { return m_supportsContentUploading; }
-
-void ClientCapabilitiesDto::setSupportsContentUploading(bool newSupportsContentUploading) {
-	m_supportsContentUploading = newSupportsContentUploading;
-}
-
-QString ClientCapabilitiesDto::messageCallbackUrl() const { return m_messageCallbackUrl; }
-
-void ClientCapabilitiesDto::setMessageCallbackUrl(QString newMessageCallbackUrl) {
-	m_messageCallbackUrl = newMessageCallbackUrl;
-}
-bool ClientCapabilitiesDto::messageCallbackUrlNull() const {
-	return m_messageCallbackUrl.isNull();
-}
-
-void ClientCapabilitiesDto::setMessageCallbackUrlNull() {
-	m_messageCallbackUrl.clear();
-
-}
 bool ClientCapabilitiesDto::supportsPersistentIdentifier() const { return m_supportsPersistentIdentifier; }
 
 void ClientCapabilitiesDto::setSupportsPersistentIdentifier(bool newSupportsPersistentIdentifier) {
 	m_supportsPersistentIdentifier = newSupportsPersistentIdentifier;
-}
-
-bool ClientCapabilitiesDto::supportsSync() const { return m_supportsSync; }
-
-void ClientCapabilitiesDto::setSupportsSync(bool newSupportsSync) {
-	m_supportsSync = newSupportsSync;
 }
 
 QSharedPointer<DeviceProfile> ClientCapabilitiesDto::deviceProfile() const { return m_deviceProfile; }

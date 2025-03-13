@@ -35,16 +35,16 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
-GetLoader::GetLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<SearchHintResult, GetParams>(apiClient) {}
+GetSearchHintsLoader::GetSearchHintsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<SearchHintResult, GetSearchHintsParams>(apiClient) {}
 
-QString GetLoader::path(const GetParams &params) const {
+QString GetSearchHintsLoader::path(const GetSearchHintsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/Search/Hints");
 }
 
-QUrlQuery GetLoader::query(const GetParams &params) const {
+QUrlQuery GetSearchHintsLoader::query(const GetSearchHintsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
@@ -61,13 +61,13 @@ QUrlQuery GetLoader::query(const GetParams &params) const {
 		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QList<BaseItemKind>>(params.includeItemTypes()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QList<BaseItemKind>>(params.excludeItemTypes()));
 	}
 	if (!params.mediaTypesNull()) {
-		result.addQueryItem("mediaTypes", Support::toString<QStringList>(params.mediaTypes()));
+		result.addQueryItem("mediaTypes", Support::toString<QList<MediaType>>(params.mediaTypes()));
 	}
 	if (!params.parentIdNull()) {
 		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
@@ -106,11 +106,11 @@ QUrlQuery GetLoader::query(const GetParams &params) const {
 	return result;
 }
 
-QByteArray GetLoader::body(const GetParams &params) const {
+QByteArray GetSearchHintsLoader::body(const GetSearchHintsParams &params) const {
 	return QByteArray();
 }
 
-QNetworkAccessManager::Operation GetLoader::operation() const {
+QNetworkAccessManager::Operation GetSearchHintsLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
 

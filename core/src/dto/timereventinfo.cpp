@@ -33,6 +33,12 @@ namespace Jellyfin {
 namespace DTO {
 
 TimerEventInfo::TimerEventInfo() {}
+TimerEventInfo::TimerEventInfo (
+		QString jellyfinId 
+		) :
+	m_jellyfinId(jellyfinId) { }
+
+
 
 TimerEventInfo::TimerEventInfo(const TimerEventInfo &other) :
 
@@ -61,11 +67,7 @@ void TimerEventInfo::setFromJson(QJsonObject source) {
 QJsonObject TimerEventInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_jellyfinId.isNull())) {
-		result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);
-	}
-			
+	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
 	
 	if (!(m_programId.isNull())) {
 		result["ProgramId"] = Jellyfin::Support::toJsonValue<QString>(m_programId);
@@ -79,14 +81,7 @@ QString TimerEventInfo::jellyfinId() const { return m_jellyfinId; }
 void TimerEventInfo::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
 }
-bool TimerEventInfo::jellyfinIdNull() const {
-	return m_jellyfinId.isNull();
-}
 
-void TimerEventInfo::setJellyfinIdNull() {
-	m_jellyfinId.clear();
-
-}
 QString TimerEventInfo::programId() const { return m_programId; }
 
 void TimerEventInfo::setProgramId(QString newProgramId) {

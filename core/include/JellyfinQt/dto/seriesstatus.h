@@ -50,6 +50,7 @@ public:
 		EnumNotSet,
 		Continuing,
 		Ended,
+		Unreleased,
 	};
 	Q_ENUM(Value)
 private:

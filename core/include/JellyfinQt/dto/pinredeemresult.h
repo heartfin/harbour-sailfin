@@ -50,7 +50,8 @@ namespace DTO {
 class PinRedeemResult {
 public:
 	PinRedeemResult(	
-		bool success				
+		bool success,			
+		QStringList usersReset		
 	);
 
 	PinRedeemResult(const PinRedeemResult &other);
@@ -82,8 +83,6 @@ public:
 	* @brief Gets or sets the users reset.
 	*/
 	void setUsersReset(QStringList newUsersReset);
-	bool usersResetNull() const;
-	void setUsersResetNull();
 
 
 protected:

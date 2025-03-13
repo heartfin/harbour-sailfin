@@ -34,9 +34,11 @@ namespace DTO {
 
 ContainerProfile::ContainerProfile() {}
 ContainerProfile::ContainerProfile (
-		DlnaProfileType type 
+		DlnaProfileType type, 
+		QList<ProfileCondition> conditions 
 		) :
-	m_type(type) { }
+	m_type(type),
+	m_conditions(conditions) { }
 
 
 
@@ -44,13 +46,15 @@ ContainerProfile::ContainerProfile(const ContainerProfile &other) :
 
 	m_type(other.m_type),
 	m_conditions(other.m_conditions),
-	m_container(other.m_container){}
+	m_container(other.m_container),
+	m_subContainer(other.m_subContainer){}
 
 
 void ContainerProfile::replaceData(ContainerProfile &other) {
 	m_type = other.m_type;
 	m_conditions = other.m_conditions;
 	m_container = other.m_container;
+	m_subContainer = other.m_subContainer;
 }
 
 ContainerProfile ContainerProfile::fromJson(QJsonObject source) {
@@ -64,6 +68,7 @@ void ContainerProfile::setFromJson(QJsonObject source) {
 	m_type = Jellyfin::Support::fromJsonValue<DlnaProfileType>(source["Type"]);
 	m_conditions = Jellyfin::Support::fromJsonValue<QList<ProfileCondition>>(source["Conditions"]);
 	m_container = Jellyfin::Support::fromJsonValue<QString>(source["Container"]);
+	m_subContainer = Jellyfin::Support::fromJsonValue<QString>(source["SubContainer"]);
 
 }
 	
@@ -71,14 +76,15 @@ QJsonObject ContainerProfile::toJson() const {
 	QJsonObject result;
 	
 	result["Type"] = Jellyfin::Support::toJsonValue<DlnaProfileType>(m_type);		
-	
-	if (!(m_conditions.size() == 0)) {
-		result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);
-	}
-			
+	result["Conditions"] = Jellyfin::Support::toJsonValue<QList<ProfileCondition>>(m_conditions);		
 	
 	if (!(m_container.isNull())) {
 		result["Container"] = Jellyfin::Support::toJsonValue<QString>(m_container);
+	}
+			
+	
+	if (!(m_subContainer.isNull())) {
+		result["SubContainer"] = Jellyfin::Support::toJsonValue<QString>(m_subContainer);
 	}
 		
 	return result;
@@ -95,14 +101,7 @@ QList<ProfileCondition> ContainerProfile::conditions() const { return m_conditio
 void ContainerProfile::setConditions(QList<ProfileCondition> newConditions) {
 	m_conditions = newConditions;
 }
-bool ContainerProfile::conditionsNull() const {
-	return m_conditions.size() == 0;
-}
 
-void ContainerProfile::setConditionsNull() {
-	m_conditions.clear();
-
-}
 QString ContainerProfile::container() const { return m_container; }
 
 void ContainerProfile::setContainer(QString newContainer) {
@@ -114,6 +113,19 @@ bool ContainerProfile::containerNull() const {
 
 void ContainerProfile::setContainerNull() {
 	m_container.clear();
+
+}
+QString ContainerProfile::subContainer() const { return m_subContainer; }
+
+void ContainerProfile::setSubContainer(QString newSubContainer) {
+	m_subContainer = newSubContainer;
+}
+bool ContainerProfile::subContainerNull() const {
+	return m_subContainer.isNull();
+}
+
+void ContainerProfile::setSubContainerNull() {
+	m_subContainer.clear();
 
 }
 

@@ -81,22 +81,10 @@ public:	AuthenticateUserByName();
 	bool pwNull() const;
 	void setPwNull();
 
-	/**
-	 * @brief Gets or sets the sha1-hashed password.
-	 */
-	QString password() const;
-	/**
-	* @brief Gets or sets the sha1-hashed password.
-	*/
-	void setPassword(QString newPassword);
-	bool passwordNull() const;
-	void setPasswordNull();
-
 
 protected:
 	QString m_username;
 	QString m_pw;
-	QString m_password;
 
 
 };

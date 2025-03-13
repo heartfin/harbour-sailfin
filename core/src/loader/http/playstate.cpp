@@ -35,6 +35,162 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+OnPlaybackStartLoader::OnPlaybackStartLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, OnPlaybackStartParams>(apiClient) {}
+
+QString OnPlaybackStartLoader::path(const OnPlaybackStartParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/PlayingItems/") + Support::toString< QString>(params.itemId()) ;
+}
+
+QUrlQuery OnPlaybackStartLoader::query(const OnPlaybackStartParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.mediaSourceIdNull()) {
+		result.addQueryItem("mediaSourceId", Support::toString<QString>(params.mediaSourceId()));
+	}
+	if (!params.audioStreamIndexNull()) {
+		result.addQueryItem("audioStreamIndex", Support::toString<std::optional<qint32>>(params.audioStreamIndex()));
+	}
+	if (!params.subtitleStreamIndexNull()) {
+		result.addQueryItem("subtitleStreamIndex", Support::toString<std::optional<qint32>>(params.subtitleStreamIndex()));
+	}
+	if (!params.playMethodNull()) {
+		result.addQueryItem("playMethod", Support::toString<PlayMethod>(params.playMethod()));
+	}
+	if (!params.liveStreamIdNull()) {
+		result.addQueryItem("liveStreamId", Support::toString<QString>(params.liveStreamId()));
+	}
+	if (!params.playSessionIdNull()) {
+		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
+	}
+	if (!params.canSeekNull()) {
+		result.addQueryItem("canSeek", Support::toString<std::optional<bool>>(params.canSeek()));
+	}
+	
+	return result;
+}
+
+QByteArray OnPlaybackStartLoader::body(const OnPlaybackStartParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation OnPlaybackStartLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+OnPlaybackStoppedLoader::OnPlaybackStoppedLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, OnPlaybackStoppedParams>(apiClient) {}
+
+QString OnPlaybackStoppedLoader::path(const OnPlaybackStoppedParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/PlayingItems/") + Support::toString< QString>(params.itemId()) ;
+}
+
+QUrlQuery OnPlaybackStoppedLoader::query(const OnPlaybackStoppedParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.mediaSourceIdNull()) {
+		result.addQueryItem("mediaSourceId", Support::toString<QString>(params.mediaSourceId()));
+	}
+	if (!params.nextMediaTypeNull()) {
+		result.addQueryItem("nextMediaType", Support::toString<QString>(params.nextMediaType()));
+	}
+	if (!params.positionTicksNull()) {
+		result.addQueryItem("positionTicks", Support::toString<std::optional<qint64>>(params.positionTicks()));
+	}
+	if (!params.liveStreamIdNull()) {
+		result.addQueryItem("liveStreamId", Support::toString<QString>(params.liveStreamId()));
+	}
+	if (!params.playSessionIdNull()) {
+		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
+	}
+	
+	return result;
+}
+
+QByteArray OnPlaybackStoppedLoader::body(const OnPlaybackStoppedParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation OnPlaybackStoppedLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
+OnPlaybackProgressLoader::OnPlaybackProgressLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, OnPlaybackProgressParams>(apiClient) {}
+
+QString OnPlaybackProgressLoader::path(const OnPlaybackProgressParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/PlayingItems/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Progress");
+}
+
+QUrlQuery OnPlaybackProgressLoader::query(const OnPlaybackProgressParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.mediaSourceIdNull()) {
+		result.addQueryItem("mediaSourceId", Support::toString<QString>(params.mediaSourceId()));
+	}
+	if (!params.positionTicksNull()) {
+		result.addQueryItem("positionTicks", Support::toString<std::optional<qint64>>(params.positionTicks()));
+	}
+	if (!params.audioStreamIndexNull()) {
+		result.addQueryItem("audioStreamIndex", Support::toString<std::optional<qint32>>(params.audioStreamIndex()));
+	}
+	if (!params.subtitleStreamIndexNull()) {
+		result.addQueryItem("subtitleStreamIndex", Support::toString<std::optional<qint32>>(params.subtitleStreamIndex()));
+	}
+	if (!params.volumeLevelNull()) {
+		result.addQueryItem("volumeLevel", Support::toString<std::optional<qint32>>(params.volumeLevel()));
+	}
+	if (!params.playMethodNull()) {
+		result.addQueryItem("playMethod", Support::toString<PlayMethod>(params.playMethod()));
+	}
+	if (!params.liveStreamIdNull()) {
+		result.addQueryItem("liveStreamId", Support::toString<QString>(params.liveStreamId()));
+	}
+	if (!params.playSessionIdNull()) {
+		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
+	}
+	if (!params.repeatModeNull()) {
+		result.addQueryItem("repeatMode", Support::toString<RepeatMode>(params.repeatMode()));
+	}
+	if (!params.isPausedNull()) {
+		result.addQueryItem("isPaused", Support::toString<std::optional<bool>>(params.isPaused()));
+	}
+	if (!params.isMutedNull()) {
+		result.addQueryItem("isMuted", Support::toString<std::optional<bool>>(params.isMuted()));
+	}
+	
+	return result;
+}
+
+QByteArray OnPlaybackProgressLoader::body(const OnPlaybackProgressParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation OnPlaybackProgressLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
 ReportPlaybackStartLoader::ReportPlaybackStartLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<void, ReportPlaybackStartParams>(apiClient) {}
 
@@ -77,11 +233,9 @@ QUrlQuery PingPlaybackSessionLoader::query(const PingPlaybackSessionParams &para
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
+	result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
 
 	// Optional parameters
-	if (!params.playSessionIdNull()) {
-		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
-	}
 	
 	return result;
 }
@@ -160,7 +314,7 @@ MarkPlayedItemLoader::MarkPlayedItemLoader(ApiClient *apiClient)
 QString MarkPlayedItemLoader::path(const MarkPlayedItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/PlayedItems/") + Support::toString< QString>(params.itemId()) ;
+	return QStringLiteral("/UserPlayedItems/") + Support::toString< QString>(params.itemId()) ;
 }
 
 QUrlQuery MarkPlayedItemLoader::query(const MarkPlayedItemParams &params) const {
@@ -169,6 +323,9 @@ QUrlQuery MarkPlayedItemLoader::query(const MarkPlayedItemParams &params) const 
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	if (!params.datePlayedNull()) {
 		result.addQueryItem("datePlayed", Support::toString<QDateTime>(params.datePlayed()));
 	}
@@ -192,7 +349,7 @@ MarkUnplayedItemLoader::MarkUnplayedItemLoader(ApiClient *apiClient)
 QString MarkUnplayedItemLoader::path(const MarkUnplayedItemParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/PlayedItems/") + Support::toString< QString>(params.itemId()) ;
+	return QStringLiteral("/UserPlayedItems/") + Support::toString< QString>(params.itemId()) ;
 }
 
 QUrlQuery MarkUnplayedItemLoader::query(const MarkUnplayedItemParams &params) const {
@@ -201,6 +358,9 @@ QUrlQuery MarkUnplayedItemLoader::query(const MarkUnplayedItemParams &params) co
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	
 	return result;
 }
@@ -212,162 +372,6 @@ QByteArray MarkUnplayedItemLoader::body(const MarkUnplayedItemParams &params) co
 QNetworkAccessManager::Operation MarkUnplayedItemLoader::operation() const {
 	// HTTP method Delete
 	return QNetworkAccessManager::DeleteOperation;
-
-}
-
-OnPlaybackStartLoader::OnPlaybackStartLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, OnPlaybackStartParams>(apiClient) {}
-
-QString OnPlaybackStartLoader::path(const OnPlaybackStartParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/PlayingItems/") + Support::toString< QString>(params.itemId()) ;
-}
-
-QUrlQuery OnPlaybackStartLoader::query(const OnPlaybackStartParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	if (!params.mediaSourceIdNull()) {
-		result.addQueryItem("mediaSourceId", Support::toString<QString>(params.mediaSourceId()));
-	}
-	if (!params.audioStreamIndexNull()) {
-		result.addQueryItem("audioStreamIndex", Support::toString<std::optional<qint32>>(params.audioStreamIndex()));
-	}
-	if (!params.subtitleStreamIndexNull()) {
-		result.addQueryItem("subtitleStreamIndex", Support::toString<std::optional<qint32>>(params.subtitleStreamIndex()));
-	}
-	if (!params.playMethodNull()) {
-		result.addQueryItem("playMethod", Support::toString<PlayMethod>(params.playMethod()));
-	}
-	if (!params.liveStreamIdNull()) {
-		result.addQueryItem("liveStreamId", Support::toString<QString>(params.liveStreamId()));
-	}
-	if (!params.playSessionIdNull()) {
-		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
-	}
-	if (!params.canSeekNull()) {
-		result.addQueryItem("canSeek", Support::toString<std::optional<bool>>(params.canSeek()));
-	}
-	
-	return result;
-}
-
-QByteArray OnPlaybackStartLoader::body(const OnPlaybackStartParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation OnPlaybackStartLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-OnPlaybackStoppedLoader::OnPlaybackStoppedLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, OnPlaybackStoppedParams>(apiClient) {}
-
-QString OnPlaybackStoppedLoader::path(const OnPlaybackStoppedParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/PlayingItems/") + Support::toString< QString>(params.itemId()) ;
-}
-
-QUrlQuery OnPlaybackStoppedLoader::query(const OnPlaybackStoppedParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	if (!params.mediaSourceIdNull()) {
-		result.addQueryItem("mediaSourceId", Support::toString<QString>(params.mediaSourceId()));
-	}
-	if (!params.nextMediaTypeNull()) {
-		result.addQueryItem("nextMediaType", Support::toString<QString>(params.nextMediaType()));
-	}
-	if (!params.positionTicksNull()) {
-		result.addQueryItem("positionTicks", Support::toString<std::optional<qint64>>(params.positionTicks()));
-	}
-	if (!params.liveStreamIdNull()) {
-		result.addQueryItem("liveStreamId", Support::toString<QString>(params.liveStreamId()));
-	}
-	if (!params.playSessionIdNull()) {
-		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
-	}
-	
-	return result;
-}
-
-QByteArray OnPlaybackStoppedLoader::body(const OnPlaybackStoppedParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation OnPlaybackStoppedLoader::operation() const {
-	// HTTP method Delete
-	return QNetworkAccessManager::DeleteOperation;
-
-}
-
-OnPlaybackProgressLoader::OnPlaybackProgressLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, OnPlaybackProgressParams>(apiClient) {}
-
-QString OnPlaybackProgressLoader::path(const OnPlaybackProgressParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/PlayingItems/") + Support::toString< QString>(params.itemId()) + QStringLiteral("/Progress");
-}
-
-QUrlQuery OnPlaybackProgressLoader::query(const OnPlaybackProgressParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	if (!params.mediaSourceIdNull()) {
-		result.addQueryItem("mediaSourceId", Support::toString<QString>(params.mediaSourceId()));
-	}
-	if (!params.positionTicksNull()) {
-		result.addQueryItem("positionTicks", Support::toString<std::optional<qint64>>(params.positionTicks()));
-	}
-	if (!params.audioStreamIndexNull()) {
-		result.addQueryItem("audioStreamIndex", Support::toString<std::optional<qint32>>(params.audioStreamIndex()));
-	}
-	if (!params.subtitleStreamIndexNull()) {
-		result.addQueryItem("subtitleStreamIndex", Support::toString<std::optional<qint32>>(params.subtitleStreamIndex()));
-	}
-	if (!params.volumeLevelNull()) {
-		result.addQueryItem("volumeLevel", Support::toString<std::optional<qint32>>(params.volumeLevel()));
-	}
-	if (!params.playMethodNull()) {
-		result.addQueryItem("playMethod", Support::toString<PlayMethod>(params.playMethod()));
-	}
-	if (!params.liveStreamIdNull()) {
-		result.addQueryItem("liveStreamId", Support::toString<QString>(params.liveStreamId()));
-	}
-	if (!params.playSessionIdNull()) {
-		result.addQueryItem("playSessionId", Support::toString<QString>(params.playSessionId()));
-	}
-	if (!params.repeatModeNull()) {
-		result.addQueryItem("repeatMode", Support::toString<RepeatMode>(params.repeatMode()));
-	}
-	if (!params.isPausedNull()) {
-		result.addQueryItem("isPaused", Support::toString<std::optional<bool>>(params.isPaused()));
-	}
-	if (!params.isMutedNull()) {
-		result.addQueryItem("isMuted", Support::toString<std::optional<bool>>(params.isMuted()));
-	}
-	
-	return result;
-}
-
-QByteArray OnPlaybackProgressLoader::body(const OnPlaybackProgressParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation OnPlaybackProgressLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
 
 }
 

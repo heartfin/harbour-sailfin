@@ -89,6 +89,8 @@ public:
 		PlayNext,
 		ToggleOsdMenu,
 		Play,
+		SetMaxStreamingBitrate,
+		SetPlaybackOrder,
 	};
 	Q_ENUM(Value)
 private:

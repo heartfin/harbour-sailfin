@@ -142,7 +142,7 @@ QUrlQuery UpdateNamedConfigurationLoader::query(const UpdateNamedConfigurationPa
 }
 
 QByteArray UpdateNamedConfigurationLoader::body(const UpdateNamedConfigurationParams &params) const {
-	return QByteArray();
+	return Support::toString<QVariant>(params.body()).toUtf8();
 }
 
 QNetworkAccessManager::Operation UpdateNamedConfigurationLoader::operation() const {
@@ -177,35 +177,6 @@ QByteArray GetDefaultMetadataOptionsLoader::body(const GetDefaultMetadataOptions
 QNetworkAccessManager::Operation GetDefaultMetadataOptionsLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
-
-}
-
-UpdateMediaEncoderPathLoader::UpdateMediaEncoderPathLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, UpdateMediaEncoderPathParams>(apiClient) {}
-
-QString UpdateMediaEncoderPathLoader::path(const UpdateMediaEncoderPathParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/System/MediaEncoder/Path");
-}
-
-QUrlQuery UpdateMediaEncoderPathLoader::query(const UpdateMediaEncoderPathParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray UpdateMediaEncoderPathLoader::body(const UpdateMediaEncoderPathParams &params) const {
-	return Support::toString<QSharedPointer<MediaEncoderPathDto>>(params.body()).toUtf8();
-}
-
-QNetworkAccessManager::Operation UpdateMediaEncoderPathLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
 
 }
 

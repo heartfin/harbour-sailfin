@@ -36,7 +36,7 @@
 #include <QString>
 #include <optional>
 
-#include "JellyfinQt/dto/version.h"
+#include "JellyfinQt/dto/packageinfo.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -50,8 +50,8 @@ namespace DTO {
 class InstallationInfo {
 public:
 	InstallationInfo(	
-		QString guid,					
-		QSharedPointer<Version> version								
+		QString guid,													
+		QSharedPointer<PackageInfo> packageInfo		
 	);
 
 	InstallationInfo(const InstallationInfo &other);
@@ -86,10 +86,16 @@ public:
 	bool nameNull() const;
 	void setNameNull();
 
-
-	QSharedPointer<Version> version() const;
-
-	void setVersion(QSharedPointer<Version> newVersion);
+	/**
+	 * @brief Gets or sets the version.
+	 */
+	QString version() const;
+	/**
+	* @brief Gets or sets the version.
+	*/
+	void setVersion(QString newVersion);
+	bool versionNull() const;
+	void setVersionNull();
 
 	/**
 	 * @brief Gets or sets the changelog for this version.
@@ -125,13 +131,19 @@ public:
 	void setChecksumNull();
 
 
+	QSharedPointer<PackageInfo> packageInfo() const;
+
+	void setPackageInfo(QSharedPointer<PackageInfo> newPackageInfo);
+
+
 protected:
 	QString m_guid;
 	QString m_name;
-	QSharedPointer<Version> m_version = QSharedPointer<Version>();
+	QString m_version;
 	QString m_changelog;
 	QString m_sourceUrl;
 	QString m_checksum;
+	QSharedPointer<PackageInfo> m_packageInfo = QSharedPointer<PackageInfo>();
 
 private:
 	// Private constructor which generates an invalid object, for use withing InstallationInfo::fromJson();

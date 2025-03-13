@@ -35,9 +35,9 @@
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
-#include "JellyfinQt/dto/deviceinfoqueryresult.h"
-#include "JellyfinQt/dto/deviceinfo.h"
-#include "JellyfinQt/dto/deviceoptions.h"
+#include "JellyfinQt/dto/deviceinfodtoqueryresult.h"
+#include "JellyfinQt/dto/deviceinfodto.h"
+#include "JellyfinQt/dto/deviceoptionsdto.h"
 
 namespace Jellyfin {
 // Forward declaration
@@ -53,7 +53,7 @@ using namespace Jellyfin::DTO;
  * @brief Get Devices.
  */
 
-class GetDevicesLoader : public Jellyfin::Support::HttpLoader<DeviceInfoQueryResult, GetDevicesParams> {
+class GetDevicesLoader : public Jellyfin::Support::HttpLoader<DeviceInfoDtoQueryResult, GetDevicesParams> {
 public:
 	explicit GetDevicesLoader(ApiClient *apiClient = nullptr);
 
@@ -81,7 +81,7 @@ protected:
  * @brief Get info for a device.
  */
 
-class GetDeviceInfoLoader : public Jellyfin::Support::HttpLoader<DeviceInfo, GetDeviceInfoParams> {
+class GetDeviceInfoLoader : public Jellyfin::Support::HttpLoader<DeviceInfoDto, GetDeviceInfoParams> {
 public:
 	explicit GetDeviceInfoLoader(ApiClient *apiClient = nullptr);
 
@@ -95,7 +95,7 @@ protected:
  * @brief Get options for a device.
  */
 
-class GetDeviceOptionsLoader : public Jellyfin::Support::HttpLoader<DeviceOptions, GetDeviceOptionsParams> {
+class GetDeviceOptionsLoader : public Jellyfin::Support::HttpLoader<DeviceOptionsDto, GetDeviceOptionsParams> {
 public:
 	explicit GetDeviceOptionsLoader(ApiClient *apiClient = nullptr);
 

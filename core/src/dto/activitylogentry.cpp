@@ -35,11 +35,15 @@ namespace DTO {
 ActivityLogEntry::ActivityLogEntry() {}
 ActivityLogEntry::ActivityLogEntry (
 		qint64 jellyfinId, 
+		QString name, 
+		QString type, 
 		QDateTime date, 
 		QString userId, 
 		LogLevel severity 
 		) :
 	m_jellyfinId(jellyfinId),
+	m_name(name),
+	m_type(type),
 	m_date(date),
 	m_userId(userId),
 	m_severity(severity) { }
@@ -98,11 +102,7 @@ QJsonObject ActivityLogEntry::toJson() const {
 	QJsonObject result;
 	
 	result["Id"] = Jellyfin::Support::toJsonValue<qint64>(m_jellyfinId);		
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
 	
 	if (!(m_overview.isNull())) {
 		result["Overview"] = Jellyfin::Support::toJsonValue<QString>(m_overview);
@@ -113,11 +113,7 @@ QJsonObject ActivityLogEntry::toJson() const {
 		result["ShortOverview"] = Jellyfin::Support::toJsonValue<QString>(m_shortOverview);
 	}
 			
-	
-	if (!(m_type.isNull())) {
-		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	}
-			
+	result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);		
 	
 	if (!(m_itemId.isNull())) {
 		result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);
@@ -145,14 +141,7 @@ QString ActivityLogEntry::name() const { return m_name; }
 void ActivityLogEntry::setName(QString newName) {
 	m_name = newName;
 }
-bool ActivityLogEntry::nameNull() const {
-	return m_name.isNull();
-}
 
-void ActivityLogEntry::setNameNull() {
-	m_name.clear();
-
-}
 QString ActivityLogEntry::overview() const { return m_overview; }
 
 void ActivityLogEntry::setOverview(QString newOverview) {
@@ -184,14 +173,7 @@ QString ActivityLogEntry::type() const { return m_type; }
 void ActivityLogEntry::setType(QString newType) {
 	m_type = newType;
 }
-bool ActivityLogEntry::typeNull() const {
-	return m_type.isNull();
-}
 
-void ActivityLogEntry::setTypeNull() {
-	m_type.clear();
-
-}
 QString ActivityLogEntry::itemId() const { return m_itemId; }
 
 void ActivityLogEntry::setItemId(QString newItemId) {

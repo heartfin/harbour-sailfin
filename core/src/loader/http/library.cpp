@@ -301,6 +301,12 @@ QUrlQuery GetThemeMediaLoader::query(const GetThemeMediaParams &params) const {
 	if (!params.inheritFromParentNull()) {
 		result.addQueryItem("inheritFromParent", Support::toString<std::optional<bool>>(params.inheritFromParent()));
 	}
+	if (!params.sortByNull()) {
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
+	}
+	if (!params.sortOrderNull()) {
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
+	}
 	
 	return result;
 }
@@ -336,6 +342,12 @@ QUrlQuery GetThemeSongsLoader::query(const GetThemeSongsParams &params) const {
 	if (!params.inheritFromParentNull()) {
 		result.addQueryItem("inheritFromParent", Support::toString<std::optional<bool>>(params.inheritFromParent()));
 	}
+	if (!params.sortByNull()) {
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
+	}
+	if (!params.sortOrderNull()) {
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
+	}
 	
 	return result;
 }
@@ -370,6 +382,12 @@ QUrlQuery GetThemeVideosLoader::query(const GetThemeVideosParams &params) const 
 	}
 	if (!params.inheritFromParentNull()) {
 		result.addQueryItem("inheritFromParent", Support::toString<std::optional<bool>>(params.inheritFromParent()));
+	}
+	if (!params.sortByNull()) {
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
+	}
+	if (!params.sortOrderNull()) {
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
 	}
 	
 	return result;
@@ -436,7 +454,7 @@ QUrlQuery GetLibraryOptionsInfoLoader::query(const GetLibraryOptionsInfoParams &
 
 	// Optional parameters
 	if (!params.libraryContentTypeNull()) {
-		result.addQueryItem("libraryContentType", Support::toString<QString>(params.libraryContentType()));
+		result.addQueryItem("libraryContentType", Support::toString<CollectionType>(params.libraryContentType()));
 	}
 	if (!params.isNewLibraryNull()) {
 		result.addQueryItem("isNewLibrary", Support::toString<std::optional<bool>>(params.isNewLibrary()));
@@ -475,7 +493,7 @@ QUrlQuery PostUpdatedMediaLoader::query(const PostUpdatedMediaParams &params) co
 }
 
 QByteArray PostUpdatedMediaLoader::body(const PostUpdatedMediaParams &params) const {
-	return Support::toString<QList<MediaUpdateInfoDto>>(params.body()).toUtf8();
+	return Support::toString<QSharedPointer<MediaUpdateInfoDto>>(params.body()).toUtf8();
 }
 
 QNetworkAccessManager::Operation PostUpdatedMediaLoader::operation() const {
@@ -639,8 +657,8 @@ QByteArray RefreshLibraryLoader::body(const RefreshLibraryParams &params) const 
 }
 
 QNetworkAccessManager::Operation RefreshLibraryLoader::operation() const {
-	// HTTP method Get
-	return QNetworkAccessManager::GetOperation;
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

@@ -36,13 +36,17 @@ SearchHint::SearchHint() {}
 SearchHint::SearchHint (
 		QString itemId, 
 		QString jellyfinId, 
-		QString albumId, 
-		QString channelId 
+		QString name, 
+		BaseItemKind type, 
+		MediaType mediaType, 
+		QStringList artists 
 		) :
 	m_itemId(itemId),
 	m_jellyfinId(jellyfinId),
-	m_albumId(albumId),
-	m_channelId(channelId) { }
+	m_name(name),
+	m_type(type),
+	m_mediaType(mediaType),
+	m_artists(artists) { }
 
 
 
@@ -131,10 +135,10 @@ void SearchHint::setFromJson(QJsonObject source) {
 	m_thumbImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["ThumbImageItemId"]);
 	m_backdropImageTag = Jellyfin::Support::fromJsonValue<QString>(source["BackdropImageTag"]);
 	m_backdropImageItemId = Jellyfin::Support::fromJsonValue<QString>(source["BackdropImageItemId"]);
-	m_type = Jellyfin::Support::fromJsonValue<QString>(source["Type"]);
+	m_type = Jellyfin::Support::fromJsonValue<BaseItemKind>(source["Type"]);
 	m_isFolder = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["IsFolder"]);
 	m_runTimeTicks = Jellyfin::Support::fromJsonValue<std::optional<qint64>>(source["RunTimeTicks"]);
-	m_mediaType = Jellyfin::Support::fromJsonValue<QString>(source["MediaType"]);
+	m_mediaType = Jellyfin::Support::fromJsonValue<MediaType>(source["MediaType"]);
 	m_startDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["StartDate"]);
 	m_endDate = Jellyfin::Support::fromJsonValue<QDateTime>(source["EndDate"]);
 	m_series = Jellyfin::Support::fromJsonValue<QString>(source["Series"]);
@@ -156,11 +160,7 @@ QJsonObject SearchHint::toJson() const {
 	
 	result["ItemId"] = Jellyfin::Support::toJsonValue<QString>(m_itemId);		
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
-	
-	if (!(m_name.isNull())) {
-		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
-	}
-			
+	result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);		
 	
 	if (!(m_matchedTerm.isNull())) {
 		result["MatchedTerm"] = Jellyfin::Support::toJsonValue<QString>(m_matchedTerm);
@@ -206,11 +206,7 @@ QJsonObject SearchHint::toJson() const {
 		result["BackdropImageItemId"] = Jellyfin::Support::toJsonValue<QString>(m_backdropImageItemId);
 	}
 			
-	
-	if (!(m_type.isNull())) {
-		result["Type"] = Jellyfin::Support::toJsonValue<QString>(m_type);
-	}
-			
+	result["Type"] = Jellyfin::Support::toJsonValue<BaseItemKind>(m_type);		
 	
 	if (!(!m_isFolder.has_value())) {
 		result["IsFolder"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_isFolder);
@@ -221,11 +217,7 @@ QJsonObject SearchHint::toJson() const {
 		result["RunTimeTicks"] = Jellyfin::Support::toJsonValue<std::optional<qint64>>(m_runTimeTicks);
 	}
 			
-	
-	if (!(m_mediaType.isNull())) {
-		result["MediaType"] = Jellyfin::Support::toJsonValue<QString>(m_mediaType);
-	}
-			
+	result["MediaType"] = Jellyfin::Support::toJsonValue<MediaType>(m_mediaType);		
 	
 	if (!(m_startDate.isNull())) {
 		result["StartDate"] = Jellyfin::Support::toJsonValue<QDateTime>(m_startDate);
@@ -251,17 +243,17 @@ QJsonObject SearchHint::toJson() const {
 		result["Album"] = Jellyfin::Support::toJsonValue<QString>(m_album);
 	}
 			
-	result["AlbumId"] = Jellyfin::Support::toJsonValue<QString>(m_albumId);		
+	
+	if (!(m_albumId.isNull())) {
+		result["AlbumId"] = Jellyfin::Support::toJsonValue<QString>(m_albumId);
+	}
+			
 	
 	if (!(m_albumArtist.isNull())) {
 		result["AlbumArtist"] = Jellyfin::Support::toJsonValue<QString>(m_albumArtist);
 	}
 			
-	
-	if (!(m_artists.size() == 0)) {
-		result["Artists"] = Jellyfin::Support::toJsonValue<QStringList>(m_artists);
-	}
-			
+	result["Artists"] = Jellyfin::Support::toJsonValue<QStringList>(m_artists);		
 	
 	if (!(!m_songCount.has_value())) {
 		result["SongCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_songCount);
@@ -272,7 +264,11 @@ QJsonObject SearchHint::toJson() const {
 		result["EpisodeCount"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_episodeCount);
 	}
 			
-	result["ChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_channelId);		
+	
+	if (!(m_channelId.isNull())) {
+		result["ChannelId"] = Jellyfin::Support::toJsonValue<QString>(m_channelId);
+	}
+			
 	
 	if (!(m_channelName.isNull())) {
 		result["ChannelName"] = Jellyfin::Support::toJsonValue<QString>(m_channelName);
@@ -303,14 +299,7 @@ QString SearchHint::name() const { return m_name; }
 void SearchHint::setName(QString newName) {
 	m_name = newName;
 }
-bool SearchHint::nameNull() const {
-	return m_name.isNull();
-}
 
-void SearchHint::setNameNull() {
-	m_name.clear();
-
-}
 QString SearchHint::matchedTerm() const { return m_matchedTerm; }
 
 void SearchHint::setMatchedTerm(QString newMatchedTerm) {
@@ -428,19 +417,12 @@ void SearchHint::setBackdropImageItemIdNull() {
 	m_backdropImageItemId.clear();
 
 }
-QString SearchHint::type() const { return m_type; }
+BaseItemKind SearchHint::type() const { return m_type; }
 
-void SearchHint::setType(QString newType) {
+void SearchHint::setType(BaseItemKind newType) {
 	m_type = newType;
 }
-bool SearchHint::typeNull() const {
-	return m_type.isNull();
-}
 
-void SearchHint::setTypeNull() {
-	m_type.clear();
-
-}
 std::optional<bool> SearchHint::isFolder() const { return m_isFolder; }
 
 void SearchHint::setIsFolder(std::optional<bool> newIsFolder) {
@@ -467,19 +449,12 @@ void SearchHint::setRunTimeTicksNull() {
 	m_runTimeTicks = std::nullopt;
 
 }
-QString SearchHint::mediaType() const { return m_mediaType; }
+MediaType SearchHint::mediaType() const { return m_mediaType; }
 
-void SearchHint::setMediaType(QString newMediaType) {
+void SearchHint::setMediaType(MediaType newMediaType) {
 	m_mediaType = newMediaType;
 }
-bool SearchHint::mediaTypeNull() const {
-	return m_mediaType.isNull();
-}
 
-void SearchHint::setMediaTypeNull() {
-	m_mediaType.clear();
-
-}
 QDateTime SearchHint::startDate() const { return m_startDate; }
 
 void SearchHint::setStartDate(QDateTime newStartDate) {
@@ -550,7 +525,14 @@ QString SearchHint::albumId() const { return m_albumId; }
 void SearchHint::setAlbumId(QString newAlbumId) {
 	m_albumId = newAlbumId;
 }
+bool SearchHint::albumIdNull() const {
+	return m_albumId.isNull();
+}
 
+void SearchHint::setAlbumIdNull() {
+	m_albumId.clear();
+
+}
 QString SearchHint::albumArtist() const { return m_albumArtist; }
 
 void SearchHint::setAlbumArtist(QString newAlbumArtist) {
@@ -569,14 +551,7 @@ QStringList SearchHint::artists() const { return m_artists; }
 void SearchHint::setArtists(QStringList newArtists) {
 	m_artists = newArtists;
 }
-bool SearchHint::artistsNull() const {
-	return m_artists.size() == 0;
-}
 
-void SearchHint::setArtistsNull() {
-	m_artists.clear();
-
-}
 std::optional<qint32> SearchHint::songCount() const { return m_songCount; }
 
 void SearchHint::setSongCount(std::optional<qint32> newSongCount) {
@@ -608,7 +583,14 @@ QString SearchHint::channelId() const { return m_channelId; }
 void SearchHint::setChannelId(QString newChannelId) {
 	m_channelId = newChannelId;
 }
+bool SearchHint::channelIdNull() const {
+	return m_channelId.isNull();
+}
 
+void SearchHint::setChannelIdNull() {
+	m_channelId.clear();
+
+}
 QString SearchHint::channelName() const { return m_channelName; }
 
 void SearchHint::setChannelName(QString newChannelName) {

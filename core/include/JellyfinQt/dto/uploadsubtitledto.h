@@ -51,6 +51,7 @@ public:
 		QString language,			
 		QString format,			
 		bool isForced,			
+		bool isHearingImpaired,			
 		QString data		
 	);
 
@@ -94,6 +95,15 @@ public:
 	void setIsForced(bool newIsForced);
 
 	/**
+	 * @brief Gets or sets a value indicating whether the subtitle is for hearing impaired.
+	 */
+	bool isHearingImpaired() const;
+	/**
+	* @brief Gets or sets a value indicating whether the subtitle is for hearing impaired.
+	*/
+	void setIsHearingImpaired(bool newIsHearingImpaired);
+
+	/**
 	 * @brief Gets or sets the subtitle data.
 	 */
 	QString data() const;
@@ -107,6 +117,7 @@ protected:
 	QString m_language;
 	QString m_format;
 	bool m_isForced;
+	bool m_isHearingImpaired;
 	QString m_data;
 
 private:

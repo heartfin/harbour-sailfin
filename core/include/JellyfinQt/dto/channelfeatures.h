@@ -52,8 +52,13 @@ namespace DTO {
 
 class ChannelFeatures {
 public:
-	ChannelFeatures(					
-		bool canSearch,													
+	ChannelFeatures(	
+		QString name,			
+		QString jellyfinId,			
+		bool canSearch,			
+		QList<ChannelMediaType> mediaTypes,			
+		QList<ChannelMediaContentType> contentTypes,							
+		QList<ChannelItemSortField> defaultSortFields,			
 		bool supportsSortOrderToggle,			
 		bool supportsLatestMedia,			
 		bool canFilter,			
@@ -80,8 +85,6 @@ public:
 	* @brief Gets or sets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets or sets the identifier.
@@ -91,8 +94,6 @@ public:
 	* @brief Gets or sets the identifier.
 	*/
 	void setJellyfinId(QString newJellyfinId);
-	bool jellyfinIdNull() const;
-	void setJellyfinIdNull();
 
 	/**
 	 * @brief Gets or sets a value indicating whether this instance can search.
@@ -111,8 +112,6 @@ public:
 	* @brief Gets or sets the media types.
 	*/
 	void setMediaTypes(QList<ChannelMediaType> newMediaTypes);
-	bool mediaTypesNull() const;
-	void setMediaTypesNull();
 
 	/**
 	 * @brief Gets or sets the content types.
@@ -122,15 +121,13 @@ public:
 	* @brief Gets or sets the content types.
 	*/
 	void setContentTypes(QList<ChannelMediaContentType> newContentTypes);
-	bool contentTypesNull() const;
-	void setContentTypesNull();
 
 	/**
-	 * @brief Represents the maximum number of records the channel allows retrieving at a time.
+	 * @brief Gets or sets the maximum number of records the channel allows retrieving at a time.
 	 */
 	std::optional<qint32> maxPageSize() const;
 	/**
-	* @brief Represents the maximum number of records the channel allows retrieving at a time.
+	* @brief Gets or sets the maximum number of records the channel allows retrieving at a time.
 	*/
 	void setMaxPageSize(std::optional<qint32> newMaxPageSize);
 	bool maxPageSizeNull() const;
@@ -155,15 +152,13 @@ public:
 	* @brief Gets or sets the default sort orders.
 	*/
 	void setDefaultSortFields(QList<ChannelItemSortField> newDefaultSortFields);
-	bool defaultSortFieldsNull() const;
-	void setDefaultSortFieldsNull();
 
 	/**
-	 * @brief Indicates if a sort ascending/descending toggle is supported or not.
+	 * @brief Gets or sets a value indicating whether a sort ascending/descending toggle is supported.
 	 */
 	bool supportsSortOrderToggle() const;
 	/**
-	* @brief Indicates if a sort ascending/descending toggle is supported or not.
+	* @brief Gets or sets a value indicating whether a sort ascending/descending toggle is supported.
 	*/
 	void setSupportsSortOrderToggle(bool newSupportsSortOrderToggle);
 

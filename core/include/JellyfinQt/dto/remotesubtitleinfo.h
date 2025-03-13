@@ -124,6 +124,13 @@ public:	RemoteSubtitleInfo();
 	void setCommunityRatingNull();
 
 
+	std::optional<float> frameRate() const;
+
+	void setFrameRate(std::optional<float> newFrameRate);
+	bool frameRateNull() const;
+	void setFrameRateNull();
+
+
 	std::optional<qint32> downloadCount() const;
 
 	void setDownloadCount(std::optional<qint32> newDownloadCount);
@@ -138,6 +145,34 @@ public:	RemoteSubtitleInfo();
 	void setIsHashMatchNull();
 
 
+	std::optional<bool> aiTranslated() const;
+
+	void setAiTranslated(std::optional<bool> newAiTranslated);
+	bool aiTranslatedNull() const;
+	void setAiTranslatedNull();
+
+
+	std::optional<bool> machineTranslated() const;
+
+	void setMachineTranslated(std::optional<bool> newMachineTranslated);
+	bool machineTranslatedNull() const;
+	void setMachineTranslatedNull();
+
+
+	std::optional<bool> forced() const;
+
+	void setForced(std::optional<bool> newForced);
+	bool forcedNull() const;
+	void setForcedNull();
+
+
+	std::optional<bool> hearingImpaired() const;
+
+	void setHearingImpaired(std::optional<bool> newHearingImpaired);
+	bool hearingImpairedNull() const;
+	void setHearingImpairedNull();
+
+
 protected:
 	QString m_threeLetterISOLanguageName;
 	QString m_jellyfinId;
@@ -148,8 +183,13 @@ protected:
 	QString m_comment;
 	QDateTime m_dateCreated;
 	std::optional<float> m_communityRating = std::nullopt;
+	std::optional<float> m_frameRate = std::nullopt;
 	std::optional<qint32> m_downloadCount = std::nullopt;
 	std::optional<bool> m_isHashMatch = std::nullopt;
+	std::optional<bool> m_aiTranslated = std::nullopt;
+	std::optional<bool> m_machineTranslated = std::nullopt;
+	std::optional<bool> m_forced = std::nullopt;
+	std::optional<bool> m_hearingImpaired = std::nullopt;
 
 
 };

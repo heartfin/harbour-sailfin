@@ -81,11 +81,11 @@ public:
 	
 	// Properties
 	/**
-	 * @brief Id of the recording.
+	 * @brief Gets or sets the Id of the recording.
 	 */
 	QString jellyfinId() const;
 	/**
-	* @brief Id of the recording.
+	* @brief Gets or sets the Id of the recording.
 	*/
 	void setJellyfinId(QString newJellyfinId);
 	bool jellyfinIdNull() const;
@@ -121,11 +121,11 @@ public:
 	void setExternalIdNull();
 
 	/**
-	 * @brief ChannelId of the recording.
+	 * @brief Gets or sets the channel id of the recording.
 	 */
 	QString channelId() const;
 	/**
-	* @brief ChannelId of the recording.
+	* @brief Gets or sets the channel id of the recording.
 	*/
 	void setChannelId(QString newChannelId);
 
@@ -141,11 +141,11 @@ public:
 	void setExternalChannelIdNull();
 
 	/**
-	 * @brief ChannelName of the recording.
+	 * @brief Gets or sets the channel name of the recording.
 	 */
 	QString channelName() const;
 	/**
-	* @brief ChannelName of the recording.
+	* @brief Gets or sets the channel name of the recording.
 	*/
 	void setChannelName(QString newChannelName);
 	bool channelNameNull() const;
@@ -181,42 +181,42 @@ public:
 	void setExternalProgramIdNull();
 
 	/**
-	 * @brief Name of the recording.
+	 * @brief Gets or sets the name of the recording.
 	 */
 	QString name() const;
 	/**
-	* @brief Name of the recording.
+	* @brief Gets or sets the name of the recording.
 	*/
 	void setName(QString newName);
 	bool nameNull() const;
 	void setNameNull();
 
 	/**
-	 * @brief Description of the recording.
+	 * @brief Gets or sets the description of the recording.
 	 */
 	QString overview() const;
 	/**
-	* @brief Description of the recording.
+	* @brief Gets or sets the description of the recording.
 	*/
 	void setOverview(QString newOverview);
 	bool overviewNull() const;
 	void setOverviewNull();
 
 	/**
-	 * @brief The start date of the recording, in UTC.
+	 * @brief Gets or sets the start date of the recording, in UTC.
 	 */
 	QDateTime startDate() const;
 	/**
-	* @brief The start date of the recording, in UTC.
+	* @brief Gets or sets the start date of the recording, in UTC.
 	*/
 	void setStartDate(QDateTime newStartDate);
 
 	/**
-	 * @brief The end date of the recording, in UTC.
+	 * @brief Gets or sets the end date of the recording, in UTC.
 	 */
 	QDateTime endDate() const;
 	/**
-	* @brief The end date of the recording, in UTC.
+	* @brief Gets or sets the end date of the recording, in UTC.
 	*/
 	void setEndDate(QDateTime newEndDate);
 
@@ -268,11 +268,11 @@ public:
 	void setIsPrePaddingRequired(bool newIsPrePaddingRequired);
 
 	/**
-	 * @brief If the item does not have any backdrops, this will hold the Id of the Parent that has one.
+	 * @brief Gets or sets the Id of the Parent that has a backdrop if the item does not have one.
 	 */
 	QString parentBackdropItemId() const;
 	/**
-	* @brief If the item does not have any backdrops, this will hold the Id of the Parent that has one.
+	* @brief Gets or sets the Id of the Parent that has a backdrop if the item does not have one.
 	*/
 	void setParentBackdropItemId(QString newParentBackdropItemId);
 	bool parentBackdropItemIdNull() const;

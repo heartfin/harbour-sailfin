@@ -50,7 +50,9 @@ namespace DTO {
 class ActivityLogEntry {
 public:
 	ActivityLogEntry(	
-		qint64 jellyfinId,													
+		qint64 jellyfinId,			
+		QString name,							
+		QString type,					
 		QDateTime date,			
 		QString userId,					
 		LogLevel severity		
@@ -85,8 +87,6 @@ public:
 	* @brief Gets or sets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets or sets the overview.
@@ -118,8 +118,6 @@ public:
 	* @brief Gets or sets the type.
 	*/
 	void setType(QString newType);
-	bool typeNull() const;
-	void setTypeNull();
 
 	/**
 	 * @brief Gets or sets the item identifier.

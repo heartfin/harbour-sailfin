@@ -35,6 +35,64 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
+UploadCustomSplashscreenLoader::UploadCustomSplashscreenLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, UploadCustomSplashscreenParams>(apiClient) {}
+
+QString UploadCustomSplashscreenLoader::path(const UploadCustomSplashscreenParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Branding/Splashscreen");
+}
+
+QUrlQuery UploadCustomSplashscreenLoader::query(const UploadCustomSplashscreenParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray UploadCustomSplashscreenLoader::body(const UploadCustomSplashscreenParams &params) const {
+	return Support::toString<QByteArray>(params.body()).toUtf8();
+}
+
+QNetworkAccessManager::Operation UploadCustomSplashscreenLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
+
+}
+
+DeleteCustomSplashscreenLoader::DeleteCustomSplashscreenLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<void, DeleteCustomSplashscreenParams>(apiClient) {}
+
+QString DeleteCustomSplashscreenLoader::path(const DeleteCustomSplashscreenParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/Branding/Splashscreen");
+}
+
+QUrlQuery DeleteCustomSplashscreenLoader::query(const DeleteCustomSplashscreenParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	
+	return result;
+}
+
+QByteArray DeleteCustomSplashscreenLoader::body(const DeleteCustomSplashscreenParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation DeleteCustomSplashscreenLoader::operation() const {
+	// HTTP method Delete
+	return QNetworkAccessManager::DeleteOperation;
+
+}
+
 GetItemImageInfosLoader::GetItemImageInfosLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<QList<ImageInfo>, GetItemImageInfosParams>(apiClient) {}
 
@@ -116,7 +174,7 @@ QUrlQuery SetItemImageLoader::query(const SetItemImageParams &params) const {
 }
 
 QByteArray SetItemImageLoader::body(const SetItemImageParams &params) const {
-	return QByteArray();
+	return Support::toString<QByteArray>(params.body()).toUtf8();
 }
 
 QNetworkAccessManager::Operation SetItemImageLoader::operation() const {
@@ -174,7 +232,7 @@ QUrlQuery SetItemImageByIndexLoader::query(const SetItemImageByIndexParams &para
 }
 
 QByteArray SetItemImageByIndexLoader::body(const SetItemImageByIndexParams &params) const {
-	return QByteArray();
+	return Support::toString<QByteArray>(params.body()).toUtf8();
 }
 
 QNetworkAccessManager::Operation SetItemImageByIndexLoader::operation() const {
@@ -196,11 +254,9 @@ QUrlQuery UpdateItemImageIndexLoader::query(const UpdateItemImageIndexParams &pa
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
+	result.addQueryItem("newIndex", Support::toString<qint32>(params.newIndex()));
 
 	// Optional parameters
-	if (!params.newIndexNull()) {
-		result.addQueryItem("newIndex", Support::toString<std::optional<qint32>>(params.newIndex()));
-	}
 	
 	return result;
 }
@@ -221,7 +277,7 @@ PostUserImageLoader::PostUserImageLoader(ApiClient *apiClient)
 QString PostUserImageLoader::path(const PostUserImageParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Images/") + Support::toString< ImageType>(params.imageType()) ;
+	return QStringLiteral("/UserImage");
 }
 
 QUrlQuery PostUserImageLoader::query(const PostUserImageParams &params) const {
@@ -230,15 +286,15 @@ QUrlQuery PostUserImageLoader::query(const PostUserImageParams &params) const {
 	QUrlQuery result;
 
 	// Optional parameters
-	if (!params.indexNull()) {
-		result.addQueryItem("index", Support::toString<std::optional<qint32>>(params.index()));
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;
 }
 
 QByteArray PostUserImageLoader::body(const PostUserImageParams &params) const {
-	return QByteArray();
+	return Support::toString<QByteArray>(params.body()).toUtf8();
 }
 
 QNetworkAccessManager::Operation PostUserImageLoader::operation() const {
@@ -253,7 +309,7 @@ DeleteUserImageLoader::DeleteUserImageLoader(ApiClient *apiClient)
 QString DeleteUserImageLoader::path(const DeleteUserImageParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Images/") + Support::toString< ImageType>(params.imageType()) ;
+	return QStringLiteral("/UserImage");
 }
 
 QUrlQuery DeleteUserImageLoader::query(const DeleteUserImageParams &params) const {
@@ -262,8 +318,8 @@ QUrlQuery DeleteUserImageLoader::query(const DeleteUserImageParams &params) cons
 	QUrlQuery result;
 
 	// Optional parameters
-	if (!params.indexNull()) {
-		result.addQueryItem("index", Support::toString<std::optional<qint32>>(params.index()));
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;
@@ -274,64 +330,6 @@ QByteArray DeleteUserImageLoader::body(const DeleteUserImageParams &params) cons
 }
 
 QNetworkAccessManager::Operation DeleteUserImageLoader::operation() const {
-	// HTTP method Delete
-	return QNetworkAccessManager::DeleteOperation;
-
-}
-
-PostUserImageByIndexLoader::PostUserImageByIndexLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, PostUserImageByIndexParams>(apiClient) {}
-
-QString PostUserImageByIndexLoader::path(const PostUserImageByIndexParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Images/") + Support::toString< ImageType>(params.imageType()) + QStringLiteral("/") + Support::toString< qint32>(params.index()) ;
-}
-
-QUrlQuery PostUserImageByIndexLoader::query(const PostUserImageByIndexParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray PostUserImageByIndexLoader::body(const PostUserImageByIndexParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation PostUserImageByIndexLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-DeleteUserImageByIndexLoader::DeleteUserImageByIndexLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, DeleteUserImageByIndexParams>(apiClient) {}
-
-QString DeleteUserImageByIndexLoader::path(const DeleteUserImageByIndexParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Images/") + Support::toString< ImageType>(params.imageType()) + QStringLiteral("/") + Support::toString< qint32>(params.index()) ;
-}
-
-QUrlQuery DeleteUserImageByIndexLoader::query(const DeleteUserImageByIndexParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray DeleteUserImageByIndexLoader::body(const DeleteUserImageByIndexParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation DeleteUserImageByIndexLoader::operation() const {
 	// HTTP method Delete
 	return QNetworkAccessManager::DeleteOperation;
 

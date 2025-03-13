@@ -35,11 +35,9 @@ namespace DTO {
 IPlugin::IPlugin() {}
 IPlugin::IPlugin (
 		QString jellyfinId, 
-		QSharedPointer<Version> version, 
 		bool canUninstall 
 		) :
 	m_jellyfinId(jellyfinId),
-	m_version(version),
 	m_canUninstall(canUninstall) { }
 
 
@@ -76,7 +74,7 @@ void IPlugin::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
 	m_description = Jellyfin::Support::fromJsonValue<QString>(source["Description"]);
 	m_jellyfinId = Jellyfin::Support::fromJsonValue<QString>(source["Id"]);
-	m_version = Jellyfin::Support::fromJsonValue<QSharedPointer<Version>>(source["Version"]);
+	m_version = Jellyfin::Support::fromJsonValue<QString>(source["Version"]);
 	m_assemblyFilePath = Jellyfin::Support::fromJsonValue<QString>(source["AssemblyFilePath"]);
 	m_canUninstall = Jellyfin::Support::fromJsonValue<bool>(source["CanUninstall"]);
 	m_dataFolderPath = Jellyfin::Support::fromJsonValue<QString>(source["DataFolderPath"]);
@@ -97,7 +95,11 @@ QJsonObject IPlugin::toJson() const {
 	}
 			
 	result["Id"] = Jellyfin::Support::toJsonValue<QString>(m_jellyfinId);		
-	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);		
+	
+	if (!(m_version.isNull())) {
+		result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	}
+			
 	
 	if (!(m_assemblyFilePath.isNull())) {
 		result["AssemblyFilePath"] = Jellyfin::Support::toJsonValue<QString>(m_assemblyFilePath);
@@ -144,12 +146,19 @@ void IPlugin::setJellyfinId(QString newJellyfinId) {
 	m_jellyfinId = newJellyfinId;
 }
 
-QSharedPointer<Version> IPlugin::version() const { return m_version; }
+QString IPlugin::version() const { return m_version; }
 
-void IPlugin::setVersion(QSharedPointer<Version> newVersion) {
+void IPlugin::setVersion(QString newVersion) {
 	m_version = newVersion;
 }
+bool IPlugin::versionNull() const {
+	return m_version.isNull();
+}
 
+void IPlugin::setVersionNull() {
+	m_version.clear();
+
+}
 QString IPlugin::assemblyFilePath() const { return m_assemblyFilePath; }
 
 void IPlugin::setAssemblyFilePath(QString newAssemblyFilePath) {

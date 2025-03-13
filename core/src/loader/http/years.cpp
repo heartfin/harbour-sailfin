@@ -57,7 +57,7 @@ QUrlQuery GetYearsLoader::query(const GetYearsParams &params) const {
 		result.addQueryItem("limit", Support::toString<std::optional<qint32>>(params.limit()));
 	}
 	if (!params.sortOrderNull()) {
-		result.addQueryItem("sortOrder", Support::toString<QString>(params.sortOrder()));
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
 	}
 	if (!params.parentIdNull()) {
 		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
@@ -66,16 +66,16 @@ QUrlQuery GetYearsLoader::query(const GetYearsParams &params) const {
 		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QList<BaseItemKind>>(params.excludeItemTypes()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QList<BaseItemKind>>(params.includeItemTypes()));
 	}
 	if (!params.mediaTypesNull()) {
-		result.addQueryItem("mediaTypes", Support::toString<QStringList>(params.mediaTypes()));
+		result.addQueryItem("mediaTypes", Support::toString<QList<MediaType>>(params.mediaTypes()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString<QString>(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
 	}
 	if (!params.enableUserDataNull()) {
 		result.addQueryItem("enableUserData", Support::toString<std::optional<bool>>(params.enableUserData()));

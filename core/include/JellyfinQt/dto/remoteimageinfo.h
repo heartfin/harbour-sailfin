@@ -89,11 +89,11 @@ public:
 	void setUrlNull();
 
 	/**
-	 * @brief Gets a url used for previewing a smaller version.
+	 * @brief Gets or sets a url used for previewing a smaller version.
 	 */
 	QString thumbnailUrl() const;
 	/**
-	* @brief Gets a url used for previewing a smaller version.
+	* @brief Gets or sets a url used for previewing a smaller version.
 	*/
 	void setThumbnailUrl(QString newThumbnailUrl);
 	bool thumbnailUrlNull() const;

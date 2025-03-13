@@ -35,10 +35,10 @@ namespace DTO {
 InstallationInfo::InstallationInfo() {}
 InstallationInfo::InstallationInfo (
 		QString guid, 
-		QSharedPointer<Version> version 
+		QSharedPointer<PackageInfo> packageInfo 
 		) :
 	m_guid(guid),
-	m_version(version) { }
+	m_packageInfo(packageInfo) { }
 
 
 
@@ -49,7 +49,8 @@ InstallationInfo::InstallationInfo(const InstallationInfo &other) :
 	m_version(other.m_version),
 	m_changelog(other.m_changelog),
 	m_sourceUrl(other.m_sourceUrl),
-	m_checksum(other.m_checksum){}
+	m_checksum(other.m_checksum),
+	m_packageInfo(other.m_packageInfo){}
 
 
 void InstallationInfo::replaceData(InstallationInfo &other) {
@@ -59,6 +60,7 @@ void InstallationInfo::replaceData(InstallationInfo &other) {
 	m_changelog = other.m_changelog;
 	m_sourceUrl = other.m_sourceUrl;
 	m_checksum = other.m_checksum;
+	m_packageInfo = other.m_packageInfo;
 }
 
 InstallationInfo InstallationInfo::fromJson(QJsonObject source) {
@@ -71,10 +73,11 @@ InstallationInfo InstallationInfo::fromJson(QJsonObject source) {
 void InstallationInfo::setFromJson(QJsonObject source) {
 	m_guid = Jellyfin::Support::fromJsonValue<QString>(source["Guid"]);
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
-	m_version = Jellyfin::Support::fromJsonValue<QSharedPointer<Version>>(source["Version"]);
+	m_version = Jellyfin::Support::fromJsonValue<QString>(source["Version"]);
 	m_changelog = Jellyfin::Support::fromJsonValue<QString>(source["Changelog"]);
 	m_sourceUrl = Jellyfin::Support::fromJsonValue<QString>(source["SourceUrl"]);
 	m_checksum = Jellyfin::Support::fromJsonValue<QString>(source["Checksum"]);
+	m_packageInfo = Jellyfin::Support::fromJsonValue<QSharedPointer<PackageInfo>>(source["PackageInfo"]);
 
 }
 	
@@ -87,7 +90,11 @@ QJsonObject InstallationInfo::toJson() const {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	}
 			
-	result["Version"] = Jellyfin::Support::toJsonValue<QSharedPointer<Version>>(m_version);		
+	
+	if (!(m_version.isNull())) {
+		result["Version"] = Jellyfin::Support::toJsonValue<QString>(m_version);
+	}
+			
 	
 	if (!(m_changelog.isNull())) {
 		result["Changelog"] = Jellyfin::Support::toJsonValue<QString>(m_changelog);
@@ -102,7 +109,8 @@ QJsonObject InstallationInfo::toJson() const {
 	if (!(m_checksum.isNull())) {
 		result["Checksum"] = Jellyfin::Support::toJsonValue<QString>(m_checksum);
 	}
-		
+			
+	result["PackageInfo"] = Jellyfin::Support::toJsonValue<QSharedPointer<PackageInfo>>(m_packageInfo);	
 	return result;
 }
 
@@ -125,12 +133,19 @@ void InstallationInfo::setNameNull() {
 	m_name.clear();
 
 }
-QSharedPointer<Version> InstallationInfo::version() const { return m_version; }
+QString InstallationInfo::version() const { return m_version; }
 
-void InstallationInfo::setVersion(QSharedPointer<Version> newVersion) {
+void InstallationInfo::setVersion(QString newVersion) {
 	m_version = newVersion;
 }
+bool InstallationInfo::versionNull() const {
+	return m_version.isNull();
+}
 
+void InstallationInfo::setVersionNull() {
+	m_version.clear();
+
+}
 QString InstallationInfo::changelog() const { return m_changelog; }
 
 void InstallationInfo::setChangelog(QString newChangelog) {
@@ -170,6 +185,12 @@ void InstallationInfo::setChecksumNull() {
 	m_checksum.clear();
 
 }
+QSharedPointer<PackageInfo> InstallationInfo::packageInfo() const { return m_packageInfo; }
+
+void InstallationInfo::setPackageInfo(QSharedPointer<PackageInfo> newPackageInfo) {
+	m_packageInfo = newPackageInfo;
+}
+
 
 } // NS DTO
 

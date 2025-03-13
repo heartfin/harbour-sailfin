@@ -35,107 +35,49 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
-ActivateLoader::ActivateLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, ActivateParams>(apiClient) {}
+AuthorizeQuickConnectLoader::AuthorizeQuickConnectLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<bool, AuthorizeQuickConnectParams>(apiClient) {}
 
-QString ActivateLoader::path(const ActivateParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/QuickConnect/Activate");
-}
-
-QUrlQuery ActivateLoader::query(const ActivateParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray ActivateLoader::body(const ActivateParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation ActivateLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-AuthorizeLoader::AuthorizeLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<bool, AuthorizeParams>(apiClient) {}
-
-QString AuthorizeLoader::path(const AuthorizeParams &params) const {
+QString AuthorizeQuickConnectLoader::path(const AuthorizeQuickConnectParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/QuickConnect/Authorize");
 }
 
-QUrlQuery AuthorizeLoader::query(const AuthorizeParams &params) const {
+QUrlQuery AuthorizeQuickConnectLoader::query(const AuthorizeQuickConnectParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
 	result.addQueryItem("code", Support::toString<QString>(params.code()));
 
 	// Optional parameters
-	
-	return result;
-}
-
-QByteArray AuthorizeLoader::body(const AuthorizeParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation AuthorizeLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
-
-}
-
-AvailableLoader::AvailableLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<void, AvailableParams>(apiClient) {}
-
-QString AvailableLoader::path(const AvailableParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/QuickConnect/Available");
-}
-
-QUrlQuery AvailableLoader::query(const AvailableParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	if (!params.statusNull()) {
-		result.addQueryItem("status", Support::toString<QuickConnectState>(params.status()));
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
 	}
 	
 	return result;
 }
 
-QByteArray AvailableLoader::body(const AvailableParams &params) const {
+QByteArray AuthorizeQuickConnectLoader::body(const AuthorizeQuickConnectParams &params) const {
 	return QByteArray();
 }
 
-QNetworkAccessManager::Operation AvailableLoader::operation() const {
+QNetworkAccessManager::Operation AuthorizeQuickConnectLoader::operation() const {
 	// HTTP method Post
 	return QNetworkAccessManager::PostOperation;
 
 }
 
-ConnectLoader::ConnectLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<QuickConnectResult, ConnectParams>(apiClient) {}
+GetQuickConnectStateLoader::GetQuickConnectStateLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QuickConnectResult, GetQuickConnectStateParams>(apiClient) {}
 
-QString ConnectLoader::path(const ConnectParams &params) const {
+QString GetQuickConnectStateLoader::path(const GetQuickConnectStateParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/QuickConnect/Connect");
 }
 
-QUrlQuery ConnectLoader::query(const ConnectParams &params) const {
+QUrlQuery GetQuickConnectStateLoader::query(const GetQuickConnectStateParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
@@ -146,26 +88,26 @@ QUrlQuery ConnectLoader::query(const ConnectParams &params) const {
 	return result;
 }
 
-QByteArray ConnectLoader::body(const ConnectParams &params) const {
+QByteArray GetQuickConnectStateLoader::body(const GetQuickConnectStateParams &params) const {
 	return QByteArray();
 }
 
-QNetworkAccessManager::Operation ConnectLoader::operation() const {
+QNetworkAccessManager::Operation GetQuickConnectStateLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
 
 }
 
-DeauthorizeLoader::DeauthorizeLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<qint32, DeauthorizeParams>(apiClient) {}
+GetQuickConnectEnabledLoader::GetQuickConnectEnabledLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<bool, GetQuickConnectEnabledParams>(apiClient) {}
 
-QString DeauthorizeLoader::path(const DeauthorizeParams &params) const {
+QString GetQuickConnectEnabledLoader::path(const GetQuickConnectEnabledParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/QuickConnect/Deauthorize");
+	return QStringLiteral("/QuickConnect/Enabled");
 }
 
-QUrlQuery DeauthorizeLoader::query(const DeauthorizeParams &params) const {
+QUrlQuery GetQuickConnectEnabledLoader::query(const GetQuickConnectEnabledParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
@@ -175,26 +117,26 @@ QUrlQuery DeauthorizeLoader::query(const DeauthorizeParams &params) const {
 	return result;
 }
 
-QByteArray DeauthorizeLoader::body(const DeauthorizeParams &params) const {
+QByteArray GetQuickConnectEnabledLoader::body(const GetQuickConnectEnabledParams &params) const {
 	return QByteArray();
 }
 
-QNetworkAccessManager::Operation DeauthorizeLoader::operation() const {
-	// HTTP method Post
-	return QNetworkAccessManager::PostOperation;
+QNetworkAccessManager::Operation GetQuickConnectEnabledLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
 
 }
 
-InitiateLoader::InitiateLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<QuickConnectResult, InitiateParams>(apiClient) {}
+InitiateQuickConnectLoader::InitiateQuickConnectLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QuickConnectResult, InitiateQuickConnectParams>(apiClient) {}
 
-QString InitiateLoader::path(const InitiateParams &params) const {
+QString InitiateQuickConnectLoader::path(const InitiateQuickConnectParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
 	return QStringLiteral("/QuickConnect/Initiate");
 }
 
-QUrlQuery InitiateLoader::query(const InitiateParams &params) const {
+QUrlQuery InitiateQuickConnectLoader::query(const InitiateQuickConnectParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 
 	QUrlQuery result;
@@ -204,42 +146,13 @@ QUrlQuery InitiateLoader::query(const InitiateParams &params) const {
 	return result;
 }
 
-QByteArray InitiateLoader::body(const InitiateParams &params) const {
+QByteArray InitiateQuickConnectLoader::body(const InitiateQuickConnectParams &params) const {
 	return QByteArray();
 }
 
-QNetworkAccessManager::Operation InitiateLoader::operation() const {
-	// HTTP method Get
-	return QNetworkAccessManager::GetOperation;
-
-}
-
-GetStatusLoader::GetStatusLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<QuickConnectState, GetStatusParams>(apiClient) {}
-
-QString GetStatusLoader::path(const GetStatusParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/QuickConnect/Status");
-}
-
-QUrlQuery GetStatusLoader::query(const GetStatusParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray GetStatusLoader::body(const GetStatusParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation GetStatusLoader::operation() const {
-	// HTTP method Get
-	return QNetworkAccessManager::GetOperation;
+QNetworkAccessManager::Operation InitiateQuickConnectLoader::operation() const {
+	// HTTP method Post
+	return QNetworkAccessManager::PostOperation;
 
 }
 

@@ -38,6 +38,8 @@
 #include <QStringList>
 #include <optional>
 
+#include "JellyfinQt/dto/baseitemkind.h"
+#include "JellyfinQt/dto/mediatype.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -52,9 +54,11 @@ class SearchHint {
 public:
 	SearchHint(	
 		QString itemId,			
-		QString jellyfinId,																																									
-		QString albumId,											
-		QString channelId						
+		QString jellyfinId,			
+		QString name,																					
+		BaseItemKind type,							
+		MediaType mediaType,																	
+		QStringList artists												
 	);
 
 	SearchHint(const SearchHint &other);
@@ -78,9 +82,13 @@ public:
 	*/
 	void setItemId(QString newItemId);
 
-
+	/**
+	 * @brief Gets or sets the item id.
+	 */
 	QString jellyfinId() const;
-
+	/**
+	* @brief Gets or sets the item id.
+	*/
 	void setJellyfinId(QString newJellyfinId);
 
 	/**
@@ -91,8 +99,6 @@ public:
 	* @brief Gets or sets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets or sets the matched term.
@@ -193,20 +199,18 @@ public:
 	bool backdropImageItemIdNull() const;
 	void setBackdropImageItemIdNull();
 
+
+	BaseItemKind type() const;
+
+	void setType(BaseItemKind newType);
+
 	/**
-	 * @brief Gets or sets the type.
+	 * @brief Gets or sets a value indicating whether this instance is folder.
 	 */
-	QString type() const;
-	/**
-	* @brief Gets or sets the type.
-	*/
-	void setType(QString newType);
-	bool typeNull() const;
-	void setTypeNull();
-
-
 	std::optional<bool> isFolder() const;
-
+	/**
+	* @brief Gets or sets a value indicating whether this instance is folder.
+	*/
 	void setIsFolder(std::optional<bool> newIsFolder);
 	bool isFolderNull() const;
 	void setIsFolderNull();
@@ -222,27 +226,29 @@ public:
 	bool runTimeTicksNull() const;
 	void setRunTimeTicksNull();
 
+
+	MediaType mediaType() const;
+
+	void setMediaType(MediaType newMediaType);
+
 	/**
-	 * @brief Gets or sets the type of the media.
+	 * @brief Gets or sets the start date.
 	 */
-	QString mediaType() const;
-	/**
-	* @brief Gets or sets the type of the media.
-	*/
-	void setMediaType(QString newMediaType);
-	bool mediaTypeNull() const;
-	void setMediaTypeNull();
-
-
 	QDateTime startDate() const;
-
+	/**
+	* @brief Gets or sets the start date.
+	*/
 	void setStartDate(QDateTime newStartDate);
 	bool startDateNull() const;
 	void setStartDateNull();
 
-
+	/**
+	 * @brief Gets or sets the end date.
+	 */
 	QDateTime endDate() const;
-
+	/**
+	* @brief Gets or sets the end date.
+	*/
 	void setEndDate(QDateTime newEndDate);
 	bool endDateNull() const;
 	void setEndDateNull();
@@ -258,9 +264,13 @@ public:
 	bool seriesNull() const;
 	void setSeriesNull();
 
-
+	/**
+	 * @brief Gets or sets the status.
+	 */
 	QString status() const;
-
+	/**
+	* @brief Gets or sets the status.
+	*/
 	void setStatus(QString newStatus);
 	bool statusNull() const;
 	void setStatusNull();
@@ -276,10 +286,16 @@ public:
 	bool albumNull() const;
 	void setAlbumNull();
 
-
+	/**
+	 * @brief Gets or sets the album id.
+	 */
 	QString albumId() const;
-
+	/**
+	* @brief Gets or sets the album id.
+	*/
 	void setAlbumId(QString newAlbumId);
+	bool albumIdNull() const;
+	void setAlbumIdNull();
 
 	/**
 	 * @brief Gets or sets the album artist.
@@ -300,8 +316,6 @@ public:
 	* @brief Gets or sets the artists.
 	*/
 	void setArtists(QStringList newArtists);
-	bool artistsNull() const;
-	void setArtistsNull();
 
 	/**
 	 * @brief Gets or sets the song count.
@@ -333,6 +347,8 @@ public:
 	* @brief Gets or sets the channel identifier.
 	*/
 	void setChannelId(QString newChannelId);
+	bool channelIdNull() const;
+	void setChannelIdNull();
 
 	/**
 	 * @brief Gets or sets the name of the channel.
@@ -370,10 +386,10 @@ protected:
 	QString m_thumbImageItemId;
 	QString m_backdropImageTag;
 	QString m_backdropImageItemId;
-	QString m_type;
+	BaseItemKind m_type;
 	std::optional<bool> m_isFolder = std::nullopt;
 	std::optional<qint64> m_runTimeTicks = std::nullopt;
-	QString m_mediaType;
+	MediaType m_mediaType;
 	QDateTime m_startDate;
 	QDateTime m_endDate;
 	QString m_series;

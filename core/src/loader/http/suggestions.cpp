@@ -41,7 +41,7 @@ GetSuggestionsLoader::GetSuggestionsLoader(ApiClient *apiClient)
 QString GetSuggestionsLoader::path(const GetSuggestionsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Suggestions");
+	return QStringLiteral("/Items/Suggestions");
 }
 
 QUrlQuery GetSuggestionsLoader::query(const GetSuggestionsParams &params) const {
@@ -50,11 +50,14 @@ QUrlQuery GetSuggestionsLoader::query(const GetSuggestionsParams &params) const 
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	if (!params.mediaTypeNull()) {
-		result.addQueryItem("mediaType", Support::toString<QStringList>(params.mediaType()));
+		result.addQueryItem("mediaType", Support::toString<QList<MediaType>>(params.mediaType()));
 	}
 	if (!params.typeNull()) {
-		result.addQueryItem("type", Support::toString<QStringList>(params.type()));
+		result.addQueryItem("type", Support::toString<QList<BaseItemKind>>(params.type()));
 	}
 	if (!params.startIndexNull()) {
 		result.addQueryItem("startIndex", Support::toString<std::optional<qint32>>(params.startIndex()));

@@ -66,10 +66,10 @@ QUrlQuery GetMusicGenresLoader::query(const GetMusicGenresParams &params) const 
 		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QList<BaseItemKind>>(params.excludeItemTypes()));
 	}
 	if (!params.includeItemTypesNull()) {
-		result.addQueryItem("includeItemTypes", Support::toString<QStringList>(params.includeItemTypes()));
+		result.addQueryItem("includeItemTypes", Support::toString<QList<BaseItemKind>>(params.includeItemTypes()));
 	}
 	if (!params.isFavoriteNull()) {
 		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
@@ -91,6 +91,12 @@ QUrlQuery GetMusicGenresLoader::query(const GetMusicGenresParams &params) const 
 	}
 	if (!params.nameLessThanNull()) {
 		result.addQueryItem("nameLessThan", Support::toString<QString>(params.nameLessThan()));
+	}
+	if (!params.sortByNull()) {
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
+	}
+	if (!params.sortOrderNull()) {
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
 	}
 	if (!params.enableImagesNull()) {
 		result.addQueryItem("enableImages", Support::toString<std::optional<bool>>(params.enableImages()));

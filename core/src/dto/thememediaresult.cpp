@@ -34,10 +34,12 @@ namespace DTO {
 
 ThemeMediaResult::ThemeMediaResult() {}
 ThemeMediaResult::ThemeMediaResult (
+		QList<BaseItemDto> items, 
 		qint32 totalRecordCount, 
 		qint32 startIndex, 
 		QString ownerId 
 		) :
+	m_items(items),
 	m_totalRecordCount(totalRecordCount),
 	m_startIndex(startIndex),
 	m_ownerId(ownerId) { }
@@ -77,11 +79,7 @@ void ThemeMediaResult::setFromJson(QJsonObject source) {
 QJsonObject ThemeMediaResult::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_items.size() == 0)) {
-		result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);
-	}
-			
+	result["Items"] = Jellyfin::Support::toJsonValue<QList<BaseItemDto>>(m_items);		
 	result["TotalRecordCount"] = Jellyfin::Support::toJsonValue<qint32>(m_totalRecordCount);		
 	result["StartIndex"] = Jellyfin::Support::toJsonValue<qint32>(m_startIndex);		
 	result["OwnerId"] = Jellyfin::Support::toJsonValue<QString>(m_ownerId);	
@@ -93,14 +91,7 @@ QList<BaseItemDto> ThemeMediaResult::items() const { return m_items; }
 void ThemeMediaResult::setItems(QList<BaseItemDto> newItems) {
 	m_items = newItems;
 }
-bool ThemeMediaResult::itemsNull() const {
-	return m_items.size() == 0;
-}
 
-void ThemeMediaResult::setItemsNull() {
-	m_items.clear();
-
-}
 qint32 ThemeMediaResult::totalRecordCount() const { return m_totalRecordCount; }
 
 void ThemeMediaResult::setTotalRecordCount(qint32 newTotalRecordCount) {

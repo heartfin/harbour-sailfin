@@ -34,15 +34,18 @@ namespace DTO {
 
 ArtistInfo::ArtistInfo() {}
 ArtistInfo::ArtistInfo (
-		bool isAutomated 
+		bool isAutomated, 
+		QList<SongInfo> songInfos 
 		) :
-	m_isAutomated(isAutomated) { }
+	m_isAutomated(isAutomated),
+	m_songInfos(songInfos) { }
 
 
 
 ArtistInfo::ArtistInfo(const ArtistInfo &other) :
 
 	m_name(other.m_name),
+	m_originalTitle(other.m_originalTitle),
 	m_path(other.m_path),
 	m_metadataLanguage(other.m_metadataLanguage),
 	m_metadataCountryCode(other.m_metadataCountryCode),
@@ -57,6 +60,7 @@ ArtistInfo::ArtistInfo(const ArtistInfo &other) :
 
 void ArtistInfo::replaceData(ArtistInfo &other) {
 	m_name = other.m_name;
+	m_originalTitle = other.m_originalTitle;
 	m_path = other.m_path;
 	m_metadataLanguage = other.m_metadataLanguage;
 	m_metadataCountryCode = other.m_metadataCountryCode;
@@ -78,6 +82,7 @@ ArtistInfo ArtistInfo::fromJson(QJsonObject source) {
 
 void ArtistInfo::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_originalTitle = Jellyfin::Support::fromJsonValue<QString>(source["OriginalTitle"]);
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
@@ -97,6 +102,11 @@ QJsonObject ArtistInfo::toJson() const {
 	
 	if (!(m_name.isNull())) {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_originalTitle.isNull())) {
+		result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
 	}
 			
 	
@@ -140,11 +150,7 @@ QJsonObject ArtistInfo::toJson() const {
 	}
 			
 	result["IsAutomated"] = Jellyfin::Support::toJsonValue<bool>(m_isAutomated);		
-	
-	if (!(m_songInfos.size() == 0)) {
-		result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<SongInfo>>(m_songInfos);
-	}
-		
+	result["SongInfos"] = Jellyfin::Support::toJsonValue<QList<SongInfo>>(m_songInfos);	
 	return result;
 }
 
@@ -159,6 +165,19 @@ bool ArtistInfo::nameNull() const {
 
 void ArtistInfo::setNameNull() {
 	m_name.clear();
+
+}
+QString ArtistInfo::originalTitle() const { return m_originalTitle; }
+
+void ArtistInfo::setOriginalTitle(QString newOriginalTitle) {
+	m_originalTitle = newOriginalTitle;
+}
+bool ArtistInfo::originalTitleNull() const {
+	return m_originalTitle.isNull();
+}
+
+void ArtistInfo::setOriginalTitleNull() {
+	m_originalTitle.clear();
 
 }
 QString ArtistInfo::path() const { return m_path; }
@@ -276,14 +295,7 @@ QList<SongInfo> ArtistInfo::songInfos() const { return m_songInfos; }
 void ArtistInfo::setSongInfos(QList<SongInfo> newSongInfos) {
 	m_songInfos = newSongInfos;
 }
-bool ArtistInfo::songInfosNull() const {
-	return m_songInfos.size() == 0;
-}
 
-void ArtistInfo::setSongInfosNull() {
-	m_songInfos.clear();
-
-}
 
 } // NS DTO
 

@@ -49,7 +49,17 @@ namespace DTO {
 
 
 class PackageInfo {
-public:	PackageInfo();
+public:
+	PackageInfo(	
+		QString name,			
+		QString description,			
+		QString overview,			
+		QString owner,			
+		QString category,			
+		QString guid,			
+		QList<VersionInfo> versions				
+	);
+
 	PackageInfo(const PackageInfo &other);
 	
 	/**
@@ -70,8 +80,6 @@ public:	PackageInfo();
 	* @brief Gets or sets the name.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets or sets a long description of the plugin containing features or helpful explanations.
@@ -81,8 +89,6 @@ public:	PackageInfo();
 	* @brief Gets or sets a long description of the plugin containing features or helpful explanations.
 	*/
 	void setDescription(QString newDescription);
-	bool descriptionNull() const;
-	void setDescriptionNull();
 
 	/**
 	 * @brief Gets or sets a short overview of what the plugin does.
@@ -92,8 +98,6 @@ public:	PackageInfo();
 	* @brief Gets or sets a short overview of what the plugin does.
 	*/
 	void setOverview(QString newOverview);
-	bool overviewNull() const;
-	void setOverviewNull();
 
 	/**
 	 * @brief Gets or sets the owner.
@@ -103,8 +107,6 @@ public:	PackageInfo();
 	* @brief Gets or sets the owner.
 	*/
 	void setOwner(QString newOwner);
-	bool ownerNull() const;
-	void setOwnerNull();
 
 	/**
 	 * @brief Gets or sets the category.
@@ -114,8 +116,6 @@ public:	PackageInfo();
 	* @brief Gets or sets the category.
 	*/
 	void setCategory(QString newCategory);
-	bool categoryNull() const;
-	void setCategoryNull();
 
 	/**
 	 * @brief Gets or sets the guid of the assembly associated with this plugin.
@@ -127,8 +127,6 @@ This is used to identify the proper item for automatic updates.
 This is used to identify the proper item for automatic updates.
 	*/
 	void setGuid(QString newGuid);
-	bool guidNull() const;
-	void setGuidNull();
 
 	/**
 	 * @brief Gets or sets the versions.
@@ -138,8 +136,6 @@ This is used to identify the proper item for automatic updates.
 	* @brief Gets or sets the versions.
 	*/
 	void setVersions(QList<VersionInfo> newVersions);
-	bool versionsNull() const;
-	void setVersionsNull();
 
 	/**
 	 * @brief Gets or sets the image url for the package.
@@ -163,7 +159,9 @@ protected:
 	QList<VersionInfo> m_versions;
 	QString m_imageUrl;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing PackageInfo::fromJson();
+	PackageInfo();
 };
 
 

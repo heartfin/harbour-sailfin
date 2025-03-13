@@ -49,8 +49,10 @@ namespace DTO {
 
 class LiveTvInfo {
 public:
-	LiveTvInfo(			
-		bool isEnabled				
+	LiveTvInfo(	
+		QList<LiveTvServiceInfo> services,			
+		bool isEnabled,			
+		QStringList enabledUsers		
 	);
 
 	LiveTvInfo(const LiveTvInfo &other);
@@ -73,8 +75,6 @@ public:
 	* @brief Gets or sets the services.
 	*/
 	void setServices(QList<LiveTvServiceInfo> newServices);
-	bool servicesNull() const;
-	void setServicesNull();
 
 	/**
 	 * @brief Gets or sets a value indicating whether this instance is enabled.
@@ -93,8 +93,6 @@ public:
 	* @brief Gets or sets the enabled users.
 	*/
 	void setEnabledUsers(QStringList newEnabledUsers);
-	bool enabledUsersNull() const;
-	void setEnabledUsersNull();
 
 
 protected:

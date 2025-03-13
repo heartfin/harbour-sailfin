@@ -46,7 +46,11 @@ namespace DTO {
 
 
 class CreateUserByName {
-public:	CreateUserByName();
+public:
+	CreateUserByName(	
+		QString name				
+	);
+
 	CreateUserByName(const CreateUserByName &other);
 	
 	/**
@@ -67,8 +71,6 @@ public:	CreateUserByName();
 	* @brief Gets or sets the username.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets or sets the password.
@@ -86,7 +88,9 @@ protected:
 	QString m_name;
 	QString m_password;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing CreateUserByName::fromJson();
+	CreateUserByName();
 };
 
 

@@ -46,6 +46,7 @@ MediaSourceInfo::MediaSourceInfo (
 		bool supportsDirectStream, 
 		bool supportsDirectPlay, 
 		bool isInfiniteStream, 
+		std::optional<bool> useMostCompatibleTranscodingProfile, 
 		bool requiresOpening, 
 		bool requiresClosing, 
 		bool requiresLooping, 
@@ -53,7 +54,9 @@ MediaSourceInfo::MediaSourceInfo (
 		VideoType videoType, 
 		IsoType isoType, 
 		Video3DFormat video3DFormat, 
-		TransportStreamTimestamp timestamp 
+		TransportStreamTimestamp timestamp, 
+		MediaStreamProtocol transcodingSubProtocol, 
+		bool hasSegments 
 		) :
 	m_protocol(protocol),
 	m_encoderProtocol(encoderProtocol),
@@ -67,6 +70,7 @@ MediaSourceInfo::MediaSourceInfo (
 	m_supportsDirectStream(supportsDirectStream),
 	m_supportsDirectPlay(supportsDirectPlay),
 	m_isInfiniteStream(isInfiniteStream),
+	m_useMostCompatibleTranscodingProfile(useMostCompatibleTranscodingProfile),
 	m_requiresOpening(requiresOpening),
 	m_requiresClosing(requiresClosing),
 	m_requiresLooping(requiresLooping),
@@ -74,7 +78,9 @@ MediaSourceInfo::MediaSourceInfo (
 	m_videoType(videoType),
 	m_isoType(isoType),
 	m_video3DFormat(video3DFormat),
-	m_timestamp(timestamp) { }
+	m_timestamp(timestamp),
+	m_transcodingSubProtocol(transcodingSubProtocol),
+	m_hasSegments(hasSegments) { }
 
 
 
@@ -100,6 +106,7 @@ MediaSourceInfo::MediaSourceInfo(const MediaSourceInfo &other) :
 	m_supportsDirectStream(other.m_supportsDirectStream),
 	m_supportsDirectPlay(other.m_supportsDirectPlay),
 	m_isInfiniteStream(other.m_isInfiniteStream),
+	m_useMostCompatibleTranscodingProfile(other.m_useMostCompatibleTranscodingProfile),
 	m_requiresOpening(other.m_requiresOpening),
 	m_openToken(other.m_openToken),
 	m_requiresClosing(other.m_requiresClosing),
@@ -114,6 +121,7 @@ MediaSourceInfo::MediaSourceInfo(const MediaSourceInfo &other) :
 	m_mediaAttachments(other.m_mediaAttachments),
 	m_formats(other.m_formats),
 	m_bitrate(other.m_bitrate),
+	m_fallbackMaxStreamingBitrate(other.m_fallbackMaxStreamingBitrate),
 	m_timestamp(other.m_timestamp),
 	m_requiredHttpHeaders(other.m_requiredHttpHeaders),
 	m_transcodingUrl(other.m_transcodingUrl),
@@ -121,7 +129,8 @@ MediaSourceInfo::MediaSourceInfo(const MediaSourceInfo &other) :
 	m_transcodingContainer(other.m_transcodingContainer),
 	m_analyzeDurationMs(other.m_analyzeDurationMs),
 	m_defaultAudioStreamIndex(other.m_defaultAudioStreamIndex),
-	m_defaultSubtitleStreamIndex(other.m_defaultSubtitleStreamIndex){}
+	m_defaultSubtitleStreamIndex(other.m_defaultSubtitleStreamIndex),
+	m_hasSegments(other.m_hasSegments){}
 
 
 void MediaSourceInfo::replaceData(MediaSourceInfo &other) {
@@ -145,6 +154,7 @@ void MediaSourceInfo::replaceData(MediaSourceInfo &other) {
 	m_supportsDirectStream = other.m_supportsDirectStream;
 	m_supportsDirectPlay = other.m_supportsDirectPlay;
 	m_isInfiniteStream = other.m_isInfiniteStream;
+	m_useMostCompatibleTranscodingProfile = other.m_useMostCompatibleTranscodingProfile;
 	m_requiresOpening = other.m_requiresOpening;
 	m_openToken = other.m_openToken;
 	m_requiresClosing = other.m_requiresClosing;
@@ -159,6 +169,7 @@ void MediaSourceInfo::replaceData(MediaSourceInfo &other) {
 	m_mediaAttachments = other.m_mediaAttachments;
 	m_formats = other.m_formats;
 	m_bitrate = other.m_bitrate;
+	m_fallbackMaxStreamingBitrate = other.m_fallbackMaxStreamingBitrate;
 	m_timestamp = other.m_timestamp;
 	m_requiredHttpHeaders = other.m_requiredHttpHeaders;
 	m_transcodingUrl = other.m_transcodingUrl;
@@ -167,6 +178,7 @@ void MediaSourceInfo::replaceData(MediaSourceInfo &other) {
 	m_analyzeDurationMs = other.m_analyzeDurationMs;
 	m_defaultAudioStreamIndex = other.m_defaultAudioStreamIndex;
 	m_defaultSubtitleStreamIndex = other.m_defaultSubtitleStreamIndex;
+	m_hasSegments = other.m_hasSegments;
 }
 
 MediaSourceInfo MediaSourceInfo::fromJson(QJsonObject source) {
@@ -197,6 +209,7 @@ void MediaSourceInfo::setFromJson(QJsonObject source) {
 	m_supportsDirectStream = Jellyfin::Support::fromJsonValue<bool>(source["SupportsDirectStream"]);
 	m_supportsDirectPlay = Jellyfin::Support::fromJsonValue<bool>(source["SupportsDirectPlay"]);
 	m_isInfiniteStream = Jellyfin::Support::fromJsonValue<bool>(source["IsInfiniteStream"]);
+	m_useMostCompatibleTranscodingProfile = Jellyfin::Support::fromJsonValue<std::optional<bool>>(source["UseMostCompatibleTranscodingProfile"]);
 	m_requiresOpening = Jellyfin::Support::fromJsonValue<bool>(source["RequiresOpening"]);
 	m_openToken = Jellyfin::Support::fromJsonValue<QString>(source["OpenToken"]);
 	m_requiresClosing = Jellyfin::Support::fromJsonValue<bool>(source["RequiresClosing"]);
@@ -211,14 +224,16 @@ void MediaSourceInfo::setFromJson(QJsonObject source) {
 	m_mediaAttachments = Jellyfin::Support::fromJsonValue<QList<MediaAttachment>>(source["MediaAttachments"]);
 	m_formats = Jellyfin::Support::fromJsonValue<QStringList>(source["Formats"]);
 	m_bitrate = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Bitrate"]);
+	m_fallbackMaxStreamingBitrate = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["FallbackMaxStreamingBitrate"]);
 	m_timestamp = Jellyfin::Support::fromJsonValue<TransportStreamTimestamp>(source["Timestamp"]);
 	m_requiredHttpHeaders = Jellyfin::Support::fromJsonValue<QJsonObject>(source["RequiredHttpHeaders"]);
 	m_transcodingUrl = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingUrl"]);
-	m_transcodingSubProtocol = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingSubProtocol"]);
+	m_transcodingSubProtocol = Jellyfin::Support::fromJsonValue<MediaStreamProtocol>(source["TranscodingSubProtocol"]);
 	m_transcodingContainer = Jellyfin::Support::fromJsonValue<QString>(source["TranscodingContainer"]);
 	m_analyzeDurationMs = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["AnalyzeDurationMs"]);
 	m_defaultAudioStreamIndex = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["DefaultAudioStreamIndex"]);
 	m_defaultSubtitleStreamIndex = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["DefaultSubtitleStreamIndex"]);
+	m_hasSegments = Jellyfin::Support::fromJsonValue<bool>(source["HasSegments"]);
 
 }
 	
@@ -277,6 +292,7 @@ QJsonObject MediaSourceInfo::toJson() const {
 	result["SupportsDirectStream"] = Jellyfin::Support::toJsonValue<bool>(m_supportsDirectStream);		
 	result["SupportsDirectPlay"] = Jellyfin::Support::toJsonValue<bool>(m_supportsDirectPlay);		
 	result["IsInfiniteStream"] = Jellyfin::Support::toJsonValue<bool>(m_isInfiniteStream);		
+	result["UseMostCompatibleTranscodingProfile"] = Jellyfin::Support::toJsonValue<std::optional<bool>>(m_useMostCompatibleTranscodingProfile);		
 	result["RequiresOpening"] = Jellyfin::Support::toJsonValue<bool>(m_requiresOpening);		
 	
 	if (!(m_openToken.isNull())) {
@@ -319,6 +335,11 @@ QJsonObject MediaSourceInfo::toJson() const {
 		result["Bitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_bitrate);
 	}
 			
+	
+	if (!(!m_fallbackMaxStreamingBitrate.has_value())) {
+		result["FallbackMaxStreamingBitrate"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_fallbackMaxStreamingBitrate);
+	}
+			
 	result["Timestamp"] = Jellyfin::Support::toJsonValue<TransportStreamTimestamp>(m_timestamp);		
 	
 	if (!(m_requiredHttpHeaders.isEmpty())) {
@@ -330,11 +351,7 @@ QJsonObject MediaSourceInfo::toJson() const {
 		result["TranscodingUrl"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingUrl);
 	}
 			
-	
-	if (!(m_transcodingSubProtocol.isNull())) {
-		result["TranscodingSubProtocol"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingSubProtocol);
-	}
-			
+	result["TranscodingSubProtocol"] = Jellyfin::Support::toJsonValue<MediaStreamProtocol>(m_transcodingSubProtocol);		
 	
 	if (!(m_transcodingContainer.isNull())) {
 		result["TranscodingContainer"] = Jellyfin::Support::toJsonValue<QString>(m_transcodingContainer);
@@ -354,7 +371,8 @@ QJsonObject MediaSourceInfo::toJson() const {
 	if (!(!m_defaultSubtitleStreamIndex.has_value())) {
 		result["DefaultSubtitleStreamIndex"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_defaultSubtitleStreamIndex);
 	}
-		
+			
+	result["HasSegments"] = Jellyfin::Support::toJsonValue<bool>(m_hasSegments);	
 	return result;
 }
 
@@ -534,6 +552,12 @@ void MediaSourceInfo::setIsInfiniteStream(bool newIsInfiniteStream) {
 	m_isInfiniteStream = newIsInfiniteStream;
 }
 
+std::optional<bool> MediaSourceInfo::useMostCompatibleTranscodingProfile() const { return m_useMostCompatibleTranscodingProfile; }
+
+void MediaSourceInfo::setUseMostCompatibleTranscodingProfile(std::optional<bool> newUseMostCompatibleTranscodingProfile) {
+	m_useMostCompatibleTranscodingProfile = newUseMostCompatibleTranscodingProfile;
+}
+
 bool MediaSourceInfo::requiresOpening() const { return m_requiresOpening; }
 
 void MediaSourceInfo::setRequiresOpening(bool newRequiresOpening) {
@@ -667,6 +691,19 @@ void MediaSourceInfo::setBitrateNull() {
 	m_bitrate = std::nullopt;
 
 }
+std::optional<qint32> MediaSourceInfo::fallbackMaxStreamingBitrate() const { return m_fallbackMaxStreamingBitrate; }
+
+void MediaSourceInfo::setFallbackMaxStreamingBitrate(std::optional<qint32> newFallbackMaxStreamingBitrate) {
+	m_fallbackMaxStreamingBitrate = newFallbackMaxStreamingBitrate;
+}
+bool MediaSourceInfo::fallbackMaxStreamingBitrateNull() const {
+	return !m_fallbackMaxStreamingBitrate.has_value();
+}
+
+void MediaSourceInfo::setFallbackMaxStreamingBitrateNull() {
+	m_fallbackMaxStreamingBitrate = std::nullopt;
+
+}
 TransportStreamTimestamp MediaSourceInfo::timestamp() const { return m_timestamp; }
 
 void MediaSourceInfo::setTimestamp(TransportStreamTimestamp newTimestamp) {
@@ -699,19 +736,12 @@ void MediaSourceInfo::setTranscodingUrlNull() {
 	m_transcodingUrl.clear();
 
 }
-QString MediaSourceInfo::transcodingSubProtocol() const { return m_transcodingSubProtocol; }
+MediaStreamProtocol MediaSourceInfo::transcodingSubProtocol() const { return m_transcodingSubProtocol; }
 
-void MediaSourceInfo::setTranscodingSubProtocol(QString newTranscodingSubProtocol) {
+void MediaSourceInfo::setTranscodingSubProtocol(MediaStreamProtocol newTranscodingSubProtocol) {
 	m_transcodingSubProtocol = newTranscodingSubProtocol;
 }
-bool MediaSourceInfo::transcodingSubProtocolNull() const {
-	return m_transcodingSubProtocol.isNull();
-}
 
-void MediaSourceInfo::setTranscodingSubProtocolNull() {
-	m_transcodingSubProtocol.clear();
-
-}
 QString MediaSourceInfo::transcodingContainer() const { return m_transcodingContainer; }
 
 void MediaSourceInfo::setTranscodingContainer(QString newTranscodingContainer) {
@@ -764,6 +794,12 @@ void MediaSourceInfo::setDefaultSubtitleStreamIndexNull() {
 	m_defaultSubtitleStreamIndex = std::nullopt;
 
 }
+bool MediaSourceInfo::hasSegments() const { return m_hasSegments; }
+
+void MediaSourceInfo::setHasSegments(bool newHasSegments) {
+	m_hasSegments = newHasSegments;
+}
+
 
 } // NS DTO
 

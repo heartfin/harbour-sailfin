@@ -34,8 +34,20 @@ namespace DTO {
 
 LibraryUpdateInfo::LibraryUpdateInfo() {}
 LibraryUpdateInfo::LibraryUpdateInfo (
+		QStringList foldersAddedTo, 
+		QStringList foldersRemovedFrom, 
+		QStringList itemsAdded, 
+		QStringList itemsRemoved, 
+		QStringList itemsUpdated, 
+		QStringList collectionFolders, 
 		bool isEmpty 
 		) :
+	m_foldersAddedTo(foldersAddedTo),
+	m_foldersRemovedFrom(foldersRemovedFrom),
+	m_itemsAdded(itemsAdded),
+	m_itemsRemoved(itemsRemoved),
+	m_itemsUpdated(itemsUpdated),
+	m_collectionFolders(collectionFolders),
 	m_isEmpty(isEmpty) { }
 
 
@@ -82,36 +94,12 @@ void LibraryUpdateInfo::setFromJson(QJsonObject source) {
 QJsonObject LibraryUpdateInfo::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_foldersAddedTo.size() == 0)) {
-		result["FoldersAddedTo"] = Jellyfin::Support::toJsonValue<QStringList>(m_foldersAddedTo);
-	}
-			
-	
-	if (!(m_foldersRemovedFrom.size() == 0)) {
-		result["FoldersRemovedFrom"] = Jellyfin::Support::toJsonValue<QStringList>(m_foldersRemovedFrom);
-	}
-			
-	
-	if (!(m_itemsAdded.size() == 0)) {
-		result["ItemsAdded"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemsAdded);
-	}
-			
-	
-	if (!(m_itemsRemoved.size() == 0)) {
-		result["ItemsRemoved"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemsRemoved);
-	}
-			
-	
-	if (!(m_itemsUpdated.size() == 0)) {
-		result["ItemsUpdated"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemsUpdated);
-	}
-			
-	
-	if (!(m_collectionFolders.size() == 0)) {
-		result["CollectionFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_collectionFolders);
-	}
-			
+	result["FoldersAddedTo"] = Jellyfin::Support::toJsonValue<QStringList>(m_foldersAddedTo);		
+	result["FoldersRemovedFrom"] = Jellyfin::Support::toJsonValue<QStringList>(m_foldersRemovedFrom);		
+	result["ItemsAdded"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemsAdded);		
+	result["ItemsRemoved"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemsRemoved);		
+	result["ItemsUpdated"] = Jellyfin::Support::toJsonValue<QStringList>(m_itemsUpdated);		
+	result["CollectionFolders"] = Jellyfin::Support::toJsonValue<QStringList>(m_collectionFolders);		
 	result["IsEmpty"] = Jellyfin::Support::toJsonValue<bool>(m_isEmpty);	
 	return result;
 }
@@ -121,79 +109,37 @@ QStringList LibraryUpdateInfo::foldersAddedTo() const { return m_foldersAddedTo;
 void LibraryUpdateInfo::setFoldersAddedTo(QStringList newFoldersAddedTo) {
 	m_foldersAddedTo = newFoldersAddedTo;
 }
-bool LibraryUpdateInfo::foldersAddedToNull() const {
-	return m_foldersAddedTo.size() == 0;
-}
 
-void LibraryUpdateInfo::setFoldersAddedToNull() {
-	m_foldersAddedTo.clear();
-
-}
 QStringList LibraryUpdateInfo::foldersRemovedFrom() const { return m_foldersRemovedFrom; }
 
 void LibraryUpdateInfo::setFoldersRemovedFrom(QStringList newFoldersRemovedFrom) {
 	m_foldersRemovedFrom = newFoldersRemovedFrom;
 }
-bool LibraryUpdateInfo::foldersRemovedFromNull() const {
-	return m_foldersRemovedFrom.size() == 0;
-}
 
-void LibraryUpdateInfo::setFoldersRemovedFromNull() {
-	m_foldersRemovedFrom.clear();
-
-}
 QStringList LibraryUpdateInfo::itemsAdded() const { return m_itemsAdded; }
 
 void LibraryUpdateInfo::setItemsAdded(QStringList newItemsAdded) {
 	m_itemsAdded = newItemsAdded;
 }
-bool LibraryUpdateInfo::itemsAddedNull() const {
-	return m_itemsAdded.size() == 0;
-}
 
-void LibraryUpdateInfo::setItemsAddedNull() {
-	m_itemsAdded.clear();
-
-}
 QStringList LibraryUpdateInfo::itemsRemoved() const { return m_itemsRemoved; }
 
 void LibraryUpdateInfo::setItemsRemoved(QStringList newItemsRemoved) {
 	m_itemsRemoved = newItemsRemoved;
 }
-bool LibraryUpdateInfo::itemsRemovedNull() const {
-	return m_itemsRemoved.size() == 0;
-}
 
-void LibraryUpdateInfo::setItemsRemovedNull() {
-	m_itemsRemoved.clear();
-
-}
 QStringList LibraryUpdateInfo::itemsUpdated() const { return m_itemsUpdated; }
 
 void LibraryUpdateInfo::setItemsUpdated(QStringList newItemsUpdated) {
 	m_itemsUpdated = newItemsUpdated;
 }
-bool LibraryUpdateInfo::itemsUpdatedNull() const {
-	return m_itemsUpdated.size() == 0;
-}
 
-void LibraryUpdateInfo::setItemsUpdatedNull() {
-	m_itemsUpdated.clear();
-
-}
 QStringList LibraryUpdateInfo::collectionFolders() const { return m_collectionFolders; }
 
 void LibraryUpdateInfo::setCollectionFolders(QStringList newCollectionFolders) {
 	m_collectionFolders = newCollectionFolders;
 }
-bool LibraryUpdateInfo::collectionFoldersNull() const {
-	return m_collectionFolders.size() == 0;
-}
 
-void LibraryUpdateInfo::setCollectionFoldersNull() {
-	m_collectionFolders.clear();
-
-}
 bool LibraryUpdateInfo::isEmpty() const { return m_isEmpty; }
 
 void LibraryUpdateInfo::setIsEmpty(bool newIsEmpty) {

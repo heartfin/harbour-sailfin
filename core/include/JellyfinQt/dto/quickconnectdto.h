@@ -48,7 +48,7 @@ namespace DTO {
 class QuickConnectDto {
 public:
 	QuickConnectDto(	
-		QString token		
+		QString secret		
 	);
 
 	QuickConnectDto(const QuickConnectDto &other);
@@ -64,17 +64,17 @@ public:
 	
 	// Properties
 	/**
-	 * @brief Gets or sets the quick connect token.
+	 * @brief Gets or sets the quick connect secret.
 	 */
-	QString token() const;
+	QString secret() const;
 	/**
-	* @brief Gets or sets the quick connect token.
+	* @brief Gets or sets the quick connect secret.
 	*/
-	void setToken(QString newToken);
+	void setSecret(QString newSecret);
 
 
 protected:
-	QString m_token;
+	QString m_secret;
 
 private:
 	// Private constructor which generates an invalid object, for use withing QuickConnectDto::fromJson();

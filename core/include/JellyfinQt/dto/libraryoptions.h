@@ -37,6 +37,7 @@
 #include <QStringList>
 #include <optional>
 
+#include "JellyfinQt/dto/embeddedsubtitleoptions.h"
 #include "JellyfinQt/dto/mediapathinfo.h"
 #include "JellyfinQt/dto/typeoptions.h"
 #include "JellyfinQt/support/jsonconv.h"
@@ -52,20 +53,43 @@ namespace DTO {
 class LibraryOptions {
 public:
 	LibraryOptions(	
+		bool enabled,			
 		bool enablePhotos,			
 		bool enableRealtimeMonitor,			
+		bool enableLUFSScan,			
 		bool enableChapterImageExtraction,			
-		bool extractChapterImagesDuringLibraryScan,					
+		bool extractChapterImagesDuringLibraryScan,			
+		bool enableTrickplayImageExtraction,			
+		bool extractTrickplayImagesDuringLibraryScan,			
+		QList<MediaPathInfo> pathInfos,			
 		bool saveLocalMetadata,			
 		bool enableInternetProviders,			
 		bool enableAutomaticSeriesGrouping,			
 		bool enableEmbeddedTitles,			
+		bool enableEmbeddedExtrasTitles,			
 		bool enableEmbeddedEpisodeInfos,			
-		qint32 automaticRefreshIntervalDays,																			
+		qint32 automaticRefreshIntervalDays,							
+		QString seasonZeroDisplayName,					
+		QStringList disabledLocalMetadataReaders,					
+		QStringList disabledSubtitleFetchers,			
+		QStringList subtitleFetcherOrder,			
+		QStringList disabledMediaSegmentProviders,			
+		QStringList mediaSegmentProvideOrder,			
 		bool skipSubtitlesIfEmbeddedSubtitlesPresent,			
 		bool skipSubtitlesIfAudioTrackMatches,					
 		bool requirePerfectSubtitleMatch,			
-		bool saveSubtitlesWithMedia				
+		bool saveSubtitlesWithMedia,			
+		std::optional<bool> saveLyricsWithMedia,			
+		std::optional<bool> saveTrickplayWithMedia,			
+		QStringList disabledLyricFetchers,			
+		QStringList lyricFetcherOrder,			
+		std::optional<bool> preferNonstandardArtistsTag,			
+		std::optional<bool> useCustomTagDelimiters,			
+		QStringList customTagDelimiters,			
+		QStringList delimiterWhitelist,			
+		bool automaticallyAddToCollection,			
+		EmbeddedSubtitleOptions allowEmbeddedSubtitles,			
+		QList<TypeOptions> typeOptions		
 	);
 
 	LibraryOptions(const LibraryOptions &other);
@@ -81,6 +105,11 @@ public:
 	
 	// Properties
 
+	bool enabled() const;
+
+	void setEnabled(bool newEnabled);
+
+
 	bool enablePhotos() const;
 
 	void setEnablePhotos(bool newEnablePhotos);
@@ -89,6 +118,11 @@ public:
 	bool enableRealtimeMonitor() const;
 
 	void setEnableRealtimeMonitor(bool newEnableRealtimeMonitor);
+
+
+	bool enableLUFSScan() const;
+
+	void setEnableLUFSScan(bool newEnableLUFSScan);
 
 
 	bool enableChapterImageExtraction() const;
@@ -101,11 +135,19 @@ public:
 	void setExtractChapterImagesDuringLibraryScan(bool newExtractChapterImagesDuringLibraryScan);
 
 
+	bool enableTrickplayImageExtraction() const;
+
+	void setEnableTrickplayImageExtraction(bool newEnableTrickplayImageExtraction);
+
+
+	bool extractTrickplayImagesDuringLibraryScan() const;
+
+	void setExtractTrickplayImagesDuringLibraryScan(bool newExtractTrickplayImagesDuringLibraryScan);
+
+
 	QList<MediaPathInfo> pathInfos() const;
 
 	void setPathInfos(QList<MediaPathInfo> newPathInfos);
-	bool pathInfosNull() const;
-	void setPathInfosNull();
 
 
 	bool saveLocalMetadata() const;
@@ -126,6 +168,11 @@ public:
 	bool enableEmbeddedTitles() const;
 
 	void setEnableEmbeddedTitles(bool newEnableEmbeddedTitles);
+
+
+	bool enableEmbeddedExtrasTitles() const;
+
+	void setEnableEmbeddedExtrasTitles(bool newEnableEmbeddedExtrasTitles);
 
 
 	bool enableEmbeddedEpisodeInfos() const;
@@ -163,8 +210,6 @@ public:
 	QString seasonZeroDisplayName() const;
 
 	void setSeasonZeroDisplayName(QString newSeasonZeroDisplayName);
-	bool seasonZeroDisplayNameNull() const;
-	void setSeasonZeroDisplayNameNull();
 
 
 	QStringList metadataSavers() const;
@@ -177,8 +222,6 @@ public:
 	QStringList disabledLocalMetadataReaders() const;
 
 	void setDisabledLocalMetadataReaders(QStringList newDisabledLocalMetadataReaders);
-	bool disabledLocalMetadataReadersNull() const;
-	void setDisabledLocalMetadataReadersNull();
 
 
 	QStringList localMetadataReaderOrder() const;
@@ -191,15 +234,21 @@ public:
 	QStringList disabledSubtitleFetchers() const;
 
 	void setDisabledSubtitleFetchers(QStringList newDisabledSubtitleFetchers);
-	bool disabledSubtitleFetchersNull() const;
-	void setDisabledSubtitleFetchersNull();
 
 
 	QStringList subtitleFetcherOrder() const;
 
 	void setSubtitleFetcherOrder(QStringList newSubtitleFetcherOrder);
-	bool subtitleFetcherOrderNull() const;
-	void setSubtitleFetcherOrderNull();
+
+
+	QStringList disabledMediaSegmentProviders() const;
+
+	void setDisabledMediaSegmentProviders(QStringList newDisabledMediaSegmentProviders);
+
+
+	QStringList mediaSegmentProvideOrder() const;
+
+	void setMediaSegmentProvideOrder(QStringList newMediaSegmentProvideOrder);
 
 
 	bool skipSubtitlesIfEmbeddedSubtitlesPresent() const;
@@ -229,23 +278,76 @@ public:
 	void setSaveSubtitlesWithMedia(bool newSaveSubtitlesWithMedia);
 
 
+	std::optional<bool> saveLyricsWithMedia() const;
+
+	void setSaveLyricsWithMedia(std::optional<bool> newSaveLyricsWithMedia);
+
+
+	std::optional<bool> saveTrickplayWithMedia() const;
+
+	void setSaveTrickplayWithMedia(std::optional<bool> newSaveTrickplayWithMedia);
+
+
+	QStringList disabledLyricFetchers() const;
+
+	void setDisabledLyricFetchers(QStringList newDisabledLyricFetchers);
+
+
+	QStringList lyricFetcherOrder() const;
+
+	void setLyricFetcherOrder(QStringList newLyricFetcherOrder);
+
+
+	std::optional<bool> preferNonstandardArtistsTag() const;
+
+	void setPreferNonstandardArtistsTag(std::optional<bool> newPreferNonstandardArtistsTag);
+
+
+	std::optional<bool> useCustomTagDelimiters() const;
+
+	void setUseCustomTagDelimiters(std::optional<bool> newUseCustomTagDelimiters);
+
+
+	QStringList customTagDelimiters() const;
+
+	void setCustomTagDelimiters(QStringList newCustomTagDelimiters);
+
+
+	QStringList delimiterWhitelist() const;
+
+	void setDelimiterWhitelist(QStringList newDelimiterWhitelist);
+
+
+	bool automaticallyAddToCollection() const;
+
+	void setAutomaticallyAddToCollection(bool newAutomaticallyAddToCollection);
+
+
+	EmbeddedSubtitleOptions allowEmbeddedSubtitles() const;
+
+	void setAllowEmbeddedSubtitles(EmbeddedSubtitleOptions newAllowEmbeddedSubtitles);
+
+
 	QList<TypeOptions> typeOptions() const;
 
 	void setTypeOptions(QList<TypeOptions> newTypeOptions);
-	bool typeOptionsNull() const;
-	void setTypeOptionsNull();
 
 
 protected:
+	bool m_enabled;
 	bool m_enablePhotos;
 	bool m_enableRealtimeMonitor;
+	bool m_enableLUFSScan;
 	bool m_enableChapterImageExtraction;
 	bool m_extractChapterImagesDuringLibraryScan;
+	bool m_enableTrickplayImageExtraction;
+	bool m_extractTrickplayImagesDuringLibraryScan;
 	QList<MediaPathInfo> m_pathInfos;
 	bool m_saveLocalMetadata;
 	bool m_enableInternetProviders;
 	bool m_enableAutomaticSeriesGrouping;
 	bool m_enableEmbeddedTitles;
+	bool m_enableEmbeddedExtrasTitles;
 	bool m_enableEmbeddedEpisodeInfos;
 	qint32 m_automaticRefreshIntervalDays;
 	QString m_preferredMetadataLanguage;
@@ -256,11 +358,23 @@ protected:
 	QStringList m_localMetadataReaderOrder;
 	QStringList m_disabledSubtitleFetchers;
 	QStringList m_subtitleFetcherOrder;
+	QStringList m_disabledMediaSegmentProviders;
+	QStringList m_mediaSegmentProvideOrder;
 	bool m_skipSubtitlesIfEmbeddedSubtitlesPresent;
 	bool m_skipSubtitlesIfAudioTrackMatches;
 	QStringList m_subtitleDownloadLanguages;
 	bool m_requirePerfectSubtitleMatch;
 	bool m_saveSubtitlesWithMedia;
+	std::optional<bool> m_saveLyricsWithMedia = std::nullopt;
+	std::optional<bool> m_saveTrickplayWithMedia = std::nullopt;
+	QStringList m_disabledLyricFetchers;
+	QStringList m_lyricFetcherOrder;
+	std::optional<bool> m_preferNonstandardArtistsTag = std::nullopt;
+	std::optional<bool> m_useCustomTagDelimiters = std::nullopt;
+	QStringList m_customTagDelimiters;
+	QStringList m_delimiterWhitelist;
+	bool m_automaticallyAddToCollection;
+	EmbeddedSubtitleOptions m_allowEmbeddedSubtitles;
 	QList<TypeOptions> m_typeOptions;
 
 private:

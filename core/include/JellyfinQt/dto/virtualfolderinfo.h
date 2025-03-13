@@ -38,6 +38,7 @@
 #include <QStringList>
 #include <optional>
 
+#include "JellyfinQt/dto/collectiontypeoptions.h"
 #include "JellyfinQt/dto/libraryoptions.h"
 #include "JellyfinQt/support/jsonconv.h"
 
@@ -51,7 +52,8 @@ namespace DTO {
 
 class VirtualFolderInfo {
 public:
-	VirtualFolderInfo(							
+	VirtualFolderInfo(					
+		CollectionTypeOptions collectionType,			
 		QSharedPointer<LibraryOptions> libraryOptions										
 	);
 
@@ -89,16 +91,10 @@ public:
 	bool locationsNull() const;
 	void setLocationsNull();
 
-	/**
-	 * @brief Gets or sets the type of the collection.
-	 */
-	QString collectionType() const;
-	/**
-	* @brief Gets or sets the type of the collection.
-	*/
-	void setCollectionType(QString newCollectionType);
-	bool collectionTypeNull() const;
-	void setCollectionTypeNull();
+
+	CollectionTypeOptions collectionType() const;
+
+	void setCollectionType(CollectionTypeOptions newCollectionType);
 
 
 	QSharedPointer<LibraryOptions> libraryOptions() const;
@@ -145,7 +141,7 @@ public:
 protected:
 	QString m_name;
 	QStringList m_locations;
-	QString m_collectionType;
+	CollectionTypeOptions m_collectionType;
 	QSharedPointer<LibraryOptions> m_libraryOptions = QSharedPointer<LibraryOptions>();
 	QString m_itemId;
 	QString m_primaryImageItemId;

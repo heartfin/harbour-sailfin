@@ -78,11 +78,11 @@ public:
 	void setItemId(QString newItemId);
 
 	/**
-	 * @brief Will only search within the given provider when set.
+	 * @brief Gets or sets the provider name to search within if set.
 	 */
 	QString searchProviderName() const;
 	/**
-	* @brief Will only search within the given provider when set.
+	* @brief Gets or sets the provider name to search within if set.
 	*/
 	void setSearchProviderName(QString newSearchProviderName);
 	bool searchProviderNameNull() const;

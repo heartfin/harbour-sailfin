@@ -60,6 +60,7 @@ public:
 		Season,
 		Series,
 		Track,
+		Book,
 	};
 	Q_ENUM(Value)
 private:

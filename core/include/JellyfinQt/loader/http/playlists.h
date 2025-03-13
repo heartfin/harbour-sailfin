@@ -36,7 +36,10 @@
 #include "JellyfinQt/support/loader.h"
 #include "JellyfinQt/loader/requesttypes.h"
 #include "JellyfinQt/dto/playlistcreationresult.h"
+#include "JellyfinQt/dto/playlistdto.h"
 #include "JellyfinQt/dto/baseitemdtoqueryresult.h"
+#include "JellyfinQt/dto/playlistuserpermissions.h"
+#include "JellyfinQt/dto/playlistuserpermissions.h"
 
 namespace Jellyfin {
 // Forward declaration
@@ -63,31 +66,59 @@ protected:
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
+ * @brief Updates a playlist.
+ */
+
+class UpdatePlaylistLoader : public Jellyfin::Support::HttpLoader<void, UpdatePlaylistParams> {
+public:
+	explicit UpdatePlaylistLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdatePlaylistParams& parameters) const override;
+	QUrlQuery query(const UpdatePlaylistParams& parameters) const override;
+	QByteArray body(const UpdatePlaylistParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Get a playlist.
+ */
+
+class GetPlaylistLoader : public Jellyfin::Support::HttpLoader<PlaylistDto, GetPlaylistParams> {
+public:
+	explicit GetPlaylistLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetPlaylistParams& parameters) const override;
+	QUrlQuery query(const GetPlaylistParams& parameters) const override;
+	QByteArray body(const GetPlaylistParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
  * @brief Adds items to a playlist.
  */
 
-class AddToPlaylistLoader : public Jellyfin::Support::HttpLoader<void, AddToPlaylistParams> {
+class AddItemToPlaylistLoader : public Jellyfin::Support::HttpLoader<void, AddItemToPlaylistParams> {
 public:
-	explicit AddToPlaylistLoader(ApiClient *apiClient = nullptr);
+	explicit AddItemToPlaylistLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const AddToPlaylistParams& parameters) const override;
-	QUrlQuery query(const AddToPlaylistParams& parameters) const override;
-	QByteArray body(const AddToPlaylistParams& parameters) const override;
+	QString path(const AddItemToPlaylistParams& parameters) const override;
+	QUrlQuery query(const AddItemToPlaylistParams& parameters) const override;
+	QByteArray body(const AddItemToPlaylistParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
  * @brief Removes items from a playlist.
  */
 
-class RemoveFromPlaylistLoader : public Jellyfin::Support::HttpLoader<void, RemoveFromPlaylistParams> {
+class RemoveItemFromPlaylistLoader : public Jellyfin::Support::HttpLoader<void, RemoveItemFromPlaylistParams> {
 public:
-	explicit RemoveFromPlaylistLoader(ApiClient *apiClient = nullptr);
+	explicit RemoveItemFromPlaylistLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const RemoveFromPlaylistParams& parameters) const override;
-	QUrlQuery query(const RemoveFromPlaylistParams& parameters) const override;
-	QByteArray body(const RemoveFromPlaylistParams& parameters) const override;
+	QString path(const RemoveItemFromPlaylistParams& parameters) const override;
+	QUrlQuery query(const RemoveItemFromPlaylistParams& parameters) const override;
+	QByteArray body(const RemoveItemFromPlaylistParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 /**
@@ -116,6 +147,62 @@ protected:
 	QString path(const MoveItemParams& parameters) const override;
 	QUrlQuery query(const MoveItemParams& parameters) const override;
 	QByteArray body(const MoveItemParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Get a playlist's users.
+ */
+
+class GetPlaylistUsersLoader : public Jellyfin::Support::HttpLoader<QList<PlaylistUserPermissions>, GetPlaylistUsersParams> {
+public:
+	explicit GetPlaylistUsersLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetPlaylistUsersParams& parameters) const override;
+	QUrlQuery query(const GetPlaylistUsersParams& parameters) const override;
+	QByteArray body(const GetPlaylistUsersParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Get a playlist user.
+ */
+
+class GetPlaylistUserLoader : public Jellyfin::Support::HttpLoader<PlaylistUserPermissions, GetPlaylistUserParams> {
+public:
+	explicit GetPlaylistUserLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const GetPlaylistUserParams& parameters) const override;
+	QUrlQuery query(const GetPlaylistUserParams& parameters) const override;
+	QByteArray body(const GetPlaylistUserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Modify a user of a playlist's users.
+ */
+
+class UpdatePlaylistUserLoader : public Jellyfin::Support::HttpLoader<void, UpdatePlaylistUserParams> {
+public:
+	explicit UpdatePlaylistUserLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const UpdatePlaylistUserParams& parameters) const override;
+	QUrlQuery query(const UpdatePlaylistUserParams& parameters) const override;
+	QByteArray body(const UpdatePlaylistUserParams& parameters) const override;
+	QNetworkAccessManager::Operation operation() const override;
+};
+/**
+ * @brief Remove a user from a playlist's users.
+ */
+
+class RemoveUserFromPlaylistLoader : public Jellyfin::Support::HttpLoader<void, RemoveUserFromPlaylistParams> {
+public:
+	explicit RemoveUserFromPlaylistLoader(ApiClient *apiClient = nullptr);
+
+protected:
+	QString path(const RemoveUserFromPlaylistParams& parameters) const override;
+	QUrlQuery query(const RemoveUserFromPlaylistParams& parameters) const override;
+	QByteArray body(const RemoveUserFromPlaylistParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

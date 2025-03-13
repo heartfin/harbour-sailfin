@@ -35,42 +35,13 @@ namespace HTTP {
 
 using namespace Jellyfin::DTO;
 
-GetGroupingOptionsLoader::GetGroupingOptionsLoader(ApiClient *apiClient)
-	: Jellyfin::Support::HttpLoader<QList<SpecialViewOptionDto>, GetGroupingOptionsParams>(apiClient) {}
-
-QString GetGroupingOptionsLoader::path(const GetGroupingOptionsParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/GroupingOptions");
-}
-
-QUrlQuery GetGroupingOptionsLoader::query(const GetGroupingOptionsParams &params) const {
-	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
-
-	QUrlQuery result;
-
-	// Optional parameters
-	
-	return result;
-}
-
-QByteArray GetGroupingOptionsLoader::body(const GetGroupingOptionsParams &params) const {
-	return QByteArray();
-}
-
-QNetworkAccessManager::Operation GetGroupingOptionsLoader::operation() const {
-	// HTTP method Get
-	return QNetworkAccessManager::GetOperation;
-
-}
-
 GetUserViewsLoader::GetUserViewsLoader(ApiClient *apiClient)
 	: Jellyfin::Support::HttpLoader<BaseItemDtoQueryResult, GetUserViewsParams>(apiClient) {}
 
 QString GetUserViewsLoader::path(const GetUserViewsParams &params) const {
 	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
 	
-	return QStringLiteral("/Users/") + Support::toString< QString>(params.userId()) + QStringLiteral("/Views");
+	return QStringLiteral("/UserViews");
 }
 
 QUrlQuery GetUserViewsLoader::query(const GetUserViewsParams &params) const {
@@ -79,11 +50,14 @@ QUrlQuery GetUserViewsLoader::query(const GetUserViewsParams &params) const {
 	QUrlQuery result;
 
 	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
 	if (!params.includeExternalContentNull()) {
 		result.addQueryItem("includeExternalContent", Support::toString<std::optional<bool>>(params.includeExternalContent()));
 	}
 	if (!params.presetViewsNull()) {
-		result.addQueryItem("presetViews", Support::toString<QStringList>(params.presetViews()));
+		result.addQueryItem("presetViews", Support::toString<QList<CollectionType>>(params.presetViews()));
 	}
 	if (!params.includeHiddenNull()) {
 		result.addQueryItem("includeHidden", Support::toString<std::optional<bool>>(params.includeHidden()));
@@ -97,6 +71,38 @@ QByteArray GetUserViewsLoader::body(const GetUserViewsParams &params) const {
 }
 
 QNetworkAccessManager::Operation GetUserViewsLoader::operation() const {
+	// HTTP method Get
+	return QNetworkAccessManager::GetOperation;
+
+}
+
+GetGroupingOptionsLoader::GetGroupingOptionsLoader(ApiClient *apiClient)
+	: Jellyfin::Support::HttpLoader<QList<SpecialViewOptionDto>, GetGroupingOptionsParams>(apiClient) {}
+
+QString GetGroupingOptionsLoader::path(const GetGroupingOptionsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+	
+	return QStringLiteral("/UserViews/GroupingOptions");
+}
+
+QUrlQuery GetGroupingOptionsLoader::query(const GetGroupingOptionsParams &params) const {
+	Q_UNUSED(params) // Might be overzealous, but I don't like theses kind of warnings
+
+	QUrlQuery result;
+
+	// Optional parameters
+	if (!params.userIdNull()) {
+		result.addQueryItem("userId", Support::toString<QString>(params.userId()));
+	}
+	
+	return result;
+}
+
+QByteArray GetGroupingOptionsLoader::body(const GetGroupingOptionsParams &params) const {
+	return QByteArray();
+}
+
+QNetworkAccessManager::Operation GetGroupingOptionsLoader::operation() const {
 	// HTTP method Get
 	return QNetworkAccessManager::GetOperation;
 

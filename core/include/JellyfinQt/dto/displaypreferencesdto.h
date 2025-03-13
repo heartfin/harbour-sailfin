@@ -52,7 +52,8 @@ public:
 	DisplayPreferencesDto(									
 		bool rememberIndexing,			
 		qint32 primaryImageHeight,			
-		qint32 primaryImageWidth,					
+		qint32 primaryImageWidth,			
+		QJsonObject customPrefs,			
 		ScrollDirection scrollDirection,			
 		bool showBackdrop,			
 		bool rememberSorting,			
@@ -151,8 +152,6 @@ public:
 	* @brief Gets or sets the custom prefs.
 	*/
 	void setCustomPrefs(QJsonObject newCustomPrefs);
-	bool customPrefsNull() const;
-	void setCustomPrefsNull();
 
 
 	ScrollDirection scrollDirection() const;

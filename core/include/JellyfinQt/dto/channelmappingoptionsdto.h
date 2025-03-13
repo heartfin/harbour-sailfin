@@ -51,7 +51,13 @@ namespace DTO {
 
 
 class ChannelMappingOptionsDto {
-public:	ChannelMappingOptionsDto();
+public:
+	ChannelMappingOptionsDto(	
+		QList<TunerChannelMapping> tunerChannels,			
+		QList<NameIdPair> providerChannels,			
+		QList<NameValuePair> mappings				
+	);
+
 	ChannelMappingOptionsDto(const ChannelMappingOptionsDto &other);
 	
 	/**
@@ -72,8 +78,6 @@ public:	ChannelMappingOptionsDto();
 	* @brief Gets or sets list of tuner channels.
 	*/
 	void setTunerChannels(QList<TunerChannelMapping> newTunerChannels);
-	bool tunerChannelsNull() const;
-	void setTunerChannelsNull();
 
 	/**
 	 * @brief Gets or sets list of provider channels.
@@ -83,8 +87,6 @@ public:	ChannelMappingOptionsDto();
 	* @brief Gets or sets list of provider channels.
 	*/
 	void setProviderChannels(QList<NameIdPair> newProviderChannels);
-	bool providerChannelsNull() const;
-	void setProviderChannelsNull();
 
 	/**
 	 * @brief Gets or sets list of mappings.
@@ -94,8 +96,6 @@ public:	ChannelMappingOptionsDto();
 	* @brief Gets or sets list of mappings.
 	*/
 	void setMappings(QList<NameValuePair> newMappings);
-	bool mappingsNull() const;
-	void setMappingsNull();
 
 	/**
 	 * @brief Gets or sets provider name.
@@ -115,7 +115,9 @@ protected:
 	QList<NameValuePair> m_mappings;
 	QString m_providerName;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing ChannelMappingOptionsDto::fromJson();
+	ChannelMappingOptionsDto();
 };
 
 

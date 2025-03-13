@@ -46,7 +46,11 @@ namespace DTO {
 
 
 class MediaPathInfo {
-public:	MediaPathInfo();
+public:
+	MediaPathInfo(	
+		QString path		
+	);
+
 	MediaPathInfo(const MediaPathInfo &other);
 	
 	/**
@@ -63,22 +67,14 @@ public:	MediaPathInfo();
 	QString path() const;
 
 	void setPath(QString newPath);
-	bool pathNull() const;
-	void setPathNull();
-
-
-	QString networkPath() const;
-
-	void setNetworkPath(QString newNetworkPath);
-	bool networkPathNull() const;
-	void setNetworkPathNull();
 
 
 protected:
 	QString m_path;
-	QString m_networkPath;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing MediaPathInfo::fromJson();
+	MediaPathInfo();
 };
 
 

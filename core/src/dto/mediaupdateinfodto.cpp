@@ -33,16 +33,20 @@ namespace Jellyfin {
 namespace DTO {
 
 MediaUpdateInfoDto::MediaUpdateInfoDto() {}
+MediaUpdateInfoDto::MediaUpdateInfoDto (
+		QList<MediaUpdateInfoPathDto> updates 
+		) :
+	m_updates(updates) { }
+
+
 
 MediaUpdateInfoDto::MediaUpdateInfoDto(const MediaUpdateInfoDto &other) :
 
-	m_path(other.m_path),
-	m_updateType(other.m_updateType){}
+	m_updates(other.m_updates){}
 
 
 void MediaUpdateInfoDto::replaceData(MediaUpdateInfoDto &other) {
-	m_path = other.m_path;
-	m_updateType = other.m_updateType;
+	m_updates = other.m_updates;
 }
 
 MediaUpdateInfoDto MediaUpdateInfoDto::fromJson(QJsonObject source) {
@@ -53,53 +57,23 @@ MediaUpdateInfoDto MediaUpdateInfoDto::fromJson(QJsonObject source) {
 
 
 void MediaUpdateInfoDto::setFromJson(QJsonObject source) {
-	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
-	m_updateType = Jellyfin::Support::fromJsonValue<QString>(source["UpdateType"]);
+	m_updates = Jellyfin::Support::fromJsonValue<QList<MediaUpdateInfoPathDto>>(source["Updates"]);
 
 }
 	
 QJsonObject MediaUpdateInfoDto::toJson() const {
 	QJsonObject result;
 	
-	
-	if (!(m_path.isNull())) {
-		result["Path"] = Jellyfin::Support::toJsonValue<QString>(m_path);
-	}
-			
-	
-	if (!(m_updateType.isNull())) {
-		result["UpdateType"] = Jellyfin::Support::toJsonValue<QString>(m_updateType);
-	}
-		
+	result["Updates"] = Jellyfin::Support::toJsonValue<QList<MediaUpdateInfoPathDto>>(m_updates);	
 	return result;
 }
 
-QString MediaUpdateInfoDto::path() const { return m_path; }
+QList<MediaUpdateInfoPathDto> MediaUpdateInfoDto::updates() const { return m_updates; }
 
-void MediaUpdateInfoDto::setPath(QString newPath) {
-	m_path = newPath;
-}
-bool MediaUpdateInfoDto::pathNull() const {
-	return m_path.isNull();
+void MediaUpdateInfoDto::setUpdates(QList<MediaUpdateInfoPathDto> newUpdates) {
+	m_updates = newUpdates;
 }
 
-void MediaUpdateInfoDto::setPathNull() {
-	m_path.clear();
-
-}
-QString MediaUpdateInfoDto::updateType() const { return m_updateType; }
-
-void MediaUpdateInfoDto::setUpdateType(QString newUpdateType) {
-	m_updateType = newUpdateType;
-}
-bool MediaUpdateInfoDto::updateTypeNull() const {
-	return m_updateType.isNull();
-}
-
-void MediaUpdateInfoDto::setUpdateTypeNull() {
-	m_updateType.clear();
-
-}
 
 } // NS DTO
 

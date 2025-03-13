@@ -51,14 +51,14 @@ using namespace Jellyfin::DTO;
  * @brief Gets the search hint result.
  */
 
-class GetLoader : public Jellyfin::Support::HttpLoader<SearchHintResult, GetParams> {
+class GetSearchHintsLoader : public Jellyfin::Support::HttpLoader<SearchHintResult, GetSearchHintsParams> {
 public:
-	explicit GetLoader(ApiClient *apiClient = nullptr);
+	explicit GetSearchHintsLoader(ApiClient *apiClient = nullptr);
 
 protected:
-	QString path(const GetParams& parameters) const override;
-	QUrlQuery query(const GetParams& parameters) const override;
-	QByteArray body(const GetParams& parameters) const override;
+	QString path(const GetSearchHintsParams& parameters) const override;
+	QUrlQuery query(const GetSearchHintsParams& parameters) const override;
+	QByteArray body(const GetSearchHintsParams& parameters) const override;
 	QNetworkAccessManager::Operation operation() const override;
 };
 

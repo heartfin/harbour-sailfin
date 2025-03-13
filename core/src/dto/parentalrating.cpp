@@ -33,12 +33,6 @@ namespace Jellyfin {
 namespace DTO {
 
 ParentalRating::ParentalRating() {}
-ParentalRating::ParentalRating (
-		qint32 value 
-		) :
-	m_value(value) { }
-
-
 
 ParentalRating::ParentalRating(const ParentalRating &other) :
 
@@ -60,7 +54,7 @@ ParentalRating ParentalRating::fromJson(QJsonObject source) {
 
 void ParentalRating::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
-	m_value = Jellyfin::Support::fromJsonValue<qint32>(source["Value"]);
+	m_value = Jellyfin::Support::fromJsonValue<std::optional<qint32>>(source["Value"]);
 
 }
 	
@@ -72,7 +66,11 @@ QJsonObject ParentalRating::toJson() const {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
 	}
 			
-	result["Value"] = Jellyfin::Support::toJsonValue<qint32>(m_value);	
+	
+	if (!(!m_value.has_value())) {
+		result["Value"] = Jellyfin::Support::toJsonValue<std::optional<qint32>>(m_value);
+	}
+		
 	return result;
 }
 
@@ -89,12 +87,19 @@ void ParentalRating::setNameNull() {
 	m_name.clear();
 
 }
-qint32 ParentalRating::value() const { return m_value; }
+std::optional<qint32> ParentalRating::value() const { return m_value; }
 
-void ParentalRating::setValue(qint32 newValue) {
+void ParentalRating::setValue(std::optional<qint32> newValue) {
 	m_value = newValue;
 }
+bool ParentalRating::valueNull() const {
+	return !m_value.has_value();
+}
 
+void ParentalRating::setValueNull() {
+	m_value = std::nullopt;
+
+}
 
 } // NS DTO
 

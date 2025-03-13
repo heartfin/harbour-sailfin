@@ -43,6 +43,7 @@ BookInfo::BookInfo (
 BookInfo::BookInfo(const BookInfo &other) :
 
 	m_name(other.m_name),
+	m_originalTitle(other.m_originalTitle),
 	m_path(other.m_path),
 	m_metadataLanguage(other.m_metadataLanguage),
 	m_metadataCountryCode(other.m_metadataCountryCode),
@@ -57,6 +58,7 @@ BookInfo::BookInfo(const BookInfo &other) :
 
 void BookInfo::replaceData(BookInfo &other) {
 	m_name = other.m_name;
+	m_originalTitle = other.m_originalTitle;
 	m_path = other.m_path;
 	m_metadataLanguage = other.m_metadataLanguage;
 	m_metadataCountryCode = other.m_metadataCountryCode;
@@ -78,6 +80,7 @@ BookInfo BookInfo::fromJson(QJsonObject source) {
 
 void BookInfo::setFromJson(QJsonObject source) {
 	m_name = Jellyfin::Support::fromJsonValue<QString>(source["Name"]);
+	m_originalTitle = Jellyfin::Support::fromJsonValue<QString>(source["OriginalTitle"]);
 	m_path = Jellyfin::Support::fromJsonValue<QString>(source["Path"]);
 	m_metadataLanguage = Jellyfin::Support::fromJsonValue<QString>(source["MetadataLanguage"]);
 	m_metadataCountryCode = Jellyfin::Support::fromJsonValue<QString>(source["MetadataCountryCode"]);
@@ -97,6 +100,11 @@ QJsonObject BookInfo::toJson() const {
 	
 	if (!(m_name.isNull())) {
 		result["Name"] = Jellyfin::Support::toJsonValue<QString>(m_name);
+	}
+			
+	
+	if (!(m_originalTitle.isNull())) {
+		result["OriginalTitle"] = Jellyfin::Support::toJsonValue<QString>(m_originalTitle);
 	}
 			
 	
@@ -159,6 +167,19 @@ bool BookInfo::nameNull() const {
 
 void BookInfo::setNameNull() {
 	m_name.clear();
+
+}
+QString BookInfo::originalTitle() const { return m_originalTitle; }
+
+void BookInfo::setOriginalTitle(QString newOriginalTitle) {
+	m_originalTitle = newOriginalTitle;
+}
+bool BookInfo::originalTitleNull() const {
+	return m_originalTitle.isNull();
+}
+
+void BookInfo::setOriginalTitleNull() {
+	m_originalTitle.clear();
 
 }
 QString BookInfo::path() const { return m_path; }

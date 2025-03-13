@@ -34,19 +34,19 @@ namespace DTO {
 
 QuickConnectDto::QuickConnectDto() {}
 QuickConnectDto::QuickConnectDto (
-		QString token 
+		QString secret 
 		) :
-	m_token(token) { }
+	m_secret(secret) { }
 
 
 
 QuickConnectDto::QuickConnectDto(const QuickConnectDto &other) :
 
-	m_token(other.m_token){}
+	m_secret(other.m_secret){}
 
 
 void QuickConnectDto::replaceData(QuickConnectDto &other) {
-	m_token = other.m_token;
+	m_secret = other.m_secret;
 }
 
 QuickConnectDto QuickConnectDto::fromJson(QJsonObject source) {
@@ -57,21 +57,21 @@ QuickConnectDto QuickConnectDto::fromJson(QJsonObject source) {
 
 
 void QuickConnectDto::setFromJson(QJsonObject source) {
-	m_token = Jellyfin::Support::fromJsonValue<QString>(source["Token"]);
+	m_secret = Jellyfin::Support::fromJsonValue<QString>(source["Secret"]);
 
 }
 	
 QJsonObject QuickConnectDto::toJson() const {
 	QJsonObject result;
 	
-	result["Token"] = Jellyfin::Support::toJsonValue<QString>(m_token);	
+	result["Secret"] = Jellyfin::Support::toJsonValue<QString>(m_secret);	
 	return result;
 }
 
-QString QuickConnectDto::token() const { return m_token; }
+QString QuickConnectDto::secret() const { return m_secret; }
 
-void QuickConnectDto::setToken(QString newToken) {
-	m_token = newToken;
+void QuickConnectDto::setSecret(QString newSecret) {
+	m_secret = newSecret;
 }
 
 

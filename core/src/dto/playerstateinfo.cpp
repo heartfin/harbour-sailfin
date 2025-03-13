@@ -38,13 +38,15 @@ PlayerStateInfo::PlayerStateInfo (
 		bool isPaused, 
 		bool isMuted, 
 		PlayMethod playMethod, 
-		RepeatMode repeatMode 
+		RepeatMode repeatMode, 
+		PlaybackOrder playbackOrder 
 		) :
 	m_canSeek(canSeek),
 	m_isPaused(isPaused),
 	m_isMuted(isMuted),
 	m_playMethod(playMethod),
-	m_repeatMode(repeatMode) { }
+	m_repeatMode(repeatMode),
+	m_playbackOrder(playbackOrder) { }
 
 
 
@@ -59,7 +61,9 @@ PlayerStateInfo::PlayerStateInfo(const PlayerStateInfo &other) :
 	m_subtitleStreamIndex(other.m_subtitleStreamIndex),
 	m_mediaSourceId(other.m_mediaSourceId),
 	m_playMethod(other.m_playMethod),
-	m_repeatMode(other.m_repeatMode){}
+	m_repeatMode(other.m_repeatMode),
+	m_playbackOrder(other.m_playbackOrder),
+	m_liveStreamId(other.m_liveStreamId){}
 
 
 void PlayerStateInfo::replaceData(PlayerStateInfo &other) {
@@ -73,6 +77,8 @@ void PlayerStateInfo::replaceData(PlayerStateInfo &other) {
 	m_mediaSourceId = other.m_mediaSourceId;
 	m_playMethod = other.m_playMethod;
 	m_repeatMode = other.m_repeatMode;
+	m_playbackOrder = other.m_playbackOrder;
+	m_liveStreamId = other.m_liveStreamId;
 }
 
 PlayerStateInfo PlayerStateInfo::fromJson(QJsonObject source) {
@@ -93,6 +99,8 @@ void PlayerStateInfo::setFromJson(QJsonObject source) {
 	m_mediaSourceId = Jellyfin::Support::fromJsonValue<QString>(source["MediaSourceId"]);
 	m_playMethod = Jellyfin::Support::fromJsonValue<PlayMethod>(source["PlayMethod"]);
 	m_repeatMode = Jellyfin::Support::fromJsonValue<RepeatMode>(source["RepeatMode"]);
+	m_playbackOrder = Jellyfin::Support::fromJsonValue<PlaybackOrder>(source["PlaybackOrder"]);
+	m_liveStreamId = Jellyfin::Support::fromJsonValue<QString>(source["LiveStreamId"]);
 
 }
 	
@@ -128,7 +136,13 @@ QJsonObject PlayerStateInfo::toJson() const {
 	}
 			
 	result["PlayMethod"] = Jellyfin::Support::toJsonValue<PlayMethod>(m_playMethod);		
-	result["RepeatMode"] = Jellyfin::Support::toJsonValue<RepeatMode>(m_repeatMode);	
+	result["RepeatMode"] = Jellyfin::Support::toJsonValue<RepeatMode>(m_repeatMode);		
+	result["PlaybackOrder"] = Jellyfin::Support::toJsonValue<PlaybackOrder>(m_playbackOrder);		
+	
+	if (!(m_liveStreamId.isNull())) {
+		result["LiveStreamId"] = Jellyfin::Support::toJsonValue<QString>(m_liveStreamId);
+	}
+		
 	return result;
 }
 
@@ -227,6 +241,25 @@ void PlayerStateInfo::setRepeatMode(RepeatMode newRepeatMode) {
 	m_repeatMode = newRepeatMode;
 }
 
+PlaybackOrder PlayerStateInfo::playbackOrder() const { return m_playbackOrder; }
+
+void PlayerStateInfo::setPlaybackOrder(PlaybackOrder newPlaybackOrder) {
+	m_playbackOrder = newPlaybackOrder;
+}
+
+QString PlayerStateInfo::liveStreamId() const { return m_liveStreamId; }
+
+void PlayerStateInfo::setLiveStreamId(QString newLiveStreamId) {
+	m_liveStreamId = newLiveStreamId;
+}
+bool PlayerStateInfo::liveStreamIdNull() const {
+	return m_liveStreamId.isNull();
+}
+
+void PlayerStateInfo::setLiveStreamIdNull() {
+	m_liveStreamId.clear();
+
+}
 
 } // NS DTO
 

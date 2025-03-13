@@ -128,6 +128,21 @@ QUrlQuery GetTrailersLoader::query(const GetTrailersParams &params) const {
 	if (!params.hasTvdbIdNull()) {
 		result.addQueryItem("hasTvdbId", Support::toString<std::optional<bool>>(params.hasTvdbId()));
 	}
+	if (!params.isMovieNull()) {
+		result.addQueryItem("isMovie", Support::toString<std::optional<bool>>(params.isMovie()));
+	}
+	if (!params.isSeriesNull()) {
+		result.addQueryItem("isSeries", Support::toString<std::optional<bool>>(params.isSeries()));
+	}
+	if (!params.isNewsNull()) {
+		result.addQueryItem("isNews", Support::toString<std::optional<bool>>(params.isNews()));
+	}
+	if (!params.isKidsNull()) {
+		result.addQueryItem("isKids", Support::toString<std::optional<bool>>(params.isKids()));
+	}
+	if (!params.isSportsNull()) {
+		result.addQueryItem("isSports", Support::toString<std::optional<bool>>(params.isSports()));
+	}
 	if (!params.excludeItemIdsNull()) {
 		result.addQueryItem("excludeItemIds", Support::toString<QStringList>(params.excludeItemIds()));
 	}
@@ -144,7 +159,7 @@ QUrlQuery GetTrailersLoader::query(const GetTrailersParams &params) const {
 		result.addQueryItem("searchTerm", Support::toString<QString>(params.searchTerm()));
 	}
 	if (!params.sortOrderNull()) {
-		result.addQueryItem("sortOrder", Support::toString<QString>(params.sortOrder()));
+		result.addQueryItem("sortOrder", Support::toString<QList<SortOrder>>(params.sortOrder()));
 	}
 	if (!params.parentIdNull()) {
 		result.addQueryItem("parentId", Support::toString<QString>(params.parentId()));
@@ -153,7 +168,7 @@ QUrlQuery GetTrailersLoader::query(const GetTrailersParams &params) const {
 		result.addQueryItem("fields", Support::toString<QList<ItemFields>>(params.fields()));
 	}
 	if (!params.excludeItemTypesNull()) {
-		result.addQueryItem("excludeItemTypes", Support::toString<QStringList>(params.excludeItemTypes()));
+		result.addQueryItem("excludeItemTypes", Support::toString<QList<BaseItemKind>>(params.excludeItemTypes()));
 	}
 	if (!params.filtersNull()) {
 		result.addQueryItem("filters", Support::toString<QList<ItemFilter>>(params.filters()));
@@ -162,13 +177,13 @@ QUrlQuery GetTrailersLoader::query(const GetTrailersParams &params) const {
 		result.addQueryItem("isFavorite", Support::toString<std::optional<bool>>(params.isFavorite()));
 	}
 	if (!params.mediaTypesNull()) {
-		result.addQueryItem("mediaTypes", Support::toString<QStringList>(params.mediaTypes()));
+		result.addQueryItem("mediaTypes", Support::toString<QList<MediaType>>(params.mediaTypes()));
 	}
 	if (!params.imageTypesNull()) {
 		result.addQueryItem("imageTypes", Support::toString<QList<ImageType>>(params.imageTypes()));
 	}
 	if (!params.sortByNull()) {
-		result.addQueryItem("sortBy", Support::toString<QString>(params.sortBy()));
+		result.addQueryItem("sortBy", Support::toString<QList<ItemSortBy>>(params.sortBy()));
 	}
 	if (!params.isPlayedNull()) {
 		result.addQueryItem("isPlayed", Support::toString<std::optional<bool>>(params.isPlayed()));

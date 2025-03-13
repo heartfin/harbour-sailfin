@@ -37,6 +37,8 @@
 #include <QStringList>
 #include <optional>
 
+#include "JellyfinQt/dto/mediatype.h"
+#include "JellyfinQt/dto/playlistuserpermissions.h"
 #include "JellyfinQt/support/jsonconv.h"
 
 namespace Jellyfin {
@@ -48,7 +50,15 @@ namespace DTO {
 
 
 class CreatePlaylistDto {
-public:	CreatePlaylistDto();
+public:
+	CreatePlaylistDto(	
+		QString name,			
+		QStringList ids,					
+		MediaType mediaType,			
+		QList<PlaylistUserPermissions> users,			
+		bool isPublic		
+	);
+
 	CreatePlaylistDto(const CreatePlaylistDto &other);
 	
 	/**
@@ -69,8 +79,6 @@ public:	CreatePlaylistDto();
 	* @brief Gets or sets the name of the new playlist.
 	*/
 	void setName(QString newName);
-	bool nameNull() const;
-	void setNameNull();
 
 	/**
 	 * @brief Gets or sets item ids to add to the playlist.
@@ -80,8 +88,6 @@ public:	CreatePlaylistDto();
 	* @brief Gets or sets item ids to add to the playlist.
 	*/
 	void setIds(QStringList newIds);
-	bool idsNull() const;
-	void setIdsNull();
 
 	/**
 	 * @brief Gets or sets the user id.
@@ -94,25 +100,41 @@ public:	CreatePlaylistDto();
 	bool userIdNull() const;
 	void setUserIdNull();
 
+
+	MediaType mediaType() const;
+
+	void setMediaType(MediaType newMediaType);
+
 	/**
-	 * @brief Gets or sets the media type.
+	 * @brief Gets or sets the playlist users.
 	 */
-	QString mediaType() const;
+	QList<PlaylistUserPermissions> users() const;
 	/**
-	* @brief Gets or sets the media type.
+	* @brief Gets or sets the playlist users.
 	*/
-	void setMediaType(QString newMediaType);
-	bool mediaTypeNull() const;
-	void setMediaTypeNull();
+	void setUsers(QList<PlaylistUserPermissions> newUsers);
+
+	/**
+	 * @brief Gets or sets a value indicating whether the playlist is public.
+	 */
+	bool isPublic() const;
+	/**
+	* @brief Gets or sets a value indicating whether the playlist is public.
+	*/
+	void setIsPublic(bool newIsPublic);
 
 
 protected:
 	QString m_name;
 	QStringList m_ids;
 	QString m_userId;
-	QString m_mediaType;
+	MediaType m_mediaType;
+	QList<PlaylistUserPermissions> m_users;
+	bool m_isPublic;
 
-
+private:
+	// Private constructor which generates an invalid object, for use withing CreatePlaylistDto::fromJson();
+	CreatePlaylistDto();
 };
 
 

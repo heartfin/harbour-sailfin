@@ -49,7 +49,8 @@ namespace DTO {
 
 class AuthenticationInfoQueryResult {
 public:
-	AuthenticationInfoQueryResult(			
+	AuthenticationInfoQueryResult(	
+		QList<AuthenticationInfo> items,			
 		qint32 totalRecordCount,			
 		qint32 startIndex		
 	);
@@ -74,24 +75,22 @@ public:
 	* @brief Gets or sets the items.
 	*/
 	void setItems(QList<AuthenticationInfo> newItems);
-	bool itemsNull() const;
-	void setItemsNull();
 
 	/**
-	 * @brief The total number of records available.
+	 * @brief Gets or sets the total number of records available.
 	 */
 	qint32 totalRecordCount() const;
 	/**
-	* @brief The total number of records available.
+	* @brief Gets or sets the total number of records available.
 	*/
 	void setTotalRecordCount(qint32 newTotalRecordCount);
 
 	/**
-	 * @brief The index of the first record in Items.
+	 * @brief Gets or sets the index of the first record in Items.
 	 */
 	qint32 startIndex() const;
 	/**
-	* @brief The index of the first record in Items.
+	* @brief Gets or sets the index of the first record in Items.
 	*/
 	void setStartIndex(qint32 newStartIndex);
 

@@ -165,7 +165,7 @@ Page {
                         model: J.ItemModel {
                             loader: J.UserItemsLoader {
                                 apiClient: appWindow.apiClient
-                                includeItemTypes: "CollectionFolder"
+                                includeItemTypes: [J.ItemType.CollectionFolder]
                                 onReady: libraryRepeaterDelay.start()
                             }
                         }

@@ -1,15 +1,15 @@
 project(harbour-sailfin-sailfish)
 
 # find_library(SAILFISH sailfishapp 1.0 REQUIRED)
-include(ExternalProject)
 # FIXME: don't hardcode /home/deploy/installroot/
 set(DEPLOY_ROOT /home/deploy/installroot/)
-ExternalProject_Add(BlurhashQt
-	# PREFIX ${CMAKE_CURRENT_BINARY_DIR}/lib/blurhash-qt
-	GIT_REPOSITORY https://github.com/HenkKalkwater/BlurhashQt.git
-	GIT_TAG 61ae7f0feca6ab67da1bfdbcb222bbd12e8f7e07
 
-	CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON -DENABLE_EXPORT=OFF -DQML_PLUGIN_PATH=${PROJECT_BINARY_DIR}/plugins/)
+set(QML_PLUGIN_PATH ${PROJECT_BINARY_DIR}/plugins CACHE PATH "QML plugin path for blurhash-qt")
+add_subdirectory(lib/blurhash-qt)
+
+set_target_properties(blurhash-qt PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/plugins/nl/netsoj/chris/blurhash
+    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/plugins/nl/netsoj/chris/blurhash)
 
 find_package(Qt5 COMPONENTS Gui Qml Quick LinguistTools)
 find_package(SailfishApp 1.0 REQUIRED)
@@ -96,6 +96,8 @@ target_link_libraries(harbour-sailfin PRIVATE Qt5::Gui Qt5::Qml Qt5::Quick Sailf
 	JellyfinQt "-Wl,-rpath,${CMAKE_INSTALL_LIBDIR} -rdynamic -pie")
 target_compile_definitions(harbour-sailfin
 	PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+
+add_dependencies(harbour-sailfin blurhash-qt)
 
 install(TARGETS harbour-sailfin
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

@@ -5,7 +5,7 @@ project(harbour-sailfin-sailfish)
 set(DEPLOY_ROOT /home/deploy/installroot/)
 
 set(QML_PLUGIN_PATH ${PROJECT_BINARY_DIR}/plugins CACHE PATH "QML plugin path for blurhash-qt")
-add_subdirectory(lib/blurhash-qt)
+add_subdirectory(../3rdparty/blurhash-qt)
 
 set_target_properties(blurhash-qt PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/plugins/nl/netsoj/chris/blurhash

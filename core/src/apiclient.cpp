@@ -256,7 +256,7 @@ void ApiClient::addTokenHeader(QNetworkRequest &request) const {
     if (d->authenticated) {
         authentication    += ", Token=\"" + d->token + "\"";
     }
-    request.setRawHeader("X-Emby-Authorization", authentication.toUtf8());
+    request.setRawHeader("Authorization", authentication.toUtf8());
 }
 
 QNetworkReply *ApiClient::get(const QString &path, const QUrlQuery &params) {

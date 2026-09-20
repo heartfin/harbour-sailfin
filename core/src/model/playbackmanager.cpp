@@ -401,7 +401,7 @@ void LocalPlaybackManagerPrivate::handlePlaybackInfoResponse(QString itemId, Med
             QUrlQuery query;
             query.addQueryItem("mediaSourceId", source.jellyfinId());
             query.addQueryItem("deviceId", m_apiClient->deviceId());
-            query.addQueryItem("api_key", m_apiClient->token());
+            query.addQueryItem("ApiKey", m_apiClient->token());
             query.addQueryItem("Static", "True");
             resultingUrl = QUrl(m_apiClient->baseUrl() + "/" + mediaTypeUrl + "/" + itemId
                     + "/stream." + source.container() + "?" + query.toString(QUrl::EncodeReserved));

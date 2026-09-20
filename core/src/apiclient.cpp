@@ -468,7 +468,7 @@ void ApiClient::postCapabilities() {
 
 QString ApiClient::downloadUrl(const QString &itemId) const {
     Q_D(const ApiClient);
-    return d->baseUrl + "/Items/" + itemId + "/Download?api_key=" + d->token;
+    return d->baseUrl + "/Items/" + itemId + "/Download?ApiKey=" + d->token;
 }
 
 void ApiClient::generateDeviceProfile() {

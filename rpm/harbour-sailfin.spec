@@ -7,7 +7,7 @@ Name:       harbour-sailfin
 %define _unpackaged_files_terminate_build 0
 
 Summary:    Sailfin
-Version:    0.5.0
+Version:    0.6.0
 Release:    1
 Group:      Qt/Qt
 License:    LGPL-2.1-or-later

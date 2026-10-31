@@ -1,5 +1,5 @@
 project(jellyfin-qt VERSION 0.1.0)
-find_package(Qt5 5.6 COMPONENTS Multimedia Network Qml WebSockets REQUIRED)
+find_package(Qt5 5.6 COMPONENTS Multimedia Network Qml Quick WebSockets REQUIRED)
 
 if (FREEDESKTOP_INTEGRATION)
     find_package(Qt5 5.6 COMPONENTS DBus REQUIRED)
@@ -24,6 +24,7 @@ set(JellyfinQt_SOURCES
         src/model/shuffle.cpp
         src/model/user.cpp
 
+        src/support/imageprovider.cpp
         src/support/jsonconv.cpp
         src/support/loader.cpp
         src/support/parseexception.cpp
@@ -62,6 +63,7 @@ set(JellyfinQt_HEADERS
     include/JellyfinQt/model/remotejellyfinplayback.h
     include/JellyfinQt/model/shuffle.h
     include/JellyfinQt/model/user.h
+    include/JellyfinQt/support/imageprovider.h
     include/JellyfinQt/support/jsonconv.h
     include/JellyfinQt/support/jsonconvimpl.h
     include/JellyfinQt/support/loader.h
@@ -123,7 +125,7 @@ if(${CMAKE_VERSION} VERSION_GREATER "3.16.0")
 endif()
 
 target_include_directories(JellyfinQt PUBLIC "include")
-target_link_libraries(JellyfinQt PUBLIC Qt5::Core Qt5::Multimedia Qt5::Network Qt5::Qml Qt5::WebSockets)
+target_link_libraries(JellyfinQt PUBLIC Qt5::Core Qt5::Multimedia Qt5::Network Qt5::Qml Qt5::Quick Qt5::WebSockets)
 
 if (FREEDESKTOP_INTEGRATION)
     target_link_libraries(JellyfinQt PUBLIC Qt5::DBus)

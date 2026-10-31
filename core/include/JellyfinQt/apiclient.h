@@ -49,6 +49,10 @@ namespace Jellyfin {
 class PlaybackManager;
 class WebSocket;
 
+namespace Support {
+class ApiImageResponse;
+}
+
 namespace ViewModel {
 class Settings;
 }
@@ -90,6 +94,7 @@ class ApiClientPrivate;
 class ApiClient : public QObject, public QQmlParserStatus {
     friend class WebSocket;
     friend class PlaybackManager;
+    friend class Support::ApiImageResponse;
     Q_OBJECT
     Q_INTERFACES(QQmlParserStatus)
     Q_DECLARE_PRIVATE(ApiClient);
@@ -253,6 +258,15 @@ public slots:
      */
     void postCapabilities();
     QString downloadUrl(const QString &itemId) const;
+
+    /**
+     * @brief URL for loading the original image of an item (e.g. a photo) in QML.
+     *
+     * The returned image:// URL is served by Support::ApiImageProvider, which sends the
+     * Authorization header instead of putting the token in the URL. This also works on
+     * servers where legacy (query parameter) authorization is disabled.
+     */
+    QString downloadImageUrl(const QString &itemId) const;
 
 protected slots:
     void defaultNetworkErrorHandler(QNetworkReply::NetworkError error);

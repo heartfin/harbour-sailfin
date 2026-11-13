@@ -23,6 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include "JellyfinQt/dto/clientcapabilitiesdto.h"
 #include "JellyfinQt/loader/http/quickconnect.h"
+#include "JellyfinQt/support/imageprovider.h"
 #include "JellyfinQt/support/jsonconv.h"
 #include "JellyfinQt/viewmodel/settings.h"
 #include "JellyfinQt/websocket.h"
@@ -228,6 +229,13 @@ void ApiClient::componentComplete() {
 
     // Generate the device profile after all properties have been parsed.
     generateDeviceProfile();
+
+    // Register an image provider that loads images with the Authorization header.
+    // The engine takes ownership of the provider.
+    QQmlEngine *engine = qmlEngine(this);
+    if (engine != nullptr && engine->imageProvider(Support::ApiImageProvider::PROVIDER_ID) == nullptr) {
+        engine->addImageProvider(Support::ApiImageProvider::PROVIDER_ID, new Support::ApiImageProvider(this));
+    }
 }
 
 
@@ -469,6 +477,12 @@ void ApiClient::postCapabilities() {
 QString ApiClient::downloadUrl(const QString &itemId) const {
     Q_D(const ApiClient);
     return d->baseUrl + "/Items/" + itemId + "/Download?ApiKey=" + d->token;
+}
+
+QString ApiClient::downloadImageUrl(const QString &itemId) const {
+    return QStringLiteral("image://%1/Items/%2/Download")
+            .arg(QString::fromLatin1(Support::ApiImageProvider::PROVIDER_ID),
+                 QString::fromLatin1(QUrl::toPercentEncoding(itemId)));
 }
 
 void ApiClient::generateDeviceProfile() {

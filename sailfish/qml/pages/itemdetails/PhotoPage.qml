@@ -21,11 +21,15 @@ BaseDetailPage {
 
     RemoteImage {
         id: image
-        source: apiClient.downloadUrl(itemId)
+        source: itemId ? apiClient.downloadImageUrl(itemId) : ""
         fillMode: Image.PreserveAspectFit
         anchors.fill: parent
 
-        blurhash: itemData.imageBlurHashes["Primary"][itemData.imageTags["Primary"]]
-        aspectRatio: itemData.width / itemData.height
+        blurhash: {
+            var hashes = itemData.imageBlurHashes ? itemData.imageBlurHashes["Primary"] : undefined
+            var tag = itemData.imageTags ? itemData.imageTags["Primary"] : undefined
+            return (hashes && tag && hashes[tag]) ? hashes[tag] : ""
+        }
+        aspectRatio: itemData.width > 0 && itemData.height > 0 ? itemData.width / itemData.height : 1.0
     }
 }
